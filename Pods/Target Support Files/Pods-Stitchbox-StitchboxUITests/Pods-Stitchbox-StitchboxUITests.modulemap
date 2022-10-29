@@ -1,0 +1,6 @@
+framework module Pods_Stitchbox_StitchboxUITests {
+  umbrella header "Pods-Stitchbox-StitchboxUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
