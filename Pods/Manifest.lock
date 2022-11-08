@@ -1,4 +1,6 @@
 PODS:
+  - Alamofire (5.6.2)
+  - Cache (6.0.0)
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
     - PINCache/Core (= 3.0.3)
@@ -43,6 +45,8 @@ PODS:
     - Texture/Core
 
 DEPENDENCIES:
+  - Alamofire
+  - Cache
   - RxCocoa
   - RxSwift
   - SwiftLint
@@ -50,6 +54,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - Cache
     - PINCache
     - PINOperation
     - PINRemoteImage
@@ -60,6 +66,8 @@ SPEC REPOS:
     - Texture
 
 SPEC CHECKSUMS:
+  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
+  Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: 00c935935f1e8cf0d1e2d6b542e75b88fc3e5e20
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
@@ -69,6 +77,6 @@ SPEC CHECKSUMS:
   SwiftLint: 32ee33ded0636d0905ef6911b2b67bbaeeedafa5
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
 
-PODFILE CHECKSUM: 95e5666f1d97b8b3ba7ea83ccd862897c29699df
+PODFILE CHECKSUM: 0e317fdf631abcd2bddb93751e3d239ff5b57a4f
 
 COCOAPODS: 1.11.3

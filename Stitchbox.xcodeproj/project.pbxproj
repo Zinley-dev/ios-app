@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		03E5E6688B0EADABFCBBCF3F /* Pods_StitchboxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F504FAFF76215E3BFB8ECB62 /* Pods_StitchboxTests.framework */; };
+		148C70FE291AF0870046FC5D /* UserAuthenticationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148C70FD291AF0870046FC5D /* UserAuthenticationModel.swift */; };
+		148C7101291AFCFF0046FC5D /* NormalLogin.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 148C7100291AFCFF0046FC5D /* NormalLogin.storyboard */; settings = {ASSET_TAGS = (Logo, ); }; };
+		148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148C7106291B0F210046FC5D /* LogInByPhoneViewController.swift */; };
+		148C7109291B11270046FC5D /* OTPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148C7108291B11270046FC5D /* OTPTextField.swift */; };
 		390FD7382909264D0068B883 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7372909264D0068B883 /* AppDelegate.swift */; };
 		390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7392909264D0068B883 /* SceneDelegate.swift */; };
 		390FD73C2909264D0068B883 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD73B2909264D0068B883 /* StartViewController.swift */; };
@@ -30,7 +34,6 @@
 		390FD78629093EA00068B883 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD78529093EA00068B883 /* FeedViewController.swift */; };
 		390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD787290A856B0068B883 /* RedirectionHelper.swift */; };
 		390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD78A290A901F0068B883 /* SettingsBundleHelper.swift */; };
-		390FD78D290A93C00068B883 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD78C290A93C00068B883 /* LoginViewModel.swift */; };
 		8ED9D2DEBF0361601F4852E3 /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2387CD412DE6CDA403E271A /* Pods_Stitchbox_StitchboxUITests.framework */; };
 		EE7F861C067F91721762DDD7 /* Pods_Stitchbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92EFEB85742B57DDE1B7EDBE /* Pods_Stitchbox.framework */; };
 /* End PBXBuildFile section */
@@ -54,6 +57,10 @@
 
 /* Begin PBXFileReference section */
 		109156B9B03B1616BF7D933A /* Pods-Stitchbox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.release.xcconfig"; sourceTree = "<group>"; };
+		148C70FD291AF0870046FC5D /* UserAuthenticationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthenticationModel.swift; sourceTree = "<group>"; };
+		148C7100291AFCFF0046FC5D /* NormalLogin.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NormalLogin.storyboard; sourceTree = "<group>"; };
+		148C7106291B0F210046FC5D /* LogInByPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInByPhoneViewController.swift; sourceTree = "<group>"; };
+		148C7108291B11270046FC5D /* OTPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPTextField.swift; sourceTree = "<group>"; };
 		1C37CBFDCF2BC88832C34BF2 /* Pods-StitchboxTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.debug.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.debug.xcconfig"; sourceTree = "<group>"; };
 		390FD7342909264D0068B883 /* Stitchbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stitchbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		390FD7372909264D0068B883 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,7 +88,6 @@
 		390FD78529093EA00068B883 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		390FD787290A856B0068B883 /* RedirectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedirectionHelper.swift; sourceTree = "<group>"; };
 		390FD78A290A901F0068B883 /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
-		390FD78C290A93C00068B883 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		45DB7D161E7CAC5C6BA91436 /* Pods-Stitchbox-StitchboxUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.release.xcconfig"; sourceTree = "<group>"; };
 		75C94A3B7BBDABB0C311E16B /* Pods-Stitchbox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.debug.xcconfig"; sourceTree = "<group>"; };
 		7BC82FC58CAEC0147E5E58D7 /* Pods-Stitchbox-StitchboxUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -119,6 +125,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		143684302918C5B800FA87D7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		148C70FF291AFCB50046FC5D /* UserAuthenticationStoryboards */ = {
+			isa = PBXGroup;
+			children = (
+				148C7100291AFCFF0046FC5D /* NormalLogin.storyboard */,
+			);
+			path = UserAuthenticationStoryboards;
+			sourceTree = "<group>";
+		};
+		148C7102291B00CF0046FC5D /* StyledComponents */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = StyledComponents;
+			sourceTree = "<group>";
+		};
+		148C7103291B0C780046FC5D /* StyledComponents */ = {
+			isa = PBXGroup;
+			children = (
+				148C7108291B11270046FC5D /* OTPTextField.swift */,
+			);
+			path = StyledComponents;
+			sourceTree = "<group>";
+		};
 		390FD72B2909264D0068B883 = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +180,8 @@
 		390FD7362909264D0068B883 /* Stitchbox */ = {
 			isa = PBXGroup;
 			children = (
+				148C7103291B0C780046FC5D /* StyledComponents */,
+				143684302918C5B800FA87D7 /* Models */,
 				390FD767290927C90068B883 /* NetworkManager */,
 				390FD77A29092B7A0068B883 /* AppDeletgate */,
 				390FD77E29092BC10068B883 /* Controllers */,
@@ -175,6 +213,7 @@
 		390FD767290927C90068B883 /* NetworkManager */ = {
 			isa = PBXGroup;
 			children = (
+				148C7102291B00CF0046FC5D /* StyledComponents */,
 				390FD770290928F70068B883 /* Managers */,
 				390FD77229092A880068B883 /* Service */,
 				390FD77129092A6C0068B883 /* Response */,
@@ -241,6 +280,7 @@
 			children = (
 				390FD73B2909264D0068B883 /* StartViewController.swift */,
 				390FD781290931900068B883 /* LoginViewController.swift */,
+				148C7106291B0F210046FC5D /* LogInByPhoneViewController.swift */,
 				390FD78529093EA00068B883 /* FeedViewController.swift */,
 			);
 			path = Controllers;
@@ -258,6 +298,7 @@
 		390FD78029092BE90068B883 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				148C70FF291AFCB50046FC5D /* UserAuthenticationStoryboards */,
 				390FD73D2909264D0068B883 /* Main.storyboard */,
 				390FD7422909264E0068B883 /* LaunchScreen.storyboard */,
 				390FD7832909375C0068B883 /* Dashboard.storyboard */,
@@ -277,7 +318,7 @@
 		390FD78E290A93CD0068B883 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				390FD78C290A93C00068B883 /* LoginViewModel.swift */,
+				148C70FD291AF0870046FC5D /* UserAuthenticationModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -373,6 +414,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					Logo,
+				);
 				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
@@ -414,6 +458,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				148C7101291AFCFF0046FC5D /* NormalLogin.storyboard in Resources */,
 				390FD7442909264E0068B883 /* LaunchScreen.storyboard in Resources */,
 				390FD7412909264E0068B883 /* Assets.xcassets in Resources */,
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
@@ -545,11 +590,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */,
+				148C70FE291AF0870046FC5D /* UserAuthenticationModel.swift in Sources */,
 				390FD782290931900068B883 /* LoginViewController.swift in Sources */,
 				390FD76F290928DA0068B883 /* APIResponse.swift in Sources */,
 				390FD76D290928A70068B883 /* APIManager.swift in Sources */,
+				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				390FD769290927E40068B883 /* NetworkManager.swift in Sources */,
-				390FD78D290A93C00068B883 /* LoginViewModel.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
 				390FD77429092A9B0068B883 /* HTTPTask.swift in Sources */,
 				390FD77629092AB30068B883 /* HTTPMethod.swift in Sources */,

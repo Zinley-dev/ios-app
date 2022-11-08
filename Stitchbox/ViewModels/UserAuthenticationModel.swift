@@ -7,21 +7,21 @@
 
 import Foundation
 class Account {
-    private var _id: String {get}
-    private var dob: String {get}
-    private var country: String {get}
-    private var region: String {get}
-    private var address1: String {get}
-    private var address2: String {get}
-    private var name: String {get}
-    private var email: String {get}
-    private var phone: String {get}
-    private var password: String {get}
-    private var status: String {get}
-    private var createdAt: String {get}
-    private var updatedAt: String {get}
-    
-    init(account: [String: Any]) {
+    var _id: String?
+    var dob: String?
+    var country: String?
+    var region: String?
+    var address1: String?
+    var address2: String?
+    var name: String?
+    var email: String?
+    var phone: String?
+    var password: String?
+    var status: String?
+    var createdAt: String?
+    var updatedAt: String?
+
+    init(account: [String: String]) {
         self._id = account["_id"];
         self.dob = account["dob"];
         self.country = account["country"];
@@ -39,14 +39,14 @@ class Account {
 }
 
 final class UserAuthenticationModel {
-    private var refreshToken: String {get, set}
-    private var accessToken: String {get, set}
-    private var account: Account {get, set}
-    
-    init(refreshToken: String, accessToken: String, account: [String: Any]) {
+    var refreshToken: String
+    var accessToken: String
+    var account: Account
+
+    init(refreshToken: String, accessToken: String, account: [String: String]) {
         self.refreshToken = refreshToken
         self.accessToken = accessToken
-        self.account = Account(account)
+        self.account = Account(account: account)
     }
-    
+
 }
