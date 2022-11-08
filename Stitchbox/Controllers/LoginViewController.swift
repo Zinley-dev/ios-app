@@ -16,7 +16,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         lblMess.text = viewModel.message
-        bindViewModel()
+        //bindViewModel()
     }
     
     @IBAction func btnLoginClick(_ sender: Any) {
@@ -24,10 +24,10 @@ class LoginViewController: UIViewController {
 //        RedirectionHelper.redirectToDashboard()
     }
     
-    private func bindViewModel() {
-        viewModel.$message.sink { [weak self] state in
-            self?.lblMess.text = state
-        }
-    }
+//    private func bindViewModel() {
+//        viewModel.$message.sink { [weak self] state in
+//            self?.lblMess.text = state
+//        }
+//    }
 
 }
