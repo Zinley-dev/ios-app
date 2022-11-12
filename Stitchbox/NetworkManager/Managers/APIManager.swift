@@ -29,7 +29,25 @@ struct APIManager {
             completion(result)
         }
     }
-
+    
+    func normalLogin(email: String, password: String, completion: @escaping APICompletion) {
+        manager.request(.normallogin(email: email, password: password)) { result in
+            completion(result)
+        }
+    }
+    
+    func phoneLogin(phone: String, countryCode: String, via: String, completion: @escaping APICompletion) {
+        manager.request(.phonelogin(phone: phone, countryCode: countryCode, via: via)) { result in
+            completion(result)
+        }
+    }
+    
+    func phoneVerify(phone: String, countryCode: String, code: String, completion: @escaping APICompletion) {
+        manager.request(.phoneverify(phone: phone, countryCode: countryCode, code: code)) { result in
+            completion(result)
+        }
+    }
+    
     func signUp(_ params: [String: Any], completion: @escaping APICompletion) {
         manager.request(.signup) { result in
             completion(result)

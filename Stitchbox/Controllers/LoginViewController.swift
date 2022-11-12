@@ -6,48 +6,37 @@
 //
 
 import UIKit
+import RxSwift
+import Then
+import RxRealmDataSources
 
 class LoginViewController: UIViewController {
-
-    @IBOutlet weak var lblMess: UILabel!
     
-//    var viewModel = UserAuthenticationModel(nil,nil,[String:])
+    @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var logInButton: UIButton!
+    @IBOutlet weak var logInByPhone: UIButton!
+    @IBOutlet weak var messageView: UIView!
+    
+    
+    private let bag = DisposeBag()
+    fileprivate var viewModel: NormalLoginViewModel!
+    
+    //    var viewModel = UserAuthenticationModel(nil,nil,[String:])
     // in ViewDidLoad, observe the keyboardWillShow notification
     override func viewDidLoad() {
         super.viewDidLoad()
-      
-        // call the 'keyboardWillShow' function when the view controller receive the notification that a keyboard is going to be shown
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-      
-          // call the 'keyboardWillHide' function when the view controlelr receive notification that keyboard is going to be hidden
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-
-    @objc func keyboardWillShow(notification: NSNotification) {
-            
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-           // if keyboard size is not available for some reason, dont do anything
-           return
-        }
-      
-      // move the root view up by the distance of keyboard height
-      self.view.frame.origin.y = 0 - keyboardSize.height
-    }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-      // move back the root view origin to zero
-      self.view.frame.origin.y = 0
+        bindUI()
     }
     
-    @IBAction func btnLoginClick(_ sender: Any) {
-//        viewModel.login()
-//        RedirectionHelper.redirectToDashboard()
+    func bindUI() {
+        // Bind button to the people view controller
+        viewModel.account.drive(logInButton.rx.isSelected).dispose(by: bag)
+        
+        // Show message when no account available
+        viewModel.loggedIn
+          .drive(messageView.rx.isHidden)
+          .disposed(by: bag)
+      }
     }
-    
-    private func bindViewModel() {
-//        viewModel.$message.sink { [weak self] state in
-//            self?.lblMess.text = state
-//        }
-    }
-
 }

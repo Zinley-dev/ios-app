@@ -9,6 +9,7 @@ target 'Stitchbox' do
   pod "Texture"
   pod "SwiftLint"
   pod 'RxSwift'
+  pod 'Unbox'
   pod 'RxCocoa'
   pod 'Alamofire'
   pod 'Cache'
