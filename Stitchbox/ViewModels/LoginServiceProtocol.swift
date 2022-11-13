@@ -22,14 +22,14 @@ class LoginService: LoginServiceProtocol {
             
             APIManager().normalLogin(email: credentials.email,
                                      password: credentials.password) {
-                result in {
+                result in
                     switch result{
                     case .success(let returnJSON):
-                        observer.onNext(try Account(JSONbody: returnJSON.body))
+                        observer.onNext(Account(JSONbody: returnJSON.body))
                     case .failure(let error):
                         observer.onError(error)
                     }
-                }
+                
             } // Simulation of successful user authentication.
             return Disposables.create()
         }

@@ -57,25 +57,19 @@ extension UserApi: EndPointType {
     
     var task: HTTPTask {
         switch self {
-        case .phonelogin:
-            return .request
-        case .phoneverify:
-            return .request
+        case let .phonelogin(phone, countrycode, via):
+            return .requestParameters(parameters: ["phone": phone,
+                    "countryCode": countrycode,
+                    "via": via])
+        case let .phoneverify(phone, countrycode, code):
+            return .requestParameters(parameters: ["phone": phone,
+                    "countryCode": countrycode,
+                    "code": code])
         }
     }
     
     var headers: [String: String]? {
-        switch self {
-        case let .phonelogin(phone, countrycode, via):
-            return ["phone": phone,
-                    "countryCode": countrycode,
-                    "via": via]
-        case let .phoneverify(phone, countrycode, code):
-            return ["phone": phone,
-                    "countryCode": countrycode,
-                    "code": code]
-        }
-        
+        return nil
     }
 }
 
@@ -100,17 +94,13 @@ extension MobileAuthApi: EndPointType {
     
     var task: HTTPTask {
         switch self {
-        case .login:
-            return .request
+        case let .login(email, password):
+            return .requestParameters(parameters: ["email": email,
+                                                   "password": password])
         }
     }
     
     var headers: [String: String]? {
-        switch self {
-        case let .login(email, password):
-            return ["email": email,
-                    "password": password]
-        }
-        
+        return nil
     }
 }

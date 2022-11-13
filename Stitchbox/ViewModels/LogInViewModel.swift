@@ -46,20 +46,26 @@ class LoginControllerViewModel: ViewModelProtocol {
                         errorsObservable: errorsSubject.asObservable())
         
         signInDidTapSubject
-                    .withLatestFrom(credentialsObservable)
-                    .flatMapLatest { credentials in
-                        return loginService.signIn(with: credentials).materialize()
-                    }
-                    .subscribe(onNext: { [weak self] event in
-                        switch event {
-                        case .next(let user):
-                            self?.loginResultSubject.onNext(user)
-                        case .error(let error):
-                            self?.errorsSubject.onNext(error)
-                        default:
-                            break
-                        }
-                    })
-                    .disposed(by: disposeBag)
+            .withLatestFrom(credentialsObservable)
+            .flatMapLatest{
+                credentials in
+                    return
+            }
+//        signInDidTapSubject
+//                    .withLatestFrom(credentialsObservable)
+//                    .flatMapLatest { credentials in
+//                        return loginService.signIn(with: credentials).materialize()
+//                    }
+//                    .subscribe(onNext: { [weak self] event in
+//                        switch event {
+//                        case .next(let user):
+//                            self?.loginResultSubject.onNext(user)
+//                        case .error(let error):
+//                            self?.errorsSubject.onNext(error)
+//                        default:
+//                            break
+//                        }
+//                    })
+//                    .disposed(by: disposeBag)
     }
 }
