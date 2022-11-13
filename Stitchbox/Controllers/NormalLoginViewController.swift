@@ -25,11 +25,11 @@ class LoginController: UIViewController, ControllerType {
     // MARK: - Functions
     func bindUI(with viewModel: ViewModelType) {
         
-        emailTextfield.rx.text.asObservable()
+        emailTextfield.rx.text.orEmpty.asObservable()
             .subscribe(viewModel.input.email)
             .disposed(by: disposeBag)
         
-        passwordTextfield.rx.text.asObservable()
+        passwordTextfield.rx.text.orEmpty.asObservable()
             .subscribe(viewModel.input.password)
             .disposed(by: disposeBag)
         

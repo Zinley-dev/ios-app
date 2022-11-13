@@ -11,8 +11,8 @@ import RxSwift
 
 class LoginControllerViewModel: ViewModelProtocol {
     struct Input {
-        let email: AnyObserver<String?>
-        let password: AnyObserver<String?>
+        let email: AnyObserver<String>
+        let password: AnyObserver<String>
         let signInDidTap: AnyObserver<Void>
     }
     struct Output {
@@ -23,11 +23,12 @@ class LoginControllerViewModel: ViewModelProtocol {
     let input: Input
     let output: Output
     
-    private let emailSubject = PublishSubject<String?>()
-    private let passwordSubject = PublishSubject<String?>()
+    private let emailSubject = PublishSubject<String>()
+    private let passwordSubject = PublishSubject<String>()
     private let signInDidTapSubject = PublishSubject<Void>()
     private let loginResultSubject = PublishSubject<Account>()
     private let errorsSubject = PublishSubject<Error>()
+    private let credentialSubject = PublishSubject<Credentials?>()
     private let disposeBag = DisposeBag()
     
     private var credentialsObservable: Observable<Credentials> {
