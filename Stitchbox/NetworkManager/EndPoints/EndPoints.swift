@@ -24,57 +24,39 @@ extension APIBuilder: BaseURL {
     }
 }
 
+public enum MobileAuthApi {
+    case login (email: String, password: String)
+}
+
 public enum UserApi {
-    case login
-    case normallogin (email: String, password: String)
-    case signup
     case phonelogin (phone: String, countryCode: String, via: String)
     case phoneverify (phone: String, countryCode: String, code: String)
 }
-
 extension UserApi: EndPointType {
     var module: String {
-        return "/restApi"
+        return "/api/user"
     }
     
     var path: String {
         switch self {
-        case .login:
-            return "/login"
-        case .signup:
-            return "/signup"
-        case .normallogin:
-            return "/api/mobile/auth/login"
         case .phonelogin:
-            return "/api/user/sms/login"
+            return "/sms/login"
         case .phoneverify:
-            return "/api/user/sms/login/verify"
+            return "/sms/login/verify"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .login:
-            return .post
-        case .signup:
-            return .post
-        case .normallogin:
-            return .get
         case .phonelogin:
             return .get
         case .phoneverify:
-            return .get
+            return .post
         }
     }
     
     var task: HTTPTask {
         switch self {
-        case .login:
-            return .request
-        case .signup:
-            return .request
-        case .normallogin:
-            return .request
         case .phonelogin:
             return .request
         case .phoneverify:
@@ -84,9 +66,6 @@ extension UserApi: EndPointType {
     
     var headers: [String: String]? {
         switch self {
-        case let .normallogin(email, password):
-            return ["email": email,
-                    "password": password]
         case let .phonelogin(phone, countrycode, via):
             return ["phone": phone,
                     "countryCode": countrycode,
@@ -95,8 +74,42 @@ extension UserApi: EndPointType {
             return ["phone": phone,
                     "countryCode": countrycode,
                     "code": code]
-        default:
-           return nil
+        }
+        
+    }
+}
+
+extension MobileAuthApi: EndPointType {
+    var module: String {
+        return "/api/user/"
+    }
+    
+    var path: String {
+        switch self {
+        case .login:
+            return "/api/mobile/auth/login"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .login:
+            return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .login:
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        switch self {
+        case let .login(email, password):
+            return ["email": email,
+                    "password": password]
         }
         
     }

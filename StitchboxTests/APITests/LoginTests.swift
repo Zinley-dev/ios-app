@@ -18,14 +18,10 @@ class LoginTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-    
-    func testEasy() {
-       XCTAssertEqual(1, 2, "It is not true")
-    }
 
     func testNormalLogin() throws {
         APIManager().normalLogin(email: "welcometrue1@gmail.com", password: "01662456611", completion: { result in
-            XCTAssertNil(result)
+                print(result)
          })
 //        XCTAssertTrue(2 == 4)
     }

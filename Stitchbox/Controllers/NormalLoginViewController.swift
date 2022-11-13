@@ -1,19 +1,19 @@
+
 import UIKit
 import RxSwift
 import RxCocoa
 
-class LoginByPhoneViewController: UIViewController, ControllerType {
-    typealias ViewModelType = LoginByPhoneViewModel
+class LoginController: UIViewController, ControllerType {
+    typealias ViewModelType = LoginControllerViewModel
     
     // MARK: - Properties
     private var viewModel: ViewModelType!
     private let disposeBag = DisposeBag()
     
     // MARK: - UI
-    @IBOutlet weak var phoneTextfield: UITextField!
-    @IBOutlet weak var countryCodeTextfield: UITextField!
-    @IBOutlet weak var viaTextfield: UITextField!
-    @IBOutlet weak var getOTPButton: UIButton!
+    @IBOutlet weak var passwordTextfield: UITextField!
+    @IBOutlet weak var emailTextfield: UITextField!
+    @IBOutlet weak var signInButton: UIButton!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -25,20 +25,16 @@ class LoginByPhoneViewController: UIViewController, ControllerType {
     // MARK: - Functions
     func bindUI(with viewModel: ViewModelType) {
         
-        phoneTextfield.rx.text.asObservable()
-            .subscribe(viewModel.input.phone)
+        emailTextfield.rx.text.asObservable()
+            .subscribe(viewModel.input.email)
             .disposed(by: disposeBag)
         
-        countryCodeTextfield.rx.text.asObservable()
-            .subscribe(viewModel.input.countryCode)
+        passwordTextfield.rx.text.asObservable()
+            .subscribe(viewModel.input.password)
             .disposed(by: disposeBag)
         
-        viaTextfield.rx.text.asObservable()
-            .subscribe(viewModel.input.via)
-            .disposed(by: disposeBag)
-        
-        getOTPButton.rx.tap.asObservable()
-            .subscribe(viewModel.input.getOTPDidTap)
+        signInButton.rx.tap.asObservable()
+            .subscribe(viewModel.input.signInDidTap)
             .disposed(by: disposeBag)
         
         viewModel.output.errorsObservable
@@ -47,9 +43,9 @@ class LoginByPhoneViewController: UIViewController, ControllerType {
             })
             .disposed(by: disposeBag)
         
-        viewModel.output.OTPSentObservable
+        viewModel.output.loginResultObservable
             .subscribe(onNext: { [unowned self] (user) in
-                self.presentMessage(message: "OTP Sent")
+                self.presentMessage(message: "User successfully signed in")
             })
             .disposed(by: disposeBag)
 
@@ -68,10 +64,10 @@ class LoginByPhoneViewController: UIViewController, ControllerType {
     }
 }
 
-extension LoginByPhoneViewController {
+extension LoginController {
     static func create(with viewModel: ViewModelType) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "LoginByPhoneViewController") as! LoginByPhoneViewController
+        let controller = storyboard.instantiateViewController(withIdentifier: "LoginController") as! LoginController
         controller.viewModel = viewModel
         return controller
     }

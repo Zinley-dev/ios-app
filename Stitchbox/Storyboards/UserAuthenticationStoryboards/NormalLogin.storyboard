@@ -12,7 +12,7 @@
         <!--LoginViewController-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController title="LoginViewController" id="Y6W-OH-hqX" customClass="LoginViewController" customModule="Stitchbox" sceneMemberID="viewController">
+                <viewController title="LoginViewController" id="Y6W-OH-hqX" customClass="LoginController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -44,9 +44,6 @@
                                 <accessibility key="accessibilityConfiguration" label="Log In"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Log In"/>
-                                <connections>
-                                    <segue destination="ak2-f2-bqj" kind="show" id="nPX-Mt-vbV"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kg3-Wy-tK5">
                                 <rect key="frame" x="76" y="451" width="240" height="35"/>
@@ -67,10 +64,9 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="email" destination="2Ty-MA-Doc" id="OVf-9v-aH0"/>
-                        <outlet property="logInButton" destination="WCb-Iv-paf" id="HmH-Ww-foJ"/>
-                        <outlet property="logInByPhone" destination="kg3-Wy-tK5" id="Pa8-B5-E3U"/>
-                        <outlet property="password" destination="Fhd-MM-1tW" id="4UE-fm-WLb"/>
+                        <outlet property="emailTextfield" destination="2Ty-MA-Doc" id="ofm-eA-8af"/>
+                        <outlet property="passwordTextfield" destination="Fhd-MM-1tW" id="Vsb-mg-9Sn"/>
+                        <outlet property="signInButton" destination="WCb-Iv-paf" id="wY6-9t-he8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -140,7 +136,7 @@
         <!--LoginViewController-->
         <scene sceneID="Khg-fq-JHz">
             <objects>
-                <viewController title="LoginViewController" id="2Sq-VY-NkR" customClass="LogInByPhoneViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="LoginViewController" id="2Sq-VY-NkR" customClass="LogInByPhoneVerifyViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fnI-zn-hco">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -190,7 +186,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="8qB-YD-7aA"/>
-        <segue reference="nPX-Mt-vbV"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="labelColor">
