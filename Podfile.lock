@@ -22,6 +22,14 @@ PODS:
   - RxRelay (6.5.0):
     - RxSwift (= 6.5.0)
   - RxSwift (6.5.0)
+  - RxSwiftExt (6.0.1):
+    - RxSwiftExt/Core (= 6.0.1)
+    - RxSwiftExt/RxCocoa (= 6.0.1)
+  - RxSwiftExt/Core (6.0.1):
+    - RxSwift (~> 6.0)
+  - RxSwiftExt/RxCocoa (6.0.1):
+    - RxCocoa (~> 6.0)
+    - RxSwiftExt/Core
   - SwiftLint (0.49.1)
   - Texture (3.1.0):
     - Texture/AssetsLibrary (= 3.1.0)
@@ -49,6 +57,7 @@ DEPENDENCIES:
   - Cache
   - RxCocoa
   - RxSwift
+  - RxSwiftExt
   - SwiftLint
   - Texture
 
@@ -62,6 +71,7 @@ SPEC REPOS:
     - RxCocoa
     - RxRelay
     - RxSwift
+    - RxSwiftExt
     - SwiftLint
     - Texture
 
@@ -74,9 +84,10 @@ SPEC CHECKSUMS:
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  RxSwiftExt: d61c4b9b06e0a448041b1c659e0f1b5c5a035afc
   SwiftLint: 32ee33ded0636d0905ef6911b2b67bbaeeedafa5
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
 
-PODFILE CHECKSUM: 0e317fdf631abcd2bddb93751e3d239ff5b57a4f
+PODFILE CHECKSUM: c2315cd207497daf09f5759227ded8ecf5e91917
 
 COCOAPODS: 1.11.3

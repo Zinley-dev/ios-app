@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 struct Credentials {
-    let email: String
+    let username: String
     let password: String
 }
 

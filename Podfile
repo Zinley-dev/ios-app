@@ -9,10 +9,10 @@ target 'Stitchbox' do
   pod "Texture"
   pod "SwiftLint"
   pod 'RxSwift'
-  pod 'Unbox'
   pod 'RxCocoa'
   pod 'Alamofire'
   pod 'Cache'
+  pod 'RxSwiftExt'
 
   target 'StitchboxTests' do
     inherit! :search_paths
@@ -21,6 +21,18 @@ target 'Stitchbox' do
 
   target 'StitchboxUITests' do
     # Pods for testing
+  end
+
+  target 'StitchboxUnitTests' do
+    inherit! :search_paths
+    # Pods for testing
+  	pod "Texture"
+  	pod "SwiftLint"
+  	pod 'RxSwift'
+ 	pod 'RxCocoa'
+  	pod 'Alamofire'
+  	pod 'Cache'
+    
   end
 
 end

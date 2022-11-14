@@ -24,10 +24,9 @@ enum Result {
 
 struct APIManager {
     let manager = Manager<UserApi>()
-    let mobileAuthManager = Manager<MobileAuthApi>()
     
-    func normalLogin(email: String, password: String, completion: @escaping APICompletion) {
-        mobileAuthManager.request(.login(email: email, password: password)) { result in
+    func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
+        manager.request(.login(username: username, password: password)) { result in
             completion(result)
         }
     }

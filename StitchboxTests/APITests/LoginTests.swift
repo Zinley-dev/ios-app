@@ -20,10 +20,10 @@ class LoginTests: XCTestCase {
     }
 
     func testNormalLogin() throws {
-        APIManager().normalLogin(email: "welcometrue1@gmail.com", password: "01662456611", completion: { result in
-                print(result)
-         })
-//        XCTAssertTrue(2 == 4)
+//        APIManager().normalLogin(email: "welcometrue1@gmail.com", password: "01662456611", completion: { result in
+//                print(result)
+//         })
+        XCTAssertTrue(2 == 4)
     }
     
     func testPerformanceExample() throws {

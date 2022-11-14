@@ -14,7 +14,7 @@ protocol BaseURL {
 enum APIBuilder {
     struct APIBuilderConstants {
         static let ApiScheme = "https"
-        static let ApiHost = "api.stitchbox.dev"
+        static let ApiHost = "dual-api.tek4.vn"
     }
 }
 
@@ -24,11 +24,9 @@ extension APIBuilder: BaseURL {
     }
 }
 
-public enum MobileAuthApi {
-    case login (email: String, password: String)
-}
 
 public enum UserApi {
+    case login (username: String, password: String)
     case phonelogin (phone: String, countryCode: String, via: String)
     case phoneverify (phone: String, countryCode: String, code: String)
 }
@@ -39,6 +37,8 @@ extension UserApi: EndPointType {
     
     var path: String {
         switch self {
+        case .login:
+            return "/login"
         case .phonelogin:
             return "/sms/login"
         case .phoneverify:
@@ -48,6 +48,8 @@ extension UserApi: EndPointType {
     
     var httpMethod: HTTPMethod {
         switch self {
+        case .login:
+            return .post
         case .phonelogin:
             return .get
         case .phoneverify:
@@ -57,46 +59,17 @@ extension UserApi: EndPointType {
     
     var task: HTTPTask {
         switch self {
-        case let .phonelogin(phone, countrycode, via):
+        case .login(let username, let password):
+            return .requestParameters(parameters: ["username": username,
+                                                   "password": password])
+        case .phonelogin(let phone, let countrycode, let via):
             return .requestParameters(parameters: ["phone": phone,
                     "countryCode": countrycode,
                     "via": via])
-        case let .phoneverify(phone, countrycode, code):
+        case .phoneverify(let phone, let countrycode, let code):
             return .requestParameters(parameters: ["phone": phone,
                     "countryCode": countrycode,
                     "code": code])
-        }
-    }
-    
-    var headers: [String: String]? {
-        return nil
-    }
-}
-
-extension MobileAuthApi: EndPointType {
-    var module: String {
-        return "/api/mobile"
-    }
-    
-    var path: String {
-        switch self {
-        case .login:
-            return "/auth/login"
-        }
-    }
-    
-    var httpMethod: HTTPMethod {
-        switch self {
-        case .login:
-            return .post
-        }
-    }
-    
-    var task: HTTPTask {
-        switch self {
-        case let .login(email, password):
-            return .requestParameters(parameters: ["email": email,
-                                                   "password": password])
         }
     }
     

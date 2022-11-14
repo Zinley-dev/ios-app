@@ -58,14 +58,13 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     }
     fileprivate func configureParameters(parameters: [String: Any]?, request: inout URLRequest) {
         do {
-            var data: Data
-            if #available(iOS 11.0, *) {
-                data = try NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:], requiringSecureCoding: true)
-            } else {
-                data = NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:])
+            print(parameters)
+            let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
+            print(jsonData)
+            if let JSONString = String(data: jsonData!, encoding: String.Encoding.utf8) {
+               print(JSONString)
             }
-            request.httpBody = data
-        } catch {
+            request.httpBody = jsonData
         }
     }
     fileprivate func addAdditionalHeaders(_ additionalHeaders: [String: String]?, request: inout URLRequest) {
@@ -75,6 +74,9 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         }
     }
     fileprivate func handleNetworkResponse(_ data: Data?, _ response: HTTPURLResponse) -> Result {
+        if let JSONString = String(data: data!, encoding: String.Encoding.utf8) {
+           print(JSONString)
+        }
         switch response.statusCode {
         case 200...299: return .success(getAPIResponseFor(data, response))
         case 401...500: return .failure(ErrorType.authRequired)
@@ -85,6 +87,10 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     }
     fileprivate func getAPIResponseFor(_ data: Data?, _ response: HTTPURLResponse) -> APIResponse {
         do {
+            if let JSONString = String(data: data!, encoding: String.Encoding.utf8) {
+                      print(JSONString)
+                print (response)
+                   }
             guard let responseData = data else {
                 return getAPIResponseWithErrorMessage(errorMessage: ErrorMessage.kNoData)
             }

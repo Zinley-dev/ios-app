@@ -7,42 +7,43 @@ class LoginController: UIViewController, ControllerType {
     typealias ViewModelType = LoginControllerViewModel
     
     // MARK: - Properties
-    private var viewModel: ViewModelType!
+    private var viewModel: ViewModelType! = ViewModelType()
     private let disposeBag = DisposeBag()
     
     // MARK: - UI
     @IBOutlet weak var passwordTextfield: UITextField!
-    @IBOutlet weak var emailTextfield: UITextField!
+    @IBOutlet weak var usernameTextfield: UITextField!
     @IBOutlet weak var signInButton: UIButton!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         bindUI(with: viewModel)
     }
     
     // MARK: - Functions
     func bindUI(with viewModel: ViewModelType) {
         
-        emailTextfield.rx.text.orEmpty.asObservable()
-            .subscribe(viewModel.input.email)
+        // binding Controller inputs to View Model observer
+        usernameTextfield.rx.text.orEmpty.asObservable()
+            .subscribe(viewModel.input.username)
             .disposed(by: disposeBag)
         
         passwordTextfield.rx.text.orEmpty.asObservable()
             .subscribe(viewModel.input.password)
             .disposed(by: disposeBag)
-        
+
         signInButton.rx.tap.asObservable()
             .subscribe(viewModel.input.signInDidTap)
             .disposed(by: disposeBag)
         
+        // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
             .subscribe(onNext: { [unowned self] (error) in
                 self.presentError(error: error)
             })
             .disposed(by: disposeBag)
-        
+
         viewModel.output.loginResultObservable
             .subscribe(onNext: { [unowned self] (user) in
                 self.presentMessage(message: "User successfully signed in")
