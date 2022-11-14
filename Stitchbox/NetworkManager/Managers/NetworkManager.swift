@@ -49,6 +49,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         case .request:
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         case .requestParameters(let parameters):
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             self.configureParameters(parameters: parameters, request: &request)
         case .requestParametersAndHeaders(let parameters, let additionalHeaders):
             self.addAdditionalHeaders(additionalHeaders, request: &request)
@@ -58,13 +59,15 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     }
     fileprivate func configureParameters(parameters: [String: Any]?, request: inout URLRequest) {
         do {
-            var data: Data
-            if #available(iOS 11.0, *) {
-                data = try NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:], requiringSecureCoding: true)
-            } else {
-                data = NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:])
-            }
-            request.httpBody = data
+//            var data: Data
+//            if #available(iOS 11.0, *) {
+//                data = try NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:], requiringSecureCoding: true)
+//            } else {
+//                data = NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:])
+//            }
+            
+            let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
+            request.httpBody = jsonData
         } catch {
         }
     }

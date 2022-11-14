@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ForgotPasswordViewController:UIViewController{
+class ForgotPasswordViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()

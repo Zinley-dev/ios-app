@@ -137,7 +137,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7h-L2-nNd">
-                                <rect key="frame" x="124" y="216" width="168" height="213"/>
+                                <rect key="frame" x="124" y="294" width="175" height="135"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Forgot password?"/>
@@ -188,75 +188,50 @@
             </objects>
             <point key="canvasLocation" x="131.8840579710145" y="109.82142857142857"/>
         </scene>
-        <!--Signup View Controller-->
+        <!--Register View Controller-->
         <scene sceneID="Cko-rQ-R1B">
             <objects>
-                <viewController id="Wgm-Xf-ZNU" customClass="SignupViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="dPw-jt-1VN" customClass="ViewController">
+                <viewController id="Wgm-Xf-ZNU" customClass="RegisterViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dPw-jt-1VN" >
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="tDj-Du-xa8">
-                                <rect key="frame" x="40" y="132" width="334" height="347"/>
+                                <rect key="frame" x="40" y="132" width="334" height="250.5"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email (Optional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pZH-h1-1lN">
-                                        <rect key="frame" x="0.0" y="0.0" width="334" height="34.5"/>
-                                        <color key="backgroundColor" systemColor="systemGray5Color"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                        <connections>
-                                            <action selector="emailTextField:" destination="Wgm-Xf-ZNU" eventType="editingDidEnd" id="Xum-K9-fW3"/>
-                                        </connections>
-                                    </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BFf-VV-tdN">
-                                        <rect key="frame" x="0.0" y="54.5" width="334" height="34.5"/>
-                                        <color key="backgroundColor" systemColor="systemGray5Color"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Zs2-Te-inO">
-                                        <rect key="frame" x="0.0" y="109" width="334" height="34.5"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p1G-Le-SX1">
+                                        <rect key="frame" x="0.0" y="0.0" width="334" height="34"/>
                                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Owb-Rr-Qql">
-                                        <rect key="frame" x="0.0" y="163.5" width="334" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="54" width="334" height="34"/>
+                                        <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jlQ-6z-60P">
+                                        <rect key="frame" x="0.0" y="108" width="334" height="34"/>
                                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Referral code" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IPq-Zq-yOr">
-                                        <rect key="frame" x="0.0" y="218" width="334" height="34"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rz6-HX-TRy">
+                                        <rect key="frame" x="0.0" y="162" width="334" height="34"/>
                                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IyA-By-g1W">
-                                        <rect key="frame" x="0.0" y="272" width="334" height="34.5"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Io-2k-MH3">
+                                        <rect key="frame" x="0.0" y="216" width="334" height="34.5"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Sign Up"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Signup"/>
                                         <connections>
-                                            <action selector="signUpButtonAction:" destination="Wgm-Xf-ZNU" eventType="touchUpInside" id="oEf-Gi-upM"/>
+                                            <action selector="tappedSignupButton:" destination="Wgm-Xf-ZNU" eventType="touchUpInside" id="NbW-Jd-xXR"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="errorSignupLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uob-07-INv">
-                                        <rect key="frame" x="0.0" y="326.5" width="334" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" systemColor="systemRedColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="Owb-Rr-Qql" firstAttribute="height" secondItem="pZH-h1-1lN" secondAttribute="height" id="EIh-3L-QCI"/>
-                                    <constraint firstItem="IyA-By-g1W" firstAttribute="height" secondItem="pZH-h1-1lN" secondAttribute="height" id="Fru-JR-t1c"/>
-                                    <constraint firstItem="BFf-VV-tdN" firstAttribute="height" secondItem="pZH-h1-1lN" secondAttribute="height" id="MFp-wy-2Mt"/>
-                                    <constraint firstItem="Zs2-Te-inO" firstAttribute="height" secondItem="pZH-h1-1lN" secondAttribute="height" id="TGf-q0-UdM"/>
-                                    <constraint firstItem="Owb-Rr-Qql" firstAttribute="height" secondItem="pZH-h1-1lN" secondAttribute="height" id="WwN-By-ZZt"/>
-                                    <constraint firstItem="BFf-VV-tdN" firstAttribute="height" secondItem="pZH-h1-1lN" secondAttribute="height" id="i2P-y6-G2S"/>
-                                    <constraint firstItem="IyA-By-g1W" firstAttribute="height" secondItem="pZH-h1-1lN" secondAttribute="height" id="u05-yw-i40"/>
-                                    <constraint firstItem="Zs2-Te-inO" firstAttribute="height" secondItem="pZH-h1-1lN" secondAttribute="height" id="v3A-KP-sQU"/>
-                                </constraints>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Y4a-75-xzv"/>
@@ -269,13 +244,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="s5O-Ly-aCi"/>
                     <connections>
-                        <outlet property="emailTextField" destination="pZH-h1-1lN" id="pRJ-3n-Rhy"/>
-                        <outlet property="errorSignupLabel" destination="Uob-07-INv" id="Mjd-XS-qcS"/>
-                        <outlet property="nameTextField" destination="BFf-VV-tdN" id="mbY-Ru-rXl"/>
-                        <outlet property="passwordTextField" destination="Owb-Rr-Qql" id="nFM-S9-461"/>
-                        <outlet property="referralCodeTextField" destination="IPq-Zq-yOr" id="pSd-iz-12r"/>
-                        <outlet property="signUpButton" destination="IyA-By-g1W" id="2yy-sR-hVH"/>
-                        <outlet property="userNameTextField" destination="Zs2-Te-inO" id="Ce2-Bp-qFY"/>
+                        <outlet property="emailTextField" destination="p1G-Le-SX1" id="qY8-dl-Woo"/>
+                        <outlet property="nameTextField" destination="Rz6-HX-TRy" id="cIS-yJ-gcn"/>
+                        <outlet property="passwordTextField" destination="Owb-Rr-Qql" id="zfZ-p4-uhJ"/>
+                        <outlet property="phoneTextField" destination="jlQ-6z-60P" id="iTq-cx-e6m"/>
+                        <outlet property="signUpButton" destination="4Io-2k-MH3" id="wO8-7b-Hvv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UuQ-p6-w1i" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -285,7 +258,7 @@
         <!--Forgot Pasword View Controller-->
         <scene sceneID="rW9-yf-oYf">
             <objects>
-                <viewController title="Forgot Pasword View Controller" id="HIe-VL-idY" sceneMemberID="viewController">
+                <viewController title="Forgot Pasword View Controller" id="HIe-VL-idY" customClass="ForgotPasswordViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="icw-di-6eo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -307,21 +280,18 @@
                                     <segue destination="zK4-PJ-GES" kind="show" id="SU2-kQ-4WU"/>
                                 </connections>
                             </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="122" translatesAutoresizingMaskIntoConstraints="NO" id="QXh-18-ERM">
-                                <rect key="frame" x="75" y="169" width="267" height="34.5"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xjf-cv-HR1">
-                                        <rect key="frame" x="0.0" y="0.0" width="72.5" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Phone"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LGX-nJ-Hd5">
-                                        <rect key="frame" x="194.5" y="0.0" width="72.5" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Email"/>
-                                    </button>
-                                </subviews>
-                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LGX-nJ-Hd5">
+                                <rect key="frame" x="73" y="173" width="65" height="34.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Email"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xjf-cv-HR1">
+                                <rect key="frame" x="250" y="173" width="72.5" height="34.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Phone"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="4ZO-e5-jFg"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -335,7 +305,7 @@
         <!--Reset Password Verification View Controller-->
         <scene sceneID="lpk-xU-tng">
             <objects>
-                <viewController title="Reset Password Verification View Controller" id="zK4-PJ-GES" sceneMemberID="viewController">
+                <viewController title="Reset Password Verification View Controller" id="zK4-PJ-GES" customClass="ResetPasswordVerificationViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AY7-q5-rQ6">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -369,7 +339,7 @@
         <!--Password Change View Controller-->
         <scene sceneID="AIL-wc-mfh">
             <objects>
-                <viewController title="Password Change View Controller" id="XNU-09-RWu" sceneMemberID="viewController">
+                <viewController title="Password Change View Controller" id="XNU-09-RWu" customClass="PasswordChangeViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sIZ-Yo-ec9">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -440,9 +410,6 @@
         </systemColor>
         <systemColor name="systemGray5Color">
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

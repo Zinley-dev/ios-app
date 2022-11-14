@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class PasswordChangeViewController:UIViewController {
+class PasswordChangeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()

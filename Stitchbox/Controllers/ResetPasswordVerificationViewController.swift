@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ResetPasswordVerificationViewController:UIViewController{
+class ResetPasswordVerificationViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()

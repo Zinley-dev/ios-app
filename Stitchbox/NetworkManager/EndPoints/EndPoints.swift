@@ -14,7 +14,7 @@ protocol BaseURL {
 enum APIBuilder {
     struct APIBuilderConstants {
         static let ApiScheme = "https"
-        static let ApiHost = "domain-name.com"
+        static let ApiHost = "api.stitchbox.dev"
     }
 }
 
@@ -26,7 +26,7 @@ extension APIBuilder: BaseURL {
 
 public enum UserApi {
     case login
-    case signup
+    case signup(params: [String: Any]?)
 }
 
 extension UserApi: EndPointType {
@@ -37,9 +37,9 @@ extension UserApi: EndPointType {
     var path: String {
         switch self {
         case .login:
-            return "/login"
+            return "/api/mobile/auth/login"
         case .signup:
-            return "/signup"
+            return "/api/mobile/auth/register"
         }
     }
 
@@ -56,8 +56,8 @@ extension UserApi: EndPointType {
         switch self {
         case .login:
             return .request
-        case .signup:
-            return .request
+        case .signup(let params):
+            return .requestParameters(parameters: params)
         }
     }
 
