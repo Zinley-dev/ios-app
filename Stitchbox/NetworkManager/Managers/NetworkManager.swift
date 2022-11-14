@@ -105,6 +105,3 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     }
     
 }
-    }
-    
-}

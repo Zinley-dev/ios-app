@@ -15,10 +15,16 @@ class LoginController: UIViewController, ControllerType {
     @IBOutlet weak var usernameTextfield: UITextField!
     @IBOutlet weak var signInButton: UIButton!
     
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         bindUI(with: viewModel)
+    }
+    
+    @IBAction func onClickLogin() {
+        APIManager().normalLogin(username: usernameTextfield.text!, password: passwordTextfield.text!) { result in print (result)
+        }
     }
     
     // MARK: - Functions
@@ -39,21 +45,41 @@ class LoginController: UIViewController, ControllerType {
         
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
-            .subscribe(onNext: { [unowned self] (error) in
-                self.presentError(error: error)
+            .subscribe(onNext: { (error) in
+                DispatchQueue.main.async {
+                    self.presentError(error: error)
+              }
             })
             .disposed(by: disposeBag)
 
         viewModel.output.loginResultObservable
-            .subscribe(onNext: { [unowned self] (user) in
-                self.presentMessage(message: "User successfully signed in")
+            .subscribe(onNext: { account in
+                DispatchQueue.main.async {
+                    // Store account to UserDefault as "userAccount"
+                    do {
+                        // Create JSON Encoder
+                        let encoder = JSONEncoder()
+
+                        // Encode Note
+                        let data = try encoder.encode(account)
+
+                        // Write/Set Data
+                        UserDefaults.standard.set(data, forKey: "userAccount")
+
+                    } catch {
+                        print("Unable to Encode Account (\(error))")
+                    }
+                    
+                    // Perform Segue to DashboardStoryboard
+                    self.performSegue(withIdentifier: "DashboardSegue", sender:self)
+              }
             })
             .disposed(by: disposeBag)
 
     }
     
     func presentError(error: Error) {
-        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }

@@ -12,7 +12,6 @@
 		147187E92920AD520039B89E /* LogInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187E82920AD520039B89E /* LogInViewModel.swift */; };
 		147187EB2920AF6E0039B89E /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187EA2920AF6D0039B89E /* ViewModelProtocol.swift */; };
 		147187ED2920B0980039B89E /* ControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187EC2920B0980039B89E /* ControllerType.swift */; };
-		147187EF2920B1AD0039B89E /* LoginServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187EE2920B1AD0039B89E /* LoginServiceProtocol.swift */; };
 		147187F12920D0470039B89E /* LoginByPhoneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187F02920D0470039B89E /* LoginByPhoneViewModel.swift */; };
 		147187F32920D2830039B89E /* LoginByPhoneVerifyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187F22920D2830039B89E /* LoginByPhoneVerifyViewModel.swift */; };
 		14847406291F37F80099AA08 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14847405291F37F80099AA08 /* AccountModel.swift */; };
@@ -79,7 +78,6 @@
 		147187E82920AD520039B89E /* LogInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewModel.swift; sourceTree = "<group>"; };
 		147187EA2920AF6D0039B89E /* ViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProtocol.swift; sourceTree = "<group>"; };
 		147187EC2920B0980039B89E /* ControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerType.swift; sourceTree = "<group>"; };
-		147187EE2920B1AD0039B89E /* LoginServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginServiceProtocol.swift; sourceTree = "<group>"; };
 		147187F02920D0470039B89E /* LoginByPhoneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginByPhoneViewModel.swift; sourceTree = "<group>"; };
 		147187F22920D2830039B89E /* LoginByPhoneVerifyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginByPhoneVerifyViewModel.swift; sourceTree = "<group>"; };
 		14847405291F37F80099AA08 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
@@ -371,7 +369,6 @@
 			isa = PBXGroup;
 			children = (
 				147187EA2920AF6D0039B89E /* ViewModelProtocol.swift */,
-				147187EE2920B1AD0039B89E /* LoginServiceProtocol.swift */,
 				147187E82920AD520039B89E /* LogInViewModel.swift */,
 				147187F22920D2830039B89E /* LoginByPhoneVerifyViewModel.swift */,
 				147187F02920D0470039B89E /* LoginByPhoneViewModel.swift */,
@@ -416,7 +413,6 @@
 				147187DB2920A3A20039B89E /* Sources */,
 				147187DC2920A3A20039B89E /* Frameworks */,
 				147187DD2920A3A20039B89E /* Resources */,
-				AB5030716436B900D77C3A28 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -657,23 +653,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AB5030716436B900D77C3A28 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		BBF222046ED1874D0D6DE30D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -740,7 +719,6 @@
 				390FD77429092A9B0068B883 /* HTTPTask.swift in Sources */,
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
 				390FD77629092AB30068B883 /* HTTPMethod.swift in Sources */,
-				147187EF2920B1AD0039B89E /* LoginServiceProtocol.swift in Sources */,
 				390FD77829092ADE0068B883 /* EndPoints.swift in Sources */,
 				390FD7382909264D0068B883 /* AppDelegate.swift in Sources */,
 				1484740E291F7DC80099AA08 /* LogInByPhoneVerifyViewController.swift in Sources */,

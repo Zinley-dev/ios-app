@@ -12,7 +12,7 @@
         <!--LoginViewController-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController title="LoginViewController" id="Y6W-OH-hqX" customClass="LoginController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="normalLoginStoryboard" title="LoginViewController" id="Y6W-OH-hqX" customClass="LoginController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -26,7 +26,7 @@
                                 <rect key="frame" x="76" y="402" width="240" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" textContentType="password"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WCb-Iv-paf">
                                 <rect key="frame" x="76" y="451" width="240" height="35"/>
@@ -42,7 +42,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Log In By Phone"/>
                                 <connections>
-                                    <segue destination="SM8-4k-hGa" kind="show" id="8qB-YD-7aA"/>
+                                    <segue destination="SM8-4k-hGa" kind="show" id="8Ns-CB-SaH"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Ty-MA-Doc" userLabel="Username Textfield">
@@ -50,7 +50,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label="Username"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" textContentType="username"/>
                             </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
@@ -58,8 +58,9 @@
                     </view>
                     <connections>
                         <outlet property="passwordTextfield" destination="Fhd-MM-1tW" id="Vsb-mg-9Sn"/>
-                        <outlet property="signInButton" destination="WCb-Iv-paf" id="wY6-9t-he8"/>
+                        <outlet property="signInButton" destination="WCb-Iv-paf" id="YWu-Rz-gBc"/>
                         <outlet property="usernameTextfield" destination="2Ty-MA-Doc" id="nbM-5J-HCo"/>
+                        <segue destination="ak2-f2-bqj" kind="show" identifier="DashboardSegue" id="Gnn-vM-wcN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -69,7 +70,7 @@
         <!--Dashboard-->
         <scene sceneID="Y5v-Ej-usE">
             <objects>
-                <viewControllerPlaceholder storyboardName="Dashboard" id="ak2-f2-bqj" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardIdentifier="DashboardStoryboard" storyboardName="Dashboard" id="ak2-f2-bqj" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="LdV-be-pgL"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bMk-cM-d0A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -178,7 +179,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="8qB-YD-7aA"/>
+        <segue reference="8Ns-CB-SaH"/>
+        <segue reference="Gnn-vM-wcN"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="labelColor">
