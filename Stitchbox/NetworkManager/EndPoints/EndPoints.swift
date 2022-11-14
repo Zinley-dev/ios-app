@@ -14,7 +14,7 @@ protocol BaseURL {
 enum APIBuilder {
     struct APIBuilderConstants {
         static let ApiScheme = "https"
-        static let ApiHost = "dual-api.tek4.vn"
+        static let ApiHost = "dual-api.tek4.vn/api"
     }
 }
 
@@ -32,7 +32,7 @@ public enum UserApi {
 }
 extension UserApi: EndPointType {
     var module: String {
-        return "/api/user"
+        return "/user"
     }
     
     var path: String {
