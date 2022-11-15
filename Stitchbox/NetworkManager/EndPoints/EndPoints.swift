@@ -51,7 +51,7 @@ extension UserApi: EndPointType {
         case .login:
             return .post
         case .phonelogin:
-            return .get
+            return .post
         case .phoneverify:
             return .post
         }
@@ -63,6 +63,9 @@ extension UserApi: EndPointType {
             return .requestParameters(parameters: ["username": username,
                                                    "password": password])
         case .phonelogin(let phone, let countrycode, let via):
+            print(["phone": phone,
+                   "countryCode": countrycode,
+                   "via": via])
             return .requestParameters(parameters: ["phone": phone,
                     "countryCode": countrycode,
                     "via": via])

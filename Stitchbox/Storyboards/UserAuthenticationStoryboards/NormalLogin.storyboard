@@ -26,7 +26,7 @@
                                 <rect key="frame" x="76" y="402" width="240" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" textContentType="password"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WCb-Iv-paf">
                                 <rect key="frame" x="76" y="451" width="240" height="35"/>
@@ -50,7 +50,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label="Username"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" textContentType="username"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="route" textContentType="username"/>
                             </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
@@ -77,10 +77,10 @@
             </objects>
             <point key="canvasLocation" x="2580" y="8"/>
         </scene>
-        <!--LoginViewController-->
+        <!--LoginByPhoneView-->
         <scene sceneID="Gat-w2-WHn">
             <objects>
-                <viewController title="LoginViewController" id="SM8-4k-hGa" customClass="LogInByPhoneViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="LoginByPhoneView" id="SM8-4k-hGa" customClass="LoginByPhoneSendCodeController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lsE-09-cAw">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -90,14 +90,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label="Region"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" textContentType="tel"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone Number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IJy-M8-QdE">
                                 <rect key="frame" x="117" y="315" width="199" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label="Phone Number"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" textContentType="tel"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Some lines talking about phone code verification" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rCN-ea-9zT">
                                 <rect key="frame" x="76" y="131" width="240" height="128"/>
@@ -113,24 +113,27 @@
                                 <accessibility key="accessibilityConfiguration" label="Send OTP"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Send OTP"/>
-                                <connections>
-                                    <segue destination="2Sq-VY-NkR" kind="show" id="Qm5-91-r2A"/>
-                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Sco-lA-TxD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="GRu-tg-B9s"/>
+                    <connections>
+                        <outlet property="countryCodeTextfield" destination="xou-md-Nbd" id="gBM-nA-kEv"/>
+                        <outlet property="phoneTextfield" destination="IJy-M8-QdE" id="SNp-Qu-QBi"/>
+                        <outlet property="sendCodeButton" destination="UJh-H8-BQw" id="YI6-7h-C6D"/>
+                        <segue destination="2Sq-VY-NkR" kind="show" identifier="MoveToVerifySegue" id="boM-ba-Qbn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sp9-ZM-1tK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="925.95419847328242" y="-2.1126760563380285"/>
         </scene>
-        <!--LoginViewController-->
+        <!--LoginByPhoneVerifyView-->
         <scene sceneID="Khg-fq-JHz">
             <objects>
-                <viewController title="LoginViewController" id="2Sq-VY-NkR" customClass="LogInByPhoneVerifyViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LogInByPhoneView" title="LoginByPhoneVerifyView" id="2Sq-VY-NkR" customClass="LoginByPhoneVerifyController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fnI-zn-hco">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -143,35 +146,39 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9x-bo-VCl">
+                                <rect key="frame" x="76" y="444" width="240" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration" label="Send OTP"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Change Phone Number"/>
+                                <connections>
+                                    <segue destination="SM8-4k-hGa" kind="show" id="2Ug-9u-PiY"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hgp-gx-vzv">
+                                <rect key="frame" x="76" y="322" width="247" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" textContentType="one-time-code"/>
+                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NOw-Hk-G1A">
-                                <rect key="frame" x="76" y="373" width="240" height="35"/>
+                                <rect key="frame" x="76" y="409" width="240" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label="Send OTP"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Confirm OTP"/>
-                                <connections>
-                                    <segue destination="ak2-f2-bqj" kind="show" id="EEa-vb-BcR"/>
-                                </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qj6-hc-b1b">
-                                <rect key="frame" x="76" y="408" width="240" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <accessibility key="accessibilityConfiguration" label="Send OTP"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Resend OTP"/>
-                                <connections>
-                                    <segue destination="SM8-4k-hGa" kind="show" id="Sh8-ae-SST"/>
-                                </connections>
-                            </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jFi-lQ-B8r" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="76" y="255" width="240" height="110"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lUI-vQ-aZu"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="5eg-Kt-MWT"/>
+                    <connections>
+                        <outlet property="OTPCodeTextfield" destination="hgp-gx-vzv" id="A22-uA-Jz7"/>
+                        <outlet property="verifyCodeButton" destination="NOw-Hk-G1A" id="MqT-Bm-CT7"/>
+                        <segue destination="ak2-f2-bqj" kind="show" identifier="DashboardSegue2" id="Voj-3Q-62j"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B84-ud-eaC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -179,8 +186,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="8Ns-CB-SaH"/>
-        <segue reference="Gnn-vM-wcN"/>
+        <segue reference="2Ug-9u-PiY"/>
+        <segue reference="Voj-3Q-62j"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="labelColor">

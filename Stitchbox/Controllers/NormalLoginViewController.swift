@@ -29,7 +29,6 @@ class LoginController: UIViewController, ControllerType {
     
     // MARK: - Functions
     func bindUI(with viewModel: ViewModelType) {
-        
         // binding Controller inputs to View Model observer
         usernameTextfield.rx.text.orEmpty.asObservable()
             .subscribe(viewModel.input.username)
@@ -38,7 +37,7 @@ class LoginController: UIViewController, ControllerType {
         passwordTextfield.rx.text.orEmpty.asObservable()
             .subscribe(viewModel.input.password)
             .disposed(by: disposeBag)
-
+        
         signInButton.rx.tap.asObservable()
             .subscribe(viewModel.input.signInDidTap)
             .disposed(by: disposeBag)
@@ -48,34 +47,20 @@ class LoginController: UIViewController, ControllerType {
             .subscribe(onNext: { (error) in
                 DispatchQueue.main.async {
                     self.presentError(error: error)
-              }
+                }
             })
             .disposed(by: disposeBag)
-
+        
         viewModel.output.loginResultObservable
-            .subscribe(onNext: { account in
-                DispatchQueue.main.async {
-                    // Store account to UserDefault as "userAccount"
-                    do {
-                        // Create JSON Encoder
-                        let encoder = JSONEncoder()
-
-                        // Encode Note
-                        let data = try encoder.encode(account)
-
-                        // Write/Set Data
-                        UserDefaults.standard.set(data, forKey: "userAccount")
-
-                    } catch {
-                        print("Unable to Encode Account (\(error))")
-                    }
-                    
-                    // Perform Segue to DashboardStoryboard
-                    self.performSegue(withIdentifier: "DashboardSegue", sender:self)
-              }
+            .subscribe(onNext: { isTrue in
+                if(isTrue){
+                    DispatchQueue.main.async {
+                        // Perform Segue to DashboardStoryboard
+                        self.performSegue(withIdentifier: "DashboardSegue2", sender: self)
+                    }}
             })
             .disposed(by: disposeBag)
-
+        
     }
     
     func presentError(error: Error) {

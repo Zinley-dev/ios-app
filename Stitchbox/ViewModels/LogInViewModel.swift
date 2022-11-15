@@ -16,7 +16,7 @@ class LoginControllerViewModel: ViewModelProtocol {
         let signInDidTap: AnyObserver<Void>
     }
     struct Output {
-        let loginResultObservable: Observable<Account>
+        let loginResultObservable: Observable<Bool>
         let errorsObservable: Observable<Error>
     }
     
@@ -26,7 +26,7 @@ class LoginControllerViewModel: ViewModelProtocol {
     private let usernameSubject = PublishSubject<String>()
     private let passwordSubject = PublishSubject<String>()
     private let signInDidTapSubject = PublishSubject<Void>()
-    private let loginResultSubject = PublishSubject<Account>()
+    private let loginResultSubject = PublishSubject<Bool>()
     private let errorsSubject = PublishSubject<Error>()
     private let credentialSubject = PublishSubject<Credentials>()
     private let disposeBag = DisposeBag()
@@ -61,7 +61,21 @@ class LoginControllerViewModel: ViewModelProtocol {
                     let data = apiResponse.body?["data"] as! [String: Any]?
                     do{
                         let account = try Account(JSONbody: data)
-                        self.loginResultSubject.onNext(account)
+                        // Store account to UserDefault as "userAccount"
+                        do {
+                            // Create JSON Encoder
+                            let encoder = JSONEncoder()
+                            
+                            // Encode Note
+                            let data = try encoder.encode(account)
+                            
+                            // Write/Set Data
+                            UserDefaults.standard.set(data, forKey: "userAccount")
+                            
+                        } catch {
+                            print("Unable to Encode Account (\(error))")
+                        }
+                        self.loginResultSubject.onNext(true)
                     }catch{
                         self.errorsSubject.onNext(error)
                     }
