@@ -9,10 +9,26 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class RegisterViewController: UIViewController {
+class RegisterViewController: UIViewController, ControllerType {
+   
     
-    private let registerViewModel = RegisterViewModel()
+    
+    typealias ViewModelType = RegisterViewModel
+    //MARK: Properties
+    private var registerViewModel: ViewModelType! = ViewModelType()
     private let disposeBag = DisposeBag()
+    
+    func bindUI(with registerViewModel: RegisterViewModel) {
+        emailTextField.rx.text.orEmpty.asObservable().subscribe(registerViewModel.input.email).disposed(by: disposeBag)
+        passwordTextField.rx.text.orEmpty.asObservable().subscribe(registerViewModel.input.password).disposed(by: disposeBag)
+        phoneTextField.rx.text.orEmpty.asObservable().subscribe(registerViewModel.input.phone).disposed(by: disposeBag)
+        nameTextField.rx.text.orEmpty.asObservable().subscribe(registerViewModel.input.name).disposed(by: disposeBag)
+        
+    }
+    
+    
+    
+   
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -22,33 +38,25 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var signUpButton: UIButton!
     
     @IBAction func tappedSignupButton(_ sender: UIButton) {
-        registerViewModel.register(email: emailTextField.text!, password: passwordTextField.text!, phone: phoneTextField.text!, name: nameTextField.text!)
+        registerViewModel.register(email: "popp", password: "popp", phone: "popp", name: "popp")
         print("tapped signup button")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        emailTextField.becomeFirstResponder()
-        
-        emailTextField.rx.text.map{ $0 ?? ""}.bind(to: registerViewModel.emailTextPublishedSubject).disposed(by: disposeBag)
-        passwordTextField.rx.text.map{ $0 ?? ""}.bind(to: registerViewModel.nameTextPublishedSubject).disposed(by: disposeBag)
-        phoneTextField.rx.text.map{ $0 ?? ""}.bind(to: registerViewModel.phoneTextPublishedSubject).disposed(by: disposeBag)
-        nameTextField.rx.text.map{ $0 ?? ""}.bind(to: registerViewModel.nameTextPublishedSubject).disposed(by: disposeBag)
-        
-//        registerViewModel.isValid().bind(to: signUpButton.rx.isEnabled).disposed(by: disposeBag)
-//        registerViewModel.isValid().map{ $0 ? 1: 0.2 }.bind(to: signUpButton.rx.alpha).disposed(by: disposeBag)
-        
+        bindUI(with: registerViewModel)
+
     }
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    //MARK: - Bindings
-    
+
+
+}
+
+extension RegisterViewController {
+    static func create(with registerViewModel: RegisterViewModel) -> UIViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "RegisterViewController") as! RegisterViewController
+        controller.registerViewModel = registerViewModel
+        return controller
+    }
 }

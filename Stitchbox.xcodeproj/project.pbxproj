@@ -34,11 +34,12 @@
 		8ED9D2DEBF0361601F4852E3 /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2387CD412DE6CDA403E271A /* Pods_Stitchbox_StitchboxUITests.framework */; };
 		BD3BFAEE29197C490056E854 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3BFAED29197C490056E854 /* RegisterViewController.swift */; };
 		BD54A147291AC28500D0ED69 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD54A146291AC28500D0ED69 /* ForgotPasswordViewController.swift */; };
+		BDB40E2E2922BC300000A56E /* ControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB40E2D2922BC300000A56E /* ControllerType.swift */; };
+		BDB40E302922BC5E0000A56E /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB40E2F2922BC5E0000A56E /* ViewModelProtocol.swift */; };
 		BDE0B305291B911E004ACEE9 /* ResetPasswordVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE0B304291B911E004ACEE9 /* ResetPasswordVerificationViewController.swift */; };
 		BDE0B307291B9172004ACEE9 /* PasswordChangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE0B306291B9172004ACEE9 /* PasswordChangeViewController.swift */; };
 		BDE286DA291CAB9C005C4487 /* RegisterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE286D9291CAB9C005C4487 /* RegisterModel.swift */; };
 		BDE286DC291CADD8005C4487 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE286DB291CADD8005C4487 /* RegisterViewModel.swift */; };
-		BDE286DE291DDF56005C4487 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE286DD291DDF56005C4487 /* Observable.swift */; };
 		EE7F861C067F91721762DDD7 /* Pods_Stitchbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92EFEB85742B57DDE1B7EDBE /* Pods_Stitchbox.framework */; };
 /* End PBXBuildFile section */
 
@@ -95,11 +96,12 @@
 		92EFEB85742B57DDE1B7EDBE /* Pods_Stitchbox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD3BFAED29197C490056E854 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		BD54A146291AC28500D0ED69 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		BDB40E2D2922BC300000A56E /* ControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerType.swift; sourceTree = "<group>"; };
+		BDB40E2F2922BC5E0000A56E /* ViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProtocol.swift; sourceTree = "<group>"; };
 		BDE0B304291B911E004ACEE9 /* ResetPasswordVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordVerificationViewController.swift; sourceTree = "<group>"; };
 		BDE0B306291B9172004ACEE9 /* PasswordChangeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordChangeViewController.swift; sourceTree = "<group>"; };
 		BDE286D9291CAB9C005C4487 /* RegisterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterModel.swift; sourceTree = "<group>"; };
 		BDE286DB291CADD8005C4487 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
-		BDE286DD291DDF56005C4487 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		DFCA3F9D28CD84FECE45A113 /* Pods-StitchboxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.release.xcconfig"; sourceTree = "<group>"; };
 		E2387CD412DE6CDA403E271A /* Pods_Stitchbox_StitchboxUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox_StitchboxUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F504FAFF76215E3BFB8ECB62 /* Pods_StitchboxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StitchboxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -261,6 +263,7 @@
 				BD54A146291AC28500D0ED69 /* ForgotPasswordViewController.swift */,
 				BDE0B304291B911E004ACEE9 /* ResetPasswordVerificationViewController.swift */,
 				BDE0B306291B9172004ACEE9 /* PasswordChangeViewController.swift */,
+				BDB40E2D2922BC300000A56E /* ControllerType.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -289,7 +292,6 @@
 			children = (
 				390FD787290A856B0068B883 /* RedirectionHelper.swift */,
 				390FD78A290A901F0068B883 /* SettingsBundleHelper.swift */,
-				BDE286DD291DDF56005C4487 /* Observable.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -299,6 +301,7 @@
 			children = (
 				390FD78C290A93C00068B883 /* LoginViewModel.swift */,
 				BDE286DB291CADD8005C4487 /* RegisterViewModel.swift */,
+				BDB40E2F2922BC5E0000A56E /* ViewModelProtocol.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -580,6 +583,7 @@
 				390FD769290927E40068B883 /* NetworkManager.swift in Sources */,
 				390FD78D290A93C00068B883 /* LoginViewModel.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
+				BDB40E302922BC5E0000A56E /* ViewModelProtocol.swift in Sources */,
 				390FD77429092A9B0068B883 /* HTTPTask.swift in Sources */,
 				390FD77629092AB30068B883 /* HTTPMethod.swift in Sources */,
 				BDE286DA291CAB9C005C4487 /* RegisterModel.swift in Sources */,
@@ -595,8 +599,8 @@
 				390FD78629093EA00068B883 /* FeedViewController.swift in Sources */,
 				BDE0B307291B9172004ACEE9 /* PasswordChangeViewController.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
+				BDB40E2E2922BC300000A56E /* ControllerType.swift in Sources */,
 				390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */,
-				BDE286DE291DDF56005C4487 /* Observable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
