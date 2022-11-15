@@ -22,6 +22,11 @@ target 'Stitchbox' do
     # Pods for testing
   end
 
+  target 'StitchboxUnitTests' do
+    inherit! :search_paths
+    
+  end
+
 end
 
 # caches

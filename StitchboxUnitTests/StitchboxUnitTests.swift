@@ -1,15 +1,13 @@
 //
+//  StitchboxUnitTests.swift
+//  StitchboxUnitTests
 //
-//  StitchboxTests.swift
-//  StitchboxTests
-//
-//  Created by Nghiem Minh Hoang on 26/10/2022.
+//  Created by Khanh Duy Nguyen on 11/12/22.
 //
 
 import XCTest
-@testable import Stitchbox
 
-class StitchboxTests: XCTestCase {
+final class StitchboxUnitTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -19,6 +17,10 @@ class StitchboxTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testEasy() {
+       XCTAssertEqual(1, 2, "It is not true")
+    }
+    
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -29,7 +31,7 @@ class StitchboxTests: XCTestCase {
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
-        self.measure {
+        measure {
             // Put the code you want to measure the time of here.
         }
     }

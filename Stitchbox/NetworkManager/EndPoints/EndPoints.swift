@@ -14,7 +14,7 @@ protocol BaseURL {
 enum APIBuilder {
     struct APIBuilderConstants {
         static let ApiScheme = "https"
-        static let ApiHost = "domain-name.com"
+        static let ApiHost = "dual-api.tek4.vn/api"
     }
 }
 
@@ -24,43 +24,58 @@ extension APIBuilder: BaseURL {
     }
 }
 
-public enum UserApi {
-    case login
-    case signup
-}
 
+public enum UserApi {
+    case login (username: String, password: String)
+    case phonelogin (phone: String, countryCode: String, via: String)
+    case phoneverify (phone: String, countryCode: String, code: String)
+}
 extension UserApi: EndPointType {
     var module: String {
-        return "/restApi"
+        return "/user"
     }
-
+    
     var path: String {
         switch self {
         case .login:
             return "/login"
-        case .signup:
-            return "/signup"
+        case .phonelogin:
+            return "/sms/login"
+        case .phoneverify:
+            return "/sms/login/verify"
         }
     }
-
+    
     var httpMethod: HTTPMethod {
         switch self {
         case .login:
             return .post
-        case .signup:
+        case .phonelogin:
+            return .post
+        case .phoneverify:
             return .post
         }
     }
-
+    
     var task: HTTPTask {
         switch self {
-        case .login:
-            return .request
-        case .signup:
-            return .request
+        case .login(let username, let password):
+            return .requestParameters(parameters: ["username": username,
+                                                   "password": password])
+        case .phonelogin(let phone, let countrycode, let via):
+            print(["phone": phone,
+                   "countryCode": countrycode,
+                   "via": via])
+            return .requestParameters(parameters: ["phone": phone,
+                    "countryCode": countrycode,
+                    "via": via])
+        case .phoneverify(let phone, let countrycode, let code):
+            return .requestParameters(parameters: ["phone": phone,
+                    "countryCode": countrycode,
+                    "code": code])
         }
     }
-
+    
     var headers: [String: String]? {
         return nil
     }
