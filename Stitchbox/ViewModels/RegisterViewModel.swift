@@ -37,17 +37,50 @@ class RegisterViewModel: ViewModelProtocol{
     private let errorsPublishedSubject = PublishSubject<Error>()
     private let registerResultSubject = PublishSubject<Bool>()
     
+    private var registerModelObservable: Observable<RegisterModel> {
+        return Observable.combineLatest(emailTextPublishedSubject.asObservable(), passwordTextPublishedSubject.asObservable(), phoneTextPublishedSubject.asObservable(), nameTextPublishedSubject.asObservable()) {(email, password, phone, name) in
+            return RegisterModel(email: email, password: password, phone: phone, name: name)
+        }
+    }
+    
     init() {
         input = Input(email: emailTextPublishedSubject.asObserver(), password: passwordTextPublishedSubject.asObserver(), phone: phoneTextPublishedSubject.asObserver(), name: nameTextPublishedSubject.asObserver(), registerTapped: registerTappedPublishedSubject.asObserver())
         
         output = Output(errorsObservable: errorsPublishedSubject.asObservable(), registerResultObservable: registerResultSubject.asObservable())
+        
+        registerTappedPublishedSubject
+            .withLatestFrom(registerModelObservable)
+            .subscribe { [self] (registerModel) -> Void in
+                // if (isNotValidInput)
+                let params = ["email": registerModel.email, "password": registerModel.password, "phone": registerModel.phone, "name": registerModel.name]
+                APIManager().signUp(params){ result in switch result{
+                case .success(let apiResponse):
+                    let data = apiResponse.body?["data"] as! [String: Any]?
+                    do {
+                        let account = try RegisterAccount(JSONbody: data)
+                        do {
+                            let encoder = JSONEncoder()
+                            
+                            let data = try encoder.encode(account)
+                            
+                            UserDefaults.standard.set(data, forKey: "RegisterAccount")
+                            
+                            
+                        } catch {
+                            print("Unable to encode the account(\(error)")
+                        }
+                        self.registerResultSubject.onNext(true)
+                    } catch {
+                        self.errorsPublishedSubject.onNext(error)
+                    }
+                case .failure:
+                    self.errorsPublishedSubject.onNext(NSError(domain: "Error", code: 301))
+                }
+                    
+                }
+            }
     }
-    
-    func isValid() -> Observable<Bool>{
-        return Observable.combineLatest(emailTextPublishedSubject.asObservable().startWith(""), passwordTextPublishedSubject.asObservable().startWith("") ).map{ email, password in
-            return email.count > 0 && password.count > 0
-        }.startWith(false)
-    }
+
 
     func register(email: String, password: String, phone: String, name: String){
         let params = ["email": email, "password": password, "phone": phone, "name": name]
