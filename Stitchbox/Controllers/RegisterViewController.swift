@@ -18,36 +18,33 @@ class RegisterViewController: UIViewController, ControllerType {
     
     // MARK: UI
     // TextFields
-    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var phoneTextField: UITextField!
-    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var reEnterPasswordTextField: UITextField!
+    
+    @IBOutlet weak var minCharactersLabel: UILabel!
+    @IBOutlet weak var specialCharLabel: UILabel!
+    @IBOutlet weak var minLowerCaseLabel: UILabel!
+    @IBOutlet weak var minUpperCaseLabel: UILabel!
+    @IBOutlet weak var minNumLabel: UILabel!
+    @IBOutlet weak var passwordMatchLabel: UILabel!
     //Button
     @IBOutlet weak var signUpButton: UIButton!
     @IBAction func tappedSignupButton(_ sender: UIButton) {
-        registerViewModel.register(email: emailTextField.text!, password: passwordTextField.text!, phone: phoneTextField.text!, name: nameTextField.text!)
+        registerViewModel.register(userName: userNameTextField.text!, password: passwordTextField.text!)
         print("tapped signup button")
         
     }
-
-    
     // MARK: Functions
     func bindUI(with registerViewModel: RegisterViewModel) {
-        emailTextField.rx.text.orEmpty.asObservable()
-            .subscribe(registerViewModel.input.email)
+        userNameTextField.rx.text.orEmpty.asObservable()
+            .subscribe(registerViewModel.input.userName)
             .disposed(by: disposeBag)
         
         passwordTextField.rx.text.orEmpty.asObservable()
             .subscribe(registerViewModel.input.password)
             .disposed(by: disposeBag)
-        
-        phoneTextField.rx.text.orEmpty.asObservable()
-            .subscribe(registerViewModel.input.phone)
-            .disposed(by: disposeBag)
-        
-        nameTextField.rx.text.orEmpty.asObservable()
-            .subscribe(registerViewModel.input.name)
-            .disposed(by: disposeBag)
+
         
         //Binding ViewModel outputs to ViewController
         registerViewModel.output.errorsObservable
@@ -79,11 +76,15 @@ class RegisterViewController: UIViewController, ControllerType {
         self.present(alert, animated: true, completion: nil)
     }
     
-    
+    //MARK: VIEWDIDLOAD FUNCTION
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         bindUI(with: registerViewModel)
+        
+        self.passwordTextField.addBottomBorder()
+        self.userNameTextField.addBottomBorder()
+        self.reEnterPasswordTextField.addBottomBorder()
         
     }
 }
@@ -97,3 +98,12 @@ extension RegisterViewController {
     }
 }
 
+extension UITextField {
+    func addBottomBorder(){
+        let bottomLine = CALayer()
+        bottomLine.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
+        bottomLine.backgroundColor = UIColor.orange.cgColor
+        borderStyle = .none
+        layer.addSublayer(bottomLine)
+    }
+}
