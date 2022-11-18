@@ -13,10 +13,10 @@ struct RegisterModel{
 }
 
 struct RegisterAccount: Codable {
-//    // MARK: - Tokens
-//    let refreshToken: String
-//    let accessToken: String
-//
+    // MARK: - Tokens
+    //    let refreshToken: String
+    //    let accessToken: String
+    //
     // MARK: - Properties
     let birthday: String
     let country: String

@@ -35,6 +35,8 @@ class RegisterViewController: UIViewController, ControllerType {
         print("tapped signup button")
         
     }
+    
+    
     // MARK: Functions
     func bindUI(with registerViewModel: RegisterViewModel) {
         userNameTextField.rx.text.orEmpty.asObservable()
@@ -44,8 +46,41 @@ class RegisterViewController: UIViewController, ControllerType {
         passwordTextField.rx.text.orEmpty.asObservable()
             .subscribe(registerViewModel.input.password)
             .disposed(by: disposeBag)
-
         
+        
+        // Password check for label corlor change
+        registerViewModel.output.isValidPasswordObservable.subscribe(onNext: {error in
+            if(error.isEmpty){
+                self.minUpperCaseLabel.textColor = UIColor.gray
+                self.minCharactersLabel.textColor = UIColor.gray
+                self.minLowerCaseLabel.textColor = UIColor.gray
+                self.minNumLabel.textColor = UIColor.gray
+                self.specialCharLabel.textColor = UIColor.gray
+                return
+            }
+            
+            if (error.minUppercase){
+                self.minUpperCaseLabel.textColor = UIColor.red
+            }else { self.minUpperCaseLabel.textColor = UIColor.green}
+            
+            if (error.minCharacters){
+                self.minCharactersLabel.textColor = UIColor.red
+            }else { self.minCharactersLabel.textColor = UIColor.green}
+            
+            if (error.minNumber){
+                self.minNumLabel.textColor = UIColor.red
+            }else { self.minNumLabel.textColor = UIColor.green}
+            
+            if (error.minLowercase){
+                self.minLowerCaseLabel.textColor = UIColor.red
+            }else { self.minLowerCaseLabel.textColor = UIColor.green}
+            
+            if (error.minSpecialCharacter){
+                self.specialCharLabel.textColor = UIColor.red
+            }else { self.specialCharLabel.textColor = UIColor.green}
+        }).disposed(by: disposeBag)
+        
+        let validFormObservable = 
         //Binding ViewModel outputs to ViewController
         registerViewModel.output.errorsObservable
             .subscribe(onNext: { (error) in

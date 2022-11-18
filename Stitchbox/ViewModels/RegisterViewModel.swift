@@ -9,6 +9,15 @@ import RxCocoa
 import UIKit
 import RxSwift
 
+struct PasswordError: Error {
+    let minCharacters: Bool
+    let minNumber: Bool
+    let minUppercase: Bool
+    let minLowercase: Bool
+    let minSpecialCharacter: Bool
+    let isEmpty: Bool
+    
+}
 
 
 class RegisterViewModel: ViewModelProtocol{
@@ -21,20 +30,23 @@ class RegisterViewModel: ViewModelProtocol{
     
     struct Output{
         let errorsObservable: Observable<Error>
+        let isValidPasswordObservable: Observable<PasswordError>
         let registerResultObservable: Observable<Bool>
     }
     
     let input: Input
     let output: Output
     
+    private let disposeBag = DisposeBag()
     private let userNameTextPublishedSubject = PublishSubject<String>()
     private let passwordTextPublishedSubject = PublishSubject<String>()
-
+    
     private let registerTappedPublishedSubject = PublishSubject<Void>()
     private let errorsPublishedSubject = PublishSubject<Error>()
+    private let isValidPasswordSubject = PublishSubject<PasswordError>()
     private let registerResultSubject = PublishSubject<Bool>()
     
-  
+    
     
     private var registerModelObservable: Observable<RegisterModel> {
         return Observable.combineLatest(passwordTextPublishedSubject.asObservable(), userNameTextPublishedSubject.asObservable()) {(userName, password) in
@@ -47,8 +59,15 @@ class RegisterViewModel: ViewModelProtocol{
                       password: passwordTextPublishedSubject.asObserver(),
                       registerTapped: registerTappedPublishedSubject.asObserver())
         
-        output = Output(errorsObservable: errorsPublishedSubject.asObservable(), registerResultObservable: registerResultSubject.asObservable())
+        output = Output(errorsObservable: errorsPublishedSubject.asObservable(), isValidPasswordObservable: isValidPasswordSubject.asObservable(), registerResultObservable: registerResultSubject.asObservable())
         
+        passwordTextPublishedSubject.asObservable().subscribe(onNext: { [self] (password) in
+            print (password)
+            //if self.isUpperCase() { self.isValidPasswordSubject.onNext(.minUppercase) }
+            
+        isValidPasswordSubject.onNext(PasswordError(minCharacters: (isNotValidInput(Input: password, RegEx: "^.{8,}$")) , minNumber: (isNotValidInput(Input: password, RegEx: ".*[0-9]+.*")), minUppercase: (isNotValidInput(Input: password, RegEx: ".*[A-Z]+.*")), minLowercase: (isNotValidInput(Input: password, RegEx: ".*[a-z]+.*")) , minSpecialCharacter: (isNotValidInput(Input: password, RegEx: ".*[!&^%$#@()/]+.*")), isEmpty: (password == "")))
+        })
+
         registerTappedPublishedSubject
             .withLatestFrom(registerModelObservable)
             .subscribe { [self] (registerModels) -> Void in
@@ -81,55 +100,13 @@ class RegisterViewModel: ViewModelProtocol{
                 }
             }
     }
-// MARK: Get missing validation for password
-
-    func isUpperCase() -> Bool {
-        return NSPredicate(format:"SELF MATCHES %@", ".*[A-Z]+.*").evaluate(with: self)
+    // MARK: Get missing validation for password
+    func isNotValidInput(Input:String, RegEx: String) -> Bool {
+        let Test = NSPredicate(format:"SELF MATCHES %@", RegEx)
+        print(Input + String(Test.evaluate(with: Input)))
+        return !Test.evaluate(with: Input)
     }
-        
-    func containsDigit() -> Bool {
-        return NSPredicate(format:"SELF MATCHES %@", ".*[0-9]+.*").evaluate(with: self)
-        }
-    
-    func containsOneSymbol() -> Bool {
-        return NSPredicate(format:"SELF MATCHES %@", ".*[!&^%$#@()/]+.*").evaluate(with: self)
-        }
-    
-    func isLowerCase()-> Bool {
-        return NSPredicate(format:"SELF MATCHES %@", ".*[a-z]+.*").evaluate(with: self)
-        }
-//    func isMinCharacters()-> Bool {
-//        return (self.count < 8)
-//
-//        }
-      
-    
-    
-//    func isValidPassword() -> Bool {
-//        let passwordPattern =
-//            // At least 8 characters
-//            #"(?=.{8,})"# +
-//
-//            // At least one capital letter
-//            #"(?=.*[A-Z])"# +
-//
-//            // At least one lowercase letter
-//            #"(?=.*[a-z])"# +
-//
-//            // At least one digit
-//            #"(?=.*\d)"# +
-//
-//            // At least one special character
-//            #"(?=.*[ !$%&?._-])"#
-//
-//        let password = self.trimmingCharacters(in: CharacterSet.whitespaces)
-//        let passwordRegx = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&<>*~:`-]).{8,}$"
-//        let passwordCheck = NSPredicate(format: "SELF MATCHES %@",passwordRegx)
-//        return passwordCheck.evaluate(with: password)
-//
-//    }
-    
-    
+    // MARK: register function call API
     func register(userName: String, password: String){
         let params = ["username": userName, "password": password]
         APIManager().signUp(params){ result in
