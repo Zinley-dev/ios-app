@@ -77,13 +77,13 @@ class RegisterViewModel: ViewModelProtocol{
                 passwordMatched: (password == "")))
         })
         
-//        reEnterPasswordTextPublishedSubject.asObservable().withLatestFrom(passwordTextPublishedSubject.asObservable())
-//        {
-//            repassword, pass in
-//            if(repassword == pass) {
-//                self.validReEnterPasswordSubject.onNext(true)
-//            }
-//        }
+        reEnterPasswordTextPublishedSubject.asObservable().withLatestFrom(passwordTextPublishedSubject.asObservable())
+        {
+            repassword, pass in
+            if(repassword == pass) {
+                self.validReEnterPasswordSubject.onNext(true)
+            }
+        }
         
         registerDidTapPublishedSubject
             .withLatestFrom(registerModelObservable)

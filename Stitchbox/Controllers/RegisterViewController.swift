@@ -39,6 +39,8 @@ class RegisterViewController: UIViewController, ControllerType {
     
     // MARK: Functions
     func bindUI(with registerViewModel: RegisterViewModel) {
+       
+        
         userNameTextField.rx.text.orEmpty.asObservable()
             .subscribe(registerViewModel.input.userName)
             .disposed(by: disposeBag)
@@ -58,8 +60,8 @@ class RegisterViewController: UIViewController, ControllerType {
         
         // Password check for label corlor change
         registerViewModel.output.isValidPasswordObservable.subscribe(onNext: {error in
+            
             if(error.isEmpty){
-                self.signUpButton.isEnabled = false
                 self.minUpperCaseLabel.textColor = UIColor.gray
                 self.minCharactersLabel.textColor = UIColor.gray
                 self.minLowerCaseLabel.textColor = UIColor.gray
@@ -85,26 +87,28 @@ class RegisterViewController: UIViewController, ControllerType {
                 self.minLowerCaseLabel.textColor = UIColor.red
             }else { self.minLowerCaseLabel.textColor = UIColor.green}
             
-            if (error.passwordMatched){
-                self.passwordMatchLabel.textColor = UIColor.red
-            }else { self.passwordMatchLabel.textColor = UIColor.green}
+//            if (error.passwordMatched){
+//                self.passwordMatchLabel.textColor = UIColor.red
+//            }else { self.passwordMatchLabel.textColor = UIColor.green}
             
             if (error.minSpecialCharacter){
                 self.specialCharLabel.textColor = UIColor.red
             }
             else {
                 self.specialCharLabel.textColor = UIColor.green
-                self.signUpButton.isEnabled = true
             }
+            if (error.minUppercase != true && error.isEmpty != true && error.minLowercase != true && error.minSpecialCharacter != true && error.minNumber != true && error.minCharacters != true){
+                self.signUpButton.isEnabled = true}
+            else {self.signUpButton.isEnabled = false}
             
         }).disposed(by: disposeBag)
-//        
-//        registerViewModel.output.validReEnterPasswordObservable
-//            .subscribe(onNext:{ (valid) in
-//                if (valid) {
-//                    self.passwordMatchLabel.textColor = UIColor.red
-//                }else { self.passwordMatchLabel.textColor = UIColor.green}
-//            }).disposed(by: disposeBag)
+        
+        registerViewModel.output.validReEnterPasswordObservable
+            .subscribe(onNext:{ (valid) in
+                if (valid) {
+                    self.passwordMatchLabel.textColor = UIColor.red
+                }else { self.passwordMatchLabel.textColor = UIColor.green}
+            }).disposed(by: disposeBag)
 //        
         //Binding ViewModel outputs to ViewController
         registerViewModel.output.errorsObservable
@@ -142,7 +146,7 @@ class RegisterViewController: UIViewController, ControllerType {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         bindUI(with: registerViewModel)
-        
+        self.signUpButton.isEnabled = false
         self.passwordTextField.addBottomBorder()
         self.userNameTextField.addBottomBorder()
         self.reEnterPasswordTextField.addBottomBorder()
