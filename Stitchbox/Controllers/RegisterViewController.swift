@@ -47,15 +47,25 @@ class RegisterViewController: UIViewController, ControllerType {
             .subscribe(registerViewModel.input.password)
             .disposed(by: disposeBag)
         
+        reEnterPasswordTextField.rx.text.orEmpty.asObservable()
+            .subscribe(registerViewModel.input.reEnterPassword)
+            .disposed(by: disposeBag)
+        
+        signUpButton.rx.tap.asObservable()
+            .subscribe(registerViewModel.input.registerTapped)
+            .disposed(by: disposeBag)
+        
         
         // Password check for label corlor change
         registerViewModel.output.isValidPasswordObservable.subscribe(onNext: {error in
             if(error.isEmpty){
+                self.signUpButton.isEnabled = false
                 self.minUpperCaseLabel.textColor = UIColor.gray
                 self.minCharactersLabel.textColor = UIColor.gray
                 self.minLowerCaseLabel.textColor = UIColor.gray
                 self.minNumLabel.textColor = UIColor.gray
                 self.specialCharLabel.textColor = UIColor.gray
+                self.passwordMatchLabel.textColor = UIColor.gray
                 return
             }
             
@@ -75,12 +85,27 @@ class RegisterViewController: UIViewController, ControllerType {
                 self.minLowerCaseLabel.textColor = UIColor.red
             }else { self.minLowerCaseLabel.textColor = UIColor.green}
             
+            if (error.passwordMatched){
+                self.passwordMatchLabel.textColor = UIColor.red
+            }else { self.passwordMatchLabel.textColor = UIColor.green}
+            
             if (error.minSpecialCharacter){
                 self.specialCharLabel.textColor = UIColor.red
-            }else { self.specialCharLabel.textColor = UIColor.green}
+            }
+            else {
+                self.specialCharLabel.textColor = UIColor.green
+                self.signUpButton.isEnabled = true
+            }
+            
         }).disposed(by: disposeBag)
-        
-        let validFormObservable = 
+//        
+//        registerViewModel.output.validReEnterPasswordObservable
+//            .subscribe(onNext:{ (valid) in
+//                if (valid) {
+//                    self.passwordMatchLabel.textColor = UIColor.red
+//                }else { self.passwordMatchLabel.textColor = UIColor.green}
+//            }).disposed(by: disposeBag)
+//        
         //Binding ViewModel outputs to ViewController
         registerViewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
@@ -94,7 +119,7 @@ class RegisterViewController: UIViewController, ControllerType {
             .subscribe(onNext: { isTrue in
                 if (isTrue){
                     DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "", sender: self)
+                        self.performSegue(withIdentifier: "DashboardSegueSignup", sender: self)
                     }}
             })
             .disposed(by: disposeBag)
@@ -103,6 +128,7 @@ class RegisterViewController: UIViewController, ControllerType {
     func presentError(error: Error) {
         let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
+        //        alert.performSegue(withIdentifier: <#T##String#>, sender: self)
         self.present(alert, animated: true, completion: nil)
     }
     func presentMessage(message: String) {

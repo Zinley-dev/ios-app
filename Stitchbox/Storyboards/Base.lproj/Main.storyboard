@@ -188,10 +188,10 @@
             </objects>
             <point key="canvasLocation" x="131.8840579710145" y="109.82142857142857"/>
         </scene>
-        <!--SET UP YOUR USERNAME-->
+        <!--RegisterViewController-->
         <scene sceneID="Cko-rQ-R1B">
             <objects>
-                <viewController id="Wgm-Xf-ZNU" customClass="RegisterViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="RegisterViewController" id="Wgm-Xf-ZNU" customClass="RegisterViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dPw-jt-1VN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -266,6 +266,7 @@
                                         <buttonConfiguration key="configuration" style="filled" title="Save"/>
                                         <connections>
                                             <action selector="tappedSignupButton:" destination="Wgm-Xf-ZNU" eventType="touchUpInside" id="NbW-Jd-xXR"/>
+                                            <segue destination="NjN-60-BFL" kind="show" identifier="DashboardSegueSignup" id="gtr-LJ-s1d"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -468,6 +469,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="psr-1g-SeV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3640.579710144928" y="837.72321428571422"/>
+        </scene>
+        <!--Dashboard-->
+        <scene sceneID="aVM-Fo-7TT">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Dashboard" id="NjN-60-BFL" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Ebh-86-ajI"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="G1u-gh-XlC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3470" y="96"/>
         </scene>
     </scenes>
     <resources>
