@@ -56,7 +56,7 @@ class LoginController: UIViewController, ControllerType {
                 if(isTrue){
                     DispatchQueue.main.async {
                         // Perform Segue to DashboardStoryboard
-                        self.performSegue(withIdentifier: "DashboardSegue2", sender: self)
+                        self.performSegue(withIdentifier: "DashboardSegue", sender: self)
                     }}
             })
             .disposed(by: disposeBag)

@@ -80,10 +80,10 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     fileprivate func handleNetworkResponse(_ data: Data?, _ response: HTTPURLResponse) -> Result {
         switch response.statusCode {
         case 200...299: return .success(getAPIResponseFor(data, response))
-        case 401...500: return .failure(ErrorType.authRequired)
+        case 401...500: return .failure(ErrorType.authRequired(body: getAPIResponseFor(data, response).body))
         case 501...599: return .failure(ErrorType.badRequest)
         case 600: return .failure(ErrorType.outdatedRequest)
-        default: return .failure(ErrorType.requestFailed)
+        default: return .failure(ErrorType.requestFailed(body: getAPIResponseFor(data, response).body))
         }
     }
     fileprivate func getAPIResponseFor(_ data: Data?, _ response: HTTPURLResponse) -> APIResponse {

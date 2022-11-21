@@ -24,7 +24,6 @@ extension APIBuilder: BaseURL {
     }
 }
 
-
 public enum UserApi {
     case login (username: String, password: String)
     case phonelogin (phone: String, countryCode: String, via: String)

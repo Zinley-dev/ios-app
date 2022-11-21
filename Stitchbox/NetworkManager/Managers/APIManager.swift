@@ -9,10 +9,10 @@ import Foundation
 
 public enum ErrorType: Error {
     case noInternet
-    case authRequired
+    case authRequired(body: [String: Any]?)
     case badRequest
     case outdatedRequest
-    case requestFailed
+    case requestFailed(body: [String: Any]?)
     case invalidResponse
     case noData
 }
