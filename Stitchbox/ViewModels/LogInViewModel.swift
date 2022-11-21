@@ -60,17 +60,27 @@ class LoginControllerViewModel: ViewModelProtocol {
                     // get and process data
                     let data = apiResponse.body?["data"] as! [String: Any]?
                     do{
-                        let account = try Account(JSONbody: data)
+                        let account = try Account(JSONbody: data, type: .normalLogin)
                         // Store account to UserDefault as "userAccount"
+                        print(account)
                         do {
                             // Create JSON Encoder
                             let encoder = JSONEncoder()
-                            
+
                             // Encode Note
                             let data = try encoder.encode(account)
-                            
+
                             // Write/Set Data
                             UserDefaults.standard.set(data, forKey: "userAccount")
+
+                            if let data = UserDefaults.standard.data(forKey: "userAccount") {
+                                // Create JSON Decoder
+                                let decoder = JSONDecoder()
+
+                                // Decode Note
+                                let accountDecoded = try decoder.decode(Account.self, from: data)
+                                print(accountDecoded)
+                            }
                             
                         } catch {
                             print("Unable to Encode Account (\(error))")

@@ -103,7 +103,7 @@
                                 <rect key="frame" x="76" y="131" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <color key="textColor" systemColor="labelColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
@@ -177,7 +177,7 @@
                     <connections>
                         <outlet property="OTPCodeTextfield" destination="hgp-gx-vzv" id="A22-uA-Jz7"/>
                         <outlet property="verifyCodeButton" destination="NOw-Hk-G1A" id="MqT-Bm-CT7"/>
-                        <segue destination="ak2-f2-bqj" kind="show" identifier="DashboardSegue2" id="Voj-3Q-62j"/>
+                        <segue destination="ak2-f2-bqj" kind="show" identifier="DashboardSegue" id="Voj-3Q-62j"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B84-ud-eaC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -70,39 +70,50 @@ class LoginByPhoneViewModel: ViewModelProtocol {
                 }
                 // call api toward login api of backend
                 APIManager().phoneVerify(phone: input.phone, countryCode: input.countryCode, code: input.code) { result in switch result {
+                    
                 case .success(let apiResponse):
                     // get and process data
-                    let data = apiResponse.body?["data"] as! [String: Any]?
-                    print(data)
-                    let validity = data?["valid"] as! String
-                    if(validity == "1") {
-                        self.logInResultSubject.onNext(true)
-                    } else {
-                        self.errorsSubject.onNext(NSError(domain: "Cannot verify OTP", code: 300))
-                    }
-//                    do{
-//                        let account = try Account(JSONbody: data)
-//                        // Store account to UserDefault as "userAccount"
-//                        do {
-//                            // Create JSON Encoder
-//                            let encoder = JSONEncoder()
-//
-//                            // Encode Note
-//                            let data = try encoder.encode(account)
-//
-//                            // Write/Set Data
-//                            UserDefaults.standard.set(data, forKey: "userAccount")
-//
-//                        } catch {
-//                            print("Unable to Encode Account (\(error))")
-//                        }
-//                        self.logInResultSubject.onNext(true)
-//                    }catch{
-//                        self.errorsSubject.onNext(error)
-//                    }
+                    if (apiResponse.body?["status"] as! String == "ok") {
+                        // get and process data
+                        let data = apiResponse.body?["data"] as! [String: Any]?
+                        do{
+                            let account = try Account(JSONbody: data, type: .phoneLogin)
+                            print(account)
+                            //                             Create JSON Encoder
+                            let encoder = JSONEncoder()
+                            
+                            // Encode Note
+                            let data = try encoder.encode(account)
+                            
+                            // Write/Set Data
+                            UserDefaults.standard.set(data, forKey: "userAccount")
+                            
+                            if let data = UserDefaults.standard.data(forKey: "userAccount") {
+                                // Create JSON Decoder
+                                let decoder = JSONDecoder()
+                                
+                                // Decode Note
+                                let accountDecoded = try decoder.decode(Account.self, from: data)
+                                print(accountDecoded)
+                            }
+                            self.logInResultSubject.onNext(true);
+                            
+                        } catch {
+                            print("Unable to Create Account (\(error))")
+                        }        }
+                    
                 case .failure(let error):
                     print(error)
-                    self.errorsSubject.onNext(NSError(domain: "Cannot verify OTP", code: 300))
+                    switch error {
+                    case .authRequired(let body):
+                        self.errorsSubject.onNext(NSError(domain: body?["message"] as? String ?? "Cannot verify OTP", code: 401))
+                    case .requestFailed(let body):
+                        self.errorsSubject.onNext(NSError(domain: body?["message"] as? String ?? "Cannot verify OTP", code: 401))
+                        
+                    default:
+                        self.errorsSubject.onNext(NSError(domain: "Cannot verify OTP", code: 401))
+                        
+                    }
                 }
                 }
             }
@@ -126,7 +137,7 @@ class LoginByPhoneViewModel: ViewModelProtocol {
                     let data = apiResponse.body?["data"] as! [String: Any]?
                     do{
                         self.OTPSentSubject.onNext(true)
-                    }catch{
+                    } catch {
                         self.errorsSubject.onNext(error)
                     }
                 case .failure(let error):
