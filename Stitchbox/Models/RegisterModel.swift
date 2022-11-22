@@ -14,35 +14,32 @@ struct RegisterModel {
 
 struct RegisterAccount: Codable {
     // MARK: - Tokens
-    //    let refreshToken: String
-    //    let accessToken: String
+    let refreshToken: String
+    let accessToken: String
     //
-    // MARK: - Properties
-    let birthday: String
-    let country: String
-    let region: String
-    let address1: String
-    let address2: String
-    let id: String
+    // MARK: - Account
+    let device: String
+    let accountVerified: String
+    let _id: String
     let name: String
-    let email: String
-    let phone: String
-    //let userUID: String
-    //let username: String
+    let username: String
+    let password: String
+    let status: String
+    let createdAt: String
+    let updatedAt: String
     
     init(JSONbody: [String?: Any]?) throws {
-        //self.refreshToken = JSONbody?["refreshToken"] as? String ?? ""
-        //self.accessToken = JSONbody?["accessToken"] as? String ?? ""
-        self.birthday = JSONbody?["dob"] as? String ?? ""
-        self.country = JSONbody?["country"] as? String ?? ""
-        self.region = JSONbody?["country"] as? String ?? ""
-        self.address1 = JSONbody?["address1"] as? String ?? ""
-        self.address2 = JSONbody?["address2"] as? String ?? ""
-        self.id = JSONbody?["id"] as? String ?? ""
+        self.refreshToken = JSONbody?["refreshToken"] as? String ?? ""
+        self.accessToken = JSONbody?["accessToken"] as? String ?? ""
+        self.device = JSONbody?["device"] as? String ?? ""
+        self.accountVerified = JSONbody?["accountVerified"] as? String ?? ""
+        self._id = JSONbody?["_id"] as? String ?? ""
         self.name = JSONbody?["name"] as? String ?? ""
-        self.email = JSONbody?["email"] as? String ?? ""
-        self.phone = JSONbody?["phone"] as? String ?? ""
-        //self.userUID = JSONbody?["userUID"] as? String ?? ""
-        //self.username = JSONbody?["username"] as? String ?? ""
+        self.username = JSONbody?["username"] as? String ?? ""
+        self.password = JSONbody?["password"] as? String ?? ""
+        self.status = JSONbody?["status"] as? String ?? ""
+        self.createdAt = JSONbody?["createdAt"] as? String ?? ""
+        self.updatedAt = JSONbody?["updatedAt"] as? String ?? ""
+
     }
 }
