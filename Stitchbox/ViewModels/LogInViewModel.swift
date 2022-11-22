@@ -10,77 +10,68 @@ import RxSwift
 
 
 class LoginControllerViewModel: ViewModelProtocol {
-    struct Input {
-        let username: AnyObserver<String>
-        let password: AnyObserver<String>
-        let signInDidTap: AnyObserver<Void>
+    
+    // MARK: Struct Declaration
+    struct Input {}
+    
+    struct Action {
+        let signInDidTap: AnyObserver<(String, String)>
     }
     struct Output {
         let loginResultObservable: Observable<Bool>
         let errorsObservable: Observable<Error>
     }
     
+    // MARK: Variable Declaration
     let input: Input
+    let action: Action
     let output: Output
     
-    private let usernameSubject = PublishSubject<String>()
-    private let passwordSubject = PublishSubject<String>()
-    private let signInDidTapSubject = PublishSubject<Void>()
+    // MARK: Subject Instantiation
+    private let signInDidTapSubject = PublishSubject<(String, String)>()
     private let loginResultSubject = PublishSubject<Bool>()
     private let errorsSubject = PublishSubject<Error>()
-    private let credentialSubject = PublishSubject<Credentials>()
     private let disposeBag = DisposeBag()
     
-    private var credentialsObservable: Observable<Credentials> {
-        return Observable.combineLatest(usernameSubject.asObservable(), passwordSubject.asObservable()) { (username, password) in
-            return Credentials(username: username, password: password)
-        }
-    }
-    
     init() {
-        input = Input(username: usernameSubject.asObserver(),
-                      password: passwordSubject.asObserver(),
-                      signInDidTap: signInDidTapSubject.asObserver())
+        input = Input()
+        
+        action = Action(signInDidTap: signInDidTapSubject.asObserver())
         
         output = Output(loginResultObservable: loginResultSubject.asObservable(),
                         errorsObservable: errorsSubject.asObservable())
         
+        logic()
+    }
+    
+    // MARK: Logic function
+    func logic() {
         signInDidTapSubject
-            .withLatestFrom(credentialsObservable)
-            .subscribe { [self] (credentials) -> Void in
+            .subscribe (onNext: { (username, password) in
                 // check username or password in the right format
-                if (isNotValidInput(Input: credentials.username) ||
-                    isNotValidInput(Input: credentials.password)) {
-                    self.errorsSubject.onNext(NSError(domain: "Username or Password in wrong format", code: 200))
+                if (isNotValidInput(Input: username, RegEx: "\\w{7,18}") ||
+                    isNotValidInput(Input: password, RegEx: "\\w{7,18}")) {
+                    self.errorsSubject.onNext(NSError(domain: "Username or Password in wrong format", code: 400))
                     return;
                 }
                 // call api toward login api of backend
-                APIManager().normalLogin(username: credentials.username, password: credentials.password) { result in switch result {
+                APIManager().normalLogin(username: username, password: password) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
                     let data = apiResponse.body?["data"] as! [String: Any]?
                     do{
                         let account = try Account(JSONbody: data, type: .normalLogin)
                         // Store account to UserDefault as "userAccount"
-                        print(account)
                         do {
                             // Create JSON Encoder
                             let encoder = JSONEncoder()
-
+                            
                             // Encode Note
                             let data = try encoder.encode(account)
-
+                            
                             // Write/Set Data
                             UserDefaults.standard.set(data, forKey: "userAccount")
-
-                            if let data = UserDefaults.standard.data(forKey: "userAccount") {
-                                // Create JSON Decoder
-                                let decoder = JSONDecoder()
-
-                                // Decode Note
-                                let accountDecoded = try decoder.decode(Account.self, from: data)
-                                print(accountDecoded)
-                            }
+                            
                             
                         } catch {
                             print("Unable to Encode Account (\(error))")
@@ -90,18 +81,15 @@ class LoginControllerViewModel: ViewModelProtocol {
                         self.errorsSubject.onNext(error)
                     }
                 case .failure:
-                    self.errorsSubject.onNext(NSError(domain: "Wrong username or password", code: 300))
+                    self.errorsSubject.onNext(NSError(domain: "Wrong username or password", code: 400))
                 }
                 }
-            }
-        
-    }
-    
-    // MARK: Helper function
-    func isNotValidInput(Input:String) -> Bool {
-        let RegEx = "\\w{7,18}"
-        let Test = NSPredicate(format:"SELF MATCHES %@", RegEx)
-        return !Test.evaluate(with: Input)
+            }, onError: { (err) in
+                print("Error \(err.localizedDescription)")
+            }, onCompleted: {
+                print("Completed")
+            })
+            .disposed(by: disposeBag);
     }
     
 }

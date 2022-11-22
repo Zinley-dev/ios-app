@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		03E5E6688B0EADABFCBBCF3F /* Pods_StitchboxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F504FAFF76215E3BFB8ECB62 /* Pods_StitchboxTests.framework */; };
+		1432C4A6292B1CB9005800A2 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1432C4A5292B1CB9005800A2 /* Button.swift */; };
+		1432C4A8292B4DAE005800A2 /* isNotValidInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1432C4A7292B4DAD005800A2 /* isNotValidInput.swift */; };
 		147187E22920A3A20039B89E /* StitchboxUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187E12920A3A20039B89E /* StitchboxUnitTests.swift */; };
 		147187E92920AD520039B89E /* LogInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187E82920AD520039B89E /* LogInViewModel.swift */; };
 		147187EB2920AF6E0039B89E /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187EA2920AF6D0039B89E /* ViewModelProtocol.swift */; };
@@ -74,6 +76,8 @@
 
 /* Begin PBXFileReference section */
 		109156B9B03B1616BF7D933A /* Pods-Stitchbox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.release.xcconfig"; sourceTree = "<group>"; };
+		1432C4A5292B1CB9005800A2 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		1432C4A7292B4DAD005800A2 /* isNotValidInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = isNotValidInput.swift; path = ../../../../../../Documents/isNotValidInput.swift; sourceTree = "<group>"; };
 		147187DF2920A3A20039B89E /* StitchboxUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StitchboxUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		147187E12920A3A20039B89E /* StitchboxUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchboxUnitTests.swift; sourceTree = "<group>"; };
 		147187E82920AD520039B89E /* LogInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewModel.swift; sourceTree = "<group>"; };
@@ -215,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				148C7108291B11270046FC5D /* OTPTextField.swift */,
+				1432C4A5292B1CB9005800A2 /* Button.swift */,
 			);
 			path = StyledComponents;
 			sourceTree = "<group>";
@@ -381,6 +386,7 @@
 			children = (
 				390FD787290A856B0068B883 /* RedirectionHelper.swift */,
 				390FD78A290A901F0068B883 /* SettingsBundleHelper.swift */,
+				1432C4A7292B4DAD005800A2 /* isNotValidInput.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -734,6 +740,7 @@
 				390FD76D290928A70068B883 /* APIManager.swift in Sources */,
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				390FD769290927E40068B883 /* NetworkManager.swift in Sources */,
+				1432C4A8292B4DAE005800A2 /* isNotValidInput.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
 				390FD77429092A9B0068B883 /* HTTPTask.swift in Sources */,
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
@@ -742,6 +749,7 @@
 				390FD7382909264D0068B883 /* AppDelegate.swift in Sources */,
 				1484740E291F7DC80099AA08 /* LogInByPhoneVerifyViewController.swift in Sources */,
 				390FD76B290928420068B883 /* EndPointType.swift in Sources */,
+				1432C4A6292B1CB9005800A2 /* Button.swift in Sources */,
 				390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */,
 				390FD77C29092B9C0068B883 /* Contants.swift in Sources */,
 				14847406291F37F80099AA08 /* AccountModel.swift in Sources */,

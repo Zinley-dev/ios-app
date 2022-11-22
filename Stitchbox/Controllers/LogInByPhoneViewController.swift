@@ -5,7 +5,7 @@ import RxCocoa
 
 class LoginByPhoneSendCodeController: UIViewController, ControllerType {
     
-    typealias ViewModelType = LoginByPhoneViewModel
+    typealias ViewModelType = LoginByPhoneSendCodeViewModel
     
     // MARK: - Properties
     private var viewModel: ViewModelType! = ViewModelType()
@@ -16,35 +16,14 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType {
     @IBOutlet weak var phoneTextfield: UITextField!
     @IBOutlet weak var sendCodeButton: UIButton!
     
-    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         bindUI(with: viewModel)
+        bindAction(with: viewModel)
     }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "MoveToVerifySegue"){
-            if let destinationVC = segue.destination as? LoginByPhoneVerifyController {
-                destinationVC.setViewModel(viewModel: self.viewModel)
-            }
-        }
-    }
-    
     // MARK: - Functions
-    func bindUI(with viewModel: ViewModelType) {
-        
-        // binding Controller inputs to View Model observer
-        countryCodeTextfield.rx.text.orEmpty.asObservable()
-            .subscribe(viewModel.input.countryCode)
-            .disposed(by: disposeBag)
-        
-        phoneTextfield.rx.text.orEmpty.asObservable()
-            .subscribe(viewModel.input.phone)
-            .disposed(by: disposeBag)
-
-        sendCodeButton.rx.tap.asObservable()
-            .subscribe(viewModel.input.sendOTPDidTap)
-            .disposed(by: disposeBag)
+    func bindUI(with viewModel: LoginByPhoneSendCodeViewModel) {
         
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
@@ -58,32 +37,36 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType {
         viewModel.output.OTPSentObservable
             .subscribe(onNext: { isTrue in
                 if isTrue {
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "MoveToVerifySegue", sender: self)
+                    DispatchQueue.main.async { [self] in
+                        
+                        let viewModel = LoginByPhoneVerifyViewModel()
+                        phoneTextfield.rx.text.orEmpty.asObservable().subscribe(viewModel.input.phoneObserver)
+                            .disposed(by: self.disposeBag)
+                        countryCodeTextfield.rx.text.orEmpty.asObservable()
+                            .subscribe(viewModel.input.countryCodeObserver)
+                            .disposed(by: self.disposeBag)
+                        
+                        self.navigationController?.pushViewController(LoginByPhoneVerifyController.create(with: viewModel), animated: true)
                     }}
             })
             .disposed(by: disposeBag)
 
     }
-    
-    func presentError(error: Error) {
-        let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    func presentMessage(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+    func bindAction(with viewModel: LoginByPhoneSendCodeViewModel) {
+        sendCodeButton.rx.tap.asObservable()
+            .withLatestFrom(phoneTextfield.rx.text.orEmpty.asObservable())
+            .withLatestFrom(countryCodeTextfield.rx.text.orEmpty.asObservable()) { ($0, $1) }
+            .subscribe(viewModel.action.sendOTPDidTap)
+            .disposed(by: disposeBag)
     }
 }
 
 extension LoginByPhoneSendCodeController {
     static func create(with viewModel: ViewModelType) -> UIViewController {
-        let storyboard = UIStoryboard(name: "LogInByPhoneVerifyView", bundle: nil)
+        let storyboard = UIStoryboard(name: "NormalLogin", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "LoginByPhoneSendCodeController") as! LoginByPhoneSendCodeController
         controller.viewModel = viewModel
+        controller.modalPresentationStyle = .fullScreen
         return controller
     }
 }

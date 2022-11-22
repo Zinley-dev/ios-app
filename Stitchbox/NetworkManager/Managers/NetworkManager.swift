@@ -58,18 +58,8 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         return request
     }
     fileprivate func configureParameters(parameters: [String: Any]?, request: inout URLRequest) {
-        do {
-//            var data: Data
-//            if #available(iOS 11.0, *) {
-//                data = try NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:], requiringSecureCoding: true)
-//            } else {
-//                data = NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:])
-//            }
-            
-            let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
-            request.httpBody = jsonData
-        } catch {
-        }
+        let jsonData = try? JSONSerialization.data(withJSONObject: parameters ?? Data())
+        request.httpBody = jsonData
     }
     fileprivate func addAdditionalHeaders(_ additionalHeaders: [String: String]?, request: inout URLRequest) {
         guard let headers = additionalHeaders else { return }

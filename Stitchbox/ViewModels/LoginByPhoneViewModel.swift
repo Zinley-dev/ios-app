@@ -8,23 +8,17 @@
 import Foundation
 import RxSwift
 
-class LoginByPhoneViewModel: ViewModelProtocol {
-    struct Input {
-        let phone: AnyObserver<String>
-        let countryCode: AnyObserver<String>
-        let code: AnyObserver<String>
-        let verifyOTPDidTap: AnyObserver<Void>
-        let sendOTPDidTap: AnyObserver<Void>
+class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
+    
+    struct Input {}
+    
+    struct Action {
+        let sendOTPDidTap: AnyObserver<(String, String)>
     }
+    
     struct Output {
         let OTPSentObservable: Observable<Bool>
-        let logInResultObservable: Observable<Bool>
         let errorsObservable: Observable<Error>
-    }
-    struct verifyAPIInput {
-        let phone: String
-        let countryCode: String
-        let code: String
     }
     struct sendAPIInput {
         let phone: String
@@ -32,6 +26,76 @@ class LoginByPhoneViewModel: ViewModelProtocol {
         let via: String
     }
     let input: Input
+    let action: Action
+    let output: Output
+    
+    private let sendOTPDidTapSubject = PublishSubject<(String, String)>()
+    private let OTPSentSubject = PublishSubject<Bool>()
+    private let logInResultSubject = PublishSubject<Bool>()
+    private let errorsSubject = PublishSubject<Error>()
+    private let disposeBag = DisposeBag()
+    
+    
+    init() {
+        input = Input()
+        
+        action = Action(sendOTPDidTap: sendOTPDidTapSubject.asObserver())
+        
+        output = Output(OTPSentObservable: OTPSentSubject.asObservable(),
+                        errorsObservable: errorsSubject.asObservable())
+        
+        logic()
+    }
+    func logic() {
+        sendOTPDidTapSubject.asObservable()
+            .subscribe (onNext: { (phone, countryCode) in
+                print(phone, countryCode)
+                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
+                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
+                    self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
+                    return;
+                }
+                // call api toward login api of backend
+                APIManager().phoneLogin(phone: phone, countryCode: countryCode) { result in switch result {
+                case .success(let apiResponse):
+                    // get and process data
+                    _ = apiResponse.body?["data"] as! [String: Any]?
+                    self.OTPSentSubject.onNext(true)
+                case .failure(let error):
+                    print(error)
+                    self.errorsSubject.onNext(NSError(domain: "Error in send OTP", code: 300))
+                }
+                }
+                
+                
+            }).disposed(by: disposeBag)
+    }
+    
+}
+
+
+class LoginByPhoneVerifyViewModel: ViewModelProtocol {
+    
+    struct Input {
+        let phoneObserver: AnyObserver<String>
+        let countryCodeObserver: AnyObserver<String>
+        let codeObserver: AnyObserver<String>
+    }
+    struct Action {
+        let verifyOTPDidTap: AnyObserver<Void>
+        let sendOTPDidTap: AnyObserver<Void>
+    }
+    
+    struct Output {
+        let successObservable: Observable<SuccessMessage>
+        let errorsObservable: Observable<Error>
+    }
+    enum SuccessMessage{
+        case sendCodeSuccess
+        case logInSuccess
+    }
+    let input: Input
+    let action: Action
     let output: Output
     
     private let phoneSubject = PublishSubject<String>()
@@ -39,37 +103,42 @@ class LoginByPhoneViewModel: ViewModelProtocol {
     private let codeSubject = PublishSubject<String>()
     private let verifyOTPDidTapSubject = PublishSubject<Void>()
     private let sendOTPDidTapSubject = PublishSubject<Void>()
-    private let OTPSentSubject = PublishSubject<Bool>()
-    private let logInResultSubject = PublishSubject<Bool>()
+    private let successSubject = PublishSubject<SuccessMessage>()
     private let errorsSubject = PublishSubject<Error>()
-    
+    private let disposeBag = DisposeBag()
     
     init() {
-        input = Input(phone: phoneSubject.asObserver(),
-                      countryCode: countryCodeSubject.asObserver(),
-                      code: codeSubject.asObserver(),
-                      verifyOTPDidTap: verifyOTPDidTapSubject.asObserver(),
-                      sendOTPDidTap: sendOTPDidTapSubject.asObserver())
+        input = Input(phoneObserver: phoneSubject.asObserver(),
+                      countryCodeObserver: countryCodeSubject.asObserver(),
+                      codeObserver: codeSubject.asObserver())
         
-        output = Output(OTPSentObservable: OTPSentSubject.asObservable(),
-                        logInResultObservable: logInResultSubject.asObservable(),
+        action = Action(verifyOTPDidTap: verifyOTPDidTapSubject.asObserver(),
+                        sendOTPDidTap: sendOTPDidTapSubject.asObserver())
+        
+        output = Output(successObservable: successSubject.asObservable(),
                         errorsObservable: errorsSubject.asObservable())
         
-        let verifyApiInputObservable = Observable.combineLatest(phoneSubject.asObservable(), countryCodeSubject.asObservable(), codeSubject.asObservable()){ (phone, countryCode, code) in return verifyAPIInput(phone: phone, countryCode: countryCode, code: code)}
-        
-        
+        logic()
+    }
+    
+    func logic() {
         verifyOTPDidTapSubject
-            .withLatestFrom(verifyApiInputObservable)
-            .subscribe { [self] (input) -> Void in
+            .withLatestFrom(phoneSubject.asObservable())
+            .withLatestFrom(countryCodeSubject.asObservable())
+                    {(phone: $0, countryCode: $1)}
+            .withLatestFrom(codeSubject.asObservable())
+                    {(phone: $0.phone, countryCode: $0.countryCode, code: $1)}
+            .subscribe (onNext: {(phone, countryCode, code) in
+                print(phone, countryCode, code)
                 // check username or password in the right format
-                if (isNotValidInput(Input: input.phone, RegEx: "^\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{4}$")
-                    || isNotValidInput(Input: input.countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")
-                    || isNotValidInput(Input: input.code, RegEx: "^[0-9]{6}$")) {
+                if (isNotValidInput(Input: phone, RegEx: "^\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{4}$")
+                    || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")
+                    || isNotValidInput(Input: code, RegEx: "^[0-9]{6}$")) {
                     self.errorsSubject.onNext(NSError(domain: "OTP in wrong format", code: 200))
                     return;
                 }
                 // call api toward login api of backend
-                APIManager().phoneVerify(phone: input.phone, countryCode: input.countryCode, code: input.code) { result in switch result {
+                APIManager().phoneVerify(phone: phone, countryCode: countryCode, code: code) { result in switch result {
                     
                 case .success(let apiResponse):
                     // get and process data
@@ -96,7 +165,7 @@ class LoginByPhoneViewModel: ViewModelProtocol {
                                 let accountDecoded = try decoder.decode(Account.self, from: data)
                                 print(accountDecoded)
                             }
-                            self.logInResultSubject.onNext(true);
+                            self.successSubject.onNext(.logInSuccess);
                             
                         } catch {
                             print("Unable to Create Account (\(error))")
@@ -116,41 +185,30 @@ class LoginByPhoneViewModel: ViewModelProtocol {
                     }
                 }
                 }
-            }
-        let sendApiInputObservable = Observable.combineLatest(phoneSubject.asObservable(), countryCodeSubject.asObservable()){ (phone, countryCode) in return sendAPIInput(phone: phone, countryCode: countryCode, via: "sms")
-        }
+            }).disposed(by: disposeBag)
         
-        sendOTPDidTapSubject
-            .withLatestFrom(sendApiInputObservable)
-            .subscribe { [self] (Input) -> Void in
-                // check username or password in the right format
-                if (isNotValidInput(Input: Input.phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
-                    || isNotValidInput(Input: Input.countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
+        sendOTPDidTapSubject.asObservable()
+            .withLatestFrom(phoneSubject.asObservable())
+            .withLatestFrom(countryCodeSubject.asObservable()) {($0, $1)}
+            .subscribe (onNext: { (phone, countryCode) in
+                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
+                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
                     self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
                     return;
                 }
                 // call api toward login api of backend
-                print(Input)
-                APIManager().phoneLogin(phone: Input.phone, countryCode: Input.countryCode, via: Input.via) { result in switch result {
+                APIManager().phoneLogin(phone: phone, countryCode: countryCode) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
-                    let data = apiResponse.body?["data"] as! [String: Any]?
-                    do{
-                        self.OTPSentSubject.onNext(true)
-                    } catch {
-                        self.errorsSubject.onNext(error)
-                    }
+                    _ = apiResponse.body?["data"] as! [String: Any]?
+                    self.successSubject.onNext(.sendCodeSuccess)
                 case .failure(let error):
                     print(error)
                     self.errorsSubject.onNext(NSError(domain: "Error in send OTP", code: 300))
                 }
                 }
-            }
-        // MARK: Helper function
-        func isNotValidInput(Input:String, RegEx: String) -> Bool {
-            let Test = NSPredicate(format:"SELF MATCHES %@", RegEx)
-            print(Input + String(Test.evaluate(with: Input)))
-            return !Test.evaluate(with: Input)
-        }
+                
+                
+            }).disposed(by: disposeBag)
     }
 }
