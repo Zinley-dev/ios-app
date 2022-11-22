@@ -146,6 +146,7 @@ class RegisterViewController: UIViewController, ControllerType {
         // Do any additional setup after loading the view.
         bindUI(with: registerViewModel)
         self.signUpButton.isEnabled = false
+        self.signUpButton.layer.backgroundColor = UIColor(hexString: "FE805C").cgColor
         self.passwordTextField.addBottomBorder()
         self.userNameTextField.addBottomBorder()
         self.reEnterPasswordTextField.addBottomBorder()

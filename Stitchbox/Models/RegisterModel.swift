@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RegisterModel{
+struct RegisterModel {
     var userName = ""
     var password = ""
 }
