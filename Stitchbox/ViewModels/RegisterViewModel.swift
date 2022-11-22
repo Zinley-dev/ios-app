@@ -16,7 +16,6 @@ struct PasswordError: Error {
     let minLowercase: Bool
     let minSpecialCharacter: Bool
     let isEmpty: Bool
-    let passwordMatched: Bool
 }
 
 
@@ -33,63 +32,76 @@ class RegisterViewModel: ViewModelProtocol{
         let errorsObservable: Observable<Error>
         let isValidPasswordObservable: Observable<PasswordError>
         let registerResultObservable: Observable<Bool>
-        let validReEnterPasswordObservable: Observable<Bool>
+        var validMatch: Observable<Bool>
     }
     
     let input: Input
     let output: Output
     
     private let disposeBag = DisposeBag()
-    private let userNameTextPublishedSubject = PublishSubject<String>()
-    private let passwordTextPublishedSubject = PublishSubject<String>()
-    private let reEnterPasswordTextPublishedSubject = PublishSubject<String>()
-    private let registerDidTapPublishedSubject = PublishSubject<Void>()
+    private let userNameTextSubject = PublishSubject<String>()
+    private let passwordTextSubject = PublishSubject<String>()
+    private var reEnterPasswordTextSubject = PublishSubject<String>()
+    private let registerDidTapSubject = PublishSubject<Void>()
     private let validReEnterPasswordSubject = PublishSubject<Bool>()
-    private let errorsPublishedSubject = PublishSubject<Error>()
+    private let errorsSubject = PublishSubject<Error>()
     private let isValidPasswordSubject = PublishSubject<PasswordError>()
     private let registerResultSubject = PublishSubject<Bool>()
     private let registerModelSubject = PublishSubject<RegisterModel>()
     
+    private var validMatch: Observable<Bool> {
+        return Observable.combineLatest(passwordTextSubject.asObservable(), reEnterPasswordTextSubject.asObservable()) {(pass,repass) in
+            if (pass.isEqualToString(find: repass)) {
+                self.validReEnterPasswordSubject.onNext(true)
+                return true
+            }else {self.validReEnterPasswordSubject.onNext(false)
+                return false
+            }
+                }
+        
+    }
     
     private var registerModelObservable: Observable<RegisterModel> {
-        return Observable.combineLatest(userNameTextPublishedSubject.asObservable(), passwordTextPublishedSubject.asObservable()) {(userName, password) in
+        return Observable.combineLatest(userNameTextSubject.asObservable(), passwordTextSubject.asObservable()) {(userName, password) in
             return RegisterModel(userName: userName, password: password)
         }
     }
     
+    
     init() {
-        input = Input(userName: userNameTextPublishedSubject.asObserver(),
-                      password: passwordTextPublishedSubject.asObserver(),
-                      reEnterPassword: reEnterPasswordTextPublishedSubject.asObserver(),
-                      registerTapped: registerDidTapPublishedSubject.asObserver())
+        input = Input(userName: userNameTextSubject.asObserver(),
+                      password: passwordTextSubject.asObserver(),
+                      reEnterPassword: reEnterPasswordTextSubject.asObserver(),
+                      registerTapped: registerDidTapSubject.asObserver())
         
-        output = Output(errorsObservable: errorsPublishedSubject.asObservable(), isValidPasswordObservable: isValidPasswordSubject.asObservable(), registerResultObservable: registerResultSubject.asObservable(), validReEnterPasswordObservable: validReEnterPasswordSubject.asObservable())
+        output = Output(errorsObservable: errorsSubject.asObservable(), isValidPasswordObservable: isValidPasswordSubject.asObservable(), registerResultObservable: registerResultSubject.asObservable(), validMatch: validReEnterPasswordSubject.asObservable())
         
-        passwordTextPublishedSubject.asObservable()
+        // Password TextField Strength Checker
+        passwordTextSubject.asObservable()
             .subscribe(onNext: { [self] (password) in
-            isValidPasswordSubject.onNext(PasswordError(
-                minCharacters: (isNotValidInput(Input: password, RegEx: "^.{8,}$")) ,
-                minNumber: (isNotValidInput(Input: password, RegEx: ".*[0-9]+.*")),
-                minUppercase: (isNotValidInput(Input: password, RegEx: ".*[A-Z]+.*")),
-                minLowercase: (isNotValidInput(Input: password, RegEx: ".*[a-z]+.*")) ,
-                minSpecialCharacter: (isNotValidInput(Input: password, RegEx: ".*[!&^%$#@()/]+.*")),
-                isEmpty: (password == ""),
-                passwordMatched: (password == "")))
-        })
+                isValidPasswordSubject.onNext(PasswordError(
+                    minCharacters: (isNotValidInput(Input: password, RegEx: "^.{8,}$")) ,
+                    minNumber: (isNotValidInput(Input: password, RegEx: ".*[0-9]+.*")),
+                    minUppercase: (isNotValidInput(Input: password, RegEx: ".*[A-Z]+.*")),
+                    minLowercase: (isNotValidInput(Input: password, RegEx: ".*[a-z]+.*")) ,
+                    minSpecialCharacter: (isNotValidInput(Input: password, RegEx: ".*[!&^%$#@()/]+.*")),
+                    isEmpty: (password == "")))
+            })
         
-        reEnterPasswordTextPublishedSubject.asObservable().withLatestFrom(passwordTextPublishedSubject.asObservable())
-        {
-            repassword, pass in
-            if(repassword == pass) {
-                self.validReEnterPasswordSubject.onNext(true)
-            }
-        }
-        
-        registerDidTapPublishedSubject
+        // Password comfirmed checker
+        reEnterPasswordTextSubject.asObservable()
+            .withLatestFrom(validMatch.asObservable())
+            .subscribe(onNext:{ [self] repass in
+                if (repass){
+                    self.validReEnterPasswordSubject.onNext(true)
+                }else {self.validReEnterPasswordSubject.onNext(false)}
+            })
+        //
+        registerDidTapSubject
             .withLatestFrom(registerModelObservable)
             .subscribe { [self] (registerModels) -> Void in
                 if (registerModels.userName == "" || registerModels.password == "") {
-                    self.errorsPublishedSubject.onNext(NSError(domain: "Empty Username or Password", code: 201))
+                    self.errorsSubject.onNext(NSError(domain: "Empty Username or Password", code: 201))
                     self.registerResultSubject.onNext(false)
                     return;
                 }
@@ -109,10 +121,10 @@ class RegisterViewModel: ViewModelProtocol{
                             }
                             self.registerResultSubject.onNext(true)
                         } catch {
-                            self.errorsPublishedSubject.onNext(error)
+                            self.errorsSubject.onNext(error)
                         }
                     case .failure:
-                        self.errorsPublishedSubject.onNext(NSError(domain: "Error", code: 301))
+                        self.errorsSubject.onNext(NSError(domain: "Error", code: 301))
                     }
                     
                 }
@@ -125,6 +137,7 @@ class RegisterViewModel: ViewModelProtocol{
         return !Test.evaluate(with: Input)
     }
     
+    
     // MARK: register function call API
     func register(userName: String, password: String){
         let params = ["username": userName, "password": password]
@@ -134,3 +147,8 @@ class RegisterViewModel: ViewModelProtocol{
     }
 }
 
+extension String {
+    func isEqualToString(find: String) -> Bool {
+        return String(format: self) == find
+    }
+}

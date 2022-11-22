@@ -21,15 +21,16 @@ class RegisterViewController: UIViewController, ControllerType {
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var reEnterPasswordTextField: UITextField!
-    
+    //Labels
     @IBOutlet weak var minCharactersLabel: UILabel!
     @IBOutlet weak var specialCharLabel: UILabel!
     @IBOutlet weak var minLowerCaseLabel: UILabel!
     @IBOutlet weak var minUpperCaseLabel: UILabel!
     @IBOutlet weak var minNumLabel: UILabel!
     @IBOutlet weak var passwordMatchLabel: UILabel!
-    //Button
+    //Buttons
     @IBOutlet weak var signUpButton: UIButton!
+    
     @IBAction func tappedSignupButton(_ sender: UIButton) {
         registerViewModel.register(userName: userNameTextField.text!, password: passwordTextField.text!)
         print("tapped signup button")
@@ -38,8 +39,8 @@ class RegisterViewController: UIViewController, ControllerType {
     
     
     // MARK: Functions
+
     func bindUI(with registerViewModel: RegisterViewModel) {
-       
         
         userNameTextField.rx.text.orEmpty.asObservable()
             .subscribe(registerViewModel.input.userName)
@@ -57,10 +58,14 @@ class RegisterViewController: UIViewController, ControllerType {
             .subscribe(registerViewModel.input.registerTapped)
             .disposed(by: disposeBag)
         
+        registerViewModel.output.validMatch.subscribe(onNext:{ isTrue in
+            if(isTrue){
+                self.passwordMatchLabel.textColor = UIColor.green
+            }else { self.passwordMatchLabel.textColor = UIColor.red}
+        }).disposed(by: disposeBag)
         
-        // Password check for label corlor change
         registerViewModel.output.isValidPasswordObservable.subscribe(onNext: {error in
-            
+
             if(error.isEmpty){
                 self.minUpperCaseLabel.textColor = UIColor.gray
                 self.minCharactersLabel.textColor = UIColor.gray
@@ -86,30 +91,24 @@ class RegisterViewController: UIViewController, ControllerType {
             if (error.minLowercase){
                 self.minLowerCaseLabel.textColor = UIColor.red
             }else { self.minLowerCaseLabel.textColor = UIColor.green}
-            
-//            if (error.passwordMatched){
-//                self.passwordMatchLabel.textColor = UIColor.red
-//            }else { self.passwordMatchLabel.textColor = UIColor.green}
-            
+
+//            if (error.passwordMatched) {
+//                self.passwordMatchLabel.textColor = UIColor.green
+//            }else { self.passwordMatchLabel.textColor = UIColor.red}
+
             if (error.minSpecialCharacter){
                 self.specialCharLabel.textColor = UIColor.red
-            }
-            else {
+            }else {
                 self.specialCharLabel.textColor = UIColor.green
             }
-            if (error.minUppercase != true && error.isEmpty != true && error.minLowercase != true && error.minSpecialCharacter != true && error.minNumber != true && error.minCharacters != true){
-                self.signUpButton.isEnabled = true}
-            else {self.signUpButton.isEnabled = false}
+            
+            if (error.minUppercase != true && error.isEmpty != true && error.minLowercase != true && error.minSpecialCharacter != true && error.minNumber != true && error.minCharacters != true ) {
+                self.signUpButton.isEnabled = true }
+            else {
+                self.signUpButton.isEnabled = false}
             
         }).disposed(by: disposeBag)
-        
-        registerViewModel.output.validReEnterPasswordObservable
-            .subscribe(onNext:{ (valid) in
-                if (valid) {
-                    self.passwordMatchLabel.textColor = UIColor.red
-                }else { self.passwordMatchLabel.textColor = UIColor.green}
-            }).disposed(by: disposeBag)
-//        
+ 
         //Binding ViewModel outputs to ViewController
         registerViewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
