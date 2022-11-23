@@ -81,7 +81,7 @@ class RegisterViewModel: ViewModelProtocol{
                     }
             
         }
-        
+
         var registerModelObservable: Observable<RegisterModel> {
             return Observable.combineLatest(userNameTextSubject.asObservable(), passwordTextSubject.asObservable()) {(userName, password) in
                 return RegisterModel(userName: userName, password: password)
