@@ -29,6 +29,11 @@ public enum UserApi {
     case signup(params: [String: Any]?)
 }
 
+public enum MobileApi {
+    case login
+    case register(params: [String: Any]?)
+}
+
 extension UserApi: EndPointType {
     var module: String {
         return "/user"
@@ -37,9 +42,9 @@ extension UserApi: EndPointType {
     var path: String {
         switch self {
         case .login:
-            return "/mobile/auth/login"
+            return "/login"
         case .signup:
-            return "/register"
+            return "/signup"
         }
     }
 
@@ -57,6 +62,43 @@ extension UserApi: EndPointType {
         case .login:
             return .request
         case .signup(let params):
+            return .requestParameters(parameters: params)
+        }
+    }
+
+    var headers: [String: String]? {
+        return nil
+    }
+}
+
+extension MobileApi: EndPointType {
+    var module: String {
+        return "/mobile/auth"
+    }
+
+    var path: String {
+        switch self {
+        case .login:
+            return "/login"
+        case .register:
+            return "/register"
+        }
+    }
+
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .login:
+            return .post
+        case .register:
+            return .post
+        }
+    }
+
+    var task: HTTPTask {
+        switch self {
+        case .login:
+            return .request
+        case .register(let params):
             return .requestParameters(parameters: params)
         }
     }

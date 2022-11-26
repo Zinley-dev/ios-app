@@ -188,71 +188,71 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="tDj-Du-xa8">
-                                <rect key="frame" x="40" y="132" width="334" height="438"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="tDj-Du-xa8">
+                                <rect key="frame" x="40" y="132" width="334" height="391.5"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p1G-Le-SX1" userLabel="userName Text FIeld">
-                                        <rect key="frame" x="0.0" y="0.0" width="334" height="34"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p1G-Le-SX1" userLabel="userName Text FIeld">
+                                        <rect key="frame" x="0.0" y="0.0" width="334" height="19.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check availability" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YXK-fW-Nk9">
-                                        <rect key="frame" x="0.0" y="54" width="334" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="39.5" width="334" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Owb-Rr-Qql">
-                                        <rect key="frame" x="0.0" y="88.5" width="334" height="34"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Owb-Rr-Qql">
+                                        <rect key="frame" x="0.0" y="74" width="334" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="More than 8 characters" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eDp-GI-Uvx">
-                                        <rect key="frame" x="0.0" y="142.5" width="334" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="112" width="334" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contains at least 1 number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kj2-i5-IX6">
-                                        <rect key="frame" x="0.0" y="177" width="334" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="146.5" width="334" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contains at least 1 Uppercase letter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CfQ-xd-TcI">
-                                        <rect key="frame" x="0.0" y="211.5" width="334" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="181" width="334" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contains at least 1 Lowercase letter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mH4-OA-ZVJ">
-                                        <rect key="frame" x="0.0" y="246" width="334" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="215.5" width="334" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contains at least 1 special character" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RYp-ur-bY7">
-                                        <rect key="frame" x="0.0" y="280.5" width="334" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="250" width="334" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Re-enter password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S4w-KB-wwC">
-                                        <rect key="frame" x="0.0" y="315" width="334" height="34"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Re-enter password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S4w-KB-wwC">
+                                        <rect key="frame" x="0.0" y="284.5" width="334" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password match" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IVh-bc-1Vf">
-                                        <rect key="frame" x="0.0" y="369" width="334" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="322.5" width="334" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Io-2k-MH3">
-                                        <rect key="frame" x="0.0" y="403.5" width="334" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="357" width="334" height="34.5"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="filled" title="Save">
-                                            <color key="baseBackgroundColor" red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="calibratedRGB"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Save" cornerStyle="capsule" titleAlignment="center">
+                                            <color key="baseBackgroundColor" red="0.99607843139999996" green="0.50196078430000002" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="tappedSignupButton:" destination="Wgm-Xf-ZNU" eventType="touchUpInside" id="NbW-Jd-xXR"/>
@@ -265,11 +265,9 @@
                         <viewLayoutGuide key="safeArea" id="Y4a-75-xzv"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="tDj-Du-xa8" firstAttribute="top" secondItem="Y4a-75-xzv" secondAttribute="top" constant="40" id="Iyr-He-aJr"/>
-                            <constraint firstItem="tDj-Du-xa8" firstAttribute="leading" secondItem="Y4a-75-xzv" secondAttribute="leading" constant="40" id="QeP-QN-Fpn"/>
-                            <constraint firstItem="tDj-Du-xa8" firstAttribute="top" secondItem="Y4a-75-xzv" secondAttribute="top" constant="40" id="azp-3A-4mV"/>
-                            <constraint firstItem="Y4a-75-xzv" firstAttribute="trailing" secondItem="tDj-Du-xa8" secondAttribute="trailing" constant="40" id="nLe-8p-dwZ"/>
-                            <constraint firstItem="tDj-Du-xa8" firstAttribute="leading" secondItem="Y4a-75-xzv" secondAttribute="leading" constant="40" id="shS-qS-xko"/>
+                            <constraint firstItem="tDj-Du-xa8" firstAttribute="centerX" secondItem="dPw-jt-1VN" secondAttribute="centerX" id="Tmi-Tr-ADE"/>
+                            <constraint firstItem="tDj-Du-xa8" firstAttribute="leading" secondItem="Y4a-75-xzv" secondAttribute="leading" constant="40" id="W55-uR-amE"/>
+                            <constraint firstItem="tDj-Du-xa8" firstAttribute="top" secondItem="Y4a-75-xzv" secondAttribute="top" constant="40" id="nFL-So-6wG"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="SET UP YOUR USERNAME" id="s5O-Ly-aCi"/>

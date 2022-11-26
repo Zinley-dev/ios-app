@@ -25,6 +25,8 @@ enum Result {
 struct APIManager {
     let manager = Manager<UserApi>()
     
+    let mobileManager = Manager<MobileApi>()
+    
     func login(_ params: [String: Any], completion: @escaping APICompletion) {
         manager.request(.login) { result in
             completion(result)
@@ -33,7 +35,7 @@ struct APIManager {
 
     func signUp(_ params: [String: Any], completion: @escaping APICompletion) {
 //        print(params)
-        manager.request(.signup(params: params)) { result in
+        mobileManager.request(.register(params: params)) { result in
             completion(result)
         }
     }

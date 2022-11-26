@@ -19,7 +19,7 @@ struct RegisterAccount: Codable {
     //
     // MARK: - Account
     let device: String
-    let accountVerified: String
+    let accountVerified: Bool
     let _id: String
     let name: String
     let username: String
@@ -32,7 +32,7 @@ struct RegisterAccount: Codable {
         self.refreshToken = JSONbody?["refreshToken"] as? String ?? ""
         self.accessToken = JSONbody?["accessToken"] as? String ?? ""
         self.device = JSONbody?["device"] as? String ?? ""
-        self.accountVerified = JSONbody?["accountVerified"] as? String ?? ""
+        self.accountVerified = JSONbody?["accountVerified"] as? Bool ?? true
         self._id = JSONbody?["_id"] as? String ?? ""
         self.name = JSONbody?["name"] as? String ?? ""
         self.username = JSONbody?["username"] as? String ?? ""
