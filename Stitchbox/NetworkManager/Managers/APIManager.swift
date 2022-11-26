@@ -32,6 +32,7 @@ struct APIManager {
     }
 
     func signUp(_ params: [String: Any], completion: @escaping APICompletion) {
+//        print(params)
         manager.request(.signup(params: params)) { result in
             completion(result)
         }

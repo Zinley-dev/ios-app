@@ -4,7 +4,6 @@
 //
 //  Created by Nghiem Minh Hoang on 26/10/2022.
 //
-
 import Foundation
 
 typealias APICompletion = (Result) -> Void
@@ -24,6 +23,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         if let request = buildRequest(from: route) {
+            
             task = session.dataTask(with: request, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
@@ -59,13 +59,6 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     }
     fileprivate func configureParameters(parameters: [String: Any]?, request: inout URLRequest) {
         do {
-//            var data: Data
-//            if #available(iOS 11.0, *) {
-//                data = try NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:], requiringSecureCoding: true)
-//            } else {
-//                data = NSKeyedArchiver.archivedData(withRootObject: parameters ?? [:])
-//            }
-            
             let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
             request.httpBody = jsonData
         } catch {

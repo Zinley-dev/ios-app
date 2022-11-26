@@ -8,8 +8,8 @@
 import Foundation
 
 struct RegisterModel {
-    var userName = ""
     var password = ""
+    var userName = ""
 }
 
 struct RegisterAccount: Codable {

@@ -31,7 +31,7 @@ public enum UserApi {
 
 extension UserApi: EndPointType {
     var module: String {
-        return "/restApi"
+        return "/user"
     }
 
     var path: String {
@@ -39,7 +39,7 @@ extension UserApi: EndPointType {
         case .login:
             return "/mobile/auth/login"
         case .signup:
-            return "/mobile/auth/register"
+            return "/register"
         }
     }
 

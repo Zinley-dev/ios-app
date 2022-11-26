@@ -83,8 +83,8 @@ class RegisterViewModel: ViewModelProtocol{
         }
 
         var registerModelObservable: Observable<RegisterModel> {
-            return Observable.combineLatest(userNameTextSubject.asObservable(), passwordTextSubject.asObservable()) {(userName, password) in
-                return RegisterModel(userName: userName, password: password)
+            return Observable.combineLatest(userNameTextSubject.asObservable(), passwordTextSubject.asObservable()) {(password, userName) in
+                return RegisterModel(password: password, userName: userName)
             }
         }
         
@@ -113,7 +113,8 @@ class RegisterViewModel: ViewModelProtocol{
         registerDidTapSubject
             .withLatestFrom(registerModelObservable)
             .subscribe { [self] (registerModels) -> Void in
-                let params = ["name": registerModels.userName, "password": registerModels.password]
+                let params = ["password": registerModels.password, "username": registerModels.userName]
+                
                 APIManager().signUp(params){ result in
                     switch result{
                     case .success(let apiResponse):
@@ -132,11 +133,11 @@ class RegisterViewModel: ViewModelProtocol{
                             self.errorsSubject.onNext(error)
                         }
                     case .failure:
-                        self.errorsSubject.onNext(NSError(domain: "Error", code: 301))
+                        self.errorsSubject.onNext(NSError(domain: " ", code: 301))
                     }
                     
                 }
-            }
+            }.disposed(by: disposeBag)
     }
     
     // MARK: Get missing validation for password
@@ -148,8 +149,8 @@ class RegisterViewModel: ViewModelProtocol{
     
     
     // MARK: register function call API
-    func register(userName: String, password: String){
-        let params = ["username": userName, "password": password]
+    func register(password: String, userName: String){
+        let params = ["password": password, "username": userName]
         APIManager().signUp(params){ result in
             print(result)
         }

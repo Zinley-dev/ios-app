@@ -32,11 +32,23 @@ class RegisterViewController: UIViewController, ControllerType {
     @IBOutlet weak var signUpButton: UIButton!
     
     @IBAction func tappedSignupButton(_ sender: UIButton) {
-        registerViewModel.register(userName: userNameTextField.text!, password: passwordTextField.text!)
+        registerViewModel.register(password: passwordTextField.text!, userName: userNameTextField.text!)
         print("tapped signup button")
+    }
+    //MARK: Lifecyle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        bindUI(with: registerViewModel)
+        bindAction(with: registerViewModel)
+        self.reEnterPasswordTextField.isEnabled = false
+        self.enableButton(button: self.signUpButton, enabled: false)
+        self.signUpButton.layer.backgroundColor = UIColor(hexString: "FE805C").cgColor
+        self.passwordTextField.addBottomBorder()
+        self.userNameTextField.addBottomBorder()
+        self.reEnterPasswordTextField.addBottomBorder()
         
     }
-    
     
     // MARK: Functions
     
@@ -143,20 +155,7 @@ class RegisterViewController: UIViewController, ControllerType {
             textfield.alpha = enabled ? 1.0 : 0.25
         }
     
-    //MARK: VIEWDIDLOAD FUNCTION
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        bindUI(with: registerViewModel)
-        bindAction(with: registerViewModel)
-        self.reEnterPasswordTextField.isEnabled = false
-        self.enableButton(button: self.signUpButton, enabled: false)
-        self.signUpButton.layer.backgroundColor = UIColor(hexString: "FE805C").cgColor
-        self.passwordTextField.addBottomBorder()
-        self.userNameTextField.addBottomBorder()
-        self.reEnterPasswordTextField.addBottomBorder()
-        
-    }
+    
 }
 
 extension RegisterViewController {
