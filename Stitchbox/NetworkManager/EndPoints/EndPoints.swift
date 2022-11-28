@@ -73,15 +73,15 @@ extension UserApi: EndPointType {
 
 extension MobileApi: EndPointType {
     var module: String {
-        return "/mobile/auth"
+        return "/mobile"
     }
 
     var path: String {
         switch self {
         case .login:
-            return "/login"
+            return "/auth/login"
         case .register:
-            return "/register"
+            return "/auth/register"
         }
     }
 
