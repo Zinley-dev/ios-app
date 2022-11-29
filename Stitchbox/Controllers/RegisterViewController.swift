@@ -42,15 +42,16 @@ class RegisterViewController: UIViewController, ControllerType {
         // Do any additional setup after loading the view.
         bindUI(with: registerViewModel)
         bindAction(with: registerViewModel)
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "whiteBackground.png")!)
-        self.view.alpha = 0.95
-        self.reEnterPasswordTextField.isEnabled = false
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "darkBackground.png")!)
+        self.view.alpha = 0.9
+        
+        
         self.enableButton(button: self.signUpButton, enabled: false)
-        self.signUpButton.frame = CGRect(x: 0, y: 0, width: 121, height: 44)
+        
         self.signUpButton.backgroundColor = .white
         self.signUpButton.layer.backgroundColor = UIColor(red: 0.208, green: 0.18, blue: 0.443, alpha: 1).cgColor
         self.signUpButton.layer.cornerRadius = 23
-
+        self.reEnterPasswordTextField.isEnabled = false
     }
     
     // MARK: Functions
@@ -152,7 +153,9 @@ class RegisterViewController: UIViewController, ControllerType {
     func enableButton(button: UIButton, enabled:Bool) {
             button.isEnabled = enabled
             button.alpha = enabled ? 1.0 : 0.25
+        button.layer.backgroundColor = enabled ? UIColor(red: 0.208, green: 0.18, blue: 0.443, alpha: 1).cgColor : UIColor(red: 0.733, green: 0.733, blue: 0.733, alpha: 1).cgColor
         }
+    
     func enableTextField(textfield: UITextField, enabled:Bool) {
             textfield.isEnabled = enabled
             textfield.alpha = enabled ? 1.0 : 0.25
