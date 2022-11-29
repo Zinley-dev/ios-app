@@ -35,19 +35,22 @@ class RegisterViewController: UIViewController, ControllerType {
         registerViewModel.register(password: passwordTextField.text!, userName: userNameTextField.text!)
         print("tapped signup button")
     }
+ 
     //MARK: Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         bindUI(with: registerViewModel)
         bindAction(with: registerViewModel)
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "whiteBackground.png")!)
+        self.view.alpha = 0.95
         self.reEnterPasswordTextField.isEnabled = false
         self.enableButton(button: self.signUpButton, enabled: false)
-        self.signUpButton.layer.backgroundColor = UIColor(hexString: "FE805C").cgColor
-        self.passwordTextField.addBottomBorder()
-        self.userNameTextField.addBottomBorder()
-        self.reEnterPasswordTextField.addBottomBorder()
-        
+        self.signUpButton.frame = CGRect(x: 0, y: 0, width: 121, height: 44)
+        self.signUpButton.backgroundColor = .white
+        self.signUpButton.layer.backgroundColor = UIColor(red: 0.208, green: 0.18, blue: 0.443, alpha: 1).cgColor
+        self.signUpButton.layer.cornerRadius = 23
+
     }
     
     // MARK: Functions
@@ -167,12 +170,4 @@ extension RegisterViewController {
     }
 }
 
-extension UITextField {
-    func addBottomBorder(){
-        let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
-        bottomLine.backgroundColor = UIColor.orange.cgColor
-        borderStyle = .none
-        layer.addSublayer(bottomLine)
-    }
-}
+
