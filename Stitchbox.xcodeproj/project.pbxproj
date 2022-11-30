@@ -11,7 +11,7 @@
 		1405F600293274C10061DC8D /* STextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1405F5FF293274C10061DC8D /* STextField.swift */; };
 		1405F602293277980061DC8D /* TextField.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1405F601293277980061DC8D /* TextField.storyboard */; };
 		1432C4A6292B1CB9005800A2 /* SButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1432C4A5292B1CB9005800A2 /* SButton.swift */; };
-		1432C4A8292B4DAE005800A2 /* isNotValidInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1432C4A7292B4DAD005800A2 /* isNotValidInput.swift */; };
+		1432C4A8292B4DAE005800A2 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1432C4A7292B4DAD005800A2 /* Helpers.swift */; };
 		145C4EBF2931563E00DB296C /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C4EBE2931563E00DB296C /* UIViewExtension.swift */; };
 		145C4EC129318A6B00DB296C /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C4EC029318A6B00DB296C /* Color.swift */; };
 		145C4EC32931A1D700DB296C /* Empty.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 145C4EC22931A1D700DB296C /* Empty.storyboard */; };
@@ -24,7 +24,7 @@
 		147BDB6B2928B7B6003511C3 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147BDB6A2928B7B6003511C3 /* Font.swift */; };
 		14847406291F37F80099AA08 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14847405291F37F80099AA08 /* AccountModel.swift */; };
 		1484740C291F65000099AA08 /* LoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1484740B291F65000099AA08 /* LoginTests.swift */; };
-		1484740E291F7DC80099AA08 /* LogInByPhoneVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1484740D291F7DC80099AA08 /* LogInByPhoneVerifyViewController.swift */; };
+		1484740E291F7DC80099AA08 /* LoginByPhoneVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1484740D291F7DC80099AA08 /* LoginByPhoneVerifyViewController.swift */; };
 		148C7101291AFCFF0046FC5D /* NormalLogin.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 148C7100291AFCFF0046FC5D /* NormalLogin.storyboard */; settings = {ASSET_TAGS = (Logo, ); }; };
 		148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148C7106291B0F210046FC5D /* LogInByPhoneViewController.swift */; };
 		148C7109291B11270046FC5D /* OTPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148C7108291B11270046FC5D /* OTPTextField.swift */; };
@@ -84,7 +84,7 @@
 		1405F5FF293274C10061DC8D /* STextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STextField.swift; sourceTree = "<group>"; };
 		1405F601293277980061DC8D /* TextField.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TextField.storyboard; sourceTree = "<group>"; };
 		1432C4A5292B1CB9005800A2 /* SButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SButton.swift; sourceTree = "<group>"; };
-		1432C4A7292B4DAD005800A2 /* isNotValidInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = isNotValidInput.swift; path = ../../../../../../Documents/isNotValidInput.swift; sourceTree = "<group>"; };
+		1432C4A7292B4DAD005800A2 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		145C4EBE2931563E00DB296C /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		145C4EC029318A6B00DB296C /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		145C4EC22931A1D700DB296C /* Empty.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Empty.storyboard; sourceTree = "<group>"; };
@@ -98,7 +98,7 @@
 		147BDB6A2928B7B6003511C3 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		14847405291F37F80099AA08 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 		1484740B291F65000099AA08 /* LoginTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTests.swift; sourceTree = "<group>"; };
-		1484740D291F7DC80099AA08 /* LogInByPhoneVerifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogInByPhoneVerifyViewController.swift; path = ../../../../../Documents/LogInByPhoneVerifyViewController.swift; sourceTree = "<group>"; };
+		1484740D291F7DC80099AA08 /* LoginByPhoneVerifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginByPhoneVerifyViewController.swift; sourceTree = "<group>"; };
 		148C7100291AFCFF0046FC5D /* NormalLogin.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NormalLogin.storyboard; sourceTree = "<group>"; };
 		148C7106291B0F210046FC5D /* LogInByPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInByPhoneViewController.swift; sourceTree = "<group>"; };
 		148C7108291B11270046FC5D /* OTPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPTextField.swift; sourceTree = "<group>"; };
@@ -375,7 +375,7 @@
 				390FD73B2909264D0068B883 /* StartViewController.swift */,
 				390FD781290931900068B883 /* NormalLoginViewController.swift */,
 				148C7106291B0F210046FC5D /* LogInByPhoneViewController.swift */,
-				1484740D291F7DC80099AA08 /* LogInByPhoneVerifyViewController.swift */,
+				1484740D291F7DC80099AA08 /* LoginByPhoneVerifyViewController.swift */,
 				390FD78529093EA00068B883 /* FeedViewController.swift */,
 			);
 			path = Controllers;
@@ -409,7 +409,7 @@
 			children = (
 				390FD787290A856B0068B883 /* RedirectionHelper.swift */,
 				390FD78A290A901F0068B883 /* SettingsBundleHelper.swift */,
-				1432C4A7292B4DAD005800A2 /* isNotValidInput.swift */,
+				1432C4A7292B4DAD005800A2 /* Helpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -765,7 +765,7 @@
 				390FD76D290928A70068B883 /* APIManager.swift in Sources */,
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				390FD769290927E40068B883 /* NetworkManager.swift in Sources */,
-				1432C4A8292B4DAE005800A2 /* isNotValidInput.swift in Sources */,
+				1432C4A8292B4DAE005800A2 /* Helpers.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
 				145C4EC129318A6B00DB296C /* Color.swift in Sources */,
 				390FD77429092A9B0068B883 /* HTTPTask.swift in Sources */,
@@ -773,7 +773,7 @@
 				390FD77629092AB30068B883 /* HTTPMethod.swift in Sources */,
 				390FD77829092ADE0068B883 /* EndPoints.swift in Sources */,
 				390FD7382909264D0068B883 /* AppDelegate.swift in Sources */,
-				1484740E291F7DC80099AA08 /* LogInByPhoneVerifyViewController.swift in Sources */,
+				1484740E291F7DC80099AA08 /* LoginByPhoneVerifyViewController.swift in Sources */,
 				145C4EBF2931563E00DB296C /* UIViewExtension.swift in Sources */,
 				390FD76B290928420068B883 /* EndPointType.swift in Sources */,
 				1432C4A6292B1CB9005800A2 /* SButton.swift in Sources */,
