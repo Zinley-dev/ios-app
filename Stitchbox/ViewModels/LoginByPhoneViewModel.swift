@@ -50,11 +50,11 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
         sendOTPDidTapSubject.asObservable()
             .subscribe (onNext: { (phone, countryCode) in
                 print(phone, countryCode)
-                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
-                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
-                    self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
-                    return;
-                }
+//                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
+//                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
+//                    self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
+//                    return;
+//                }
                 // call api toward login api of backend
                 APIManager().phoneLogin(phone: phone, countryCode: countryCode) { result in switch result {
                 case .success(let apiResponse):
@@ -131,12 +131,12 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
             .subscribe (onNext: {(phone, countryCode, code) in
                 print(phone, countryCode, code)
                 // check username or password in the right format
-                if (isNotValidInput(Input: phone, RegEx: "^\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{4}$")
-                    || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")
-                    || isNotValidInput(Input: code, RegEx: "^[0-9]{6}$")) {
-                    self.errorsSubject.onNext(NSError(domain: "OTP in wrong format", code: 200))
-                    return;
-                }
+//                if (isNotValidInput(Input: phone, RegEx: "^\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{4}$")
+//                    || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")
+//                    || isNotValidInput(Input: code, RegEx: "^[0-9]{6}$")) {
+//                    self.errorsSubject.onNext(NSError(domain: "OTP in wrong format", code: 200))
+//                    return;
+//                }
                 // call api toward login api of backend
                 APIManager().phoneVerify(phone: phone, countryCode: countryCode, code: code) { result in switch result {
                     
@@ -191,11 +191,11 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
             .withLatestFrom(phoneSubject.asObservable())
             .withLatestFrom(countryCodeSubject.asObservable()) {($0, $1)}
             .subscribe (onNext: { (phone, countryCode) in
-                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
-                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
-                    self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
-                    return;
-                }
+//                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
+//                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
+//                    self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
+//                    return;
+//                }
                 // call api toward login api of backend
                 APIManager().phoneLogin(phone: phone, countryCode: countryCode) { result in switch result {
                 case .success(let apiResponse):

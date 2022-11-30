@@ -46,7 +46,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType {
                             .subscribe(viewModel.input.countryCodeObserver)
                             .disposed(by: self.disposeBag)
                         
-                        self.navigationController?.pushViewController(LoginByPhoneVerifyController.create(with: viewModel), animated: true)
+//                        self.navigationController?.pushViewController(LoginByPhoneVerifyController.create(with: viewModel), animated: true)
                     }}
             })
             .disposed(by: disposeBag)

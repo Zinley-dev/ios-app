@@ -13,14 +13,5 @@ class StartViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-
-    @IBAction func signInFacebookAction(_ sender: Any) {
-    }
-    @IBAction func signInGooleAction(_ sender: Any) {
-    }
-    @IBAction func signInTwitterAction(_ sender: Any) {
-    }
-    @IBAction func signInAppleAction(_ sender: Any) {
-    }
 }
 

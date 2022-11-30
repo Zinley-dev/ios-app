@@ -49,11 +49,11 @@ class LoginControllerViewModel: ViewModelProtocol {
         signInDidTapSubject
             .subscribe (onNext: { (username, password) in
                 // check username or password in the right format
-                if (isNotValidInput(Input: username, RegEx: "\\w{7,18}") ||
-                    isNotValidInput(Input: password, RegEx: "\\w{7,18}")) {
-                    self.errorsSubject.onNext(NSError(domain: "Username or Password in wrong format", code: 400))
-                    return;
-                }
+//                if (isNotValidInput(Input: username, RegEx: "\\w{7,18}") ||
+//                    isNotValidInput(Input: password, RegEx: "\\w{7,18}")) {
+//                    self.errorsSubject.onNext(NSError(domain: "Username or Password in wrong format", code: 400))
+//                    return;
+//                }
                 // call api toward login api of backend
                 APIManager().normalLogin(username: username, password: password) { result in switch result {
                 case .success(let apiResponse):
