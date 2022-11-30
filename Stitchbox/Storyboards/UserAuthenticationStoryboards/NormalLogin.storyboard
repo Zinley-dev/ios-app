@@ -182,9 +182,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="5eg-Kt-MWT"/>
                     <connections>
-                        <outlet property="OTPCodeTextfield" destination="hgp-gx-vzv" id="A22-uA-Jz7"/>
+                        <outlet property="OTPTextfield" destination="hgp-gx-vzv" id="Cfy-zG-kh3"/>
+                        <outlet property="retypeOTP" destination="xSU-K5-HuU" id="GeF-1N-S7v"/>
                         <outlet property="sendCodeButton" destination="xSU-K5-HuU" id="HvU-x2-n57"/>
-                        <outlet property="verifyCodeButton" destination="NOw-Hk-G1A" id="MqT-Bm-CT7"/>
+                        <outlet property="verifyButton" destination="NOw-Hk-G1A" id="Cl6-UR-nTA"/>
                         <segue destination="ak2-f2-bqj" kind="show" identifier="DashboardSegue" id="Voj-3Q-62j"/>
                     </connections>
                 </viewController>
