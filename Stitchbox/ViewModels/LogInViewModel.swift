@@ -72,7 +72,6 @@ class LoginControllerViewModel: ViewModelProtocol {
                             // Write/Set Data
                             UserDefaults.standard.set(data, forKey: "userAccount")
                             
-                            
                         } catch {
                             print("Unable to Encode Account (\(error))")
                         }
