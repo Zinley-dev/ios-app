@@ -80,7 +80,7 @@
         <!--LoginByPhoneView-->
         <scene sceneID="Gat-w2-WHn">
             <objects>
-                <viewController title="LoginByPhoneView" id="SM8-4k-hGa" customClass="LoginByPhoneSendCodeController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginByPhoneSendCodeController" title="LoginByPhoneView" id="SM8-4k-hGa" customClass="LoginByPhoneSendCodeController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lsE-09-cAw">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -103,7 +103,7 @@
                                 <rect key="frame" x="76" y="131" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <color key="textColor" systemColor="labelColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
@@ -133,7 +133,7 @@
         <!--LoginByPhoneVerifyView-->
         <scene sceneID="Khg-fq-JHz">
             <objects>
-                <viewController storyboardIdentifier="LogInByPhoneView" title="LoginByPhoneVerifyView" id="2Sq-VY-NkR" customClass="LoginByPhoneVerifyController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginByPhoneVerifyController" title="LoginByPhoneVerifyView" id="2Sq-VY-NkR" customClass="LoginByPhoneVerifyController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fnI-zn-hco">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -169,6 +169,13 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Confirm OTP"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xSU-K5-HuU">
+                                <rect key="frame" x="76" y="479" width="240" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration" label="Send OTP"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Send Code Again"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lUI-vQ-aZu"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -176,8 +183,9 @@
                     <navigationItem key="navigationItem" id="5eg-Kt-MWT"/>
                     <connections>
                         <outlet property="OTPCodeTextfield" destination="hgp-gx-vzv" id="A22-uA-Jz7"/>
+                        <outlet property="sendCodeButton" destination="xSU-K5-HuU" id="HvU-x2-n57"/>
                         <outlet property="verifyCodeButton" destination="NOw-Hk-G1A" id="MqT-Bm-CT7"/>
-                        <segue destination="ak2-f2-bqj" kind="show" identifier="DashboardSegue2" id="Voj-3Q-62j"/>
+                        <segue destination="ak2-f2-bqj" kind="show" identifier="DashboardSegue" id="Voj-3Q-62j"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B84-ud-eaC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

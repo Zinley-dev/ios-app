@@ -24,11 +24,10 @@ extension APIBuilder: BaseURL {
     }
 }
 
-
 public enum UserApi {
-    case login (username: String, password: String)
-    case phonelogin (phone: String, countryCode: String, via: String)
-    case phoneverify (phone: String, countryCode: String, code: String)
+    case login (params: [String:String])
+    case phonelogin (params: [String:String])
+    case phoneverify (params: [String:String])
 }
 extension UserApi: EndPointType {
     var module: String {
@@ -59,20 +58,12 @@ extension UserApi: EndPointType {
     
     var task: HTTPTask {
         switch self {
-        case .login(let username, let password):
-            return .requestParameters(parameters: ["username": username,
-                                                   "password": password])
-        case .phonelogin(let phone, let countrycode, let via):
-            print(["phone": phone,
-                   "countryCode": countrycode,
-                   "via": via])
-            return .requestParameters(parameters: ["phone": phone,
-                    "countryCode": countrycode,
-                    "via": via])
-        case .phoneverify(let phone, let countrycode, let code):
-            return .requestParameters(parameters: ["phone": phone,
-                    "countryCode": countrycode,
-                    "code": code])
+        case .login(let params):
+            return .requestParameters(parameters: params)
+        case .phonelogin(let params):
+            return .requestParameters(parameters: params)
+        case .phoneverify(let params):
+            return .requestParameters(parameters: params)
         }
     }
     

@@ -15,33 +15,15 @@ class LoginController: UIViewController, ControllerType {
     @IBOutlet weak var usernameTextfield: UITextField!
     @IBOutlet weak var signInButton: UIButton!
     
-    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         bindUI(with: viewModel)
-    }
-    
-    @IBAction func onClickLogin() {
-        APIManager().normalLogin(username: usernameTextfield.text!, password: passwordTextfield.text!) { result in print (result)
-        }
+        bindAction(with: viewModel)
     }
     
     // MARK: - Functions
-    func bindUI(with viewModel: ViewModelType) {
-        // binding Controller inputs to View Model observer
-        usernameTextfield.rx.text.orEmpty.asObservable()
-            .subscribe(viewModel.input.username)
-            .disposed(by: disposeBag)
-        
-        passwordTextfield.rx.text.orEmpty.asObservable()
-            .subscribe(viewModel.input.password)
-            .disposed(by: disposeBag)
-        
-        signInButton.rx.tap.asObservable()
-            .subscribe(viewModel.input.signInDidTap)
-            .disposed(by: disposeBag)
-        
+    func bindUI(with: ViewModelType) {
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
@@ -56,24 +38,25 @@ class LoginController: UIViewController, ControllerType {
                 if(isTrue){
                     DispatchQueue.main.async {
                         // Perform Segue to DashboardStoryboard
-                        self.performSegue(withIdentifier: "DashboardSegue2", sender: self)
+                        self.performSegue(withIdentifier: "DashboardSegue", sender: self)
                     }}
             })
             .disposed(by: disposeBag)
         
     }
     
-    func presentError(error: Error) {
-        let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+    func bindAction(with viewModel: LoginControllerViewModel) {
+        // binding Controller actions to View Model observer
+        signInButton.rx.tap.asObservable()
+            .withLatestFrom(
+                Observable.zip(usernameTextfield.rx.text.orEmpty.asObservable(),
+                               passwordTextfield.rx.text.orEmpty.asObservable()
+                              )
+            )
+            .subscribe(viewModel.action.signInDidTap)
+            .disposed(by: disposeBag)
     }
     
-    func presentMessage(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
 }
 
 extension LoginController {
