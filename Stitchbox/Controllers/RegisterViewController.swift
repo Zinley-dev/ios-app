@@ -35,22 +35,16 @@ class RegisterViewController: UIViewController, ControllerType {
         registerViewModel.register(password: passwordTextField.text!, userName: userNameTextField.text!)
         print("tapped signup button")
     }
- 
+    
     //MARK: Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         bindUI(with: registerViewModel)
         bindAction(with: registerViewModel)
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "darkBackground.png")!)
-        self.view.alpha = 0.9
-        
-        
-        self.enableButton(button: self.signUpButton, enabled: false)
-        
-        self.signUpButton.backgroundColor = .white
-        self.signUpButton.layer.backgroundColor = UIColor(red: 0.208, green: 0.18, blue: 0.443, alpha: 1).cgColor
-        self.signUpButton.layer.cornerRadius = 23
+        self.enableButton(button: signUpButton, enabled: false)
+        //self.signUpButton.setDefault() = true
+        //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "lightBackground.png")!)
         self.reEnterPasswordTextField.isEnabled = false
     }
     
@@ -74,7 +68,9 @@ class RegisterViewController: UIViewController, ControllerType {
             if(isTrue){
                 self.passwordMatchLabel.textColor = UIColor.green
                 self.enableButton(button: self.signUpButton, enabled: true)
-            }else { self.passwordMatchLabel.textColor = UIColor.red
+            }
+            else {
+                self.passwordMatchLabel.textColor = UIColor.red
                 self.enableButton(button: self.signUpButton, enabled: false)
             }
         })
@@ -113,6 +109,7 @@ class RegisterViewController: UIViewController, ControllerType {
             
             if (error.minUppercase != true && error.isEmpty != true && error.minLowercase != true && error.minSpecialCharacter != true && error.minNumber != true && error.minCharacters != true) {
                 self.reEnterPasswordTextField.isEnabled = true
+                self.enableButton(button: self.signUpButton, enabled: false)
             }else {
                 self.reEnterPasswordTextField.isEnabled = false
                 self.enableButton(button: self.signUpButton, enabled: false)
@@ -128,12 +125,12 @@ class RegisterViewController: UIViewController, ControllerType {
                 }
             })
             .disposed(by: disposeBag)
-        // Output true, segue back to dashboard
+        // Output true, segue back to welcomescreen
         registerViewModel.output.registerResultObservable
             .subscribe(onNext: { isTrue in
                 if (isTrue){
                     DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "DashboardSegueSignup", sender: self)
+                        self.performSegue(withIdentifier: "WelcomeScreen", sender: self)
                     }}
             })
             .disposed(by: disposeBag)
@@ -151,15 +148,14 @@ class RegisterViewController: UIViewController, ControllerType {
     }
     
     func enableButton(button: UIButton, enabled:Bool) {
-            button.isEnabled = enabled
-            button.alpha = enabled ? 1.0 : 0.25
-        button.layer.backgroundColor = enabled ? UIColor(red: 0.208, green: 0.18, blue: 0.443, alpha: 1).cgColor : UIColor(red: 0.733, green: 0.733, blue: 0.733, alpha: 1).cgColor
-        }
+        button.isEnabled = enabled
+        button.backgroundColor = enabled ? UIColor.primary : UIColor.disabled
+    }
     
     func enableTextField(textfield: UITextField, enabled:Bool) {
-            textfield.isEnabled = enabled
-            textfield.alpha = enabled ? 1.0 : 0.25
-        }
+        textfield.isEnabled = enabled
+        textfield.alpha = enabled ? 1.0 : 0.25
+    }
     
     
 }

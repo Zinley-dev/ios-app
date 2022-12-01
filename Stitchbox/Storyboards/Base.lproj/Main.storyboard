@@ -248,7 +248,7 @@
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4Io-2k-MH3">
+                            <button opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" role="primary" id="4Io-2k-MH3" customClass="SButton" customModule="Stitchbox">
                                 <rect key="frame" x="134" y="487" width="121" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -258,9 +258,15 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Save"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Save"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="tappedSignupButton:" destination="Wgm-Xf-ZNU" eventType="touchUpInside" id="NbW-Jd-xXR"/>
-                                    <segue destination="NjN-60-BFL" kind="show" identifier="DashboardSegueSignup" id="gtr-LJ-s1d"/>
+                                    <segue destination="8Dq-zh-Qdm" kind="show" identifier="WelcomeScreen" id="1bj-MG-IwQ"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" layoutMarginsFollowReadableWidth="YES" insetsLayoutMarginsFromSafeArea="NO" text="Contains at least 1 Uppercase letter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="CfQ-xd-TcI">
@@ -270,15 +276,19 @@
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="lightBackground" translatesAutoresizingMaskIntoConstraints="NO" id="k24-w6-Wen">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="p1G-Le-SX1" firstAttribute="leading" secondItem="dPw-jt-1VN" secondAttribute="leading" constant="78" id="9Ti-R0-Wrt"/>
                             <constraint firstItem="mH4-OA-ZVJ" firstAttribute="leading" secondItem="dPw-jt-1VN" secondAttribute="leading" constant="96" id="AEp-mP-FSa"/>
                             <constraint firstItem="Owb-Rr-Qql" firstAttribute="leading" secondItem="dPw-jt-1VN" secondAttribute="leading" constant="78" id="BaY-vI-Gr3"/>
                             <constraint firstItem="eDp-GI-Uvx" firstAttribute="leading" secondItem="dPw-jt-1VN" secondAttribute="leading" constant="96" id="CHj-kN-uoc"/>
                             <constraint firstItem="mH4-OA-ZVJ" firstAttribute="top" secondItem="dPw-jt-1VN" secondAttribute="top" constant="356" id="COR-Bu-Y1f"/>
-                            <constraint firstItem="4Io-2k-MH3" firstAttribute="topMargin" secondItem="dPw-jt-1VN" secondAttribute="top" constant="495" id="IcC-P2-J1a"/>
+                            <constraint firstItem="4Io-2k-MH3" firstAttribute="top" secondItem="dPw-jt-1VN" secondAttribute="top" constant="488" id="IcC-P2-J1a"/>
                             <constraint firstItem="z0G-cc-RfU" firstAttribute="leading" secondItem="dPw-jt-1VN" secondAttribute="leading" constant="96" id="Jgm-ZX-ZCc"/>
                             <constraint firstItem="eDp-GI-Uvx" firstAttribute="top" secondItem="dPw-jt-1VN" secondAttribute="topMargin" constant="287" id="PO2-9Y-dDT"/>
                             <constraint firstItem="YXK-fW-Nk9" firstAttribute="leading" secondItem="dPw-jt-1VN" secondAttribute="leading" constant="95" id="Pij-bB-hpV"/>
@@ -313,20 +323,62 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UuQ-p6-w1i" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2721.5384615384614" y="109.47867298578198"/>
+            <point key="canvasLocation" x="2808" y="109"/>
         </scene>
-        <!--Dashboard-->
-        <scene sceneID="aVM-Fo-7TT">
+        <!--Navigation Controller-->
+        <scene sceneID="7EP-XJ-oc5">
             <objects>
-                <viewControllerPlaceholder storyboardName="Dashboard" id="NjN-60-BFL" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="Ebh-86-ajI"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="G1u-gh-XlC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="WelcomeScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8Dq-zh-Qdm" customClass="UINavigationController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="c4Y-md-96l">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Rectangle" translatesAutoresizingMaskIntoConstraints="NO" id="6cS-fj-4Ex">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" insetsLayoutMarginsFromSafeArea="NO" image="Vector" id="58O-pq-3mk">
+                                <rect key="frame" x="103" y="242" width="185.33333333333337" height="182"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zNe-b9-8gs" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="134" y="582" width="124" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="LET'S START"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" text="WELCOME TO STICHBOX" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0yS-6y-pPr">
+                                <rect key="frame" x="62" y="462" width="302" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="sqe-fl-Whx"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NCp-4a-80o" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3470" y="96"/>
+            <point key="canvasLocation" x="3775" y="109"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="4Io-2k-MH3">
+            <size key="intrinsicContentSize" width="62.333333333333336" height="34.333333333333336"/>
+        </designable>
+    </designables>
     <resources>
+        <image name="Rectangle" width="390" height="844"/>
+        <image name="Vector" width="741" height="728"/>
+        <image name="lightBackground" width="512" height="1108"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -38,6 +38,11 @@
 		BDB40E302922BC5E0000A56E /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB40E2F2922BC5E0000A56E /* ViewModelProtocol.swift */; };
 		BDE286DA291CAB9C005C4487 /* RegisterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE286D9291CAB9C005C4487 /* RegisterModel.swift */; };
 		BDE286DC291CADD8005C4487 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE286DB291CADD8005C4487 /* RegisterViewModel.swift */; };
+		BDE2F32A293689C000B1CCAD /* SButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2F329293689C000B1CCAD /* SButton.swift */; };
+		BDE2F32C293689E600B1CCAD /* STextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2F32B293689E600B1CCAD /* STextField.swift */; };
+		BDE2F32E293689FF00B1CCAD /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2F32D293689FF00B1CCAD /* UIViewExtension.swift */; };
+		BDE2F33329368D7D00B1CCAD /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2F33229368D7D00B1CCAD /* Color.swift */; };
+		BDE2F3352936937C00B1CCAD /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDE2F3342936937C00B1CCAD /* Colors.xcassets */; };
 		EE7F861C067F91721762DDD7 /* Pods_Stitchbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92EFEB85742B57DDE1B7EDBE /* Pods_Stitchbox.framework */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +103,11 @@
 		BDB40E2F2922BC5E0000A56E /* ViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProtocol.swift; sourceTree = "<group>"; };
 		BDE286D9291CAB9C005C4487 /* RegisterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterModel.swift; sourceTree = "<group>"; };
 		BDE286DB291CADD8005C4487 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
+		BDE2F329293689C000B1CCAD /* SButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SButton.swift; sourceTree = "<group>"; };
+		BDE2F32B293689E600B1CCAD /* STextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STextField.swift; sourceTree = "<group>"; };
+		BDE2F32D293689FF00B1CCAD /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		BDE2F33229368D7D00B1CCAD /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		BDE2F3342936937C00B1CCAD /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		DFCA3F9D28CD84FECE45A113 /* Pods-StitchboxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.release.xcconfig"; sourceTree = "<group>"; };
 		E2387CD412DE6CDA403E271A /* Pods_Stitchbox_StitchboxUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox_StitchboxUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F504FAFF76215E3BFB8ECB62 /* Pods_StitchboxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StitchboxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -265,6 +275,7 @@
 		390FD77F29092BDA0068B883 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BDE2F33129368D6100B1CCAD /* DesignRules */,
 				390FD7402909264E0068B883 /* Assets.xcassets */,
 				390FD7452909264E0068B883 /* Info.plist */,
 			);
@@ -327,6 +338,9 @@
 			isa = PBXGroup;
 			children = (
 				BD6DC37E292C9C59004FF10A /* UIColor.swift */,
+				BDE2F329293689C000B1CCAD /* SButton.swift */,
+				BDE2F32B293689E600B1CCAD /* STextField.swift */,
+				BDE2F32D293689FF00B1CCAD /* UIViewExtension.swift */,
 			);
 			path = StyledComponents;
 			sourceTree = "<group>";
@@ -337,6 +351,15 @@
 				BDE286D9291CAB9C005C4487 /* RegisterModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		BDE2F33129368D6100B1CCAD /* DesignRules */ = {
+			isa = PBXGroup;
+			children = (
+				BDE2F33229368D7D00B1CCAD /* Color.swift */,
+				BDE2F3342936937C00B1CCAD /* Colors.xcassets */,
+			);
+			path = DesignRules;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -448,6 +471,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDE2F3352936937C00B1CCAD /* Colors.xcassets in Resources */,
 				390FD7442909264E0068B883 /* LaunchScreen.storyboard in Resources */,
 				390FD7412909264E0068B883 /* Assets.xcassets in Resources */,
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
@@ -586,7 +610,9 @@
 				390FD78D290A93C00068B883 /* LoginViewModel.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
 				BDB40E302922BC5E0000A56E /* ViewModelProtocol.swift in Sources */,
+				BDE2F32C293689E600B1CCAD /* STextField.swift in Sources */,
 				BD6DC37F292C9C59004FF10A /* UIColor.swift in Sources */,
+				BDE2F32A293689C000B1CCAD /* SButton.swift in Sources */,
 				390FD77429092A9B0068B883 /* HTTPTask.swift in Sources */,
 				390FD77629092AB30068B883 /* HTTPMethod.swift in Sources */,
 				BDE286DA291CAB9C005C4487 /* RegisterModel.swift in Sources */,
@@ -594,9 +620,11 @@
 				390FD7382909264D0068B883 /* AppDelegate.swift in Sources */,
 				390FD76B290928420068B883 /* EndPointType.swift in Sources */,
 				BD3BFAEE29197C490056E854 /* RegisterViewController.swift in Sources */,
+				BDE2F33329368D7D00B1CCAD /* Color.swift in Sources */,
 				390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */,
 				BDE286DC291CADD8005C4487 /* RegisterViewModel.swift in Sources */,
 				390FD77C29092B9C0068B883 /* Contants.swift in Sources */,
+				BDE2F32E293689FF00B1CCAD /* UIViewExtension.swift in Sources */,
 				390FD78629093EA00068B883 /* FeedViewController.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
 				BDB40E2E2922BC300000A56E /* ControllerType.swift in Sources */,
