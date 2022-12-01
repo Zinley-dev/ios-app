@@ -46,6 +46,11 @@
 		A5A5E40729375FF3004E9207 /* SButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E40629375FF3004E9207 /* SButton.swift */; };
 		A5A5E40929376172004E9207 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E40829376172004E9207 /* Color.swift */; };
 		A5A5E40B29376562004E9207 /* STextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E40A29376562004E9207 /* STextField.swift */; };
+		A5A5E40D29386D37004E9207 /* UnderlineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E40C29386D37004E9207 /* UnderlineTextField.swift */; };
+		A5A5E40F29388F5F004E9207 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E40E29388F5F004E9207 /* SignUpViewController.swift */; };
+		A5A5E411293891A2004E9207 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E410293891A2004E9207 /* LoginViewController.swift */; };
+		A5A5E41329389770004E9207 /* ForgotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E41229389770004E9207 /* ForgotViewController.swift */; };
+		A5A5E4152938A30A004E9207 /* VerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E4142938A309004E9207 /* VerifyViewController.swift */; };
 		E081C3FCA8D872CA357AAC91 /* Pods_StitchboxUnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DD062074D0F5CD177CB4A59 /* Pods_StitchboxUnitTests.framework */; };
 		EE7F861C067F91721762DDD7 /* Pods_Stitchbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92EFEB85742B57DDE1B7EDBE /* Pods_Stitchbox.framework */; };
 /* End PBXBuildFile section */
@@ -124,6 +129,11 @@
 		A5A5E40629375FF3004E9207 /* SButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SButton.swift; sourceTree = "<group>"; };
 		A5A5E40829376172004E9207 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		A5A5E40A29376562004E9207 /* STextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STextField.swift; sourceTree = "<group>"; };
+		A5A5E40C29386D37004E9207 /* UnderlineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineTextField.swift; sourceTree = "<group>"; };
+		A5A5E40E29388F5F004E9207 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		A5A5E410293891A2004E9207 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		A5A5E41229389770004E9207 /* ForgotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotViewController.swift; sourceTree = "<group>"; };
+		A5A5E4142938A309004E9207 /* VerifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyViewController.swift; sourceTree = "<group>"; };
 		DFCA3F9D28CD84FECE45A113 /* Pods-StitchboxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.release.xcconfig"; sourceTree = "<group>"; };
 		E2387CD412DE6CDA403E271A /* Pods_Stitchbox_StitchboxUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox_StitchboxUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F504FAFF76215E3BFB8ECB62 /* Pods_StitchboxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StitchboxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -214,6 +224,7 @@
 				148C7108291B11270046FC5D /* OTPTextField.swift */,
 				A5A5E40629375FF3004E9207 /* SButton.swift */,
 				A5A5E40A29376562004E9207 /* STextField.swift */,
+				A5A5E40C29386D37004E9207 /* UnderlineTextField.swift */,
 			);
 			path = StyledComponents;
 			sourceTree = "<group>";
@@ -349,6 +360,10 @@
 				148C7106291B0F210046FC5D /* LogInByPhoneViewController.swift */,
 				390FD78529093EA00068B883 /* FeedViewController.swift */,
 				A5A5E4042937442B004E9207 /* LoginByPhoneVerifyController.swift */,
+				A5A5E40E29388F5F004E9207 /* SignUpViewController.swift */,
+				A5A5E410293891A2004E9207 /* LoginViewController.swift */,
+				A5A5E41229389770004E9207 /* ForgotViewController.swift */,
+				A5A5E4142938A309004E9207 /* VerifyViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -730,6 +745,7 @@
 				A5A5E4052937442B004E9207 /* LoginByPhoneVerifyController.swift in Sources */,
 				390FD76F290928DA0068B883 /* APIResponse.swift in Sources */,
 				147187EB2920AF6E0039B89E /* ViewModelProtocol.swift in Sources */,
+				A5A5E411293891A2004E9207 /* LoginViewController.swift in Sources */,
 				390FD76D290928A70068B883 /* APIManager.swift in Sources */,
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				390FD769290927E40068B883 /* NetworkManager.swift in Sources */,
@@ -739,13 +755,17 @@
 				390FD77629092AB30068B883 /* HTTPMethod.swift in Sources */,
 				390FD77829092ADE0068B883 /* EndPoints.swift in Sources */,
 				390FD7382909264D0068B883 /* AppDelegate.swift in Sources */,
+				A5A5E40D29386D37004E9207 /* UnderlineTextField.swift in Sources */,
 				390FD76B290928420068B883 /* EndPointType.swift in Sources */,
 				390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */,
 				390FD77C29092B9C0068B883 /* Contants.swift in Sources */,
 				14847406291F37F80099AA08 /* AccountModel.swift in Sources */,
 				A5A5E40929376172004E9207 /* Color.swift in Sources */,
+				A5A5E4152938A30A004E9207 /* VerifyViewController.swift in Sources */,
 				390FD78629093EA00068B883 /* FeedViewController.swift in Sources */,
 				147187ED2920B0980039B89E /* ControllerType.swift in Sources */,
+				A5A5E41329389770004E9207 /* ForgotViewController.swift in Sources */,
+				A5A5E40F29388F5F004E9207 /* SignUpViewController.swift in Sources */,
 				147187F32920D2830039B89E /* LoginByPhoneViewModel.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
 				390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */,

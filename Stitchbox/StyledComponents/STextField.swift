@@ -15,12 +15,14 @@ import SwiftUI
     // IB: use the adapter
     @IBInspectable var isPrimary: Bool = true {
         didSet {
+            print("setPrimary")
             setupView()
         }
     }
     // IB: use the adapter
     @IBInspectable var size: Int = 0 {
         didSet {
+            print("size")
             setupView()
         }
     }
@@ -36,15 +38,18 @@ import SwiftUI
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
+        print("init 1")
         setupView()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        print("init 2")
         setupView()
     }
 
     func setupView() {
+        print("SETUP VIEW")
         if size == 0 {
             frame.size.height = 32.0;
         } else if size == 1 {
@@ -65,6 +70,7 @@ import SwiftUI
 
     // Set the default properties
     func setDefault() {
+        print("Setdefault-1")
         switch isPrimary {
         case true:
             backgroundColor = UIColor.clear
@@ -75,16 +81,17 @@ import SwiftUI
             layer.borderWidth = 2.0
             clipsToBounds = true
         case false:
-            backgroundColor = UIColor.clear
+            print("VAO FALSE")
+            backgroundColor = UIColor.red
             tintColor = UIColor.secondary
             clipsToBounds = false
             layer.borderWidth = 0.0
             layer.cornerRadius = 0
             borderStyle = .none
-            let border = CALayer()
-            border.backgroundColor = UIColor.secondary.cgColor
-            border.frame = CGRect(x:0, y:self.frame.size.height, width:self.frame.size.width, height:1)
-            self.layer.addSublayer(border)
+//            let border = CALayer()
+//            border.backgroundColor = UIColor.secondary.cgColor
+//            border.frame = CGRect(x:0, y:self.frame.size.height - 5, width:self.frame.size.width, height:1)
+//            self.layer.addSublayer(border)
         }
     }
 
