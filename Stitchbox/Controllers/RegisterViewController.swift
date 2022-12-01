@@ -45,7 +45,7 @@ class RegisterViewController: UIViewController, ControllerType {
         self.enableButton(button: signUpButton, enabled: false)
         //self.signUpButton.setDefault() = true
         //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "lightBackground.png")!)
-        self.reEnterPasswordTextField.isEnabled = false
+        //self.reEnterPasswordTextField.isEnabled = false
     }
     
     // MARK: Functions
@@ -60,9 +60,9 @@ class RegisterViewController: UIViewController, ControllerType {
             .subscribe(registerViewModel.input.password)
             .disposed(by: disposeBag)
         
-        reEnterPasswordTextField.rx.text.orEmpty.asObservable()
-            .subscribe(registerViewModel.input.reEnterPassword)
-            .disposed(by: disposeBag)
+//        reEnterPasswordTextField.rx.text.orEmpty.asObservable()
+//            .subscribe(registerViewModel.input.reEnterPassword)
+//            .disposed(by: disposeBag)
         
         registerViewModel.output.validMatch.subscribe(onNext:{ isTrue in
             if(isTrue){
@@ -83,7 +83,7 @@ class RegisterViewController: UIViewController, ControllerType {
                 self.minLowerCaseLabel.textColor = UIColor.gray
                 self.minNumLabel.textColor = UIColor.gray
                 self.specialCharLabel.textColor = UIColor.gray
-                self.passwordMatchLabel.textColor = UIColor.gray
+//                self.passwordMatchLabel.textColor = UIColor.gray
                 
             }
             
