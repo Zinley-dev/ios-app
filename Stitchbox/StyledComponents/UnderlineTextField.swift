@@ -12,7 +12,7 @@ import SwiftUI
 
 @IBDesignable class UnderlineTextField: UITextField {
 
-    let leftPadding = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
+    var leftPadding = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
     let border = CALayer()
     @IBInspectable var borderColor: UIColor {
         get {
@@ -20,6 +20,23 @@ import SwiftUI
         }
         set {
             self.border.backgroundColor = newValue.cgColor
+        }
+    }
+    
+    @IBInspectable var paddingLeft: CGFloat {
+        get {
+            return self.paddingLeft
+        }
+        set {
+            self.leftPadding.left = newValue
+        }
+    }
+    @IBInspectable var placeHolderColor: UIColor? {
+        get {
+            return self.placeHolderColor
+        }
+        set {
+            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : "", attributes:[NSAttributedString.Key.foregroundColor: newValue!])
         }
     }
 
@@ -52,7 +69,7 @@ import SwiftUI
         layer.borderWidth = 0.0
         layer.cornerRadius = 0
         borderStyle = .none
-        border.frame = CGRect(x:0, y:self.frame.size.height, width:self.frame.size.width, height:1)
+        border.frame = CGRect(x:0, y:self.frame.size.height + 5, width:self.frame.size.width, height:1)
         self.layer.addSublayer(border)
     }
 
