@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		03E5E6688B0EADABFCBBCF3F /* Pods_StitchboxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F504FAFF76215E3BFB8ECB62 /* Pods_StitchboxTests.framework */; };
+		14131D7E293B3666001F7631 /* Components.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14131D7D293B3666001F7631 /* Components.storyboard */; };
+		14131D80293B9D8F001F7631 /* SLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14131D7F293B9D8F001F7631 /* SLoading.swift */; };
+		141BB195293BA4F0004F4ED7 /* CountryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141BB194293BA4F0004F4ED7 /* CountryPicker.swift */; };
+		141BB197293BA946004F4ED7 /* loading-animation.json in Resources */ = {isa = PBXBuildFile; fileRef = 141BB196293BA946004F4ED7 /* loading-animation.json */; };
 		147187E22920A3A20039B89E /* StitchboxUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187E12920A3A20039B89E /* StitchboxUnitTests.swift */; };
 		147187E92920AD520039B89E /* LogInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187E82920AD520039B89E /* LogInViewModel.swift */; };
 		147187EB2920AF6E0039B89E /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187EA2920AF6D0039B89E /* ViewModelProtocol.swift */; };
@@ -81,6 +85,10 @@
 
 /* Begin PBXFileReference section */
 		109156B9B03B1616BF7D933A /* Pods-Stitchbox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.release.xcconfig"; sourceTree = "<group>"; };
+		14131D7D293B3666001F7631 /* Components.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Components.storyboard; sourceTree = "<group>"; };
+		14131D7F293B9D8F001F7631 /* SLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLoading.swift; sourceTree = "<group>"; };
+		141BB194293BA4F0004F4ED7 /* CountryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryPicker.swift; sourceTree = "<group>"; };
+		141BB196293BA946004F4ED7 /* loading-animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "loading-animation.json"; sourceTree = "<group>"; };
 		147187DF2920A3A20039B89E /* StitchboxUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StitchboxUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		147187E12920A3A20039B89E /* StitchboxUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchboxUnitTests.swift; sourceTree = "<group>"; };
 		147187E82920AD520039B89E /* LogInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewModel.swift; sourceTree = "<group>"; };
@@ -224,6 +232,8 @@
 				148C7108291B11270046FC5D /* OTPTextField.swift */,
 				A5A5E40629375FF3004E9207 /* SButton.swift */,
 				A5A5E40A29376562004E9207 /* STextField.swift */,
+				14131D7F293B9D8F001F7631 /* SLoading.swift */,
+				141BB194293BA4F0004F4ED7 /* CountryPicker.swift */,
 				A5A5E40C29386D37004E9207 /* UnderlineTextField.swift */,
 			);
 			path = StyledComponents;
@@ -371,6 +381,7 @@
 		390FD77F29092BDA0068B883 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				141BB196293BA946004F4ED7 /* loading-animation.json */,
 				147BDB692928B760003511C3 /* DesignRules */,
 				390FD7402909264E0068B883 /* Assets.xcassets */,
 				390FD7452909264E0068B883 /* Info.plist */,
@@ -385,6 +396,7 @@
 				390FD73D2909264D0068B883 /* Main.storyboard */,
 				390FD7422909264E0068B883 /* LaunchScreen.storyboard */,
 				390FD7832909375C0068B883 /* Dashboard.storyboard */,
+				14131D7D293B3666001F7631 /* Components.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -581,7 +593,9 @@
 				390FD7442909264E0068B883 /* LaunchScreen.storyboard in Resources */,
 				390FD7412909264E0068B883 /* Assets.xcassets in Resources */,
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
+				141BB197293BA946004F4ED7 /* loading-animation.json in Resources */,
 				390FD7842909375C0068B883 /* Dashboard.storyboard in Resources */,
+				14131D7E293B3666001F7631 /* Components.storyboard in Resources */,
 				147BDB682928B1E1003511C3 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -745,6 +759,7 @@
 				A5A5E4052937442B004E9207 /* LoginByPhoneVerifyController.swift in Sources */,
 				390FD76F290928DA0068B883 /* APIResponse.swift in Sources */,
 				147187EB2920AF6E0039B89E /* ViewModelProtocol.swift in Sources */,
+				14131D80293B9D8F001F7631 /* SLoading.swift in Sources */,
 				A5A5E411293891A2004E9207 /* LoginViewController.swift in Sources */,
 				390FD76D290928A70068B883 /* APIManager.swift in Sources */,
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
@@ -752,6 +767,7 @@
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
 				390FD77429092A9B0068B883 /* HTTPTask.swift in Sources */,
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
+				141BB195293BA4F0004F4ED7 /* CountryPicker.swift in Sources */,
 				390FD77629092AB30068B883 /* HTTPMethod.swift in Sources */,
 				390FD77829092ADE0068B883 /* EndPoints.swift in Sources */,
 				390FD7382909264D0068B883 /* AppDelegate.swift in Sources */,

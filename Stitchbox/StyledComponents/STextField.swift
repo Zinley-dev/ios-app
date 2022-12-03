@@ -146,12 +146,11 @@ import SwiftUI
     }
 }
 
-
 #if canImport(SwiftUI) && DEBUG
 
-struct TextfieldViewRepresentable: UIViewRepresentable {
+struct TextFieldViewRepresentable: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
-        return UIStoryboard(name: "TextField", bundle: nil).instantiateInitialViewController()!.view
+        return UIStoryboard(name: "Components", bundle: nil).instantiateViewController(withIdentifier: "Textfield").view
     }
 
     func updateUIView(_ view: UIView, context: Context) {
@@ -164,7 +163,7 @@ struct TextfieldView_Preview: PreviewProvider {
     static var previews: some View {
         // view controller using programmatic UI
         VStack{
-            TextfieldViewRepresentable()
+            TextFieldViewRepresentable()
         }
     }
 }

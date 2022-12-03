@@ -2,6 +2,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import CountryPickerView
 
 class LoginByPhoneSendCodeController: UIViewController, ControllerType {
     
@@ -19,6 +20,9 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        let cpv = CountryPickerView(frame: CGRect(x: 0, y: 0, width: 120, height: 20))
+        countryCodeTextfield.leftView = cpv
+        countryCodeTextfield.leftViewMode = .always
         bindUI(with: viewModel)
         bindAction(with: viewModel)
     }
