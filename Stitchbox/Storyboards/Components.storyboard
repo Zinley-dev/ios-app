@@ -242,12 +242,12 @@
         <scene sceneID="4KR-S4-fUj">
             <objects>
                 <viewController storyboardIdentifier="OTPTextfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DIb-Wa-WRn" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="4Kt-VG-UPX">
+                    <view key="view" contentMode="scaleToFill" id="4Kt-VG-UPX">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="96" y="360" width="535" height="48"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="96" y="360" width="200" height="22"/>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qio-D5-8w9"/>
@@ -314,6 +314,23 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eyq-xr-zUs" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="409" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" name="Secondary"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                        <color key="value" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="paddingLeft">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="5iU-cm-Np5"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -324,7 +341,82 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KAp-o5-u4z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3815" y="-5"/>
+            <point key="canvasLocation" x="3900" y="-17"/>
+        </scene>
+        <!--PHONE-->
+        <scene sceneID="BHD-2A-o98">
+            <objects>
+                <viewController storyboardIdentifier="PHONE" title="PHONE" useStoryboardIdentifierAsRestorationIdentifier="YES" id="CkF-nT-bhO" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Auo-cJ-f7g">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hello World" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0PK-7b-Z80">
+                                <rect key="frame" x="152" y="299" width="88" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uẻname" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gLU-Em-yFI">
+                                <rect key="frame" x="152" y="388" width="64" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="dSh-7x-uCv"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="PHONE" id="4wZ-Ne-fPu" userLabel="Username"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZdA-0i-E71" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6544.2748091603053" y="719.71830985915494"/>
+        </scene>
+        <!--USERNAME-->
+        <scene sceneID="r3S-S3-ge6">
+            <objects>
+                <viewController storyboardIdentifier="USERNAME" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fZe-U9-gqq" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="paL-pN-mZM">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BCM-zl-Y9r">
+                                <rect key="frame" x="175" y="345" width="49" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="7r1-a3-TLa"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="USERNAME" id="lo5-Mp-1c1"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vka-ZN-SpH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6544.2748091603053" y="-10.563380281690142"/>
+        </scene>
+        <!--Login Tab Bar Controller-->
+        <scene sceneID="dgN-xs-ziQ">
+            <objects>
+                <tabBarController storyboardIdentifier="LoginTabBarController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lf4-hJ-216" customClass="LoginTabBarController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="RPF-tE-AJ4">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="CkF-nT-bhO" kind="relationship" relationship="viewControllers" id="laz-HI-hqu"/>
+                        <segue destination="fZe-U9-gqq" kind="relationship" relationship="viewControllers" id="XEq-a5-hI6"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nvr-KG-R4F" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5617.5572519083971" y="354.22535211267609"/>
         </scene>
     </scenes>
     <designables>
@@ -334,6 +426,7 @@
         <designable name="3pI-w7-p8u">
             <size key="intrinsicContentSize" width="9" height="18.666666666666668"/>
         </designable>
+        <designable name="4m4-dZ-2qb"/>
         <designable name="GhD-VW-W3q">
             <size key="intrinsicContentSize" width="38" height="34"/>
         </designable>
@@ -351,6 +444,9 @@
         </designable>
         <designable name="bna-sl-8Ck">
             <size key="intrinsicContentSize" width="38" height="34"/>
+        </designable>
+        <designable name="eyq-xr-zUs">
+            <size key="intrinsicContentSize" width="6" height="18.666666666666668"/>
         </designable>
         <designable name="gKb-Yg-1aW">
             <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>

@@ -5,17 +5,6 @@
 //  Created by Khanh Duy Nguyen on 12/3/22.
 //
 
-import Foundation
-
-//
-//  File.swift
-//  Stitchbox
-//
-//  Created by Khanh Duy Nguyen on 12/3/22.
-//
-
-import Foundation
-
 //
 //  SLoading.swift
 //  Stitchbox
@@ -23,6 +12,7 @@ import Foundation
 //  Created by Hisoft Hoangnm on 30/11/2022.
 //
 
+import Foundation
 import UIKit
 import SwiftUI
 import CountryPickerView
