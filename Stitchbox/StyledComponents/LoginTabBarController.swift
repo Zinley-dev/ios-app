@@ -9,23 +9,6 @@ import Foundation
 import UIKit
 import SwiftUI
 
-class LoginTabBarItem: UITabBarItem {
-    // MARK: - Initialization
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupView()
-    }
-    
-    func setupView() {
-    }
-    
-    // MARK: - UI Setup
-    override func prepareForInterfaceBuilder() {
-        super.prepareForInterfaceBuilder()
-        setupView()
-    }
-    
-}
 @IBDesignable class LoginTabBarController: UITabBarController {
     
     
@@ -83,7 +66,7 @@ class LoginTabBarItem: UITabBarItem {
         
         tabBarAppearance.stackedLayoutAppearance = tabBarItemAppearance
         tabBarAppearance.configureWithTransparentBackground()
-
+        
         self.tabBar.standardAppearance = tabBarAppearance
         self.tabBar.scrollEdgeAppearance = tabBarAppearance
         self.updateViewConstraints()
@@ -95,8 +78,8 @@ class LoginTabBarItem: UITabBarItem {
     
     // MARK: - UI Setup
     override func prepareForInterfaceBuilder() {
-        super.prepareForInterfaceBuilder()
         setupView()
+        super.prepareForInterfaceBuilder()
         
     }
     override func viewDidLoad() {
@@ -133,56 +116,58 @@ struct TabSwitchingView_Preview: PreviewProvider {
     }
 }
 #endif
+
+// MARK: UIIamge Extension for creating layouts
 extension UIImage {
     class func imageWithColor(color: UIColor, size: CGSize) -> UIImage {
-            let rect: CGRect = CGRectMake(0, 0, size.width, size.height)
-            UIGraphicsBeginImageContextWithOptions(size, false, 0)
-            color.setFill()
+        let rect: CGRect = CGRectMake(0, 0, size.width, size.height)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        color.setFill()
         let path = UIBezierPath(roundedRect: rect, cornerRadius: size.height / 2)
         path.fill()
         
         let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-            UIGraphicsEndImageContext()
-            return image
-        }
+        UIGraphicsEndImageContext()
+        return image
+    }
     /// Returns a new image with the specified shadow properties.
-        /// This will increase the size of the image to fit the shadow and the original image.
-        func withShadow(blur: CGFloat = 6, offset: CGSize = .zero, color: UIColor = UIColor(white: 0, alpha: 0.8)) -> UIImage {
-
-            let shadowRect = CGRect(
-                x: offset.width - blur,
-                y: offset.height - blur,
-                width: size.width + blur * 2 ,
-                height: size.height + blur * 2
+    /// This will increase the size of the image to fit the shadow and the original image.
+    func withShadow(blur: CGFloat = 6, offset: CGSize = .zero, color: UIColor = UIColor(white: 0, alpha: 0.8)) -> UIImage {
+        
+        let shadowRect = CGRect(
+            x: offset.width - blur,
+            y: offset.height - blur,
+            width: size.width + blur * 2 ,
+            height: size.height + blur * 2
+        )
+        
+        UIGraphicsBeginImageContextWithOptions(
+            CGSize(
+                width: max(shadowRect.maxX, size.width) - min(shadowRect.minX, 0),
+                height: max(shadowRect.maxY, size.height) - min(shadowRect.minY, 0)
+            ),
+            false, 0
+        )
+        
+        let context = UIGraphicsGetCurrentContext()!
+        
+        context.setShadow(
+            offset: offset,
+            blur: blur,
+            color: color.cgColor
+        )
+        
+        draw(
+            in: CGRect(
+                x: max(0, -shadowRect.origin.x),
+                y: max(0, -shadowRect.origin.y),
+                width: size.width,
+                height: size.height
             )
-            
-            UIGraphicsBeginImageContextWithOptions(
-                CGSize(
-                    width: max(shadowRect.maxX, size.width) - min(shadowRect.minX, 0),
-                    height: max(shadowRect.maxY, size.height) - min(shadowRect.minY, 0)
-                ),
-                false, 0
-            )
-            
-            let context = UIGraphicsGetCurrentContext()!
-
-            context.setShadow(
-                offset: offset,
-                blur: blur,
-                color: color.cgColor
-            )
-            
-            draw(
-                in: CGRect(
-                    x: max(0, -shadowRect.origin.x),
-                    y: max(0, -shadowRect.origin.y),
-                    width: size.width,
-                    height: size.height
-                )
-            )
-            let image = UIGraphicsGetImageFromCurrentImageContext()!
-            
-            UIGraphicsEndImageContext()
-            return image
-        }
+        )
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        
+        UIGraphicsEndImageContext()
+        return image
+    }
 }
