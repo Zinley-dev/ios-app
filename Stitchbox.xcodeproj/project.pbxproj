@@ -41,6 +41,7 @@
 		390FD78629093EA00068B883 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD78529093EA00068B883 /* FeedViewController.swift */; };
 		390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD787290A856B0068B883 /* RedirectionHelper.swift */; };
 		390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD78A290A901F0068B883 /* SettingsBundleHelper.swift */; };
+		395477B1293FC524008EED97 /* bg.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 395477B0293FC524008EED97 /* bg.mp4 */; };
 		8ED9D2DEBF0361601F4852E3 /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2387CD412DE6CDA403E271A /* Pods_Stitchbox_StitchboxUITests.framework */; };
 		A5A5E4052937442B004E9207 /* LoginByPhoneVerifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E4042937442B004E9207 /* LoginByPhoneVerifyController.swift */; };
 		A5A5E40729375FF3004E9207 /* SButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E40629375FF3004E9207 /* SButton.swift */; };
@@ -120,6 +121,7 @@
 		390FD78529093EA00068B883 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		390FD787290A856B0068B883 /* RedirectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedirectionHelper.swift; sourceTree = "<group>"; };
 		390FD78A290A901F0068B883 /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
+		395477B0293FC524008EED97 /* bg.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bg.mp4; sourceTree = "<group>"; };
 		45DB7D161E7CAC5C6BA91436 /* Pods-Stitchbox-StitchboxUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.release.xcconfig"; sourceTree = "<group>"; };
 		6DD062074D0F5CD177CB4A59 /* Pods_StitchboxUnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StitchboxUnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C94A3B7BBDABB0C311E16B /* Pods-Stitchbox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.debug.xcconfig"; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 		390FD7362909264D0068B883 /* Stitchbox */ = {
 			isa = PBXGroup;
 			children = (
+				395477B0293FC524008EED97 /* bg.mp4 */,
 				148C7103291B0C780046FC5D /* StyledComponents */,
 				143684302918C5B800FA87D7 /* Models */,
 				390FD767290927C90068B883 /* NetworkManager */,
@@ -580,6 +583,7 @@
 				148C7101291AFCFF0046FC5D /* NormalLogin.storyboard in Resources */,
 				390FD7442909264E0068B883 /* LaunchScreen.storyboard in Resources */,
 				390FD7412909264E0068B883 /* Assets.xcassets in Resources */,
+				395477B1293FC524008EED97 /* bg.mp4 in Resources */,
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
 				390FD7842909375C0068B883 /* Dashboard.storyboard in Resources */,
 				147BDB682928B1E1003511C3 /* Colors.xcassets in Resources */,
