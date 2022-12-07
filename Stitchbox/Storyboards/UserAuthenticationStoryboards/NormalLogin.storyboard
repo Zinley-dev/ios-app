@@ -323,10 +323,10 @@
     </scenes>
     <designables>
         <designable name="6GU-51-u4L">
-            <size key="intrinsicContentSize" width="105.5" height="34"/>
+            <size key="intrinsicContentSize" width="111.5" height="34"/>
         </designable>
         <designable name="IJy-M8-QdE">
-            <size key="intrinsicContentSize" width="124.5" height="34"/>
+            <size key="intrinsicContentSize" width="101.5" height="18.5"/>
         </designable>
         <designable name="UJh-H8-BQw">
             <size key="intrinsicContentSize" width="100.5" height="34.5"/>
@@ -335,10 +335,10 @@
             <size key="intrinsicContentSize" width="45" height="29"/>
         </designable>
         <designable name="voI-7f-prV">
-            <size key="intrinsicContentSize" width="104" height="34"/>
+            <size key="intrinsicContentSize" width="110" height="34"/>
         </designable>
         <designable name="xou-md-Nbd">
-            <size key="intrinsicContentSize" width="72.5" height="34"/>
+            <size key="intrinsicContentSize" width="49.5" height="18.5"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
