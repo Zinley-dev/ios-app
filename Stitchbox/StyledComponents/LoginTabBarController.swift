@@ -41,7 +41,7 @@ import SwiftUI
         let x = screenCenterX - width/2.0
         
         // y position of blue view, top half of the blue view is on top of the y center point
-        let y = screenCenterY - height/2.0 - CGFloat(200)
+        let y = screenCenterY - height/2.0 - CGFloat(250)
         self.tabBar.frame = CGRect(x: x, y: y, width: width, height: height)
         self.view.backgroundColor = .clear
         
@@ -96,7 +96,7 @@ import SwiftUI
 
 struct TabBarViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        return UIStoryboard(name: "Components", bundle: nil).instantiateViewController(withIdentifier: "LoginTabBarController")
+        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginTabBarController")
     }
     
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {

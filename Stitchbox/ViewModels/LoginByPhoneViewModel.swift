@@ -50,13 +50,13 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
         sendOTPDidTapSubject.asObservable()
             .subscribe (onNext: { (phone, countryCode) in
                 print(phone, countryCode)
-//                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
-//                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
-//                    self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
-//                    return;
-//                }
+                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
+                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
+                    self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
+                    return;
+                }
                 // call api toward login api of backend
-                APIManager().phoneLogin(phone: phone, countryCode: countryCode) { result in switch result {
+                APIManager().phoneLogin(phone: countryCode + phone) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
                     _ = apiResponse.body?["data"] as! [String: Any]?
@@ -79,16 +79,16 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
     struct Input {
         let phoneObserver: AnyObserver<String>
         let countryCodeObserver: AnyObserver<String>
-        let codeObserver: AnyObserver<String>
     }
     struct Action {
-        let verifyOTPDidTap: AnyObserver<Void>
+        let verifyOTPDidTap: AnyObserver<String>
         let sendOTPDidTap: AnyObserver<Void>
     }
     
     struct Output {
         let successObservable: Observable<SuccessMessage>
         let errorsObservable: Observable<Error>
+        var phoneNumber: String
     }
     enum SuccessMessage{
         case sendCodeSuccess
@@ -96,12 +96,12 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
     }
     let input: Input
     let action: Action
-    let output: Output
+    var output: Output
     
     private let phoneSubject = PublishSubject<String>()
     private let countryCodeSubject = PublishSubject<String>()
     private let codeSubject = PublishSubject<String>()
-    private let verifyOTPDidTapSubject = PublishSubject<Void>()
+    private let verifyOTPDidTapSubject = PublishSubject<String>()
     private let sendOTPDidTapSubject = PublishSubject<Void>()
     private let successSubject = PublishSubject<SuccessMessage>()
     private let errorsSubject = PublishSubject<Error>()
@@ -109,40 +109,42 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
     
     init() {
         input = Input(phoneObserver: phoneSubject.asObserver(),
-                      countryCodeObserver: countryCodeSubject.asObserver(),
-                      codeObserver: codeSubject.asObserver())
+                      countryCodeObserver: countryCodeSubject.asObserver())
         
         action = Action(verifyOTPDidTap: verifyOTPDidTapSubject.asObserver(),
                         sendOTPDidTap: sendOTPDidTapSubject.asObserver())
         
         output = Output(successObservable: successSubject.asObservable(),
-                        errorsObservable: errorsSubject.asObservable())
+                        errorsObservable: errorsSubject.asObservable(),
+                        phoneNumber: "")
         
         logic()
     }
     
     func logic() {
+        Observable.zip(countryCodeSubject.asObservable(), phoneSubject.asObservable()) {$0 + " " + $1}.subscribe {
+            self.output.phoneNumber = $0
+        }
         verifyOTPDidTapSubject
             .withLatestFrom(phoneSubject.asObservable())
+                {(phone: $1, code: $0)}
             .withLatestFrom(countryCodeSubject.asObservable())
-                    {(phone: $0, countryCode: $1)}
-            .withLatestFrom(codeSubject.asObservable())
-                    {(phone: $0.phone, countryCode: $0.countryCode, code: $1)}
+                {(phone: $0.phone, countryCode: $1, code: $0.code)}
             .subscribe (onNext: {(phone, countryCode, code) in
                 print(phone, countryCode, code)
                 // check username or password in the right format
-//                if (isNotValidInput(Input: phone, RegEx: "^\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{4}$")
-//                    || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")
-//                    || isNotValidInput(Input: code, RegEx: "^[0-9]{6}$")) {
-//                    self.errorsSubject.onNext(NSError(domain: "OTP in wrong format", code: 200))
-//                    return;
-//                }
+                if (isNotValidInput(Input: phone, RegEx: "^\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{4}$")
+                    || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")
+                    || isNotValidInput(Input: code, RegEx: "^[0-9]{6}$")) {
+                    self.errorsSubject.onNext(NSError(domain: "OTP in wrong format", code: 200))
+                    return;
+                }
                 // call api toward login api of backend
-                APIManager().phoneVerify(phone: phone, countryCode: countryCode, code: code) { result in switch result {
+                APIManager().phoneVerify(phone: countryCode + phone, OTP: code) { result in switch result {
                     
                 case .success(let apiResponse):
                     // get and process data
-                    if (apiResponse.body?["status"] as! String == "ok") {
+                    if (apiResponse.body?["message"] as! String == "success") {
                         // get and process data
                         let data = apiResponse.body?["data"] as! [String: Any]?
                         do{
@@ -191,13 +193,13 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
             .withLatestFrom(phoneSubject.asObservable())
             .withLatestFrom(countryCodeSubject.asObservable()) {($0, $1)}
             .subscribe (onNext: { (phone, countryCode) in
-//                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
-//                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
-//                    self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
-//                    return;
-//                }
+                if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#)
+                   || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
+                    self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
+                    return;
+                }
                 // call api toward login api of backend
-                APIManager().phoneLogin(phone: phone, countryCode: countryCode) { result in switch result {
+                APIManager().phoneLogin(phone: phone) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
                     _ = apiResponse.body?["data"] as! [String: Any]?

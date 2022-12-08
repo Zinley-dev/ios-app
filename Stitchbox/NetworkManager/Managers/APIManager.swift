@@ -32,16 +32,16 @@ struct APIManager {
         }
     }
     
-    func phoneLogin(phone: String, countryCode: String, completion: @escaping APICompletion) {
-        let params = ["phone": phone, "countryCode": countryCode, "via": "sms"]
+    func phoneLogin(phone: String, completion: @escaping APICompletion) {
+        let params = ["phone": phone]
         print(params)
         manager.request(.phonelogin(params: params)) { result in
             completion(result)
         }
     }
     
-    func phoneVerify(phone: String, countryCode: String, code: String, completion: @escaping APICompletion) {
-        let params = ["phone": phone, "countryCode": countryCode, "code": code]
+    func phoneVerify(phone: String, OTP: String, completion: @escaping APICompletion) {
+        let params = ["phone": phone, "OTP": OTP]
         manager.request(.phoneverify(params: params)) { result in
             completion(result)
         }

@@ -36,10 +36,8 @@ class LoginController: UIViewController, ControllerType {
         viewModel.output.loginResultObservable
             .subscribe(onNext: { isTrue in
                 if(isTrue){
-                    DispatchQueue.main.async {
-                        // Perform Segue to DashboardStoryboard
-                        self.performSegue(withIdentifier: "DashboardSegue", sender: self)
-                    }}
+                    RedirectionHelper.redirectToDashboard()
+                }
             })
             .disposed(by: disposeBag)
         

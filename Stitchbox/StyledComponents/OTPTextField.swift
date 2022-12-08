@@ -30,7 +30,11 @@ class OTPTextField: UnderlineTextField {
     }
     override func setupView() {
         super.setupView()
-        self.placeHolderColor = .secondary
+        let border = CALayer()
+        border.frame = CGRect(x:0, y:self.frame.size.height + 5, width:self.frame.size.width, height:1)
+        border.borderColor = UIColor.secondary.cgColor
+        
+        self.layer.addSublayer(border)
     }
     
 }
@@ -45,11 +49,14 @@ class OTPStackView: UIStackView {
     var showsWarningColor = true
     
     //Colors
-    let inactiveFieldBorderColor = UIColor.disabled
     let textBackgroundColor = UIColor.clear
     let activeFieldBorderColor = UIColor.secondary
     var remainingStrStack: [String] = []
-    
+    var text: String {
+        get{
+            return getOTP()
+        }
+    }
     required init(coder: NSCoder) {
         super.init(coder: coder)
         setupStackView()
@@ -93,14 +100,14 @@ class OTPStackView: UIStackView {
         self.addArrangedSubview(textField)
         textField.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         textField.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
-        textField.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        textField.widthAnchor.constraint(equalToConstant: 50).isActive = true
         textField.textAlignment = .center
         textField.adjustsFontSizeToFitWidth = false
         textField.keyboardType = .numberPad
         textField.autocorrectionType = .yes
         textField.textContentType = .oneTimeCode
-        textField.setDefault()
-        textField.border.backgroundColor = UIColor.secondary.cgColor
+        textField.setupView()
+        
     }
     
     //checks if all the OTPfields are filled
@@ -157,15 +164,12 @@ extension OTPStackView: UITextFieldDelegate {
         
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if showsWarningColor {
-            setAllFieldColor(color: inactiveFieldBorderColor)
             showsWarningColor = false
         }
-        textField.layer.borderColor = activeFieldBorderColor.cgColor
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         checkForValidity()
-        textField.layer.borderColor = inactiveFieldBorderColor.cgColor
     }
     
     //switches between OTPTextfields
