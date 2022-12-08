@@ -61,7 +61,7 @@ class LoginController: UIViewController, ControllerType {
 
 extension LoginController {
     static func create(with viewModel: ViewModelType) -> UIViewController {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "LoginController", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "LoginController") as! LoginController
         controller.viewModel = viewModel
         return controller

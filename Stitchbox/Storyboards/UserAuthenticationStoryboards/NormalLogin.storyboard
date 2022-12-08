@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
@@ -13,9 +13,9 @@
         <!--LoginViewController-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="normalLoginStoryboard" title="LoginViewController" id="Y6W-OH-hqX" customClass="LoginController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginController" title="LoginViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="LoginController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wqR-Lm-wbI">
@@ -29,22 +29,15 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WCb-Iv-paf">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="WCb-Iv-paf" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
                                 <rect key="frame" x="76" y="451" width="240" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <accessibility key="accessibilityConfiguration" label="Log In"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Log In"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kg3-Wy-tK5">
-                                <rect key="frame" x="76" y="482" width="240" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <accessibility key="accessibilityConfiguration" label="Log In By Phone"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Log In By Phone"/>
-                                <connections>
-                                    <segue destination="SM8-4k-hGa" kind="show" id="8Ns-CB-SaH"/>
-                                </connections>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Ty-MA-Doc" userLabel="Username Textfield">
                                 <rect key="frame" x="76" y="360" width="240" height="34"/>
@@ -53,9 +46,23 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="route" textContentType="username"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kg3-Wy-tK5" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="76" y="503" width="240" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration" label="Log In By Phone"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Log In By Phone"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="SM8-4k-hGa" kind="show" id="8Ns-CB-SaH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <color key="tintColor" name="Text"/>
                     </view>
                     <connections>
                         <outlet property="passwordTextfield" destination="Fhd-MM-1tW" id="Vsb-mg-9Sn"/>
@@ -66,7 +73,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="56.521739130434788" y="-2.6785714285714284"/>
+            <point key="canvasLocation" x="57.251908396946561" y="-2.1126760563380285"/>
         </scene>
         <!--Dashboard-->
         <scene sceneID="Y5v-Ej-usE">
@@ -83,32 +90,22 @@
             <objects>
                 <viewController storyboardIdentifier="LoginByPhoneSendCodeController" title="LoginByPhoneView" id="SM8-4k-hGa" customClass="LoginByPhoneSendCodeController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lsE-09-cAw">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="838"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Region" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xou-md-Nbd" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Region" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xou-md-Nbd">
                                 <rect key="frame" x="76" y="315" width="33" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label="Region"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" textContentType="tel"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" name="Secondary"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone Number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IJy-M8-QdE" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone Number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IJy-M8-QdE">
                                 <rect key="frame" x="117" y="315" width="199" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label="Phone Number"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" textContentType="tel"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" name="Secondary"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Some lines talking about phone code verification" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rCN-ea-9zT">
                                 <rect key="frame" x="76" y="131" width="240" height="128"/>
@@ -118,7 +115,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UJh-H8-BQw" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UJh-H8-BQw">
                                 <rect key="frame" x="76" y="373" width="240" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label="Send OTP"/>
@@ -146,7 +143,7 @@
             <objects>
                 <viewController storyboardIdentifier="LoginByPhoneVerifyController" title="LoginByPhoneVerifyView" id="2Sq-VY-NkR" customClass="LoginByPhoneVerifyController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fnI-zn-hco">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="838"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Some lines talking about phone code verification" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="djZ-eG-ChE">
@@ -193,9 +190,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="5eg-Kt-MWT"/>
                     <connections>
-                        <outlet property="OTPCodeTextfield" destination="hgp-gx-vzv" id="A22-uA-Jz7"/>
+                        <outlet property="OTPTextfield" destination="hgp-gx-vzv" id="Cfy-zG-kh3"/>
+                        <outlet property="retypeOTP" destination="xSU-K5-HuU" id="GeF-1N-S7v"/>
                         <outlet property="sendCodeButton" destination="xSU-K5-HuU" id="HvU-x2-n57"/>
-                        <outlet property="verifyCodeButton" destination="NOw-Hk-G1A" id="MqT-Bm-CT7"/>
+                        <outlet property="verifyButton" destination="NOw-Hk-G1A" id="Cl6-UR-nTA"/>
                         <segue destination="ak2-f2-bqj" kind="show" identifier="DashboardSegue" id="Voj-3Q-62j"/>
                     </connections>
                 </viewController>
@@ -203,142 +201,13 @@
             </objects>
             <point key="canvasLocation" x="1687.7862595419847" y="8.4507042253521139"/>
         </scene>
-        <!--Login Controller-->
-        <scene sceneID="2eV-sK-16P">
-            <objects>
-                <viewController id="fbh-J2-PyH" customClass="LoginController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="rcb-N9-HB7">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="eau-5c-BMn">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="VectorCurve" translatesAutoresizingMaskIntoConstraints="NO" id="13e-pI-nA3">
-                                <rect key="frame" x="0.0" y="549" width="414" height="347"/>
-                                <edgeInsets key="layoutMargins" top="0.0" left="8" bottom="0.0" right="0.0"/>
-                            </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5Xz-Bh-OrD">
-                                <rect key="frame" x="57" y="242" width="300" height="29"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LOGIN" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eH0-Id-uqQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="29"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
-                                        <color key="textColor" name="Text"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="470-ZB-n5Y"/>
-                                </constraints>
-                            </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4MQ-uD-qEU">
-                                <rect key="frame" x="57" y="291" width="300" height="88"/>
-                                <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="USERNAME" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="voI-7f-prV" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="34"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="size">
-                                                <integer key="value" value="3"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                <color key="value" systemColor="systemGray5Color"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="PASSWORD" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6GU-51-u4L" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="54" width="300" height="34"/>
-                                        <color key="textColor" systemColor="systemGray5Color"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="size">
-                                                <integer key="value" value="3"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                <color key="value" systemColor="systemGray4Color"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </textField>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="Ivr-cy-XyI"/>
-                                </constraints>
-                            </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="go0-8o-8Ah" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="147" y="426" width="121" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="121" id="47i-mk-8eZ"/>
-                                    <constraint firstAttribute="height" constant="44" id="gRt-Ui-kd9"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="LOGIN"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
-                                        <integer key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </button>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="l1g-eP-jrH"/>
-                        <color key="backgroundColor" name="Background"/>
-                        <constraints>
-                            <constraint firstItem="4MQ-uD-qEU" firstAttribute="centerX" secondItem="rcb-N9-HB7" secondAttribute="centerX" id="0Vt-nb-uh6"/>
-                            <constraint firstAttribute="bottom" secondItem="13e-pI-nA3" secondAttribute="bottom" id="3zF-fp-MuZ"/>
-                            <constraint firstItem="eau-5c-BMn" firstAttribute="centerY" secondItem="rcb-N9-HB7" secondAttribute="centerY" id="6Rq-yV-mAC"/>
-                            <constraint firstItem="l1g-eP-jrH" firstAttribute="trailing" secondItem="eau-5c-BMn" secondAttribute="trailing" id="GXr-g6-8bs"/>
-                            <constraint firstItem="eau-5c-BMn" firstAttribute="top" secondItem="rcb-N9-HB7" secondAttribute="top" id="J7w-Zp-5iN"/>
-                            <constraint firstItem="13e-pI-nA3" firstAttribute="leading" secondItem="l1g-eP-jrH" secondAttribute="leading" id="PQK-8K-jGc"/>
-                            <constraint firstItem="4MQ-uD-qEU" firstAttribute="top" secondItem="5Xz-Bh-OrD" secondAttribute="bottom" constant="20" id="RfF-lt-dm8"/>
-                            <constraint firstItem="go0-8o-8Ah" firstAttribute="top" secondItem="4MQ-uD-qEU" secondAttribute="bottom" constant="25" id="Ry0-pG-ISS"/>
-                            <constraint firstItem="eau-5c-BMn" firstAttribute="top" secondItem="rcb-N9-HB7" secondAttribute="top" id="XIE-CN-RWK"/>
-                            <constraint firstItem="go0-8o-8Ah" firstAttribute="centerX" secondItem="rcb-N9-HB7" secondAttribute="centerX" id="YDw-9W-0xp"/>
-                            <constraint firstItem="5Xz-Bh-OrD" firstAttribute="top" secondItem="l1g-eP-jrH" secondAttribute="top" constant="194" id="aur-0j-ot3"/>
-                            <constraint firstItem="l1g-eP-jrH" firstAttribute="trailing" secondItem="13e-pI-nA3" secondAttribute="trailing" id="fzn-ff-GqD"/>
-                            <constraint firstItem="5Xz-Bh-OrD" firstAttribute="centerX" secondItem="rcb-N9-HB7" secondAttribute="centerX" id="jbK-z3-dTl"/>
-                            <constraint firstAttribute="bottom" secondItem="13e-pI-nA3" secondAttribute="bottom" id="sEC-94-iPP"/>
-                            <constraint firstItem="eau-5c-BMn" firstAttribute="leading" secondItem="l1g-eP-jrH" secondAttribute="leading" id="tsb-MF-7eb"/>
-                            <constraint firstItem="eau-5c-BMn" firstAttribute="centerX" secondItem="rcb-N9-HB7" secondAttribute="centerX" id="whd-Mi-BxB"/>
-                            <constraint firstAttribute="trailing" secondItem="13e-pI-nA3" secondAttribute="trailing" id="z4x-Ap-S1Y"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="mm6-sU-fma">
-                        <barButtonItem key="backBarButtonItem" title=" " id="fet-AT-5Fj"/>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="passwordTextfield" destination="6GU-51-u4L" id="O1c-sp-2er"/>
-                        <outlet property="signInButton" destination="go0-8o-8Ah" id="Btv-jt-hSq"/>
-                        <outlet property="usernameTextfield" destination="voI-7f-prV" id="W45-xJ-tFO"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="yGS-Gz-ht4" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-54.375" y="1514.7887323943662"/>
-        </scene>
     </scenes>
     <designables>
-        <designable name="6GU-51-u4L">
-            <size key="intrinsicContentSize" width="111.5" height="34"/>
+        <designable name="WCb-Iv-paf">
+            <size key="intrinsicContentSize" width="70.333333333333329" height="34.333333333333336"/>
         </designable>
-        <designable name="IJy-M8-QdE">
-            <size key="intrinsicContentSize" width="101.5" height="18.5"/>
-        </designable>
-        <designable name="UJh-H8-BQw">
-            <size key="intrinsicContentSize" width="100.5" height="34.5"/>
-        </designable>
-        <designable name="go0-8o-8Ah">
-            <size key="intrinsicContentSize" width="45" height="29"/>
-        </designable>
-        <designable name="voI-7f-prV">
-            <size key="intrinsicContentSize" width="110" height="34"/>
-        </designable>
-        <designable name="xou-md-Nbd">
-            <size key="intrinsicContentSize" width="49.5" height="18.5"/>
+        <designable name="kg3-Wy-tK5">
+            <size key="intrinsicContentSize" width="147" height="34.333333333333336"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
@@ -346,13 +215,8 @@
         <segue reference="Gnn-vM-wcN"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="BackgroundImage" width="780" height="1688"/>
-        <image name="VectorCurve" width="390" height="347"/>
         <namedColor name="Background">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="Secondary">
-            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Text">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -362,12 +226,6 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray4Color">
-            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGray5Color">
-            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
