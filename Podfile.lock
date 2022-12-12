@@ -1,6 +1,8 @@
 PODS:
   - Alamofire (5.6.2)
   - Cache (6.0.0)
+  - CountryPickerView (3.3.0)
+  - lottie-ios (3.5.0)
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
     - PINCache/Core (= 3.0.3)
@@ -47,6 +49,8 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - Cache
+  - CountryPickerView
+  - lottie-ios
   - RxCocoa
   - RxSwift
   - SwiftLint
@@ -56,6 +60,8 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - Cache
+    - CountryPickerView
+    - lottie-ios
     - PINCache
     - PINOperation
     - PINRemoteImage
@@ -68,6 +74,8 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
   Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
+  CountryPickerView: 6322ada32a80b0cd721b0267282a5c24f406f263
+  lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: 00c935935f1e8cf0d1e2d6b542e75b88fc3e5e20
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
@@ -77,6 +85,6 @@ SPEC CHECKSUMS:
   SwiftLint: 32ee33ded0636d0905ef6911b2b67bbaeeedafa5
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
 
-PODFILE CHECKSUM: 446c445b6fd82168cf8f3ab332d9136a58969b1d
+PODFILE CHECKSUM: 11ae04834d7fd67de58567322161082c28a81ccd
 
 COCOAPODS: 1.11.3

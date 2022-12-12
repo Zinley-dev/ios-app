@@ -34,8 +34,8 @@ struct Account : Codable {
     
     init(JSONbody: [String?: Any]?, type: logintype) throws {
         if type == .normalLogin {
-            self.refreshToken = JSONbody?["refreshToken"] as? String ?? ""
-            self.accessToken = JSONbody?["accessToken"] as? String ?? ""
+            self.refreshToken = JSONbody?["refresh-token"] as? String ?? ""
+            self.accessToken = JSONbody?["token"] as? String ?? ""
             self.avatarUrl = JSONbody?["avatarUrl"] as? String ?? ""
             self.birthday = JSONbody?["birthday"] as? String ?? ""
             self.email = JSONbody?["email"] as? String ?? ""
@@ -45,7 +45,7 @@ struct Account : Codable {
             self.userUID = JSONbody?["userUID"] as? String ?? ""
             self.username = JSONbody?["username"] as? String ?? ""
         } else if type == .phoneLogin {
-            self.refreshToken = JSONbody?["refreshToken"] as? String ?? ""
+            self.refreshToken = JSONbody?["refresh-token"] as? String ?? ""
             self.accessToken = JSONbody?["token"] as? String ?? ""
             let userInfo = JSONbody?["user"] as? [String: Any]? ?? ["":""]
             self.avatarUrl =  userInfo?["avatar"]  as? String ?? ""

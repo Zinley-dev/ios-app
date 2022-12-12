@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="Button" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w6R-PB-o3b" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="168" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L5B-yZ-Bz8" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="264" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gKb-Yg-1aW" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="354" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ogd-UU-co2" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="430" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SiY-Zw-rKg" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="502" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yz9-3w-jnS" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="575" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.64122137404578" y="3.5211267605633805"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="GBI-6q-Oiq">
+            <objects>
+                <viewController storyboardIdentifier="Textfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Xz8-pb-pVx" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XpD-ks-kAv">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GhD-VW-W3q" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="179" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bna-sl-8Ck" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="233" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yIl-ri-0s3" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="313" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0dc-Cu-ADw" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="397" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z9P-lI-zda" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="450" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k55-E0-bG7" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="510" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="FpB-jh-RPS"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gEF-7b-DQj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="929" y="4"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="r52-6K-j0Q">
+            <objects>
+                <viewController storyboardIdentifier="UnderlineTextfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="4Ur-n4-uyE" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PBU-wh-5yH">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3pI-w7-p8u" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="397" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" name="Secondary"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TOz-ed-Qc3" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="450" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="paddingLeft">
+                                        <real key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" name="Secondary"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="UP5-gw-TAd"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0uh-yB-XQf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1650" y="4"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="4KR-S4-fUj">
+            <objects>
+                <viewController storyboardIdentifier="OTPTextfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DIb-Wa-WRn" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4Kt-VG-UPX">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="96" y="360" width="200" height="22"/>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="qio-D5-8w9"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vPx-Pg-TQW" firstAttribute="top" secondItem="qio-D5-8w9" secondAttribute="top" constant="301" id="CZN-mE-qDK"/>
+                            <constraint firstItem="vPx-Pg-TQW" firstAttribute="top" secondItem="qio-D5-8w9" secondAttribute="top" constant="301" id="gVP-Oa-KTE"/>
+                            <constraint firstItem="vPx-Pg-TQW" firstAttribute="leading" secondItem="qio-D5-8w9" secondAttribute="leading" constant="96" id="tCJ-U8-tCF"/>
+                            <constraint firstItem="qio-D5-8w9" firstAttribute="trailing" secondItem="vPx-Pg-TQW" secondAttribute="trailing" constant="97" id="zrN-OZ-W3n"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XZC-b7-dpX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2416" y="4"/>
+        </scene>
+        <!--Loading-->
+        <scene sceneID="Ppv-Sp-apB">
+            <objects>
+                <viewController storyboardIdentifier="Loading" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mFr-18-cfP" customClass="SLoading" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yD2-BF-E68">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4m4-dZ-2qb" customClass="LottieAnimationView" customModule="Lottie">
+                                <rect key="frame" x="76" y="117" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6o8-HP-8KD"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <connections>
+                        <outlet property="animationView" destination="4m4-dZ-2qb" id="PTh-eB-xCt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jqI-cF-ZJV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3111" y="4"/>
+        </scene>
+        <!--Country Code View Controller-->
+        <scene sceneID="SBN-bN-QqC">
+            <objects>
+                <viewController storyboardIdentifier="CountryPicker" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LIg-qe-IoH" customClass="CountryCodeViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5Ze-TC-FDS">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SiS-Qd-H9G" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="366" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" name="Secondary"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                        <color key="value" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="paddingLeft">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eyq-xr-zUs" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="148" y="409" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" name="Secondary"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                        <color key="value" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="paddingLeft">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="5iU-cm-Np5"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <connections>
+                        <outlet property="phoneNumberField" destination="SiS-Qd-H9G" id="216-z4-a5Q"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KAp-o5-u4z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3900" y="-17"/>
+        </scene>
+        <!--PHONE-->
+        <scene sceneID="BHD-2A-o98">
+            <objects>
+                <viewController storyboardIdentifier="PHONE" title="PHONE" useStoryboardIdentifierAsRestorationIdentifier="YES" id="CkF-nT-bhO" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Auo-cJ-f7g">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hello World" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0PK-7b-Z80">
+                                <rect key="frame" x="152" y="299" width="88" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uẻname" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gLU-Em-yFI">
+                                <rect key="frame" x="152" y="388" width="64" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="dSh-7x-uCv"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="PHONE" id="4wZ-Ne-fPu" userLabel="Username"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZdA-0i-E71" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6544.2748091603053" y="719.71830985915494"/>
+        </scene>
+        <!--USERNAME-->
+        <scene sceneID="r3S-S3-ge6">
+            <objects>
+                <viewController storyboardIdentifier="USERNAME" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fZe-U9-gqq" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="paL-pN-mZM">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BCM-zl-Y9r">
+                                <rect key="frame" x="175" y="345" width="49" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="7r1-a3-TLa"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="USERNAME" id="lo5-Mp-1c1"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vka-ZN-SpH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6544.2748091603053" y="-10.563380281690142"/>
+        </scene>
+        <!--Login Tab Bar Controller-->
+        <scene sceneID="dgN-xs-ziQ">
+            <objects>
+                <tabBarController storyboardIdentifier="LoginTabBarController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lf4-hJ-216" customClass="LoginTabBarController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="RPF-tE-AJ4">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="CkF-nT-bhO" kind="relationship" relationship="viewControllers" id="laz-HI-hqu"/>
+                        <segue destination="fZe-U9-gqq" kind="relationship" relationship="viewControllers" id="XEq-a5-hI6"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nvr-KG-R4F" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5617.5572519083971" y="354.22535211267609"/>
+        </scene>
+    </scenes>
+    <designables>
+        <designable name="0dc-Cu-ADw">
+            <size key="intrinsicContentSize" width="24" height="18.666666666666668"/>
+        </designable>
+        <designable name="3pI-w7-p8u">
+            <size key="intrinsicContentSize" width="9" height="18.666666666666668"/>
+        </designable>
+        <designable name="4m4-dZ-2qb"/>
+        <designable name="GhD-VW-W3q">
+            <size key="intrinsicContentSize" width="38" height="34"/>
+        </designable>
+        <designable name="L5B-yZ-Bz8">
+            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+        </designable>
+        <designable name="SiS-Qd-H9G">
+            <size key="intrinsicContentSize" width="6" height="18.666666666666668"/>
+        </designable>
+        <designable name="SiY-Zw-rKg">
+            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+        </designable>
+        <designable name="TOz-ed-Qc3">
+            <size key="intrinsicContentSize" width="8" height="18.666666666666668"/>
+        </designable>
+        <designable name="bna-sl-8Ck">
+            <size key="intrinsicContentSize" width="38" height="34"/>
+        </designable>
+        <designable name="eyq-xr-zUs">
+            <size key="intrinsicContentSize" width="6" height="18.666666666666668"/>
+        </designable>
+        <designable name="gKb-Yg-1aW">
+            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+        </designable>
+        <designable name="k55-E0-bG7">
+            <size key="intrinsicContentSize" width="24" height="18.666666666666668"/>
+        </designable>
+        <designable name="ogd-UU-co2">
+            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+        </designable>
+        <designable name="w6R-PB-o3b">
+            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+        </designable>
+        <designable name="yIl-ri-0s3">
+            <size key="intrinsicContentSize" width="38" height="34"/>
+        </designable>
+        <designable name="yz9-3w-jnS">
+            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+        </designable>
+        <designable name="z9P-lI-zda">
+            <size key="intrinsicContentSize" width="24" height="18.666666666666668"/>
+        </designable>
+    </designables>
+    <resources>
+        <namedColor name="Secondary">
+            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

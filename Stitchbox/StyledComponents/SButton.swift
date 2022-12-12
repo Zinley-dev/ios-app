@@ -145,7 +145,7 @@ import SwiftUI
 
 struct ButtonViewRepresentable: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
-        return UIStoryboard(name: "Empty", bundle: nil).instantiateInitialViewController()!.view
+        return UIStoryboard(name: "Components", bundle: nil).instantiateViewController(withIdentifier: "Button").view
     }
 
     func updateUIView(_ view: UIView, context: Context) {

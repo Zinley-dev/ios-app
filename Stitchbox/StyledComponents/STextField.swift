@@ -146,17 +146,19 @@ import SwiftUI
     }
 }
 
-
 #if canImport(SwiftUI) && DEBUG
 
-struct TextfieldViewRepresentable: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        return UIStoryboard(name: "TextField", bundle: nil).instantiateInitialViewController()!.view
+struct TextFieldViewControllerRepresentable: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        return UIStoryboard(name: "Components", bundle: nil).instantiateViewController(withIdentifier: "Textfield")
     }
-
-    func updateUIView(_ view: UIView, context: Context) {
-
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        
     }
+    
+    typealias UIViewControllerType = UIViewController
+    
 }
 
 @available(iOS 13, *)
@@ -164,7 +166,7 @@ struct TextfieldView_Preview: PreviewProvider {
     static var previews: some View {
         // view controller using programmatic UI
         VStack{
-            TextfieldViewRepresentable()
+            TextFieldViewControllerRepresentable()
         }
     }
 }

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import UIKit
 import SwiftUI
 
@@ -111,3 +110,30 @@ import SwiftUI
         return bounds.inset(by: leftPadding)
     }
 }
+
+
+#if canImport(SwiftUI) && DEBUG
+
+struct UnderlineTextFieldViewRepresentable: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        return UIStoryboard(name: "Components", bundle: nil).instantiateViewController(withIdentifier: "UnderlineTextfield")
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        
+    }
+    
+    typealias UIViewControllerType = UIViewController
+    
+}
+
+@available(iOS 13, *)
+struct UnderlineTextfieldView_Preview: PreviewProvider {
+    static var previews: some View {
+        // view controller using programmatic UI
+        VStack{
+            UnderlineTextFieldViewRepresentable()
+        }
+    }
+}
+#endif

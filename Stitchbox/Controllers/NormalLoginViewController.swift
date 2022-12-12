@@ -36,10 +36,8 @@ class LoginController: UIViewController, ControllerType {
         viewModel.output.loginResultObservable
             .subscribe(onNext: { isTrue in
                 if(isTrue){
-                    DispatchQueue.main.async {
-                        // Perform Segue to DashboardStoryboard
-                        self.performSegue(withIdentifier: "DashboardSegue", sender: self)
-                    }}
+                    RedirectionHelper.redirectToDashboard()
+                }
             })
             .disposed(by: disposeBag)
         
@@ -61,7 +59,7 @@ class LoginController: UIViewController, ControllerType {
 
 extension LoginController {
     static func create(with viewModel: ViewModelType) -> UIViewController {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "LoginController", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "LoginController") as! LoginController
         controller.viewModel = viewModel
         return controller
