@@ -163,8 +163,13 @@
                                             <constraint firstAttribute="height" constant="40" id="Ren-Fc-nIK"/>
                                         </constraints>
                                         <color key="tintColor" red="0.20784313730000001" green="0.18039215689999999" blue="0.4431372549" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="10"/>
+                                        <inset key="titleEdgeInsets" minX="-40" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="-20" maxY="10"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="User Phone / Username"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="User Phone / Username">
+                                            <directionalEdgeInsets key="contentInsets" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="didTapLogin:" destination="bTH-hk-GcG" eventType="touchUpInside" id="Pja-o4-i1p"/>
                                         </connections>
@@ -177,7 +182,12 @@
                                         </constraints>
                                         <color key="tintColor" red="0.20784313730000001" green="0.18039215689999999" blue="0.4431372549" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Continue with Google"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Continue with Google">
+                                            <directionalEdgeInsets key="contentInsets" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="didTapLogin:" destination="bTH-hk-GcG" eventType="touchUpInside" id="Oe9-lC-jE2"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ep-qi-GgG">
                                         <rect key="frame" x="0.0" y="88" width="340" height="40"/>
@@ -188,6 +198,9 @@
                                         <color key="tintColor" red="0.20784313730000001" green="0.18039215689999999" blue="0.4431372549" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Continue with Facebook"/>
+                                        <connections>
+                                            <action selector="didTapLogin:" destination="bTH-hk-GcG" eventType="touchUpInside" id="vkz-Xe-lGO"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Je2-0T-ZKa">
                                         <rect key="frame" x="0.0" y="132" width="340" height="40"/>
@@ -198,6 +211,9 @@
                                         <color key="tintColor" red="0.20784313730000001" green="0.18039215689999999" blue="0.4431372549" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Continue with Twitter"/>
+                                        <connections>
+                                            <action selector="didTapLogin:" destination="bTH-hk-GcG" eventType="touchUpInside" id="PU9-Xt-41R"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C4B-9A-WS5">
                                         <rect key="frame" x="0.0" y="176" width="340" height="40"/>
@@ -208,6 +224,9 @@
                                         <color key="tintColor" red="0.20784313730000001" green="0.18039215689999999" blue="0.4431372549" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Continue with Apple"/>
+                                        <connections>
+                                            <action selector="didTapLogin:" destination="bTH-hk-GcG" eventType="touchUpInside" id="Udr-7s-E0a"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6j6-Gq-nNo">
                                         <rect key="frame" x="0.0" y="220" width="340" height="40"/>
@@ -218,6 +237,9 @@
                                         <color key="tintColor" red="0.20784313730000001" green="0.18039215689999999" blue="0.4431372549" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Continue with Tiktok"/>
+                                        <connections>
+                                            <action selector="didTapLogin:" destination="bTH-hk-GcG" eventType="touchUpInside" id="DBa-Pz-qQR"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTP-qI-DtS">
                                         <rect key="frame" x="0.0" y="264" width="340" height="40"/>

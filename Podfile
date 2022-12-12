@@ -12,7 +12,12 @@ target 'Stitchbox' do
   pod 'RxCocoa'
   pod 'Alamofire'
   pod 'Cache'
-
+  
+  # Add the Firebase pod for Google Analytics
+  pod 'FirebaseAnalytics'
+  pod 'FirebaseAuth'
+  pod 'GoogleSignIn'
+  
   target 'StitchboxTests' do
     inherit! :search_paths
     # Pods for testing
