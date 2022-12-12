@@ -7,17 +7,34 @@
 
 import UIKit
 import AVFoundation
+import RxSwift
+import RxCocoa
 
 class StartViewController: UIViewController {
+    private lazy var vm: StartViewModel = StartViewModel(vc: self)
+    private let disposeBag = DisposeBag()
 
+    
     @IBOutlet weak var btnLetStart: UIButton!
     @IBOutlet var collectionLoginProviders: [UIButton]!
     @IBOutlet weak var logo: UIImageView!
+    
     var player: AVPlayer?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         buildUI()
+        bindingUI()
+    }
+    
+    func bindingUI() {
+        vm.output.loginResultObservable.subscribe(onNext: { isTrue in
+            if (isTrue) {
+                RedirectionHelper.redirectToDashboard()
+            }
+        })
+        .disposed(by: disposeBag)
     }
     
     func buildUI() {
@@ -32,7 +49,6 @@ class StartViewController: UIViewController {
         player!.seek(to: CMTime.zero)
         player!.play()
         self.player?.isMuted = true
-        
         
         btnLetStart.layer.cornerRadius = btnLetStart.frame.height / 2
         collectionLoginProviders.forEach { (btn) in
@@ -56,7 +72,9 @@ class StartViewController: UIViewController {
         }
             }
     
-    @IBAction func didTapLogin(_ sender: Any) {
+    @IBAction func didTapLogin(_ sender: UIButton) {
+        let seleted = SocialLoginType(rawValue: sender.tag)!
+        vm.startSignInProcess(with: seleted)
     }
     
     
@@ -65,4 +83,5 @@ class StartViewController: UIViewController {
     }
     
 }
+
 

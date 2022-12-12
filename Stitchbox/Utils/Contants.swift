@@ -8,9 +8,11 @@
 import Foundation
 
 enum SocialLoginType: Int {
-    case google = 0
-    case faceBook
+    case google = 1
+    case facebook
+    case twitter
     case apple
+    case tiktok
 }
 
 struct Constants {
@@ -37,6 +39,6 @@ struct Constants {
     }
 
     struct GoogleSignIn {
-        static let clientId = "750192727959-49ilo64c4cc9fbigm6em7pe5aa5ghmld.apps.googleusercontent.com"
+        static let clientId = "56078114675-c5lhtgsgsp4bod4amsc9rlfv8b4s64j8.apps.googleusercontent.com"
     }
 }

@@ -15,7 +15,11 @@ target 'Stitchbox' do
   pod 'lottie-ios'
   pod 'CountryPickerView'
 
-
+  # Add the Firebase pod for Google Analytics
+  pod 'FirebaseAnalytics'
+  pod 'FirebaseAuth'
+  pod 'GoogleSignIn'
+  
   target 'StitchboxTests' do
     inherit! :search_paths
     # Pods for testing
