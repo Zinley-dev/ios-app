@@ -7,19 +7,34 @@
 
 import UIKit
 import AVFoundation
-import GoogleSignIn
+import RxSwift
+import RxCocoa
 
 class StartViewController: UIViewController {
+    private lazy var vm: StartViewModel = StartViewModel(vc: self)
+    private let disposeBag = DisposeBag()
 
+    
     @IBOutlet weak var btnLetStart: UIButton!
     @IBOutlet var collectionLoginProviders: [UIButton]!
     @IBOutlet weak var logo: UIImageView!
+    
     var player: AVPlayer?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         buildUI()
-        
+        bindingUI()
+    }
+    
+    func bindingUI() {
+        vm.output.loginResultObservable.subscribe(onNext: { isTrue in
+            if (isTrue) {
+                RedirectionHelper.redirectToDashboard()
+            }
+        })
+        .disposed(by: disposeBag)
     }
     
     func buildUI() {
@@ -34,7 +49,6 @@ class StartViewController: UIViewController {
         player!.seek(to: CMTime.zero)
         player!.play()
         self.player?.isMuted = true
-        
         
         btnLetStart.layer.cornerRadius = btnLetStart.frame.height / 2
         collectionLoginProviders.forEach { (btn) in
@@ -59,34 +73,8 @@ class StartViewController: UIViewController {
             }
     
     @IBAction func didTapLogin(_ sender: UIButton) {
-        print(sender.titleLabel?.text)
-        
-        let signInConfig = GIDConfiguration(clientID: "56078114675-c5lhtgsgsp4bod4amsc9rlfv8b4s64j8.apps.googleusercontent.com")
-
-        GIDSignIn.sharedInstance.signIn(with: signInConfig, presenting: self) { user, error in
-                guard error == nil else { return }
-                guard let user = user else { return }
-
-                if let profiledata = user.profile {
-                    
-                    let userId : String = user.userID ?? ""
-                    let givenName : String = profiledata.givenName ?? ""
-                    let familyName : String = profiledata.familyName ?? ""
-                    let email : String = profiledata.email
-                    
-                    if let imgurl = user.profile?.imageURL(withDimension: 100) {
-                        let absoluteurl : String = imgurl.absoluteString
-                        //HERE CALL YOUR SERVER API
-                    }
-                    
-                    print(userId)
-                    print(givenName)
-                    print(familyName)
-                    print(email)
-                }
-                
-            }
-        
+        let seleted = SocialLoginType(rawValue: sender.tag)!
+        vm.startSignInProcess(with: seleted)
     }
     
     

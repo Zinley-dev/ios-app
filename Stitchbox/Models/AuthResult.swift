@@ -15,11 +15,18 @@ public struct AuthResult {
     // Google
     public var accessToken: String?
     
-    public init(idToken: String? = nil, providerID: String? = nil, rawNonce: String? = nil, accessToken: String? = nil) {
+    public var name: String?
+    public var email: String?
+    public var phone: String?
+    
+    public init(idToken: String? = nil, providerID: String? = nil, rawNonce: String? = nil, accessToken: String? = nil, name: String? = nil, email: String? = nil, phone: String? = nil) {
         self.idToken = idToken
         self.providerID = providerID
         self.rawNonce = rawNonce
         self.accessToken = accessToken
+        self.name = name
+        self.email = email
+        self.phone = phone
     }
     
 }
