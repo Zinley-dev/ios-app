@@ -8,17 +8,21 @@
 import UIKit
 import FirebaseCore
 import GoogleSignIn
+import FBSDKCoreKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-//        FirebaseApp.configure()
-//        GoogleSignIn.sharedInstance().clientID = "56078114675-c5lhtgsgsp4bod4amsc9rlfv8b4s64j8.apps.googleusercontent.com"
-        
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
+    -> Bool {
+        ApplicationDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
         return true
     }
 
@@ -37,12 +41,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     @available(iOS 9.0, *)
-    func application(_ application: UIApplication, open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey: Any])
+    func application(
+        _ application: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey: Any])
       -> Bool {
+      ApplicationDelegate.shared.application(
+          application,
+          open: url,
+          sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+          annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+      )
       return GIDSignIn.sharedInstance.handle(url)
     }
-
 
 }
 

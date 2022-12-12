@@ -8,6 +8,14 @@ PODS:
     - AppAuth/Core
   - Cache (6.0.0)
   - CountryPickerView (3.3.0)
+  - FBAEMKit (14.1.0):
+    - FBSDKCoreKit_Basics (= 14.1.0)
+  - FBSDKCoreKit (14.1.0):
+    - FBAEMKit (= 14.1.0)
+    - FBSDKCoreKit_Basics (= 14.1.0)
+  - FBSDKCoreKit_Basics (14.1.0)
+  - FBSDKLoginKit (14.1.0):
+    - FBSDKCoreKit (= 14.1.0)
   - FirebaseAnalytics (10.1.0):
     - FirebaseAnalytics/AdIdSupport (= 10.1.0)
     - FirebaseCore (~> 10.0)
@@ -143,6 +151,7 @@ DEPENDENCIES:
   - Alamofire
   - Cache
   - CountryPickerView
+  - FBSDKLoginKit
   - FirebaseAnalytics
   - FirebaseAuth
   - GoogleSignIn
@@ -158,6 +167,10 @@ SPEC REPOS:
     - AppAuth
     - Cache
     - CountryPickerView
+    - FBAEMKit
+    - FBSDKCoreKit
+    - FBSDKCoreKit_Basics
+    - FBSDKLoginKit
     - FirebaseAnalytics
     - FirebaseAuth
     - FirebaseCore
@@ -185,6 +198,10 @@ SPEC CHECKSUMS:
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
   CountryPickerView: 6322ada32a80b0cd721b0267282a5c24f406f263
+  FBAEMKit: a899515e45476027f73aef377b5cffadcd56ca3a
+  FBSDKCoreKit: 24f8bc8d3b5b2a8c5c656a1329492a12e8efa792
+  FBSDKCoreKit_Basics: 6e578c9bdc7aa1365dbbbde633c9ebb536bcaa98
+  FBSDKLoginKit: 787de205d524c3a4b17d527916f1d066e4361660
   FirebaseAnalytics: 24cb27b52b2e11ad5013528195b4ca0755dec960
   FirebaseAuth: 19a85b8a42e7c1104a2ffa6987c748daa79a5e64
   FirebaseCore: 55e7ae35991ccca4db03ff8d8df6ed5f17a3e4c7
@@ -207,6 +224,6 @@ SPEC CHECKSUMS:
   SwiftLint: 32ee33ded0636d0905ef6911b2b67bbaeeedafa5
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
 
-PODFILE CHECKSUM: 72a9bb2a474ebd22efd316e3abf78ba9bfb14702
+PODFILE CHECKSUM: 95e37001a85b12426ebae88aad38ba886a1ec2cd
 
 COCOAPODS: 1.11.3

@@ -20,6 +20,10 @@ target 'Stitchbox' do
   pod 'FirebaseAuth'
   pod 'GoogleSignIn'
   
+  # Facebook login
+  pod 'FBSDKLoginKit'
+  
+  
   target 'StitchboxTests' do
     inherit! :search_paths
     # Pods for testing
