@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_12" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -15,7 +14,7 @@
             <objects>
                 <viewController storyboardIdentifier="Button" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w6R-PB-o3b" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
@@ -104,7 +103,7 @@
             <objects>
                 <viewController storyboardIdentifier="Textfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Xz8-pb-pVx" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XpD-ks-kAv">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GhD-VW-W3q" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
@@ -193,7 +192,7 @@
             <objects>
                 <viewController storyboardIdentifier="UnderlineTextfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="4Ur-n4-uyE" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PBU-wh-5yH">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3pI-w7-p8u" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
@@ -243,11 +242,11 @@
             <objects>
                 <viewController storyboardIdentifier="OTPTextfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DIb-Wa-WRn" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Kt-VG-UPX">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="96" y="360" width="200" height="22"/>
+                                <rect key="frame" x="96" y="360" width="221" height="22"/>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qio-D5-8w9"/>
@@ -269,7 +268,7 @@
             <objects>
                 <viewController storyboardIdentifier="Loading" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mFr-18-cfP" customClass="SLoading" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yD2-BF-E68">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4m4-dZ-2qb" customClass="LottieAnimationView" customModule="Lottie">
@@ -294,7 +293,7 @@
             <objects>
                 <viewController storyboardIdentifier="CountryPicker" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LIg-qe-IoH" customClass="CountryCodeViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5Ze-TC-FDS">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SiS-Qd-H9G" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
@@ -348,7 +347,7 @@
             <objects>
                 <viewController storyboardIdentifier="PHONE" title="PHONE" useStoryboardIdentifierAsRestorationIdentifier="YES" id="CkF-nT-bhO" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Auo-cJ-f7g">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hello World" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0PK-7b-Z80">
@@ -380,7 +379,7 @@
             <objects>
                 <viewController storyboardIdentifier="USERNAME" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fZe-U9-gqq" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="paL-pN-mZM">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BCM-zl-Y9r">
@@ -422,53 +421,53 @@
     </scenes>
     <designables>
         <designable name="0dc-Cu-ADw">
-            <size key="intrinsicContentSize" width="24" height="18.666666666666668"/>
+            <size key="intrinsicContentSize" width="24" height="18.5"/>
         </designable>
         <designable name="3pI-w7-p8u">
-            <size key="intrinsicContentSize" width="9" height="18.666666666666668"/>
+            <size key="intrinsicContentSize" width="9" height="18.5"/>
         </designable>
         <designable name="4m4-dZ-2qb"/>
         <designable name="GhD-VW-W3q">
             <size key="intrinsicContentSize" width="38" height="34"/>
         </designable>
         <designable name="L5B-yZ-Bz8">
-            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="SiS-Qd-H9G">
-            <size key="intrinsicContentSize" width="6" height="18.666666666666668"/>
+            <size key="intrinsicContentSize" width="6" height="18.5"/>
         </designable>
         <designable name="SiY-Zw-rKg">
-            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="TOz-ed-Qc3">
-            <size key="intrinsicContentSize" width="8" height="18.666666666666668"/>
+            <size key="intrinsicContentSize" width="8" height="18.5"/>
         </designable>
         <designable name="bna-sl-8Ck">
             <size key="intrinsicContentSize" width="38" height="34"/>
         </designable>
         <designable name="eyq-xr-zUs">
-            <size key="intrinsicContentSize" width="6" height="18.666666666666668"/>
+            <size key="intrinsicContentSize" width="6" height="18.5"/>
         </designable>
         <designable name="gKb-Yg-1aW">
-            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="k55-E0-bG7">
-            <size key="intrinsicContentSize" width="24" height="18.666666666666668"/>
+            <size key="intrinsicContentSize" width="24" height="18.5"/>
         </designable>
         <designable name="ogd-UU-co2">
-            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="w6R-PB-o3b">
-            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="yIl-ri-0s3">
             <size key="intrinsicContentSize" width="38" height="34"/>
         </designable>
         <designable name="yz9-3w-jnS">
-            <size key="intrinsicContentSize" width="75" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="z9P-lI-zda">
-            <size key="intrinsicContentSize" width="24" height="18.666666666666668"/>
+            <size key="intrinsicContentSize" width="24" height="18.5"/>
         </designable>
     </designables>
     <resources>

@@ -63,7 +63,7 @@ import SwiftUI
             NSAttributedString.Key.font: UIFont(name: "Helvetica", size: 20) as Any
         ]
         tabBarItemAppearance.normal.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -4)
-        tabBar.selectionIndicatorImage = UIImage.imageWithColor(color: .secondary, size: CGSizeMake(155, 44)).withShadow(blur: 3, color: .black)
+        tabBar.selectionIndicatorImage = UIImage.imageWithColor(color: .secondary, size: CGSize(width: 155, height: 44)).withShadow(blur: 3, color: .black)
         
         tabBarAppearance.stackedLayoutAppearance = tabBarItemAppearance
         tabBarAppearance.configureWithTransparentBackground()
@@ -121,7 +121,7 @@ struct TabSwitchingView_Preview: PreviewProvider {
 // MARK: UIIamge Extension for creating layouts
 extension UIImage {
     class func imageWithColor(color: UIColor, size: CGSize) -> UIImage {
-        let rect: CGRect = CGRectMake(0, 0, size.width, size.height)
+        let rect: CGRect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         color.setFill()
         let path = UIBezierPath(roundedRect: rect, cornerRadius: size.height / 2)

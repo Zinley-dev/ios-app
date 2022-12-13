@@ -27,6 +27,9 @@ extension FacebookSignInService: LoginCoordinatorProtocol {
                         print("Cancelled")
                     } else {
                         print("Logged In")
+                        print(result)
+//                        let data = AuthResult(idToken: userId, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(familyName) \(givenName)", email: email, phone: nil)
+//                        self.vm.completeSignIn(with: data)
                     }
                 }
     }

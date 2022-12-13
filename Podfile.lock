@@ -146,6 +146,7 @@ PODS:
     - Texture/Core
   - Texture/Video (3.1.0):
     - Texture/Core
+  - TikTokOpenSDK (5.0.15)
 
 DEPENDENCIES:
   - Alamofire
@@ -160,6 +161,7 @@ DEPENDENCIES:
   - RxSwift
   - SwiftLint
   - Texture
+  - TikTokOpenSDK (~> 5.0.14)
 
 SPEC REPOS:
   trunk:
@@ -192,6 +194,7 @@ SPEC REPOS:
     - RxSwift
     - SwiftLint
     - Texture
+    - TikTokOpenSDK
 
 SPEC CHECKSUMS:
   Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
@@ -223,7 +226,8 @@ SPEC CHECKSUMS:
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SwiftLint: 32ee33ded0636d0905ef6911b2b67bbaeeedafa5
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
+  TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
 
-PODFILE CHECKSUM: 95e37001a85b12426ebae88aad38ba886a1ec2cd
+PODFILE CHECKSUM: 301bd8d29227716ad1d0573a30e8ddb0427bdab4
 
 COCOAPODS: 1.11.3

@@ -23,6 +23,9 @@ target 'Stitchbox' do
   # Facebook login
   pod 'FBSDKLoginKit'
   
+  # Tiktok SDK
+  pod 'TikTokOpenSDK', '~> 5.0.14'
+
   
   target 'StitchboxTests' do
     inherit! :search_paths

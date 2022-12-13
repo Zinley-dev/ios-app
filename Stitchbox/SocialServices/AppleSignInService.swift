@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AuthenticationServices
 
 class AppleSignInService: NSObject {
     private var vm: StartViewModel
@@ -15,9 +16,39 @@ class AppleSignInService: NSObject {
     }
 }
 
+extension AppleSignInService: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            let userIdentifier = appleIDCredential.user
+            let userFirstName = appleIDCredential.fullName?.givenName
+            let userLastName = appleIDCredential.fullName?.familyName
+            let userEmail = appleIDCredential.email
+            
+            print(userIdentifier)
+            print(userEmail)
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        
+    }
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.vm.vc.view.window!
+    }
+}
+
 extension AppleSignInService: LoginCoordinatorProtocol {
     func triggerSignIn() {
         print("Apple LOGIN...")
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
     }
         
     func logout() {

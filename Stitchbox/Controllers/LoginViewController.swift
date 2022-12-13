@@ -24,7 +24,6 @@ class LoginViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         initView()
         bindUI(with: viewModel)
         bindAction(with: viewModel)
