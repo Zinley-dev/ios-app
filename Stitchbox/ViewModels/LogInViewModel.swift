@@ -49,8 +49,8 @@ class LoginControllerViewModel: ViewModelProtocol {
         signInDidTapSubject
             .subscribe (onNext: { (username, password) in
                 // check username or password in the right format
-                if (isNotValidInput(Input: username, RegEx: "\\w{7,18}") ||
-                    isNotValidInput(Input: password, RegEx: "\\w{7,18}")) {
+                if (isNotValidInput(Input: username, RegEx: "\\w{3,18}") ||
+                    isNotValidInput(Input: password, RegEx: "\\w{6,18}")) {
                     self.errorsSubject.onNext(NSError(domain: "Username or Password in wrong format", code: 400))
                     return;
                 }
@@ -58,10 +58,12 @@ class LoginControllerViewModel: ViewModelProtocol {
                 APIManager().normalLogin(username: username, password: password) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
+                    print("Response \(apiResponse)")
                     let data = apiResponse.body?["data"] as! [String: Any]?
                     do{
                         let account = try Account(JSONbody: data, type: .normalLogin)
                         // Store account to UserDefault as "userAccount"
+                        print("account \(account)")
                         do {
                             // Create JSON Encoder
                             let encoder = JSONEncoder()

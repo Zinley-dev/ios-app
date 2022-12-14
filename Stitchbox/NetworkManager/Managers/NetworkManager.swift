@@ -24,6 +24,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         if let request = buildRequest(from: route) {
+            print(request)
             task = session.dataTask(with: request, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
@@ -49,6 +50,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         case .request:
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         case .requestParameters(let parameters):
+            print("Vao param \(parameters)")
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             self.configureParameters(parameters: parameters, request: &request)
         case .requestParametersAndHeaders(let parameters, let additionalHeaders):

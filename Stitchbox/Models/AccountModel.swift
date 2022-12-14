@@ -24,50 +24,46 @@ struct Account : Codable {
     
     // MARK: - Properties
     var avatarUrl: String
-    var birthday: String
     var email: String
+    var about: String
     var id: String
     var name: String
-    var referralCode: String
-    var userUID: String
+    var phone: String
     var username: String
     
     init(JSONbody: [String?: Any]?, type: logintype) throws {
         if type == .normalLogin {
             self.refreshToken = JSONbody?["refresh-token"] as? String ?? ""
             self.accessToken = JSONbody?["token"] as? String ?? ""
-            self.avatarUrl = JSONbody?["avatarUrl"] as? String ?? ""
-            self.birthday = JSONbody?["birthday"] as? String ?? ""
-            self.email = JSONbody?["email"] as? String ?? ""
-            self.id = JSONbody?["id"] as? String ?? ""
-            self.referralCode = JSONbody?["referralCode"] as? String ?? ""
-            self.name = JSONbody?["name"] as? String ?? ""
-            self.userUID = JSONbody?["userUID"] as? String ?? ""
-            self.username = JSONbody?["username"] as? String ?? ""
+            let user = JSONbody?["user"] as? [String?: Any]
+            self.avatarUrl = user?["avatar"] as? String ?? ""
+            self.email = user?["email"] as? String ?? ""
+            self.id = user?["ID"] as? String ?? ""
+            self.name = user?["name"] as? String ?? ""
+            self.about = user?["about"] as? String ?? ""
+            self.phone = user?["phone"] as? String ?? ""
+            self.username = user?["username"] as? String ?? ""
         } else if type == .phoneLogin {
             self.refreshToken = JSONbody?["refresh-token"] as? String ?? ""
             self.accessToken = JSONbody?["token"] as? String ?? ""
-            let userInfo = JSONbody?["user"] as? [String: Any]? ?? ["":""]
-            self.avatarUrl =  userInfo?["avatar"]  as? String ?? ""
-            self.birthday = userInfo?["bod"] as? String ?? ""
-            self.email = userInfo?["email"] as? String ?? ""
-            self.id = userInfo?["_id"] as? String ?? ""
-            self.referralCode = userInfo?["referralCode"] as? String ?? ""
-            self.name = userInfo?["name"] as? String ?? ""
-            self.userUID = userInfo?["firebaseId"] as? String ?? ""
-            self.username = userInfo?["username"] as? String ?? ""
-            
+            let user = JSONbody?["user"] as? [String: Any]? ?? ["":""]
+            self.avatarUrl = user?["avatar"] as? String ?? ""
+            self.email = user?["email"] as? String ?? ""
+            self.id = user?["ID"] as? String ?? ""
+            self.name = user?["name"] as? String ?? ""
+            self.about = user?["about"] as? String ?? ""
+            self.phone = user?["phone"] as? String ?? ""
+            self.username = user?["username"] as? String ?? ""
         } else {
             self.refreshToken = ""
             self.accessToken = ""
             self.avatarUrl =  ""
-            self.birthday = ""
             self.email = ""
             self.id = ""
-            self.referralCode = ""
             self.name = ""
-            self.userUID = ""
             self.username = ""
+            self.about = ""
+            self.phone = ""
         }
     }
 }

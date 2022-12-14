@@ -1,4 +1,3 @@
-
 import UIKit
 import RxSwift
 import RxCocoa
@@ -45,12 +44,13 @@ class LoginController: UIViewController, ControllerType {
     
     func bindAction(with viewModel: LoginControllerViewModel) {
         // binding Controller actions to View Model observer
+        let userInputs = Observable.combineLatest(
+            usernameTextfield.rx.text.orEmpty,
+            passwordTextfield.rx.text.orEmpty) { (email, password) -> (String, String) in
+            return (email, password)
+        }
         signInButton.rx.tap.asObservable()
-            .withLatestFrom(
-                Observable.zip(usernameTextfield.rx.text.orEmpty.asObservable(),
-                               passwordTextfield.rx.text.orEmpty.asObservable()
-                              )
-            )
+            .withLatestFrom(userInputs)
             .subscribe(viewModel.action.signInDidTap)
             .disposed(by: disposeBag)
     }

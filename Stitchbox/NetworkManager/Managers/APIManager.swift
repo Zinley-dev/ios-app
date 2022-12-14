@@ -27,6 +27,7 @@ struct APIManager {
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
+        print("params \(params)")
         manager.request(.login(params: params)) { result in
             completion(result)
         }
