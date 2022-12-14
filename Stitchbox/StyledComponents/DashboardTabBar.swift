@@ -25,7 +25,7 @@ import SwiftUI
     func setupMiddleButton() {
         button.setImage(UIImage(named: "Add 2"), for: .normal)
         button.backgroundColor = UIColor.tabbarbackground
-        button.layer.cornerRadius = 40
+        button.layer.cornerRadius = 35
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOffset = CGSize(width: 0.0, height: -6.0)
         button.layer.shadowRadius = 4
