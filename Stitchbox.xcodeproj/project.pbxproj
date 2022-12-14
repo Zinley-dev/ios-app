@@ -12,6 +12,9 @@
 		14131D80293B9D8F001F7631 /* SLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14131D7F293B9D8F001F7631 /* SLoading.swift */; };
 		141BB195293BA4F0004F4ED7 /* CountryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141BB194293BA4F0004F4ED7 /* CountryPicker.swift */; };
 		141BB197293BA946004F4ED7 /* loading-animation.json in Resources */ = {isa = PBXBuildFile; fileRef = 141BB196293BA946004F4ED7 /* loading-animation.json */; };
+		1457CCD72945898F003C742F /* CardStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457CCD62945898F003C742F /* CardStackView.swift */; };
+		1457CCD929464DD6003C742F /* IconSet.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1457CCD829464DD6003C742F /* IconSet.xcassets */; };
+		1457CDEC294862DF003C742F /* DashboardTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457CDEB294862DF003C742F /* DashboardTabBar.swift */; };
 		147187E22920A3A20039B89E /* StitchboxUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187E12920A3A20039B89E /* StitchboxUnitTests.swift */; };
 		147187E92920AD520039B89E /* LogInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187E82920AD520039B89E /* LogInViewModel.swift */; };
 		147187EB2920AF6E0039B89E /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187EA2920AF6D0039B89E /* ViewModelProtocol.swift */; };
@@ -92,6 +95,9 @@
 		14131D7F293B9D8F001F7631 /* SLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLoading.swift; sourceTree = "<group>"; };
 		141BB194293BA4F0004F4ED7 /* CountryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryPicker.swift; sourceTree = "<group>"; };
 		141BB196293BA946004F4ED7 /* loading-animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "loading-animation.json"; sourceTree = "<group>"; };
+		1457CCD62945898F003C742F /* CardStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackView.swift; sourceTree = "<group>"; };
+		1457CCD829464DD6003C742F /* IconSet.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = IconSet.xcassets; sourceTree = "<group>"; };
+		1457CDEB294862DF003C742F /* DashboardTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTabBar.swift; sourceTree = "<group>"; };
 		147187DF2920A3A20039B89E /* StitchboxUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StitchboxUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		147187E12920A3A20039B89E /* StitchboxUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchboxUnitTests.swift; sourceTree = "<group>"; };
 		147187E82920AD520039B89E /* LogInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewModel.swift; sourceTree = "<group>"; };
@@ -212,6 +218,7 @@
 			children = (
 				147BDB672928B1E0003511C3 /* Colors.xcassets */,
 				A5A5E40829376172004E9207 /* Color.swift */,
+				1457CCD829464DD6003C742F /* IconSet.xcassets */,
 			);
 			path = DesignRules;
 			sourceTree = "<group>";
@@ -242,6 +249,8 @@
 				141BB194293BA4F0004F4ED7 /* CountryPicker.swift */,
 				A5A5E40C29386D37004E9207 /* UnderlineTextField.swift */,
 				14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */,
+				1457CDEB294862DF003C742F /* DashboardTabBar.swift */,
+				1457CCD62945898F003C742F /* CardStackView.swift */,
 			);
 			path = StyledComponents;
 			sourceTree = "<group>";
@@ -607,6 +616,7 @@
 				390FD7842909375C0068B883 /* Dashboard.storyboard in Resources */,
 				14131D7E293B3666001F7631 /* Components.storyboard in Resources */,
 				147BDB682928B1E1003511C3 /* Colors.xcassets in Resources */,
+				1457CCD929464DD6003C742F /* IconSet.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -785,6 +795,7 @@
 				A5A5E40D29386D37004E9207 /* UnderlineTextField.swift in Sources */,
 				390FD76B290928420068B883 /* EndPointType.swift in Sources */,
 				390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */,
+				1457CCD72945898F003C742F /* CardStackView.swift in Sources */,
 				390FD77C29092B9C0068B883 /* Contants.swift in Sources */,
 				14847406291F37F80099AA08 /* AccountModel.swift in Sources */,
 				14C46C1C293D8DD1004D5D3A /* LoginTabBarController.swift in Sources */,
@@ -798,6 +809,7 @@
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
 				390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */,
 				A5A5E40729375FF3004E9207 /* SButton.swift in Sources */,
+				1457CDEC294862DF003C742F /* DashboardTabBar.swift in Sources */,
 				A5A5E40B29376562004E9207 /* STextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
