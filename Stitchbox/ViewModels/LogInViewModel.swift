@@ -58,7 +58,7 @@ class LoginControllerViewModel: ViewModelProtocol {
                 APIManager().normalLogin(username: username, password: password) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
-                    print("Response \(apiResponse)")
+                    print("Response \(apiResponse)`")
                     let data = apiResponse.body?["data"] as! [String: Any]?
                     do{
                         let account = try Account(JSONbody: data, type: .normalLogin)
@@ -72,8 +72,11 @@ class LoginControllerViewModel: ViewModelProtocol {
                             let data = try encoder.encode(account)
                             
                             // Write/Set Data
-                            UserDefaults.standard.set(data, forKey: "userAccount")
-                            
+                            let sessionToken = SessionDataSource.init(JSONString: "{}")!
+                            sessionToken.accessToken = account.accessToken
+                            sessionToken.refreshToken = account.refreshToken
+                            _AppCoreData.userSession.accept(sessionToken)
+
                         } catch {
                             print("Unable to Encode Account (\(error))")
                         }

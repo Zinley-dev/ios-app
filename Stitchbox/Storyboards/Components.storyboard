@@ -404,11 +404,11 @@
             <objects>
                 <viewController storyboardIdentifier="CARD" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Amu-QB-ID6" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Axv-i3-wsf">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Sbf-Ub-OAo" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="46.666666666666657" y="318.33333333333331" width="300" height="215.66666666666669"/>
+                                <rect key="frame" x="57" y="348.5" width="300" height="199"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VA2-GQ-N6o">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -416,27 +416,27 @@
                                         <buttonConfiguration key="configuration" style="plain" image="AC.png" imagePlacement="trailing" title="Button" imagePadding="11" titleAlignment="trailing"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L7w-Jk-YRG">
-                                        <rect key="frame" x="0.0" y="44" width="300" height="34.333333333333343"/>
+                                        <rect key="frame" x="0.0" y="44" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEk-aL-QUY">
-                                        <rect key="frame" x="0.0" y="78.333333333333371" width="300" height="34.333333333333343"/>
+                                        <rect key="frame" x="0.0" y="75" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vic-77-7fA">
-                                        <rect key="frame" x="0.0" y="112.66666666666667" width="300" height="34.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="106" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rCu-Ll-ewu">
-                                        <rect key="frame" x="0.0" y="147" width="300" height="34.333333333333343"/>
+                                        <rect key="frame" x="0.0" y="137" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="txM-F3-SPX">
-                                        <rect key="frame" x="0.0" y="181.33333333333337" width="300" height="34.333333333333343"/>
+                                        <rect key="frame" x="0.0" y="168" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>

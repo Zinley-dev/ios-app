@@ -60,7 +60,7 @@ import SwiftUI
 //        frame.size.width = 200
 
         let gradient = CAGradientLayer()
-        gradient.frame =  CGRect(origin: CGPointZero, size: self.frame.size)
+        gradient.frame =  CGRect(origin: CGPoint.zero, size: self.frame.size)
         gradient.cornerRadius = 20
         gradient.colors = [UIColor.primary.cgColor, UIColor.secondary.cgColor]
 
@@ -72,7 +72,7 @@ import SwiftUI
         gradient.mask = shape
         gradient.shadowColor = UIColor.black.cgColor
         gradient.shadowOpacity = 1
-        gradient.shadowOffset = CGSizeMake(0, 4)
+        gradient.shadowOffset = CGSize(width: 0, height: 4)
         gradient.shadowRadius = 4
         self.layer.addSublayer(gradient)
         self.backgroundColor = .background

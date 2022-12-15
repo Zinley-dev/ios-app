@@ -21,10 +21,6 @@ struct Constants {
         static let resetPassword = "segueToResetPassword"
     }
 
-    struct Keys {
-        static let environment = "currentEnvironment"
-    }
-
     struct URLs {
         static let baseUrl = "http://localhost:8080/systango-boilerplate-swift-mvvm.com/"
         static let loginEndPoint = "login"

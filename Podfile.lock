@@ -103,6 +103,7 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - ObjectMapper (3.5.3)
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
     - PINCache/Core (= 3.0.3)
@@ -157,6 +158,7 @@ DEPENDENCIES:
   - FirebaseAuth
   - GoogleSignIn
   - lottie-ios
+  - ObjectMapper (~> 3.5)
   - RxCocoa
   - RxSwift
   - SwiftLint
@@ -185,6 +187,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - lottie-ios
     - nanopb
+    - ObjectMapper
     - PINCache
     - PINOperation
     - PINRemoteImage
@@ -217,6 +220,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
   lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: 00c935935f1e8cf0d1e2d6b542e75b88fc3e5e20
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
@@ -228,6 +232,6 @@ SPEC CHECKSUMS:
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
   TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
 
-PODFILE CHECKSUM: 301bd8d29227716ad1d0573a30e8ddb0427bdab4
+PODFILE CHECKSUM: 1632be6c5dec1f54dfebc4719a597abb7a6204bd
 
 COCOAPODS: 1.11.3

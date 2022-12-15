@@ -19,7 +19,6 @@ import SwiftUI
     }
     
     func setupView() {
-        self.navigationItem.hidesBackButton = true
         // fixing position of tab bar
         let width = CGFloat(300)
         let height = CGFloat(30)
@@ -41,7 +40,7 @@ import SwiftUI
         let x = screenCenterX - width/2.0
         
         // y position of blue view, top half of the blue view is on top of the y center point
-        let y = screenCenterY - height/2.0 - CGFloat(250)
+        let y = screenCenterY - height/2.0 - CGFloat(280)
         self.tabBar.frame = CGRect(x: x, y: y, width: width, height: height)
         self.view.backgroundColor = .clear
         

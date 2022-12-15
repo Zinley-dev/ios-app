@@ -27,7 +27,7 @@ struct SettingsBundleHelper {
     static let shared = SettingsBundleHelper()
     private init() {}
     var currentEnvironment: Environment {
-        if let env = UserDefaults.standard.string(forKey: Constants.Keys.environment) {
+        if let env = UserDefaults.standard.string(forKey: kEnvironment) {
             return Environment(rawValue: env.lowercased()) ?? Environment.production
         }
         return Environment.production

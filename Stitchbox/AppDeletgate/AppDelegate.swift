@@ -13,7 +13,7 @@ import FBSDKCoreKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    static let sharedInstance = UIApplication.shared.delegate as! AppDelegate
 
     func application(
         _ application: UIApplication,

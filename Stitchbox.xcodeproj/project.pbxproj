@@ -55,12 +55,18 @@
 		395477B629425274008EED97 /* LoginCoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477B529425274008EED97 /* LoginCoordinatorProtocol.swift */; };
 		395477B829425318008EED97 /* AuthResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477B729425318008EED97 /* AuthResult.swift */; };
 		8ED9D2DEBF0361601F4852E3 /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2387CD412DE6CDA403E271A /* Pods_Stitchbox_StitchboxUITests.framework */; };
+		A5346488294B09B300FB6A94 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5346487294B09B300FB6A94 /* ProfileViewController.swift */; };
 		A540A8D2294721190085CC45 /* GoogleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D1294721190085CC45 /* GoogleSignInService.swift */; };
 		A540A8D4294726300085CC45 /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D3294726300085CC45 /* StartViewModel.swift */; };
 		A540A8D6294730C40085CC45 /* FacebookSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D5294730C40085CC45 /* FacebookSignInService.swift */; };
 		A540A8D8294731120085CC45 /* TwitterSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D7294731120085CC45 /* TwitterSignInService.swift */; };
 		A540A8DA294731320085CC45 /* AppleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D9294731320085CC45 /* AppleSignInService.swift */; };
 		A540A8DC294731750085CC45 /* TiktokSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8DB294731750085CC45 /* TiktokSignInService.swift */; };
+		A59CB3ED294ADA4700D84D9A /* ApplicationMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59CB3EC294ADA4700D84D9A /* ApplicationMacros.swift */; };
+		A59CB3EF294ADB1E00D84D9A /* AppNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59CB3EE294ADB1E00D84D9A /* AppNavigationController.swift */; };
+		A59CB3F1294ADBD700D84D9A /* ApplicationCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59CB3F0294ADBD700D84D9A /* ApplicationCoreData.swift */; };
+		A59CB3F3294ADC2500D84D9A /* SessionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59CB3F2294ADC2500D84D9A /* SessionDataSource.swift */; };
+		A59CB3F5294ADCA200D84D9A /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59CB3F4294ADCA200D84D9A /* UserDataSource.swift */; };
 		A5A5E4052937442B004E9207 /* LoginByPhoneVerifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E4042937442B004E9207 /* LoginByPhoneVerifyController.swift */; };
 		A5A5E40729375FF3004E9207 /* SButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E40629375FF3004E9207 /* SButton.swift */; };
 		A5A5E40929376172004E9207 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E40829376172004E9207 /* Color.swift */; };
@@ -158,12 +164,18 @@
 		75C94A3B7BBDABB0C311E16B /* Pods-Stitchbox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.debug.xcconfig"; sourceTree = "<group>"; };
 		7BC82FC58CAEC0147E5E58D7 /* Pods-Stitchbox-StitchboxUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		92EFEB85742B57DDE1B7EDBE /* Pods_Stitchbox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5346487294B09B300FB6A94 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		A540A8D1294721190085CC45 /* GoogleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInService.swift; sourceTree = "<group>"; };
 		A540A8D3294726300085CC45 /* StartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
 		A540A8D5294730C40085CC45 /* FacebookSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookSignInService.swift; sourceTree = "<group>"; };
 		A540A8D7294731120085CC45 /* TwitterSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterSignInService.swift; sourceTree = "<group>"; };
 		A540A8D9294731320085CC45 /* AppleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInService.swift; sourceTree = "<group>"; };
 		A540A8DB294731750085CC45 /* TiktokSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiktokSignInService.swift; sourceTree = "<group>"; };
+		A59CB3EC294ADA4700D84D9A /* ApplicationMacros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationMacros.swift; sourceTree = "<group>"; };
+		A59CB3EE294ADB1E00D84D9A /* AppNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigationController.swift; sourceTree = "<group>"; };
+		A59CB3F0294ADBD700D84D9A /* ApplicationCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationCoreData.swift; sourceTree = "<group>"; };
+		A59CB3F2294ADC2500D84D9A /* SessionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDataSource.swift; sourceTree = "<group>"; };
+		A59CB3F4294ADCA200D84D9A /* UserDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSource.swift; sourceTree = "<group>"; };
 		A5A5E4042937442B004E9207 /* LoginByPhoneVerifyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginByPhoneVerifyController.swift; sourceTree = "<group>"; };
 		A5A5E40629375FF3004E9207 /* SButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SButton.swift; sourceTree = "<group>"; };
 		A5A5E40829376172004E9207 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -221,6 +233,8 @@
 			children = (
 				14847405291F37F80099AA08 /* AccountModel.swift */,
 				395477B729425318008EED97 /* AuthResult.swift */,
+				A59CB3F2294ADC2500D84D9A /* SessionDataSource.swift */,
+				A59CB3F4294ADCA200D84D9A /* UserDataSource.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -389,6 +403,9 @@
 			children = (
 				390FD7372909264D0068B883 /* AppDelegate.swift */,
 				390FD7392909264D0068B883 /* SceneDelegate.swift */,
+				A59CB3EC294ADA4700D84D9A /* ApplicationMacros.swift */,
+				A59CB3EE294ADB1E00D84D9A /* AppNavigationController.swift */,
+				A59CB3F0294ADBD700D84D9A /* ApplicationCoreData.swift */,
 			);
 			path = AppDeletgate;
 			sourceTree = "<group>";
@@ -415,6 +432,7 @@
 				A5A5E410293891A2004E9207 /* LoginViewController.swift */,
 				A5A5E41229389770004E9207 /* ForgotViewController.swift */,
 				A5A5E4142938A309004E9207 /* VerifyViewController.swift */,
+				A5346487294B09B300FB6A94 /* ProfileViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -821,7 +839,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A540A8D4294726300085CC45 /* StartViewModel.swift in Sources */,
+				A59CB3EF294ADB1E00D84D9A /* AppNavigationController.swift in Sources */,
 				148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */,
+				A59CB3F3294ADC2500D84D9A /* SessionDataSource.swift in Sources */,
 				390FD782290931900068B883 /* NormalLoginViewController.swift in Sources */,
 				A5A5E4052937442B004E9207 /* LoginByPhoneVerifyController.swift in Sources */,
 				390FD76F290928DA0068B883 /* APIResponse.swift in Sources */,
@@ -830,6 +850,8 @@
 				A5A5E411293891A2004E9207 /* LoginViewController.swift in Sources */,
 				390FD76D290928A70068B883 /* APIManager.swift in Sources */,
 				1494675329419A6D007033E5 /* Helpers.swift in Sources */,
+				A59CB3F1294ADBD700D84D9A /* ApplicationCoreData.swift in Sources */,
+				A59CB3F5294ADCA200D84D9A /* UserDataSource.swift in Sources */,
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				A540A8D6294730C40085CC45 /* FacebookSignInService.swift in Sources */,
 				395477B629425274008EED97 /* LoginCoordinatorProtocol.swift in Sources */,
@@ -840,6 +862,7 @@
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
 				141BB195293BA4F0004F4ED7 /* CountryPicker.swift in Sources */,
 				390FD77629092AB30068B883 /* HTTPMethod.swift in Sources */,
+				A5346488294B09B300FB6A94 /* ProfileViewController.swift in Sources */,
 				390FD77829092ADE0068B883 /* EndPoints.swift in Sources */,
 				A540A8D8294731120085CC45 /* TwitterSignInService.swift in Sources */,
 				390FD7382909264D0068B883 /* AppDelegate.swift in Sources */,
@@ -857,6 +880,7 @@
 				390FD78629093EA00068B883 /* FeedViewController.swift in Sources */,
 				147187ED2920B0980039B89E /* ControllerType.swift in Sources */,
 				A5A5E41329389770004E9207 /* ForgotViewController.swift in Sources */,
+				A59CB3ED294ADA4700D84D9A /* ApplicationMacros.swift in Sources */,
 				A5A5E40F29388F5F004E9207 /* SignUpViewController.swift in Sources */,
 				147187F32920D2830039B89E /* LoginByPhoneViewModel.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,

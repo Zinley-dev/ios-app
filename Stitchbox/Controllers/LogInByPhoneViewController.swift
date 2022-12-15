@@ -32,6 +32,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
         super.viewDidLoad()
         
         //setup country code field
+        cpv.hostViewController = self
         cpv.showCountryNameInView = true
         cpv.showPhoneCodeInView = false
         cpv.textColor = .text
@@ -39,7 +40,6 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
         countryCodeNameTextfield.leftViewMode = .always
         cpv.delegate = self
         countryCodeTextfield.text = cpv.selectedCountry.phoneCode
-        
         bindUI(with: viewModel)
         bindAction(with: viewModel)
     }
