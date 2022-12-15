@@ -8,6 +8,7 @@ PODS:
     - AppAuth/Core
   - Cache (6.0.0)
   - CountryPickerView (3.3.0)
+  - EzPopup (1.2)
   - FBAEMKit (14.1.0):
     - FBSDKCoreKit_Basics (= 14.1.0)
   - FBSDKCoreKit (14.1.0):
@@ -153,6 +154,7 @@ DEPENDENCIES:
   - Alamofire
   - Cache
   - CountryPickerView
+  - EzPopup
   - FBSDKLoginKit
   - FirebaseAnalytics
   - FirebaseAuth
@@ -171,6 +173,7 @@ SPEC REPOS:
     - AppAuth
     - Cache
     - CountryPickerView
+    - EzPopup
     - FBAEMKit
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
@@ -204,6 +207,7 @@ SPEC CHECKSUMS:
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
   CountryPickerView: 6322ada32a80b0cd721b0267282a5c24f406f263
+  EzPopup: 989ac21992a82ad6d1245c747a78bf3833279ef0
   FBAEMKit: a899515e45476027f73aef377b5cffadcd56ca3a
   FBSDKCoreKit: 24f8bc8d3b5b2a8c5c656a1329492a12e8efa792
   FBSDKCoreKit_Basics: 6e578c9bdc7aa1365dbbbde633c9ebb536bcaa98
@@ -232,6 +236,6 @@ SPEC CHECKSUMS:
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
   TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
 
-PODFILE CHECKSUM: 1632be6c5dec1f54dfebc4719a597abb7a6204bd
+PODFILE CHECKSUM: ebb508496cccd07313575c22d7971d5768a04587
 
 COCOAPODS: 1.11.3
