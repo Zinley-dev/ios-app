@@ -46,7 +46,8 @@ class LoginController: UIViewController, ControllerType {
         // binding Controller actions to View Model observer
         let userInputs = Observable.combineLatest(
             usernameTextfield.rx.text.orEmpty,
-            passwordTextfield.rx.text.orEmpty) { (email, password) -> (String, String) in
+            passwordTextfield.rx.text.orEmpty) { ($0, $1) 
+            }
         signInButton.rx.tap.asObservable()
             .withLatestFrom(userInputs)
             .subscribe(viewModel.action.signInDidTap)
