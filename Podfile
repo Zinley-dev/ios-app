@@ -26,7 +26,13 @@ target 'Stitchbox' do
   
   # Tiktok SDK
   pod 'TikTokOpenSDK', '~> 5.0.14'
-
+  
+  
+  # Sendbird SDK
+  pod 'SendBirdSDK'
+  pod 'SendBirdUIKit'
+  pod 'SendBirdCalls'
+  
   
   target 'StitchboxTests' do
     inherit! :search_paths
