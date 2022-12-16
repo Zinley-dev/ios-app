@@ -6,7 +6,7 @@ PODS:
   - AppAuth/Core (1.6.0)
   - AppAuth/ExternalUserAgent (1.6.0):
     - AppAuth/Core
-  - Cache (6.0.0)
+  - Cache (5.3.0)
   - CountryPickerView (3.3.0)
   - FBAEMKit (14.1.0):
     - FBSDKCoreKit_Basics (= 14.1.0)
@@ -154,21 +154,21 @@ PODS:
   - TikTokOpenSDK (5.0.15)
 
 DEPENDENCIES:
-  - Alamofire
-  - Cache
-  - CountryPickerView
-  - FBSDKLoginKit
-  - FirebaseAnalytics
-  - FirebaseAuth
-  - GoogleSignIn
-  - lottie-ios
+  - Alamofire (~> 5.6.4)
+  - Cache (~> 5.3.0)
+  - CountryPickerView (~> 3.3.0)
+  - FBSDKLoginKit (~> 14.1.0)
+  - FirebaseAnalytics (~> 10.3.0)
+  - FirebaseAuth (~> 10.3.0)
+  - GoogleSignIn (~> 7.0.0)
+  - lottie-ios (~> 4.0.1)
   - ObjectMapper (~> 3.5)
-  - RxCocoa
-  - RxSwift
-  - SendBirdCalls
-  - SendBirdSDK
-  - SwiftLint
-  - Texture
+  - RxCocoa (~> 6.5.0)
+  - RxSwift (~> 6.5.0)
+  - SendBirdCalls (~> 1.9.7)
+  - SendBirdSDK (~> 3.1.37)
+  - SwiftLint (~> 0.50.3)
+  - Texture (~> 3.1.0)
   - TikTokOpenSDK (~> 5.0.14)
 
 SPEC REPOS:
@@ -211,7 +211,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
-  Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
+  Cache: 48762993ec44e1d93483c4d4a13edd18452326f4
   CountryPickerView: 6322ada32a80b0cd721b0267282a5c24f406f263
   FBAEMKit: a899515e45476027f73aef377b5cffadcd56ca3a
   FBSDKCoreKit: 24f8bc8d3b5b2a8c5c656a1329492a12e8efa792
@@ -244,6 +244,6 @@ SPEC CHECKSUMS:
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
   TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
 
-PODFILE CHECKSUM: 4e304516d14e4343850f82d8996ae861565c437d
+PODFILE CHECKSUM: bf11ab821b6370ee52e1cc9f9717217958e31227
 
 COCOAPODS: 1.11.3
