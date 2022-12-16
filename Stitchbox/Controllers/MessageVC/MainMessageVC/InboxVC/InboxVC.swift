@@ -9,6 +9,8 @@ import UIKit
 
 class InboxVC: UIViewController {
 
+    @IBOutlet weak var groupChannelsTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SendbirdUIKit
 import SendBirdSDK
 import SendBirdCalls
 

@@ -12,7 +12,6 @@ import CoreLocation
 import Alamofire
 import SendBirdCalls
 import SendBirdSDK
-import SendbirdUIKit
 import SendBirdSDK
 import CoreMedia
 import AsyncDisplayKit

@@ -9,6 +9,8 @@ import UIKit
 
 class RequestVC: UIViewController {
 
+    @IBOutlet weak var groupChannelsTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

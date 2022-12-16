@@ -93,7 +93,7 @@
                                         <state key="normal" title="Inbox"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="20"/>
+                                                <real key="value" value="18"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
@@ -106,7 +106,7 @@
                                         <state key="normal" title="Request"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="20"/>
+                                                <real key="value" value="18"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
@@ -153,20 +153,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Inbox" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7fC-Gk-GKE">
-                                <rect key="frame" x="186" y="437.5" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="S68-w2-wfi">
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="eHm-GO-G6Y"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="7fC-Gk-GKE" firstAttribute="centerX" secondItem="cI9-pB-ysc" secondAttribute="centerX" id="89H-RI-7SW"/>
-                            <constraint firstItem="7fC-Gk-GKE" firstAttribute="centerY" secondItem="cI9-pB-ysc" secondAttribute="centerY" id="Ah0-Qt-fKJ"/>
+                            <constraint firstItem="S68-w2-wfi" firstAttribute="top" secondItem="eHm-GO-G6Y" secondAttribute="top" id="4TH-T4-XzY"/>
+                            <constraint firstItem="eHm-GO-G6Y" firstAttribute="bottom" secondItem="S68-w2-wfi" secondAttribute="bottom" id="5Om-eD-ClB"/>
+                            <constraint firstItem="eHm-GO-G6Y" firstAttribute="trailing" secondItem="S68-w2-wfi" secondAttribute="trailing" id="BkY-RR-0Sr"/>
+                            <constraint firstItem="S68-w2-wfi" firstAttribute="leading" secondItem="eHm-GO-G6Y" secondAttribute="leading" id="d58-bd-fQd"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="groupChannelsTableView" destination="S68-w2-wfi" id="KiR-Ed-fD4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ex5-UG-b5w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -180,20 +183,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Request" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xdR-xV-djL">
-                                <rect key="frame" x="175.5" y="437.5" width="63" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fV9-96-hoi">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nHy-De-4Xt"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="xdR-xV-djL" firstAttribute="centerY" secondItem="arn-2G-TWV" secondAttribute="centerY" id="2KF-7a-P9g"/>
-                            <constraint firstItem="xdR-xV-djL" firstAttribute="centerX" secondItem="arn-2G-TWV" secondAttribute="centerX" id="6E0-p5-Zeu"/>
+                            <constraint firstItem="nHy-De-4Xt" firstAttribute="bottom" secondItem="fV9-96-hoi" secondAttribute="bottom" id="YiN-KR-ggP"/>
+                            <constraint firstItem="fV9-96-hoi" firstAttribute="leading" secondItem="arn-2G-TWV" secondAttribute="leading" id="ZQg-TN-U40"/>
+                            <constraint firstItem="fV9-96-hoi" firstAttribute="top" secondItem="arn-2G-TWV" secondAttribute="top" id="pjY-RB-LBs"/>
+                            <constraint firstItem="nHy-De-4Xt" firstAttribute="trailing" secondItem="fV9-96-hoi" secondAttribute="trailing" id="zGe-NF-W4j"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="groupChannelsTableView" destination="fV9-96-hoi" id="33Z-KM-g4d"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Od-OI-bBH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
