@@ -54,7 +54,7 @@ import SwiftUI
         tabBarItemAppearance.selected.titleTextAttributes = [
             NSAttributedString.Key.backgroundColor: UIColor.secondary,
             NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont(name: "Helvetica", size: 20) as Any
+            NSAttributedString.Key.font: UIFont(name: "Fenwick", size: 20) as Any
         ]
         tabBarItemAppearance.normal.titleTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor.text,

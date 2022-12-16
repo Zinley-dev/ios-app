@@ -28,6 +28,10 @@
 		148C7109291B11270046FC5D /* OTPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148C7108291B11270046FC5D /* OTPTextField.swift */; };
 		1494675329419A6D007033E5 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1494675229419A6D007033E5 /* Helpers.swift */; };
 		14C46C1C293D8DD1004D5D3A /* LoginTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */; };
+		14E740F8294C89860011FE5C /* Font in Resources */ = {isa = PBXBuildFile; fileRef = 14E740F6294C89410011FE5C /* Font */; };
+		14E740F9294C89870011FE5C /* Font in Resources */ = {isa = PBXBuildFile; fileRef = 14E740F6294C89410011FE5C /* Font */; };
+		14E740FA294C89870011FE5C /* Font in Resources */ = {isa = PBXBuildFile; fileRef = 14E740F6294C89410011FE5C /* Font */; };
+		14E740FB294C89890011FE5C /* Font in Resources */ = {isa = PBXBuildFile; fileRef = 14E740F6294C89410011FE5C /* Font */; };
 		390FD7382909264D0068B883 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7372909264D0068B883 /* AppDelegate.swift */; };
 		390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7392909264D0068B883 /* SceneDelegate.swift */; };
 		390FD73C2909264D0068B883 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD73B2909264D0068B883 /* StartViewController.swift */; };
@@ -127,6 +131,7 @@
 		148C7108291B11270046FC5D /* OTPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPTextField.swift; sourceTree = "<group>"; };
 		1494675229419A6D007033E5 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTabBarController.swift; sourceTree = "<group>"; };
+		14E740F6294C89410011FE5C /* Font */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; path = Font; sourceTree = "<group>"; };
 		1C37CBFDCF2BC88832C34BF2 /* Pods-StitchboxTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.debug.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.debug.xcconfig"; sourceTree = "<group>"; };
 		390FD7342909264D0068B883 /* Stitchbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stitchbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		390FD7372909264D0068B883 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -441,6 +446,7 @@
 			isa = PBXGroup;
 			children = (
 				141BB196293BA946004F4ED7 /* loading-animation.json */,
+				14E740F6294C89410011FE5C /* Font */,
 				147BDB692928B760003511C3 /* DesignRules */,
 				390FD7402909264E0068B883 /* Assets.xcassets */,
 				390FD7452909264E0068B883 /* Info.plist */,
@@ -663,6 +669,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14E740FA294C89870011FE5C /* Font in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -677,6 +684,7 @@
 				395477B1293FC524008EED97 /* bg.mp4 in Resources */,
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
 				141BB197293BA946004F4ED7 /* loading-animation.json in Resources */,
+				14E740FB294C89890011FE5C /* Font in Resources */,
 				390FD7842909375C0068B883 /* Dashboard.storyboard in Resources */,
 				14131D7E293B3666001F7631 /* Components.storyboard in Resources */,
 				147BDB682928B1E1003511C3 /* Colors.xcassets in Resources */,
@@ -688,6 +696,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14E740F8294C89860011FE5C /* Font in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -695,6 +704,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14E740F9294C89870011FE5C /* Font in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
