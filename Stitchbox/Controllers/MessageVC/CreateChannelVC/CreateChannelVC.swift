@@ -39,8 +39,8 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     private lazy var _titleView: UILabel = {
         var titleView = UILabel()
         titleView.backgroundColor = UIColor.clear
-        titleView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50)
-        titleView.text = "New Message"
+        titleView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 55)
+        titleView.text = "New message"
         titleView.textAlignment = .center
         titleView.textColor = UIColor.white
         
@@ -155,10 +155,10 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     
     func setupStyles() {
 
-        self.leftBarButton?.tintColor = SBUTheme.userListTheme.leftBarButtonTintColor
+        self.leftBarButton?.tintColor = UIColor.white
         self.rightBarButton?.tintColor = self.selectedUsers.isEmpty
             ? SBUTheme.userListTheme.rightBarButtonTintColor
-            : SBUTheme.userListTheme.rightBarButtonSelectedTintColor
+            : UIColor.white
 
     }
     
