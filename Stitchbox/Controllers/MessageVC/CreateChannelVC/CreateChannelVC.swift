@@ -38,6 +38,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
    
     private lazy var _titleView: UILabel = {
         var titleView = UILabel()
+        titleView.backgroundColor = UIColor.clear
         titleView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50)
         titleView.text = "New Message"
         titleView.textAlignment = .center
@@ -80,12 +81,11 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
     }
     
+
     // setup initial view
     
     func setupNavigationView() {
         
-        
-       
         self.navigationItem.leftBarButtonItem = self.leftBarButton
         self.navigationItem.rightBarButtonItem = self.rightBarButton
         self.navigationItem.titleView = self.titleView
@@ -98,7 +98,6 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
         self.searchController = UISearchController(searchResultsController: nil)
         self.searchController?.searchBar.delegate = self
-        self.searchController?.searchBar.placeholder = "Search"
         self.searchController?.obscuresBackgroundDuringPresentation = false
         
         self.searchController?.searchBar.searchBarStyle = .minimal
@@ -106,6 +105,9 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.searchController?.searchBar.tintColor = UIColor.white
+        self.searchController?.searchBar.searchTextField.textColor = UIColor.white
+        self.searchController!.searchBar.searchTextField.attributedPlaceholder =  NSAttributedString.init(string: "Search", attributes: [NSAttributedString.Key.foregroundColor:UIColor.lightGray])
+        self.searchController!.searchBar.searchTextField.leftView?.tintColor = UIColor.lightGray
         
     }
     
