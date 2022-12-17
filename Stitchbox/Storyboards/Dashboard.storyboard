@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zfi-ic-Dzc">
-    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <device id="retina5_5" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
@@ -15,11 +15,11 @@
             <objects>
                 <viewController id="Y6W-OH-hqX" customClass="FeedViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HOME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nRW-GJ-eXT">
-                                <rect key="frame" x="172.5" y="433.5" width="69" height="29"/>
+                                <rect key="frame" x="172.66666666666666" y="353.66666666666669" width="69" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -46,11 +46,11 @@
             <objects>
                 <viewController id="wfD-iE-xiS" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Hcg-tr-zol">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Challenges" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iS4-3u-FW6">
-                                <rect key="frame" x="149" y="433.5" width="116" height="29"/>
+                                <rect key="frame" x="149" y="353.66666666666669" width="116" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -74,7 +74,7 @@
             <objects>
                 <viewController id="KzE-0Q-kOw" customClass="MainMessageVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ya0-LT-VIE">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pXo-eH-6Hr">
@@ -119,7 +119,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lwv-Om-luR">
-                                <rect key="frame" x="0.0" y="139" width="414" height="674"/>
+                                <rect key="frame" x="0.0" y="139" width="414" height="548"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
@@ -153,11 +153,11 @@
             <objects>
                 <viewController storyboardIdentifier="InboxViewController" id="CiS-Sm-IU3" customClass="InboxVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cI9-pB-ysc">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="S68-w2-wfi">
-                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
@@ -183,11 +183,11 @@
             <objects>
                 <viewController storyboardIdentifier="RequestViewController" id="ZWM-c3-fQk" customClass="RequestVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="arn-2G-TWV">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fV9-96-hoi">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
@@ -213,15 +213,24 @@
             <objects>
                 <viewController id="l9I-Ci-Uq5" customClass="ProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LJT-Ib-Nta">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kHL-Nd-kxq">
-                                <rect key="frame" x="174.5" y="433.5" width="65" height="29"/>
+                                <rect key="frame" x="174.66666666666666" y="353.66666666666669" width="65" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W1W-4K-06D">
+                                <rect key="frame" x="168" y="312" width="79" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Setting"/>
+                                <connections>
+                                    <segue destination="xuI-Xg-Q5p" kind="show" id="wJh-Qo-QFJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ebJ-bj-z4B"/>
                         <color key="backgroundColor" name="Background"/>
@@ -266,7 +275,7 @@
                     <tabBarItem key="tabBarItem" title="" image="search" selectedImage="search.filled" id="tvb-6D-BsV"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="DBH-so-Bk6">
-                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -285,7 +294,7 @@
                     <tabBarItem key="tabBarItem" title="" image="user" selectedImage="user.filled" id="AoD-y3-sQP"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="tUb-gg-zbn">
-                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -302,11 +311,11 @@
             <objects>
                 <viewController id="iuL-41-Vew" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XNC-2q-Vo8">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Noneúe" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hmu-Uu-alB">
-                                <rect key="frame" x="166" y="433.5" width="82" height="29"/>
+                                <rect key="frame" x="166" y="353.66666666666669" width="82" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -332,7 +341,7 @@
                     <tabBarItem key="tabBarItem" title="" image="chat" selectedImage="chat.filled" id="qpA-Go-YoS"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cy5-LO-t1Q">
-                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="Background"/>
                         <color key="tintColor" name="Background"/>
@@ -353,16 +362,315 @@
             </objects>
             <point key="canvasLocation" x="460.86956521739131" y="911.38392857142856"/>
         </scene>
+        <!--SETTING-->
+        <scene sceneID="dta-GJ-n4h">
+            <objects>
+                <viewController storyboardIdentifier="SETTING" title="SETTING" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xuI-Xg-Q5p" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TI1-Hx-BUo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Ev4-ye-Ch6">
+                                <rect key="frame" x="57" y="44" width="300" height="625"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Adm-jC-HTD">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Challenge" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kdg-BB-mmh">
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="LFD-pA-Tu5"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="liR-SW-NHP" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="40" width="300" height="30"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PdQ-TC-Ctu" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="JjR-mH-fWW"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="trophy" title="Accept challenge"/>
+                                                    </button>
+                                                </subviews>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="IDj-5m-Lpp">
+                                        <rect key="frame" x="0.0" y="75" width="300" height="130"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Social" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hRL-8A-y12">
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="akh-TB-LOt"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ymm-dQ-MM4" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="40" width="300" height="90"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5fN-Rc-NRW" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="2uH-yH-vhT"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="discord" title="Discord link"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FOI-cM-P0o" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="30" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="yNb-qs-yCd"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="users" title="Referral code"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4go-h1-QJJ" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="60" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="Q6b-NJ-rk3"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="adduser" title="Find friends"/>
+                                                    </button>
+                                                </subviews>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="O5B-uW-NEx">
+                                        <rect key="frame" x="0.0" y="210" width="300" height="100"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oel-NM-Ke8">
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="hba-Pj-ulc"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="wxM-VX-CvP" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="40" width="300" height="60"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nbB-c6-ceP" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="edc-Y3-zAB"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="sound" title="Sound"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4Z-Wg-wyP" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="30" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="z0o-IF-P3d"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="dropdown" title="Automatic minimize"/>
+                                                    </button>
+                                                </subviews>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="m9c-ii-5IL">
+                                        <rect key="frame" x="0.0" y="315" width="300" height="310"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sl8-aQ-wad">
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="JfU-Zc-udh"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="FW8-YC-6xo" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="40" width="300" height="270"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J3i-nB-Li5" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="lH6-Lq-4ZJ"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="user-setting" title="Edit profile"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4L-i8-m8u" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="30" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="HJq-06-zH1"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="push" title="Push notification"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H2p-AI-TAt" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="60" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="MVi-Ha-kOE"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="clock" title="Account activity"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LJd-pP-0wN" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="90" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="3SW-wM-lGI"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="link" title="Social link"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KT3-Bl-ukO" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="120" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="M4h-8V-DAH"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="lock" title="Block accounts"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3N-fr-Ry2" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="150" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="sn8-fs-7hB"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="call" title="Contact us"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wx0-kI-Yna" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="180" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="nTB-x1-89n"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="file" title="Term of Services"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CZ4-93-5UE" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="210" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="NHE-fo-PuR"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="About us"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HXp-PI-Fgg" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="240" width="300" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="OrP-23-eV8"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="logout" title="Logout"/>
+                                                    </button>
+                                                </subviews>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="9bs-KL-fMf"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Icr-ZQ-wP1"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="Ev4-ye-Ch6" firstAttribute="centerX" secondItem="TI1-Hx-BUo" secondAttribute="centerX" id="0jA-Ci-O96"/>
+                            <constraint firstItem="Ev4-ye-Ch6" firstAttribute="top" secondItem="Icr-ZQ-wP1" secondAttribute="top" id="ua9-uR-ifC"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="ssg-za-I02"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XYD-To-fAx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2207" y="1655"/>
+        </scene>
     </scenes>
+    <designables>
+        <designable name="4go-h1-QJJ">
+            <size key="intrinsicContentSize" width="142" height="42"/>
+        </designable>
+        <designable name="5fN-Rc-NRW">
+            <size key="intrinsicContentSize" width="134" height="34.333333333333336"/>
+        </designable>
+        <designable name="CZ4-93-5UE">
+            <size key="intrinsicContentSize" width="92.333333333333329" height="34.333333333333336"/>
+        </designable>
+        <designable name="FOI-cM-P0o">
+            <size key="intrinsicContentSize" width="152" height="40"/>
+        </designable>
+        <designable name="H2p-AI-TAt">
+            <size key="intrinsicContentSize" width="170.33333333333334" height="38"/>
+        </designable>
+        <designable name="HXp-PI-Fgg">
+            <size key="intrinsicContentSize" width="101.33333333333333" height="38"/>
+        </designable>
+        <designable name="J3i-nB-Li5">
+            <size key="intrinsicContentSize" width="130.66666666666666" height="39"/>
+        </designable>
+        <designable name="KT3-Bl-ukO">
+            <size key="intrinsicContentSize" width="165.33333333333334" height="39"/>
+        </designable>
+        <designable name="L3N-fr-Ry2">
+            <size key="intrinsicContentSize" width="126" height="34.333333333333336"/>
+        </designable>
+        <designable name="LJd-pP-0wN">
+            <size key="intrinsicContentSize" width="125" height="39"/>
+        </designable>
+        <designable name="PdQ-TC-Ctu">
+            <size key="intrinsicContentSize" width="172.33333333333334" height="34.333333333333336"/>
+        </designable>
+        <designable name="Wx0-kI-Yna">
+            <size key="intrinsicContentSize" width="177" height="39"/>
+        </designable>
+        <designable name="b4Z-Wg-wyP">
+            <size key="intrinsicContentSize" width="203" height="44"/>
+        </designable>
+        <designable name="nbB-c6-ceP">
+            <size key="intrinsicContentSize" width="100" height="39"/>
+        </designable>
+        <designable name="v4L-i8-m8u">
+            <size key="intrinsicContentSize" width="172" height="35"/>
+        </designable>
+    </designables>
     <resources>
+        <image name="adduser" width="28" height="28"/>
+        <image name="call" width="19" height="19"/>
         <image name="chat" width="29" height="28"/>
         <image name="chat.filled" width="28" height="26"/>
+        <image name="clock" width="24" height="24"/>
+        <image name="discord" width="21" height="15"/>
+        <image name="dropdown" width="30" height="30"/>
+        <image name="file" width="25" height="25"/>
         <image name="home" width="36" height="37"/>
         <image name="home.filled" width="24" height="26"/>
+        <image name="link" width="25" height="25"/>
+        <image name="lock" width="25" height="25"/>
+        <image name="logout" width="24" height="24"/>
+        <image name="push" width="21" height="21"/>
         <image name="search" width="36" height="36"/>
         <image name="search.filled" width="36" height="36"/>
+        <image name="sound" width="27" height="25"/>
+        <image name="trophy" width="17" height="15"/>
         <image name="user" width="29" height="29"/>
+        <image name="user-setting" width="25" height="25"/>
         <image name="user.filled" width="27" height="28"/>
+        <image name="users" width="26" height="26"/>
         <namedColor name="Background">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
