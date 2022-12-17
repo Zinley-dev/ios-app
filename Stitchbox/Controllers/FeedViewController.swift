@@ -9,11 +9,12 @@ import UIKit
 
 class FeedViewController: UIViewController {
 
-    override func viewDidLoad() {
+  @IBOutlet weak var lblHome: UILabel!
+  override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
+        lblHome.text = _AppCoreData.userDataSource.value?.userName
     }
     
 

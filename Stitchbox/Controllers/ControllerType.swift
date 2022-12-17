@@ -22,7 +22,7 @@ protocol ControllerType: UIViewController {
     ///
     /// - Parameter viewModel: View model object
     /// - Returns: View controller of concrete type
-    static func create(with viewModel: ViewModelType) -> UIViewController
+//    static func create(with viewModel: ViewModelType) -> UIViewController
 }
 
 extension ControllerType {

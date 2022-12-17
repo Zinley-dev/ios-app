@@ -33,6 +33,9 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="home" selectedImage="home.filled" id="ybi-qx-dx4"/>
+                    <connections>
+                        <outlet property="lblHome" destination="nRW-GJ-eXT" id="xHn-ZR-B0L"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
