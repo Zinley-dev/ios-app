@@ -222,15 +222,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O2Q-ze-oOF">
-                                <rect key="frame" x="169" y="502" width="78" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Sign out"/>
-                                <connections>
-                                    <action selector="tapedSignOut:" destination="l9I-Ci-Uq5" eventType="touchUpInside" id="nx7-pK-WRI"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ebJ-bj-z4B"/>
                         <color key="backgroundColor" name="Background"/>
