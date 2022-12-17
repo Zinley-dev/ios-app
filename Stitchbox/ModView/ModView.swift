@@ -45,8 +45,6 @@ func blurImage(image:UIImage) -> UIImage? {
     }
 
 
-var sendbird_applicationID = "B3325F9F-FB59-4A96-823B-95D176E949C8"
-
 extension String: ParameterEncoding {
 
     public func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {

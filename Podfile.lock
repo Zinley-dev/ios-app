@@ -129,6 +129,8 @@ PODS:
   - SendBirdCalls (1.9.7):
     - SendBirdWebRTC (~> 1.6.0)
   - SendBirdSDK (3.1.37)
+  - SendBirdUIKit (2.2.9):
+    - SendBirdSDK (>= 3.1.13)
   - SendBirdWebRTC (1.6.0)
   - SwiftLint (0.50.3)
   - Texture (3.1.0):
@@ -167,6 +169,7 @@ DEPENDENCIES:
   - RxSwift (~> 6.5.0)
   - SendBirdCalls (~> 1.9.7)
   - SendBirdSDK (~> 3.1.37)
+  - SendBirdUIKit (= 2.2.9)
   - SwiftLint (~> 0.50.3)
   - Texture (~> 3.1.0)
   - TikTokOpenSDK (~> 5.0.14)
@@ -203,6 +206,7 @@ SPEC REPOS:
     - RxSwift
     - SendBirdCalls
     - SendBirdSDK
+    - SendBirdUIKit
     - SendBirdWebRTC
     - SwiftLint
     - Texture
@@ -239,11 +243,12 @@ SPEC CHECKSUMS:
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SendBirdCalls: 738efdd2a21e3ff0cf058477f1c612d59cd73510
   SendBirdSDK: 7d9c96803fdfd0537e83f0e394b472d844147a0c
+  SendBirdUIKit: 672887bc69cf53fa8af6ef74d3c083b6199847b8
   SendBirdWebRTC: 6bbdbda7aa2f9c3f2cbedacd3e53b9536e2ac8ac
   SwiftLint: 77f7cb2b9bb81ab4a12fcc86448ba3f11afa50c6
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
   TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
 
-PODFILE CHECKSUM: bf11ab821b6370ee52e1cc9f9717217958e31227
+PODFILE CHECKSUM: 661d0f89c7d20f0b22a27e8a0f9a0ffd66a5f851
 
 COCOAPODS: 1.11.3

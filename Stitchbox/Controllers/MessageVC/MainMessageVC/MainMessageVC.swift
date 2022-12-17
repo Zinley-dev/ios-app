@@ -103,7 +103,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         // Do any additional setup after loading the view.
         createButton.setImage(UIImage(named: "4x_add"), for: [])
-        //createButton.addTarget(self, action: #selector(showCreateChannel(_:)), for: .touchUpInside)
+        createButton.addTarget(self, action: #selector(showCreateChannel(_:)), for: .touchUpInside)
         createButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let createBarButton = UIBarButtonItem(customView: createButton)
         
@@ -112,6 +112,18 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         self.navigationItem.rightBarButtonItems = [createBarButton]
         
         
+    }
+    
+    @objc func showCreateChannel(_ sender: AnyObject) {
+        //CreateChannelVC
+        
+        if let CCV = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "CreateChannelVC") as? CreateChannelVC {
+             
+            self.navigationController?.pushViewController(CCV, animated: true)
+            
+        }
+        
+       
     }
     
     // Buttons controll

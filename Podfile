@@ -30,7 +30,7 @@ target 'Stitchbox' do
   
   # Sendbird SDK
   pod 'SendBirdSDK', '~> 3.1.37'
-  #pod 'SendBirdUIKit'
+  pod 'SendBirdUIKit', '2.2.9'
   pod 'SendBirdCalls', '~> 1.9.7'
   
   
