@@ -8,6 +8,29 @@
 import UIKit
 import SwiftUI
 @IBDesignable class CardButton: UIButton {
+    
+    // IB: use the adapter
+    @IBInspectable var haveSwitch: Bool = true {
+        didSet {
+            if haveSwitch {
+                let switchbtn = UISwitch()
+                self.addSubview(switchbtn)
+                
+            }else {
+//                let rightImageView = UIImageView(image: "")
+//                rightImageView.tintColor = .text
+//
+//                            let height = self.frame.height * 0.2
+//                            let width = height
+//                            let xPos = self.frame.width - width
+//                            let yPos = (self.frame.height - height) / 2
+//
+//                            rightImageView.frame = CGRect(x: xPos, y: yPos, width: width, height: height)
+//                            self.addSubview(rightImageView)
+            }
+        }
+    }
+    
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,6 +49,12 @@ import SwiftUI
 
     }
     func setupView() {
+        
+        let spacing = CGFloat(20); // the amount of spacing to appear between image and title
+        
+        self.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: CGFloat(50))
+        self.titleEdgeInsets = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: 0)
+        
         self.semanticContentAttribute = UIApplication.shared
             .userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
 
@@ -36,11 +65,13 @@ import SwiftUI
             .userInterfaceLayoutDirection == .leftToRight ? .forceLeftToRight : .forceRightToLeft
         
         let origImage = self.currentImage
-        let tintedImage = origImage?.withRenderingMode(.alwaysTemplate)
+        let tintedImage = origImage?.withRenderingMode(.alwaysTemplate).resize(targetSize: CGSizeMake(CGFloat(25), CGFloat(25))).withTintColor(.text)
         self.setImage(tintedImage, for: .normal)
         self.tintColor = .text
-
+        
     }
+    
+    
 }
 @IBDesignable class CardStackView: UIStackView {
 
@@ -66,19 +97,13 @@ import SwiftUI
                 self.layer.addSublayer(gradient)
 
             } else {
-                
                 layer.shadowColor = UIColor.black.cgColor
                 layer.shadowOpacity = 0.15
                 self.cornerRadius = 20
             }
         }
     }
-    // IB: use the adapter
-    @IBInspectable var haveSwitch: Int = 0 {
-        didSet {
-            setupView()
-        }
-    }
+    
 
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -94,6 +119,8 @@ import SwiftUI
     func setupView() {
         self.backgroundColor = .background
         self.tintColor = .text
+        
+        
     }
 
     // MARK: - UI Setup

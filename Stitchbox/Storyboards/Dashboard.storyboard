@@ -366,15 +366,15 @@
         <scene sceneID="dta-GJ-n4h">
             <objects>
                 <viewController storyboardIdentifier="SETTING" title="SETTING" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xuI-Xg-Q5p" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="TI1-Hx-BUo">
+                    <view key="view" clipsSubviews="YES" contentMode="top" id="TI1-Hx-BUo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Ev4-ye-Ch6">
-                                <rect key="frame" x="57" y="44" width="300" height="625"/>
+                                <rect key="frame" x="57" y="44" width="300" height="775"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Adm-jC-HTD">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="80"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Challenge" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kdg-BB-mmh">
                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
@@ -382,19 +382,19 @@
                                                     <constraint firstAttribute="height" constant="40" id="LFD-pA-Tu5"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" name="Text"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="liR-SW-NHP" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="40" width="300" height="30"/>
+                                                <rect key="frame" x="0.0" y="40" width="300" height="40"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PdQ-TC-Ctu" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="JjR-mH-fWW"/>
+                                                            <constraint firstAttribute="height" constant="40" id="JjR-mH-fWW"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="trophy" title="Accept challenge"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="trophy" imagePlacement="leading" title="Accept challenge" imagePadding="10"/>
                                                     </button>
                                                 </subviews>
                                                 <userDefinedRuntimeAttributes>
@@ -404,7 +404,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="IDj-5m-Lpp">
-                                        <rect key="frame" x="0.0" y="75" width="300" height="130"/>
+                                        <rect key="frame" x="0.0" y="85" width="300" height="160"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Social" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hRL-8A-y12">
                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
@@ -412,35 +412,35 @@
                                                     <constraint firstAttribute="height" constant="40" id="akh-TB-LOt"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" name="Text"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ymm-dQ-MM4" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="40" width="300" height="90"/>
+                                                <rect key="frame" x="0.0" y="40" width="300" height="120"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5fN-Rc-NRW" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="2uH-yH-vhT"/>
+                                                            <constraint firstAttribute="height" constant="40" id="2uH-yH-vhT"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="discord" title="Discord link"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="discord" title="Discord link" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FOI-cM-P0o" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="30" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="40" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="yNb-qs-yCd"/>
+                                                            <constraint firstAttribute="height" constant="40" id="yNb-qs-yCd"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="users" title="Referral code"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="users" title="Referral code" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4go-h1-QJJ" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="60" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="80" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="Q6b-NJ-rk3"/>
+                                                            <constraint firstAttribute="height" constant="40" id="Q6b-NJ-rk3"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="adduser" title="Find friends"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="adduser" title="Find friends" imagePadding="10"/>
                                                     </button>
                                                 </subviews>
                                                 <userDefinedRuntimeAttributes>
@@ -450,7 +450,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="O5B-uW-NEx">
-                                        <rect key="frame" x="0.0" y="210" width="300" height="100"/>
+                                        <rect key="frame" x="0.0" y="250" width="300" height="120"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oel-NM-Ke8">
                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
@@ -458,27 +458,27 @@
                                                     <constraint firstAttribute="height" constant="40" id="hba-Pj-ulc"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" name="Text"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="wxM-VX-CvP" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="40" width="300" height="60"/>
+                                                <rect key="frame" x="0.0" y="40" width="300" height="80"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nbB-c6-ceP" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="edc-Y3-zAB"/>
+                                                            <constraint firstAttribute="height" constant="40" id="edc-Y3-zAB"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="sound" title="Sound"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="sound" title="Sound" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4Z-Wg-wyP" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="30" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="40" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="z0o-IF-P3d"/>
+                                                            <constraint firstAttribute="height" constant="40" id="z0o-IF-P3d"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="dropdown" title="Automatic minimize"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="dropdown" title="Automatic minimize" imagePadding="10"/>
                                                     </button>
                                                 </subviews>
                                                 <userDefinedRuntimeAttributes>
@@ -488,7 +488,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="m9c-ii-5IL">
-                                        <rect key="frame" x="0.0" y="315" width="300" height="310"/>
+                                        <rect key="frame" x="0.0" y="375" width="300" height="400"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sl8-aQ-wad">
                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
@@ -496,80 +496,80 @@
                                                     <constraint firstAttribute="height" constant="40" id="JfU-Zc-udh"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" name="Text"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="FW8-YC-6xo" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="40" width="300" height="270"/>
+                                                <rect key="frame" x="0.0" y="40" width="300" height="360"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J3i-nB-Li5" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="lH6-Lq-4ZJ"/>
+                                                            <constraint firstAttribute="height" constant="40" id="lH6-Lq-4ZJ"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="user-setting" title="Edit profile"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="user-setting" title="Edit profile" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4L-i8-m8u" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="30" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="40" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="HJq-06-zH1"/>
+                                                            <constraint firstAttribute="height" constant="40" id="HJq-06-zH1"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="push" title="Push notification"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="push" title="Push notification" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H2p-AI-TAt" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="60" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="80" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="MVi-Ha-kOE"/>
+                                                            <constraint firstAttribute="height" constant="40" id="MVi-Ha-kOE"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="clock" title="Account activity"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="clock" title="Account activity" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LJd-pP-0wN" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="90" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="120" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="3SW-wM-lGI"/>
+                                                            <constraint firstAttribute="height" constant="40" id="3SW-wM-lGI"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="link" title="Social link"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="link" title="Social link" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KT3-Bl-ukO" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="120" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="160" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="M4h-8V-DAH"/>
+                                                            <constraint firstAttribute="height" constant="40" id="M4h-8V-DAH"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="lock" title="Block accounts"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="lock" title="Block accounts" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3N-fr-Ry2" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="150" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="200" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="sn8-fs-7hB"/>
+                                                            <constraint firstAttribute="height" constant="40" id="sn8-fs-7hB"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="call" title="Contact us"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="call" title="Contact us" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wx0-kI-Yna" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="180" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="240" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="nTB-x1-89n"/>
+                                                            <constraint firstAttribute="height" constant="40" id="nTB-x1-89n"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="file" title="Term of Services"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="file" title="Term of Services" imagePadding="10"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CZ4-93-5UE" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="210" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="280" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="NHE-fo-PuR"/>
+                                                            <constraint firstAttribute="height" constant="40" id="NHE-fo-PuR"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" title="About us"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HXp-PI-Fgg" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="240" width="300" height="30"/>
+                                                        <rect key="frame" x="0.0" y="320" width="300" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="OrP-23-eV8"/>
+                                                            <constraint firstAttribute="height" constant="40" id="OrP-23-eV8"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" image="logout" title="Logout"/>
@@ -593,6 +593,9 @@
                             <constraint firstItem="Ev4-ye-Ch6" firstAttribute="centerX" secondItem="TI1-Hx-BUo" secondAttribute="centerX" id="0jA-Ci-O96"/>
                             <constraint firstItem="Ev4-ye-Ch6" firstAttribute="top" secondItem="Icr-ZQ-wP1" secondAttribute="top" id="ua9-uR-ifC"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <navigationItem key="navigationItem" id="ssg-za-I02"/>
                 </viewController>
@@ -603,49 +606,49 @@
     </scenes>
     <designables>
         <designable name="4go-h1-QJJ">
-            <size key="intrinsicContentSize" width="142" height="42"/>
+            <size key="intrinsicContentSize" width="152" height="42"/>
         </designable>
         <designable name="5fN-Rc-NRW">
-            <size key="intrinsicContentSize" width="134" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="144" height="34.333333333333336"/>
         </designable>
         <designable name="CZ4-93-5UE">
             <size key="intrinsicContentSize" width="92.333333333333329" height="34.333333333333336"/>
         </designable>
         <designable name="FOI-cM-P0o">
-            <size key="intrinsicContentSize" width="152" height="40"/>
+            <size key="intrinsicContentSize" width="162" height="40"/>
         </designable>
         <designable name="H2p-AI-TAt">
-            <size key="intrinsicContentSize" width="170.33333333333334" height="38"/>
+            <size key="intrinsicContentSize" width="180.33333333333334" height="38"/>
         </designable>
         <designable name="HXp-PI-Fgg">
             <size key="intrinsicContentSize" width="101.33333333333333" height="38"/>
         </designable>
         <designable name="J3i-nB-Li5">
-            <size key="intrinsicContentSize" width="130.66666666666666" height="39"/>
+            <size key="intrinsicContentSize" width="140.66666666666666" height="39"/>
         </designable>
         <designable name="KT3-Bl-ukO">
-            <size key="intrinsicContentSize" width="165.33333333333334" height="39"/>
+            <size key="intrinsicContentSize" width="175.33333333333334" height="39"/>
         </designable>
         <designable name="L3N-fr-Ry2">
-            <size key="intrinsicContentSize" width="126" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="136" height="34.333333333333336"/>
         </designable>
         <designable name="LJd-pP-0wN">
-            <size key="intrinsicContentSize" width="125" height="39"/>
+            <size key="intrinsicContentSize" width="135" height="39"/>
         </designable>
         <designable name="PdQ-TC-Ctu">
-            <size key="intrinsicContentSize" width="172.33333333333334" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="182.33333333333334" height="34.333333333333336"/>
         </designable>
         <designable name="Wx0-kI-Yna">
-            <size key="intrinsicContentSize" width="177" height="39"/>
+            <size key="intrinsicContentSize" width="187" height="39"/>
         </designable>
         <designable name="b4Z-Wg-wyP">
-            <size key="intrinsicContentSize" width="203" height="44"/>
+            <size key="intrinsicContentSize" width="213" height="44"/>
         </designable>
         <designable name="nbB-c6-ceP">
-            <size key="intrinsicContentSize" width="100" height="39"/>
+            <size key="intrinsicContentSize" width="110" height="39"/>
         </designable>
         <designable name="v4L-i8-m8u">
-            <size key="intrinsicContentSize" width="172" height="35"/>
+            <size key="intrinsicContentSize" width="182" height="35"/>
         </designable>
     </designables>
     <resources>
@@ -672,10 +675,13 @@
         <image name="user.filled" width="27" height="28"/>
         <image name="users" width="26" height="26"/>
         <namedColor name="Background">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="TabBarColor">
             <color red="0.20784313725490197" green="0.17647058823529413" blue="0.4392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Text">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

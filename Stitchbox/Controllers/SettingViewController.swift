@@ -23,7 +23,6 @@ class SettingViewController: UIViewController, ControllerType {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         bindUI(with: viewModel)
         bindAction(with: viewModel)
     }
