@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         
         sendbird_authentication()
-        syncSendbircAccount()
+        syncSendbirdAccount()
         attemptRegisterForNotifications(application: application)
         setupStyle()
         return true
@@ -43,9 +43,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func setupStyle() {
         
         SBUTheme.set(theme: .dark)
-        SBUTheme.channelListTheme.navigationBarTintColor = UIColor(red: 40, green: 42, blue: 48, alpha: 1.0)
-        SBUTheme.channelTheme.navigationBarTintColor = UIColor(red: 40, green: 42, blue: 48, alpha: 1.0)
-        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor(red: 40, green: 42, blue: 48, alpha: 1.0)
+        SBUTheme.channelListTheme.navigationBarTintColor = UIColor.background
+        SBUTheme.channelTheme.navigationBarTintColor = UIColor.background
+        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.background
         
         //SBUStringSet.Empty_No_Channels = "No messages"
         SBUStringSet.User_No_Name = "Stitchbox user"
@@ -93,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func sendbird_authentication() {
         
-        SBDMain.initWithApplicationId(sendbird_key, useCaching: true) {
+        SBDMain.initWithApplicationId(sendbird_key, useCaching: false) {
             print("initWithApplicationId: \(sendbird_key)")
         }
         

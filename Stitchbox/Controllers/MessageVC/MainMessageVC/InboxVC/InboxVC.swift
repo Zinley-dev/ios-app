@@ -54,7 +54,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: #selector(InboxVC.refreshChannelList), for: .valueChanged)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(InboxVC.addHideChannel), name: (NSNotification.Name(rawValue: "addHideChannel")), object: nil)
         
     }
     
@@ -341,7 +341,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     }
                 }
                 else {
-                    cell.lastMessageLabel.text = "System: message is created"
+                    cell.lastMessageLabel.text = "System: The message is created"
                 }
             }
             
@@ -1038,6 +1038,30 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         }
         
      
+        
+    }
+    
+    @objc func addHideChannel() {
+        
+        if hideChannelToadd != nil {
+            
+            DispatchQueue.main.async {
+                if self.channels.firstIndex(of: hideChannelToadd!) == nil {
+                    
+                    self.channels.insert(hideChannelToadd!, at: 0)
+                    self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                   
+                    
+                    
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+
         
     }
     

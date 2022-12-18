@@ -2,6 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need your permission to change your avatar profile or send image from your library in message</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone access is needed so you can record video with sound and calling feature</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Stitchbox require location to provide more precise result</string>
+	<key>NSContactsUsageDescription</key>
+	<string>We need your contact to find out your friends on our platform and invite new users.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need your permission to change your avatar profile, send image from your library in message or record your highlight moments.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>We need your permission to change your avatar profile or send image from your library in message or pick highlight from your library</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

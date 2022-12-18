@@ -11,7 +11,7 @@ import SendBirdCalls
 import SendBirdUIKit
 import UIKit
 
-func syncSendbircAccount() {
+func syncSendbirdAccount() {
     
     if _AppCoreData.userSession.value != nil {
         
@@ -99,7 +99,7 @@ func syncSendbircAccount() {
      
                     }
                     
-                    SBDMain.setChannelInvitationPreferenceAutoAccept(false, completionHandler: { (error) in
+                    SBDMain.setChannelInvitationPreferenceAutoAccept(true, completionHandler: { (error) in
                         guard error == nil else {
                             // Handle error.
                             print("Senbird Invites: \(error!.localizedDescription)")
