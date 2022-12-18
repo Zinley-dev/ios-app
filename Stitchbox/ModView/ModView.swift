@@ -349,15 +349,6 @@ extension UITextField {
 }
 
 
-
-var pixel_key = "ZFZ7ImsiOiJve3NvYDZKJFY7SjlON01dMWJBIiwidiI6ImY4RkRqIiwiaSI6IjUzIn1yTWZ1"
-var env_key = "v9s48ds44jmrgnqgmp666jcpe"
-var applicationKey = "2c3ccae1-c080-467b-b989-d1d70aaf159c"
-var twApiKey = "4ob6dNOQJPIjz9DQtCiLcD8VY"
-var twSecretKey = "mGTOy20I2fhrvvkGsNIRJwKKY7TCywJbrjuaEJexzVrfKeJyqQ"
-var should_Play = false
-var login_type = ""
-
 extension UIView
 {
     func fixInView(_ container: UIView!) -> Void{

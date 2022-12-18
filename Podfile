@@ -34,6 +34,12 @@ target 'Stitchbox' do
   pod 'SendBirdCalls', '~> 1.9.7'
   
   
+  # Image SDK
+  pod 'FLAnimatedImage', '~> 1.0'
+  pod 'RSKImageCropper'
+  pod 'NYTPhotoViewer', '~> 1.1.0'
+  pod 'AlamofireImage'
+  
   target 'StitchboxTests' do
     inherit! :search_paths
     # Pods for testing

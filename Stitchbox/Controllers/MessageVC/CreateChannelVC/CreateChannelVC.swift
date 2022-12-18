@@ -19,8 +19,8 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     @IBOutlet weak var selectedUserListHeight: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     
-    
     var searchController: UISearchController?
+    var testUserList: [SBUUser] = [SBUUser(userId: "639e6786ab2572f58918d2e5", nickname: "test01", profileUrl: "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"), SBUUser(userId: "639e674eab2572f58918d2e2", nickname: "kai1004pro", profileUrl: "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"), SBUUser(userId: "6399411fc499cc35d651ec04", nickname: "hoangnm", profileUrl: "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png")]
     var userList: [SBUUser] = []
     var searchUserList: [SBUUser] = []
     
@@ -34,8 +34,6 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     private lazy var leftBarButton: UIBarButtonItem? = _leftBarButton
     private lazy var rightBarButton: UIBarButtonItem? = _rightBarButton
     
-    
-   
     private lazy var _titleView: UILabel = {
         var titleView = UILabel()
         titleView.backgroundColor = UIColor.clear
@@ -78,6 +76,36 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         setupCollectionView()
         setupScrollView()
         setupStyles()
+        
+        
+        //
+        
+        loadUsers()
+        
+    }
+    
+    func loadUsers() {
+        
+        
+        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
+            
+            for user in testUserList {
+                
+                if user.userId != userUID {
+                    
+                    self.userList.append(user)
+                    
+                }
+                
+            }
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            
+        }
+        
+
         
     }
     
@@ -244,7 +272,6 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
                 
             }
           
-            
         } else {
             
             user = userList[indexPath.row]
@@ -254,7 +281,6 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
         var cell: UITableViewCell? = nil
         cell = tableView.dequeueReusableCell(withIdentifier: SBUUserCell.sbu_className)
-
         cell?.selectionStyle = .none
 
         if let defaultCell = cell as? SBUUserCell {
@@ -263,6 +289,12 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
                 user: user!,
                 isChecked: self.selectedUsers.contains(user!)
             )
+            
+            defaultCell.theme = .dark
+            
+            defaultCell.contentView.backgroundColor = self.view.backgroundColor
+            
+           
         }
         
         return cell ?? UITableViewCell()
@@ -311,8 +343,6 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
             }
             
         }
-        
-        
         
        
         if self.selectedUsers.count == 0 {
@@ -425,6 +455,79 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     
    @objc func createChannel() {
 
+       
+       if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
+           
+           
+          if selectedUsers.count != 0 {
+              
+              let channelParams = SBDGroupChannelParams()
+              channelParams.isDistinct = true
+              for item in selectedUsers {
+                  channelParams.addUserId(item.userId)
+              }
+              
+              if selectedUsers.count > 1 {
+                  channelParams.operatorUserIds = [userUID]
+              }
+              
+              channelParams.addUserId(userUID)
+              
+              
+              SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
+                  guard error == nil else {
+                      // Handle error.
+                      self.showErrorAlert("Oops!", msg: error!.localizedDescription)
+                      return
+                  }
+                  
+                  let channelUrl = groupChannel?.channelUrl
+                  
+                  if self.selectedUsers.count == 1 {
+                      let user = self.selectedUsers[0]
+                      //addToAvailableChatList(uid: [user.userId])
+                      
+                      //self.checkIfHidden(uid: user.userId, channelUrl: channelUrl!, channel: groupChannel!)
+                      
+                      
+                  } else {
+                      
+                      
+                      var user_list = [String]()
+                     
+                      
+                      for user in self.selectedUsers {
+                          
+                          if !user_list.contains(user.userId) {
+                              user_list.append(user.userId)
+                          }
+                          
+                      }
+                      
+                      self.hideForSelectedUser(channelUrl: channelUrl!, user_list: user_list, channel: groupChannel!)
+                      
+    
+     
+                  }
+                  
+                  
+                 
+                  
+                  let channelVC = ChannelViewController(
+                      channelUrl: channelUrl!,
+                      messageListParams: nil
+                  )
+                  
+                 
+                  self.navigationController?.pushViewController(channelVC, animated: true)
+                  self.navigationController?.viewControllers.remove(at: 1)
+      
+              }
+      
+          }
+           
+           
+       }
         
    
     }

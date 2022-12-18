@@ -12,10 +12,11 @@ import FBSDKCoreKit
 import SendBirdSDK
 import SendBirdCalls
 import PushKit
-
+import UserNotifications
+import SendBirdUIKit
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, SBDChannelDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
     
     
     var voipRegistry: PKPushRegistry?
@@ -34,8 +35,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SBDChannelDelegate {
         
         sendbird_authentication()
         syncSendbircAccount()
-        
+        attemptRegisterForNotifications(application: application)
+        setupStyle()
         return true
+    }
+    
+    func setupStyle() {
+        
+        SBUTheme.set(theme: .dark)
+        SBUTheme.channelListTheme.navigationBarTintColor = UIColor(red: 40, green: 42, blue: 48, alpha: 1.0)
+        SBUTheme.channelTheme.navigationBarTintColor = UIColor(red: 40, green: 42, blue: 48, alpha: 1.0)
+        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor(red: 40, green: 42, blue: 48, alpha: 1.0)
+        
+        //SBUStringSet.Empty_No_Channels = "No messages"
+        SBUStringSet.User_No_Name = "Stitchbox user"
+        SBUStringSet.User_Operator = "Leader"
+        
+        //
+        SBUGlobals.UsingImageCompression = true
+        SBUGlobals.imageCompressionRate = 0.65
+        SBUGlobals.imageResizingSize = CGSize(width: 480, height: 480)
+        
+        
     }
 
     // MARK: UISceneSession Lifecycle
@@ -73,7 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SBDChannelDelegate {
     func sendbird_authentication() {
         
         SBDMain.initWithApplicationId(sendbird_key, useCaching: true) {
-            print("initWithApplicationId")
+            print("initWithApplicationId: \(sendbird_key)")
         }
         
         SendBirdCall.configure(appId: sendbird_key)
@@ -83,6 +104,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SBDChannelDelegate {
         SBDMain.add(self as SBDChannelDelegate, identifier: self.description)
         
     }
+    
+    private func attemptRegisterForNotifications(application: UIApplication) {
+        print("Attempting to register APNS...")
+      
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self
+            // user notifications auth
+            // all of this works for iOS 10+
+            let options: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(options: options) { (granted, err) in
+                if let err = err {
+                    print("Failed to request auth:", err)
+                    return
+                }
+                
+                if granted {
+                    print("Auth granted.")
+                  
+                } else {
+                    print("Auth denied")
+                }
+            }
+        } else {
+            
+            let notificationSettings = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil)
+            application.registerUserNotificationSettings(notificationSettings)
+            
+            
+        }
+        
+ 
+        application.registerForRemoteNotifications()
+       
+       
+    }
+    
+   
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
+    
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         print("Registered for notifications:", deviceToken)

@@ -9,9 +9,11 @@ import UIKit
 import SendBirdSDK
 import SendBirdCalls
 
+var oldTabbarFr: CGRect = .zero
 
 class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate {
 
+    @IBOutlet weak var BtnWidthConstants: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var requestBtn: UIButton!
     @IBOutlet weak var inboxBtn: UIButton!
@@ -65,7 +67,19 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         InboxVC.view.isHidden = false
         RequestVC.view.isHidden = true
+        oldTabbarFr = self.tabBarController?.tabBar.frame ?? .zero
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        BtnWidthConstants.constant = self.view.bounds.width * (200/414)
+        
+        self.tabBarController?.tabBar.isHidden = false
+        self.tabBarController?.tabBar.frame = oldTabbarFr
+        
+     
     }
     
     

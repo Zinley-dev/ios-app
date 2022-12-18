@@ -16,7 +16,7 @@ func syncSendbircAccount() {
     if _AppCoreData.userSession.value != nil {
         
         
-        if let userUID = _AppCoreData.userDataSource.value?.userID {
+        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
             
             var loadUsername = ""
             
@@ -30,9 +30,7 @@ func syncSendbircAccount() {
                 
                 
             }
-            
-            print(userUID, loadUsername)
-            
+          
             if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL {
                 
                 SBUGlobals.CurrentUser = SBUUser(userId: userUID, nickname: loadUsername, profileUrl: avatarUrl)
@@ -79,6 +77,8 @@ func syncSendbircAccount() {
                                 print("APNS Token is registered.")
                             }
                         })
+                    } else {
+                        
                     }
                     
                     
@@ -193,3 +193,6 @@ func sendbirdLogout() {
     }
     
 }
+
+///////
+
