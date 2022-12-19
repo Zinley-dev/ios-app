@@ -134,7 +134,7 @@ class ChannelViewController: SBUChannelViewController {
         if let url = channel?.channelUrl {
             
             if general_room == nil {
-                checkIfRoomForChanelUrl(ChanelUrl: url)
+                checkIfRoomForChanelUrl(chanelUrl: url)
             } else {
                 
                 if gereral_group_chanel_url != url {
@@ -147,7 +147,7 @@ class ChannelViewController: SBUChannelViewController {
                         
                         // participant has exited the room successfully.
                         
-                        checkIfRoomForChanelUrl(ChanelUrl: url)
+                        checkIfRoomForChanelUrl(chanelUrl: url)
                         
                     } catch {
                         
@@ -186,15 +186,35 @@ class ChannelViewController: SBUChannelViewController {
     }
     
     
-    func checkIfRoomForChanelUrl(ChanelUrl: String) {
+    func checkIfRoomForChanelUrl(chanelUrl: String) {
         
-        let roomType = RoomType.largeRoomForAudioOnly
-        let params = RoomParams(roomType: roomType)
+        APIManager().roomIDRequest(channelUrl: chanelUrl) { result in switch result {
+            
+        case .success(let apiResponse):
+            
+            if (apiResponse.body?["message"] as! String == "success") {
+                
+                if let data = apiResponse.body?["data"] as! [String: Any]? {
+                    
+                    print(data)
+                    
+                } else {
+                    
+                    print("Can't extract data")
+                    
+                }
+                
+            }
+            
+        case .failure(let error):
+            
+            print(error)
+            
+        }
         
-        
+            
+        }
         
     }
-
-   
 
 }

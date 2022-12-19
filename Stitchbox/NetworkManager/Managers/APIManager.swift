@@ -48,5 +48,14 @@ struct APIManager {
         }
     }
     
+    func roomIDRequest(channelUrl: String, completion: @escaping APICompletion) {
+        let params = ["channel": channelUrl]
+        manager.request(.roomIDRequest(params: params)) { result in
+            completion(result)
+        }
+    }
+    
+    
+    
 }
 
