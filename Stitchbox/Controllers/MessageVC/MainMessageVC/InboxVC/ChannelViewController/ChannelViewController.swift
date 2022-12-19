@@ -107,31 +107,14 @@ class ChannelViewController: SBUChannelViewController {
         
     }
     
-    /*
-    override func sendUserMessage(messageParams: SBDUserMessageParams, parentMessage: SBDBaseMessage? = nil) {
-        
-        sendTextMessage(messageParams: messageParams)
-        
-    }*/
-    
-    /*
-    override func sendFileMessage(fileData: Data?, fileName: String, mimeType: String) {
-        
-        
-        sendMediaMess(fileData: fileData, fileName: fileName, mimeType: mimeType)
-      
-        
-    }*/
-    
     
     func showChannelSetting(_ sender: AnyObject) {
        
         if let selected_channel = channel {
             
-            /*
             let CSV = ChannelSettingsVC(channelUrl: selected_channel.channelUrl)
             navigationController?.pushViewController(CSV, animated: true)
-            */
+            
         }
         
         
@@ -147,6 +130,66 @@ class ChannelViewController: SBUChannelViewController {
     
     
     func preProcessGroupCall() {
+        
+        if let url = channel?.channelUrl {
+            
+            if general_room == nil {
+                checkIfRoomForChanelUrl(ChanelUrl: url)
+            } else {
+                
+                if gereral_group_chanel_url != url {
+                    
+                    do {
+                        try general_room!.exit()
+                        general_room?.removeAllDelegates()
+                        general_room = nil
+                        gereral_group_chanel_url = nil
+                        
+                        // participant has exited the room successfully.
+                        
+                        checkIfRoomForChanelUrl(ChanelUrl: url)
+                        
+                    } catch {
+                        
+                        self.presentErrorAlert(message: "Multiple call at once error!")
+                        // SBCError.participantNotInRoom is thrown because participant has not entered the room.
+                    }
+                               
+                    
+                } else {
+                    
+                    
+                    if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "GroupCallViewController") as? GroupCallViewController {
+        
+                        controller.currentRoom = general_room
+                        controller.newroom = false
+                        controller.currentChanelUrl = url
+                        
+                        controller.modalPresentationStyle = .fullScreen
+                        self.present(controller, animated: true, completion: nil)
+                        
+                    }
+                    
+                    
+                }
+                
+            }
+            
+            
+            
+        } else {
+            
+            self.presentErrorAlert(message: "Can't join call")
+            
+        }
+        
+    }
+    
+    
+    func checkIfRoomForChanelUrl(ChanelUrl: String) {
+        
+        let roomType = RoomType.largeRoomForAudioOnly
+        let params = RoomParams(roomType: roomType)
         
         
         
