@@ -1108,10 +1108,10 @@
                                 <rect key="frame" x="0.0" y="497" width="390" height="347"/>
                                 <edgeInsets key="layoutMargins" top="0.0" left="8" bottom="0.0" right="0.0"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="yxE-7Z-GvA">
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="yxE-7Z-GvA">
                                 <rect key="frame" x="-132.66666666666666" y="326.66666666666669" width="655.33333333333337" height="110"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kSv-s1-Lz4" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
+                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kSv-s1-Lz4" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="655.33333333333337" height="110"/>
                                     </stackView>
                                 </subviews>

@@ -434,16 +434,25 @@
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="79"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="Add 2" imagePlacement="leading" title="Button" imagePadding="11" titleAlignment="trailing"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aKE-px-xsz" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="79" width="300" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2MZ-hc-eRg" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="113.5" width="300" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6qC-xn-G04" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="148" width="300" height="34.5"/>
@@ -454,6 +463,9 @@
                                         <rect key="frame" x="0.0" y="182.5" width="300" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cgn-xV-IH2" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="217" width="300" height="34.5"/>
