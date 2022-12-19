@@ -25,6 +25,7 @@ class SettingViewController: UIViewController, ControllerType {
         super.viewDidLoad()
         bindUI(with: viewModel)
         bindAction(with: viewModel)
+        setUpNavigationBar()
     }
     // MARK: - Functions
     func bindUI(with viewModel: SettingViewModel) {
@@ -34,6 +35,8 @@ class SettingViewController: UIViewController, ControllerType {
     func bindAction(with viewModel: SettingViewModel) {
         
     }
+    
+    
 }
 
 
@@ -63,3 +66,15 @@ struct SettingSwitchingView_Preview: PreviewProvider {
     }
 }
 #endif
+
+extension UIViewController {
+    func setUpNavigationBar() {
+        navigationController?.navigationBar.tintColor = .text
+        let imgBackArrow = UIImage(named: "dropdownleft")
+        navigationController?.navigationBar.backIndicatorImage = imgBackArrow
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = imgBackArrow
+        navigationController?.navigationBar.topItem?.title = ""
+
+
+    }
+}
