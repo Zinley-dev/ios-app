@@ -818,9 +818,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             
             guard needReload else { return }
             
-           
-            //self.groupChannelsTableView.reloadData()
             self.groupChannelsTableView.reloadSections([0], with: .automatic)
+           
         }
         
     }
@@ -1116,8 +1115,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             
         }
         
- 
-        
     }
     
     func channelWasHidden(_ sender: SBDGroupChannel) {
@@ -1133,11 +1130,17 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         //self.loadHideChannelList()
         
     }
-   
+    
+
     func channelWasChanged(_ sender: SBDBaseChannel) {
        
         //guard let channel = sender as? SBDGroupChannel else { return }
-        self.sortChannelList(needReload: true)
+        guard let channel = sender as? SBDGroupChannel else { return }
+        DispatchQueue.main.async {
+            if let index = self.channels.firstIndex(of: channel as SBDGroupChannel) {
+                self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+            }
+        }
        
     }
     

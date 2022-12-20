@@ -44,8 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         SBUTheme.set(theme: .dark)
         SBUTheme.channelListTheme.navigationBarTintColor = UIColor.background
-        SBUTheme.channelTheme.navigationBarTintColor = UIColor.background
-        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.background
+        
         
         //SBUStringSet.Empty_No_Channels = "No messages"
         SBUStringSet.User_No_Name = "Stitchbox user"
@@ -55,8 +54,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUGlobals.UsingImageCompression = true
         SBUGlobals.imageCompressionRate = 0.65
         SBUGlobals.imageResizingSize = CGSize(width: 480, height: 480)
+        SBUTheme.componentTheme.barItemTintColor = UIColor.white
         
         
+        SBUTheme.messageCellTheme.leftBackgroundColor = UIColor.darkGray
+        SBUTheme.messageCellTheme.rightBackgroundColor = UIColor.primary
+        SBUTheme.messageCellTheme.userMessageLeftTextColor = UIColor.white
+        SBUTheme.messageCellTheme.userMessageRightTextColor = UIColor.white
+        SBUTheme.messageCellTheme.userMessageLeftEditTextColor = UIColor.white
+        SBUTheme.messageCellTheme.userMessageRightEditTextColor = UIColor.white
+        SBUTheme.messageInputTheme.backgroundColor = UIColor.black
+        SBUTheme.messageInputTheme.buttonTintColor = UIColor.white
+        
+        
+        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.background
+        SBUTheme.channelSettingsTheme.rightBarButtonTintColor = UIColor.white
+        SBUTheme.channelSettingsTheme.leftBarButtonTintColor = UIColor.white
+        SBUTheme.channelSettingsTheme.cellArrowIconTintColor = UIColor.white
+        SBUTheme.channelSettingsTheme.cellSwitchColor = UIColor.secondary
+        SBUTheme.channelSettingsTheme.cellTypeIconTintColor = UIColor.white
+        SBUTheme.channelSettingsTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        
+        SBUTheme.userListTheme.rightBarButtonTintColor = UIColor.white
+        SBUTheme.userListTheme.leftBarButtonTintColor = UIColor.white
+        SBUTheme.userListTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        
+        SBUTheme.channelTheme.navigationBarTintColor = UIColor.background
+        SBUTheme.channelTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        
+        SBUTheme.channelTheme.leftBarButtonTintColor = UIColor.white
+        SBUTheme.channelTheme.rightBarButtonTintColor = UIColor.white
+       
     }
 
     // MARK: UISceneSession Lifecycle

@@ -24,6 +24,7 @@ enum Result {
 
 struct APIManager {
     let manager = Manager<UserApi>()
+    let SBmanager = Manager<ChatApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -49,10 +50,20 @@ struct APIManager {
     }
     
     func roomIDRequest(channelUrl: String, completion: @escaping APICompletion) {
-        let params = ["channel": channelUrl]
-        manager.request(.roomIDRequest(params: params)) { result in
-            completion(result)
+        
+        if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
+            
+            let params = ["channel": channelUrl]
+            let headers = ["Authorization": userToken]
+            SBmanager.request(.roomIDRequest(params: params, additionHeaders: headers)) { result in
+                completion(result)
+            }
+            
+        } else {
+            print("Can't get token for authentication request")
         }
+            
+        
     }
     
     

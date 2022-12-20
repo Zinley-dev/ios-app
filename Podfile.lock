@@ -130,6 +130,7 @@ PODS:
     - PINCache (~> 3.0.3)
     - PINRemoteImage/Core
   - PromisesObjC (2.1.1)
+  - QuickLayout (3.0.0)
   - RSKImageCropper (3.0.2)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
@@ -143,6 +144,8 @@ PODS:
   - SendBirdUIKit (2.2.9):
     - SendBirdSDK (>= 3.1.13)
   - SendBirdWebRTC (1.6.0)
+  - SwiftEntryKit (1.2.6):
+    - QuickLayout (= 3.0.0)
   - SwiftLint (0.50.3)
   - Texture (3.1.0):
     - Texture/AssetsLibrary (= 3.1.0)
@@ -185,6 +188,7 @@ DEPENDENCIES:
   - SendBirdCalls (~> 1.9.7)
   - SendBirdSDK (~> 3.1.37)
   - SendBirdUIKit (= 2.2.9)
+  - SwiftEntryKit (= 1.2.6)
   - SwiftLint (~> 0.50.3)
   - Texture (~> 3.1.0)
   - TikTokOpenSDK (~> 5.0.14)
@@ -219,6 +223,7 @@ SPEC REPOS:
     - PINOperation
     - PINRemoteImage
     - PromisesObjC
+    - QuickLayout
     - RSKImageCropper
     - RxCocoa
     - RxRelay
@@ -227,6 +232,7 @@ SPEC REPOS:
     - SendBirdSDK
     - SendBirdUIKit
     - SendBirdWebRTC
+    - SwiftEntryKit
     - SwiftLint
     - Texture
     - TikTokOpenSDK
@@ -260,6 +266,7 @@ SPEC CHECKSUMS:
   PINOperation: daa34d4aa1d8449089be7d405b9d974abc4724c6
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  QuickLayout: 07b45a72b10083fee3f095990cfed1c1e7b27f0a
   RSKImageCropper: 1ac71e9a82e3f41eea3eedfff8eacb0d3821c9ec
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -268,10 +275,11 @@ SPEC CHECKSUMS:
   SendBirdSDK: 7d9c96803fdfd0537e83f0e394b472d844147a0c
   SendBirdUIKit: 672887bc69cf53fa8af6ef74d3c083b6199847b8
   SendBirdWebRTC: 6bbdbda7aa2f9c3f2cbedacd3e53b9536e2ac8ac
+  SwiftEntryKit: 96a2fa90b2631bbbfac50d18449e9ca3d0635f13
   SwiftLint: 77f7cb2b9bb81ab4a12fcc86448ba3f11afa50c6
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
   TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
 
-PODFILE CHECKSUM: fc7b99e797abe5a40bf308ba0ac84ad45e27a551
+PODFILE CHECKSUM: 51369dde07173e69d707e1696bab179e8c5b4c11
 
 COCOAPODS: 1.11.3

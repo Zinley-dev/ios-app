@@ -67,7 +67,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iS4-3u-FW6">
-                                <rect key="frame" x="171" y="433.5" width="72.5" height="29"/>
+                                <rect key="frame" x="170.5" y="433.5" width="73" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -766,7 +766,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="9c2-5g-KQU"/>
-                        <color key="backgroundColor" name="Background"/>
+                        <color key="backgroundColor" red="0.22745098039215686" green="0.2352387309" blue="0.25186070799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dyc-wI-ge0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -787,6 +787,9 @@
                                     <constraint firstAttribute="height" constant="60" id="SNc-Qf-gS6"/>
                                     <constraint firstAttribute="width" constant="72" id="nFI-gd-I5c"/>
                                 </constraints>
+                                <connections>
+                                    <action selector="back1BtnPressed:" destination="m7q-To-Va9" eventType="touchUpInside" id="O9d-n6-RU3"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HlJ-zK-3ld">
                                 <rect key="frame" x="16" y="73" width="20" height="20"/>
@@ -795,6 +798,9 @@
                                     <constraint firstAttribute="width" constant="20" id="r2U-Z7-GWD"/>
                                 </constraints>
                                 <state key="normal" image="back_icn_white"/>
+                                <connections>
+                                    <action selector="back2BtnPressed:" destination="m7q-To-Va9" eventType="touchUpInside" id="9iA-cc-HBV"/>
+                                </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="vMb-QV-cRp">
                                 <rect key="frame" x="256" y="63" width="142" height="40"/>
@@ -831,6 +837,9 @@
                                         <state key="normal" backgroundImage="btnCallEnd">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didTapEnd" destination="m7q-To-Va9" eventType="touchUpInside" id="cRk-cc-JkN"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -856,9 +865,9 @@
                     </view>
                     <connections>
                         <outlet property="contentView" destination="8TE-CX-HdF" id="xdo-1Z-U7O"/>
-                        <outlet property="endButton" destination="wyu-dq-nHy" id="Oy2-q1-nAT"/>
-                        <outlet property="muteAudioButton" destination="3GP-AZ-FWt" id="aF6-cL-oKd"/>
-                        <outlet property="speakerButton" destination="MGP-X7-uk5" id="dg7-zt-5Ua"/>
+                        <outlet property="endButton" destination="wyu-dq-nHy" id="phx-wE-cEX"/>
+                        <outlet property="muteAudioButton" destination="3GP-AZ-FWt" id="3IA-Qw-YcG"/>
+                        <outlet property="speakerButton" destination="MGP-X7-uk5" id="Y9E-7m-oBH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xHj-e6-2Uy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

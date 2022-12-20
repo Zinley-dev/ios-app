@@ -40,6 +40,9 @@ target 'Stitchbox' do
   pod 'NYTPhotoViewer', '~> 1.1.0'
   pod 'AlamofireImage'
   
+  # animation note
+  pod 'SwiftEntryKit', '1.2.6'
+  
   target 'StitchboxTests' do
     inherit! :search_paths
     # Pods for testing

@@ -28,7 +28,6 @@ public enum UserApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
     case phoneverify (params: [String:String])
-    case roomIDRequest (params: [String:String])
 }
 extension UserApi: EndPointType {
     var module: String {
@@ -39,8 +38,6 @@ extension UserApi: EndPointType {
             return "/auth"
         case .phoneverify:
             return "/auth"
-        case .roomIDRequest:
-            return "/chat"
         }
     }
     
@@ -52,8 +49,6 @@ extension UserApi: EndPointType {
             return "/phone-login"
         case .phoneverify:
             return "/phone-verify"
-        case .roomIDRequest:
-            return "/call"
         }
     }
     
@@ -64,8 +59,6 @@ extension UserApi: EndPointType {
         case .phonelogin:
             return .post
         case .phoneverify:
-            return .post
-        case .roomIDRequest:
             return .post
         }
     }
@@ -78,8 +71,6 @@ extension UserApi: EndPointType {
             return .requestParameters(parameters: params)
         case .phoneverify(let params):
             return .requestParameters(parameters: params)
-        case .roomIDRequest(let params):
-            return .requestParameters(parameters: params)
         }
     }
     
@@ -87,3 +78,44 @@ extension UserApi: EndPointType {
         return nil
     }
 }
+
+
+public enum ChatApi {
+    case roomIDRequest (params: [String:String], additionHeaders: [String:String])
+}
+
+extension ChatApi: EndPointType {
+
+    var module: String {
+        return "/chat"
+    }
+    
+    var path: String {
+        switch self {
+        case .roomIDRequest:
+            return "/call"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .roomIDRequest:
+            return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .roomIDRequest(let params, let headers):
+            return .requestParametersAndHeaders(bodyParameters: params, additionHeaders: headers)
+        }
+    }
+    
+    var headers: [String: String]? {
+        return nil
+    }
+    
+    
+}
+
+

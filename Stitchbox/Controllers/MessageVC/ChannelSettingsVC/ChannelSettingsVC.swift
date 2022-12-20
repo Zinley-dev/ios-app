@@ -9,12 +9,15 @@ import UIKit
 import SendBirdUIKit
 
 class ChannelSettingsVC: SBUChannelSettingsViewController {
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        navigationItem.titleView = createLeftTitleItem(text: "Information")
+        navigationItem.titleView = createLeftTitleItem(text: "Setting")
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
