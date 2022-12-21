@@ -92,17 +92,15 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
             let alert = UIAlertController(title: Utils.createGroupChannelName(channel: channel), message: nil, preferredStyle: .actionSheet)
             
             let actionLeave = UIAlertAction(title: "Leave message", style: .destructive) { (action) in
-                channel.leave(completionHandler: { (error) in
+                
+                channel.declineInvitation(completionHandler: { (error) in
                     if let error = error {
                         Utils.showAlertController(error: error, viewController: self)
                         return
                     }
-                    
-                    DispatchQueue.main.async {
-                        self.deleteChannels(channelUrls: [self.channels[indexPath.row].channelUrl], needReload: true)
-                    }
-                    
+      
                 })
+                
             }
             
             let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -168,148 +166,14 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
             cell.typingIndicatorContainerView.isHidden = true
             cell.notiOffIconImageView.isHidden = true
             
-            if channel.lastMessage != nil {
-                if channel.lastMessage is SBDUserMessage {
-                    let lastMessage = channel.lastMessage as! SBDUserMessage
-                    
-                    if channel.lastMessage?.sender?.userId == userUID {
-                        
-                        cell.lastMessageLabel.text = "You: \(lastMessage.message)"
-                        
-                    } else {
-                        
-                        if let nickname = channel.lastMessage?.sender?.nickname {
-                            
-                            cell.lastMessageLabel.text = "\(nickname): \(lastMessage.message)"
-                            
-                        }
-                        
-                        
-                        
-                    }
-                    
-                    
-                }
-                else if channel.lastMessage is SBDFileMessage {
-                    let lastMessage = channel.lastMessage as! SBDFileMessage
-                    if lastMessage.type.hasPrefix("image") {
-                        
-                        if channel.lastMessage?.sender?.userId == userUID {
-                            
-                            cell.lastMessageLabel.text = "You just sent an image"
-                            
-                        } else {
-                            
-                            if let nickname = channel.lastMessage?.sender?.nickname {
-                                
-                                if channel.memberCount == 2 {
-                                    
-                                    cell.lastMessageLabel.text = "just sent an image"
-                                    
-                                } else if channel.memberCount > 2 {
-                                    
-                                    cell.lastMessageLabel.text = "\(nickname): just sent an image"
-                                    
-                                    
-                                } else {
-                                    
-                                    
-                                    cell.lastMessageLabel.text = "\(nickname): just sent an image"
-                                    
-                                }
-                                
-                                
-                                
-                                
-                                
-                            }
-                            
-                            
-                            
-                        }
-                        
-                       
-                    }
-                    else if lastMessage.type.hasPrefix("video") {
-                        
-                        if channel.lastMessage?.sender?.userId == userUID {
-                            
-                            cell.lastMessageLabel.text = "You just sent a video"
-                            
-                        } else {
-                            
-                            if let nickname = channel.lastMessage?.sender?.nickname {
-                                
-                                
-                                if channel.memberCount == 2 {
-                                    
-                                    cell.lastMessageLabel.text = "just sent a video"
-                                    
-                                } else if channel.memberCount > 2 {
-                                    
-                                    cell.lastMessageLabel.text = "\(nickname): just sent a video"
-                                    
-                                    
-                                } else {
-                                    
-                                    
-                                    cell.lastMessageLabel.text = "\(nickname): just sent a video"
-                                    
-                                }
-                               
-                                
-                            }
-                            
-                            
-                            
-                        }
-                        
-                    }
-                    else if lastMessage.type.hasPrefix("audio") {
-                        
-                        if channel.lastMessage?.sender?.userId == userUID {
-                            
-
-                            cell.lastMessageLabel.text = "You just sent an audio"
-                            
-                        } else {
-                            
-                            if let nickname = channel.lastMessage?.sender?.nickname {
-                                
-                                
-                                if channel.memberCount == 2 {
-                                    
-                                    cell.lastMessageLabel.text = "just sent an audio"
-                                    
-                                } else if channel.memberCount > 2 {
-                                    
-                                    cell.lastMessageLabel.text = "\(nickname): just sent an audio"
-                                    
-                                    
-                                } else {
-                                    
-                                    
-                                    cell.lastMessageLabel.text = "\(nickname): just sent an audio"
-                                    
-                                }
-                               
-                                
-                            }
-                            
-                            
-                            
-                        }
-                        
-                    }
-                   
-                }
-                else if  channel.lastMessage is SBDAdminMessage{
-                    let lastMessage = channel.lastMessage as! SBDAdminMessage
-                    cell.lastMessageLabel.text = lastMessage.message
-                } else {
-                    cell.lastMessageLabel.text = "Message is hidden in request box"
-                }
+            
+            if let inviter = channel.getInviter()?.nickname {
+                
+                cell.lastMessageLabel.text = "You was invited to join by \(inviter)"
+                
             }
+            
+            
             else {
                 cell.lastMessageLabel.text = ""
             }
@@ -480,7 +344,6 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //performSegue(withIdentifier: "ShowGroupChat", sender: indexPath.row)
         
         let channel = self.channels[indexPath.row]
         let channelUrl = channel.channelUrl
@@ -503,18 +366,50 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                 let size = tableView.visibleCells[0].frame.height
                 let iconSize: CGFloat = 40.0
                 
+                let hideAction = UIContextualAction(
+                    style: .normal,
+                    title: ""
+                ) { action, view, actionHandler in
+                    
+                    if self.channels[indexPath.row].hiddenState != .unhidden {
+                        
+                        // write accept invitations here
+                        hideChannelToadd = self.channels[indexPath.row]
+                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "addHideChannel")), object: nil)
+                        
+                        self.deleteChannel(channel: self.channels[indexPath.row])
+                        
+                    }
+                    
+                    actionHandler(true)
+                }
+                
+                let hideTypeView = UIImageView(
+                    frame: CGRect(
+                        x: (size-iconSize)/2,
+                        y: (size-iconSize)/2,
+                        width: iconSize,
+                        height: iconSize
+                ))
+                hideTypeView.layer.cornerRadius = iconSize/2
+                hideTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOffBackgroundColor
+                hideTypeView.image = UIImage(named: "hide3x")
+                hideTypeView.contentMode = .center
+                
+                hideAction.image = hideTypeView.asImage()
+                hideAction.backgroundColor = UIColor.background
+                
                 let leaveAction = UIContextualAction(
                     style: .normal,
                     title: ""
                 ) { action, view, actionHandler in
                     
-                    self.channels[indexPath.row].leave(completionHandler: { (error) in
+                    self.channels[indexPath.row].declineInvitation(completionHandler: { (error) in
                         if let error = error {
                             Utils.showAlertController(error: error, viewController: self)
                             return
                         }
-                        
-                        
+                              
                     })
                     
                     actionHandler(true)
@@ -535,16 +430,10 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                 leaveAction.image = leaveTypeView.asImage()
                 leaveAction.backgroundColor = UIColor.background
                 
+                    
+                return UISwipeActionsConfiguration(actions: [leaveAction, hideAction])
                 
-                
-                
-                
-                return UISwipeActionsConfiguration(actions: [leaveAction])
-                
-                
-                
-                
-                
+                     
         }
     
     func tableView(_ tableView: UITableView,
@@ -572,7 +461,7 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         if self.channelListQuery == nil {
             self.channelListQuery = SBDGroupChannel.createMyGroupChannelListQuery()
             self.channelListQuery?.order = .latestLastMessage
-            self.channelListQuery?.channelHiddenStateFilter = .hiddenOnly
+            self.channelListQuery?.memberStateFilter = .stateFilterInvitedOnly
             self.channelListQuery?.limit = self.limit
             self.channelListQuery?.includeFrozenChannel = true
             self.channelListQuery?.includeEmptyChannel = true
@@ -721,29 +610,19 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         }
         
     }
-    
-    func channelWasHidden(_ sender: SBDGroupChannel) {
+
+    func channel(_ sender: SBDGroupChannel, didReceiveInvitation invitees: [SBDUser]?, inviter: SBDUser?) {
+        
         
         DispatchQueue.main.async {
-            if self.channels.firstIndex(of: sender) == nil {
-                
-                if self.channels.firstIndex(of: sender) == nil {
-                    
-                    self.channels.insert(sender, at: 0)
-                    self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-        
-                }
-                
-            } else {
-                
-                
-                if let index = self.channels.firstIndex(of: sender as SBDGroupChannel) {
-                    self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                }
-                
+            if self.channels.count == 50 {
+                self.channels.removeLast()
+                self.groupChannelsTableView.deleteRows(at: [IndexPath(row: 49, section: 0)], with: .automatic)
             }
-            
+            self.channels.insert(sender, at: 0)
+            self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
+        
         
     }
     

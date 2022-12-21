@@ -70,12 +70,11 @@ class RequestChannelVC: SBUChannelViewController {
                     
                     hideChannelToadd = channel
                     
-                    
-                    
+ 
                     NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "addHideChannel")), object: nil)
                     NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "removeHideChannel")), object: nil)
                     
-                    
+
                     channel.setMyPushTriggerOption(.all) { error in
                         if let error = error {
                             Utils.showAlertController(error: error, viewController: self)
@@ -86,11 +85,6 @@ class RequestChannelVC: SBUChannelViewController {
                     isUnHidden = true
                     
                 }
-                
-                
-                
-                
-                //
                 
                 
                 
@@ -134,6 +128,11 @@ class RequestChannelVC: SBUChannelViewController {
             
             if let channel = self.channel, self.channel?.creator?.userId != userUID {
                 
+                
+                
+                acceptInvitesRequest(channel: channel.channelUrl, userUID: userUID)
+                
+                /*
                 channel.acceptInvitation { error in
                     if let error = error {
                         Utils.showAlertController(error: error, viewController: self)
@@ -141,9 +140,7 @@ class RequestChannelVC: SBUChannelViewController {
                     }
                     
                     self.sendText(messageParams: messageParams)
-                }
-                
-                
+                }*/
                 
                 
             } else {
@@ -154,18 +151,56 @@ class RequestChannelVC: SBUChannelViewController {
             }
             
         }
+           
+    }
+    
+    
+    func acceptInvitesRequest(channel: String, userUID: String) {
         
+        if let inviterUID = self.channel?.getInviter()?.userId {
+            
+            if inviterUID == userUID {
+                
+                performAcceptAPIRequest(channel: channel, inviterUID: "", userUID: userUID)
+            
+            } else {
+                
+                performAcceptAPIRequest(channel: channel, inviterUID: inviterUID, userUID: userUID)
+                
+            }
+            
+        } else {
+            
+            performAcceptAPIRequest(channel: channel, inviterUID: "", userUID: userUID)
+        }
         
+    }
+    
+    func performAcceptAPIRequest(channel: String, inviterUID: String, userUID: String) {
         
+        APIManager().acceptSBInvitationRequest(user_id: inviterUID, channelUrl: channel) { result in
+            switch result {
+            case .success(let apiResponse):
+                // Check if the request was successful
+                guard apiResponse.body?["message"] as? String == "success",
+                    let data = apiResponse.body?["data"] as? [String: Any] else {
+                        return
+                }
+                
+                print(data)
+                
+               
+            case .failure(let error):
+                print(error)
+            }
+        }
         
     }
 
     
     func sendText(messageParams: SBDUserMessageParams) {
         
-        
         if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-            
             
             if self.channel?.isHidden == true {
                 

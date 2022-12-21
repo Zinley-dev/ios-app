@@ -15,23 +15,19 @@ struct SendBirdRoom : Codable {
 
     // MARK: - Properties
     var room_id: String
-    var state: String
     
     init(JSONbody: [String?: Any]?) throws {
         
-        
-        if let data = JSONbody!["room"] as? [String: Any] {
+        if let data = JSONbody {
             
-            self.room_id = data["room_id"] as? String ?? ""
-            self.state = data["state"] as? String ?? ""
+            self.room_id = data["room"] as? String ?? ""
             
         } else {
             
             self.room_id =  ""
-            self.state =  ""
-            
+           
         }
-       
+
    
     }
         

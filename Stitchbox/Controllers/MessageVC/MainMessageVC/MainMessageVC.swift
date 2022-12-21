@@ -61,13 +61,16 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         // Do any additional setup after loading the view.
         setupInboxBtn()
         settingUpLayoutNavView()
-        setupRightButtons()
+        checkCallForLayout()
         
         // default load for 2 child views
         
         InboxVC.view.isHidden = false
         RequestVC.view.isHidden = true
         oldTabbarFr = self.tabBarController?.tabBar.frame ?? .zero
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(MainMessageVC.checkCallForLayout), name: (NSNotification.Name(rawValue: "checkCallForLayout")), object: nil)
         
     }
     
@@ -79,9 +82,30 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         self.tabBarController?.tabBar.isHidden = false
         self.tabBarController?.tabBar.frame = oldTabbarFr
         
+        
+        checkCallForLayout()
      
     }
+
     
+    //
+     
+    @objc func checkCallForLayout() {
+        
+        if general_room != nil {
+            
+            
+            setupWithCall()
+            
+            
+        } else {
+            
+            setupWithoutCall()
+            
+        }
+        
+        
+    }
     
     // setting up navigation bar
     
@@ -112,8 +136,35 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         titleLabel.textColor = UIColor.white
         return UIBarButtonItem.init(customView: titleLabel)
     }
+        
     
-    func setupRightButtons() {
+    func setupWithCall() {
+        
+        // Do any additional setup after loading the view.
+        createButton.setImage(UIImage(named: "4x_add"), for: [])
+        createButton.addTarget(self, action: #selector(showCreateChannel(_:)), for: .touchUpInside)
+        createButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let createBarButton = UIBarButtonItem(customView: createButton)
+    
+
+        
+        let voiceCallButton: UIButton = UIButton(type: .custom)
+        voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
+        voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
+        voiceCallButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let voiceCallBarButton = UIBarButtonItem(customView: voiceCallButton)
+        
+        voiceCallButton.setTitle("+", for: .normal)
+        voiceCallButton.sizeToFit()
+        
+        self.navigationItem.rightBarButtonItems = [createBarButton, voiceCallBarButton]
+        
+        voiceCallButton.shake()
+    
+        
+    }
+    
+    func setupWithoutCall() {
         
         // Do any additional setup after loading the view.
         createButton.setImage(UIImage(named: "4x_add"), for: [])
@@ -121,8 +172,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         createButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let createBarButton = UIBarButtonItem(customView: createButton)
         
-       
-        
+
         self.navigationItem.rightBarButtonItems = [createBarButton]
         
         
@@ -205,6 +255,34 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         childViewController.willMove(toParent: nil)
         childViewController.view.removeFromSuperview()
         childViewController.removeFromParent()
+    }
+    
+    
+    @objc func clickVoiceCallBarButton(_ sender: AnyObject) {
+        
+        if general_room != nil {
+            
+            if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "GroupCallViewController") as? GroupCallViewController {
+
+                controller.currentRoom = general_room
+                controller.newroom = false
+                controller.currentChanelUrl = gereral_group_chanel_url
+                
+                self.present(controller, animated: true, completion: nil)
+                
+            }
+            
+            
+            
+        } else {
+            
+            setupWithoutCall()
+            
+            
+        }
+        
+          
+        
     }
     
 }

@@ -17,7 +17,6 @@ class ChannelSettingsVC: SBUChannelSettingsViewController {
         // Do any additional setup after loading the view.
         navigationItem.titleView = createLeftTitleItem(text: "Setting")
         
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

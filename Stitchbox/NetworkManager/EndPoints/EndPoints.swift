@@ -29,6 +29,7 @@ public enum UserApi {
     case phonelogin (params: [String:String])
     case phoneverify (params: [String:String])
 }
+
 extension UserApi: EndPointType {
     var module: String {
         switch self {
@@ -82,6 +83,7 @@ extension UserApi: EndPointType {
 
 public enum ChatApi {
     case roomIDRequest (params: [String:String], additionHeaders: [String:String])
+    case acceptSBInvitationRequest (params: [String:String], additionHeaders: [String:String])
 }
 
 extension ChatApi: EndPointType {
@@ -94,12 +96,16 @@ extension ChatApi: EndPointType {
         switch self {
         case .roomIDRequest:
             return "/call"
+        case .acceptSBInvitationRequest:
+            return "/invite/accept"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
         case .roomIDRequest:
+            return .post
+        case .acceptSBInvitationRequest:
             return .post
         }
     }
@@ -108,7 +114,10 @@ extension ChatApi: EndPointType {
         switch self {
         case .roomIDRequest(let params, let headers):
             return .requestParametersAndHeaders(bodyParameters: params, additionHeaders: headers)
+        case .acceptSBInvitationRequest(let params, let headers):
+            return .requestParametersAndHeaders(bodyParameters: params, additionHeaders: headers)
         }
+        
     }
     
     var headers: [String: String]? {

@@ -165,6 +165,7 @@ class GroupCallViewController: UIViewController {
             general_room = nil
             gereral_group_chanel_url = nil
             //
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "checkCallForLayout")), object: nil)
             self.dismiss(animated: true, completion: nil)
             // participant has exited the room successfully.
         } catch {

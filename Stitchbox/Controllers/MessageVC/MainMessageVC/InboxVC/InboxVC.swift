@@ -25,7 +25,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     var trypingIndicatorTimer: [String : Timer] = [:]
     
     var channelListQuery: SBDGroupChannelListQuery?
-    var Hide_channelListQuery: SBDGroupChannelListQuery?
+    
     var channels: [SBDGroupChannel] = []
     var toastCompleted: Bool = true
     var lastUpdatedTimestamp: Int64 = 0
@@ -83,23 +83,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 })
             }
             
-            let actionHide = UIAlertAction(title: "Hide message", style: .default) { (action) in
-                if channel.hiddenState == .unhidden {
-                    
-                    channel.hide(withHidePreviousMessages: false, allowAutoUnhide: false) { error in
-                        if let error = error {
-                            Utils.showAlertController(error: error, viewController: self)
-                            return
-                        }
-                    }
-                    
-                    
-                                      
-                }
-            }
-            
-            
-            
+        
             let actionNotificationOn = UIAlertAction(title: "Turn notification on", style: .default) { (action) in
                channel.setMyPushTriggerOption(.all) { error in
                     if let error = error {
@@ -127,7 +111,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 
                 
                 alert.addAction(actionNotificationOn)
-                alert.addAction(actionHide)
+                
                 alert.addAction(actionLeave)
                 alert.addAction(actionCancel)
                 
@@ -135,13 +119,13 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 
                 
                 alert.addAction(actionNotificationOff)
-                alert.addAction(actionHide)
+                
                 alert.addAction(actionLeave)
                 alert.addAction(actionCancel)
                 
             } else {
                 
-                alert.addAction(actionHide)
+               
                 alert.addAction(actionLeave)
                 alert.addAction(actionCancel)
                 
@@ -540,7 +524,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //performSegue(withIdentifier: "ShowGroupChat", sender: indexPath.row)
         
         let channel = self.channels[indexPath.row]
         let channelUrl = channel.channelUrl
@@ -668,44 +651,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 alarmAction.image = alarmTypeView.asImage()
                 alarmAction.backgroundColor = UIColor.background
                 
-                
-                let hideAction = UIContextualAction(
-                    style: .normal,
-                    title: ""
-                ) { action, view, actionHandler in
-                    
-                    if self.channels[indexPath.row].hiddenState == .unhidden {
-                        
-                        self.channels[indexPath.row].hide(withHidePreviousMessages: false, allowAutoUnhide: false) { error in
-                            if let error = error {
-                                Utils.showAlertController(error: error, viewController: self)
-                                return
-                            }
-                        }
-                        
-                        
-                                          
-                    }
-                    
-                    actionHandler(true)
-                }
-                
-                let hideTypeView = UIImageView(
-                    frame: CGRect(
-                        x: (size-iconSize)/2,
-                        y: (size-iconSize)/2,
-                        width: iconSize,
-                        height: iconSize
-                ))
-                hideTypeView.layer.cornerRadius = iconSize/2
-                hideTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOffBackgroundColor
-                hideTypeView.image = UIImage(named: "hide3x")
-                hideTypeView.contentMode = .center
-                
-                hideAction.image = hideTypeView.asImage()
-                hideAction.backgroundColor = UIColor.background
-                
-                return UISwipeActionsConfiguration(actions: [leaveAction, hideAction, alarmAction])
+   
+                return UISwipeActionsConfiguration(actions: [leaveAction, alarmAction])
                 
         }
     
@@ -726,7 +673,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         if self.channelListQuery == nil {
             self.channelListQuery = SBDGroupChannel.createMyGroupChannelListQuery()
             self.channelListQuery?.order = .latestLastMessage
-            self.channelListQuery?.channelHiddenStateFilter = .unhiddenOnly
+            self.channelListQuery?.memberStateFilter = .stateFilterJoinedOnly
             self.channelListQuery?.limit = self.limit
             self.channelListQuery?.includeFrozenChannel = true
             self.channelListQuery?.includeEmptyChannel = true
@@ -755,25 +702,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 }
                            
                 self.channels += newChannels!
-                
-                for channel in self.channels {
-                    
-                    if channel.channelUrl.contains("challenge") {
-                        
-                        let timeNow = UInt.init(Date().timeIntervalSince1970)
-                        
-                        if timeNow - (channel.createdAt) > 5 * 60 * 60 {
-                        
-                            self.channels.removeObject(channel)
-                            
-                        }
-                        
-                        
-                    }
-                    
-                    
-                }
-                
                 self.sortChannelList(needReload: true)
                 self.lastUpdatedTimestamp = Int64(Date().timeIntervalSince1970*1000)
                 self.refreshControl?.endRefreshing()
@@ -783,46 +711,50 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     
     func upsertChannels(_ channels: [SBDGroupChannel]?, needReload: Bool) {
-        guard let channels = channels else { return }
-        
-        for channel in channels {
-            guard self.channelListQuery?.belongs(to: channel) == true else { continue }
-            let includeEmptyChannel = self.channelListQuery?.includeEmptyChannel ?? false
-            guard (channel.lastMessage != nil || includeEmptyChannel) else { continue }
-            guard let index = self.channels.firstIndex(of: channel) else {
-                self.channels.append(channel)
-                continue
+        guard let newChannels = channels else { return }
+
+            // Filter new channels based on the channel list query.
+            let filteredChannels = newChannels.filter {
+                self.channelListQuery?.belongs(to: $0) == true &&
+                ($0.lastMessage != nil || self.channelListQuery?.includeEmptyChannel == true)
             }
-            self.channels.append(self.channels.remove(at: index))
-        }
-        self.sortChannelList(needReload: needReload)
+
+            // Find the indices of the new channels in the current list of channels.
+            let indices = filteredChannels.map { self.channels.firstIndex(of: $0) }
+
+            // Create a dictionary mapping the new channels to their indices.
+            let channelsDict = Dictionary(uniqueKeysWithValues: zip(filteredChannels, indices))
+
+            // Remove the channels that are already in the list.
+            let channelsToAdd = filteredChannels.filter { channelsDict[$0] == nil }
+
+            // Add the new channels to the list.
+            self.channels += channelsToAdd
+
+            // Sort the list of channels.
+            self.sortChannelList(needReload: needReload)
     }
 
     
     func sortChannelList(needReload: Bool) {
-        let sortedChannelList = self.channels
-            .sorted(by: { (lhs: SBDGroupChannel, rhs: SBDGroupChannel) -> Bool in
-                let createdAt1: Int64 = lhs.lastMessage?.createdAt ?? -1
-                let createdAt2: Int64 = rhs.lastMessage?.createdAt ?? -1
-                if (createdAt1 == -1 && createdAt2 == -1) {
-                    return Int64(lhs.createdAt * 1000) > Int64(rhs.createdAt * 1000)
-                } else {
-                    return createdAt1 > createdAt2
-                }
-            })
-        
-        
-        self.channels = sortedChannelList.sbu_unique()
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            guard needReload else { return }
-            
-            self.groupChannelsTableView.reloadSections([0], with: .automatic)
-           
+        let sortedChannels = channels.sorted {
+            let createdAt1 = $0.lastMessage?.createdAt ?? -1
+            let createdAt2 = $1.lastMessage?.createdAt ?? -1
+            if createdAt1 == -1 && createdAt2 == -1 {
+                return Int64($0.createdAt * 1000) > Int64($1.createdAt * 1000)
+            } else {
+                return createdAt1 > createdAt2
+            }
         }
+        channels = sortedChannels.sbu_unique()
         
+        if needReload {
+            DispatchQueue.main.async {
+                self.groupChannelsTableView.reloadSections([0], with: .automatic)
+            }
+        }
     }
+
     
     
     func deleteChannel(channel: SBDGroupChannel) {
@@ -1067,30 +999,23 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     func channel(_ sender: SBDGroupChannel, userDidJoin user: SBDUser) {
         DispatchQueue.main.async {
-            if self.channels.firstIndex(of: sender) == nil {
-                
-                if self.shouldAddToList(channel: sender) == true {
-                    
-                    if self.channels.firstIndex(of: sender) == nil {
-                        
-                        self.channels.insert(sender, at: 0)
-                        self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
             
+            let index = self.channels.firstIndex(of: sender)
+                    if index == nil {
+                        // Channel is not in the list.
+                        if self.shouldAddToList(channel: sender) {
+                            // Add channel to the list and table view.
+                            self.channels.insert(sender, at: 0)
+                            self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                        }
+                    } else {
+                        // Channel is already in the list.
+                        self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .automatic)
                     }
-                    
-                }
-                
-                
-            } else {
-                
-                
-                if let index = self.channels.firstIndex(of: sender as SBDGroupChannel) {
-                    self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                }
-                
-            }
             
         }
+        
+
     }
     
     
@@ -1114,20 +1039,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             
             
         }
-        
-    }
-    
-    func channelWasHidden(_ sender: SBDGroupChannel) {
-        
-        self.deleteChannel(channel: sender)
-        sender.setMyPushTriggerOption(.off) { error in
-            if let error = error {
-                Utils.showAlertController(error: error, viewController: self)
-                return
-            }
-        }
-        
-        //self.loadHideChannelList()
         
     }
     

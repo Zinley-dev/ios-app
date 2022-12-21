@@ -66,6 +66,22 @@ struct APIManager {
         
     }
     
+    func acceptSBInvitationRequest(user_id: String, channelUrl: String, completion: @escaping APICompletion) {
+        
+        if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
+            
+            let params = ["channel": channelUrl, "user_id": user_id]
+            let headers = ["Authorization": userToken]
+            SBmanager.request(.acceptSBInvitationRequest(params: params, additionHeaders: headers)) { result in
+                completion(result)
+            }
+            
+        } else {
+            print("Can't get token for authentication request")
+        }
+            
+        
+    }
     
     
 }
