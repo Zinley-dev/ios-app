@@ -826,6 +826,9 @@
                                         </constraints>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" backgroundImage="btnAudioOff"/>
+                                        <connections>
+                                            <action selector="didTapAudioOption:" destination="m7q-To-Va9" eventType="touchUpInside" id="mXI-ZW-OJg"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.85000002384185791" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wyu-dq-nHy">
                                         <rect key="frame" x="102" y="0.0" width="40" height="40"/>
