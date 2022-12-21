@@ -68,7 +68,11 @@ import SwiftUI
         tabBarAppearance.configureWithTransparentBackground()
         
         self.tabBar.standardAppearance = tabBarAppearance
-        self.tabBar.scrollEdgeAppearance = tabBarAppearance
+        if #available(iOS 15.0, *) {
+            self.tabBar.scrollEdgeAppearance = tabBarAppearance
+        } else {
+            // Fallback on earlier versions
+        }
         self.updateViewConstraints()
     }
     override func viewDidLayoutSubviews() {
