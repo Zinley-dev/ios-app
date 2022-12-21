@@ -37,6 +37,14 @@
 				<string>com.googleusercontent.apps.56078114675-c5lhtgsgsp4bod4amsc9rlfv8b4s64j8</string>
 			</array>
 		</dict>
+		<string>fenwick_bd_it.otf</string>
+		<string>fenwick_bd.otf</string>
+		<string>fenwick_lt_it.otf</string>
+		<string>fenwick_lt.otf</string>
+		<string>fenwick_olden.otf</string>
+		<string>fenwick_rg_it.otf</string>
+		<string>fenwick_rg.otf</string>
+		<string>fenwick_outline.otf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
