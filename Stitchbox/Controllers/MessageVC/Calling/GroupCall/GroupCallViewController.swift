@@ -24,32 +24,19 @@ class GroupCallViewController: UIViewController {
     var currentChanelUrl: String?
 
     @IBOutlet weak var speakerButton: UIButton! {
-        
         didSet {
-    
-            guard let output = AVAudioSession().currentRoute.outputs.first else { return }
-            
-            if output.portType.rawValue == "BluetoothHFP" {
-                
-                self.speakerButton.setBackgroundImage(UIImage(named: "airpod"), for: .normal)
-                
-            } else {
-                
-                self.speakerButton.setBackgroundImage(.audio(output: output.portType),
-                                                         for: .normal)
+                guard let output = AVAudioSession.sharedInstance().currentRoute.outputs.first else { return }
+            speakerButton.setBackgroundImage(output.portType.rawValue == "BluetoothHFP" ? UIImage(named: "airpod") : .audio(output: output.portType), for: .normal)
             }
-            
-        }
-        
         
     }
     
     @IBOutlet weak var muteAudioButton: UIButton! {
-        
         didSet {
-            self.muteAudioButton.isSelected = (self.currentRoom?.localParticipant?.isAudioEnabled)!
-            self.muteAudioButton.setBackgroundImage(.audio(isOn: !(self.currentRoom?.localParticipant?.isAudioEnabled)!), for: .normal)
-        }
+                let isAudioEnabled = currentRoom?.localParticipant?.isAudioEnabled ?? false
+                muteAudioButton.isSelected = isAudioEnabled
+            muteAudioButton.setBackgroundImage( .audio(isOn: !isAudioEnabled), for: .normal)
+            }
     }
     
     @IBOutlet weak var endButton: UIButton!
@@ -63,51 +50,24 @@ class GroupCallViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup
-        
-        if newroom == true {
+        if newroom! {
             general_room = currentRoom
             gereral_group_chanel_url = currentChanelUrl
         }
-        
         currentRoom?.addDelegate(self, identifier: "room")
         setupAudioOutputButton()
-        
-        for user in currentRoom!.participants {
-            
-            
-            if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-                
-                if user.user.userId != userUID {
-                    
-                    current_participants.append(user)
-                    
-                }
-                
-            }
-            
-        }
-        
-        
-        // add myself
-        
+        current_participants = currentRoom?.participants.filter { $0.user.userId != _AppCoreData.userDataSource.value?.userID } ?? []
         current_participants.insert((currentRoom?.localParticipant!)!, at: 0)
-          
-        // layout delegate
-        
         let flowLayout = UICollectionViewFlowLayout()
-        self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        
+        collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         flowLayout.minimumInteritemSpacing = 5
         flowLayout.minimumLineSpacing = 5
-        self.wireDelegates()
-        
-        self.applyStyle()
-        self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
+        wireDelegates()
+        applyStyle()
+        collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         contentView.addSubview(collectionNode.view)
-        
     }
+
     
     
     func applyStyle() {
@@ -154,28 +114,17 @@ class GroupCallViewController: UIViewController {
     }
     
     @IBAction func didTapEnd() {
-        self.endButton.isEnabled = false
-        
-        do {
+        endButton.isEnabled = false
             currentRoom?.removeAllDelegates()
-            try currentRoom!.exit()
-            
-            
-            //
-            general_room = nil
-            gereral_group_chanel_url = nil
-            //
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "checkCallForLayout")), object: nil)
-            self.dismiss(animated: true, completion: nil)
-            // participant has exited the room successfully.
-        } catch {
-            
-            self.presentErrorAlert(message: "Can't leave the room now!")
-           
-        }
-        
-        
-        
+            do {
+                try currentRoom?.exit()
+                general_room = nil
+                gereral_group_chanel_url = nil
+                NotificationCenter.default.post(name: NSNotification.Name("checkCallForLayout"), object: nil)
+                dismiss(animated: true, completion: nil)
+            } catch {
+                presentErrorAlert(message: "Can't leave the room now!")
+            }
     }
     
 }
@@ -183,16 +132,14 @@ class GroupCallViewController: UIViewController {
 extension GroupCallViewController {
     
     func setupAudioOutputButton() {
-        
-        let width = self.speakerButton.frame.width
-        let height = self.speakerButton.frame.height
+        let width = speakerButton.frame.width
+        let height = speakerButton.frame.height
         let frame = CGRect(x: 0, y: 0, width: width, height: height)
-    
         let routePickerView = SendBirdCall.routePickerView(frame: frame)
-        self.customize(routePickerView)
-        self.speakerButton.addSubview(routePickerView)
+        customize(routePickerView)
+        speakerButton.addSubview(routePickerView)
     }
-    
+
     func customize(_ routePickerView: UIView) {
         if #available(iOS 11.0, *) {
             guard let routePickerView = routePickerView as? AVRoutePickerView else { return }
@@ -200,121 +147,55 @@ extension GroupCallViewController {
             routePickerView.tintColor = .clear
         } else {
             guard let volumeView = routePickerView as? MPVolumeView else { return }
-            
             volumeView.showsVolumeSlider = true
             volumeView.setRouteButtonImage(nil, for: .normal)
             volumeView.routeButtonRect(forBounds: volumeView.frame)
         }
     }
-    
+
     func updateLocalAudio(isEnabled: Bool) {
-        self.muteAudioButton.setBackgroundImage(.audio(isOn: isEnabled), for: .normal)
-        
-        
+        muteAudioButton.setBackgroundImage(.audio(isOn: isEnabled), for: .normal)
         if isEnabled {
             currentRoom?.localParticipant?.muteMicrophone()
         } else {
             currentRoom?.localParticipant?.unmuteMicrophone()
         }
-        
-        
         current_participants[0] = (currentRoom?.localParticipant!)!
         collectionNode.reloadItems(at: [IndexPath(item: 0, section: 0)])
     }
+
+
     
     
 }
 
 extension GroupCallViewController: RoomDelegate {
-    // MARK: Required Methods
-    
-    // Called when a remote participant has entered the room.
     func didRemoteParticipantEnter(_ participant: RemoteParticipant) {
-        
-        if !current_participants.contains(participant) {
-            
-            current_participants.insert(participant, at: 1)
-            collectionNode.insertItems(at: [IndexPath(item: 1, section: 0)])
-            
-        }
-        
+        guard !current_participants.contains(participant) else { return }
+        current_participants.insert(participant, at: 1)
+        collectionNode.insertItems(at: [IndexPath(item: 1, section: 0)])
     }
-    
 
-    // Called when a remote participant has exited the room.
     func didRemoteParticipantExit(_ participant: RemoteParticipant) {
-        
-        
-        if current_participants.contains(participant)  {
-            
-            let index = getIndexOfParticipannt(participant: participant)
-            current_participants.removeObject(participant)
-            collectionNode.deleteItems(at: [IndexPath(item: index, section: 0)])
-            
-           
-            
-        }
-        
-        
-    }
-        
-    
-    func didRemoteAudioSettingsChange(_ participant: RemoteParticipant) {
-        //self.updateRemoteAudio(isEnabled: participant.isAudioEnabled)
-        
-        if current_participants.contains(participant) {
-            
-            let id = getIndexOfParticipannt(participant: participant)
-            
-            current_participants[id] = participant
-            
-            collectionNode.reloadItems(at: [IndexPath(item: id, section: 0)])
-            
-        }
-        
-        
-    }
-    
-    func getIndexOfParticipannt(participant: Participant) -> Int {
-        
-        var count = 0
-        
-        for user in current_participants {
-            
-            if user.user.userId == participant.user.userId {
-                
-                break
-            }
-            
-            count += 1
-            
-        }
-        
-        return count
-        
-        
-    }
-    func didAudioDeviceChange(_ room: Room, session: AVAudioSession, previousRoute: AVAudioSessionRouteDescription, reason: AVAudioSession.RouteChangeReason) {
-    
-        guard let output = session.currentRoute.outputs.first else { return }
-        
-        if output.portType.rawValue == "BluetoothHFP" {
-            
-            self.speakerButton.setBackgroundImage(UIImage(named: "airpod"), for: .normal)
-            
-        } else {
-            self.speakerButton.setBackgroundImage(.audio(output: output.portType),
-                                                     for: .normal)
-        }
-        
-    }
-    
-    func didReceiveError(_ error: SBCError, participant: Participant?) {
-            // Clear resources for group calls.
-        
-        self.presentErrorAlert(message: error.localizedDescription)
+        guard let index = current_participants.firstIndex(of: participant) else { return }
+        current_participants.remove(at: index)
+        collectionNode.deleteItems(at: [IndexPath(item: index, section: 0)])
     }
 
+    func didRemoteAudioSettingsChange(_ participant: RemoteParticipant) {
+        guard let index = current_participants.firstIndex(of: participant) else { return }
+        current_participants[index] = participant
+        collectionNode.reloadItems(at: [IndexPath(item: index, section: 0)])
+    }
+
+    func didAudioDeviceChange(_ room: Room, session: AVAudioSession, previousRoute: AVAudioSessionRouteDescription, reason: AVAudioSession.RouteChangeReason) {
+        guard let output = session.currentRoute.outputs.first else { return }
+        speakerButton.setBackgroundImage(.audio(output: output.portType), for: .normal)
+    }
+
+    func didReceiveError(_ error: SBCError, participant: Participant?) {
+        presentErrorAlert(message: error.localizedDescription)
+    }
 }
 
 

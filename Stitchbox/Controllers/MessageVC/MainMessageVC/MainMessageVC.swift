@@ -259,30 +259,17 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     
     @objc func clickVoiceCallBarButton(_ sender: AnyObject) {
-        
-        if general_room != nil {
-            
-            if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "GroupCallViewController") as? GroupCallViewController {
-
-                controller.currentRoom = general_room
-                controller.newroom = false
-                controller.currentChanelUrl = gereral_group_chanel_url
-                
-                self.present(controller, animated: true, completion: nil)
-                
-            }
-            
-            
-            
-        } else {
-            
+        guard let room = general_room else {
             setupWithoutCall()
-            
-            
+            return
         }
-        
-          
-        
+
+        let controller = GroupCallViewController.instantiate(from: "Dashboard")
+        controller.currentRoom = room
+        controller.newroom = false
+        controller.currentChanelUrl = gereral_group_chanel_url
+        present(controller, animated: true, completion: nil)
     }
+
     
 }

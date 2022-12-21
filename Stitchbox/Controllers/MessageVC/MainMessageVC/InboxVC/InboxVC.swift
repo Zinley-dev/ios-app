@@ -33,6 +33,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     var deletedChannel: SBDGroupChannel!
   
     
+    // MARK: - View Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,31 +43,39 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         self.groupChannelsTableView.delegate = self
         self.groupChannelsTableView.dataSource = self
         
+        // Add a long press gesture recognizer to the table view to allow the user to leave or mute channels
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(InboxVC.longPressChannel(_:)))
         longPressGesture.minimumPressDuration = 0.5
         self.groupChannelsTableView.addGestureRecognizer(longPressGesture)
         
+        // Update the badge of the tab bar item that displays the total number of unread messages
         self.updateTotalUnreadMessageCountBadge()
         
+        // Load the first page of channels from the server
         self.loadChannelListNextPage(true)
         
+        // Add self as a delegate for the SBDChannel and SBDConnection classes to handle events such as incoming messages and changes in connection status
         SBDMain.add(self as SBDChannelDelegate, identifier: self.description)
         SBDMain.add(self as SBDConnectionDelegate, identifier: self.description)
         
+        // Create a refresh control and add it to the table view
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: #selector(InboxVC.refreshChannelList), for: .valueChanged)
-        NotificationCenter.default.addObserver(self, selector: #selector(InboxVC.addHideChannel), name: (NSNotification.Name(rawValue: "addHideChannel")), object: nil)
+        self.groupChannelsTableView.addSubview(self.refreshControl!)
         
+        // Add an observer for the "addHideChannel" notification to update the list of channels
+        NotificationCenter.default.addObserver(self, selector: #selector(InboxVC.addHideChannel), name: (NSNotification.Name(rawValue: "addHideChannel")), object: nil)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Update the layout of the table view
         self.groupChannelsTableView.layoutIfNeeded()
-        
-        
     }
     
+    
+    // MARK: - Gesture Recognizers
     
     @objc func longPressChannel(_ recognizer: UILongPressGestureRecognizer) {
         let point = recognizer.location(in: self.groupChannelsTableView)
@@ -212,282 +222,105 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "GroupChannelTableViewCell") as! GroupChannelTableViewCell
             let channel = self.channels[indexPath.row]
-            
-            cell.setTimeStamp(channel: channel)
-            
-            
-            let typingIndicatorText = self.buildTypingIndicatorLabel(channel: channel)
-            let timer = self.trypingIndicatorTimer[channel.channelUrl]
-            var showTypingIndicator = false
-            if timer != nil && typingIndicatorText.count > 0 {
-                showTypingIndicator = true
-            }
-            
-            if showTypingIndicator {
-                cell.lastMessageLabel.isHidden = true
-                cell.typingIndicatorContainerView.isHidden = false
-                cell.typingIndicatorLabel.text = typingIndicatorText
-            }
-            else {
-                cell.lastMessageLabel.isHidden = false
-                cell.typingIndicatorContainerView.isHidden = true
-                if channel.lastMessage != nil {
-                    if channel.lastMessage is SBDUserMessage {
-                        let lastMessage = channel.lastMessage as! SBDUserMessage
-                        
-                        if channel.lastMessage?.sender?.userId == userUID {
-                            
-                            cell.lastMessageLabel.text = "You: \(lastMessage.message)"
-                            
-                        } else {
-                            
-                            if let nickname = channel.lastMessage?.sender?.nickname {
-                                
-                                cell.lastMessageLabel.text = "\(nickname): \(lastMessage.message)"
-                                
-                            }
-                            
-                            
-                            
-                        }
-                        
-                        
-                    }
-                    else if channel.lastMessage is SBDFileMessage {
-                        let lastMessage = channel.lastMessage as! SBDFileMessage
-                        if lastMessage.type.hasPrefix("image") {
-                            
-                            if channel.lastMessage?.sender?.userId == userUID {
-                                
-                                cell.lastMessageLabel.text = "You just sent an image"
-                                
-                            } else {
-                                
-                                if let nickname = channel.lastMessage?.sender?.nickname {
-                                    
-                                    cell.lastMessageLabel.text = "\(nickname): just sent an image"
-                                }
-                                
-                                
-                                
-                            }
-                            
-                           
-                        }
-                        else if lastMessage.type.hasPrefix("video") {
-                            
-                            if channel.lastMessage?.sender?.userId == userUID {
-                                
-                                cell.lastMessageLabel.text = "You just sent a video"
-                                
-                            } else {
-                                
-                                if let nickname = channel.lastMessage?.sender?.nickname {
-                                    
-                                    
-                                    cell.lastMessageLabel.text = "\(nickname): just sent a video"
-                                   
-                                    
-                                }
-                                
-                                
-                                
-                            }
-                            
-                        }
-                        else if lastMessage.type.hasPrefix("audio") {
-                            
-                            if channel.lastMessage?.sender?.userId == userUID {
-                                
 
-                                cell.lastMessageLabel.text = "You just sent an audio"
-                                
-                            } else {
-                                
-                                if let nickname = channel.lastMessage?.sender?.nickname {
-                                    
-                                    
-                                    cell.lastMessageLabel.text = "\(nickname): just sent an audio"
-                                   
-                                    
-                                }
-                                
-                                
-                                
-                            }
-                            
-                        }
-                       
-                    }
-                    else if  channel.lastMessage is SBDAdminMessage{
-                        let lastMessage = channel.lastMessage as! SBDAdminMessage
-                        cell.lastMessageLabel.text = lastMessage.message
+            cell.setTimeStamp(channel: channel)
+
+            let typingIndicatorText = self.buildTypingIndicatorLabel(channel: channel)
+            let showTypingIndicator = self.trypingIndicatorTimer[channel.channelUrl] != nil && !typingIndicatorText.isEmpty
+
+            cell.lastMessageLabel.isHidden = showTypingIndicator
+            cell.typingIndicatorContainerView.isHidden = !showTypingIndicator
+            cell.typingIndicatorLabel.text = typingIndicatorText
+
+            if let lastMessage = channel.lastMessage {
+                let isSender = lastMessage.sender?.userId == userUID
+                let nickname = lastMessage.sender?.nickname
+
+                if let userMessage = lastMessage as? SBDUserMessage {
+                    cell.lastMessageLabel.text = isSender ? "You: \(userMessage.message)" : "\(nickname ?? ""): \(userMessage.message)"
+                } else if let fileMessage = lastMessage as? SBDFileMessage {
+                    let fileType = fileMessage.type.prefix(5)
+                    if fileType == "image" {
+                        cell.lastMessageLabel.text = isSender ? "You just sent an image" : "\(nickname ?? ""): just sent an image"
+                    } else if fileType == "video" {
+                        cell.lastMessageLabel.text = isSender ? "You just sent a video" : "\(nickname ?? ""): just sent a video"
+                    } else if fileType == "audio" {
+                        cell.lastMessageLabel.text = isSender ? "You just sent an audio file" : "\(nickname ?? ""): just sent an audio file"
+                    } else {
+                        cell.lastMessageLabel.text = fileMessage.name
                     }
                 }
-                else {
-                    cell.lastMessageLabel.text = "System: The message is created"
-                }
             }
-            
-            cell.unreadMessageCountContainerView.isHidden = false
-            if channel.unreadMessageCount > 99 {
-                cell.unreadMessageCountLabel.text = "+99"
-            }
-            else if channel.unreadMessageCount > 0 {
-                cell.unreadMessageCountLabel.text = String(channel.unreadMessageCount)
-            }
-            else {
+
+            if channel.unreadMessageCount > 0 {
+                cell.unreadMessageCountContainerView.isHidden = false
+                cell.unreadMessageCountLabel.text = (channel.unreadMessageCount > 99) ? "+99" : String(channel.unreadMessageCount)
+            } else {
                 cell.unreadMessageCountContainerView.isHidden = true
             }
-            
-            if channel.memberCount <= 2 {
-                cell.memberCountContainerView.isHidden = true
-                cell.memberCountWidth.constant = 0.0
-            }
-            else {
+
+            if channel.memberCount > 2 {
                 cell.memberCountContainerView.isHidden = false
                 cell.memberCountWidth.constant = 18.0
                 cell.memberCountLabel.text = String(channel.memberCount)
-            }
-            
-            let pushOption = channel.myPushTriggerOption
-            
-            switch pushOption {
-            case .all, .default, .mentionOnly:
-                cell.notiOffIconImageView.isHidden = true
-                break
-            case .off:
-                cell.notiOffIconImageView.isHidden = false
-                break
-            @unknown default:
-                cell.notiOffIconImageView.isHidden = true
-                break
+            } else {
+                cell.memberCountContainerView.isHidden = true
+                cell.memberCountWidth.constant = 0.0
             }
 
             
-            if channel.isFrozen == true {
-                
-                cell.frozenImageView.isHidden = false
-                
-            } else {
-                
-                cell.frozenImageView.isHidden = true
-            }
+            let pushOption = channel.myPushTriggerOption
+                        
+                        switch pushOption {
+                        case .all, .default, .mentionOnly:
+                            cell.notiOffIconImageView.isHidden = true
+                            break
+                        case .off:
+                            cell.notiOffIconImageView.isHidden = false
+                            break
+                        @unknown default:
+                            cell.notiOffIconImageView.isHidden = true
+                            break
+                        }
             
+            
+            cell.frozenImageView.isHidden = !channel.isFrozen
+
             
             DispatchQueue.main.async {
-                var members: [SBDUser] = []
-                var count = 0
-                if let channelMembers = channel.members as? [SBDMember], let currentUser = SBDMain.getCurrentUser() {
-                    for member in channelMembers {
-                        if member.userId == currentUser.userId {
-                            continue
-                        }
-                        members.append(member)
-                        count += 1
-                       
-                    }
-                }
-                
-                
-                if let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell {
+                if let members = channel.members {
+                    let filteredMembers = members.compactMap { $0 as? SBDMember }.filter { $0.userId != SBDMain.getCurrentUser()?.userId }
+                    let count = filteredMembers.count
+                    let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell
                     
-                    
-                    if channel.channelUrl.contains("challenge") {
-                        
-                        if let coverUrl = channel.coverUrl, coverUrl != "" {
-                         
-                            updateCell.profileImagView.setImage(withCoverUrl: coverUrl, shouldGetGame: true)
-                            
-                        }
-                        
-                        
+                    if count == 0 {
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
+                    } else if count == 1 {
+                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!, shouldGetGame: false)
+                    } else if count > 1 && count < 5 {
+                        updateCell?.profileImagView.users = filteredMembers
+                        updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
                     } else {
-                        
-                        if members.count == 0 {
-                            
-                            if let coverUrl = channel.coverUrl, coverUrl != "" {
-                                
-                                updateCell.profileImagView.setImage(withCoverUrl: coverUrl, shouldGetGame: false)
-                                
-                            }
-                            
-                        } else if members.count == 1 {
-                            
-                            updateCell.profileImagView.setImage(withCoverUrl: members[0].profileUrl!, shouldGetGame: false)
-                            
-                        } else if members.count > 1 && members.count < 5{
-                            
-                            updateCell.profileImagView.users = members
-                            updateCell.profileImagView.makeCircularWithSpacing(spacing: 1)
-                            
-                        } else {
-                            
-                            if let coverUrl = channel.coverUrl, coverUrl != "" {
-                                
-                                updateCell.profileImagView.setImage(withCoverUrl: coverUrl, shouldGetGame: false)
-                                
-                            }
-                            
-                        }
-                        
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
                     }
-                    
-                    
-                    
-                    //
-                    
-                    // groupname
                     
                     if channel.name != "" && channel.name != "Group Channel" {
-                        
-                        updateCell.channelNameLabel.text = channel.name
-                        
+                        updateCell?.channelNameLabel.text = channel.name
                     } else {
                         
-                        if members.count == 0 {
+                        let names = filteredMembers.prefix(3).map { $0.nickname ?? "" }
+                        
+                        if count > 3 {
+                            updateCell?.channelNameLabel.text = "\(names.joined(separator: ",")) and \(count - 3) users"
+                        } else {
                             
-                            updateCell.channelNameLabel.text = "No members"
-                            
-                        } else if members.count == 1 {
-                            
-                            updateCell.channelNameLabel.text = members[0].nickname
-                            
-                            
-                        } else if members.count > 1 {
-                            
-                            var count = 0
-                            var name = [String]()
-                            for user in members {
-                                name.append(user.nickname!)
-                                count += 1
-                                if count == 3 {
-                                    break
-                                }
-                            }
-                            
-                            
-                            if members.count - name.count > 0 {
-                                
-                                let text = name.joined(separator: ",")
-                                updateCell.channelNameLabel.text = "\(text) and \(members.count - name.count) users"
-                                
-                            } else {
-                                
-                                
-                                let text = name.joined(separator: ",")
-                                updateCell.channelNameLabel.text = text
-                                
-                            }
-                
+                            updateCell?.channelNameLabel.text = names.joined(separator: ",")
                         }
-                        
                     }
+                } else {
+                    // Handle the
                     
-                        
                 }
-                
-                
             }
             
             if self.channels.count > 0 && indexPath.row == self.channels.count - 1 {
@@ -528,6 +361,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         let channel = self.channels[indexPath.row]
         let channelUrl = channel.channelUrl
         
+       
         let channelVC = ChannelViewController(
             channelUrl: channelUrl,
             messageListParams: nil
@@ -544,13 +378,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     func tableView(_ tableView: UITableView,
                         willDisplay cell: UITableViewCell,
                         forRowAt indexPath: IndexPath) {
-        if self.channels.count > 0,
-            self.channelListQuery?.hasNext == true,
-            indexPath.row == (self.channels.count - Int(self.limit)/2),
-            self.channelListQuery != nil {
-            
-            self.loadChannelListNextPage(false)
-        }
+        guard !channels.isEmpty, let channelListQuery = channelListQuery, channelListQuery.hasNext, indexPath.row == channels.count - Int(limit)/2 else { return }
+            loadChannelListNextPage(false)
     }
     
     
@@ -773,167 +602,82 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         return SBUChannelTheme.dark.statusBarStyle
     }
     
-    // MARK: - SBDChannelDelegate
     func channel(_ sender: SBDBaseChannel, didReceive message: SBDBaseMessage) {
-        
-        DispatchQueue.main.async {
-            
-            if sender is SBDGroupChannel {
-                var hasChannelInList = false
-                var index = 0
-                
-                for ch in self.channels {
-                    
-                    if ch.channelUrl == sender.channelUrl {
-                        self.channels.removeObject(ch)
-                        self.groupChannelsTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
-                       
-                        self.channels.insert(sender as! SBDGroupChannel, at: 0)
-                        self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-                        
-                       
-                        self.updateTotalUnreadMessageCountBadge()
-                        
-                        hasChannelInList = true
-                        break
-                    }
-                    
-                    index += 1
-                }
-                
-                if hasChannelInList == false {
-                    if self.shouldAddToList(channel: sender as! SBDGroupChannel) == true {
-                        
-                        self.channels.insert(sender as! SBDGroupChannel, at: 0)
-                        self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-                        
-                        self.updateTotalUnreadMessageCountBadge()
-                        
-                    }
-                }
+        guard let sender = sender as? SBDGroupChannel else { return }
+        let index = channels.firstIndex { $0.channelUrl == sender.channelUrl }
+
+        groupChannelsTableView.performBatchUpdates({
+            if let index = index {
+                channels.remove(at: index)
+                channels.insert(sender, at: 0)
+                groupChannelsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
             }
-            
-        }
-        
-        
+            else {
+                channels.insert(sender, at: 0)
+                groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+            }
+        }, completion: { _ in
+            self.updateTotalUnreadMessageCountBadge()
+        })
     }
-    
 
     
-    func shouldAddToList(channel: SBDGroupChannel) -> Bool {
-        
-        return true
-        
-       
-        
+    func channelDidUpdateTypingStatus(_ sender: SBDGroupChannel) {
+        guard sender.isTyping(), let currentUser = SBDMain.getCurrentUser(), sender.getTypingUsers()?.firstIndex(of: currentUser) == nil else { return }
+        let timerKey = sender.channelUrl
+        invalidateTimer(for: timerKey)
+        let timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(InboxVC.typingIndicatorTimeout(_ :)), userInfo: [timerKey, sender], repeats: false)
+        trypingIndicatorTimer[timerKey] = timer
+        let index = channels.firstIndex { $0.channelUrl == sender.channelUrl }
+        guard let row = index else { return }
+        groupChannelsTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
     }
     
-    func channelDidUpdateTypingStatus(_ sender: SBDGroupChannel) {
-        
-        if sender.isTyping() == true {
-            
-            if sender.getTypingUsers()?.firstIndex(of: SBDMain.getCurrentUser()!) == nil {
-                
-                if let timer = self.trypingIndicatorTimer[sender.channelUrl] {
-                    timer.invalidate()
-                }
-                
-                let timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(InboxVC.typingIndicatorTimeout(_ :)), userInfo: [sender.channelUrl, sender], repeats: false)
-                self.trypingIndicatorTimer[sender.channelUrl] = timer
-                
-                DispatchQueue.main.async {
-                    
-                    if let index = self.channels.firstIndex(of: sender as SBDGroupChannel) {
-                        self.groupChannelsTableView.reloadRows(at:  [IndexPath(row: index, section: 0)], with: .automatic)
-                    }
-                    
-                }
-                
-            }
- 
-        
+    func invalidateTimer(for key: String) {
+        if let timer = trypingIndicatorTimer[key] {
+            timer.invalidate()
+            trypingIndicatorTimer[key] = nil
         }
-        
     }
+
     
     func deleteChannels(channelUrls: [String]?, needReload: Bool) {
         guard let channelUrls = channelUrls else { return }
-        
-        var toBeDeleteIndexes: [Int] = []
-        
-        for channelUrl in channelUrls {
-            if let index = self.channels.firstIndex(where: { $0.channelUrl == channelUrl }) {
-                toBeDeleteIndexes.append(index)
-            }
-        }
-        
-        // for remove from last
-        let sortedIndexes = toBeDeleteIndexes.sorted().reversed()
-        
-        for toBeDeleteIdx in sortedIndexes {
-            self.channels.remove(at: toBeDeleteIdx)
-        }
-        
-        self.sortChannelList(needReload: needReload)
+        channels = channels.filter { !channelUrls.contains($0.channelUrl) }
+        sortChannelList(needReload: needReload)
+
     }
     
     func loadChannelChangeLogs(hasMore: Bool, token: String?) {
         guard hasMore else {
-            self.sortChannelList(needReload: true)
             return
         }
-        
+
         var channelLogsParams = SBDGroupChannelChangeLogsParams()
         if let channelListQuery = self.channelListQuery {
             channelLogsParams = SBDGroupChannelChangeLogsParams.create(with: channelListQuery)
         }
-        
-        
-        if let token = token {
-            
-            SBDMain.getMyGroupChannelChangeLogs(
-                byToken: token,
-                params: channelLogsParams
-            ){ [weak self] updatedChannels, deletedChannelUrls, hasMore, token, error in
-                guard let self = self else { return }
-                
-                
+
+        let getMyGroupChannelChangeLogs: (String?, SBDGroupChannelChangeLogsParams) -> Void = { token, channelLogsParams in
+            SBDMain.getMyGroupChannelChangeLogs(byToken: token, params: channelLogsParams) { updatedChannels, deletedChannelUrls, hasMore, token, error in
                 if let error = error {
                     print(error.localizedDescription)
                 }
-                
+
                 self.lastUpdatedToken = token
-                
                 self.upsertChannels(updatedChannels, needReload: false)
                 self.deleteChannels(channelUrls: deletedChannelUrls, needReload: false)
-                
                 self.loadChannelChangeLogs(hasMore: hasMore, token: token)
             }
         }
-        else {
 
-            SBDMain.getMyGroupChannelChangeLogs(
-                byTimestamp: self.lastUpdatedTimestamp,
-                params: channelLogsParams
-            ) { [weak self] updatedChannels, deletedChannelUrls, hasMore, token, error in
-                guard let self = self else { return }
-                
-                
-                if let error = error {
-                    print(error.localizedDescription)
-                }
-                
-                self.lastUpdatedToken = token
-                
-                
-                
-                self.upsertChannels(updatedChannels, needReload: false)
-                self.deleteChannels(channelUrls: deletedChannelUrls, needReload: false)
-                
-                self.loadChannelChangeLogs(hasMore: hasMore, token: token)
-            }
+        if let token = token {
+            getMyGroupChannelChangeLogs(token, channelLogsParams)
+        } else {
+            getMyGroupChannelChangeLogs(nil, channelLogsParams)
         }
     }
+
     
     
     func didSucceedReconnection() {
@@ -942,154 +686,81 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     
     func channelWasDeleted(_ channelUrl: String, channelType: SBDChannelType) {
-        
-        if findDeletedChannel(channelUrl: channelUrl) == true, deletedChannel != nil {
-            if self.channels.contains(deletedChannel) {
-                self.deleteChannel(channel: deletedChannel)
-            }
+        if channelType == .group, let deletedChannel = findDeletedChannel(channelUrl: channelUrl), channels.contains(deletedChannel) {
+            deleteChannel(channel: deletedChannel)
         }
-        
     }
     
-    func findDeletedChannel(channelUrl: String) -> Bool {
-        
-        if self.channels.isEmpty != true {
-            
-            for subChannel in self.channels {
+    func findDeletedChannel(channelUrl: String) -> SBDGroupChannel? {
+        if !channels.isEmpty {
+            for subChannel in channels {
                 if subChannel.channelUrl == channelUrl {
                     deletedChannel = subChannel
-                    return true
+                    return deletedChannel
                 }
             }
-            
-            return false
-            
-        } else {
-            return false
         }
-        
-     
-        
+
+        return nil
     }
     
     @objc func addHideChannel() {
         
-        if hideChannelToadd != nil {
-            
-            DispatchQueue.main.async {
-                if self.channels.firstIndex(of: hideChannelToadd!) == nil {
-                    
-                    self.channels.insert(hideChannelToadd!, at: 0)
-                    self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-                   
-                    
-                    
-                    
-                }
-                
+        if let hideChannelToadd = hideChannelToadd, !channels.contains(hideChannelToadd) {
+                channels.insert(hideChannelToadd, at: 0)
+                groupChannelsTableView?.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
             }
-            
-            
-        }
-        
-
-        
+  
     }
     
     
     func channel(_ sender: SBDGroupChannel, userDidJoin user: SBDUser) {
         DispatchQueue.main.async {
-            
-            let index = self.channels.firstIndex(of: sender)
-                    if index == nil {
-                        // Channel is not in the list.
-                        if self.shouldAddToList(channel: sender) {
-                            // Add channel to the list and table view.
-                            self.channels.insert(sender, at: 0)
-                            self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-                        }
-                    } else {
-                        // Channel is already in the list.
-                        self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .automatic)
-                    }
-            
+            if !self.channels.contains(sender) {
+                self.channels.insert(sender, at: 0)
+                self.groupChannelsTableView?.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+            } else {
+                self.groupChannelsTableView?.reloadRows(at: [IndexPath(row: self.channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
+            }
         }
-        
-
     }
     
     
     func channel(_ sender: SBDGroupChannel, userDidLeave user: SBDUser) {
-        
-        
-        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-            
-            if user.userId == userUID {
-                
-                self.deleteChannel(channel: sender)
-                
-            } else {
-                
-                if let index = self.channels.firstIndex(of: sender as SBDGroupChannel) {
-                    self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                }
-                
-                
-            }
-            
-            
+        if let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, user.userId == userUID, channels.contains(sender as SBDGroupChannel) {
+            deleteChannel(channel: sender)
+        } else if let index = channels.firstIndex(of: sender as SBDGroupChannel) {
+            groupChannelsTableView?.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
         }
-        
     }
+
     
 
     func channelWasChanged(_ sender: SBDBaseChannel) {
-       
-        //guard let channel = sender as? SBDGroupChannel else { return }
-        guard let channel = sender as? SBDGroupChannel else { return }
-        DispatchQueue.main.async {
-            if let index = self.channels.firstIndex(of: channel as SBDGroupChannel) {
-                self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-            }
-        }
-       
+        guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
+        groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
     }
+
     
     func channel(_ sender: SBDBaseChannel, messageWasDeleted messageId: Int64) {
-        
-        guard let channel = sender as? SBDGroupChannel else { return }
-        DispatchQueue.main.async {
-            if let index = self.channels.firstIndex(of: channel as SBDGroupChannel) {
-                self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-            }
-        }
-        
+        guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
+        groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
     }
+
     
     func channelWasFrozen(_ sender: SBDBaseChannel) {
-        guard let channel = sender as? SBDGroupChannel else { return }
-        DispatchQueue.main.async {
-            if let index = self.channels.firstIndex(of: channel as SBDGroupChannel) {
-                self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-            }
-        }
-        
+        guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
+        groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
     }
-    
+
     func channelWasUnfrozen(_ sender: SBDBaseChannel) {
-        guard let channel = sender as? SBDGroupChannel else { return }
-        DispatchQueue.main.async {
-            if let index = self.channels.firstIndex(of: channel as SBDGroupChannel) {
-                self.groupChannelsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-            }
-        }
+        guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
+        groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
     }
-    
+
     func channel(_ sender: SBDBaseChannel, userWasBanned user: SBDUser) {
-        if user.userId == SBUGlobals.CurrentUser?.userId {
-            guard let channel = sender as? SBDGroupChannel else { return }
-            self.deleteChannel(channel: channel)
-        }
+        guard let sender = sender as? SBDGroupChannel, user.userId == SBUGlobals.CurrentUser?.userId else { return }
+        deleteChannel(channel: sender)
     }
 
 

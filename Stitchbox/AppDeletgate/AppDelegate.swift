@@ -43,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func setupStyle() {
         
         SBUTheme.set(theme: .dark)
+        
+        
         SBUTheme.channelListTheme.navigationBarTintColor = UIColor.background
         
         
@@ -75,15 +77,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.channelSettingsTheme.cellTypeIconTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
         
-        SBUTheme.userListTheme.rightBarButtonTintColor = UIColor.white
-        SBUTheme.userListTheme.leftBarButtonTintColor = UIColor.white
-        SBUTheme.userListTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        
+        SBUTheme.userListTheme.navigationBarTintColor = UIColor.background
+        
+        
+        SBUTheme.messageSearchTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.userListTheme.statusBarStyle = .lightContent
+        
+        SBUTheme.overlayTheme.componentTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        
+        SBUTheme.userProfileTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.userProfileTheme.usernameTextColor = UIColor.white
+        SBUTheme.messageSearchResultCellTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        
+        SBUTheme.userCellTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        
         
         SBUTheme.channelTheme.navigationBarTintColor = UIColor.background
         SBUTheme.channelTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
         
         SBUTheme.channelTheme.leftBarButtonTintColor = UIColor.white
         SBUTheme.channelTheme.rightBarButtonTintColor = UIColor.white
+        
+        SBUTheme.componentTheme.loadingBackgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.componentTheme.addReactionTintColor = UIColor.secondary
+        SBUTheme.componentTheme.loadingSpinnerColor = UIColor.secondary
        
     }
 
@@ -121,10 +140,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func sendbird_authentication() {
         
-        SBDMain.initWithApplicationId(sendbird_key, useCaching: false) {
-            print("initWithApplicationId: \(sendbird_key)")
+        SBDMain.initWithApplicationId(sendbird_key)
+        SBUMain.initialize(applicationId: sendbird_key) { (error) in
+            if let error = error {
+                // An error occurred during initialization
+                print("Error initializing SendBird UIKit: \(error)")
+            } else {
+                // Initialization was successful
+                print("SendBird UIKit initialized successfully")
+            }
         }
-        
         SendBirdCall.configure(appId: sendbird_key)
         SendBirdCall.addDelegate(self, identifier: "com.mobile.gg.Stitchbox1")
         SendBirdCall.executeOn(queue: DispatchQueue.main)

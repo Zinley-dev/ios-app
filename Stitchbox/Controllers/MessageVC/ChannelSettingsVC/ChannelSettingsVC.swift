@@ -22,7 +22,7 @@ class ChannelSettingsVC: SBUChannelSettingsViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.navigationBar.setValue(false, forKey: "hidesShadow")
+       // self.navigationController?.navigationBar.setValue(false, forKey: "hidesShadow")
         
     }
     

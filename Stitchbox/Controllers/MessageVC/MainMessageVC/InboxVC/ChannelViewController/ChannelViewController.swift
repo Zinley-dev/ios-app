@@ -32,9 +32,12 @@ class ChannelViewController: SBUChannelViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+    
         // Do any additional setup after loading the view.
         navigationItem.rightBarButtonItem = nil
         
+    
         settingButton.setImage(UIImage(named: "img_btn_channel_settings"), for: [])
         settingButton.addTarget(self, action: #selector(showChannelSetting(_:)), for: .touchUpInside)
         settingButton.frame = CGRect(x: -1, y: 0, width: 40, height: 30)
@@ -59,6 +62,7 @@ class ChannelViewController: SBUChannelViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+    
         self.tabBarController?.tabBar.isHidden = true
         self.tabBarController?.tabBar.frame = .zero
         
@@ -90,6 +94,7 @@ class ChannelViewController: SBUChannelViewController {
         
         
     }
+    
     
     
     func showErrorAlert(_ title: String, msg: String) {
@@ -242,58 +247,19 @@ class ChannelViewController: SBUChannelViewController {
     }
     
     func callLayout() {
-    
-        if self.getRoom.participants.count > 0 {
-            
-            
-            self.voiceCallButton.setTitle("+", for: .normal)
-            
-            
-            if self.voiceCallButton.currentImage == nil {
-                
-                self.voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
-                
-            } else {
-                
-                if self.voiceCallButton.currentImage?.isEqual(UIImage(named: "icCallFilled")) == false  {
-                    
-                    self.voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
-                    
-                }
-                
-            }
-            
-            //voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
-            
-            self.voiceCallButton.sizeToFit()
+        let imageName = self.getRoom.participants.count > 0 ? "icCallFilled" : "icBarCallFilled"
+        let title = self.getRoom.participants.count > 0 ? "+" : ""
+        let animation = self.getRoom.participants.count > 0 ? "shake" : nil
+        self.voiceCallButton.setImage(UIImage(named: imageName), for: [])
+        self.voiceCallButton.setTitle(title, for: .normal)
+        self.voiceCallButton.sizeToFit()
+        if animation != nil {
             self.voiceCallButton.shake()
-            
         } else {
-            
-            
-            if self.voiceCallButton.currentImage == nil {
-                
-                self.voiceCallButton.setImage(UIImage(named: "icBarCallFilled"), for: [])
-                
-            } else {
-                
-                if self.voiceCallButton.currentImage?.isEqual(UIImage(named: "icBarCallFilled")) == false  {
-                    
-                    self.voiceCallButton.setImage(UIImage(named: "icBarCallFilled"), for: [])
-                    
-                }
-                
-            }
-            
-            //voiceCallButton.setImage(UIImage(named: "icBarCallFilled"), for: [])
-            self.voiceCallButton.setTitle("", for: .normal)
-            self.voiceCallButton.sizeToFit()
             self.voiceCallButton.removeAnimation()
-            
         }
-        
-        
     }
+
     
     
     func processCall(currentRoomID: String, chanelUrl: String) {
@@ -337,7 +303,7 @@ class ChannelViewController: SBUChannelViewController {
         switch error.errorCode {
         case .notAuthenticated:
             ShowNotAuthenticatedProperlyAndReAuthenticate()
-        case .roomDeleted, .participantNotInRoom:
+        case .roomDeleted, .enteringRoomStillInProgress, .participantsLimitExceededInRoom:
             exitRoom()
         default:
             presentErrorAlert(message: "Error code: \(error.errorCode.rawValue), \(error.localizedDescription)")
@@ -350,7 +316,7 @@ class ChannelViewController: SBUChannelViewController {
             general_room = nil
             gereral_group_chanel_url = nil
         } catch {
-            presentErrorAlert(message: "Can't leave the room now!")
+            presentErrorAlert(message: "Unable to leave room at this time")
         }
     }
     

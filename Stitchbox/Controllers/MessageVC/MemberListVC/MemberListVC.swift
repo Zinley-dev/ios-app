@@ -15,14 +15,16 @@ class MemberListVC: SBUMemberListViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        theme.backgroundColor = UIColor.red
         
-   
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.navigationBar.setValue(false, forKey: "hidesShadow")
+        theme.backgroundColor = UIColor.red
+        
         
     }
     

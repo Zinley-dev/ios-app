@@ -63,3 +63,10 @@ func swiftLoader(text: String) {
     
                                                                                                                                   
 }
+
+
+extension UIViewController {
+    static func instantiate(from storyboard: String) -> Self {
+        return UIStoryboard(name: storyboard, bundle: nil).instantiateViewController(withIdentifier: "\(self)") as! Self
+    }
+}
