@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -242,12 +241,12 @@
         <scene sceneID="4KR-S4-fUj">
             <objects>
                 <viewController storyboardIdentifier="OTPTextfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DIb-Wa-WRn" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="4Kt-VG-UPX">
+                    <view key="view" contentMode="scaleToFill" id="4Kt-VG-UPX">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="96" y="349" width="655" height="22"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="96" y="360" width="221" height="22"/>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qio-D5-8w9"/>
@@ -409,7 +408,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Sbf-Ub-OAo" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="57" y="340" width="300" height="216.5"/>
+                                <rect key="frame" x="57" y="348.5" width="300" height="199"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VA2-GQ-N6o">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -417,27 +416,27 @@
                                         <buttonConfiguration key="configuration" style="plain" image="AC.png" imagePlacement="trailing" title="Button" imagePadding="11" titleAlignment="trailing"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L7w-Jk-YRG">
-                                        <rect key="frame" x="0.0" y="44" width="300" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="44" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEk-aL-QUY">
-                                        <rect key="frame" x="0.0" y="78.5" width="300" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="75" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vic-77-7fA">
-                                        <rect key="frame" x="0.0" y="113" width="300" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="106" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rCu-Ll-ewu">
-                                        <rect key="frame" x="0.0" y="147.5" width="300" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="137" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="txM-F3-SPX">
-                                        <rect key="frame" x="0.0" y="182" width="300" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="168" width="300" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                     </button>
@@ -491,13 +490,13 @@
             <size key="intrinsicContentSize" width="38" height="34"/>
         </designable>
         <designable name="L5B-yZ-Bz8">
-            <size key="intrinsicContentSize" width="75" height="34.5"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="SiS-Qd-H9G">
             <size key="intrinsicContentSize" width="6" height="18.5"/>
         </designable>
         <designable name="SiY-Zw-rKg">
-            <size key="intrinsicContentSize" width="75" height="34.5"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="TOz-ed-Qc3">
             <size key="intrinsicContentSize" width="8" height="18.5"/>
@@ -509,22 +508,22 @@
             <size key="intrinsicContentSize" width="6" height="18.5"/>
         </designable>
         <designable name="gKb-Yg-1aW">
-            <size key="intrinsicContentSize" width="75" height="34.5"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="k55-E0-bG7">
             <size key="intrinsicContentSize" width="24" height="18.5"/>
         </designable>
         <designable name="ogd-UU-co2">
-            <size key="intrinsicContentSize" width="75" height="34.5"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="w6R-PB-o3b">
-            <size key="intrinsicContentSize" width="75" height="34.5"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="yIl-ri-0s3">
             <size key="intrinsicContentSize" width="38" height="34"/>
         </designable>
         <designable name="yz9-3w-jnS">
-            <size key="intrinsicContentSize" width="75" height="34.5"/>
+            <size key="intrinsicContentSize" width="67" height="31"/>
         </designable>
         <designable name="z9P-lI-zda">
             <size key="intrinsicContentSize" width="24" height="18.5"/>

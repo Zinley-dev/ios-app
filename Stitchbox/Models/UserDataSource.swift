@@ -17,7 +17,6 @@ class UserDataSource: Mappable {
   var userID :    String! = ""
   var userName :  String! = ""
   var email :     String! = ""
-  var phone :     String! = ""
   var gender :    UserGender = .male
   var avatarURL : String  = "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"
   
@@ -26,10 +25,9 @@ class UserDataSource: Mappable {
   }
   
   func mapping(map: Map) {
-    userID      <- map["ID"]
+    userID      <- map["id"]
     userName    <- map["username"]
     email       <- map["email"]
-    phone       <- map["phone"]
     gender      <- map["gender"]
     avatarURL   <- map["avatar"]
   }

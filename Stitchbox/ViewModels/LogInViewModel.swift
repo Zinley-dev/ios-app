@@ -7,7 +7,7 @@
 
 import Foundation
 import RxSwift
-import ObjectMapper
+
 
 class LoginControllerViewModel: ViewModelProtocol {
     
@@ -64,18 +64,22 @@ class LoginControllerViewModel: ViewModelProtocol {
                         let account = try Account(JSONbody: data, type: .normalLogin)
                         // Store account to UserDefault as "userAccount"
                         print("account \(account)")
-                       
-                        // Write/Set Data
-                        let sessionToken = SessionDataSource.init(JSONString: "{}")!
-                        sessionToken.accessToken = account.accessToken
-                        sessionToken.refreshToken = account.refreshToken
-                        _AppCoreData.userSession.accept(sessionToken)
-                      
-                        // write usr data
-                        if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
-                          _AppCoreData.userDataSource.accept(newUserData)
+                        do {
+                            // Create JSON Encoder
+                            let encoder = JSONEncoder()
+                            
+                            // Encode Note
+                            let data = try encoder.encode(account)
+                            
+                            // Write/Set Data
+                            let sessionToken = SessionDataSource.init(JSONString: "{}")!
+                            sessionToken.accessToken = account.accessToken
+                            sessionToken.refreshToken = account.refreshToken
+                            _AppCoreData.userSession.accept(sessionToken)
+
+                        } catch {
+                            print("Unable to Encode Account (\(error))")
                         }
-                        
                         self.loginResultSubject.onNext(true)
                     }catch{
                         self.errorsSubject.onNext(error)

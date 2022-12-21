@@ -9,21 +9,9 @@ import UIKit
 import FirebaseCore
 import GoogleSignIn
 import FBSDKCoreKit
-import SendBirdSDK
-import SendBirdCalls
-import PushKit
-
-
-var versionInfo: String {
-    let sampleVersion = Bundle.version
-    return "QuickStart \(sampleVersion)   SDK \(SendBirdCall.sdkVersion)"
-}
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, SBDChannelDelegate {
-    
-    
-    var voipRegistry: PKPushRegistry?
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static let sharedInstance = UIApplication.shared.delegate as! AppDelegate
 
@@ -35,11 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SBDChannelDelegate {
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-        
-        
-        
-        sendbird_authentication()
-        
         return true
     }
 
@@ -71,27 +54,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SBDChannelDelegate {
       )
       return GIDSignIn.sharedInstance.handle(url)
     }
-    
-    
-    //
-    
-    func sendbird_authentication() {
-        
-        SBDMain.initWithApplicationId(sendbird_key, useCaching: true) {
-            print("initWithApplicationId")
-        }
-        
-        SendBirdCall.configure(appId: sendbird_key)
-        SendBirdCall.addDelegate(self, identifier: "com.mobile.gg.Stitchbox1")
-        SendBirdCall.executeOn(queue: DispatchQueue.main)
-        UserDefaults.standard.designatedAppId = sendbird_key
-        SBDMain.add(self as SBDChannelDelegate, identifier: self.description)
-        
-        
-        
-    }
-    
-    
 
 }
 

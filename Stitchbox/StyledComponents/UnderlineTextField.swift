@@ -30,7 +30,7 @@ import SwiftUI
             self.leftPadding.left = newValue
         }
     }
-    @IBInspectable override var placeHolderColor: UIColor? {
+    @IBInspectable var placeHolderColor: UIColor? {
         get {
             return self.placeHolderColor
         }

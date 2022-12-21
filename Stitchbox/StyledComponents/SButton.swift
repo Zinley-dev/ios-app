@@ -56,18 +56,14 @@ import SwiftUI
         layer.masksToBounds = false
         
         // Setup the Button Depending on What State it is in]
-        if #available(iOS 15.0, *) {
-            if !self.isEnabled {
-                setDisabled()
-            } else if self.isHovered {
-                setHover()
-            } else if self.isSelected {
-                setSelected()
-            } else {
-                setDefault()
-            }
+        if !self.isEnabled {
+            setDisabled()
+        } else if self.isHovered {
+            setHover()
+        } else if self.isSelected {
+            setSelected()
         } else {
-            // Fallback on earlier versions
+            setDefault()
         }
     }
 

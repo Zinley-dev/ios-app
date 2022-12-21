@@ -26,7 +26,7 @@ import SwiftUI
             setupView()
         }
     }
-    @IBInspectable override var placeHolderColor: UIColor? {
+    @IBInspectable var placeHolderColor: UIColor? {
             get {
                 return self.placeHolderColor
             }
