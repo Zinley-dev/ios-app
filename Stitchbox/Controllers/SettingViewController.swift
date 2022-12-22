@@ -45,6 +45,12 @@ class SettingViewController: UIViewController, ControllerType {
             tabbarcontroller.tabsVisiblty(false)
         }
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let tabbarcontroller = self.tabBarController as? DashboardTabBarController {
+            tabbarcontroller.tabsVisiblty(true)
+        }
+    }
     
     // MARK: - Functions
     func bindUI(with viewModel: SettingViewModel) {
