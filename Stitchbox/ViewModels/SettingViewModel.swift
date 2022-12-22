@@ -119,6 +119,7 @@ class SettingViewModel: ViewModelProtocol {
                 ["allowChallenge": $0, "allowDiscordLink": $1,
                  "autoPlaySound": $2, "autoMinimize": $3, "notifications": $4]}
         
+        self.settingObservable.subscribe{result in print(result)}
         
         logic()
         getAPISetting()
@@ -129,6 +130,9 @@ class SettingViewModel: ViewModelProtocol {
             result in switch result {
             case .success(let response):
                 print(response)
+                let data = response.body!
+                self.populatePublishers(JSONObject: data)
+                
             case .failure:
                 self.errorsSubject.onNext(NSError(domain: "Cannot get user's setting information", code: 400))
             }
@@ -149,5 +153,22 @@ class SettingViewModel: ViewModelProtocol {
             .disposed(by: disposeBag);
     }
     
-    
+    func populatePublishers(JSONObject: [String: Any]) {
+        print(JSONObject)
+        do{
+            self.allowChallengeSubject.onNext((JSONObject["AllowChallenge"] as! Int == 1))
+            self.allowDiscordLinkSubject.onNext((JSONObject["AllowDiscordLink"] as! Int == 1))
+            self.autoMinimizeSubject.onNext((JSONObject["AutoMinimize"] as! Int == 1))
+            self.autoPlaySoundSubject.onNext((JSONObject["AutoPlaySound"] as! Int == 1))
+            let notifications = JSONObject["Notifications"]! as! [String: Any]
+            self.challengeNotificationSubject.onNext((notifications["Challenge"] as! Int == 1))
+            self.commentNotificationSubject.onNext((notifications["Comment"] as! Int == 1))
+            self.followNotificationSubject.onNext((notifications["Follow"] as! Int == 1))
+            self.highlightNotificationSubject.onNext((notifications["Highlight"] as! Int == 1))
+            self.mentionNotificationSubject.onNext((notifications["Mention"] as! Int == 1))
+            self.messageNotificationSubject.onNext((notifications["Message"] as! Int == 1))
+        }catch{
+            self.errorsSubject.onNext(error)
+        }
+    }
 }

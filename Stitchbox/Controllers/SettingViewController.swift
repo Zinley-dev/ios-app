@@ -59,6 +59,8 @@ class SettingViewController: UIViewController, ControllerType {
     
     func bindAction(with viewModel: SettingViewModel) {
         logoutButton?.rx.tap.subscribe(viewModel.action.logOutDidTap).disposed(by: disposeBag)
+        
+        
     }
     
     
