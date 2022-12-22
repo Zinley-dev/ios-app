@@ -30,9 +30,13 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType {
     func bindUI(with viewModel: LoginByPhoneVerifyViewModel) {
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
-            .subscribe(onNext: { (error) in
+        .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
+                  if (error._code == 900) {
+                    self.navigationController?.pushViewController(CreateAccountViewController.create(), animated: true)
+                  } else {
                     self.presentError(error: error)
+                  }
                 }
             })
             .disposed(by: disposeBag)

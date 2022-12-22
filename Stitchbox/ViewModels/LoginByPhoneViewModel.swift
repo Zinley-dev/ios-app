@@ -178,8 +178,11 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                     switch error {
                     case .authRequired(let body):
                         self.errorsSubject.onNext(NSError(domain: body?["message"] as? String ?? "Cannot verify OTP", code: 401))
-                    case .requestFailed(let body):
-                        self.errorsSubject.onNext(NSError(domain: body?["message"] as? String ?? "Cannot verify OTP", code: 401))
+                      case .requestFailed(let body):
+                        self.errorsSubject.onNext(NSError(
+                          domain: body?["message"] as? String ?? "Cannot verify OTP",
+                          code: Int(body?["error"] as! String)!
+                        ))
                         
                     default:
                         self.errorsSubject.onNext(NSError(domain: "Cannot verify OTP", code: 401))

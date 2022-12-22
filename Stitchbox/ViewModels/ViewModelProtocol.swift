@@ -15,6 +15,5 @@ protocol ViewModelProtocol {
     var input: Input { get }
     var action: Action { get }
     var output: Output { get }
-    func logic()
 }
 
