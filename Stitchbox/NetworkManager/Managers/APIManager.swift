@@ -54,8 +54,7 @@ struct APIManager {
         if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
             
             let params = ["channel": channelUrl]
-            let headers = ["Authorization": userToken]
-            SBmanager.request(.roomIDRequest(params: params, additionHeaders: headers)) { result in
+            SBmanager.request(.roomIDRequest(params: params)) { result in
                 completion(result)
             }
             
@@ -71,8 +70,7 @@ struct APIManager {
         if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
             
             let params = ["channel": channelUrl, "user_id": user_id]
-            let headers = ["Authorization": userToken]
-            SBmanager.request(.acceptSBInvitationRequest(params: params, additionHeaders: headers)) { result in
+            SBmanager.request(.acceptSBInvitationRequest(params: params)) { result in
                 completion(result)
             }
             

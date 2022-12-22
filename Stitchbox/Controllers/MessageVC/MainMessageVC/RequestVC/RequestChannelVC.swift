@@ -178,7 +178,7 @@ class RequestChannelVC: SBUChannelViewController {
     
     func performAcceptAPIRequest(channel: String, inviterUID: String, userUID: String) {
         
-        APIManager().acceptSBInvitationRequest(user_id: inviterUID, channelUrl: channel) { result in
+        APIManager().acceptSBInvitationRequest(user_id: userUID, channelUrl: channel) { result in
             switch result {
             case .success(let apiResponse):
                 // Check if the request was successful
