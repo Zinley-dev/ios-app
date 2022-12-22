@@ -46,13 +46,16 @@ class LoginController: UIViewController, ControllerType {
         // binding Controller actions to View Model observer
         let userInputs = Observable.combineLatest(
             usernameTextfield.rx.text.orEmpty,
-            passwordTextfield.rx.text.orEmpty) { (email, password) -> (String, String) in
-            return (email, password)
-        }
+            passwordTextfield.rx.text.orEmpty) { ($0, $1) 
+            }
         signInButton.rx.tap.asObservable()
             .withLatestFrom(userInputs)
             .subscribe(viewModel.action.signInDidTap)
             .disposed(by: disposeBag)
+        
+        signInButton.rx.tap.asObservable().subscribe { Void in
+            self.presentLoading()
+        }.disposed(by: disposeBag)
     }
     
 }
@@ -65,3 +68,31 @@ extension LoginController {
         return controller
     }
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct NormalViewControllerRepresentable: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "USERNAME")
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        
+    }
+    
+    typealias UIViewControllerType = UIViewController;
+    
+}
+
+@available(iOS 13, *)
+struct NormalLoginView_Preview: PreviewProvider {
+    static var previews: some View {
+        // view controller using programmatic UI
+        VStack{
+            NormalViewControllerRepresentable()
+        }
+    }
+}
+#endif
+

@@ -839,7 +839,7 @@
         <!--USERNAME-->
         <scene sceneID="DxO-bW-1Gl">
             <objects>
-                <viewController id="Txd-EJ-9LK" customClass="LoginController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="USERNAME" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Txd-EJ-9LK" customClass="LoginController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uNl-V8-pgs">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
