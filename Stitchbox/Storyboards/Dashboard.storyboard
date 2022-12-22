@@ -675,6 +675,9 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" leftItemsSupplementBackButton="YES" id="ssg-za-I02" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="logoutButton" destination="HXp-PI-Fgg" id="BV2-AD-I3l"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XYD-To-fAx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -17,8 +17,10 @@ class SettingViewController: UIViewController, ControllerType {
     // MARK: - Properties
     private var viewModel: ViewModelType! = ViewModelType()
     private let disposeBag = DisposeBag()
-   
+    
+    
     // MARK: - UI
+    @IBOutlet var logoutButton: UIButton?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -26,15 +28,37 @@ class SettingViewController: UIViewController, ControllerType {
         bindUI(with: viewModel)
         bindAction(with: viewModel)
         setUpNavigationBar()
-        SettingAPIManager().getSettings{result in print(result)}
-    }
-    // MARK: - Functions
-    func bindUI(with viewModel: SettingViewModel) {
         
     }
     
-    func bindAction(with viewModel: SettingViewModel) {
+    // MARK: - Functions
+    func bindUI(with viewModel: SettingViewModel) {
+        viewModel.output.errorsObservable
+        .subscribe(onNext: { (error: Error) in
+                DispatchQueue.main.async {
+                  if (error._code == 900) {
+                    self.navigationController?.pushViewController(CreateAccountViewController.create(), animated: true)
+                  } else {
+                    self.presentError(error: error)
+                  }
+                }
+            })
+            .disposed(by: disposeBag)
         
+        viewModel.output.successObservable
+            .subscribe(onNext: { successMessage in
+                switch successMessage{
+                case .logout:
+                    RedirectionHelper.redirectToLogin()
+                case .other:
+                    break
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func bindAction(with viewModel: SettingViewModel) {
+        logoutButton?.rx.tap.subscribe(viewModel.action.logOutDidTap).disposed(by: disposeBag)
     }
     
     
@@ -75,7 +99,7 @@ extension UIViewController {
         navigationController?.navigationBar.backIndicatorImage = imgBackArrow
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = imgBackArrow
         navigationController?.navigationBar.topItem?.title = ""
-
-
+        
+        
     }
 }
