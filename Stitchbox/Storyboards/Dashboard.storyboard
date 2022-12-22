@@ -1079,6 +1079,7 @@
         </designable>
     </designables>
     <resources>
+        <image name="4x_add" width="25" height="25"/>
         <image name="adduser" width="28" height="28"/>
         <image name="call" width="19" height="19"/>
         <image name="chat" width="29" height="28"/>

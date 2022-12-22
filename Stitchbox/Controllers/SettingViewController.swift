@@ -41,7 +41,9 @@ class SettingViewController: UIViewController, ControllerType {
         bindUI(with: viewModel)
         bindAction(with: viewModel)
         setUpNavigationBar()
-        
+        if let tabbarcontroller = self.tabBarController as? DashboardTabBarController {
+            tabbarcontroller.tabsVisiblty(false)
+        }
     }
     
     // MARK: - Functions
