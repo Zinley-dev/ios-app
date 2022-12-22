@@ -22,6 +22,19 @@ class SettingViewController: UIViewController, ControllerType {
     // MARK: - UI
     @IBOutlet var logoutButton: UIButton?
     
+    @IBOutlet var allowChallengeButton: CardButton?
+    @IBOutlet var autoPlaySoundButton: CardButton?
+    @IBOutlet var autoMinimizeButton: CardButton?
+    @IBOutlet var allowDiscordLinkButton: CardButton?
+    
+    
+    @IBOutlet var challengeNotificationsButton: CardButton?
+    @IBOutlet var commentNotificationsButton: CardButton?
+    @IBOutlet var followNotificationsButton: CardButton?
+    @IBOutlet var highlightNotificationsButton: CardButton?
+    @IBOutlet var mentionNotificationsButton: CardButton?
+    @IBOutlet var messageNotificationsButton: CardButton?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,13 +47,13 @@ class SettingViewController: UIViewController, ControllerType {
     // MARK: - Functions
     func bindUI(with viewModel: SettingViewModel) {
         viewModel.output.errorsObservable
-        .subscribe(onNext: { (error: Error) in
+            .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
-                  if (error._code == 900) {
-                    self.navigationController?.pushViewController(CreateAccountViewController.create(), animated: true)
-                  } else {
-                    self.presentError(error: error)
-                  }
+                    if (error._code == 900) {
+                        self.navigationController?.pushViewController(CreateAccountViewController.create(), animated: true)
+                    } else {
+                        self.presentError(error: error)
+                    }
                 }
             })
             .disposed(by: disposeBag)
@@ -55,12 +68,212 @@ class SettingViewController: UIViewController, ControllerType {
                 }
             })
             .disposed(by: disposeBag)
+        
+        viewModel.output.allowChallenge.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.allowChallengeButton?.switchbtn?.isOn {
+                    print(value)
+                    self.allowChallengeButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.autoPlaySound.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.autoPlaySoundButton?.switchbtn?.isOn {
+                    print(value)
+                    self.autoPlaySoundButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.autoMinimize.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.autoMinimizeButton?.switchbtn?.isOn {
+                    print(value)
+                    self.autoMinimizeButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.allowDiscordLink.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.allowDiscordLinkButton?.switchbtn?.isOn {
+                    print(value)
+                    self.allowDiscordLinkButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.challengeNotification.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.challengeNotificationsButton?.switchbtn?.isOn {
+                    print(value)
+                    self.challengeNotificationsButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.commentNotification.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.commentNotificationsButton?.switchbtn?.isOn {
+                    print(value)
+                    self.commentNotificationsButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.followNotification.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.followNotificationsButton?.switchbtn?.isOn {
+                    print(value)
+                    self.followNotificationsButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.highlightNotification.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.highlightNotificationsButton?.switchbtn?.isOn {
+                    print(value)
+                    self.highlightNotificationsButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.mentionNotification.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.mentionNotificationsButton?.switchbtn?.isOn {
+                    print(value)
+                    self.mentionNotificationsButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.messageNotification.subscribe{value in
+            
+            DispatchQueue.main.async {
+                if value != self.messageNotificationsButton?.switchbtn?.isOn {
+                    print(value)
+                    self.messageNotificationsButton?.switchbtn?.setOn(value, animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
+        
+        
     }
     
     func bindAction(with viewModel: SettingViewModel) {
         logoutButton?.rx.tap.subscribe(viewModel.action.logOutDidTap).disposed(by: disposeBag)
         
+        allowChallengeButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((allowChallengeButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.allowChallenge.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
         
+        autoMinimizeButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((autoMinimizeButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.autoMinimize.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        autoPlaySoundButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((autoPlaySoundButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.autoPlaySound.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        allowDiscordLinkButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((allowDiscordLinkButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.allowDiscordLink.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        challengeNotificationsButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((challengeNotificationsButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.challengeNotification.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        commentNotificationsButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((commentNotificationsButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.commentNotification.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        followNotificationsButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((followNotificationsButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.followNotification.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        highlightNotificationsButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((highlightNotificationsButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.highlightNotification.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        mentionNotificationsButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((mentionNotificationsButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.mentionNotification.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        messageNotificationsButton?.switchbtn?.rx
+            .controlEvent(.valueChanged)
+            .withLatestFrom((messageNotificationsButton?.switchbtn?.rx.value)!)
+            .subscribe{ value in
+                print(value)
+                viewModel.input.messageNotification.onNext(value)
+                viewModel.action.edit.onNext(())
+            }
+            .disposed(by: disposeBag)
     }
     
     

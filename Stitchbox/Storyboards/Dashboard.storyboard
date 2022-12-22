@@ -676,6 +676,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="Settings" leftItemsSupplementBackButton="YES" id="ssg-za-I02" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
                     <connections>
+                        <outlet property="allowChallengeButton" destination="PdQ-TC-Ctu" id="hr5-zz-Fm5"/>
+                        <outlet property="allowDiscordLinkButton" destination="5fN-Rc-NRW" id="JLv-e7-T9r"/>
+                        <outlet property="autoMinimizeButton" destination="b4Z-Wg-wyP" id="hb9-d3-BNX"/>
+                        <outlet property="autoPlaySoundButton" destination="nbB-c6-ceP" id="6jF-4l-bEW"/>
                         <outlet property="logoutButton" destination="HXp-PI-Fgg" id="BV2-AD-I3l"/>
                     </connections>
                 </viewController>
@@ -812,6 +816,14 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <navigationItem key="navigationItem" title="Push Notifications" leftItemsSupplementBackButton="YES" id="BGl-Dv-db3" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="challengeNotificationsButton" destination="Io7-Gd-p4e" id="zyC-OI-AKg"/>
+                        <outlet property="commentNotificationsButton" destination="z5k-Tq-4jF" id="yeZ-FQ-bW7"/>
+                        <outlet property="followNotificationsButton" destination="gLe-ah-MOZ" id="yYj-vc-566"/>
+                        <outlet property="highlightNotificationsButton" destination="f9j-UV-aZd" id="tnw-ze-CzW"/>
+                        <outlet property="mentionNotificationsButton" destination="8ur-f6-WPC" id="qOi-P1-gsb"/>
+                        <outlet property="messageNotificationsButton" destination="K9C-AN-45U" id="aF0-ze-ANU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OGx-sv-nSk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1038,7 +1050,7 @@
             <size key="intrinsicContentSize" width="182.33333333333334" height="34.333333333333336"/>
         </designable>
         <designable name="Tkl-5W-Yw1">
-            <size key="intrinsicContentSize" width="61" height="34"/>
+            <size key="intrinsicContentSize" width="55" height="34"/>
         </designable>
         <designable name="Wx0-kI-Yna">
             <size key="intrinsicContentSize" width="187" height="39"/>
@@ -1053,7 +1065,7 @@
             <size key="intrinsicContentSize" width="72.666666666666671" height="34.333333333333336"/>
         </designable>
         <designable name="gZ4-lz-XpD">
-            <size key="intrinsicContentSize" width="162" height="34"/>
+            <size key="intrinsicContentSize" width="156" height="34"/>
         </designable>
         <designable name="nbB-c6-ceP">
             <size key="intrinsicContentSize" width="110" height="39"/>

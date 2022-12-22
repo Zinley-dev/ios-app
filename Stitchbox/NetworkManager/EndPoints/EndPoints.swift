@@ -76,7 +76,7 @@ extension UserApi: EndPointType {
 
 public enum SettingAPI {
     case getSettings
-    case updateSettings (params: [String:String])
+    case updateSettings (params: [String: Any])
 }
 extension SettingAPI: EndPointType {
     var module: String {
@@ -97,7 +97,7 @@ extension SettingAPI: EndPointType {
         case .getSettings:
             return .get
         case .updateSettings:
-            return .post
+            return .patch
         }
     }
     

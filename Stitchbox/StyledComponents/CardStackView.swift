@@ -38,14 +38,14 @@ import SwiftUI
     
 }
 @IBDesignable class CardButton: UIButton {
-    
+    var switchbtn: UISwitch?
     // IB: use the adapter
     @IBInspectable var haveSwitch: Bool = false {
         didSet {
             if haveSwitch {
-                let switchbtn = CardSwitch(frame: CGRect(x: self.bounds.maxX - 60, y: (titleLabel?.bounds.midY)!, width: 50, height: 10))
-                switchbtn.addTarget(self, action: #selector(self.switchStateDidChange(_:)), for: .valueChanged)
-                self.addSubview(switchbtn)
+                switchbtn = CardSwitch(frame: CGRect(x: self.bounds.maxX - 60, y: (titleLabel?.bounds.midY)!, width: 50, height: 10))
+                switchbtn?.addTarget(self, action: #selector(self.switchStateDidChange(_:)), for: .valueChanged)
+                self.addSubview(switchbtn ?? UIView())
                 
             }else {
                 let rightImage = UIImage(named: "dropdownright.svg")
@@ -99,9 +99,6 @@ import SwiftUI
         let tintedImage = origImage?.withRenderingMode(.alwaysTemplate).resize(targetSize: CGSizeMake(CGFloat(25), CGFloat(25))).withTintColor(.text)
         self.setImage(tintedImage, for: .normal)
         self.tintColor = .text
-        
-        
-        
     }
     
     @objc func switchStateDidChange(_ sender:UISwitch!)

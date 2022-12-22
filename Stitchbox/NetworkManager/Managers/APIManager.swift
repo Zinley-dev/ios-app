@@ -60,4 +60,12 @@ struct SettingAPIManager{
         }
     }
     
+    func updateSettings(params: [String: Any], completion: @escaping APICompletion) {
+        manager.request(.updateSettings(params: params)){
+            result in
+            completion(result)
+        }
+    }
+
+    
 }

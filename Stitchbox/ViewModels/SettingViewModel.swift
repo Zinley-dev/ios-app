@@ -105,21 +105,35 @@ class SettingViewModel: ViewModelProtocol {
             successObservable: successSubject.asObservable()
         )
         
-        notificationObservable = Observable<[String:Any]>.zip( commentNotificationSubject.asObservable(), followNotificationSubject.asObservable(), highlightNotificationSubject.asObservable(), mentionNotificationSubject.asObservable(), messageNotificationSubject.asObservable(),
+        notificationObservable = Observable<[String:Any]>.combineLatest( commentNotificationSubject.asObservable(), followNotificationSubject.asObservable(), highlightNotificationSubject.asObservable(), mentionNotificationSubject.asObservable(), messageNotificationSubject.asObservable(),
                                                                challengeNotificationSubject.asObservable()) {
             ["comment": $0, "follow": $1, "highlight": $2,
              "mention": $3, "message": $4, "challenge": $5]
         }
-        settingObservable = Observable<[String:Any]>.zip(
+        settingObservable = Observable<[String:Any]>.combineLatest(
             allowChallengeSubject.asObservable(),
             allowDiscordLinkSubject.asObservable(),
-            autoMinimizeSubject.asObservable(),
+            autoPlaySoundSubject.asObservable(),
             autoMinimizeSubject.asObservable(),
             notificationObservable) {
                 ["allowChallenge": $0, "allowDiscordLink": $1,
                  "autoPlaySound": $2, "autoMinimize": $3, "notifications": $4]}
         
-        self.settingObservable.subscribe{result in print(result)}
+        self.editSubject.asObservable().withLatestFrom(settingObservable).subscribe(onNext: { params in
+            print(params)
+            SettingAPIManager().updateSettings(params: params) {
+                result in switch result {
+                case .success(let response):
+                    print(response)
+                    self.getAPISetting()
+                case .failure(let error):
+                    print(error)
+                    self.errorsSubject.onNext(error)
+                }
+            }
+        }, onError: { error in
+            self.errorsSubject.onNext(error)
+        }).disposed(by: disposeBag)
         
         logic()
         getAPISetting()
