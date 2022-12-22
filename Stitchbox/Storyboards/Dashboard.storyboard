@@ -306,7 +306,7 @@
             </objects>
             <point key="canvasLocation" x="2260.8695652173915" y="876.5625"/>
         </scene>
-        <!-- -->
+        <!--View Controller-->
         <scene sceneID="gvV-m7-Zbi">
             <objects>
                 <viewController id="iuL-41-Vew" sceneMemberID="viewController">
@@ -328,7 +328,8 @@
                             <constraint firstItem="Hmu-Uu-alB" firstAttribute="centerY" secondItem="XNC-2q-Vo8" secondAttribute="centerY" id="xHy-xv-Ivi"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title=" " id="gS6-OX-2fH"/>
+                    <tabBarItem key="tabBarItem" title="" selectedImage="4x_add" id="gS6-OX-2fH"/>
+                    <navigationItem key="navigationItem" id="5of-K2-ZzJ"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pZH-B8-jO7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

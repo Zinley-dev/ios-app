@@ -93,7 +93,6 @@ import SwiftUI
     override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
         setupView()
-
     }
     override var isSelected: Bool {
         didSet {

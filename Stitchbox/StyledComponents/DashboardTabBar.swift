@@ -13,7 +13,7 @@ import SwiftUI
     
     var button: UIButton = UIButton()
     var actionButtonContainerView: UIView!
-    
+     
     
     // MARK: - Initialization
     required init?(coder: NSCoder) {
@@ -32,11 +32,11 @@ import SwiftUI
         button.layer.shadowOpacity = 0.1
         self.view.insertSubview(button, aboveSubview: self.tabBar)
         button.addTarget(self, action: #selector(pressedAction(_:)), for: .touchUpInside)
-
+        
     }
     @objc func pressedAction(_ sender: UIButton) {
         // do your stuff here
-
+        self.selectedIndex = 2
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -45,8 +45,7 @@ import SwiftUI
         button.frame = CGRect.init(x: Int(self.view.bounds.midX) - sizeButton / 2, y: Int(self.tabBar.frame.minY) - sizeButton / 2, width: sizeButton, height: sizeButton)
     }
     func setupView() {
-        self.view.bringSubviewToFront( self.tabBar)
-        
+        self.view.bringSubviewToFront(self.tabBar)
         tabBar.layer.opacity = 1
         tabBar.tintColor = .tabbar
         tabBar.barTintColor = .tabbar
@@ -58,11 +57,14 @@ import SwiftUI
         tabBar.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
         tabBar.layer.masksToBounds = false
         tabBar.layer.cornerRadius = 20
-        
         tabBar.frame.size.height = 70
         tabBar.frame.origin.x = 50
         tabBar.insertSubview(UIButton(), at: 3)
+        UITabBar.appearance().isTranslucent = false
         
+        if self.tabBar.isHidden {
+            button.isHidden = true
+        }
     }
     
     // MARK: - UI Setup
@@ -76,7 +78,15 @@ import SwiftUI
         setupMiddleButton()
     }
     
-    
+    func tabsVisiblty(_ isVisiblty: Bool = true){
+        if isVisiblty {
+            self.tabBar.isHidden = false
+            self.button.isHidden = false
+        } else {
+            self.tabBar.isHidden = true
+            self.button.isHidden = true
+        }
+    }
 }
 
 

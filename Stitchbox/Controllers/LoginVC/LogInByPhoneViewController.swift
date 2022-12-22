@@ -79,6 +79,10 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
                 return ($1, self.cpv.selectedCountry.phoneCode) }
             .subscribe(viewModel.action.sendOTPDidTap)
             .disposed(by: disposeBag)
+        
+        sendCodeButton.rx.tap.asObservable().subscribe { Void in
+            self.presentLoading()
+        }.disposed(by: disposeBag)
     }
 }
 
