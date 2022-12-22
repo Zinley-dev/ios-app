@@ -26,6 +26,7 @@ class SettingViewController: UIViewController, ControllerType {
         bindUI(with: viewModel)
         bindAction(with: viewModel)
         setUpNavigationBar()
+        SettingAPIManager().getSettings{result in print(result)}
     }
     // MARK: - Functions
     func bindUI(with viewModel: SettingViewModel) {

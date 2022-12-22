@@ -16,14 +16,39 @@ class SettingViewModel: ViewModelProtocol {
     
     var output: Output
     
-    struct Input {}
+    struct Input {
+//        var allowChallenge: AnyObserver<Bool>
+//        var allowDiscordLink: AnyObserver<Bool>
+//        var autoMinimize: AnyObserver<Bool>
+//        var autoPlaySound: AnyObserver<Bool>
+//        var challengeNotification: AnyObserver<Bool>
+//        var commentNotification: AnyObserver<Bool>
+//        var followNotification: AnyObserver<Bool>
+//        var highlightNotification: AnyObserver<Bool>
+//        var mentionNotification: AnyObserver<Bool>
+//        var messageNotification: AnyObserver<Bool>
+    }
     
     struct Action {}
     
-    struct Output {}
+    struct Output {
+//        var allowChallenge: Observable<Bool>
+//        var allowDiscordLink: Observable<Bool>
+//        var autoMinimize: Observable<Bool>
+//        var autoPlaySound: Observable<Bool>
+//        var challengeNotification: Observable<Bool>
+//        var commentNotification: Observable<Bool>
+//        var followNotification: Observable<Bool>
+//        var highlightNotification: Observable<Bool>
+//        var mentionNotification: Observable<Bool>
+//        var messageNotification: Observable<Bool>
+    }
+    
+    
     
     init() {
-        input = Input()
+        input = Input(
+        )
         
         action = Action()
         

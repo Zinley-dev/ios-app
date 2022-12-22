@@ -71,3 +71,46 @@ extension UserApi: EndPointType {
         return nil
     }
 }
+
+
+
+public enum SettingAPI {
+    case getSettings
+    case updateSettings (params: [String:String])
+}
+extension SettingAPI: EndPointType {
+    var module: String {
+        return "/settings"
+    }
+    
+    var path: String {
+        switch self {
+        case .getSettings:
+            return "/"
+        case .updateSettings:
+            return "/"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getSettings:
+            return .get
+        case .updateSettings:
+            return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getSettings:
+            return .request
+        case .updateSettings(let params):
+            return .requestParameters(parameters: params)
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
