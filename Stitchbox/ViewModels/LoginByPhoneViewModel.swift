@@ -47,8 +47,11 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
         logic()
     }
     func logic() {
+      
         sendOTPDidTapSubject.asObservable()
             .subscribe (onNext: { (phone, countryCode) in
+              
+//                self.OTPSentSubject.onNext(true)
                 print(phone, countryCode)
                 if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{3,4}$"#)
                    || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
@@ -132,6 +135,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                 {(phone: $0.phone, countryCode: $1, code: $0.code)}
             .subscribe (onNext: {(phone, countryCode, code) in
                 print(phone, countryCode, code)
+//                self.successSubject.onNext(.logInSuccess);
                 // check username or password in the right format
                 if (isNotValidInput(Input: phone, RegEx: "^\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{3,4}$")
                     || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")
@@ -141,7 +145,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                 }
                 // call api toward login api of backend
                 APIManager().phoneVerify(phone: countryCode + phone, OTP: code) { result in switch result {
-                    
+
                 case .success(let apiResponse):
                     // get and process data
                     if (apiResponse.body?["message"] as! String == "success") {
@@ -152,27 +156,27 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                             print(account)
                             //                             Create JSON Encoder
                             let encoder = JSONEncoder()
-                            
+
                             // Encode Note
                             let data = try encoder.encode(account)
-                            
+
                             // Write/Set Data
                             UserDefaults.standard.set(data, forKey: "userAccount")
-                            
+
                             if let data = UserDefaults.standard.data(forKey: "userAccount") {
                                 // Create JSON Decoder
                                 let decoder = JSONDecoder()
-                                
+
                                 // Decode Note
                                 let accountDecoded = try decoder.decode(Account.self, from: data)
                                 print(accountDecoded)
                             }
                             self.successSubject.onNext(.logInSuccess);
-                            
+
                         } catch {
                             print("Unable to Create Account (\(error))")
                         }        }
-                    
+
                 case .failure(let error):
                     print(error)
                     switch error {
@@ -183,10 +187,10 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                           domain: body?["message"] as? String ?? "Cannot verify OTP",
                           code: Int(body?["error"] as! String)!
                         ))
-                        
+
                     default:
                         self.errorsSubject.onNext(NSError(domain: "Cannot verify OTP", code: 401))
-                        
+
                     }
                 }
                 }

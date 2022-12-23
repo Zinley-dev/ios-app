@@ -9,9 +9,14 @@ import UIKit
 import AVFoundation
 import RxSwift
 import RxCocoa
+import Lottie
 
-class StartViewController: UIViewController {
-  private lazy var vm: StartViewModel = StartViewModel(vc: self)
+class StartViewController: UIViewController, ControllerType {
+  typealias ViewModelType = StartViewModel
+
+  // MARK: - Properties
+//  private var viewModel: ViewModelType! = ViewModelType()
+  private lazy var vm: ViewModelType! = ViewModelType(vc: self)
   private let disposeBag = DisposeBag()
   
   
@@ -31,7 +36,16 @@ class StartViewController: UIViewController {
     } else {
       RedirectionHelper.redirectToDashboard()
     }
+    
   }
+  
+  // MARK: - Functions
+  func bindUI(with: ViewModelType) {
+  }
+  
+  func bindAction(with viewModel: ViewModelType) {
+  }
+
   
   func bindingUI() {
     vm.output.loginResultObservable.subscribe(onNext: { isTrue in
@@ -66,6 +80,9 @@ class StartViewController: UIViewController {
   }
   
   @IBAction func didTapLetStart(_ sender: UIButton) {
+//    self.presentLoading()
+
+    
     collectionLoginProviders.forEach { (btn) in
       UIView.animate(withDuration: 0.4) {
         btn.isHidden = !btn.isHidden

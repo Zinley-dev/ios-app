@@ -53,16 +53,14 @@ extension ControllerType {
     }
     
     func presentLoading() {
-        let swiftUIView = LottieView(name: "loading-animation", loopMode: .loop)
-            .frame(width: 100, height: 100)
-        
-        let viewCtrl = UIHostingController(rootView: swiftUIView)
-        let popupVC = PopupViewController(contentController: viewCtrl, popupWidth: 100, popupHeight: 100)
-        
-        viewCtrl.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
-        
-        self.present(popupVC, animated: true)
-        
+      self.dismiss(animated: true) {
+        let popupVC = LoadingViewController()
+        popupVC.providesPresentationContextTransitionStyle = true
+        popupVC.definesPresentationContext = true
+        popupVC.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+        popupVC.modalPresentationStyle = .overCurrentContext
+        self.present(popupVC, animated: false, completion: nil)
+      }
     }
     
 }

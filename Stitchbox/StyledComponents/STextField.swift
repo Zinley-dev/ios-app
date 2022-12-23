@@ -76,7 +76,7 @@ import SwiftUI
             backgroundColor = UIColor.clear
             tintColor = UIColor.primary
 //            textColor = UIColor.text
-            layer.borderColor = UIColor.secondary.cgColor
+            layer.borderColor = UIColor.tertiary.cgColor
             layer.cornerRadius = self.frame.height / 2
             layer.borderWidth = 2.0
             clipsToBounds = true

@@ -107,6 +107,8 @@
 		A540A8D8294731120085CC45 /* TwitterSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D7294731120085CC45 /* TwitterSignInService.swift */; };
 		A540A8DA294731320085CC45 /* AppleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D9294731320085CC45 /* AppleSignInService.swift */; };
 		A540A8DC294731750085CC45 /* TiktokSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8DB294731750085CC45 /* TiktokSignInService.swift */; };
+		A548E5A529555C2300E9C971 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A548E5A429555C2300E9C971 /* LoadingViewController.swift */; };
+		A548E5AA2955AD7500E9C971 /* LastStepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A548E5A92955AD7500E9C971 /* LastStepViewController.swift */; };
 		A59CB3ED294ADA4700D84D9A /* ApplicationMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59CB3EC294ADA4700D84D9A /* ApplicationMacros.swift */; };
 		A59CB3EF294ADB1E00D84D9A /* AppNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59CB3EE294ADB1E00D84D9A /* AppNavigationController.swift */; };
 		A59CB3F1294ADBD700D84D9A /* ApplicationCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59CB3F0294ADBD700D84D9A /* ApplicationCoreData.swift */; };
@@ -262,6 +264,8 @@
 		A540A8D7294731120085CC45 /* TwitterSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterSignInService.swift; sourceTree = "<group>"; };
 		A540A8D9294731320085CC45 /* AppleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInService.swift; sourceTree = "<group>"; };
 		A540A8DB294731750085CC45 /* TiktokSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiktokSignInService.swift; sourceTree = "<group>"; };
+		A548E5A429555C2300E9C971 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		A548E5A92955AD7500E9C971 /* LastStepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastStepViewController.swift; sourceTree = "<group>"; };
 		A59CB3EC294ADA4700D84D9A /* ApplicationMacros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationMacros.swift; sourceTree = "<group>"; };
 		A59CB3EE294ADB1E00D84D9A /* AppNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigationController.swift; sourceTree = "<group>"; };
 		A59CB3F0294ADBD700D84D9A /* ApplicationCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationCoreData.swift; sourceTree = "<group>"; };
@@ -530,6 +534,8 @@
 				A5A5E41229389770004E9207 /* ForgotViewController.swift */,
 				A5A5E4142938A309004E9207 /* VerifyViewController.swift */,
 				A5346487294B09B300FB6A94 /* ProfileViewController.swift */,
+				A548E5A429555C2300E9C971 /* LoadingViewController.swift */,
+				A548E5A92955AD7500E9C971 /* LastStepViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1189,6 +1195,7 @@
 				A59CB3ED294ADA4700D84D9A /* ApplicationMacros.swift in Sources */,
 				A5A5E40F29388F5F004E9207 /* CreateAccountViewController.swift in Sources */,
 				147187F32920D2830039B89E /* LoginByPhoneViewModel.swift in Sources */,
+				A548E5A529555C2300E9C971 /* LoadingViewController.swift in Sources */,
 				6AAD7A63294C699E003E3AB6 /* DispatchQueue+Extensions.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
 				395477B829425318008EED97 /* AuthResult.swift in Sources */,
@@ -1196,6 +1203,7 @@
 				6AAD7A1C294C65DD003E3AB6 /* AppDelegate+SendBirdCallsDelegates.swift in Sources */,
 				390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */,
 				A5A5E40729375FF3004E9207 /* SButton.swift in Sources */,
+				A548E5AA2955AD7500E9C971 /* LastStepViewController.swift in Sources */,
 				6AAD7A1E294C65DD003E3AB6 /* UIApplication+QuickStart.swift in Sources */,
 				1457CDEC294862DF003C742F /* DashboardTabBar.swift in Sources */,
 				6AAD7A35294C6637003E3AB6 /* CallStatus.swift in Sources */,

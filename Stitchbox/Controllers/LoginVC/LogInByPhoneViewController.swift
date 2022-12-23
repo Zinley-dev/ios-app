@@ -30,7 +30,6 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         //setup country code field
         cpv.hostViewController = self
         cpv.showCountryNameInView = true
@@ -45,7 +44,6 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
     }
     // MARK: - Functions
     func bindUI(with viewModel: LoginByPhoneSendCodeViewModel) {
-        
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
@@ -90,7 +88,7 @@ extension LoginByPhoneSendCodeController {
     static func create(with viewModel: ViewModelType) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "PHONE") as! LoginByPhoneSendCodeController
-        controller.viewModel = viewModel
+//        controller.viewModel = viewModel
         controller.modalPresentationStyle = .fullScreen
         return controller
     }

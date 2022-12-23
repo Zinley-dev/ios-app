@@ -28,6 +28,7 @@ public enum UserApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
     case phoneverify (params: [String:String])
+    case register (params: [String:String])
 }
 extension UserApi: EndPointType {
     var module: String {
@@ -42,7 +43,10 @@ extension UserApi: EndPointType {
             return "/phone-login"
         case .phoneverify:
             return "/phone-verify"
+        case .register:
+            return "/register"
         }
+        
     }
     
     var httpMethod: HTTPMethod {
@@ -52,6 +56,8 @@ extension UserApi: EndPointType {
         case .phonelogin:
             return .post
         case .phoneverify:
+            return .post
+        case .register:
             return .post
         }
     }
@@ -63,6 +69,8 @@ extension UserApi: EndPointType {
         case .phonelogin(let params):
             return .requestParameters(parameters: params)
         case .phoneverify(let params):
+            return .requestParameters(parameters: params)
+        case .register(let params):
             return .requestParameters(parameters: params)
         }
     }

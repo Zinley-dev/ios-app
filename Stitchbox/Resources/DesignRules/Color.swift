@@ -22,13 +22,8 @@ extension UIColor{
 
     class var text: UIColor{
         return UIColor{ traitCollection in
-            // 2
-            switch traitCollection.userInterfaceStyle {
-            case .light:
-                return UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
-            default:
-                return UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-            }
+            
+              return UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }
     }
 
@@ -38,12 +33,10 @@ extension UIColor{
 
     class var background: UIColor{
         return UIColor{ traitCollection in
-            switch traitCollection.userInterfaceStyle {
-            case .light:
-                return UIColor(red: (255.0/255.0), green: (255.0/255.0), blue: (255.0/255.0), alpha: 1.0)
-            default:
-                return UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
-            }
+            
+            
+              return UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
+            
         }
     }
     class var other: UIColor{
@@ -51,25 +44,13 @@ extension UIColor{
     }
     class var tabbar: UIColor{
         return UIColor{ traitCollection in
-            // 2
-            switch traitCollection.userInterfaceStyle {
-            case .light:
-                return UIColor(red: (53.0/255.0), green: (46.0/255.0), blue: (113.0/255.0), alpha: 1.0)
-            default:
-                return UIColor(red: (233.0/255.0), green: (230.0/255.0), blue: 1.0, alpha: 1.0)
-            }
+              return UIColor(red: (233.0/255.0), green: (230.0/255.0), blue: 1.0, alpha: 1.0)
         }
     }
         
         class var tabbarbackground: UIColor{
             return UIColor{ traitCollection in
-                // 2
-                switch traitCollection.userInterfaceStyle {
-                case .light:
-                    return UIColor(red: (255.0/255.0), green: (255.0/255.0), blue: (255.0/255.0), alpha: 1.0)
-                default:
                     return UIColor(red: (0.0/255.0), green: (0.0/255.0), blue: (0.0/255.0), alpha: 1.0)
-                }
             }
     }
 //    class var gradientColor: CGGradient {
