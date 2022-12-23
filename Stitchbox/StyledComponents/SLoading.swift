@@ -19,6 +19,7 @@ import SwiftUI
 import Lottie
 
 
+
 #if canImport(SwiftUI) && DEBUG
 
 
@@ -30,6 +31,7 @@ struct LottieView: UIViewRepresentable {
     
     func makeUIView(context: UIViewRepresentableContext<LottieView>) -> UIView {
         let view = UIView(frame: .zero)
+        animationView.backgroundColor = .clear
         
       
         animationView.animation = .named(name)
