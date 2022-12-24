@@ -24,13 +24,10 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     @IBOutlet weak var tableView: UITableView!
     
     var searchController: UISearchController?
-    var testUserList: [SBUUser] = [SBUUser(userId: "639e6786ab2572f58918d2e5", nickname: "test01", profileUrl: "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"), SBUUser(userId: "639e674eab2572f58918d2e2", nickname: "kai1004pro", profileUrl: "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"), SBUUser(userId: "6399411fc499cc35d651ec04", nickname: "hoangnm", profileUrl: "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png")]
     var userList: [SBUUser] = []
     var searchUserList: [SBUUser] = []
-    
     var uid_list = [String]()
     var selectedUsers: [SBUUser] = []
-    
     var createButtonItem: UIBarButtonItem?
     var cancelButtonItem: UIBarButtonItem?
     
@@ -83,17 +80,11 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
         
         //
-        
-        loadUsers()
+        loadDefaultUsers()
         
     }
     
-    func loadUsers() {
-        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty else { return }
-        self.userList = testUserList.filter { $0.userId != userUID }
-        self.tableView.reloadData()
-    }
-    
+
 
     // setup initial view
     
@@ -316,30 +307,72 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
             }
         }
     }
-
     
     func searchUsers(keyword: String) {
-        
         APIManager().searchUsersForChat(keyword: keyword) { result in
             switch result {
             case .success(let apiResponse):
-                // Check if the request was successful
-                guard apiResponse.body?["message"] as? String == "success",
-                    let data = apiResponse.body?["data"] as? [String: Any] else {
-                        return
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    return
                 }
-                
-                print(data)
-                
-               
+
+                var newUserList = [SBUUser]()
+                for user in data {
+                    do {
+                        let preloadUser = try SendBirdUser(JSONbody: user)
+                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
+                        if !self.searchUserList.contains(where: { $0.userId == user.userId }) {
+                            newUserList.append(user)
+                        }
+                    } catch {
+                        print("Can't catch user")
+                    }
+                }
+
+                self.searchUserList = newUserList
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+
             case .failure(let error):
                 print(error)
             }
         }
-
-        
     }
     
+    
+    func loadDefaultUsers() {
+        APIManager().searchUsersForChat(keyword: "") { result in
+            switch result {
+            case .success(let apiResponse):
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    return
+                }
+
+                var newUserList = [SBUUser]()
+                for user in data {
+                    do {
+                        let preloadUser = try SendBirdUser(JSONbody: user)
+                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
+                        if !self.userList.contains(where: { $0.userId == user.userId }) {
+                            newUserList.append(user)
+                        }
+                    } catch {
+                        print("Can't catch user")
+                    }
+                }
+
+                self.userList = newUserList
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
     
     func shouldShowLoadingIndicator(){
         SBULoading.start()

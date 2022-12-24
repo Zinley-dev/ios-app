@@ -138,7 +138,7 @@ extension ChatApi: EndPointType {
 
 
 public enum SearchApi {
-    case searchUsersForChat (params: [String:String])
+    case searchUsersForChat(params: [String:String])
    
 }
 
@@ -150,22 +150,22 @@ extension SearchApi: EndPointType {
     
     var path: String {
         switch self {
-        case .searchUsersForChat:
-            return ""
+        case .searchUsersForChat(let params):
+            return "/search?search=\(params["search"] ?? "")"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
         case .searchUsersForChat:
-            return .post
+            return .get
         }
     }
     
     var task: HTTPTask {
         switch self {
-        case .searchUsersForChat(let params):
-            return .requestParameters(parameters: params)
+        case .searchUsersForChat:
+            return .request
         }
         
     }

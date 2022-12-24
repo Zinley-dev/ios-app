@@ -113,7 +113,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         if let channelUrl = self.channelUrl {
             self.loadChannel(channelUrl: channelUrl)
         }
+        
         self.setupStyles()
+        loadDefaultUsers()
     }
 
     
@@ -258,7 +260,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
             let filteredUsers = userList.filter { $0.nickname?.contains(searchText) == true }
             if filteredUsers.isEmpty {
                 delayItem.perform(after: 0.35) {
-                    self.searchUsers(searchText: searchText)
+                    self.searchUsers(keyword: searchText)
                 }
             } else {
                 searchUserList = filteredUsers
@@ -266,29 +268,71 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
             }
         }
     }
-
-
     
-    func searchUsers(searchText: String) {
-        
-        APIManager().searchUsersForChat(keyword: searchText) { result in
+    
+    func loadDefaultUsers() {
+        APIManager().searchUsersForChat(keyword: "") { result in
             switch result {
             case .success(let apiResponse):
-                // Check if the request was successful
-                guard apiResponse.body?["message"] as? String == "success",
-                    let data = apiResponse.body?["data"] as? [String: Any] else {
-                        return
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    return
                 }
                 
-                
-                
-               
+                let newUserList = data.compactMap { user -> SBUUser? in
+                    do {
+                        let preloadUser = try SendBirdUser(JSONbody: user)
+                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
+                        if !self.joinedUserIds.contains(user.userId) {
+                            return user
+                        }
+                    } catch {
+                        print("Can't catch user")
+                    }
+                    return nil
+                }
+
+                self.userList = newUserList
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+
             case .failure(let error):
                 print(error)
             }
         }
-        
-        
+    }
+
+    func searchUsers(keyword: String) {
+        APIManager().searchUsersForChat(keyword: keyword) { result in
+            switch result {
+            case .success(let apiResponse):
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    return
+                }
+                
+                let newUserList = data.compactMap { user -> SBUUser? in
+                    do {
+                        let preloadUser = try SendBirdUser(JSONbody: user)
+                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
+                        if !self.joinedUserIds.contains(user.userId) {
+                            print(user.userId)
+                            return user
+                        }
+                    } catch {
+                        print("Can't catch user")
+                    }
+                    return nil
+                }
+
+                self.searchUserList = newUserList
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 
     
