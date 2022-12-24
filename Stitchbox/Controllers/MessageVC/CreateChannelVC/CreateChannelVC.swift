@@ -297,7 +297,10 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count > 0 {
-            let filteredUsers = userList.filter { $0.nickname?.contains(searchText) ?? false }
+            let filteredUsers = userList.filter {
+                guard let nickname = $0.nickname else { return false }
+                return nickname.range(of: searchText, options: .caseInsensitive) != nil
+            }
             searchUserList = filteredUsers.isEmpty ? [] : filteredUsers
             tableView.reloadData()
             if searchText != "", filteredUsers.isEmpty {
@@ -307,6 +310,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
             }
         }
     }
+
     
     func searchUsers(keyword: String) {
         APIManager().searchUsersForChat(keyword: keyword) { result in

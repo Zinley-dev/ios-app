@@ -253,21 +253,21 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            searchUserList.removeAll()
+        if searchText.count > 0 {
+            let filteredUsers = userList.filter {
+                guard let nickname = $0.nickname else { return false }
+                return nickname.range(of: searchText, options: .caseInsensitive) != nil
+            }
+            searchUserList = filteredUsers.isEmpty ? [] : filteredUsers
             tableView.reloadData()
-        } else {
-            let filteredUsers = userList.filter { $0.nickname?.contains(searchText) == true }
-            if filteredUsers.isEmpty {
+            if searchText != "", filteredUsers.isEmpty {
                 delayItem.perform(after: 0.35) {
                     self.searchUsers(keyword: searchText)
                 }
-            } else {
-                searchUserList = filteredUsers
-                tableView.reloadData()
             }
         }
     }
+
     
     
     func loadDefaultUsers() {
