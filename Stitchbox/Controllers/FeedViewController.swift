@@ -15,6 +15,7 @@ class FeedViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         lblHome.text = _AppCoreData.userDataSource.value?.userName
+        
     }
     
 

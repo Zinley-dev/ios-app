@@ -11,7 +11,6 @@ import SendBirdCalls
 
 class RequestChannelVC: SBUChannelViewController {
 
-    var isUnHidden = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,155 +40,49 @@ class RequestChannelVC: SBUChannelViewController {
         
     }
     
-    
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
-    }
-    
-    func checkIFUnhidden() {
-    
-        
-        
-        
-    }
-    
-    func updateChannel() {
-        
-        
-        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-            
-            if let channel = self.channel, self.channel?.creator?.userId != userUID {
-                
-                if isUnHidden == false {
-                    
-                    checkIFUnhidden()
-                    
-                    hideChannelToadd = channel
-                    
- 
-                    NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "addHideChannel")), object: nil)
-                    NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "removeHideChannel")), object: nil)
-                    
 
-                    channel.setMyPushTriggerOption(.all) { error in
-                        if let error = error {
-                            Utils.showAlertController(error: error, viewController: self)
-                            return
-                        }
-                    }
-                    
-                    isUnHidden = true
-                    
-                }
-                
-                
-                
-            } else if let channel = self.channel, self.channel?.joinedAt != nil {
-                
-                if isUnHidden == false {
-                    
-                    checkIFUnhidden()
-                    
-                    hideChannelToadd = channel
-                    NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "addHideChannel")), object: nil)
-                    NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "removeHideChannel")), object: nil)
-                    
-                    
-                    channel.setMyPushTriggerOption(.all) { error in
-                        if let error = error {
-                            Utils.showAlertController(error: error, viewController: self)
-                            return
-                        }
-                    }
-                    
-                    isUnHidden = true
-                
-                }
-                
-                
-            }
-            
-        }
-        
-        
-        
-        
-    }
-    
-    
     override func sendUserMessage(messageParams: SBDUserMessageParams, parentMessage: SBDBaseMessage? = nil) {
-        
-        
-        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-            
-            if let channel = self.channel, self.channel?.creator?.userId != userUID {
-                
-                
-                
-                acceptInvitesRequest(channel: channel.channelUrl, userUID: userUID)
-                
-                /*
-                channel.acceptInvitation { error in
-                    if let error = error {
-                        Utils.showAlertController(error: error, viewController: self)
-                        return
-                    }
-                    
-                    self.sendText(messageParams: messageParams)
-                }*/
-                
-                
-            } else {
-                
-                sendText(messageParams: messageParams)
-                
-                
-            }
-            
-        }
-           
-    }
-    
-    
-    func acceptInvitesRequest(channel: String, userUID: String) {
-        
-        if let inviterUID = self.channel?.getInviter()?.userId {
-            
-            if inviterUID == userUID {
-                
-                performAcceptAPIRequest(channel: channel, inviterUID: "", userUID: userUID)
-            
-            } else {
-                
-                performAcceptAPIRequest(channel: channel, inviterUID: inviterUID, userUID: userUID)
-                
-            }
-            
-        } else {
-            
-            performAcceptAPIRequest(channel: channel, inviterUID: "", userUID: userUID)
+        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, let channel = self.channel, channel.creator?.userId != userUID else {
+            sendText(messageParams: messageParams)
+            return
         }
         
+        guard channel.joinedAt != 0 else {
+            acceptInvitesRequest(channel: channel.channelUrl, userUID: userUID, messageParams: messageParams, isText: true, fileData: nil, fileName: nil, mimeType: nil)
+            return
+        }
+        
+        sendText(messageParams: messageParams)
     }
+
     
-    func performAcceptAPIRequest(channel: String, inviterUID: String, userUID: String) {
+    
+    func acceptInvitesRequest(channel: String, userUID: String, messageParams: SBDUserMessageParams?, isText: Bool, fileData: Data?, fileName: String?, mimeType: String?) {
+        let inviterUID = self.channel?.getInviter()?.userId ?? ""
+        performAcceptAPIRequest(channel: channel, inviterUID: inviterUID, userUID: userUID, messageParams: messageParams, isText: isText, fileData: fileData, fileName: fileName, mimeType: mimeType)
+    }
+
+    
+    func performAcceptAPIRequest(channel: String, inviterUID: String, userUID: String, messageParams: SBDUserMessageParams?, isText: Bool, fileData: Data?, fileName: String?, mimeType: String?) {
         
         APIManager().acceptSBInvitationRequest(user_id: inviterUID, channelUrl: channel) { result in
             switch result {
             case .success(let apiResponse):
                 // Check if the request was successful
-                guard apiResponse.body?["message"] as? String == "success",
-                    let data = apiResponse.body?["data"] as? [String: Any] else {
+                guard apiResponse.body?["message"] as? String == "success" else {
                         return
                 }
                 
-                print(data)
+                DispatchQueue.main.async {
+                    if isText {
+                        self.sendText(messageParams: messageParams!)
+                    } else {
+                        self.sendMedia(fileData: fileData, fileName: fileName!, mimeType: mimeType!)
+                    }
+                    
+                }
                 
-               
+            
             case .failure(let error):
                 print(error)
             }
@@ -269,8 +162,7 @@ class RequestChannelVC: SBUChannelViewController {
                 channel.endTyping()
             }
             
-            updateChannel()
-            
+          
         }
         
         
@@ -279,37 +171,18 @@ class RequestChannelVC: SBUChannelViewController {
     
     override func sendFileMessage(fileData: Data?, fileName: String, mimeType: String) {
         
-        
-        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-            
-            if let channel = self.channel, self.channel?.creator?.userId != userUID {
-                      
-                channel.acceptInvitation { error in
-                    if let error = error {
-                        Utils.showAlertController(error: error, viewController: self)
-                        return
-                    }
-                    
-                    self.sendMedia(fileData: fileData, fileName: fileName, mimeType: mimeType)
-                }
-                
-                  
-                
-            } else {
-                
-                sendMedia(fileData: fileData, fileName: fileName, mimeType: mimeType)
-                
-            }
-            
+        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, let channel = self.channel, channel.creator?.userId != userUID else {
+            sendMedia(fileData: fileData, fileName: fileName, mimeType: mimeType)
+            return
         }
         
+        guard channel.joinedAt != 0 else {
+            acceptInvitesRequest(channel: channel.channelUrl, userUID: userUID, messageParams: nil, isText: false, fileData: fileData, fileName: fileName, mimeType: mimeType)
+            return
+        }
         
-        
-        
-        
-        
-        
-        
+        sendMedia(fileData: fileData, fileName: fileName, mimeType: mimeType)
+ 
     }
     
     func sendMedia(fileData: Data?, fileName: String, mimeType: String) {
@@ -401,8 +274,7 @@ class RequestChannelVC: SBUChannelViewController {
             
             self.sortAllMessageList(needReload: true)
            
-            updateChannel()
-            
+           
         }
         
         

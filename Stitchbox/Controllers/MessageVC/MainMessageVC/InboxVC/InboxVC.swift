@@ -63,8 +63,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         self.refreshControl?.addTarget(self, action: #selector(InboxVC.refreshChannelList), for: .valueChanged)
         self.groupChannelsTableView.addSubview(self.refreshControl!)
         
-        // Add an observer for the "addHideChannel" notification to update the list of channels
-        NotificationCenter.default.addObserver(self, selector: #selector(InboxVC.addHideChannel), name: (NSNotification.Name(rawValue: "addHideChannel")), object: nil)
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -250,6 +249,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                         cell.lastMessageLabel.text = fileMessage.name
                     }
                 }
+            } else {
+                cell.lastMessageLabel.text = "You just have joined the channel"
             }
 
             if channel.unreadMessageCount > 0 {
@@ -703,15 +704,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
 
         return nil
     }
-    
-    @objc func addHideChannel() {
-        
-        if let hideChannelToadd = hideChannelToadd, !channels.contains(hideChannelToadd) {
-                channels.insert(hideChannelToadd, at: 0)
-                groupChannelsTableView?.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-            }
-  
-    }
+
     
     
     func channel(_ sender: SBDGroupChannel, userDidJoin user: SBDUser) {

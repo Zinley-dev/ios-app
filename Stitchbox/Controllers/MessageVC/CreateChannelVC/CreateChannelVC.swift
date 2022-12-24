@@ -13,6 +13,10 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     
     var userListQuery: SBDApplicationUserListQuery?
     
+    
+    // to override search task
+    lazy var delayItem = workItem()
+    
     var inSearchMode = false
     
     @IBOutlet weak var selectedUserListView: UICollectionView!
@@ -85,101 +89,66 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     }
     
     func loadUsers() {
-        
-        
-        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-            
-            for user in testUserList {
-                
-                if user.userId != userUID {
-                    
-                    self.userList.append(user)
-                    
-                }
-                
-            }
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-            
-        }
-        
-
-        
+        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty else { return }
+        self.userList = testUserList.filter { $0.userId != userUID }
+        self.tableView.reloadData()
     }
     
 
     // setup initial view
     
     func setupNavigationView() {
-        
         self.navigationItem.leftBarButtonItem = self.leftBarButton
         self.navigationItem.rightBarButtonItem = self.rightBarButton
         self.navigationItem.titleView = self.titleView
         self.navigationItem.largeTitleDisplayMode = .never
-        
     }
     
     
     func setupSearchController() {
-        
         self.searchController = UISearchController(searchResultsController: nil)
-        self.searchController?.searchBar.delegate = self
         self.searchController?.obscuresBackgroundDuringPresentation = false
-        
+        self.searchController?.searchBar.delegate = self
         self.searchController?.searchBar.searchBarStyle = .minimal
-        
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
-        self.searchController?.searchBar.tintColor = UIColor.white
-        self.searchController?.searchBar.searchTextField.textColor = UIColor.white
-        self.searchController!.searchBar.searchTextField.attributedPlaceholder =  NSAttributedString.init(string: "Search", attributes: [NSAttributedString.Key.foregroundColor:UIColor.lightGray])
-        self.searchController!.searchBar.searchTextField.leftView?.tintColor = UIColor.lightGray
-        
+        self.searchController?.searchBar.tintColor = .white
+        self.searchController?.searchBar.searchTextField.textColor = .white
+        self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [.foregroundColor: UIColor.lightGray])
+        self.searchController!.searchBar.searchTextField.leftView?.tintColor = .lightGray
     }
+
     
     
     func setuptableView() {
-        
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 44.0
-        
-        
         self.tableView.register(SBUUserCell.self, forCellReuseIdentifier: SBUUserCell.sbu_className)
-        
     }
     
     func setupCollectionView() {
-        
-        if self.selectedUsers.count == 0 {
-            self.rightBarButton?.isEnabled = false
-        }
-        else {
-            self.rightBarButton?.isEnabled = true
-        }
-        
+        self.rightBarButton?.isEnabled = self.selectedUsers.count > 0
     }
+
     
     func setupScrollView() {
-        self.selectedUserListView.contentInset = UIEdgeInsets.init(top: 0, left: 14, bottom: 0, right: 14)
-        self.selectedUserListView.delegate = self
-        self.selectedUserListView.dataSource = self
-        self.selectedUserListView.register(SelectedUserCollectionViewCell.nib(), forCellWithReuseIdentifier: SelectedUserCollectionViewCell.cellReuseIdentifier())
-        self.selectedUserListHeight.constant = 0
-        self.selectedUserListView.isHidden = true
-        
-        self.selectedUserListView.showsHorizontalScrollIndicator = false
-        self.selectedUserListView.showsVerticalScrollIndicator = false
-        
-        if let layout = self.selectedUserListView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .horizontal
-            layout.itemSize = CGSize(width: 120, height: 30)
-        }
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 120, height: 30)
+        selectedUserListView.collectionViewLayout = layout
+        selectedUserListView.contentInset = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+        selectedUserListView.delegate = self
+        selectedUserListView.dataSource = self
+        selectedUserListView.register(SelectedUserCollectionViewCell.nib(), forCellWithReuseIdentifier: SelectedUserCollectionViewCell.cellReuseIdentifier())
+        selectedUserListHeight.constant = 0
+        selectedUserListView.isHidden = true
+        selectedUserListView.showsHorizontalScrollIndicator = false
+        selectedUserListView.showsVerticalScrollIndicator = false
     }
+
     
     func setupStyles() {
 
@@ -191,13 +160,17 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     }
     
     @objc func onClickBack() {
-        if let navigationController = self.navigationController,
-            navigationController.viewControllers.count > 1 {
-            navigationController.popViewController(animated: true)
+        if let navigationController = self.navigationController {
+            if let viewController = navigationController.viewControllers.first(where: { $0 is MainMessageVC }) {
+                navigationController.popToViewController(viewController, animated: true)
+            } else {
+                navigationController.popViewController(animated: true)
+            }
         } else {
             self.dismiss(animated: true, completion: nil)
         }
     }
+
     
     
     // collectionView setup
@@ -207,99 +180,43 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     }
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: SelectedUserCollectionViewCell.cellReuseIdentifier(), for: indexPath)) as! SelectedUserCollectionViewCell
-        
-        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelectedUserCollectionViewCell.cellReuseIdentifier(), for: indexPath) as! SelectedUserCollectionViewCell
         cell.nicknameLabel.text = selectedUsers[indexPath.row].nickname
-        
         return cell
-        
     }
-    
-    
+
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         self.selectedUsers.remove(at: indexPath.row)
-        
-        
-        if self.selectedUsers.count == 0 {
-            self.rightBarButton?.isEnabled = false
-        }
-        else {
-            self.rightBarButton?.isEnabled = true
-        }
-        
+        self.rightBarButton?.isEnabled = !self.selectedUsers.isEmpty
         setupStyles()
-        
-        DispatchQueue.main.async {
-            if self.selectedUsers.count == 0 {
-                self.selectedUserListHeight.constant = 0
-                self.selectedUserListView.isHidden = true
-            }
-            collectionView.reloadData()
-            self.tableView.reloadData()
-        }
-        
+        collectionView.reloadData()
+        self.tableView.reloadData()
+        self.selectedUserListHeight.constant = self.selectedUsers.isEmpty ? 0 : self.selectedUserListView.bounds.height
+        self.selectedUserListView.isHidden = self.selectedUsers.isEmpty
     }
+
     
     // tableView setup
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if inSearchMode {
-            
-            return self.searchUserList.count
-           
-        } else {
-            
-            return self.userList.count
-                   
-        }
-       
+        return inSearchMode ? searchUserList.count : userList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
-        var user: SBUUser?
-        
-        if inSearchMode {
-            
-            if indexPath.row < searchUserList.count {
-                
-                user = searchUserList[indexPath.row]
-                
-            }
-          
-        } else {
-            
-            user = userList[indexPath.row]
-                   
-        }
-        
-        
-        var cell: UITableViewCell? = nil
-        cell = tableView.dequeueReusableCell(withIdentifier: SBUUserCell.sbu_className)
+        let user: SBUUser = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: SBUUserCell.sbu_className, for: indexPath) as? SBUUserCell
+        cell?.configure(
+            type: .createChannel,
+            user: user,
+            isChecked: self.selectedUsers.contains(user)
+        )
+        cell?.theme = .dark
+        cell?.contentView.backgroundColor = self.view.backgroundColor
         cell?.selectionStyle = .none
-
-        if let defaultCell = cell as? SBUUserCell {
-            defaultCell.configure(
-                type: .createChannel,
-                user: user!,
-                isChecked: self.selectedUsers.contains(user!)
-            )
-            
-            defaultCell.theme = .dark
-            
-            defaultCell.contentView.backgroundColor = self.view.backgroundColor
-            
-           
-        }
-        
         return cell ?? UITableViewCell()
-        
     }
+
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -389,48 +306,40 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count > 0 {
-           
-            let filteredUsers = userList.filter { ($0.nickname?.contains(searchText))!}
-            
-            if filteredUsers.count != 0 {
-                
-                searchUserList = filteredUsers
-                self.tableView.reloadData()
-                
-            } else {
-                
-                if searchText != "" {
-                    
-                    //self.searchUsers(searchText: searchText)
-                    
+            let filteredUsers = userList.filter { $0.nickname?.contains(searchText) ?? false }
+            searchUserList = filteredUsers.isEmpty ? [] : filteredUsers
+            tableView.reloadData()
+            if searchText != "", filteredUsers.isEmpty {
+                delayItem.perform(after: 0.35) {
+                    self.searchUsers(keyword: searchText)
                 }
             }
         }
     }
+
     
-    
-    func hideForSelectedUser(channelUrl: String, user_list: [String], channel: SBDGroupChannel) {
+    func searchUsers(keyword: String) {
         
-     
-    }
-    
-    
-    func checkIfHidden(uid: String, channelUrl: String, channel: SBDGroupChannel) {
-        
-       
-    }
-    
-    func acceptInviation(channelUrl: String, user_id: String) {
+        APIManager().searchUsersForChat(keyword: keyword) { result in
+            switch result {
+            case .success(let apiResponse):
+                // Check if the request was successful
+                guard apiResponse.body?["message"] as? String == "success",
+                    let data = apiResponse.body?["data"] as? [String: Any] else {
+                        return
+                }
+                
+                print(data)
+                
+               
+            case .failure(let error):
+                print(error)
+            }
+        }
 
         
     }
     
-    
-    
-    func sendAdminMessage(channelUrl: String, message: String) {
-        
-        
-    }
     
     func shouldShowLoadingIndicator(){
         SBULoading.start()
@@ -452,84 +361,30 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
     }
     
-    
-   @objc func createChannel() {
+    @objc func createChannel() {
+        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, !selectedUsers.isEmpty else { return }
 
-       
-       if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-           
-           
-          if selectedUsers.count != 0 {
-              
-              let channelParams = SBDGroupChannelParams()
-              channelParams.isDistinct = true
-              for item in selectedUsers {
-                  channelParams.addUserId(item.userId)
-              }
-              
-              if selectedUsers.count > 1 {
-                  channelParams.operatorUserIds = [userUID]
-              }
-              
-              channelParams.addUserId(userUID)
-              
-              
-              SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
-                  guard error == nil else {
-                      // Handle error.
-                      self.showErrorAlert("Oops!", msg: error!.localizedDescription)
-                      return
-                  }
-                  
-                  let channelUrl = groupChannel?.channelUrl
-                  
-                  if self.selectedUsers.count == 1 {
-                      let user = self.selectedUsers[0]
-                      //addToAvailableChatList(uid: [user.userId])
-                      
-                      //self.checkIfHidden(uid: user.userId, channelUrl: channelUrl!, channel: groupChannel!)
-                      
-                      
-                  } else {
-                      
-                      
-                      var user_list = [String]()
-                     
-                      
-                      for user in self.selectedUsers {
-                          
-                          if !user_list.contains(user.userId) {
-                              user_list.append(user.userId)
-                          }
-                          
-                      }
-                      
-                      self.hideForSelectedUser(channelUrl: channelUrl!, user_list: user_list, channel: groupChannel!)
-                      
-    
-     
-                  }
-                  
-                  
-                 
-                  
-                  let channelVC = ChannelViewController(
-                      channelUrl: channelUrl!,
-                      messageListParams: nil
-                  )
-                  
-                 
-                  self.navigationController?.pushViewController(channelVC, animated: true)
-                  self.navigationController?.viewControllers.remove(at: 1)
-      
-              }
-      
-          }
-           
-           
-       }
-        
-   
+        let channelParams = SBDGroupChannelParams()
+        channelParams.isDistinct = true
+        channelParams.addUserIds(selectedUsers.map { $0.userId })
+        if selectedUsers.count > 1 {
+            channelParams.operatorUserIds = [userUID]
+        }
+
+        SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
+            guard error == nil, let channelUrl = groupChannel?.channelUrl else {
+                self.showErrorAlert("Oops!", msg: error?.localizedDescription ?? "Failed to create channel")
+                return
+            }
+
+            let userIDs = self.selectedUsers.map { $0.userId }
+            checkForChannelInvitation(channelUrl: channelUrl, user_ids: userIDs)
+
+            let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+            self.navigationController?.pushViewController(channelVC, animated: true)
+            self.navigationController?.viewControllers.remove(at: 1)
+        }
     }
+
 
 }

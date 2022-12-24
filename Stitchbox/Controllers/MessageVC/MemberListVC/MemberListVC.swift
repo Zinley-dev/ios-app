@@ -16,37 +16,24 @@ class MemberListVC: SBUMemberListViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        theme.backgroundColor = UIColor.red
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        theme.backgroundColor = UIColor.red
-        
-        
+      
     }
     
     override func showInviteUser() {
-        
-        if let CCV = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "InviteUserVC") as? InviteUserVC {
-                
-            for item in memberList {
-                
-                let uid = item.userId
-                joinedUserIds.append(uid)
-                
-            }
-            
-            
-            CCV.channelUrl = self.channelUrl
-            CCV.joinedUserIds = joinedUserIds
-            navigationController?.pushViewController(CCV, animated: true)
-        }
-        
-        
+       // Get a reference to the invite user view controller
+       guard let inviteUserVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "InviteUserVC") as? InviteUserVC else { return }
+
+       // Add the user IDs of the members in the memberList array to the joinedUserIds array
+       let joinedUserIds = memberList.map { $0.userId }
+
+       // Set the channelUrl and joinedUserIds properties of the invite user view controller
+       inviteUserVC.channelUrl = self.channelUrl
+       inviteUserVC.joinedUserIds = joinedUserIds
+
+       // Push the invite user view controller onto the navigation stack
+       navigationController?.pushViewController(inviteUserVC, animated: true)
     }
+
     
 
 }

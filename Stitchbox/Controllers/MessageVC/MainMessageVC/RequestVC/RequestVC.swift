@@ -37,7 +37,6 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(InboxVC.longPressChannel(_:)))
         longPressGesture.minimumPressDuration = 1.0
         self.groupChannelsTableView.addGestureRecognizer(longPressGesture)
-        NotificationCenter.default.addObserver(self, selector: #selector(RequestVC.removeHideChannel), name: (NSNotification.Name(rawValue: "removeHideChannel")), object: nil)
         
         self.groupChannelsTableView.delegate = self
         self.groupChannelsTableView.dataSource = self
@@ -47,26 +46,7 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         
     }
     
-    
-    
-    @objc func removeHideChannel() {
-        
-        if hideChannelToadd != nil {
-            
-            DispatchQueue.main.async {
-                if let index = self.channels.firstIndex(of: hideChannelToadd! as SBDGroupChannel) {
-                    self.channels.remove(at: index)
-                    self.groupChannelsTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                }
-            }
-            
-            
-        }
-        
 
-        
-    }
-    
     func showToast(message: String, completion: (() -> Void)?) {
         self.toastCompleted = false
         self.toastView.alpha = 1
@@ -128,190 +108,88 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "GroupChannelTableViewCell") as! GroupChannelTableViewCell
             let channel = self.channels[indexPath.row]
-            
-        
+
             let lastMessageDateFormatter = DateFormatter()
-            var lastUpdatedAt: Date?
-            
-            /// Marking Date on the Group Channel List
-            if channel.lastMessage != nil {
-                lastUpdatedAt = Date(timeIntervalSince1970: Double((channel.lastMessage?.createdAt)! / 1000))
-            } else {
-                lastUpdatedAt = Date(timeIntervalSince1970: Double(channel.createdAt))
-            }
-            
             let currDate = Date()
-            
-            let lastMessageDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastUpdatedAt!)
+            let lastUpdatedAt: Int64 = channel.lastMessage?.createdAt != nil ? channel.lastMessage!.createdAt : Int64(channel.createdAt)
+            let lastMessageDate = Date(timeIntervalSince1970: Double(lastUpdatedAt / 1000))
+            let lastMessageDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastMessageDate)
             let currDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: currDate)
-            
+
             if lastMessageDateComponents.year != currDateComponents.year || lastMessageDateComponents.month != currDateComponents.month || lastMessageDateComponents.day != currDateComponents.day {
                 lastMessageDateFormatter.dateStyle = .short
                 lastMessageDateFormatter.timeStyle = .none
-                cell.lastUpdatedDateLabel.text = timeForChat(lastUpdatedAt!, numericDates: true)
-            
-            }
-            else {
+                cell.lastUpdatedDateLabel.text = timeForChat(lastMessageDate, numericDates: true)
+            } else {
                 lastMessageDateFormatter.dateStyle = .none
                 lastMessageDateFormatter.timeStyle = .short
-                cell.lastUpdatedDateLabel.text = lastMessageDateFormatter.string(from: lastUpdatedAt!)
+                cell.lastUpdatedDateLabel.text = lastMessageDateFormatter.string(from: lastMessageDate)
             }
-            
-            
-            
-            cell.lastMessageLabel.isHidden = false
-            cell.typingIndicatorContainerView.isHidden = true
-            
-            cell.lastMessageLabel.isHidden = false
+
             cell.typingIndicatorContainerView.isHidden = true
             cell.notiOffIconImageView.isHidden = true
-            
-            
+
             if let inviter = channel.getInviter()?.nickname {
-                
                 cell.lastMessageLabel.text = "You was invited to join by \(inviter)"
-                
-            }
-            
-            
-            else {
+            } else {
                 cell.lastMessageLabel.text = ""
             }
-            
+
             cell.unreadMessageCountContainerView.isHidden = false
             if channel.unreadMessageCount > 99 {
                 cell.unreadMessageCountLabel.text = "+99"
-            }
-            else if channel.unreadMessageCount > 0 {
+            } else if channel.unreadMessageCount > 0 {
                 cell.unreadMessageCountLabel.text = String(channel.unreadMessageCount)
-            }
-            else {
+            } else {
                 cell.unreadMessageCountContainerView.isHidden = true
             }
-            
+
             if channel.memberCount <= 2 {
                 cell.memberCountContainerView.isHidden = true
                 cell.memberCountWidth.constant = 0.0
-            }
-            else {
+            } else {
                 cell.memberCountContainerView.isHidden = false
                 cell.memberCountWidth.constant = 18.0
                 cell.memberCountLabel.text = String(channel.memberCount)
             }
+
             
             DispatchQueue.main.async {
-                var members: [SBDUser] = []
-                var count = 0
-                if let channelMembers = channel.members as? [SBDMember], let currentUser = SBDMain.getCurrentUser() {
-                    for member in channelMembers {
-                        if member.userId == currentUser.userId {
-                            continue
-                        }
-                        members.append(member)
-                        count += 1
-                       
-                    }
-                }
-                
-                if let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell {
+                if let members = channel.members {
+                    let filteredMembers = members.compactMap { $0 as? SBDMember }.filter { $0.userId != SBDMain.getCurrentUser()?.userId }
+                    let count = filteredMembers.count
+                    let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell
                     
-                    
-                    if channel.channelUrl.contains("challenge") {
-                        
-                        if let coverUrl = channel.coverUrl, coverUrl != "" {
-                         
-                            updateCell.profileImagView.setImage(withCoverUrl: coverUrl, shouldGetGame: true)
-                           
-                        }
-                        
-                        
+                    if count == 0 {
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
+                    } else if count == 1 {
+                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!, shouldGetGame: false)
+                    } else if count > 1 && count < 5 {
+                        updateCell?.profileImagView.users = filteredMembers
+                        updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
                     } else {
-                        
-                        if members.count == 0 {
-                            
-                            if let coverUrl = channel.coverUrl, coverUrl != "" {
-                                
-                                updateCell.profileImagView.setImage(withCoverUrl: coverUrl, shouldGetGame: false)
-                                
-                            }
-                            
-                        } else if members.count == 1 {
-                            
-                            updateCell.profileImagView.setImage(withCoverUrl: members[0].profileUrl!, shouldGetGame: false)
-                            
-                        } else if members.count > 1 && members.count < 5{
-                            
-                            updateCell.profileImagView.users = members
-                            updateCell.profileImagView.makeCircularWithSpacing(spacing: 1)
-                            
-                        } else {
-                            
-                            if let coverUrl = channel.coverUrl, coverUrl != "" {
-                                
-                                updateCell.profileImagView.setImage(withCoverUrl: coverUrl, shouldGetGame: false)
-                                
-                            }
-                            
-                        }
-                        
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
                     }
-                    
-                    
-                    
-                    //
-                    
-                    // groupname
                     
                     if channel.name != "" && channel.name != "Group Channel" {
-                        
-                        updateCell.channelNameLabel.text = channel.name
-                        
+                        updateCell?.channelNameLabel.text = channel.name
                     } else {
                         
-                        if members.count == 0 {
+                        let names = filteredMembers.prefix(3).map { $0.nickname ?? "" }
+                        
+                        if count > 3 {
+                            updateCell?.channelNameLabel.text = "\(names.joined(separator: ",")) and \(count - 3) users"
+                        } else {
                             
-                            updateCell.channelNameLabel.text = "No members"
-                            
-                        } else if members.count == 1 {
-                            
-                            updateCell.channelNameLabel.text = members[0].nickname
-                            
-                            
-                        } else if members.count > 1 {
-                            
-                            var count = 0
-                            var name = [String]()
-                            for user in members {
-                                name.append(user.nickname!)
-                                count += 1
-                                if count == 3 {
-                                    break
-                                }
-                            }
-                            
-                            
-                            if members.count - name.count > 0 {
-                                
-                                let text = name.joined(separator: ",")
-                                updateCell.channelNameLabel.text = "\(text) and \(members.count - name.count) users"
-                                
-                            } else {
-                                
-                                
-                                let text = name.joined(separator: ",")
-                                updateCell.channelNameLabel.text = text
-                                
-                            }
-                
+                            updateCell?.channelNameLabel.text = names.joined(separator: ",")
                         }
-                        
                     }
+                } else {
+                    // Handle the
                     
-                        
                 }
-                
-                
             }
+
             
             if self.channels.count > 0 && indexPath.row == self.channels.count - 1 {
                 self.loadChannelListNextPage(false)
@@ -371,15 +249,12 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                     title: ""
                 ) { action, view, actionHandler in
                     
-                    if self.channels[indexPath.row].hiddenState != .unhidden {
-                        
-                        // write accept invitations here
-                        hideChannelToadd = self.channels[indexPath.row]
-                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "addHideChannel")), object: nil)
-                        
-                        self.deleteChannel(channel: self.channels[indexPath.row])
-                        
-                    }
+                    
+                     if let inviterUID = self.channels[indexPath.row].getInviter()?.userId {
+                         
+                         self.performAcceptAPIRequest(channel: self.channels[indexPath.row].channelUrl, inviterUID: inviterUID)
+         
+                     }
                     
                     actionHandler(true)
                 }
@@ -436,6 +311,23 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                      
         }
     
+    func performAcceptAPIRequest(channel: String, inviterUID: String) {
+        
+        APIManager().acceptSBInvitationRequest(user_id: inviterUID, channelUrl: channel) { result in
+            switch result {
+            case .success(let apiResponse):
+                // Check if the request was successful
+                guard apiResponse.body?["message"] as? String == "success" else {
+                    return
+                }
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+    }
+    
     func tableView(_ tableView: UITableView,
                         willDisplay cell: UITableViewCell,
                         forRowAt indexPath: IndexPath) {
@@ -455,31 +347,25 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
     
     func loadChannelListNextPage(_ refresh: Bool) {
         if refresh {
-            self.channelListQuery = nil
+            channelListQuery = nil
         }
         
-        if self.channelListQuery == nil {
-            self.channelListQuery = SBDGroupChannel.createMyGroupChannelListQuery()
-            self.channelListQuery?.order = .latestLastMessage
-            self.channelListQuery?.memberStateFilter = .stateFilterInvitedOnly
-            self.channelListQuery?.limit = self.limit
-            self.channelListQuery?.includeFrozenChannel = true
-            self.channelListQuery?.includeEmptyChannel = true
-           
-           
-            
-        }
+        guard channelListQuery == nil else { return }
         
-        if self.channelListQuery?.hasNext == false {
-            return
-        }
+        channelListQuery = SBDGroupChannel.createMyGroupChannelListQuery()
+        channelListQuery?.order = .latestLastMessage
+        channelListQuery?.memberStateFilter = .stateFilterInvitedOnly
+        channelListQuery?.limit = limit
+        channelListQuery?.includeFrozenChannel = true
+        channelListQuery?.includeEmptyChannel = true
         
-        self.channelListQuery?.loadNextPage(completionHandler: { (channels, error) in
-            if error != nil {
+        guard let query = channelListQuery, query.hasNext else { return }
+        
+        query.loadNextPage { channels, error in
+            guard error == nil, let channels = channels else {
                 DispatchQueue.main.async {
                     self.refreshControl?.endRefreshing()
                 }
-                
                 return
             }
             
@@ -487,50 +373,46 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                 if refresh {
                     self.channels.removeAll()
                 }
-                
-                self.channels += channels!
+                self.channels += channels
                 self.sortChannelList(needReload: true)
                 self.refreshControl?.endRefreshing()
             }
-        })
+        }
     }
+
     
     /// This function sorts the channel lists.
     /// - Parameter needReload: If set to `true`, the tableview will be call reloadData.
     /// - Since: 1.2.5
     public func sortChannelList(needReload: Bool) {
-        let sortedChannelList = self.channels
-            .sorted(by: { (lhs: SBDGroupChannel, rhs: SBDGroupChannel) -> Bool in
-                let createdAt1: Int64 = lhs.lastMessage?.createdAt ?? -1
-                let createdAt2: Int64 = rhs.lastMessage?.createdAt ?? -1
-                if (createdAt1 == -1 && createdAt2 == -1) {
-                    return Int64(lhs.createdAt * 1000) > Int64(rhs.createdAt * 1000)
-                } else {
-                    return createdAt1 > createdAt2
-                }
-            })
-        
-        self.channels = sortedChannelList.sbu_unique()
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-
-            guard needReload else { return }
-            
-            self.groupChannelsTableView.reloadData()
+       
+        let sortedChannels = channels.sorted {
+            let createdAt1 = $0.lastMessage?.createdAt ?? -1
+            let createdAt2 = $1.lastMessage?.createdAt ?? -1
+            if createdAt1 == -1 && createdAt2 == -1 {
+                return Int64($0.createdAt * 1000) > Int64($1.createdAt * 1000)
+            } else {
+                return createdAt1 > createdAt2
+            }
         }
+        channels = sortedChannels.sbu_unique()
+        
+        if needReload {
+            DispatchQueue.main.async {
+                self.groupChannelsTableView.reloadSections([0], with: .automatic)
+            }
+        }
+        
     }
     
     func updateChannels(_ channels: [SBDGroupChannel]?, needReload: Bool) {
-        guard let channels = channels else { return }
+        guard let channels = channels, let query = channelListQuery else { return }
         
-        for channel in channels {
-            guard self.channelListQuery?.belongs(to: channel) == true else { continue }
-            guard let index = self.channels.firstIndex(of: channel) else { continue }
-            self.channels.append(self.channels.remove(at: index))
-        }
-        self.sortChannelList(needReload: needReload)
-        
+        let updatedChannels = channels.filter { query.belongs(to: $0) && self.channels.contains($0) }
+        self.channels = self.channels.filter { !updatedChannels.contains($0) } + updatedChannels
+        sortChannelList(needReload: needReload)
     }
+
     
     /// This function upserts the channels.
     ///
@@ -562,23 +444,8 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
     
     func deleteChannels(channelUrls: [String]?, needReload: Bool) {
         guard let channelUrls = channelUrls else { return }
-        
-        var toBeDeleteIndexes: [Int] = []
-        
-        for channelUrl in channelUrls {
-            if let index = self.channels.firstIndex(where: { $0.channelUrl == channelUrl }) {
-                toBeDeleteIndexes.append(index)
-            }
-        }
-        
-        // for remove from last
-        let sortedIndexes = toBeDeleteIndexes.sorted().reversed()
-        
-        for toBeDeleteIdx in sortedIndexes {
-            self.channels.remove(at: toBeDeleteIdx)
-        }
-        
-        self.sortChannelList(needReload: needReload)
+        self.channels.removeAll(where: { channelUrls.contains($0.channelUrl) })
+        sortChannelList(needReload: needReload)
     }
    
     
@@ -597,7 +464,25 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
     
     
     func channel(_ sender: SBDGroupChannel, userDidLeave user: SBDUser) {
-        
+        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, user.userId == userUID else { return }
+        deleteChannel(channel: sender)
+    }
+
+
+    func channel(_ sender: SBDGroupChannel, didReceiveInvitation invitees: [SBDUser]?, inviter: SBDUser?) {
+        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, sender.joinedAt == 0, inviter?.userId != userUID else { return }
+        DispatchQueue.main.async {
+            if self.channels.count == 50 {
+                self.channels.removeLast()
+                self.groupChannelsTableView.deleteRows(at: [IndexPath(row: 49, section: 0)], with: .automatic)
+            }
+            self.channels.insert(sender, at: 0)
+            self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        }
+    }
+
+    
+    func channel(_ sender: SBDGroupChannel, userDidJoin user: SBDUser) {
         
         if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
             
@@ -608,21 +493,6 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
             }
             
         }
-        
-    }
-
-    func channel(_ sender: SBDGroupChannel, didReceiveInvitation invitees: [SBDUser]?, inviter: SBDUser?) {
-        
-        
-        DispatchQueue.main.async {
-            if self.channels.count == 50 {
-                self.channels.removeLast()
-                self.groupChannelsTableView.deleteRows(at: [IndexPath(row: 49, section: 0)], with: .automatic)
-            }
-            self.channels.insert(sender, at: 0)
-            self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-        }
-        
         
     }
     
@@ -652,7 +522,5 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
             }
         }
     }
-
-   
 
 }

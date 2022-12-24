@@ -11,7 +11,7 @@ import SendBirdUIKit
 import SendBirdCalls
 import SwiftEntryKit
 
-var hideChannelToadd: SBDGroupChannel?
+
 var general_room: Room!
 var gereral_group_chanel_url: String!
 

@@ -18,6 +18,7 @@ class ProfileViewController: UIViewController {
 
   @IBAction func tapedSignOut(_ sender: Any) {
     _AppCoreData.signOut()
+    sendbirdLogout()
     RedirectionHelper.redirectToLogin()
   }
   /*

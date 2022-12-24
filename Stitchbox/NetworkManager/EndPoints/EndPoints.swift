@@ -80,10 +80,10 @@ extension UserApi: EndPointType {
     }
 }
 
-
 public enum ChatApi {
-    case roomIDRequest (params: [String:String], additionHeaders: [String:String])
-    case acceptSBInvitationRequest (params: [String:String], additionHeaders: [String:String])
+    case roomIDRequest (params: [String:String])
+    case acceptSBInvitationRequest (params: [String:String])
+    case channelCheckForInviation (params: [String:Any])
 }
 
 extension ChatApi: EndPointType {
@@ -97,7 +97,9 @@ extension ChatApi: EndPointType {
         case .roomIDRequest:
             return "/call"
         case .acceptSBInvitationRequest:
-            return "/invite/accept"
+            return "/channel/invite/accept"
+        case .channelCheckForInviation:
+            return "/channel"
         }
     }
     
@@ -107,24 +109,73 @@ extension ChatApi: EndPointType {
             return .post
         case .acceptSBInvitationRequest:
             return .post
+        case .channelCheckForInviation:
+            return .post
         }
     }
     
     var task: HTTPTask {
         switch self {
-        case .roomIDRequest(let params, let headers):
-            return .requestParametersAndHeaders(bodyParameters: params, additionHeaders: headers)
-        case .acceptSBInvitationRequest(let params, let headers):
-            return .requestParametersAndHeaders(bodyParameters: params, additionHeaders: headers)
+        case .roomIDRequest(let params):
+            return .requestParameters(parameters: params)
+        case .acceptSBInvitationRequest(let params):
+            return .requestParameters(parameters: params)
+        case .channelCheckForInviation(let params):
+            return .requestParameters(parameters: params)
         }
         
     }
     
     var headers: [String: String]? {
-        return nil
+          if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
+            let headers = ["Authorization": userToken]
+            return headers
+          }
+          return nil
     }
-    
     
 }
 
 
+public enum SearchApi {
+    case searchUsersForChat (params: [String:String])
+   
+}
+
+extension SearchApi: EndPointType {
+
+    var module: String {
+        return "/user"
+    }
+    
+    var path: String {
+        switch self {
+        case .searchUsersForChat:
+            return ""
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .searchUsersForChat:
+            return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .searchUsersForChat(let params):
+            return .requestParameters(parameters: params)
+        }
+        
+    }
+    
+    var headers: [String: String]? {
+          if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
+            let headers = ["Authorization": userToken]
+            return headers
+          }
+          return nil
+    }
+    
+}
