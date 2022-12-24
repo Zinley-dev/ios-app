@@ -45,16 +45,7 @@ class SettingViewController: UIViewController, ControllerType {
             }
         }
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if hidesBottomBarWhenPushed {
-            if self.tabBarController is DashboardTabBarController {
-                print("yes")
-                let tbctrl = self.tabBarController as! DashboardTabBarController
-                tbctrl.button.isHidden = false
-            }
-        }
-    }
+   
     
     // MARK: - Lifecycle
     override func viewDidLoad() {

@@ -29,6 +29,7 @@
 		148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148C7106291B0F210046FC5D /* LogInByPhoneViewController.swift */; };
 		148C7109291B11270046FC5D /* OTPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148C7108291B11270046FC5D /* OTPTextField.swift */; };
 		1494675329419A6D007033E5 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1494675229419A6D007033E5 /* Helpers.swift */; };
+		14C067682956EC4F002C79AE /* ReferralCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */; };
 		14C46C1C293D8DD1004D5D3A /* LoginTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */; };
 		14FAEE04294DED5800C20B99 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE03294DED5800C20B99 /* SettingViewController.swift */; };
 		14FAEE06294DEE0B00C20B99 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */; };
@@ -176,6 +177,7 @@
 		148C7106291B0F210046FC5D /* LogInByPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInByPhoneViewController.swift; sourceTree = "<group>"; };
 		148C7108291B11270046FC5D /* OTPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPTextField.swift; sourceTree = "<group>"; };
 		1494675229419A6D007033E5 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralCodeViewController.swift; sourceTree = "<group>"; };
 		14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTabBarController.swift; sourceTree = "<group>"; };
 		14FAEE03294DED5800C20B99 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
@@ -536,6 +538,7 @@
 				395477BC294D6BCA008EED97 /* LoginByPhoneVerifyController.swift */,
 				A5A5E40E29388F5F004E9207 /* CreateAccountViewController.swift */,
 				14FAEE03294DED5800C20B99 /* SettingViewController.swift */,
+				14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */,
 				A5A5E410293891A2004E9207 /* LoginViewController.swift */,
 				A5A5E41229389770004E9207 /* ForgotViewController.swift */,
 				A5A5E4142938A309004E9207 /* VerifyViewController.swift */,
@@ -1202,6 +1205,7 @@
 				6AAD7A62294C699E003E3AB6 /* Array_compare.swift in Sources */,
 				6AAD7A60294C699E003E3AB6 /* UIViewController+Utils.swift in Sources */,
 				6AAD7A42294C6642003E3AB6 /* ImageCache.swift in Sources */,
+				14C067682956EC4F002C79AE /* ReferralCodeViewController.swift in Sources */,
 				A59CB3ED294ADA4700D84D9A /* ApplicationMacros.swift in Sources */,
 				A5A5E40F29388F5F004E9207 /* CreateAccountViewController.swift in Sources */,
 				147187F32920D2830039B89E /* LoginByPhoneViewModel.swift in Sources */,
