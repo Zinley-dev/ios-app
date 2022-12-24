@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zfi-ic-Dzc">
-    <device id="retina5_5" orientation="portrait" appearance="dark"/>
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
@@ -15,11 +15,11 @@
             <objects>
                 <viewController id="Y6W-OH-hqX" customClass="FeedViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HOME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nRW-GJ-eXT">
-                                <rect key="frame" x="172.66666666666666" y="353.66666666666669" width="69" height="29"/>
+                                <rect key="frame" x="172.5" y="433.5" width="69" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -46,11 +46,11 @@
             <objects>
                 <viewController id="wfD-iE-xiS" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Hcg-tr-zol">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Challenges" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iS4-3u-FW6">
-                                <rect key="frame" x="149" y="353.66666666666669" width="116" height="29"/>
+                                <rect key="frame" x="149" y="433.5" width="116" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -74,7 +74,7 @@
             <objects>
                 <viewController id="KzE-0Q-kOw" customClass="MainMessageVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ya0-LT-VIE">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pXo-eH-6Hr">
@@ -119,7 +119,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lwv-Om-luR">
-                                <rect key="frame" x="0.0" y="139" width="414" height="548"/>
+                                <rect key="frame" x="0.0" y="139" width="414" height="674"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
@@ -153,11 +153,11 @@
             <objects>
                 <viewController storyboardIdentifier="InboxViewController" id="CiS-Sm-IU3" customClass="InboxVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cI9-pB-ysc">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="S68-w2-wfi">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
@@ -183,11 +183,11 @@
             <objects>
                 <viewController storyboardIdentifier="RequestViewController" id="ZWM-c3-fQk" customClass="RequestVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="arn-2G-TWV">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fV9-96-hoi">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
@@ -213,11 +213,11 @@
             <objects>
                 <viewController storyboardIdentifier="PROFILE" useStoryboardIdentifierAsRestorationIdentifier="YES" id="l9I-Ci-Uq5" customClass="ProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LJT-Ib-Nta">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kHL-Nd-kxq">
-                                <rect key="frame" x="174.66666666666666" y="353.66666666666669" width="65" height="29"/>
+                                <rect key="frame" x="174.5" y="433.5" width="65" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -275,7 +275,7 @@
                     <tabBarItem key="tabBarItem" title="" image="search" selectedImage="search.filled" id="tvb-6D-BsV"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="DBH-so-Bk6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -294,7 +294,7 @@
                     <tabBarItem key="tabBarItem" title="" image="user" selectedImage="user.filled" id="AoD-y3-sQP"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="tUb-gg-zbn">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -311,11 +311,11 @@
             <objects>
                 <viewController id="iuL-41-Vew" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XNC-2q-Vo8">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Noneúe" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hmu-Uu-alB">
-                                <rect key="frame" x="166" y="353.66666666666669" width="82" height="29"/>
+                                <rect key="frame" x="166" y="433.5" width="82" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -342,7 +342,7 @@
                     <tabBarItem key="tabBarItem" title="" image="chat" selectedImage="chat.filled" id="qpA-Go-YoS"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cy5-LO-t1Q">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="Background"/>
                         <color key="tintColor" name="Background"/>
@@ -368,11 +368,11 @@
             <objects>
                 <viewController storyboardIdentifier="SETTING" title="Settings" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xuI-Xg-Q5p" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="top" id="TI1-Hx-BUo">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qUb-51-hjp">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qUb-51-hjp">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="Ev4-ye-Ch6">
                                         <rect key="frame" x="50" y="0.0" width="314" height="775"/>
@@ -544,6 +544,9 @@
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
                                                                 </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <segue destination="7fC-38-BWa" kind="show" id="Zp9-tR-qiu"/>
+                                                                </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4L-i8-m8u" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="40" width="314" height="40"/>
@@ -657,7 +660,7 @@
                                 <constraints>
                                     <constraint firstItem="Ev4-ye-Ch6" firstAttribute="centerX" secondItem="qUb-51-hjp" secondAttribute="centerX" id="EOb-m3-NWO"/>
                                     <constraint firstAttribute="bottom" secondItem="Ev4-ye-Ch6" secondAttribute="bottom" id="KOC-Mg-45m"/>
-                                    <constraint firstItem="Ev4-ye-Ch6" firstAttribute="width" secondItem="qUb-51-hjp" secondAttribute="width" constant="-100" id="Opt-zX-Mp9"/>
+                                    <constraint firstAttribute="width" constant="420" id="Nb8-pH-9gJ"/>
                                     <constraint firstItem="Ev4-ye-Ch6" firstAttribute="top" secondItem="qUb-51-hjp" secondAttribute="top" id="dOF-Sw-tpr"/>
                                 </constraints>
                             </scrollView>
@@ -666,8 +669,6 @@
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
                             <constraint firstItem="qUb-51-hjp" firstAttribute="top" secondItem="TI1-Hx-BUo" secondAttribute="top" id="Efn-YY-Wi7"/>
-                            <constraint firstItem="qUb-51-hjp" firstAttribute="leading" secondItem="Icr-ZQ-wP1" secondAttribute="leading" id="I3F-96-8h4"/>
-                            <constraint firstItem="qUb-51-hjp" firstAttribute="trailing" secondItem="Icr-ZQ-wP1" secondAttribute="trailing" id="Sn5-TT-27v"/>
                             <constraint firstAttribute="bottom" secondItem="qUb-51-hjp" secondAttribute="bottom" id="TMU-hF-LoK"/>
                             <constraint firstItem="qUb-51-hjp" firstAttribute="centerX" secondItem="TI1-Hx-BUo" secondAttribute="centerX" id="W52-ik-Wr6"/>
                         </constraints>
@@ -693,11 +694,11 @@
             <objects>
                 <viewController storyboardIdentifier="PUSHNOTIFICATION" title="PUSH NOTIFICATION" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tPc-JI-4UU" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="top" id="vvO-fJ-qbP">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8qw-8j-fTh">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="500"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8qw-8j-fTh">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="4U8-RU-PUM">
                                         <rect key="frame" x="50" y="0.0" width="314" height="775"/>
@@ -780,8 +781,9 @@
                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </stackView>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="53y-PT-eka">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NtP-e1-hYp">
                                                         <rect key="frame" x="0.0" y="240" width="314" height="535"/>
+                                                        <color key="backgroundColor" name="Background"/>
                                                     </view>
                                                 </subviews>
                                                 <constraints>
@@ -797,20 +799,17 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="width" constant="420" id="APG-J4-mV2"/>
+                                    <constraint firstAttribute="height" constant="736" id="E8A-R3-16G"/>
                                     <constraint firstItem="4U8-RU-PUM" firstAttribute="centerX" secondItem="8qw-8j-fTh" secondAttribute="centerX" id="LKk-jU-oLu"/>
                                     <constraint firstItem="4U8-RU-PUM" firstAttribute="top" secondItem="8qw-8j-fTh" secondAttribute="top" id="McC-D1-229"/>
-                                    <constraint firstItem="4U8-RU-PUM" firstAttribute="width" secondItem="8qw-8j-fTh" secondAttribute="width" constant="-100" id="hLI-L2-K9G"/>
-                                    <constraint firstAttribute="bottom" secondItem="4U8-RU-PUM" secondAttribute="bottom" id="oSI-oL-NY5"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="rwv-fY-uGW"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
-                            <constraint firstItem="8qw-8j-fTh" firstAttribute="trailing" secondItem="rwv-fY-uGW" secondAttribute="trailing" id="28P-dP-cmL"/>
-                            <constraint firstAttribute="bottom" secondItem="8qw-8j-fTh" secondAttribute="bottom" id="P2R-LC-9wh"/>
                             <constraint firstItem="8qw-8j-fTh" firstAttribute="top" secondItem="vvO-fJ-qbP" secondAttribute="top" id="UD0-bb-Qpg"/>
-                            <constraint firstItem="8qw-8j-fTh" firstAttribute="leading" secondItem="rwv-fY-uGW" secondAttribute="leading" id="zDF-ru-ycq"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
@@ -833,64 +832,89 @@
         <!--REFERRAL-->
         <scene sceneID="mKX-El-TYh">
             <objects>
-                <viewController storyboardIdentifier="REFERRAL" title="REFERRAL" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KlH-ah-CY1" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="REFERRAL" title="REFERRAL" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KlH-ah-CY1" customClass="ReferralCodeViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="top" id="yH2-uS-ahJ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xPF-Yz-s6r">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="500"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xPF-Yz-s6r">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="Qcm-ho-5Ea">
-                                        <rect key="frame" x="50" y="0.0" width="314" height="775"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="s4M-vx-JTK">
+                                        <rect key="frame" x="50" y="-136" width="314" height="775"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="top" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="8u5-Pv-Cvn">
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="Qcm-ho-5Ea">
                                                 <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1YQ-F0-VEC">
-                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="139.33333333333334"/>
-                                                    </view>
-                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User's referral code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gZ4-lz-XpD" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="179.33333333333334" width="314" height="34"/>
-                                                        <color key="textColor" name="Text"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                                <color key="value" name="Text"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="size">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </textField>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBW-Pu-Oc8">
-                                                        <rect key="frame" x="0.0" y="253.33333333333334" width="314" height="59.666666666666657"/>
-                                                        <attributedString key="attributedText">
-                                                            <fragment content="Tap the code to share it with your friends so when they sign up for Stitchbox, you and your friend get reward points!">
-                                                                <attributes>
-                                                                    <font key="NSFont" size="17" name="HelveticaNeue"/>
-                                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                </attributes>
-                                                            </fragment>
-                                                        </attributedString>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="Otd-IW-3Q6">
-                                                        <rect key="frame" x="0.0" y="353" width="314" height="278"/>
-                                                    </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Learn more about the Stitchbox referral program." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2QV-lg-Yj6">
-                                                        <rect key="frame" x="0.0" y="671" width="314" height="14"/>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yto-cR-7ah">
-                                                        <rect key="frame" x="0.0" y="725" width="314" height="50"/>
-                                                    </view>
+                                                    <stackView opaque="NO" contentMode="top" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="8u5-Pv-Cvn">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OD5-TY-SXt">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="225.5"/>
+                                                                <color key="backgroundColor" name="Background"/>
+                                                            </view>
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User's referral code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gZ4-lz-XpD" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="265.5" width="314" height="36"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="36" id="sA9-bc-Dmc"/>
+                                                                </constraints>
+                                                                <color key="textColor" name="Text"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                        <color key="value" name="Text"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                                                        <integer key="value" value="1"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                                        <color key="value" name="Text"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </textField>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBW-Pu-Oc8">
+                                                                <rect key="frame" x="0.0" y="341.5" width="314" height="59.5"/>
+                                                                <color key="tintColor" name="Text"/>
+                                                                <attributedString key="attributedText">
+                                                                    <fragment content="Tap the code to share it with your friends so when they sign up for Stitchbox, you and your friend get reward points!">
+                                                                        <attributes>
+                                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                                        </attributes>
+                                                                    </fragment>
+                                                                </attributedString>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="Otd-IW-3Q6" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="441" width="314" height="280"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
+                                                                        <size key="value" width="280" height="280"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
+                                                                        <real key="value" value="10"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Learn more about the Stitchbox referral program." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2QV-lg-Yj6">
+                                                                <rect key="frame" x="0.0" y="761" width="314" height="14"/>
+                                                                <color key="tintColor" name="Text"/>
+                                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
                                                 </subviews>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                        <color key="value" systemColor="linkColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                             </stackView>
                                         </subviews>
                                         <userDefinedRuntimeAttributes>
@@ -901,20 +925,16 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="Qcm-ho-5Ea" secondAttribute="bottom" id="0PT-0i-eas"/>
-                                    <constraint firstItem="Qcm-ho-5Ea" firstAttribute="top" secondItem="xPF-Yz-s6r" secondAttribute="top" id="eMZ-Ro-Su8"/>
-                                    <constraint firstItem="Qcm-ho-5Ea" firstAttribute="width" secondItem="xPF-Yz-s6r" secondAttribute="width" constant="-100" id="iEL-TG-DJM"/>
-                                    <constraint firstItem="Qcm-ho-5Ea" firstAttribute="centerX" secondItem="xPF-Yz-s6r" secondAttribute="centerX" id="tF9-ON-gaq"/>
+                                    <constraint firstAttribute="width" constant="420" id="JBq-Tc-2Rd"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Gca-Em-iZO"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstItem="xPF-Yz-s6r" firstAttribute="centerX" secondItem="yH2-uS-ahJ" secondAttribute="centerX" id="7ce-Gr-Ysu"/>
                             <constraint firstItem="xPF-Yz-s6r" firstAttribute="top" secondItem="yH2-uS-ahJ" secondAttribute="top" id="L8d-TA-AvH"/>
-                            <constraint firstAttribute="bottom" secondItem="xPF-Yz-s6r" secondAttribute="bottom" id="bKX-60-dCO"/>
-                            <constraint firstItem="xPF-Yz-s6r" firstAttribute="leading" secondItem="Gca-Em-iZO" secondAttribute="leading" id="mv0-BU-hcO"/>
-                            <constraint firstItem="xPF-Yz-s6r" firstAttribute="trailing" secondItem="Gca-Em-iZO" secondAttribute="trailing" id="wbA-UI-qyz"/>
+                            <constraint firstItem="xPF-Yz-s6r" firstAttribute="bottom" secondItem="Gca-Em-iZO" secondAttribute="bottom" id="coT-Uq-N3s"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
@@ -926,16 +946,296 @@
             </objects>
             <point key="canvasLocation" x="2997" y="2434"/>
         </scene>
+        <!--EDITPROFILE-->
+        <scene sceneID="gpQ-lS-C4S">
+            <objects>
+                <viewController storyboardIdentifier="EDITPROFILE" title="EDITPROFILE" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7fC-38-BWa" customClass="EditProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="top" id="4pM-FY-sXE">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6i-ko-VMQ">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="iSP-bn-FE7">
+                                        <rect key="frame" x="50" y="0.0" width="314" height="775"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="aIu-ti-IxW">
+                                                <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b5P-CC-Mhr">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="184.5"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d9d-G8-Wsy">
+                                                                <rect key="frame" x="0.0" y="0.0" width="87" height="184.5"/>
+                                                                <color key="backgroundColor" name="Background"/>
+                                                            </view>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="FRx-Es-6Wx">
+                                                                <rect key="frame" x="87" y="0.0" width="140" height="184.5"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Gb-bG-gbS" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="140" height="130"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="130" id="e2M-4N-1fj"/>
+                                                                        </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="imageWidth">
+                                                                                <real key="value" value="130"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="imageHeight">
+                                                                                <real key="value" value="130"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
+                                                                                <real key="value" value="-1"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
+                                                                                <size key="value" width="130" height="130"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </imageView>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change profile photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PbC-QU-sck">
+                                                                        <rect key="frame" x="0.0" y="132" width="140" height="14.5"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                        <color key="textColor" name="Secondary"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Foobar" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S26-ws-XD1" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="0.0" y="148.5" width="140" height="36"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="36" id="vqa-WH-iMq"/>
+                                                                        </constraints>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                                                                <integer key="value" value="1"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="140" id="xud-Yv-Mna"/>
+                                                                </constraints>
+                                                            </stackView>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="18o-3I-016">
+                                                                <rect key="frame" x="227" y="0.0" width="87" height="184.5"/>
+                                                                <color key="backgroundColor" name="Background"/>
+                                                            </view>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="FRx-Es-6Wx" firstAttribute="centerX" secondItem="b5P-CC-Mhr" secondAttribute="centerX" id="ugW-Vw-cAK"/>
+                                                        </constraints>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="A2p-0U-07j">
+                                                        <rect key="frame" x="0.0" y="192.5" width="314" height="252.5"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CoverPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="Eui-BL-g8x" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="238"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
+                                                                        <size key="value" width="420" height="210"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
+                                                                        <real key="value" value="20"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="20"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change cover photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjs-5r-LvS">
+                                                                <rect key="frame" x="0.0" y="238" width="314" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" name="Secondary"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="QnR-w6-lma" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="453" width="314" height="121.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zhP-gu-TnC">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="17"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <color key="textColor" name="Disable"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="John Doe" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pjv-Nl-ThH" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="20" width="314" height="18.5"/>
+                                                                <color key="tintColor" name="Text"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="400" id="PPE-nm-jFm"/>
+                                                                </constraints>
+                                                                <color key="textColor" name="Text"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                        <color key="value" name="BorderColor"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                        <color key="value" name="Text"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </textField>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Birthday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rwr-Le-ela">
+                                                                <rect key="frame" x="0.0" y="41.5" width="314" height="17"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <color key="textColor" name="Disable"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mm/dd/yyyy" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B61-D7-lE3" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="61.5" width="314" height="18.5"/>
+                                                                <color key="tintColor" name="Text"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="400" id="xUg-66-OT4"/>
+                                                                </constraints>
+                                                                <color key="textColor" name="Text"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                        <color key="value" name="BorderColor"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                        <color key="value" name="Text"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </textField>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M5L-7i-0xm">
+                                                                <rect key="frame" x="0.0" y="83" width="314" height="17"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <color key="textColor" name="Disable"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Maximum 100 characters" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xcd-Hb-Awa" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="103" width="314" height="18.5"/>
+                                                                <color key="tintColor" name="Text"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="400" id="fRE-xV-H5l"/>
+                                                                </constraints>
+                                                                <color key="textColor" name="Text"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                        <color key="value" name="BorderColor"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                        <color key="value" name="Text"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </textField>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="trailing" secondItem="zhP-gu-TnC" secondAttribute="trailing" constant="10" id="3CS-yP-4my"/>
+                                                            <constraint firstItem="zhP-gu-TnC" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="Bx6-hJ-B3f"/>
+                                                            <constraint firstAttribute="trailing" secondItem="M5L-7i-0xm" secondAttribute="trailing" constant="10" id="E35-cK-mme"/>
+                                                            <constraint firstItem="pjv-Nl-ThH" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="HFz-Kd-fAZ"/>
+                                                            <constraint firstItem="B61-D7-lE3" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="I6e-Zj-rce"/>
+                                                            <constraint firstAttribute="trailing" secondItem="B61-D7-lE3" secondAttribute="trailing" constant="10" id="Ibr-Ei-Pod"/>
+                                                            <constraint firstItem="M5L-7i-0xm" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="Mn4-eW-u1S"/>
+                                                            <constraint firstAttribute="trailing" secondItem="pjv-Nl-ThH" secondAttribute="trailing" constant="10" id="cyb-Gj-dKJ"/>
+                                                            <constraint firstItem="rwr-Le-ela" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="dBZ-yh-afu"/>
+                                                            <constraint firstAttribute="trailing" secondItem="Xcd-Hb-Awa" secondAttribute="trailing" constant="10" id="e4e-hH-ANK"/>
+                                                            <constraint firstItem="Xcd-Hb-Awa" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="nYg-pk-C9x"/>
+                                                            <constraint firstAttribute="trailing" secondItem="rwr-Le-ela" secondAttribute="trailing" constant="10" id="phl-HK-in6"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit personal information" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NTd-wM-1Rv">
+                                                        <rect key="frame" x="0.0" y="582.5" width="314" height="14.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                        <color key="textColor" name="Secondary"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hTn-tB-Ple" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="605" width="314" height="103.5"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tE9-3h-XBe" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="34.5"/>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" title="Email"/>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HWx-D5-7SP" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="34.5" width="314" height="34.5"/>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" title="Phone Number"/>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ff7-XJ-HPn" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="69" width="314" height="34.5"/>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" title="Reset Password"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zcx-lP-2he">
+                                                        <rect key="frame" x="0.0" y="716.5" width="314" height="58.5"/>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="b5P-CC-Mhr" firstAttribute="top" secondItem="aIu-ti-IxW" secondAttribute="top" constant="58" id="DMe-Tc-8Fw"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                <color key="value" systemColor="linkColor"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="iSP-bn-FE7" firstAttribute="centerX" secondItem="b6i-ko-VMQ" secondAttribute="centerX" id="Dvb-Tn-JOj"/>
+                                    <constraint firstAttribute="width" constant="420" id="lI1-pc-hFo"/>
+                                    <constraint firstItem="iSP-bn-FE7" firstAttribute="top" secondItem="b6i-ko-VMQ" secondAttribute="top" id="yzy-i4-eLD"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="GPu-Dn-CEr"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="b6i-ko-VMQ" firstAttribute="top" secondItem="4pM-FY-sXE" secondAttribute="top" id="2Uc-We-zSi"/>
+                            <constraint firstItem="b6i-ko-VMQ" firstAttribute="centerX" secondItem="GPu-Dn-CEr" secondAttribute="centerX" id="hk9-6E-emP"/>
+                            <constraint firstItem="b6i-ko-VMQ" firstAttribute="centerY" secondItem="4pM-FY-sXE" secondAttribute="centerY" id="x4G-uA-vtE"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <navigationItem key="navigationItem" title="Edit Profile" leftItemsSupplementBackButton="YES" id="Nqr-rt-qKA" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uAU-T9-C6Y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3689.8550724637685" y="2432.8125"/>
+        </scene>
         <!--SOCIAL-->
         <scene sceneID="Cng-pc-SXw">
             <objects>
                 <viewController storyboardIdentifier="SOCIAL" title="SOCIAL" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2JE-DM-s0Y" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="top" id="a4r-8V-SRX">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aJF-YF-efo">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="500"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aJF-YF-efo">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="qoY-9S-NF0">
                                         <rect key="frame" x="50" y="0.0" width="314" height="775"/>
@@ -983,7 +1283,7 @@
                                 <constraints>
                                     <constraint firstItem="qoY-9S-NF0" firstAttribute="top" secondItem="aJF-YF-efo" secondAttribute="top" id="9Sn-Ig-Xga"/>
                                     <constraint firstItem="qoY-9S-NF0" firstAttribute="centerX" secondItem="aJF-YF-efo" secondAttribute="centerX" id="Hg3-cZ-82o"/>
-                                    <constraint firstItem="qoY-9S-NF0" firstAttribute="width" secondItem="aJF-YF-efo" secondAttribute="width" constant="-100" id="TIA-52-QSO"/>
+                                    <constraint firstAttribute="width" constant="420" id="gVI-yo-bCz"/>
                                     <constraint firstAttribute="bottom" secondItem="qoY-9S-NF0" secondAttribute="bottom" id="qVi-Ko-rdw"/>
                                 </constraints>
                             </scrollView>
@@ -991,8 +1291,7 @@
                         <viewLayoutGuide key="safeArea" id="eWV-Tn-b1A"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
-                            <constraint firstItem="aJF-YF-efo" firstAttribute="leading" secondItem="eWV-Tn-b1A" secondAttribute="leading" id="5jQ-oM-RuA"/>
-                            <constraint firstItem="aJF-YF-efo" firstAttribute="trailing" secondItem="eWV-Tn-b1A" secondAttribute="trailing" id="Rbk-h9-LiB"/>
+                            <constraint firstItem="aJF-YF-efo" firstAttribute="centerX" secondItem="a4r-8V-SRX" secondAttribute="centerX" id="OIG-Ob-yYr"/>
                             <constraint firstItem="aJF-YF-efo" firstAttribute="top" secondItem="a4r-8V-SRX" secondAttribute="top" id="iu1-z7-8EN"/>
                             <constraint firstAttribute="bottom" secondItem="aJF-YF-efo" secondAttribute="bottom" id="x3J-BT-Ljm"/>
                         </constraints>
@@ -1004,7 +1303,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V97-Cz-9fo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2206" y="2448"/>
+            <point key="canvasLocation" x="2206" y="2450"/>
         </scene>
     </scenes>
     <designables>
@@ -1012,74 +1311,105 @@
             <size key="intrinsicContentSize" width="152" height="42"/>
         </designable>
         <designable name="5fN-Rc-NRW">
-            <size key="intrinsicContentSize" width="144" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="144" height="34.5"/>
+        </designable>
+        <designable name="6Gb-bG-gbS">
+            <size key="intrinsicContentSize" width="130" height="130"/>
         </designable>
         <designable name="8ur-f6-WPC">
-            <size key="intrinsicContentSize" width="86" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="86" height="34.5"/>
+        </designable>
+        <designable name="B61-D7-lE3">
+            <size key="intrinsicContentSize" width="84" height="18.5"/>
         </designable>
         <designable name="CZ4-93-5UE">
-            <size key="intrinsicContentSize" width="92.333333333333329" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="92.5" height="34.5"/>
+        </designable>
+        <designable name="Eui-BL-g8x">
+            <size key="intrinsicContentSize" width="420" height="238"/>
         </designable>
         <designable name="FOI-cM-P0o">
             <size key="intrinsicContentSize" width="162" height="40"/>
         </designable>
         <designable name="H2p-AI-TAt">
-            <size key="intrinsicContentSize" width="180.33333333333334" height="38"/>
+            <size key="intrinsicContentSize" width="180.5" height="38"/>
+        </designable>
+        <designable name="HWx-D5-7SP">
+            <size key="intrinsicContentSize" width="138.5" height="34.5"/>
         </designable>
         <designable name="HXp-PI-Fgg">
-            <size key="intrinsicContentSize" width="101.33333333333333" height="38"/>
+            <size key="intrinsicContentSize" width="101.5" height="38"/>
         </designable>
         <designable name="Io7-Gd-p4e">
-            <size key="intrinsicContentSize" width="100" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="100" height="34.5"/>
         </designable>
         <designable name="J3i-nB-Li5">
-            <size key="intrinsicContentSize" width="140.66666666666666" height="39"/>
+            <size key="intrinsicContentSize" width="141" height="39"/>
         </designable>
         <designable name="K9C-AN-45U">
-            <size key="intrinsicContentSize" width="92.666666666666671" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="93" height="34.5"/>
         </designable>
         <designable name="KT3-Bl-ukO">
-            <size key="intrinsicContentSize" width="175.33333333333334" height="39"/>
+            <size key="intrinsicContentSize" width="175.5" height="39"/>
         </designable>
         <designable name="L3N-fr-Ry2">
-            <size key="intrinsicContentSize" width="136" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="136" height="34.5"/>
         </designable>
         <designable name="LJd-pP-0wN">
             <size key="intrinsicContentSize" width="135" height="39"/>
         </designable>
+        <designable name="Otd-IW-3Q6">
+            <size key="intrinsicContentSize" width="280" height="280"/>
+        </designable>
         <designable name="PdQ-TC-Ctu">
-            <size key="intrinsicContentSize" width="182.33333333333334" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="182.5" height="34.5"/>
+        </designable>
+        <designable name="S26-ws-XD1">
+            <size key="intrinsicContentSize" width="79.5" height="34"/>
         </designable>
         <designable name="Tkl-5W-Yw1">
-            <size key="intrinsicContentSize" width="55" height="34"/>
+            <size key="intrinsicContentSize" width="61" height="34"/>
         </designable>
         <designable name="Wx0-kI-Yna">
             <size key="intrinsicContentSize" width="187" height="39"/>
+        </designable>
+        <designable name="Xcd-Hb-Awa">
+            <size key="intrinsicContentSize" width="168" height="18.5"/>
         </designable>
         <designable name="b4Z-Wg-wyP">
             <size key="intrinsicContentSize" width="213" height="44"/>
         </designable>
         <designable name="f9j-UV-aZd">
-            <size key="intrinsicContentSize" width="92.333333333333329" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="92.5" height="34.5"/>
+        </designable>
+        <designable name="ff7-XJ-HPn">
+            <size key="intrinsicContentSize" width="145" height="34.5"/>
         </designable>
         <designable name="gLe-ah-MOZ">
-            <size key="intrinsicContentSize" width="72.666666666666671" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="73" height="34.5"/>
         </designable>
         <designable name="gZ4-lz-XpD">
-            <size key="intrinsicContentSize" width="156" height="34"/>
+            <size key="intrinsicContentSize" width="162" height="34"/>
         </designable>
         <designable name="nbB-c6-ceP">
             <size key="intrinsicContentSize" width="110" height="39"/>
+        </designable>
+        <designable name="pjv-Nl-ThH">
+            <size key="intrinsicContentSize" width="67" height="18.5"/>
+        </designable>
+        <designable name="tE9-3h-XBe">
+            <size key="intrinsicContentSize" width="65" height="34.5"/>
         </designable>
         <designable name="v4L-i8-m8u">
             <size key="intrinsicContentSize" width="182" height="35"/>
         </designable>
         <designable name="z5k-Tq-4jF">
-            <size key="intrinsicContentSize" width="98.666666666666671" height="34.333333333333336"/>
+            <size key="intrinsicContentSize" width="99" height="34.5"/>
         </designable>
     </designables>
     <resources>
         <image name="4x_add" width="25" height="25"/>
+        <image name="CoverPhoto" width="340" height="192"/>
         <image name="adduser" width="28" height="28"/>
         <image name="call" width="19" height="19"/>
         <image name="chat" width="29" height="28"/>
@@ -1105,6 +1435,15 @@
         <image name="users" width="26" height="26"/>
         <namedColor name="Background">
             <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="BorderColor">
+            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Disable">
+            <color red="0.73333333333333328" green="0.73333333333333328" blue="0.73333333333333328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Secondary">
+            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="TabBarColor">
             <color red="0.20784313725490197" green="0.17647058823529413" blue="0.4392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
