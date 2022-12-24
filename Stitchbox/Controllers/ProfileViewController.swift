@@ -11,9 +11,6 @@ class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let tabbarcontroller = self.tabBarController as? DashboardTabBarController {
-            tabbarcontroller.tabsVisiblty(true)
-        }
         // Do any additional setup after loading the view.
     }
     

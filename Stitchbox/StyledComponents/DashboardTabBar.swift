@@ -8,19 +8,15 @@
 import Foundation
 import UIKit
 import SwiftUI
+import RxCocoa
+import RxSwift
+import CoreMedia
 
 @IBDesignable class DashboardTabBarController: UITabBarController {
     
     var button: UIButton = UIButton()
     var actionButtonContainerView: UIView!
-     
     
-    // MARK: - Initialization
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        //        setupView()
-        self.setupMiddleButton()
-    }
     // TabBarButton – Setup Middle Button
     func setupMiddleButton() {
         button.setImage(UIImage(named: "Add 2"), for: .normal)
@@ -32,6 +28,8 @@ import SwiftUI
         button.layer.shadowOpacity = 0.1
         self.view.insertSubview(button, aboveSubview: self.tabBar)
         button.addTarget(self, action: #selector(pressedAction(_:)), for: .touchUpInside)
+        button.layer.zPosition = 1000
+        
         
     }
     @objc func pressedAction(_ sender: UIButton) {
@@ -59,12 +57,8 @@ import SwiftUI
         tabBar.layer.cornerRadius = 20
         tabBar.frame.size.height = 70
         tabBar.frame.origin.x = 50
-        tabBar.insertSubview(UIButton(), at: 3)
         UITabBar.appearance().isTranslucent = false
-        
-        if self.tabBar.isHidden {
-            button.isHidden = true
-        }
+        setupMiddleButton()
     }
     
     // MARK: - UI Setup
@@ -75,18 +69,9 @@ import SwiftUI
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupMiddleButton()
+        
     }
     
-    func tabsVisiblty(_ isVisiblty: Bool = true){
-        if isVisiblty {
-            self.tabBar.isHidden = false
-            self.button.isHidden = false
-        } else {
-            self.tabBar.isHidden = true
-            self.button.isHidden = true
-        }
-    }
 }
 
 

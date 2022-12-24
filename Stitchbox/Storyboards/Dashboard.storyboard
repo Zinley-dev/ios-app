@@ -366,7 +366,7 @@
         <!--Settings-->
         <scene sceneID="dta-GJ-n4h">
             <objects>
-                <viewController storyboardIdentifier="SETTING" title="Settings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xuI-Xg-Q5p" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SETTING" title="Settings" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xuI-Xg-Q5p" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="top" id="TI1-Hx-BUo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

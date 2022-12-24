@@ -35,23 +35,34 @@ class SettingViewController: UIViewController, ControllerType {
     @IBOutlet var mentionNotificationsButton: CardButton?
     @IBOutlet var messageNotificationsButton: CardButton?
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if hidesBottomBarWhenPushed {
+            if self.tabBarController is DashboardTabBarController {
+                print("yes")
+                let tbctrl = self.tabBarController as! DashboardTabBarController
+                tbctrl.button.isHidden = true
+            }
+        }
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if hidesBottomBarWhenPushed {
+            if self.tabBarController is DashboardTabBarController {
+                print("yes")
+                let tbctrl = self.tabBarController as! DashboardTabBarController
+                tbctrl.button.isHidden = false
+            }
+        }
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         bindUI(with: viewModel)
         bindAction(with: viewModel)
         setUpNavigationBar()
-        if let tabbarcontroller = self.tabBarController as? DashboardTabBarController {
-            tabbarcontroller.tabsVisiblty(false)
-        }
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if let tabbarcontroller = self.tabBarController as? DashboardTabBarController {
-            tabbarcontroller.tabsVisiblty(true)
-        }
-    }
-    
     // MARK: - Functions
     func bindUI(with viewModel: SettingViewModel) {
         viewModel.output.errorsObservable
