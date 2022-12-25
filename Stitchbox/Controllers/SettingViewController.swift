@@ -53,6 +53,8 @@ class SettingViewController: UIViewController, ControllerType {
         bindUI(with: viewModel)
         bindAction(with: viewModel)
         setUpNavigationBar()
+        viewModel.getAPISetting()
+        presentLoading()
     }
     // MARK: - Functions
     func bindUI(with viewModel: SettingViewModel) {
@@ -73,6 +75,10 @@ class SettingViewController: UIViewController, ControllerType {
                 switch successMessage{
                 case .logout:
                     RedirectionHelper.redirectToLogin()
+                case .updateState:
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true)
+                    }
                 case .other:
                     break
                 }
@@ -186,7 +192,7 @@ class SettingViewController: UIViewController, ControllerType {
         logoutButton?.rx.tap.subscribe(viewModel.action.logOutDidTap).disposed(by: disposeBag)
         
         allowChallengeButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed
             .withLatestFrom((allowChallengeButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
@@ -196,7 +202,7 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         autoMinimizeButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed
             .withLatestFrom((autoMinimizeButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
@@ -206,7 +212,7 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         autoPlaySoundButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed //handle rigorous user switching
             .withLatestFrom((autoPlaySoundButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
@@ -216,7 +222,7 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         allowDiscordLinkButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed
             .withLatestFrom((allowDiscordLinkButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
@@ -226,7 +232,7 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         challengeNotificationsButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed
             .withLatestFrom((challengeNotificationsButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
@@ -236,7 +242,7 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         commentNotificationsButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed
             .withLatestFrom((commentNotificationsButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
@@ -246,7 +252,7 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         followNotificationsButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed
             .withLatestFrom((followNotificationsButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
@@ -256,7 +262,7 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         highlightNotificationsButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed
             .withLatestFrom((highlightNotificationsButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
@@ -266,7 +272,7 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         mentionNotificationsButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed
             .withLatestFrom((mentionNotificationsButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
@@ -276,7 +282,7 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         messageNotificationsButton?.switchbtn?.rx
-            .controlEvent(.valueChanged)
+            .isOn.changed
             .withLatestFrom((messageNotificationsButton?.switchbtn?.rx.value)!)
             .subscribe{ value in
                 print(value)
