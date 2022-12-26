@@ -120,6 +120,11 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
             buttonStackView.isHidden = true
             navigationItem.searchController = searchController
             searchController?.searchBar.isHidden = false
+            
+            delay(0.025) {
+                self.searchController?.searchBar.becomeFirstResponder()
+            }
+            
         } else {
             buttonStackView.isHidden = false
             navigationItem.searchController = nil
@@ -330,6 +335,10 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         
         contentViewTopConstant.constant = 10
+        
+        buttonStackView.isHidden = false
+        navigationItem.searchController = nil
+        searchController?.searchBar.isHidden = true
        
         if InboxVC.view.isHidden == false {
             
@@ -351,6 +360,8 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
             return
             
         }
+        
+        
         
     }
     

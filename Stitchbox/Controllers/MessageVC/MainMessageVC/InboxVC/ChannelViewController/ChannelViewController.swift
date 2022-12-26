@@ -54,6 +54,11 @@ class ChannelViewController: SBUChannelViewController {
         
         self.navigationItem.rightBarButtonItems = [settingBarButton, voiceCallBarButton]
         
+        let uiview = UIView()
+        view.backgroundColor = UIColor.red
+        view.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+        self.view.insertSubview(uiview, at: 2)
+        
         
     }
     
