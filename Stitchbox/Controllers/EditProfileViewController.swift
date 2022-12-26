@@ -36,7 +36,18 @@ class EditProfileViewController: UIViewController, ControllerType {
     }
     
     // MARK: - UI
-    @IBOutlet var ChangeProfileImageLabel: UITextField?
+    @IBOutlet var ChangeProfileImageLabel: UILabel?
+    @IBOutlet var ChangeCoveImageLabel: UILabel?
+    @IBAction func EditInfo() {
+        
+    }
+    
+    @IBAction func resetPasswordButton() {
+        
+    }
+    
+
+    
     
    
     

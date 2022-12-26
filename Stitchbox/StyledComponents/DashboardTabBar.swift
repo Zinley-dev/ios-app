@@ -28,7 +28,7 @@ import CoreMedia
         button.layer.shadowOpacity = 0.1
         self.view.insertSubview(button, aboveSubview: self.tabBar)
         button.addTarget(self, action: #selector(pressedAction(_:)), for: .touchUpInside)
-        button.layer.zPosition = 1000
+        button.layer.zPosition = 2500
         
         
     }
@@ -58,6 +58,7 @@ import CoreMedia
         tabBar.frame.size.height = 70
         tabBar.frame.origin.x = 50
         UITabBar.appearance().isTranslucent = false
+        tabBar.layer.zPosition = 2000
         setupMiddleButton()
     }
     
