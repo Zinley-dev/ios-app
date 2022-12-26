@@ -11,7 +11,6 @@ import SendBirdCalls
 
 class ChannelViewController: SBUChannelViewController {
     
-    
     var settingButton: UIButton = UIButton(type: .custom)
     var voiceCallButton: UIButton = UIButton(type: .custom)
     private lazy var CleftBarButton: UIBarButtonItem? = _leftBarButton
@@ -238,11 +237,7 @@ class ChannelViewController: SBUChannelViewController {
                 
             }
             
-            
-            
         }
-        
-        
         
     }
     

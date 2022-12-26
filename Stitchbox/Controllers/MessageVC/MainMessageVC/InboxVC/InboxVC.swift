@@ -19,6 +19,9 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     @IBOutlet weak var toastMessageLabel: UILabel!
     @IBOutlet weak var emptyLabel: UILabel!
     
+    var inSearchMode = false
+    var searchChannelList: [SBDGroupChannel] = []
+    
     var lastUpdatedToken: String? = nil
     var limit: UInt = 20
     var refreshControl: UIRefreshControl?
@@ -32,6 +35,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     var deletedChannel: SBDGroupChannel!
   
+    var firstLoad = true
     
     // MARK: - View Lifecycle
 
@@ -71,6 +75,14 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         
         // Update the layout of the table view
         self.groupChannelsTableView.layoutIfNeeded()
+        
+        // Set the firstLoad flag to false and return if it was previously true
+        if firstLoad {
+            firstLoad = false
+            return
+        }
+        // Update the active status of the channels
+        updateActiveStatus()
     }
     
     
@@ -220,7 +232,10 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "GroupChannelTableViewCell") as! GroupChannelTableViewCell
-            let channel = self.channels[indexPath.row]
+            
+            let array = inSearchMode ? searchChannelList : channels
+            let channel = array[indexPath.row]
+            
 
             cell.setTimeStamp(channel: channel)
 
@@ -256,8 +271,10 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             if channel.unreadMessageCount > 0 {
                 cell.unreadMessageCountContainerView.isHidden = false
                 cell.unreadMessageCountLabel.text = (channel.unreadMessageCount > 99) ? "+99" : String(channel.unreadMessageCount)
+                cell.lastMessageLabel.textColor = UIColor.white
             } else {
                 cell.unreadMessageCountContainerView.isHidden = true
+                cell.lastMessageLabel.textColor = UIColor.lightGray
             }
 
             if channel.memberCount > 2 {
@@ -318,8 +335,14 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                             updateCell?.channelNameLabel.text = names.joined(separator: ",")
                         }
                     }
-                } else {
-                    // Handle the
+                    
+                    if count == 0 {
+                        updateCell?.activeView.backgroundColor = .lightGray
+                    } else {
+                        updateCell?.activeView.backgroundColor = filteredMembers.contains(where: { $0.isActive }) ? .green : .lightGray
+                    }
+
+                    
                     
                 }
             }
@@ -338,18 +361,32 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         
     }
     
-    
+    func updateActiveStatus() {
+        // Filter the channels array to include only channels with members
+        let channelsWithMembers = channels.filter { $0.members != nil }
+        // Iterate over the filtered array
+        for channel in channelsWithMembers {
+            // Get the members of the channel and filter out the current user
+            let filteredMembers = channel.members!.compactMap { $0 as? SBDMember }.filter { $0.userId != SBDMain.getCurrentUser()?.userId }
+            // Get the index of the channel in the original array
+            if let index = channels.firstIndex(of: channel) {
+                // Get the cell at the index of the channel
+                if let updateCell = groupChannelsTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? GroupChannelTableViewCell {
+                    // Check if there are any active members in the channel
+                    let hasActiveMember = filteredMembers.contains(where: { $0.isActive })
+                    // Update the background color of the active view based on the active status of the members
+                    updateCell.activeView.backgroundColor = hasActiveMember ? .green : .lightGray
+                }
+            }
+        }
+    }
+
+
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        
-        if self.channels.count == 0 && self.toastCompleted {
-            self.emptyLabel.isHidden = false
-        }
-        else {
-            self.emptyLabel.isHidden = true
-        }
-        
-        return self.channels.count
+        let array = inSearchMode ? searchChannelList : channels
+        emptyLabel.isHidden = array.count > 0
+        return array.count
     }
     
     // MARK: - UITableViewDelegate
@@ -358,23 +395,11 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let channel = self.channels[indexPath.row]
-        let channelUrl = channel.channelUrl
-        
-       
-        let channelVC = ChannelViewController(
-            channelUrl: channelUrl,
-            messageListParams: nil
-        
-        )
-        
-        
+        let channel = inSearchMode ? searchChannelList[indexPath.row] : channels[indexPath.row]
+        let channelVC = ChannelViewController(channelUrl: channel.channelUrl, messageListParams: nil)
         self.navigationController?.pushViewController(channelVC, animated: true)
-        
-        
     }
-   
+
     
     func tableView(_ tableView: UITableView,
                         willDisplay cell: UITableViewCell,
@@ -604,23 +629,26 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     }
     
     func channel(_ sender: SBDBaseChannel, didReceive message: SBDBaseMessage) {
-        guard let sender = sender as? SBDGroupChannel else { return }
-        let index = channels.firstIndex { $0.channelUrl == sender.channelUrl }
-
-        groupChannelsTableView.performBatchUpdates({
-            if let index = index {
-                channels.remove(at: index)
-                channels.insert(sender, at: 0)
-                groupChannelsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        DispatchQueue.main.async {
+            if let sender = sender as? SBDGroupChannel {
+                var index: Int?
+                for (i, ch) in self.channels.enumerated() {
+                    if ch.channelUrl == sender.channelUrl {
+                        index = i
+                        break
+                    }
+                }
+                if let index = index {
+                    self.channels.remove(at: index)
+                    self.groupChannelsTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                }
+                self.channels.insert(sender, at: 0)
+                self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                self.updateTotalUnreadMessageCountBadge()
             }
-            else {
-                channels.insert(sender, at: 0)
-                groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-            }
-        }, completion: { _ in
-            self.updateTotalUnreadMessageCountBadge()
-        })
+        }
     }
+
 
     
     func channelDidUpdateTypingStatus(_ sender: SBDGroupChannel) {

@@ -1666,6 +1666,12 @@
 				INFOPLIST_FILE = Stitchbox/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Stitchbox ";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need your permission to change your avatar profile or send image from your library in message or pick highlight from your library";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need your permission to change your avatar profile, send image from your library in message or record your highlight moments.";
+				INFOPLIST_KEY_NSContactsUsageDescription = "We need your contact to find out your friends on our platform and invite new users.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stitchbox require location to provide more precise result";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone access is needed so you can record video with sound and calling feature";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need your permission to change your avatar profile or send image from your library in message";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1702,6 +1708,12 @@
 				INFOPLIST_FILE = Stitchbox/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Stitchbox ";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need your permission to change your avatar profile or send image from your library in message or pick highlight from your library";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need your permission to change your avatar profile, send image from your library in message or record your highlight moments.";
+				INFOPLIST_KEY_NSContactsUsageDescription = "We need your contact to find out your friends on our platform and invite new users.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stitchbox require location to provide more precise result";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone access is needed so you can record video with sound and calling feature";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need your permission to change your avatar profile or send image from your library in message";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

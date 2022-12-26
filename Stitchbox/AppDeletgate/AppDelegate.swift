@@ -18,7 +18,7 @@ import SendBirdUIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
     
-    
+    var window: UIWindow?
     var voipRegistry: PKPushRegistry?
 
     static let sharedInstance = UIApplication.shared.delegate as! AppDelegate
@@ -242,5 +242,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // In this case, I recommend that you register local notification to notify the unterminated calls.
     }
 
+    // This method is called when a local notification is received and the user has interacted with it.
+    // It presents a ChannelViewController with the channel specified in the notification.
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        // Extract the user info dictionary and the channel URL from the notification payload.
+        // Return early if the user is not logged in or the required information is not present.
+        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty,
+            let payload = response.notification.request.content.userInfo["sendbird"] as? NSDictionary,
+            let channel = payload["channel"] as? NSDictionary,
+            let channelUrl = channel["channel_url"] as? String else {
+            return
+        }
+
+        // Initialize an instance of SBUUser with the current user's ID and connect to Sendbird.
+        SBUGlobals.CurrentUser = SBUUser(userId: userUID)
+        SBUMain.connectIfNeeded { _, error in
+            // If an error occurred while connecting, print it and return.
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+
+            // If the app is in the foreground, present a ChannelViewController with the channel URL.
+            // If the app is in the background, pop the current view controller and present a ChannelViewController.
+            if let vc = UIViewController.currentViewController() {
+                let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+                let navigationController = UINavigationController(rootViewController: channelVC)
+                navigationController.modalPresentationStyle = .fullScreen
+                vc.present(navigationController, animated: true, completion: nil)
+            } else if let current = UINavigationController.currentViewController() as? ChannelViewController {
+                current.navigationController?.popViewController(animated: false)
+                let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+                let navigationController = UINavigationController(rootViewController: channelVC)
+                navigationController.modalPresentationStyle = .fullScreen
+                current.present(navigationController, animated: true, completion: nil)
+            }
+        }
+        // Call the completion handler to indicate that the method has finished executing.
+        completionHandler()
+    }
+
+
+    
 }
 

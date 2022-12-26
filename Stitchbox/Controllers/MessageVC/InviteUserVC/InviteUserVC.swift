@@ -269,7 +269,6 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     }
 
     
-    
     func loadDefaultUsers() {
         APIManager().searchUsersForChat(keyword: "") { result in
             switch result {

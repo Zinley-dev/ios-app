@@ -296,17 +296,22 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count > 0 {
-            let filteredUsers = userList.filter {
-                guard let nickname = $0.nickname else { return false }
-                return nickname.range(of: searchText, options: .caseInsensitive) != nil
-            }
-            searchUserList = filteredUsers.isEmpty ? [] : filteredUsers
+        guard !searchText.isEmpty else {
+            searchUserList.removeAll()
             tableView.reloadData()
-            if searchText != "", filteredUsers.isEmpty {
-                delayItem.perform(after: 0.35) {
-                    self.searchUsers(keyword: searchText)
-                }
+            return
+        }
+
+        let filteredUsers = userList.filter {
+            guard let nickname = $0.nickname else { return false }
+            return nickname.range(of: searchText, options: .caseInsensitive) != nil
+        }
+        searchUserList = filteredUsers.isEmpty ? [] : filteredUsers
+        tableView.reloadData()
+
+        if filteredUsers.isEmpty {
+            delayItem.perform(after: 0.35) {
+                self.searchUsers(keyword: searchText)
             }
         }
     }

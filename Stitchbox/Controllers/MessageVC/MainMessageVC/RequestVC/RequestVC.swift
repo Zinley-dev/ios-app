@@ -25,6 +25,9 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
     var channels: [SBDGroupChannel] = []
     var toastCompleted: Bool = true
     
+    var inSearchMode = false
+    var searchChannelList: [SBDGroupChannel] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -106,8 +109,10 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         
         if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
             
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "GroupChannelTableViewCell") as! GroupChannelTableViewCell
-            let channel = self.channels[indexPath.row]
+            let array = inSearchMode ? searchChannelList : channels
+            let channel = array[indexPath.row]
 
             let lastMessageDateFormatter = DateFormatter()
             let currDate = Date()
@@ -138,10 +143,13 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
             cell.unreadMessageCountContainerView.isHidden = false
             if channel.unreadMessageCount > 99 {
                 cell.unreadMessageCountLabel.text = "+99"
+                cell.lastMessageLabel.textColor = UIColor.white
             } else if channel.unreadMessageCount > 0 {
                 cell.unreadMessageCountLabel.text = String(channel.unreadMessageCount)
+                cell.lastMessageLabel.textColor = UIColor.white
             } else {
                 cell.unreadMessageCountContainerView.isHidden = true
+                cell.lastMessageLabel.textColor = UIColor.lightGray
             }
 
             if channel.memberCount <= 2 {
@@ -206,14 +214,9 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.channels.count == 0 && self.toastCompleted {
-            self.emptyLabel.isHidden = false
-        }
-        else {
-            self.emptyLabel.isHidden = true
-        }
-        
-        return self.channels.count
+        let array = inSearchMode ? searchChannelList : channels
+        emptyLabel.isHidden = array.count > 0
+        return array.count
     }
     
     // MARK: - UITableViewDelegate
@@ -223,16 +226,10 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let channel = self.channels[indexPath.row]
-        let channelUrl = channel.channelUrl
-        
-        let channelVC = RequestChannelVC(
-            channelUrl: channelUrl,
-            messageListParams: nil
-        
-        )
-        
+        let channel = inSearchMode ? searchChannelList[indexPath.row] : channels[indexPath.row]
+        let channelVC = RequestChannelVC(channelUrl: channel.channelUrl, messageListParams: nil)
         self.navigationController?.pushViewController(channelVC, animated: true)
+
         
     }
     

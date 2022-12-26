@@ -14,6 +14,8 @@ import SendBirdSDK
 
 class GroupChannelTableViewCell: UITableViewCell {
     
+    
+    @IBOutlet weak var activeView: UIView!
     @IBOutlet weak var channelNameLabel: UILabel!
     @IBOutlet weak var memberCountContainerView: UIView!
     @IBOutlet weak var memberCountLabel: UILabel!
