@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import ObjectMapper
 
 class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
     
@@ -63,6 +64,11 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
                 case .success(let apiResponse):
                     // get and process data
                     _ = apiResponse.body?["data"] as! [String: Any]?
+                    // save datasource
+                    let initMap = ["phone": "\(countryCode)\(phone)"]
+                    let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
+                    _AppCoreData.userDataSource.accept(newUserData)
+                  
                     self.OTPSentSubject.onNext(true)
                 case .failure(let error):
                     print(error)
@@ -206,7 +212,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                     return;
                 }
                 // call api toward login api of backend
-                APIManager().phoneLogin(phone: phone) { result in switch result {
+                APIManager().phoneLogin(phone: countryCode + phone) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
                     _ = apiResponse.body?["data"] as! [String: Any]?

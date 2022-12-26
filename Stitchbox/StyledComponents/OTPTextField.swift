@@ -16,25 +16,28 @@ class OTPTextField: UnderlineTextField {
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupView()
     }
     
     override public func deleteBackward(){
         text = ""
         previousTextField?.becomeFirstResponder()
     }
+  
     override func setupView() {
-        super.setupView()
-        let border = CALayer()
-        border.frame = CGRect(x:0, y:self.frame.size.height + 5, width:self.frame.size.width, height:1)
-        border.borderColor = UIColor.white.cgColor
-        
-        self.layer.addSublayer(border)
+      print("============================")
+      print(self.frame.size)
+      backgroundColor = UIColor.clear
+      tintColor = UIColor.white
+      textColor = UIColor.white
+      
+      borderStyle = .line
+      border.frame = CGRect(x:0, y:self.frame.size.height + 5, width: self.frame.size.width - 5, height:1)
+      self.border.backgroundColor = UIColor.white.cgColor
+      self.layer.addSublayer(border)
     }
     
 }
@@ -82,7 +85,7 @@ class OTPStackView: UIStackView {
     //Adding each OTPfield to stack view
     private final func addOTPFields() {
         for index in 0..<numberOfFields{
-            let field = OTPTextField()
+            let field = OTPTextField(frame: CGRect(x: 0, y: 0, width: 50, height: 100))
             setupTextField(field)
             textFieldsCollection.append(field)
             //Adding a marker to previous field

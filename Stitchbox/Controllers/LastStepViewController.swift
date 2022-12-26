@@ -32,6 +32,7 @@ class LastStepViewController: UIViewController, ControllerType {
     // MARK: - Lifecycle
     override func viewDidLoad() {
       super.viewDidLoad()
+      submitButton.isEnabled = false
       bindUI(with: viewModel)
       bindAction(with: viewModel)
     }
@@ -48,7 +49,18 @@ class LastStepViewController: UIViewController, ControllerType {
       viewModel.isValidPassword.subscribe(onNext: { isValid in
         self.checkPassLengthLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
       })
-      
+      viewModel.isHasUppercase.subscribe(onNext: { isValid in
+        self.checkPassUpperLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+      })
+      viewModel.isHasLowercase.subscribe(onNext: { isValid in
+        self.checkPassLowerLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+      })
+      viewModel.isHasNumber.subscribe(onNext: { isValid in
+        self.checkPassNumberLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+      })
+      viewModel.isHasSpecial.subscribe(onNext: { isValid in
+        self.checkPassSpecialLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+      })
     }
     
     func bindAction(with viewModel: CreateAccountViewModel) {
@@ -65,12 +77,19 @@ class LastStepViewController: UIViewController, ControllerType {
       submitButton.rx.tap.asObservable().subscribe { Void in
         self.presentLoading()
       }.disposed(by: disposeBag)
-
       
+      viewModel.output.registerSuccessObservable
+        .subscribe(onNext: { successMessage in
+          RedirectionHelper.redirectToDashboard()
+        })
+        .disposed(by: disposeBag)
       
+      viewModel.output.errorsObservable
+        .subscribe(onNext: { error in
+          self.presentError(error: error)
+        })
+        .disposed(by: disposeBag)
     }
-
-
 }
 extension LastStepViewController {
   static func create() -> UIViewController {
