@@ -545,7 +545,7 @@
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
                                                                 </userDefinedRuntimeAttributes>
                                                                 <connections>
-                                                                    <segue destination="7fC-38-BWa" kind="show" id="Zp9-tR-qiu"/>
+                                                                    <segue destination="Heq-RT-hug" kind="show" id="hrF-kW-gwp"/>
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4L-i8-m8u" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
@@ -704,91 +704,88 @@
                                         <rect key="frame" x="50" y="0.0" width="314" height="775"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="xAy-6T-Nni">
-                                                <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qBl-4O-mgx" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="314" height="240"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qBl-4O-mgx" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="240"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f9j-UV-aZd" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="40" id="oVB-0D-96d"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="Highlight"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Io7-Gd-p4e" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="40" width="314" height="40"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="40" id="08R-4F-RoG"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="Challenge"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z5k-Tq-4jF" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="80" width="314" height="40"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="40" id="jmA-y7-0RT"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="Comment"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ur-f6-WPC" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="120" width="314" height="40"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="40" id="fSs-IW-80R"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="Mention"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gLe-ah-MOZ" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="160" width="314" height="40"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="40" id="DlS-Np-WsM"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="Follow"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K9C-AN-45U" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="200" width="314" height="40"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="40" id="Mt4-CJ-SsG"/>
-                                                                </constraints>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="Message"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </button>
-                                                        </subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f9j-UV-aZd" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="oVB-0D-96d"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Highlight"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
                                                         </userDefinedRuntimeAttributes>
-                                                    </stackView>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Io7-Gd-p4e" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="08R-4F-RoG"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Challenge"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z5k-Tq-4jF" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="80" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="jmA-y7-0RT"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Comment"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ur-f6-WPC" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="120" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="fSs-IW-80R"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Mention"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gLe-ah-MOZ" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="160" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="DlS-Np-WsM"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Follow"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K9C-AN-45U" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="200" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="Mt4-CJ-SsG"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Message"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                </subviews>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="xAy-6T-Nni">
+                                                <rect key="frame" x="0.0" y="245" width="314" height="530"/>
+                                                <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NtP-e1-hYp">
-                                                        <rect key="frame" x="0.0" y="240" width="314" height="535"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="530"/>
                                                         <color key="backgroundColor" name="Background"/>
                                                     </view>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="qBl-4O-mgx" firstAttribute="width" secondItem="xAy-6T-Nni" secondAttribute="width" id="0WQ-IW-7gf"/>
-                                                </constraints>
                                             </stackView>
                                         </subviews>
                                         <userDefinedRuntimeAttributes>
@@ -946,286 +943,6 @@
             </objects>
             <point key="canvasLocation" x="2997" y="2434"/>
         </scene>
-        <!--EDITPROFILE-->
-        <scene sceneID="gpQ-lS-C4S">
-            <objects>
-                <viewController storyboardIdentifier="EDITPROFILE" title="EDITPROFILE" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7fC-38-BWa" customClass="EditProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" clipsSubviews="YES" contentMode="top" id="4pM-FY-sXE">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6i-ko-VMQ">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="iSP-bn-FE7">
-                                        <rect key="frame" x="50" y="0.0" width="314" height="775"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="top" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="aIu-ti-IxW">
-                                                <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b5P-CC-Mhr">
-                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="184.5"/>
-                                                        <subviews>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d9d-G8-Wsy">
-                                                                <rect key="frame" x="0.0" y="0.0" width="87" height="184.5"/>
-                                                                <color key="backgroundColor" name="Background"/>
-                                                            </view>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="FRx-Es-6Wx">
-                                                                <rect key="frame" x="87" y="0.0" width="140" height="184.5"/>
-                                                                <subviews>
-                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Gb-bG-gbS" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="140" height="130"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="130" id="e2M-4N-1fj"/>
-                                                                        </constraints>
-                                                                        <userDefinedRuntimeAttributes>
-                                                                            <userDefinedRuntimeAttribute type="number" keyPath="imageWidth">
-                                                                                <real key="value" value="130"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                            <userDefinedRuntimeAttribute type="number" keyPath="imageHeight">
-                                                                                <real key="value" value="130"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
-                                                                                <real key="value" value="-1"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                            <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
-                                                                                <size key="value" width="130" height="130"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                        </userDefinedRuntimeAttributes>
-                                                                    </imageView>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change profile photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PbC-QU-sck">
-                                                                        <rect key="frame" x="0.0" y="132" width="140" height="14.5"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                        <color key="textColor" name="Secondary"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Foobar" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S26-ws-XD1" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="148.5" width="140" height="36"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="36" id="vqa-WH-iMq"/>
-                                                                        </constraints>
-                                                                        <color key="textColor" name="Text"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits"/>
-                                                                        <userDefinedRuntimeAttributes>
-                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                                                <color key="value" name="Text"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
-                                                                            <userDefinedRuntimeAttribute type="number" keyPath="size">
-                                                                                <integer key="value" value="1"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
-                                                                                <color key="value" name="Text"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                        </userDefinedRuntimeAttributes>
-                                                                    </textField>
-                                                                </subviews>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="140" id="xud-Yv-Mna"/>
-                                                                </constraints>
-                                                            </stackView>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="18o-3I-016">
-                                                                <rect key="frame" x="227" y="0.0" width="87" height="184.5"/>
-                                                                <color key="backgroundColor" name="Background"/>
-                                                            </view>
-                                                        </subviews>
-                                                        <constraints>
-                                                            <constraint firstItem="FRx-Es-6Wx" firstAttribute="centerX" secondItem="b5P-CC-Mhr" secondAttribute="centerX" id="ugW-Vw-cAK"/>
-                                                        </constraints>
-                                                    </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="A2p-0U-07j">
-                                                        <rect key="frame" x="0.0" y="192.5" width="314" height="252.5"/>
-                                                        <subviews>
-                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CoverPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="Eui-BL-g8x" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="238"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
-                                                                        <size key="value" width="420" height="210"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
-                                                                        <real key="value" value="20"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                        <real key="value" value="20"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </imageView>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change cover photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjs-5r-LvS">
-                                                                <rect key="frame" x="0.0" y="238" width="314" height="14.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                <color key="textColor" name="Secondary"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="QnR-w6-lma" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="453" width="314" height="121.5"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zhP-gu-TnC">
-                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="17"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <color key="textColor" name="Disable"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="John Doe" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pjv-Nl-ThH" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="20" width="314" height="18.5"/>
-                                                                <color key="tintColor" name="Text"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="400" id="PPE-nm-jFm"/>
-                                                                </constraints>
-                                                                <color key="textColor" name="Text"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <textInputTraits key="textInputTraits"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                        <color key="value" name="BorderColor"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                                        <color key="value" name="Text"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </textField>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Birthday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rwr-Le-ela">
-                                                                <rect key="frame" x="0.0" y="41.5" width="314" height="17"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <color key="textColor" name="Disable"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mm/dd/yyyy" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B61-D7-lE3" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="61.5" width="314" height="18.5"/>
-                                                                <color key="tintColor" name="Text"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="400" id="xUg-66-OT4"/>
-                                                                </constraints>
-                                                                <color key="textColor" name="Text"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <textInputTraits key="textInputTraits"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                        <color key="value" name="BorderColor"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                                        <color key="value" name="Text"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </textField>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M5L-7i-0xm">
-                                                                <rect key="frame" x="0.0" y="83" width="314" height="17"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <color key="textColor" name="Disable"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Maximum 100 characters" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xcd-Hb-Awa" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="103" width="314" height="18.5"/>
-                                                                <color key="tintColor" name="Text"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="400" id="fRE-xV-H5l"/>
-                                                                </constraints>
-                                                                <color key="textColor" name="Text"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <textInputTraits key="textInputTraits"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                        <color key="value" name="BorderColor"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                                        <color key="value" name="Text"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </textField>
-                                                        </subviews>
-                                                        <constraints>
-                                                            <constraint firstAttribute="trailing" secondItem="zhP-gu-TnC" secondAttribute="trailing" constant="10" id="3CS-yP-4my"/>
-                                                            <constraint firstItem="zhP-gu-TnC" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="Bx6-hJ-B3f"/>
-                                                            <constraint firstAttribute="trailing" secondItem="M5L-7i-0xm" secondAttribute="trailing" constant="10" id="E35-cK-mme"/>
-                                                            <constraint firstItem="pjv-Nl-ThH" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="HFz-Kd-fAZ"/>
-                                                            <constraint firstItem="B61-D7-lE3" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="I6e-Zj-rce"/>
-                                                            <constraint firstAttribute="trailing" secondItem="B61-D7-lE3" secondAttribute="trailing" constant="10" id="Ibr-Ei-Pod"/>
-                                                            <constraint firstItem="M5L-7i-0xm" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="Mn4-eW-u1S"/>
-                                                            <constraint firstAttribute="trailing" secondItem="pjv-Nl-ThH" secondAttribute="trailing" constant="10" id="cyb-Gj-dKJ"/>
-                                                            <constraint firstItem="rwr-Le-ela" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="dBZ-yh-afu"/>
-                                                            <constraint firstAttribute="trailing" secondItem="Xcd-Hb-Awa" secondAttribute="trailing" constant="10" id="e4e-hH-ANK"/>
-                                                            <constraint firstItem="Xcd-Hb-Awa" firstAttribute="leading" secondItem="QnR-w6-lma" secondAttribute="leading" constant="10" id="nYg-pk-C9x"/>
-                                                            <constraint firstAttribute="trailing" secondItem="rwr-Le-ela" secondAttribute="trailing" constant="10" id="phl-HK-in6"/>
-                                                        </constraints>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </stackView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit personal information" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NTd-wM-1Rv">
-                                                        <rect key="frame" x="0.0" y="582.5" width="314" height="14.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                        <color key="textColor" name="Secondary"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hTn-tB-Ple" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="605" width="314" height="103.5"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tE9-3h-XBe" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="34.5"/>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="Email"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HWx-D5-7SP" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="34.5" width="314" height="34.5"/>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="Phone Number"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ff7-XJ-HPn" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="69" width="314" height="34.5"/>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="Reset Password"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </button>
-                                                        </subviews>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </stackView>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zcx-lP-2he">
-                                                        <rect key="frame" x="0.0" y="716.5" width="314" height="58.5"/>
-                                                    </view>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="b5P-CC-Mhr" firstAttribute="top" secondItem="aIu-ti-IxW" secondAttribute="top" constant="58" id="DMe-Tc-8Fw"/>
-                                                </constraints>
-                                            </stackView>
-                                        </subviews>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
-                                                <color key="value" systemColor="linkColor"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </stackView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="iSP-bn-FE7" firstAttribute="centerX" secondItem="b6i-ko-VMQ" secondAttribute="centerX" id="Dvb-Tn-JOj"/>
-                                    <constraint firstAttribute="width" constant="420" id="lI1-pc-hFo"/>
-                                    <constraint firstItem="iSP-bn-FE7" firstAttribute="top" secondItem="b6i-ko-VMQ" secondAttribute="top" id="yzy-i4-eLD"/>
-                                </constraints>
-                            </scrollView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="GPu-Dn-CEr"/>
-                        <color key="backgroundColor" name="Background"/>
-                        <constraints>
-                            <constraint firstItem="b6i-ko-VMQ" firstAttribute="top" secondItem="4pM-FY-sXE" secondAttribute="top" id="2Uc-We-zSi"/>
-                            <constraint firstItem="b6i-ko-VMQ" firstAttribute="centerX" secondItem="GPu-Dn-CEr" secondAttribute="centerX" id="hk9-6E-emP"/>
-                            <constraint firstItem="b6i-ko-VMQ" firstAttribute="centerY" secondItem="4pM-FY-sXE" secondAttribute="centerY" id="x4G-uA-vtE"/>
-                        </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
-                        </userDefinedRuntimeAttributes>
-                    </view>
-                    <navigationItem key="navigationItem" title="Edit Profile" leftItemsSupplementBackButton="YES" id="Nqr-rt-qKA" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="uAU-T9-C6Y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3689.8550724637685" y="2432.8125"/>
-        </scene>
         <!--SOCIAL-->
         <scene sceneID="Cng-pc-SXw">
             <objects>
@@ -1305,6 +1022,327 @@
             </objects>
             <point key="canvasLocation" x="2206" y="2450"/>
         </scene>
+        <!--Edit Profile View Controller-->
+        <scene sceneID="tzr-vY-2LI">
+            <objects>
+                <viewController storyboardIdentifier="EDIT" id="Heq-RT-hug" customClass="EditProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3cr-Zb-xve">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9M-D9-Zh1">
+                                <rect key="frame" x="0.0" y="92" width="414" height="721"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kn6-bB-yk7">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="VJl-eg-wxc">
+                                                <rect key="frame" x="57" y="0.0" width="300" height="870.5"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LLJ-9B-xdk">
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="50"/>
+                                                        <color key="backgroundColor" name="Background"/>
+                                                    </view>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ila-zp-q3e">
+                                                        <rect key="frame" x="0.0" y="86" width="300" height="196"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WYU-Qk-Dfs">
+                                                                <rect key="frame" x="0.0" y="0.0" width="80" height="196"/>
+                                                                <color key="backgroundColor" name="Background"/>
+                                                            </view>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bJK-rz-J5u">
+                                                                <rect key="frame" x="80" y="0.0" width="140" height="196"/>
+                                                                <subviews>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r6D-Ts-89N">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
+                                                                        <subviews>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" layoutMarginsFollowReadableWidth="YES" image="defaultuser" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ci7-gB-oHf" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
+                                                                                <rect key="frame" x="2" y="4" width="136" height="120"/>
+                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="imageWidth">
+                                                                                        <real key="value" value="130"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="imageHeight">
+                                                                                        <real key="value" value="130"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
+                                                                                        <real key="value" value="-1"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                    <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
+                                                                                        <size key="value" width="130" height="130"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </imageView>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" name="Background"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="140" id="a7z-Y4-VGQ"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change profile photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nnF-zJ-E6G">
+                                                                        <rect key="frame" x="0.0" y="140" width="140" height="20"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="20" id="eKz-XR-pM6"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                        <color key="textColor" name="Secondary"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Foobar" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SjD-10-vYT" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="0.0" y="160" width="140" height="36"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="36" id="gED-ht-OcW"/>
+                                                                        </constraints>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                                                                <integer key="value" value="1"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="140" id="vtO-2a-fmE"/>
+                                                                </constraints>
+                                                            </stackView>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y9Z-Ny-udy">
+                                                                <rect key="frame" x="220" y="0.0" width="80" height="196"/>
+                                                                <color key="backgroundColor" name="Background"/>
+                                                            </view>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="bJK-rz-J5u" firstAttribute="centerX" secondItem="ila-zp-q3e" secondAttribute="centerX" id="hVa-DR-Trb"/>
+                                                        </constraints>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="-5" translatesAutoresizingMaskIntoConstraints="NO" id="unA-MQ-MrU">
+                                                        <rect key="frame" x="0.0" y="318" width="300" height="189.5"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CoverPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="j3e-pQ-uGe" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="180"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
+                                                                        <size key="value" width="300" height="180"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
+                                                                        <real key="value" value="20"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="20"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change cover photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eqg-kW-0aO">
+                                                                <rect key="frame" x="0.0" y="175" width="300" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" name="Secondary"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="fOA-QS-Uel">
+                                                        <rect key="frame" x="0.0" y="543.5" width="300" height="171"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="dxt-do-rOS" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="156.5"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m8v-BA-LuH">
+                                                                        <rect key="frame" x="10" y="10" width="280" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="John Doe" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ftx-Ln-q3h" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="10" y="33" width="280" height="18.5"/>
+                                                                        <color key="tintColor" name="Text"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" name="BorderColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Birthday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WiS-vv-q5b">
+                                                                        <rect key="frame" x="10" y="57.5" width="280" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mm/dd/yyyy" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xaK-9A-REj" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="10" y="80.5" width="280" height="18.5"/>
+                                                                        <color key="tintColor" name="Text"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" name="BorderColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSi-Vt-WLZ">
+                                                                        <rect key="frame" x="10" y="105" width="280" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Maximum 100 characters" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LKV-48-eKM" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="10" y="128" width="280" height="18.5"/>
+                                                                        <color key="tintColor" name="Text"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" name="BorderColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="280" id="5o7-oA-mHR"/>
+                                                                </constraints>
+                                                                <directionalEdgeInsets key="directionalLayoutMargins" top="10" leading="10" bottom="10" trailing="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </stackView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit personal information" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg4-Aa-KQ7">
+                                                                <rect key="frame" x="0.0" y="156.5" width="300" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" name="Secondary"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MBZ-ft-JKn" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="750.5" width="300" height="120"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rHl-vD-3vp">
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rhR-vZ-79a">
+                                                                        <rect key="frame" x="10" y="0.0" width="50" height="40"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="50" id="012-xS-B9b"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1cs-ba-IHp">
+                                                                        <rect key="frame" x="60" y="0.0" width="230" height="40"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="CHP-58-Fpl"/>
+                                                                </constraints>
+                                                                <directionalEdgeInsets key="directionalLayoutMargins" top="0.0" leading="10" bottom="0.0" trailing="10"/>
+                                                            </stackView>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZQb-sS-IrM">
+                                                                <rect key="frame" x="0.0" y="40" width="300" height="40"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fy1-WL-1Vx">
+                                                                        <rect key="frame" x="10" y="0.0" width="80" height="40"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="80" id="GIU-Xc-o9S"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ts-do-18Y">
+                                                                        <rect key="frame" x="90" y="0.0" width="200" height="40"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="F6R-cJ-otC"/>
+                                                                </constraints>
+                                                                <directionalEdgeInsets key="directionalLayoutMargins" top="0.0" leading="10" bottom="0.0" trailing="10"/>
+                                                            </stackView>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wal-Ok-Qxw" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="80" width="300" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="bGg-QN-BFL"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" title="Reset Password"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="300" id="sdp-Xi-Qlc"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" name="Background"/>
+                                        <constraints>
+                                            <constraint firstItem="VJl-eg-wxc" firstAttribute="top" secondItem="Kn6-bB-yk7" secondAttribute="top" id="CK3-Ff-dXp"/>
+                                            <constraint firstItem="VJl-eg-wxc" firstAttribute="centerX" secondItem="Kn6-bB-yk7" secondAttribute="centerX" id="VLO-e8-wcC"/>
+                                            <constraint firstAttribute="height" constant="1200" id="wZs-X5-BV2"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" name="Background"/>
+                                <constraints>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="leading" secondItem="Ju1-to-nBQ" secondAttribute="leading" id="5ae-DO-8YQ"/>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="width" secondItem="H1y-D0-HCS" secondAttribute="width" id="Hvp-Tk-YUQ"/>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="top" secondItem="Ju1-to-nBQ" secondAttribute="top" id="M3r-uM-8xg"/>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="bottom" secondItem="Ju1-to-nBQ" secondAttribute="bottom" id="MfO-BJ-f4Y"/>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="trailing" secondItem="Ju1-to-nBQ" secondAttribute="trailing" id="qjq-vr-W6K"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="Ju1-to-nBQ"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="H1y-D0-HCS"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="sSp-sN-0NR"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="sSp-sN-0NR" firstAttribute="trailing" secondItem="g9M-D9-Zh1" secondAttribute="trailing" id="8kD-NR-6xi"/>
+                            <constraint firstItem="g9M-D9-Zh1" firstAttribute="leading" secondItem="sSp-sN-0NR" secondAttribute="leading" id="GBp-ya-LnI"/>
+                            <constraint firstItem="g9M-D9-Zh1" firstAttribute="top" secondItem="sSp-sN-0NR" secondAttribute="top" id="Gd1-fR-hzb"/>
+                            <constraint firstItem="g9M-D9-Zh1" firstAttribute="bottom" secondItem="sSp-sN-0NR" secondAttribute="bottom" id="k90-Lo-ooS"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Nsb-RJ-aZp"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zcd-fM-Xd5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3840.579710144928" y="2432.8125"/>
+        </scene>
     </scenes>
     <designables>
         <designable name="4go-h1-QJJ">
@@ -1313,29 +1351,23 @@
         <designable name="5fN-Rc-NRW">
             <size key="intrinsicContentSize" width="144" height="34.5"/>
         </designable>
-        <designable name="6Gb-bG-gbS">
-            <size key="intrinsicContentSize" width="130" height="130"/>
-        </designable>
         <designable name="8ur-f6-WPC">
             <size key="intrinsicContentSize" width="86" height="34.5"/>
-        </designable>
-        <designable name="B61-D7-lE3">
-            <size key="intrinsicContentSize" width="84" height="18.5"/>
         </designable>
         <designable name="CZ4-93-5UE">
             <size key="intrinsicContentSize" width="92.5" height="34.5"/>
         </designable>
-        <designable name="Eui-BL-g8x">
-            <size key="intrinsicContentSize" width="420" height="238"/>
+        <designable name="Ci7-gB-oHf">
+            <size key="intrinsicContentSize" width="130" height="130"/>
         </designable>
         <designable name="FOI-cM-P0o">
             <size key="intrinsicContentSize" width="162" height="40"/>
         </designable>
+        <designable name="Ftx-Ln-q3h">
+            <size key="intrinsicContentSize" width="67" height="18.5"/>
+        </designable>
         <designable name="H2p-AI-TAt">
             <size key="intrinsicContentSize" width="180.5" height="38"/>
-        </designable>
-        <designable name="HWx-D5-7SP">
-            <size key="intrinsicContentSize" width="138.5" height="34.5"/>
         </designable>
         <designable name="HXp-PI-Fgg">
             <size key="intrinsicContentSize" width="101.5" height="38"/>
@@ -1358,13 +1390,16 @@
         <designable name="LJd-pP-0wN">
             <size key="intrinsicContentSize" width="135" height="39"/>
         </designable>
+        <designable name="LKV-48-eKM">
+            <size key="intrinsicContentSize" width="168" height="18.5"/>
+        </designable>
         <designable name="Otd-IW-3Q6">
             <size key="intrinsicContentSize" width="280" height="280"/>
         </designable>
         <designable name="PdQ-TC-Ctu">
             <size key="intrinsicContentSize" width="182.5" height="34.5"/>
         </designable>
-        <designable name="S26-ws-XD1">
+        <designable name="SjD-10-vYT">
             <size key="intrinsicContentSize" width="79.5" height="34"/>
         </designable>
         <designable name="Tkl-5W-Yw1">
@@ -1373,17 +1408,11 @@
         <designable name="Wx0-kI-Yna">
             <size key="intrinsicContentSize" width="187" height="39"/>
         </designable>
-        <designable name="Xcd-Hb-Awa">
-            <size key="intrinsicContentSize" width="168" height="18.5"/>
-        </designable>
         <designable name="b4Z-Wg-wyP">
             <size key="intrinsicContentSize" width="213" height="44"/>
         </designable>
         <designable name="f9j-UV-aZd">
             <size key="intrinsicContentSize" width="92.5" height="34.5"/>
-        </designable>
-        <designable name="ff7-XJ-HPn">
-            <size key="intrinsicContentSize" width="145" height="34.5"/>
         </designable>
         <designable name="gLe-ah-MOZ">
             <size key="intrinsicContentSize" width="73" height="34.5"/>
@@ -1391,17 +1420,20 @@
         <designable name="gZ4-lz-XpD">
             <size key="intrinsicContentSize" width="162" height="34"/>
         </designable>
+        <designable name="j3e-pQ-uGe">
+            <size key="intrinsicContentSize" width="319" height="180"/>
+        </designable>
         <designable name="nbB-c6-ceP">
             <size key="intrinsicContentSize" width="110" height="39"/>
         </designable>
-        <designable name="pjv-Nl-ThH">
-            <size key="intrinsicContentSize" width="67" height="18.5"/>
-        </designable>
-        <designable name="tE9-3h-XBe">
-            <size key="intrinsicContentSize" width="65" height="34.5"/>
-        </designable>
         <designable name="v4L-i8-m8u">
             <size key="intrinsicContentSize" width="182" height="35"/>
+        </designable>
+        <designable name="wal-Ok-Qxw">
+            <size key="intrinsicContentSize" width="145" height="34.5"/>
+        </designable>
+        <designable name="xaK-9A-REj">
+            <size key="intrinsicContentSize" width="84" height="18.5"/>
         </designable>
         <designable name="z5k-Tq-4jF">
             <size key="intrinsicContentSize" width="99" height="34.5"/>
@@ -1439,9 +1471,6 @@
         <namedColor name="BorderColor">
             <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="Disable">
-            <color red="0.73333333333333328" green="0.73333333333333328" blue="0.73333333333333328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="Secondary">
             <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -1450,6 +1479,9 @@
         </namedColor>
         <namedColor name="Text">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TextOnBackground">
+            <color red="0.73333333333333328" green="0.73333333333333328" blue="0.73333333333333328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

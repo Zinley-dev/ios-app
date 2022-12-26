@@ -9,17 +9,36 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-class EditProfileViewController: UIViewController {
+class EditProfileViewController: UIViewController, ControllerType {
     
     
-    // MARK: - UI
-    @IBOutlet var ReferralTextField: UITextField?
+    typealias ViewModelType = EditProfileViewModel
+    
+    // MARK: - Properties
+    private var viewModel: ViewModelType! = ViewModelType()
+    private let disposeBag = DisposeBag()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        print()
+        bindUI(with: viewModel)
+        bindAction(with: viewModel)
+        setUpNavigationBar()
+        viewModel.getAPISetting()
+        presentLoading()
     }
+    func bindUI(with viewModel: EditProfileViewModel) {
+    
+    }
+    
+    func bindAction(with viewModel: EditProfileViewModel) {
+        
+    }
+    
+    // MARK: - UI
+    @IBOutlet var ChangeProfileImageLabel: UITextField?
+    
+   
     
 }
 
@@ -29,7 +48,7 @@ import SwiftUI
 
 struct EditProfileViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        return UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EDITPROFILE")
+        return UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EDIT")
     }
     
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {

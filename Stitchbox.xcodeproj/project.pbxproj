@@ -14,6 +14,7 @@
 		141BB197293BA946004F4ED7 /* loading-animation.json in Resources */ = {isa = PBXBuildFile; fileRef = 141BB196293BA946004F4ED7 /* loading-animation.json */; };
 		1429CD032950119100CDBCC8 /* SNavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1429CD022950119100CDBCC8 /* SNavigationItem.swift */; };
 		1429CD05295042AA00CDBCC8 /* Backups.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1429CD04295042AA00CDBCC8 /* Backups.storyboard */; };
+		144022E5295966CA009B7A58 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144022E4295966CA009B7A58 /* EditProfileViewModel.swift */; };
 		1457CCD72945898F003C742F /* CardStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457CCD62945898F003C742F /* CardStackView.swift */; };
 		1457CCD929464DD6003C742F /* IconSet.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1457CCD829464DD6003C742F /* IconSet.xcassets */; };
 		1457CDEC294862DF003C742F /* DashboardTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457CDEB294862DF003C742F /* DashboardTabBar.swift */; };
@@ -162,6 +163,7 @@
 		141BB196293BA946004F4ED7 /* loading-animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "loading-animation.json"; sourceTree = "<group>"; };
 		1429CD022950119100CDBCC8 /* SNavigationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNavigationItem.swift; sourceTree = "<group>"; };
 		1429CD04295042AA00CDBCC8 /* Backups.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Backups.storyboard; sourceTree = "<group>"; };
+		144022E4295966CA009B7A58 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 		145402D9D6A81E58D5531439 /* Pods-StitchboxUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.release.xcconfig"; sourceTree = "<group>"; };
 		1457CCD62945898F003C742F /* CardStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackView.swift; sourceTree = "<group>"; };
 		1457CCD829464DD6003C742F /* IconSet.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = IconSet.xcassets; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 			children = (
 				395477BE294D714F008EED97 /* CreateAccountViewModel.swift */,
 				147187EA2920AF6D0039B89E /* ViewModelProtocol.swift */,
+				144022E4295966CA009B7A58 /* EditProfileViewModel.swift */,
 				147187E82920AD520039B89E /* LogInViewModel.swift */,
 				14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */,
 				147187F22920D2830039B89E /* LoginByPhoneViewModel.swift */,
@@ -1158,6 +1161,7 @@
 				1494675329419A6D007033E5 /* Helpers.swift in Sources */,
 				A59CB3F1294ADBD700D84D9A /* ApplicationCoreData.swift in Sources */,
 				6AAD7A02294C4D1C003E3AB6 /* MainMessageVC.swift in Sources */,
+				144022E5295966CA009B7A58 /* EditProfileViewModel.swift in Sources */,
 				6AAD7A49294C664D003E3AB6 /* NSUserActivity+QuickStart.swift in Sources */,
 				A59CB3F5294ADCA200D84D9A /* UserDataSource.swift in Sources */,
 				6AAD7A08294C5DBB003E3AB6 /* RequestVC.swift in Sources */,

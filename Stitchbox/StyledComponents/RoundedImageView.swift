@@ -21,10 +21,13 @@ class RoundedImageView: UIImageView {
     
     @IBInspectable var borderRadius: Double = -1 {
         didSet {
+            self.layer.borderWidth = 5.0 //Or some other value
+            self.layer.borderColor = UIColor.clear.cgColor
             if (borderRadius == -1) {
-                self.layer.cornerRadius = (self.frame.size.width / 2)
+                self.layer.cornerRadius = (self.bounds.size.width / 2)
             } else {
                 self.layer.cornerRadius = borderRadius
+                
                 self.clipsToBounds = true
                 
             }
