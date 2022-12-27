@@ -124,16 +124,17 @@ import SwiftUI
                 gradient.colors = [UIColor.primary.cgColor, UIColor.secondary.cgColor]
                 
                 let shape = CAShapeLayer()
-                shape.lineWidth = 5
+//                shape.lineWidth = 5
                 shape.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 20).cgPath
                 shape.strokeColor = UIColor.black.cgColor
-                shape.fillColor = UIColor.clear.cgColor
+                shape.fillColor = UIColor.black.cgColor
                 gradient.mask = shape
                 gradient.shadowColor = UIColor.black.cgColor
                 gradient.shadowOpacity = 1
                 gradient.shadowOffset = CGSize(width: 0, height: 4)
                 gradient.shadowRadius = 4
-                self.layer.addSublayer(gradient)
+                self.layer.insertSublayer(gradient, at: 0)
+                layer.backgroundColor = UIColor.clear.cgColor
                 
             } else {
                 layer.shadowColor = UIColor.black.cgColor

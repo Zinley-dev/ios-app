@@ -15,6 +15,7 @@
 		1429CD032950119100CDBCC8 /* SNavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1429CD022950119100CDBCC8 /* SNavigationItem.swift */; };
 		1429CD05295042AA00CDBCC8 /* Backups.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1429CD04295042AA00CDBCC8 /* Backups.storyboard */; };
 		144022E5295966CA009B7A58 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144022E4295966CA009B7A58 /* EditProfileViewModel.swift */; };
+		144022E7295AED4F009B7A58 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144022E6295AED4F009B7A58 /* PopupViewController.swift */; };
 		1457CCD72945898F003C742F /* CardStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457CCD62945898F003C742F /* CardStackView.swift */; };
 		1457CCD929464DD6003C742F /* IconSet.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1457CCD829464DD6003C742F /* IconSet.xcassets */; };
 		1457CDEC294862DF003C742F /* DashboardTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457CDEB294862DF003C742F /* DashboardTabBar.swift */; };
@@ -164,6 +165,7 @@
 		1429CD022950119100CDBCC8 /* SNavigationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNavigationItem.swift; sourceTree = "<group>"; };
 		1429CD04295042AA00CDBCC8 /* Backups.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Backups.storyboard; sourceTree = "<group>"; };
 		144022E4295966CA009B7A58 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
+		144022E6295AED4F009B7A58 /* PopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 		145402D9D6A81E58D5531439 /* Pods-StitchboxUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.release.xcconfig"; sourceTree = "<group>"; };
 		1457CCD62945898F003C742F /* CardStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackView.swift; sourceTree = "<group>"; };
 		1457CCD829464DD6003C742F /* IconSet.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = IconSet.xcassets; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 				1457CCD62945898F003C742F /* CardStackView.swift */,
 				1429CD022950119100CDBCC8 /* SNavigationItem.swift */,
 				149F44F62956F8270084742A /* RoundedImageView.swift */,
+				144022E6295AED4F009B7A58 /* PopupViewController.swift */,
 			);
 			path = StyledComponents;
 			sourceTree = "<group>";
@@ -1182,6 +1185,7 @@
 				390FD77629092AB30068B883 /* HTTPMethod.swift in Sources */,
 				6AAD7A45294C6642003E3AB6 /* Bundle+QuickStart.swift in Sources */,
 				A5346488294B09B300FB6A94 /* ProfileViewController.swift in Sources */,
+				144022E7295AED4F009B7A58 /* PopupViewController.swift in Sources */,
 				6AAD7A3F294C6642003E3AB6 /* Int64+QuickStart.swift in Sources */,
 				6AAD7A64294C699E003E3AB6 /* GifImageConfig.swift in Sources */,
 				6AAD7A5E294C699E003E3AB6 /* workItem.swift in Sources */,

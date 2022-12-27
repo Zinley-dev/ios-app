@@ -1036,14 +1036,14 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kn6-bB-yk7">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="VJl-eg-wxc">
-                                                <rect key="frame" x="57" y="0.0" width="300" height="870.5"/>
+                                            <stackView autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="VJl-eg-wxc">
+                                                <rect key="frame" x="57" y="0.0" width="300" height="881.5"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LLJ-9B-xdk">
                                                         <rect key="frame" x="0.0" y="0.0" width="300" height="50"/>
                                                         <color key="backgroundColor" name="Background"/>
                                                     </view>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ila-zp-q3e">
+                                                    <stackView opaque="NO" contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ila-zp-q3e">
                                                         <rect key="frame" x="0.0" y="86" width="300" height="196"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WYU-Qk-Dfs">
@@ -1080,15 +1080,27 @@
                                                                             <constraint firstAttribute="height" constant="140" id="a7z-Y4-VGQ"/>
                                                                         </constraints>
                                                                     </view>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change profile photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nnF-zJ-E6G">
+                                                                    <button opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="140" placeholderIntrinsicHeight="20" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oMd-2U-zrc">
                                                                         <rect key="frame" x="0.0" y="140" width="140" height="20"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="20" id="eKz-XR-pM6"/>
+                                                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="20" id="cTB-OJ-YTr"/>
                                                                         </constraints>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                        <color key="textColor" name="Secondary"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
+                                                                        <state key="normal" title="Button"/>
+                                                                        <buttonConfiguration key="configuration" style="plain">
+                                                                            <attributedString key="attributedTitle">
+                                                                                <fragment content="Change profile photo">
+                                                                                    <attributes>
+                                                                                        <font key="NSFont" size="12" name="HelveticaNeue"/>
+                                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" tighteningFactorForTruncation="0.0"/>
+                                                                                    </attributes>
+                                                                                </fragment>
+                                                                            </attributedString>
+                                                                            <color key="baseForegroundColor" name="Secondary"/>
+                                                                        </buttonConfiguration>
+                                                                        <connections>
+                                                                            <action selector="changeProfileImage" destination="Heq-RT-hug" eventType="touchDown" id="h8u-s3-OMT"/>
+                                                                        </connections>
+                                                                    </button>
                                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Foobar" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SjD-10-vYT" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="160" width="140" height="36"/>
                                                                         <constraints>
@@ -1125,7 +1137,7 @@
                                                         </constraints>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="-5" translatesAutoresizingMaskIntoConstraints="NO" id="unA-MQ-MrU">
-                                                        <rect key="frame" x="0.0" y="318" width="300" height="189.5"/>
+                                                        <rect key="frame" x="0.0" y="318" width="300" height="195"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CoverPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="j3e-pQ-uGe" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="180"/>
@@ -1141,16 +1153,31 @@
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
                                                             </imageView>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change cover photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eqg-kW-0aO">
-                                                                <rect key="frame" x="0.0" y="175" width="300" height="14.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                <color key="textColor" name="Secondary"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
+                                                            <button opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="140" placeholderIntrinsicHeight="20" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Us-tV-MWv">
+                                                                <rect key="frame" x="0.0" y="175" width="300" height="20"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="20" id="F22-2m-Xei"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain">
+                                                                    <attributedString key="attributedTitle">
+                                                                        <fragment content="Change cover photo">
+                                                                            <attributes>
+                                                                                <font key="NSFont" size="12" name="HelveticaNeue"/>
+                                                                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" tighteningFactorForTruncation="0.0"/>
+                                                                            </attributes>
+                                                                        </fragment>
+                                                                    </attributedString>
+                                                                    <color key="baseForegroundColor" name="Secondary"/>
+                                                                </buttonConfiguration>
+                                                                <connections>
+                                                                    <action selector="changeProfileImage" destination="Heq-RT-hug" eventType="touchDown" id="CV8-Or-5ZX"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="fOA-QS-Uel">
-                                                        <rect key="frame" x="0.0" y="543.5" width="300" height="171"/>
+                                                        <rect key="frame" x="0.0" y="549" width="300" height="176.5"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="dxt-do-rOS" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="156.5"/>
@@ -1219,24 +1246,36 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </textField>
                                                                 </subviews>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="280" id="5o7-oA-mHR"/>
-                                                                </constraints>
                                                                 <directionalEdgeInsets key="directionalLayoutMargins" top="10" leading="10" bottom="10" trailing="10"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </stackView>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit personal information" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg4-Aa-KQ7">
-                                                                <rect key="frame" x="0.0" y="156.5" width="300" height="14.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                <color key="textColor" name="Secondary"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
+                                                            <button opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="140" placeholderIntrinsicHeight="20" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuL-QH-yQg">
+                                                                <rect key="frame" x="0.0" y="156.5" width="300" height="20"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="20" id="OYq-ZZ-pMY"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain">
+                                                                    <attributedString key="attributedTitle">
+                                                                        <fragment content="Edit personal information">
+                                                                            <attributes>
+                                                                                <font key="NSFont" size="12" name="HelveticaNeue"/>
+                                                                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" tighteningFactorForTruncation="0.0"/>
+                                                                            </attributes>
+                                                                        </fragment>
+                                                                    </attributedString>
+                                                                    <color key="baseForegroundColor" name="Secondary"/>
+                                                                </buttonConfiguration>
+                                                                <connections>
+                                                                    <action selector="changeProfileImage" destination="Heq-RT-hug" eventType="touchDown" id="COh-4h-nCV"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MBZ-ft-JKn" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="750.5" width="300" height="120"/>
+                                                        <rect key="frame" x="0.0" y="761.5" width="300" height="120"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rHl-vD-3vp">
                                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
@@ -1296,6 +1335,9 @@
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
                                                                 </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="resetPasswordButton" destination="Heq-RT-hug" eventType="touchDown" id="33A-S1-tp2"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <userDefinedRuntimeAttributes>
@@ -1342,6 +1384,34 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zcd-fM-Xd5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3840.579710144928" y="2432.8125"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="pDD-ED-GP8">
+            <objects>
+                <viewController id="h1w-D3-PkP" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xBJ-3V-fFX">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Ev3-gw-TGc">
+                                <rect key="frame" x="0.0" y="462" width="414" height="400"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="400" id="1Ap-bh-x2K"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="5R0-o2-VGb"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="5R0-o2-VGb" firstAttribute="bottom" secondItem="Ev3-gw-TGc" secondAttribute="bottom" id="0PI-oM-qkg"/>
+                            <constraint firstItem="5R0-o2-VGb" firstAttribute="trailing" secondItem="Ev3-gw-TGc" secondAttribute="trailing" id="70p-ck-VVj"/>
+                            <constraint firstItem="Ev3-gw-TGc" firstAttribute="leading" secondItem="5R0-o2-VGb" secondAttribute="leading" id="y41-1R-rCq"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yPv-Tx-or7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4792.753623188406" y="2443.5267857142858"/>
         </scene>
     </scenes>
     <designables>

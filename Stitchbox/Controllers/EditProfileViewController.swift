@@ -5,9 +5,9 @@
 //  Created by Khanh Duy Nguyen on 12/24/22.
 //
 
-import Foundation
 import RxCocoa
 import RxSwift
+import EzPopup
 
 class EditProfileViewController: UIViewController, ControllerType {
     
@@ -36,9 +36,21 @@ class EditProfileViewController: UIViewController, ControllerType {
     }
     
     // MARK: - UI
-    @IBOutlet var ChangeProfileImageLabel: UILabel?
-    @IBOutlet var ChangeCoveImageLabel: UILabel?
-    @IBAction func EditInfo() {
+    @IBAction func changeProfileImage() {
+        let viewCtrl = UIViewController()
+        let popupVC = PopupViewController(contentController: viewCtrl, popupWidth: 100, popupHeight: 100)
+        
+        viewCtrl.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+        
+        self.present(popupVC, animated: true)
+        
+    }
+    
+    @IBAction func changeCoverImage() {
+        
+    }
+    
+    @IBAction func editInfo() {
         
     }
     
