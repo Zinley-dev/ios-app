@@ -211,7 +211,7 @@
         <!--Profile View Controller-->
         <scene sceneID="wy7-Lo-v4z">
             <objects>
-                <viewController id="l9I-Ci-Uq5" customClass="ProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PROFILE" useStoryboardIdentifierAsRestorationIdentifier="YES" id="l9I-Ci-Uq5" customClass="ProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LJT-Ib-Nta">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -222,13 +222,13 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O2Q-ze-oOF">
-                                <rect key="frame" x="169" y="502" width="78" height="31"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W1W-4K-06D">
+                                <rect key="frame" x="168" y="312" width="79" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Sign out"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Setting"/>
                                 <connections>
-                                    <action selector="tapedSignOut:" destination="l9I-Ci-Uq5" eventType="touchUpInside" id="nx7-pK-WRI"/>
+                                    <segue destination="xuI-Xg-Q5p" kind="show" id="VQs-wP-6Xq"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -314,8 +314,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hmu-Uu-alB">
-                                <rect key="frame" x="185.5" y="433.5" width="43" height="29"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Noneúe" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hmu-Uu-alB">
+                                <rect key="frame" x="166" y="433.5" width="82" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -363,23 +363,1129 @@
             </objects>
             <point key="canvasLocation" x="460.86956521739131" y="911.38392857142856"/>
         </scene>
+        <!--Settings-->
+        <scene sceneID="dta-GJ-n4h">
+            <objects>
+                <viewController storyboardIdentifier="SETTING" title="Settings" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xuI-Xg-Q5p" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="top" id="TI1-Hx-BUo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qUb-51-hjp">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="Ev4-ye-Ch6">
+                                        <rect key="frame" x="50" y="0.0" width="314" height="775"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Adm-jC-HTD">
+                                                <rect key="frame" x="0.0" y="0.0" width="314" height="80"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Challenge" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kdg-BB-mmh">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="LFD-pA-Tu5"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                        <color key="textColor" name="Text"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="liR-SW-NHP" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PdQ-TC-Ctu" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="JjR-mH-fWW"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="trophy" imagePlacement="leading" title="Accept challenge" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="liR-SW-NHP" firstAttribute="width" secondItem="Adm-jC-HTD" secondAttribute="width" id="Gnx-Dc-MYZ"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="IDj-5m-Lpp">
+                                                <rect key="frame" x="0.0" y="85" width="314" height="160"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Social" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hRL-8A-y12">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="akh-TB-LOt"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                        <color key="textColor" name="Text"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ymm-dQ-MM4" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="120"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5fN-Rc-NRW" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="2uH-yH-vhT"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="discord" title="Discord link" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FOI-cM-P0o" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="yNb-qs-yCd"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="users" title="Referral code" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <segue destination="KlH-ah-CY1" kind="show" id="Kzo-Ib-z5p"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4go-h1-QJJ" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="80" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="Q6b-NJ-rk3"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="adduser" title="Find friends" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="ymm-dQ-MM4" firstAttribute="width" secondItem="IDj-5m-Lpp" secondAttribute="width" id="aMR-Ck-ygx"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="O5B-uW-NEx">
+                                                <rect key="frame" x="0.0" y="250" width="314" height="120"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oel-NM-Ke8">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="hba-Pj-ulc"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                        <color key="textColor" name="Text"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="wxM-VX-CvP" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="80"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nbB-c6-ceP" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="edc-Y3-zAB"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="sound" title="Sound" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4Z-Wg-wyP" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="z0o-IF-P3d"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="dropdown" title="Automatic minimize" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="m9c-ii-5IL">
+                                                <rect key="frame" x="0.0" y="375" width="314" height="400"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sl8-aQ-wad">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="JfU-Zc-udh"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                        <color key="textColor" name="Text"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="FW8-YC-6xo" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="360"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J3i-nB-Li5" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="lH6-Lq-4ZJ"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="user-setting" title="Edit profile" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <segue destination="Heq-RT-hug" kind="show" id="hrF-kW-gwp"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4L-i8-m8u" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="HJq-06-zH1"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="push" title="Push notification" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <segue destination="tPc-JI-4UU" kind="show" id="6h1-3p-nWT"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H2p-AI-TAt" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="80" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="MVi-Ha-kOE"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="clock" title="Account activity" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LJd-pP-0wN" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="120" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="3SW-wM-lGI"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="link" title="Social link" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <segue destination="2JE-DM-s0Y" kind="show" id="Z5g-jU-bHx"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KT3-Bl-ukO" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="160" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="M4h-8V-DAH"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="lock" title="Block accounts" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3N-fr-Ry2" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="200" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="sn8-fs-7hB"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="call" title="Contact us" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wx0-kI-Yna" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="240" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="nTB-x1-89n"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="file" title="Term of Services" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CZ4-93-5UE" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="280" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="NHE-fo-PuR"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" title="About us"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HXp-PI-Fgg" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="320" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="OrP-23-eV8"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="logout" title="Logout"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                <color key="value" systemColor="linkColor"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Ev4-ye-Ch6" firstAttribute="centerX" secondItem="qUb-51-hjp" secondAttribute="centerX" id="EOb-m3-NWO"/>
+                                    <constraint firstAttribute="bottom" secondItem="Ev4-ye-Ch6" secondAttribute="bottom" id="KOC-Mg-45m"/>
+                                    <constraint firstAttribute="width" constant="420" id="Nb8-pH-9gJ"/>
+                                    <constraint firstItem="Ev4-ye-Ch6" firstAttribute="top" secondItem="qUb-51-hjp" secondAttribute="top" id="dOF-Sw-tpr"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Icr-ZQ-wP1"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="qUb-51-hjp" firstAttribute="top" secondItem="TI1-Hx-BUo" secondAttribute="top" id="Efn-YY-Wi7"/>
+                            <constraint firstAttribute="bottom" secondItem="qUb-51-hjp" secondAttribute="bottom" id="TMU-hF-LoK"/>
+                            <constraint firstItem="qUb-51-hjp" firstAttribute="centerX" secondItem="TI1-Hx-BUo" secondAttribute="centerX" id="W52-ik-Wr6"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <navigationItem key="navigationItem" title="Settings" leftItemsSupplementBackButton="YES" id="ssg-za-I02" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="allowChallengeButton" destination="PdQ-TC-Ctu" id="hr5-zz-Fm5"/>
+                        <outlet property="allowDiscordLinkButton" destination="5fN-Rc-NRW" id="JLv-e7-T9r"/>
+                        <outlet property="autoMinimizeButton" destination="b4Z-Wg-wyP" id="hb9-d3-BNX"/>
+                        <outlet property="autoPlaySoundButton" destination="nbB-c6-ceP" id="6jF-4l-bEW"/>
+                        <outlet property="logoutButton" destination="HXp-PI-Fgg" id="BV2-AD-I3l"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XYD-To-fAx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2205.7971014492755" y="1654.8913043478262"/>
+        </scene>
+        <!--PUSH NOTIFICATION-->
+        <scene sceneID="ntq-VL-ZGe">
+            <objects>
+                <viewController storyboardIdentifier="PUSHNOTIFICATION" title="PUSH NOTIFICATION" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tPc-JI-4UU" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="top" id="vvO-fJ-qbP">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8qw-8j-fTh">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="4U8-RU-PUM">
+                                        <rect key="frame" x="50" y="0.0" width="314" height="775"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qBl-4O-mgx" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="314" height="240"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f9j-UV-aZd" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="oVB-0D-96d"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Highlight"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Io7-Gd-p4e" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="08R-4F-RoG"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Challenge"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z5k-Tq-4jF" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="80" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="jmA-y7-0RT"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Comment"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ur-f6-WPC" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="120" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="fSs-IW-80R"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Mention"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gLe-ah-MOZ" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="160" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="DlS-Np-WsM"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Follow"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K9C-AN-45U" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="200" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="Mt4-CJ-SsG"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Message"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                </subviews>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="xAy-6T-Nni">
+                                                <rect key="frame" x="0.0" y="245" width="314" height="530"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NtP-e1-hYp">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="530"/>
+                                                        <color key="backgroundColor" name="Background"/>
+                                                    </view>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                <color key="value" systemColor="linkColor"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="420" id="APG-J4-mV2"/>
+                                    <constraint firstAttribute="height" constant="736" id="E8A-R3-16G"/>
+                                    <constraint firstItem="4U8-RU-PUM" firstAttribute="centerX" secondItem="8qw-8j-fTh" secondAttribute="centerX" id="LKk-jU-oLu"/>
+                                    <constraint firstItem="4U8-RU-PUM" firstAttribute="top" secondItem="8qw-8j-fTh" secondAttribute="top" id="McC-D1-229"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="rwv-fY-uGW"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="8qw-8j-fTh" firstAttribute="top" secondItem="vvO-fJ-qbP" secondAttribute="top" id="UD0-bb-Qpg"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <navigationItem key="navigationItem" title="Push Notifications" leftItemsSupplementBackButton="YES" id="BGl-Dv-db3" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="challengeNotificationsButton" destination="Io7-Gd-p4e" id="zyC-OI-AKg"/>
+                        <outlet property="commentNotificationsButton" destination="z5k-Tq-4jF" id="yeZ-FQ-bW7"/>
+                        <outlet property="followNotificationsButton" destination="gLe-ah-MOZ" id="yYj-vc-566"/>
+                        <outlet property="highlightNotificationsButton" destination="f9j-UV-aZd" id="tnw-ze-CzW"/>
+                        <outlet property="mentionNotificationsButton" destination="8ur-f6-WPC" id="qOi-P1-gsb"/>
+                        <outlet property="messageNotificationsButton" destination="K9C-AN-45U" id="aF0-ze-ANU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OGx-sv-nSk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3068" y="1655"/>
+        </scene>
+        <!--REFERRAL-->
+        <scene sceneID="mKX-El-TYh">
+            <objects>
+                <viewController storyboardIdentifier="REFERRAL" title="REFERRAL" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KlH-ah-CY1" customClass="ReferralCodeViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="top" id="yH2-uS-ahJ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xPF-Yz-s6r">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="s4M-vx-JTK">
+                                        <rect key="frame" x="50" y="-136" width="314" height="775"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="Qcm-ho-5Ea">
+                                                <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="top" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="8u5-Pv-Cvn">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OD5-TY-SXt">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="225.5"/>
+                                                                <color key="backgroundColor" name="Background"/>
+                                                            </view>
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User's referral code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gZ4-lz-XpD" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="265.5" width="314" height="36"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="36" id="sA9-bc-Dmc"/>
+                                                                </constraints>
+                                                                <color key="textColor" name="Text"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                        <color key="value" name="Text"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                                                        <integer key="value" value="1"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                                        <color key="value" name="Text"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </textField>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBW-Pu-Oc8">
+                                                                <rect key="frame" x="0.0" y="341.5" width="314" height="59.5"/>
+                                                                <color key="tintColor" name="Text"/>
+                                                                <attributedString key="attributedText">
+                                                                    <fragment content="Tap the code to share it with your friends so when they sign up for Stitchbox, you and your friend get reward points!">
+                                                                        <attributes>
+                                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                                        </attributes>
+                                                                    </fragment>
+                                                                </attributedString>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="Otd-IW-3Q6" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="441" width="314" height="280"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
+                                                                        <size key="value" width="280" height="280"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
+                                                                        <real key="value" value="10"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Learn more about the Stitchbox referral program." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2QV-lg-Yj6">
+                                                                <rect key="frame" x="0.0" y="761" width="314" height="14"/>
+                                                                <color key="tintColor" name="Text"/>
+                                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                        <color key="value" systemColor="linkColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </stackView>
+                                        </subviews>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                <color key="value" systemColor="linkColor"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="420" id="JBq-Tc-2Rd"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Gca-Em-iZO"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="xPF-Yz-s6r" firstAttribute="centerX" secondItem="yH2-uS-ahJ" secondAttribute="centerX" id="7ce-Gr-Ysu"/>
+                            <constraint firstItem="xPF-Yz-s6r" firstAttribute="top" secondItem="yH2-uS-ahJ" secondAttribute="top" id="L8d-TA-AvH"/>
+                            <constraint firstItem="xPF-Yz-s6r" firstAttribute="bottom" secondItem="Gca-Em-iZO" secondAttribute="bottom" id="coT-Uq-N3s"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <navigationItem key="navigationItem" title="Referral Code" leftItemsSupplementBackButton="YES" id="ouS-VV-yRu" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lkX-Bo-Nze" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2997" y="2434"/>
+        </scene>
+        <!--SOCIAL-->
+        <scene sceneID="Cng-pc-SXw">
+            <objects>
+                <viewController storyboardIdentifier="SOCIAL" title="SOCIAL" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2JE-DM-s0Y" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="top" id="a4r-8V-SRX">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aJF-YF-efo">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="qoY-9S-NF0">
+                                        <rect key="frame" x="50" y="0.0" width="314" height="775"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="cjy-2d-EN3">
+                                                <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="HCK-Rb-0QD">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="34"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="discord" translatesAutoresizingMaskIntoConstraints="NO" id="YaW-kc-LRv">
+                                                                <rect key="frame" x="0.0" y="0.0" width="21" height="34"/>
+                                                            </imageView>
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="URL" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tkl-5W-Yw1" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="41" y="0.0" width="273" height="34"/>
+                                                                <color key="textColor" name="Text"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                        <color key="value" name="Text"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                                                        <integer key="value" value="1"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </textField>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RPi-e7-dNI">
+                                                        <rect key="frame" x="0.0" y="74" width="314" height="701"/>
+                                                    </view>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                <color key="value" systemColor="linkColor"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="qoY-9S-NF0" firstAttribute="top" secondItem="aJF-YF-efo" secondAttribute="top" id="9Sn-Ig-Xga"/>
+                                    <constraint firstItem="qoY-9S-NF0" firstAttribute="centerX" secondItem="aJF-YF-efo" secondAttribute="centerX" id="Hg3-cZ-82o"/>
+                                    <constraint firstAttribute="width" constant="420" id="gVI-yo-bCz"/>
+                                    <constraint firstAttribute="bottom" secondItem="qoY-9S-NF0" secondAttribute="bottom" id="qVi-Ko-rdw"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="eWV-Tn-b1A"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="aJF-YF-efo" firstAttribute="centerX" secondItem="a4r-8V-SRX" secondAttribute="centerX" id="OIG-Ob-yYr"/>
+                            <constraint firstItem="aJF-YF-efo" firstAttribute="top" secondItem="a4r-8V-SRX" secondAttribute="top" id="iu1-z7-8EN"/>
+                            <constraint firstAttribute="bottom" secondItem="aJF-YF-efo" secondAttribute="bottom" id="x3J-BT-Ljm"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <navigationItem key="navigationItem" title="Referral Code" leftItemsSupplementBackButton="YES" id="a8G-nY-28w" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V97-Cz-9fo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2206" y="2450"/>
+        </scene>
+        <!--Edit Profile View Controller-->
+        <scene sceneID="tzr-vY-2LI">
+            <objects>
+                <viewController storyboardIdentifier="EDIT" id="Heq-RT-hug" customClass="EditProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3cr-Zb-xve">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9M-D9-Zh1">
+                                <rect key="frame" x="0.0" y="92" width="414" height="721"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kn6-bB-yk7">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="VJl-eg-wxc">
+                                                <rect key="frame" x="57" y="0.0" width="300" height="870.5"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LLJ-9B-xdk">
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="50"/>
+                                                        <color key="backgroundColor" name="Background"/>
+                                                    </view>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ila-zp-q3e">
+                                                        <rect key="frame" x="0.0" y="86" width="300" height="196"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WYU-Qk-Dfs">
+                                                                <rect key="frame" x="0.0" y="0.0" width="80" height="196"/>
+                                                                <color key="backgroundColor" name="Background"/>
+                                                            </view>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bJK-rz-J5u">
+                                                                <rect key="frame" x="80" y="0.0" width="140" height="196"/>
+                                                                <subviews>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r6D-Ts-89N">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
+                                                                        <subviews>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" layoutMarginsFollowReadableWidth="YES" image="defaultuser" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ci7-gB-oHf" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
+                                                                                <rect key="frame" x="2" y="4" width="136" height="120"/>
+                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="imageWidth">
+                                                                                        <real key="value" value="130"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="imageHeight">
+                                                                                        <real key="value" value="130"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
+                                                                                        <real key="value" value="-1"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                    <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
+                                                                                        <size key="value" width="130" height="130"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </imageView>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" name="Background"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="140" id="a7z-Y4-VGQ"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change profile photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nnF-zJ-E6G">
+                                                                        <rect key="frame" x="0.0" y="140" width="140" height="20"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="20" id="eKz-XR-pM6"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                        <color key="textColor" name="Secondary"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Foobar" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SjD-10-vYT" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="0.0" y="160" width="140" height="36"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="36" id="gED-ht-OcW"/>
+                                                                        </constraints>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                                                                <integer key="value" value="1"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="140" id="vtO-2a-fmE"/>
+                                                                </constraints>
+                                                            </stackView>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y9Z-Ny-udy">
+                                                                <rect key="frame" x="220" y="0.0" width="80" height="196"/>
+                                                                <color key="backgroundColor" name="Background"/>
+                                                            </view>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="bJK-rz-J5u" firstAttribute="centerX" secondItem="ila-zp-q3e" secondAttribute="centerX" id="hVa-DR-Trb"/>
+                                                        </constraints>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="-5" translatesAutoresizingMaskIntoConstraints="NO" id="unA-MQ-MrU">
+                                                        <rect key="frame" x="0.0" y="318" width="300" height="189.5"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CoverPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="j3e-pQ-uGe" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="180"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
+                                                                        <size key="value" width="300" height="180"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
+                                                                        <real key="value" value="20"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="20"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change cover photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eqg-kW-0aO">
+                                                                <rect key="frame" x="0.0" y="175" width="300" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" name="Secondary"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="fOA-QS-Uel">
+                                                        <rect key="frame" x="0.0" y="543.5" width="300" height="171"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="dxt-do-rOS" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="156.5"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m8v-BA-LuH">
+                                                                        <rect key="frame" x="10" y="10" width="280" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="John Doe" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ftx-Ln-q3h" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="10" y="33" width="280" height="18.5"/>
+                                                                        <color key="tintColor" name="Text"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" name="BorderColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Birthday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WiS-vv-q5b">
+                                                                        <rect key="frame" x="10" y="57.5" width="280" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mm/dd/yyyy" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xaK-9A-REj" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="10" y="80.5" width="280" height="18.5"/>
+                                                                        <color key="tintColor" name="Text"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" name="BorderColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSi-Vt-WLZ">
+                                                                        <rect key="frame" x="10" y="105" width="280" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Maximum 100 characters" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LKV-48-eKM" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                        <rect key="frame" x="10" y="128" width="280" height="18.5"/>
+                                                                        <color key="tintColor" name="Text"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" name="BorderColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                                                <color key="value" name="Text"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="280" id="5o7-oA-mHR"/>
+                                                                </constraints>
+                                                                <directionalEdgeInsets key="directionalLayoutMargins" top="10" leading="10" bottom="10" trailing="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </stackView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit personal information" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg4-Aa-KQ7">
+                                                                <rect key="frame" x="0.0" y="156.5" width="300" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" name="Secondary"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MBZ-ft-JKn" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="750.5" width="300" height="120"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rHl-vD-3vp">
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rhR-vZ-79a">
+                                                                        <rect key="frame" x="10" y="0.0" width="50" height="40"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="50" id="012-xS-B9b"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1cs-ba-IHp">
+                                                                        <rect key="frame" x="60" y="0.0" width="230" height="40"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="CHP-58-Fpl"/>
+                                                                </constraints>
+                                                                <directionalEdgeInsets key="directionalLayoutMargins" top="0.0" leading="10" bottom="0.0" trailing="10"/>
+                                                            </stackView>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZQb-sS-IrM">
+                                                                <rect key="frame" x="0.0" y="40" width="300" height="40"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fy1-WL-1Vx">
+                                                                        <rect key="frame" x="10" y="0.0" width="80" height="40"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="80" id="GIU-Xc-o9S"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" name="Text"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ts-do-18Y">
+                                                                        <rect key="frame" x="90" y="0.0" width="200" height="40"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" name="TextOnBackground"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="F6R-cJ-otC"/>
+                                                                </constraints>
+                                                                <directionalEdgeInsets key="directionalLayoutMargins" top="0.0" leading="10" bottom="0.0" trailing="10"/>
+                                                            </stackView>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wal-Ok-Qxw" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="80" width="300" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="bGg-QN-BFL"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" title="Reset Password"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="300" id="sdp-Xi-Qlc"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" name="Background"/>
+                                        <constraints>
+                                            <constraint firstItem="VJl-eg-wxc" firstAttribute="top" secondItem="Kn6-bB-yk7" secondAttribute="top" id="CK3-Ff-dXp"/>
+                                            <constraint firstItem="VJl-eg-wxc" firstAttribute="centerX" secondItem="Kn6-bB-yk7" secondAttribute="centerX" id="VLO-e8-wcC"/>
+                                            <constraint firstAttribute="height" constant="1200" id="wZs-X5-BV2"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" name="Background"/>
+                                <constraints>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="leading" secondItem="Ju1-to-nBQ" secondAttribute="leading" id="5ae-DO-8YQ"/>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="width" secondItem="H1y-D0-HCS" secondAttribute="width" id="Hvp-Tk-YUQ"/>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="top" secondItem="Ju1-to-nBQ" secondAttribute="top" id="M3r-uM-8xg"/>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="bottom" secondItem="Ju1-to-nBQ" secondAttribute="bottom" id="MfO-BJ-f4Y"/>
+                                    <constraint firstItem="Kn6-bB-yk7" firstAttribute="trailing" secondItem="Ju1-to-nBQ" secondAttribute="trailing" id="qjq-vr-W6K"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="Ju1-to-nBQ"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="H1y-D0-HCS"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="sSp-sN-0NR"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="sSp-sN-0NR" firstAttribute="trailing" secondItem="g9M-D9-Zh1" secondAttribute="trailing" id="8kD-NR-6xi"/>
+                            <constraint firstItem="g9M-D9-Zh1" firstAttribute="leading" secondItem="sSp-sN-0NR" secondAttribute="leading" id="GBp-ya-LnI"/>
+                            <constraint firstItem="g9M-D9-Zh1" firstAttribute="top" secondItem="sSp-sN-0NR" secondAttribute="top" id="Gd1-fR-hzb"/>
+                            <constraint firstItem="g9M-D9-Zh1" firstAttribute="bottom" secondItem="sSp-sN-0NR" secondAttribute="bottom" id="k90-Lo-ooS"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Nsb-RJ-aZp"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zcd-fM-Xd5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3840.579710144928" y="2432.8125"/>
+        </scene>
     </scenes>
+    <designables>
+        <designable name="4go-h1-QJJ">
+            <size key="intrinsicContentSize" width="152" height="42"/>
+        </designable>
+        <designable name="5fN-Rc-NRW">
+            <size key="intrinsicContentSize" width="144" height="34.5"/>
+        </designable>
+        <designable name="8ur-f6-WPC">
+            <size key="intrinsicContentSize" width="86" height="34.5"/>
+        </designable>
+        <designable name="CZ4-93-5UE">
+            <size key="intrinsicContentSize" width="92.5" height="34.5"/>
+        </designable>
+        <designable name="Ci7-gB-oHf">
+            <size key="intrinsicContentSize" width="130" height="130"/>
+        </designable>
+        <designable name="FOI-cM-P0o">
+            <size key="intrinsicContentSize" width="162" height="40"/>
+        </designable>
+        <designable name="Ftx-Ln-q3h">
+            <size key="intrinsicContentSize" width="67" height="18.5"/>
+        </designable>
+        <designable name="H2p-AI-TAt">
+            <size key="intrinsicContentSize" width="180.5" height="38"/>
+        </designable>
+        <designable name="HXp-PI-Fgg">
+            <size key="intrinsicContentSize" width="101.5" height="38"/>
+        </designable>
+        <designable name="Io7-Gd-p4e">
+            <size key="intrinsicContentSize" width="100" height="34.5"/>
+        </designable>
+        <designable name="J3i-nB-Li5">
+            <size key="intrinsicContentSize" width="141" height="39"/>
+        </designable>
+        <designable name="K9C-AN-45U">
+            <size key="intrinsicContentSize" width="93" height="34.5"/>
+        </designable>
+        <designable name="KT3-Bl-ukO">
+            <size key="intrinsicContentSize" width="175.5" height="39"/>
+        </designable>
+        <designable name="L3N-fr-Ry2">
+            <size key="intrinsicContentSize" width="136" height="34.5"/>
+        </designable>
+        <designable name="LJd-pP-0wN">
+            <size key="intrinsicContentSize" width="135" height="39"/>
+        </designable>
+        <designable name="LKV-48-eKM">
+            <size key="intrinsicContentSize" width="168" height="18.5"/>
+        </designable>
+        <designable name="Otd-IW-3Q6">
+            <size key="intrinsicContentSize" width="280" height="280"/>
+        </designable>
+        <designable name="PdQ-TC-Ctu">
+            <size key="intrinsicContentSize" width="182.5" height="34.5"/>
+        </designable>
+        <designable name="SjD-10-vYT">
+            <size key="intrinsicContentSize" width="79.5" height="34"/>
+        </designable>
+        <designable name="Tkl-5W-Yw1">
+            <size key="intrinsicContentSize" width="61" height="34"/>
+        </designable>
+        <designable name="Wx0-kI-Yna">
+            <size key="intrinsicContentSize" width="187" height="39"/>
+        </designable>
+        <designable name="b4Z-Wg-wyP">
+            <size key="intrinsicContentSize" width="213" height="44"/>
+        </designable>
+        <designable name="f9j-UV-aZd">
+            <size key="intrinsicContentSize" width="92.5" height="34.5"/>
+        </designable>
+        <designable name="gLe-ah-MOZ">
+            <size key="intrinsicContentSize" width="73" height="34.5"/>
+        </designable>
+        <designable name="gZ4-lz-XpD">
+            <size key="intrinsicContentSize" width="162" height="34"/>
+        </designable>
+        <designable name="j3e-pQ-uGe">
+            <size key="intrinsicContentSize" width="319" height="180"/>
+        </designable>
+        <designable name="nbB-c6-ceP">
+            <size key="intrinsicContentSize" width="110" height="39"/>
+        </designable>
+        <designable name="v4L-i8-m8u">
+            <size key="intrinsicContentSize" width="182" height="35"/>
+        </designable>
+        <designable name="wal-Ok-Qxw">
+            <size key="intrinsicContentSize" width="145" height="34.5"/>
+        </designable>
+        <designable name="xaK-9A-REj">
+            <size key="intrinsicContentSize" width="84" height="18.5"/>
+        </designable>
+        <designable name="z5k-Tq-4jF">
+            <size key="intrinsicContentSize" width="99" height="34.5"/>
+        </designable>
+    </designables>
     <resources>
         <image name="4x_add" width="25" height="25"/>
+        <image name="CoverPhoto" width="340" height="192"/>
+        <image name="adduser" width="28" height="28"/>
+        <image name="call" width="19" height="19"/>
         <image name="chat" width="29" height="28"/>
         <image name="chat.filled" width="28" height="26"/>
+        <image name="clock" width="24" height="24"/>
+        <image name="defaultuser" width="278" height="278"/>
+        <image name="discord" width="21" height="15"/>
+        <image name="dropdown" width="30" height="30"/>
+        <image name="file" width="25" height="25"/>
         <image name="home" width="36" height="37"/>
         <image name="home.filled" width="24" height="26"/>
+        <image name="link" width="25" height="25"/>
+        <image name="lock" width="25" height="25"/>
+        <image name="logout" width="24" height="24"/>
+        <image name="push" width="21" height="21"/>
         <image name="search" width="36" height="36"/>
         <image name="search.filled" width="36" height="36"/>
+        <image name="sound" width="27" height="25"/>
+        <image name="trophy" width="17" height="15"/>
         <image name="user" width="29" height="29"/>
+        <image name="user-setting" width="25" height="25"/>
         <image name="user.filled" width="27" height="28"/>
+        <image name="users" width="26" height="26"/>
         <namedColor name="Background">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="BorderColor">
+            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Secondary">
+            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="TabBarColor">
             <color red="0.20784313725490197" green="0.17647058823529413" blue="0.4392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="Text">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TextOnBackground">
+            <color red="0.73333333333333328" green="0.73333333333333328" blue="0.73333333333333328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

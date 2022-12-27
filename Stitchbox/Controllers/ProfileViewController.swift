@@ -11,10 +11,18 @@ class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if !hidesBottomBarWhenPushed {
+            if self.tabBarController is DashboardTabBarController {
+                print("yes")
+                let tbctrl = self.tabBarController as! DashboardTabBarController
+                tbctrl.button.isHidden = false
+            }
+        }
+    }
 
   @IBAction func tapedSignOut(_ sender: Any) {
     _AppCoreData.signOut()

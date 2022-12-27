@@ -503,10 +503,10 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="VMy-Qd-jOQ">
-                                <rect key="frame" x="45" y="222.66666666666666" width="300" height="51.333333333333343"/>
+                                <rect key="frame" x="55" y="222.66666666666666" width="280" height="51.333333333333343"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="USERNAME" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yuf-BV-Aeb" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="21"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="21"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
@@ -527,7 +527,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Check availability" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vPu-aS-dnK">
-                                        <rect key="frame" x="0.0" y="31" width="300" height="20.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="31" width="280" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -538,10 +538,10 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="qiy-Wd-wmO">
-                                <rect key="frame" x="45" y="324" width="300" height="171.66666666666663"/>
+                                <rect key="frame" x="55" y="324" width="280" height="171.66666666666663"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="PASSWORD" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bEK-ZQ-k1k" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="20"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" secureTextEntry="YES"/>
@@ -562,31 +562,31 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="More than 8 characters" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kzw-8P-ixL">
-                                        <rect key="frame" x="0.0" y="30" width="300" height="20.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="30" width="280" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contains at least 1 number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tyo-pd-GPn">
-                                        <rect key="frame" x="0.0" y="60.333333333333321" width="300" height="20.333333333333336"/>
+                                        <rect key="frame" x="0.0" y="60.333333333333321" width="280" height="20.333333333333336"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contains at least 1 Uppercase letter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mZ0-XL-rW7">
-                                        <rect key="frame" x="0.0" y="90.666666666666686" width="300" height="20.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="90.666666666666686" width="280" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contains at least 1 Lowercase letter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8RM-cU-Jr5">
-                                        <rect key="frame" x="0.0" y="120.99999999999999" width="300" height="20.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="120.99999999999999" width="280" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contains at least 1 special character" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5w-qi-Bcu">
-                                        <rect key="frame" x="0.0" y="151.33333333333331" width="300" height="20.333333333333343"/>
+                                        <rect key="frame" x="0.0" y="151.33333333333331" width="280" height="20.333333333333343"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -596,8 +596,8 @@
                                     <constraint firstAttribute="width" constant="300" id="KNW-Wp-cPo"/>
                                 </constraints>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3xD-SP-On0" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="134.66666666666666" y="555.66666666666663" width="121" height="29"/>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3xD-SP-On0" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="140" y="555.66666666666663" width="110" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="121" id="Poy-2s-KTj"/>
                                 </constraints>
@@ -1264,7 +1264,7 @@
     </scenes>
     <designables>
         <designable name="3uf-b9-C82">
-            <size key="intrinsicContentSize" width="104" height="34"/>
+            <size key="intrinsicContentSize" width="110" height="34"/>
         </designable>
         <designable name="3xD-SP-On0">
             <size key="intrinsicContentSize" width="39" height="29"/>
@@ -1294,7 +1294,7 @@
             <size key="intrinsicContentSize" width="10" height="21"/>
         </designable>
         <designable name="Nhf-Gd-k7X">
-            <size key="intrinsicContentSize" width="105.66666666666667" height="34"/>
+            <size key="intrinsicContentSize" width="111.66666666666667" height="34"/>
         </designable>
         <designable name="P14-PD-9be">
             <size key="intrinsicContentSize" width="9" height="18.666666666666668"/>
@@ -1309,13 +1309,13 @@
             <size key="intrinsicContentSize" width="45" height="29"/>
         </designable>
         <designable name="Yuf-BV-Aeb">
-            <size key="intrinsicContentSize" width="92" height="21"/>
+            <size key="intrinsicContentSize" width="100" height="21"/>
         </designable>
         <designable name="a3T-PC-SPm">
             <size key="intrinsicContentSize" width="17.666666666666668" height="18.666666666666668"/>
         </designable>
         <designable name="bEK-ZQ-k1k">
-            <size key="intrinsicContentSize" width="94" height="20"/>
+            <size key="intrinsicContentSize" width="102" height="20"/>
         </designable>
         <designable name="h2h-Eg-2a0">
             <size key="intrinsicContentSize" width="45" height="29"/>

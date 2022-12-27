@@ -38,10 +38,42 @@ extension String {
         return String(UUID().uuidString[..<String.Index(utf16Offset: 8, in: UUID().uuidString)])
     }
 }
+
 extension String {
-  static func ~= (lhs: String, rhs: String) -> Bool {
-    guard let regex = try? NSRegularExpression(pattern: rhs) else { return false }
-    let range = NSRange(location: 0, length: lhs.utf16.count)
-    return regex.firstMatch(in: lhs, options: [], range: range) != nil
-  }
+    static func ~= (lhs: String, rhs: String) -> Bool {
+        guard let regex = try? NSRegularExpression(pattern: rhs) else { return false }
+        let range = NSRange(location: 0, length: lhs.utf16.count)
+        return regex.firstMatch(in: lhs, options: [], range: range) != nil
+    }
+}
+
+extension UIImage {
+    enum ContentMode {
+        case contentFill
+        case contentAspectFill
+        case contentAspectFit
+    }
+    
+    func resize(withSize size: CGSize, contentMode: ContentMode = .contentAspectFill) -> UIImage? {
+        let aspectWidth = size.width / self.size.width
+        let aspectHeight = size.height / self.size.height
+        
+        switch contentMode {
+        case .contentFill:
+            return resize(withSize: size)
+        case .contentAspectFit:
+            let aspectRatio = min(aspectWidth, aspectHeight)
+            return resize(withSize: CGSize(width: self.size.width * aspectRatio, height: self.size.height * aspectRatio))
+        case .contentAspectFill:
+            let aspectRatio = max(aspectWidth, aspectHeight)
+            return resize(withSize: CGSize(width: self.size.width * aspectRatio, height: self.size.height * aspectRatio))
+        }
+    }
+    
+    private func resize(withSize size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, self.scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
 }

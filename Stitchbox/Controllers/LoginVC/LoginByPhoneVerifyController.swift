@@ -59,6 +59,8 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType {
             })
             .disposed(by: disposeBag)
         
+        
+        
         PhoneNumber.text = viewModel.output.phoneNumber
 
     }
