@@ -28,14 +28,12 @@ class OTPTextField: UnderlineTextField {
     }
   
     override func setupView() {
-      print("============================")
-      print(self.frame.size)
       backgroundColor = UIColor.clear
       tintColor = UIColor.white
       textColor = UIColor.white
       
-      borderStyle = .line
-      border.frame = CGRect(x:0, y:self.frame.size.height + 5, width: self.frame.size.width - 5, height:1)
+      borderStyle = .none
+      border.frame = CGRect(x: 8, y: self.frame.size.height, width: self.frame.size.width, height: 2)
       self.border.backgroundColor = UIColor.white.cgColor
       self.layer.addSublayer(border)
     }
@@ -78,14 +76,14 @@ class OTPStackView: UIStackView {
         self.isUserInteractionEnabled = true
         self.translatesAutoresizingMaskIntoConstraints = false
         self.contentMode = .center
-        self.distribution = .fillEqually
+        self.distribution = .equalSpacing
         self.spacing = 5
     }
     
     //Adding each OTPfield to stack view
     private final func addOTPFields() {
         for index in 0..<numberOfFields{
-            let field = OTPTextField(frame: CGRect(x: 0, y: 0, width: 50, height: 100))
+            let field = OTPTextField(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
             setupTextField(field)
             textFieldsCollection.append(field)
             //Adding a marker to previous field

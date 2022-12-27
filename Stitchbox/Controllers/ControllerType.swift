@@ -62,7 +62,11 @@ extension ControllerType {
         self.present(popupVC, animated: false, completion: nil)
       }
     }
-    
+  
+    func dismissLoading() {
+      self.dismiss(animated: false, completion: nil)
+    }
+      
 }
 
 

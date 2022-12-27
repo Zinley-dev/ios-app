@@ -29,6 +29,11 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType {
     // MARK: - Functions
     func bindUI(with viewModel: LoginByPhoneVerifyViewModel) {
         // bind View Model outputs to Controller elements
+        viewModel.output.loadingObservable.subscribe { result in
+          if (result) { self.presentLoading() }
+//          else { self.dismissLoading() }
+        }.disposed(by: disposeBag)
+      
         viewModel.output.errorsObservable
         .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
@@ -58,8 +63,8 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType {
 
     }
     func bindAction(with viewModel: LoginByPhoneVerifyViewModel) {
-        sendCodeButton.rx.tap.asObservable().subscribe(viewModel.action.sendOTPDidTap).disposed(by: disposeBag)
-        verifyButton.rx.tap.asObservable().map({ () in
+      sendCodeButton.rx.tap.asObservable().subscribe(viewModel.action.sendOTPDidTap).disposed(by: disposeBag)
+      verifyButton.rx.tap.asObservable().map({ () in
             (self.OTPTextfield.text)
         }).subscribe(viewModel.action.verifyOTPDidTap).disposed(by: disposeBag)
     }

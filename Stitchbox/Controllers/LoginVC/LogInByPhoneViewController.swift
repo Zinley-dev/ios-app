@@ -56,6 +56,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
         viewModel.output.OTPSentObservable
             .subscribe(onNext: { isTrue in
                 if isTrue {
+                    
                     DispatchQueue.main.async { [self] in
                         
                         let viewModel = LoginByPhoneVerifyViewModel()
@@ -64,9 +65,10 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
                         countryCodeTextfield.rx.text.orEmpty.asObservable()
                             .subscribe(viewModel.input.countryCodeObserver)
                             .disposed(by: self.disposeBag)
-                        
+              
                         self.navigationController?.pushViewController(LoginByPhoneVerifyController.create(with: viewModel), animated: true)
                     }}
+              
             })
             .disposed(by: disposeBag)
 

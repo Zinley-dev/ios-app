@@ -95,6 +95,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
     }
     
     struct Output {
+        let loadingObservable: Observable<Bool>
         let successObservable: Observable<SuccessMessage>
         let errorsObservable: Observable<Error>
         var phoneNumber: String
@@ -114,6 +115,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
     private let sendOTPDidTapSubject = PublishSubject<Void>()
     private let successSubject = PublishSubject<SuccessMessage>()
     private let errorsSubject = PublishSubject<Error>()
+    private let loadingSubject = PublishSubject<Bool>()
     private let disposeBag = DisposeBag()
     
     init() {
@@ -123,7 +125,8 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
         action = Action(verifyOTPDidTap: verifyOTPDidTapSubject.asObserver(),
                         sendOTPDidTap: sendOTPDidTapSubject.asObserver())
         
-        output = Output(successObservable: successSubject.asObservable(),
+        output = Output(loadingObservable: loadingSubject.asObservable(),
+                        successObservable: successSubject.asObservable(),
                         errorsObservable: errorsSubject.asObservable(),
                         phoneNumber: "")
         
@@ -150,8 +153,9 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                     return;
                 }
                 // call api toward login api of backend
+                self.loadingSubject.onNext(true)
                 APIManager().phoneVerify(phone: countryCode + phone, OTP: code) { result in switch result {
-
+                
                 case .success(let apiResponse):
                     // get and process data
                     if (apiResponse.body?["message"] as! String == "success") {
@@ -181,10 +185,14 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
 
                         } catch {
                             print("Unable to Create Account (\(error))")
-                        }        }
+                        }
+                          self.loadingSubject.onNext(false)
+                        
+                    }
 
                 case .failure(let error):
                     print(error)
+                    self.loadingSubject.onNext(false)
                     switch error {
                     case .authRequired(let body):
                         self.errorsSubject.onNext(NSError(domain: body?["message"] as? String ?? "Cannot verify OTP", code: 401))
@@ -211,14 +219,17 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                     self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
                     return;
                 }
+                self.loadingSubject.onNext(true)
                 // call api toward login api of backend
                 APIManager().phoneLogin(phone: countryCode + phone) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
                     _ = apiResponse.body?["data"] as! [String: Any]?
                     self.successSubject.onNext(.sendCodeSuccess)
+                    self.loadingSubject.onNext(false)
                 case .failure(let error):
                     print(error)
+                    self.loadingSubject.onNext(false)
                     self.errorsSubject.onNext(NSError(domain: "Error in send OTP", code: 300))
                 }
                 }
