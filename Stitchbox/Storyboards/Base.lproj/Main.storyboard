@@ -300,7 +300,37 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sTa-qs-sJ7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1023" y="-198"/>
+            <point key="canvasLocation" x="-783" y="-198"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="d3q-hk-uq0">
+            <objects>
+                <viewController id="yaQ-U3-sIN" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pJC-3A-DCx">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m2Z-IA-ebg" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="132" y="184" width="655" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="AgS-uo-7FN"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="I1x-IS-nty"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="m2Z-IA-ebg" firstAttribute="leading" secondItem="I1x-IS-nty" secondAttribute="leading" constant="30" id="ALj-JR-gq8"/>
+                            <constraint firstItem="m2Z-IA-ebg" firstAttribute="centerX" secondItem="pJC-3A-DCx" secondAttribute="centerX" id="SPd-pW-0Ba"/>
+                            <constraint firstItem="I1x-IS-nty" firstAttribute="trailing" secondItem="m2Z-IA-ebg" secondAttribute="trailing" constant="30" id="c9l-dF-pMw"/>
+                            <constraint firstItem="m2Z-IA-ebg" firstAttribute="centerY" secondItem="pJC-3A-DCx" secondAttribute="centerY" id="cQe-x6-vJj"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="enp-pS-TBD"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IeZ-mD-AvU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1106" y="-1084"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="HWd-vP-yzz">
@@ -439,12 +469,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EFT-Ko-TKZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2758" y="873"/>
+            <point key="canvasLocation" x="1905" y="-138"/>
         </scene>
-        <!--View Controller-->
+        <!--Last Step View Controller-->
         <scene sceneID="81H-BL-4Yz">
             <objects>
-                <viewController id="GXq-Bu-ayM" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LastStepViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="GXq-Bu-ayM" customClass="LastStepViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zTo-BG-54I">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -489,10 +519,10 @@
                                                 <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" name="Secondary"/>
+                                                <color key="value" name="Tertiary"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="paddingLeft">
-                                                <real key="value" value="10"/>
+                                                <integer key="value" value="2"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </textField>
@@ -504,7 +534,7 @@
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="280" id="QJ6-eV-sJd"/>
+                                    <constraint firstAttribute="width" constant="300" id="QJ6-eV-sJd"/>
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="qiy-Wd-wmO">
@@ -514,7 +544,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="phonePad" secureTextEntry="YES"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" secureTextEntry="YES"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
                                             <userDefinedRuntimeAttribute type="number" keyPath="size">
@@ -524,10 +554,10 @@
                                                 <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" name="Secondary"/>
+                                                <color key="value" name="Tertiary"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="paddingLeft">
-                                                <real key="value" value="10"/>
+                                                <integer key="value" value="2"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </textField>
@@ -563,13 +593,13 @@
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="280" id="KNW-Wp-cPo"/>
+                                    <constraint firstAttribute="width" constant="300" id="KNW-Wp-cPo"/>
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3xD-SP-On0" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
                                 <rect key="frame" x="140" y="555.66666666666663" width="110" height="29"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="110" id="Poy-2s-KTj"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="121" id="Poy-2s-KTj"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -599,10 +629,21 @@
                             <constraint firstItem="DTn-3S-3TZ" firstAttribute="top" secondItem="zTo-BG-54I" secondAttribute="top" id="j5q-el-Bok"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="checkPassLengthLabel" destination="kzw-8P-ixL" id="Xcf-gR-ggV"/>
+                        <outlet property="checkPassLowerLabel" destination="8RM-cU-Jr5" id="D7x-nr-ji9"/>
+                        <outlet property="checkPassNumberLabel" destination="tyo-pd-GPn" id="uZS-5B-kwH"/>
+                        <outlet property="checkPassSpecialLabel" destination="N5w-qi-Bcu" id="FDi-vt-cex"/>
+                        <outlet property="checkPassUpperLabel" destination="mZ0-XL-rW7" id="98J-PR-3Nw"/>
+                        <outlet property="checkUsernameLabel" destination="vPu-aS-dnK" id="BZQ-0j-Fnj"/>
+                        <outlet property="passwordTextfield" destination="bEK-ZQ-k1k" id="tH6-Gs-DUU"/>
+                        <outlet property="submitButton" destination="3xD-SP-On0" id="1RC-zd-qd9"/>
+                        <outlet property="usernameTextfield" destination="Yuf-BV-Aeb" id="jMS-ME-vga"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qFn-mO-LDY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3418" y="873"/>
+            <point key="canvasLocation" x="2766" y="873"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="VYy-0S-feo">
@@ -990,7 +1031,7 @@
                                                         <color key="value" name="Text"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" name="BorderColor"/>
+                                                        <color key="value" name="Tertiary"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="paddingLeft">
                                                         <real key="value" value="2"/>
@@ -1010,7 +1051,7 @@
                                                         <color key="value" name="Text"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" name="BorderColor"/>
+                                                        <color key="value" name="Tertiary"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </textField>
@@ -1108,15 +1149,41 @@
                                 <rect key="frame" x="0.0" y="497" width="390" height="347"/>
                                 <edgeInsets key="layoutMargins" top="0.0" left="8" bottom="0.0" right="0.0"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="yxE-7Z-GvA">
-                                <rect key="frame" x="-132.66666666666666" y="326.66666666666669" width="655.33333333333337" height="110"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="GcF-Db-y38">
+                                <rect key="frame" x="45" y="127.00000000000001" width="300" height="62.666666666666671"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kSv-s1-Lz4" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="655.33333333333337" height="110"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VERIFICATION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6in-vb-hKL">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="28.666666666666668"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A code has been sent to your number:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ijP-Zu-URe">
+                                        <rect key="frame" x="0.0" y="28.666666666666657" width="300" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+1 213 434 344" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yWS-1h-acS">
+                                        <rect key="frame" x="0.0" y="45.666666666666657" width="300" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="mS8-kk-M9o"/>
+                                </constraints>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="center" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="yxE-7Z-GvA">
+                                <rect key="frame" x="20" y="267.66666666666669" width="340" height="40"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kSv-s1-Lz4" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="340" height="40"/>
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="110" id="6Bi-07-80N"/>
+                                    <constraint firstAttribute="height" constant="40" id="6Bi-07-80N"/>
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V6j-mg-Mho" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
@@ -1135,7 +1202,7 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PWl-Wg-TI0">
-                                <rect key="frame" x="57.333333333333343" y="446.66666666666669" width="275.33333333333326" height="33.333333333333314"/>
+                                <rect key="frame" x="57.333333333333343" y="456.66666666666669" width="275.33333333333326" height="33.333333333333314"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Didn’t get the code? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XN2-XK-1A1">
                                         <rect key="frame" x="0.0" y="0.0" width="151.66666666666666" height="33.333333333333336"/>
@@ -1154,54 +1221,29 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Pti-CD-FGA">
-                                <rect key="frame" x="45" y="164" width="300" height="62.666666666666657"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VERIFICATION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P61-pG-S5V">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="28.666666666666668"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A code has been sent to your number:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vKd-bh-4uG">
-                                        <rect key="frame" x="0.0" y="28.666666666666657" width="300" height="17"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" name="Background"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 1 (234) 567 8910" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r4t-gY-RpX">
-                                        <rect key="frame" x="0.0" y="45.666666666666657" width="300" height="17"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="rnu-22-fNA"/>
-                                </constraints>
-                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="43g-7V-Oja"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
-                            <constraint firstItem="PWl-Wg-TI0" firstAttribute="top" secondItem="yxE-7Z-GvA" secondAttribute="bottom" constant="10" id="2HX-i0-Brc"/>
                             <constraint firstItem="PWl-Wg-TI0" firstAttribute="centerX" secondItem="E8s-4U-OSa" secondAttribute="centerX" id="7Ts-kL-sOh"/>
-                            <constraint firstItem="PWl-Wg-TI0" firstAttribute="top" secondItem="V6j-mg-Mho" secondAttribute="bottom" constant="10" id="8mH-Gg-0Io"/>
                             <constraint firstItem="bTY-SS-Z56" firstAttribute="leading" secondItem="43g-7V-Oja" secondAttribute="leading" id="9ag-vI-DeC"/>
+                            <constraint firstItem="V6j-mg-Mho" firstAttribute="top" secondItem="yxE-7Z-GvA" secondAttribute="bottom" constant="100" id="A4S-zp-14E"/>
+                            <constraint firstItem="PWl-Wg-TI0" firstAttribute="top" secondItem="V6j-mg-Mho" secondAttribute="bottom" constant="20" id="BjF-KV-7Xv"/>
                             <constraint firstItem="G4O-vr-wVB" firstAttribute="top" secondItem="E8s-4U-OSa" secondAttribute="top" id="K9l-fY-t2y"/>
                             <constraint firstItem="G4O-vr-wVB" firstAttribute="top" secondItem="E8s-4U-OSa" secondAttribute="top" id="XkN-ez-VAh"/>
                             <constraint firstAttribute="trailing" secondItem="bTY-SS-Z56" secondAttribute="trailing" id="YUk-A7-Yw5"/>
                             <constraint firstItem="V6j-mg-Mho" firstAttribute="centerY" secondItem="E8s-4U-OSa" secondAttribute="centerY" id="dHo-lD-GJO"/>
                             <constraint firstItem="G4O-vr-wVB" firstAttribute="leading" secondItem="43g-7V-Oja" secondAttribute="leading" id="ddA-aV-zDg"/>
-                            <constraint firstItem="yxE-7Z-GvA" firstAttribute="centerX" secondItem="E8s-4U-OSa" secondAttribute="centerX" id="frB-h2-N8U"/>
+                            <constraint firstItem="43g-7V-Oja" firstAttribute="trailing" secondItem="yxE-7Z-GvA" secondAttribute="trailing" constant="30" id="eaC-GM-YD9"/>
+                            <constraint firstItem="GcF-Db-y38" firstAttribute="centerX" secondItem="E8s-4U-OSa" secondAttribute="centerX" id="fH5-we-q4L"/>
                             <constraint firstAttribute="bottom" secondItem="bTY-SS-Z56" secondAttribute="bottom" id="mQa-kc-6dU"/>
                             <constraint firstItem="V6j-mg-Mho" firstAttribute="centerX" secondItem="E8s-4U-OSa" secondAttribute="centerX" id="rJ5-bz-Oik"/>
                             <constraint firstItem="43g-7V-Oja" firstAttribute="trailing" secondItem="G4O-vr-wVB" secondAttribute="trailing" id="rMO-dN-cl0"/>
                             <constraint firstAttribute="bottom" secondItem="bTY-SS-Z56" secondAttribute="bottom" id="sxu-ze-gSz"/>
-                            <constraint firstItem="Pti-CD-FGA" firstAttribute="centerX" secondItem="E8s-4U-OSa" secondAttribute="centerX" id="vkC-3X-rI5"/>
-                            <constraint firstItem="yxE-7Z-GvA" firstAttribute="top" secondItem="Pti-CD-FGA" secondAttribute="bottom" constant="100" id="y7k-7M-S1E"/>
-                            <constraint firstItem="PWl-Wg-TI0" firstAttribute="centerX" secondItem="E8s-4U-OSa" secondAttribute="centerX" id="yKh-t3-c8F"/>
+                            <constraint firstItem="yxE-7Z-GvA" firstAttribute="leading" secondItem="43g-7V-Oja" secondAttribute="leading" constant="20" id="umH-PY-Pkm"/>
+                            <constraint firstItem="GcF-Db-y38" firstAttribute="top" secondItem="43g-7V-Oja" secondAttribute="top" constant="80" id="xxK-IL-moX"/>
                             <constraint firstItem="43g-7V-Oja" firstAttribute="trailing" secondItem="bTY-SS-Z56" secondAttribute="trailing" id="zKh-Gx-GQz"/>
+                            <constraint firstItem="bTY-SS-Z56" firstAttribute="bottom" secondItem="G4O-vr-wVB" secondAttribute="bottom" id="zyT-ch-nnL"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="PHONE" id="0Ru-ME-83n"/>
@@ -1210,14 +1252,14 @@
                     </navigationItem>
                     <connections>
                         <outlet property="OTPTextfield" destination="kSv-s1-Lz4" id="aDB-3z-0F9"/>
-                        <outlet property="PhoneNumber" destination="r4t-gY-RpX" id="aqg-oK-eE7"/>
+                        <outlet property="PhoneNumber" destination="yWS-1h-acS" id="LYz-Sz-4Ec"/>
                         <outlet property="sendCodeButton" destination="qVY-6t-835" id="Eup-3p-ipi"/>
                         <outlet property="verifyButton" destination="V6j-mg-Mho" id="Q45-wF-N1X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fKH-bM-tIZ" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2092" y="873"/>
+            <point key="canvasLocation" x="2089.2307692307691" y="872.98578199052133"/>
         </scene>
     </scenes>
     <designables>
@@ -1299,13 +1341,16 @@
             <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="BorderColor">
-            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="Disable">
             <color red="0.73333333333333328" green="0.73333333333333328" blue="0.73333333333333328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Secondary">
             <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Tertiary">
+            <color red="0.9137254901960784" green="0.90196078431372551" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Text">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
