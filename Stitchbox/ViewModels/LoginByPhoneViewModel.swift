@@ -164,23 +164,17 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                         do{
                             let account = try Account(JSONbody: data, type: .phoneLogin)
                             print(account)
-                            //                             Create JSON Encoder
-                            let encoder = JSONEncoder()
-
-                            // Encode Note
-                            let data = try encoder.encode(account)
-
-                            // Write/Set Data
-                            UserDefaults.standard.set(data, forKey: "userAccount")
-
-                            if let data = UserDefaults.standard.data(forKey: "userAccount") {
-                                // Create JSON Decoder
-                                let decoder = JSONDecoder()
-
-                                // Decode Note
-                                let accountDecoded = try decoder.decode(Account.self, from: data)
-                                print(accountDecoded)
-                            }
+                            
+                          // Write/Set Data
+                          let sessionToken = SessionDataSource.init(JSONString: "{}")!
+                          sessionToken.accessToken = account.accessToken
+                          sessionToken.refreshToken = account.refreshToken
+                          _AppCoreData.userSession.accept(sessionToken)
+                          
+                          // write usr data
+                          if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
+                            _AppCoreData.userDataSource.accept(newUserData)
+                          }
                             self.successSubject.onNext(.logInSuccess);
 
                         } catch {
