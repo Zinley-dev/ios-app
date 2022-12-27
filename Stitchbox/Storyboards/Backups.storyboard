@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController id="Y6W-OH-hqX" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-24" y="4"/>
+        </scene>
+        <!--Profile View Controller-->
+        <scene sceneID="3G2-GV-D4d">
+            <objects>
+                <viewController storyboardIdentifier="PROFILE" useStoryboardIdentifierAsRestorationIdentifier="YES" id="q7L-HO-Gi0" customClass="ProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="tXx-B5-OEO">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUP-o4-o38">
+                                <rect key="frame" x="164" y="411.66666666666669" width="65" height="29"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z8Q-I9-Mne">
+                                <rect key="frame" x="168" y="312" width="79" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Setting"/>
+                                <connections>
+                                    <segue destination="Vz7-13-Yu4" kind="show" id="9mA-1o-dTM"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="61u-Od-990"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="HUP-o4-o38" firstAttribute="centerY" secondItem="tXx-B5-OEO" secondAttribute="centerY" id="9sP-kT-nLv"/>
+                            <constraint firstItem="HUP-o4-o38" firstAttribute="centerX" secondItem="tXx-B5-OEO" secondAttribute="centerX" id="xC4-EG-ce8"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="oNW-SW-htA"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Oq1-T8-Eli" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1350.7246376811595" y="1603.7946428571429"/>
+        </scene>
+        <!--SETTING-->
+        <scene sceneID="2ve-Xn-Bhw">
+            <objects>
+                <viewController storyboardIdentifier="SETTING" title="SETTING" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Vz7-13-Yu4" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="top" id="yC7-Sa-wcz">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ojz-bV-wy2">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="783"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" id="sHU-VJ-WBI">
+                                        <rect key="frame" x="50" y="0.0" width="314" height="775"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="17h-tQ-o2O">
+                                                <rect key="frame" x="0.0" y="0.0" width="314" height="80"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Challenge" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="390-zY-OTF">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="FwH-5v-obY"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                        <color key="textColor" name="Text"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="l4P-JV-D03" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wER-Rb-bSw" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="VUO-NJ-pbt"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="trophy" imagePlacement="leading" title="Accept challenge" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="l4P-JV-D03" firstAttribute="width" secondItem="17h-tQ-o2O" secondAttribute="width" id="AHE-pD-Gsp"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7Jy-gA-BLz">
+                                                <rect key="frame" x="0.0" y="85" width="314" height="160"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Social" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jcB-5B-mpH">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="cWx-PD-yPj"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                        <color key="textColor" name="Text"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="TSd-6L-9Yh" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="120"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SqG-Q8-JeX" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="Ui2-GB-bhy"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="discord" title="Discord link" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ddV-fr-ghq" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="Ap1-hw-ock"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="users" title="Referral code" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IH9-MU-nQa" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="80" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="TM3-Vj-dX3"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="adduser" title="Find friends" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="TSd-6L-9Yh" firstAttribute="width" secondItem="7Jy-gA-BLz" secondAttribute="width" id="4VA-uQ-uAE"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="LUh-gG-NAh">
+                                                <rect key="frame" x="0.0" y="250" width="314" height="120"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W3n-oi-HpO">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="HLz-Jl-Bvd"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                        <color key="textColor" name="Text"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5Yb-Ua-Cyr" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="80"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iKL-1f-DOW" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="PUn-W0-NBX"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="sound" title="Sound" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jgm-Dp-cCr" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="wZ6-1S-KKM"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="dropdown" title="Automatic minimize" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="top" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="e8x-Ly-5B1">
+                                                <rect key="frame" x="0.0" y="375" width="314" height="400"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SxN-iT-nDY">
+                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="GUM-P4-SLC"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                                        <color key="textColor" name="Text"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="dNX-E2-Onb" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="40" width="314" height="360"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SNq-Pv-xep" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="cRb-B6-wDK"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="user-setting" title="Edit profile" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p1I-54-MyO" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="40" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="U5b-b5-eCf"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="push" title="Push notification" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TXj-qu-BX7" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="80" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="bmK-fj-Ocu"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="clock" title="Account activity" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ST4-uv-SkH" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="120" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="3LZ-EF-l2S"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="link" title="Social link" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4rf-9T-7GH" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="160" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="dqb-i4-DsY"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="lock" title="Block accounts" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wrf-zy-xOL" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="200" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="Fsw-8k-lEE"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="call" title="Contact us" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i9h-tR-CnB" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="240" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="tXR-Hu-C7Y"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="file" title="Term of Services" imagePadding="10"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c2j-Rp-ZeC" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="280" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="aEG-lg-cum"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" title="About us"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xUT-Qg-ybz" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="320" width="314" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="40" id="UP5-PO-vLO"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="logout" title="Logout"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </button>
+                                                        </subviews>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                                <color key="value" systemColor="linkColor"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="sHU-VJ-WBI" firstAttribute="centerX" secondItem="ojz-bV-wy2" secondAttribute="centerX" id="22R-5Z-Rtf"/>
+                                    <constraint firstAttribute="bottom" secondItem="sHU-VJ-WBI" secondAttribute="bottom" id="BGB-GY-knM"/>
+                                    <constraint firstItem="sHU-VJ-WBI" firstAttribute="width" secondItem="ojz-bV-wy2" secondAttribute="width" constant="-100" id="Egq-Fg-Ahb"/>
+                                    <constraint firstItem="sHU-VJ-WBI" firstAttribute="top" secondItem="ojz-bV-wy2" secondAttribute="top" id="UJe-Fb-chn"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="mD3-C5-YgG"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="ojz-bV-wy2" secondAttribute="bottom" id="0VT-le-Eun"/>
+                            <constraint firstItem="ojz-bV-wy2" firstAttribute="trailing" secondItem="mD3-C5-YgG" secondAttribute="trailing" id="9nA-Kf-sqm"/>
+                            <constraint firstItem="ojz-bV-wy2" firstAttribute="top" secondItem="yC7-Sa-wcz" secondAttribute="top" id="CE6-m7-LPP"/>
+                            <constraint firstItem="ojz-bV-wy2" firstAttribute="leading" secondItem="mD3-C5-YgG" secondAttribute="leading" id="Yj4-LS-v7k"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <navigationItem key="navigationItem" title="SETTING" prompt="Good morning" id="h7j-rV-lK0" customClass="SNavigationItem" customModule="Stitchbox" customModuleProvider="target"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HGU-6F-swF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2205.7971014492755" y="1654.8913043478262"/>
+        </scene>
+    </scenes>
+    <designables>
+        <designable name="4rf-9T-7GH">
+            <size key="intrinsicContentSize" width="175.33333333333334" height="39"/>
+        </designable>
+        <designable name="IH9-MU-nQa">
+            <size key="intrinsicContentSize" width="152" height="42"/>
+        </designable>
+        <designable name="SNq-Pv-xep">
+            <size key="intrinsicContentSize" width="140.66666666666666" height="39"/>
+        </designable>
+        <designable name="ST4-uv-SkH">
+            <size key="intrinsicContentSize" width="135" height="39"/>
+        </designable>
+        <designable name="SqG-Q8-JeX">
+            <size key="intrinsicContentSize" width="144" height="34.333333333333336"/>
+        </designable>
+        <designable name="TXj-qu-BX7">
+            <size key="intrinsicContentSize" width="180.33333333333334" height="38"/>
+        </designable>
+        <designable name="Wrf-zy-xOL">
+            <size key="intrinsicContentSize" width="136" height="34.333333333333336"/>
+        </designable>
+        <designable name="c2j-Rp-ZeC">
+            <size key="intrinsicContentSize" width="92.333333333333329" height="34.333333333333336"/>
+        </designable>
+        <designable name="ddV-fr-ghq">
+            <size key="intrinsicContentSize" width="162" height="40"/>
+        </designable>
+        <designable name="i9h-tR-CnB">
+            <size key="intrinsicContentSize" width="187" height="39"/>
+        </designable>
+        <designable name="iKL-1f-DOW">
+            <size key="intrinsicContentSize" width="110" height="39"/>
+        </designable>
+        <designable name="jgm-Dp-cCr">
+            <size key="intrinsicContentSize" width="213" height="44"/>
+        </designable>
+        <designable name="p1I-54-MyO">
+            <size key="intrinsicContentSize" width="182" height="35"/>
+        </designable>
+        <designable name="wER-Rb-bSw">
+            <size key="intrinsicContentSize" width="182.33333333333334" height="34.333333333333336"/>
+        </designable>
+        <designable name="xUT-Qg-ybz">
+            <size key="intrinsicContentSize" width="101.33333333333333" height="38"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="adduser" width="28" height="28"/>
+        <image name="call" width="19" height="19"/>
+        <image name="clock" width="24" height="24"/>
+        <image name="discord" width="21" height="15"/>
+        <image name="dropdown" width="30" height="30"/>
+        <image name="file" width="25" height="25"/>
+        <image name="link" width="25" height="25"/>
+        <image name="lock" width="25" height="25"/>
+        <image name="logout" width="24" height="24"/>
+        <image name="push" width="21" height="21"/>
+        <image name="sound" width="27" height="25"/>
+        <image name="trophy" width="17" height="15"/>
+        <image name="user-setting" width="25" height="25"/>
+        <image name="users" width="26" height="26"/>
+        <namedColor name="Background">
+            <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Text">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
