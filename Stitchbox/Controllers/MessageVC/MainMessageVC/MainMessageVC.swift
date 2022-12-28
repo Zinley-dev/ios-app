@@ -169,7 +169,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     func createLeftTitleItem(text: String) -> UIBarButtonItem {
         let titleLabel = UILabel()
         titleLabel.text = text
-        titleLabel.font = UIFont.systemFont(ofSize: 18)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         titleLabel.textColor = UIColor.white
         return UIBarButtonItem.init(customView: titleLabel)
     }
