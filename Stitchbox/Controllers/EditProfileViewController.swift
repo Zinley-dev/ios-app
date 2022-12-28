@@ -37,12 +37,15 @@ class EditProfileViewController: UIViewController, ControllerType {
     
     // MARK: - UI
     @IBAction func changeProfileImage() {
-        let viewCtrl = UIViewController()
-        let popupVC = PopupViewController(contentController: viewCtrl, popupWidth: 100, popupHeight: 100)
+//        let viewCtrl = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EDITPROFILEPHOTO")
+//        let popupVC =  PopupViewController(contentController: viewCtrl, position: .bottomLeft(CGPoint(x: 0, y: UIScreen.main.bounds.minY)), popupWidth: nil, popupHeight: nil)
+//        
+//        popupVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+//        popupVC.shadowEnabled = true
+//        
+//        self.present(popupVC, animated: true)
         
-        viewCtrl.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
         
-        self.present(popupVC, animated: true)
         
     }
     

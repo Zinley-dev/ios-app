@@ -121,10 +121,12 @@ import SwiftUI
                 let gradient = CAGradientLayer()
                 gradient.frame =  CGRect(origin: CGPoint.zero, size: self.frame.size)
                 gradient.cornerRadius = 20
-                gradient.colors = [UIColor.primary.cgColor, UIColor.secondary.cgColor]
+                gradient.colors = [UIColor.secondary.cgColor, UIColor.primary.cgColor]
+                gradient.locations = [-0.3425, 0.7353]
+                gradient.startPoint = CGPoint(x: -0.3, y: 0)
+                gradient.endPoint = CGPoint(x: 1, y: 1.5)
                 
                 let shape = CAShapeLayer()
-//                shape.lineWidth = 5
                 shape.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 20).cgPath
                 shape.strokeColor = UIColor.black.cgColor
                 shape.fillColor = UIColor.black.cgColor

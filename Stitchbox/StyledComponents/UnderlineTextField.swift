@@ -10,7 +10,7 @@ import UIKit
 import SwiftUI
 
 @IBDesignable class UnderlineTextField: UITextField {
-
+    private var editButton: UIButton?
     var leftPadding = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
     let border = CALayer()
     @IBInspectable var borderColor: UIColor {
@@ -30,6 +30,7 @@ import SwiftUI
             self.leftPadding.left = newValue
         }
     }
+    
     @IBInspectable override var placeHolderColor: UIColor? {
         get {
             return self.placeHolderColor
@@ -37,6 +38,28 @@ import SwiftUI
         set {
             self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : "", attributes:[NSAttributedString.Key.foregroundColor: newValue!])
         }
+    }
+    
+    @IBInspectable var haveEditButton: Bool = false {
+        didSet {
+            if haveEditButton {
+                editButton = UIButton(type: .custom)
+                editButton?.setImage(UIImage(named: "edit"), for: .normal)
+                editButton?.imageEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 0)
+                editButton?.frame = CGRect(x: CGFloat(self.frame.size.width - 25), y: CGFloat(5), width: CGFloat(25), height: CGFloat(25))
+                editButton?.addTarget(self, action: #selector(self.editAllow), for: .touchUpInside)
+
+                self.rightView = editButton
+                self.rightViewMode = .always
+                
+            }
+        }
+    }
+    @IBAction func editAllow(_ sender: Any) {
+        if self.isUserInteractionEnabled == false {
+            self.isUserInteractionEnabled = true
+        }
+
     }
 
     // MARK: - Initialization

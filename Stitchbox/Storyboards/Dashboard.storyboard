@@ -1099,9 +1099,12 @@
                                                                         </buttonConfiguration>
                                                                         <connections>
                                                                             <action selector="changeProfileImage" destination="Heq-RT-hug" eventType="touchDown" id="h8u-s3-OMT"/>
+                                                                            <segue destination="rck-1J-pp8" kind="popoverPresentation" popoverAnchorView="oMd-2U-zrc" id="tBp-qi-XwG">
+                                                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                                                            </segue>
                                                                         </connections>
                                                                     </button>
-                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Foobar" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SjD-10-vYT" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Foobar" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SjD-10-vYT" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="160" width="140" height="36"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="36" id="gED-ht-OcW"/>
@@ -1120,6 +1123,7 @@
                                                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
                                                                                 <color key="value" name="Text"/>
                                                                             </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveEditButton" value="YES"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </textField>
                                                                 </subviews>
@@ -1172,6 +1176,9 @@
                                                                 </buttonConfiguration>
                                                                 <connections>
                                                                     <action selector="changeProfileImage" destination="Heq-RT-hug" eventType="touchDown" id="CV8-Or-5ZX"/>
+                                                                    <segue destination="Aou-02-KWb" kind="popoverPresentation" popoverAnchorView="2Us-tV-MWv" id="Mba-lw-Emf">
+                                                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                                                    </segue>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -1188,7 +1195,7 @@
                                                                         <color key="textColor" name="TextOnBackground"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="John Doe" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ftx-Ln-q3h" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="John Doe" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ftx-Ln-q3h" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
                                                                         <rect key="frame" x="10" y="33" width="280" height="18.5"/>
                                                                         <color key="tintColor" name="Text"/>
                                                                         <color key="textColor" name="Text"/>
@@ -1201,6 +1208,7 @@
                                                                             <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
                                                                                 <color key="value" name="Text"/>
                                                                             </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveEditButton" value="YES"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </textField>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Birthday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WiS-vv-q5b">
@@ -1209,7 +1217,7 @@
                                                                         <color key="textColor" name="TextOnBackground"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mm/dd/yyyy" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xaK-9A-REj" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mm/dd/yyyy" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xaK-9A-REj" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
                                                                         <rect key="frame" x="10" y="80.5" width="280" height="18.5"/>
                                                                         <color key="tintColor" name="Text"/>
                                                                         <color key="textColor" name="Text"/>
@@ -1222,6 +1230,7 @@
                                                                             <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
                                                                                 <color key="value" name="Text"/>
                                                                             </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveEditButton" value="YES"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </textField>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSi-Vt-WLZ">
@@ -1230,7 +1239,7 @@
                                                                         <color key="textColor" name="TextOnBackground"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Maximum 100 characters" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LKV-48-eKM" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Maximum 100 characters" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LKV-48-eKM" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
                                                                         <rect key="frame" x="10" y="128" width="280" height="18.5"/>
                                                                         <color key="tintColor" name="Text"/>
                                                                         <color key="textColor" name="Text"/>
@@ -1243,6 +1252,7 @@
                                                                             <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
                                                                                 <color key="value" name="Text"/>
                                                                             </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveEditButton" value="YES"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </textField>
                                                                 </subviews>
@@ -1385,33 +1395,242 @@
             </objects>
             <point key="canvasLocation" x="3840.579710144928" y="2432.8125"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="pDD-ED-GP8">
+        <!--Change Photo View Controller-->
+        <scene sceneID="IhV-AS-aOu">
             <objects>
-                <viewController id="h1w-D3-PkP" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="xBJ-3V-fFX">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                <viewController id="CgQ-C9-yCl" customClass="ChangePhotoViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wJJ-I8-48Y">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="838"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Ev3-gw-TGc">
-                                <rect key="frame" x="0.0" y="462" width="414" height="400"/>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOu-Ku-Fvw">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="838"/>
+                                <color key="backgroundColor" red="0.015458762645721436" green="0.0" blue="0.0006264164112508297" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain"/>
+                                <connections>
+                                    <action selector="dismissViewController" destination="CgQ-C9-yCl" eventType="touchDown" id="8pp-Xn-Y9P"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="xcw-kk-oxI" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="438" width="414" height="400"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change profile photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hC4-tQ-EKy">
+                                        <rect key="frame" x="36" y="18" width="342" height="20.5"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" name="Text"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DoI-iK-69V" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="36" y="63.5" width="342" height="39"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="addphoto" title="Upload Photo" imagePadding="9">
+                                            <color key="baseForegroundColor" name="Text"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sOv-A7-hKk" userLabel="Take photo" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="36" y="127.5" width="342" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="takephoto" title="Take Photo" imagePadding="9">
+                                            <color key="baseForegroundColor" name="Text"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DNJ-EW-Afc" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="36" y="187" width="342" height="38"/>
+                                        <color key="tintColor" name="BorderColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="delete" title="Remove Current Photo" imagePadding="9">
+                                            <color key="baseForegroundColor" name="Secondary"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ejk-AY-mru">
+                                        <rect key="frame" x="36" y="250" width="342" height="142"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="400" id="1Ap-bh-x2K"/>
+                                    <constraint firstAttribute="height" constant="400" id="TbE-nh-75L"/>
                                 </constraints>
+                                <directionalEdgeInsets key="directionalLayoutMargins" top="18" leading="36" bottom="8" trailing="36"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </stackView>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="5R0-o2-VGb"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <viewLayoutGuide key="safeArea" id="eaw-Co-Cig"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="5R0-o2-VGb" firstAttribute="bottom" secondItem="Ev3-gw-TGc" secondAttribute="bottom" id="0PI-oM-qkg"/>
-                            <constraint firstItem="5R0-o2-VGb" firstAttribute="trailing" secondItem="Ev3-gw-TGc" secondAttribute="trailing" id="70p-ck-VVj"/>
-                            <constraint firstItem="Ev3-gw-TGc" firstAttribute="leading" secondItem="5R0-o2-VGb" secondAttribute="leading" id="y41-1R-rCq"/>
+                            <constraint firstItem="xcw-kk-oxI" firstAttribute="width" secondItem="wJJ-I8-48Y" secondAttribute="width" id="1LG-0g-yDX"/>
+                            <constraint firstItem="jOu-Ku-Fvw" firstAttribute="leading" secondItem="eaw-Co-Cig" secondAttribute="leading" id="243-Dj-3dN"/>
+                            <constraint firstAttribute="bottom" secondItem="jOu-Ku-Fvw" secondAttribute="bottom" id="9zV-mY-vEg"/>
+                            <constraint firstItem="eaw-Co-Cig" firstAttribute="trailing" secondItem="jOu-Ku-Fvw" secondAttribute="trailing" id="JGW-n4-LBl"/>
+                            <constraint firstAttribute="bottom" secondItem="xcw-kk-oxI" secondAttribute="bottom" id="ZXJ-2K-mYV"/>
+                            <constraint firstItem="jOu-Ku-Fvw" firstAttribute="top" secondItem="wJJ-I8-48Y" secondAttribute="top" id="lvl-QH-dyb"/>
+                            <constraint firstItem="xcw-kk-oxI" firstAttribute="leading" secondItem="eaw-Co-Cig" secondAttribute="leading" id="sco-QE-PHL"/>
+                            <constraint firstItem="xcw-kk-oxI" firstAttribute="trailing" secondItem="eaw-Co-Cig" secondAttribute="trailing" id="wLQ-4F-No8"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="ZVX-Id-p9G"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="yPv-Tx-or7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1kA-iB-kW5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4792.753623188406" y="2443.5267857142858"/>
+            <point key="canvasLocation" x="5613" y="2433"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="edZ-QN-XV2">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rck-1J-pp8" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Yky-pn-dmB">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="CgQ-C9-yCl" kind="relationship" relationship="rootViewController" id="xny-ns-ccF"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dey-Ne-EFs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4659" y="2433"/>
+        </scene>
+        <!--Change Photo View Controller-->
+        <scene sceneID="cMh-9Q-ozp">
+            <objects>
+                <viewController id="spq-pS-amH" customClass="ChangePhotoViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="LGd-WV-jCD">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="838"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vQ0-za-tmn">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="838"/>
+                                <color key="backgroundColor" red="0.015458762645721436" green="0.0" blue="0.0006264164112508297" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain"/>
+                                <connections>
+                                    <action selector="dismissViewController" destination="spq-pS-amH" eventType="touchDown" id="aKa-cL-jkz"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="v4S-0w-Vay" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="438" width="414" height="400"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change cover photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NF3-IA-xam">
+                                        <rect key="frame" x="36" y="18" width="342" height="20.5"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" name="Text"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mBe-ep-aCV" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="36" y="63.5" width="342" height="39"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="addphoto" title="Upload Photo" imagePadding="9">
+                                            <color key="baseForegroundColor" name="Text"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WmK-9N-BOX" userLabel="Take photo" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="36" y="127.5" width="342" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="takephoto" title="Take Photo" imagePadding="9">
+                                            <color key="baseForegroundColor" name="Text"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fcx-6a-xQ0" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="36" y="187" width="342" height="38"/>
+                                        <color key="tintColor" name="BorderColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="delete" title="Remove Current Photo" imagePadding="9">
+                                            <color key="baseForegroundColor" name="Secondary"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sz4-0V-dCp">
+                                        <rect key="frame" x="36" y="250" width="342" height="142"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="400" id="WTK-N7-CEL"/>
+                                </constraints>
+                                <directionalEdgeInsets key="directionalLayoutMargins" top="18" leading="36" bottom="8" trailing="36"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="tMA-Tg-rcC"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="tMA-Tg-rcC" firstAttribute="trailing" secondItem="vQ0-za-tmn" secondAttribute="trailing" id="4kp-2B-Zyr"/>
+                            <constraint firstAttribute="bottom" secondItem="vQ0-za-tmn" secondAttribute="bottom" id="LpM-39-hz8"/>
+                            <constraint firstItem="v4S-0w-Vay" firstAttribute="leading" secondItem="tMA-Tg-rcC" secondAttribute="leading" id="PDd-DG-ieg"/>
+                            <constraint firstItem="v4S-0w-Vay" firstAttribute="trailing" secondItem="tMA-Tg-rcC" secondAttribute="trailing" id="SCX-6p-jXK"/>
+                            <constraint firstItem="vQ0-za-tmn" firstAttribute="leading" secondItem="tMA-Tg-rcC" secondAttribute="leading" id="TOi-kp-tNO"/>
+                            <constraint firstAttribute="bottom" secondItem="v4S-0w-Vay" secondAttribute="bottom" id="guN-Wt-jQX"/>
+                            <constraint firstItem="v4S-0w-Vay" firstAttribute="width" secondItem="LGd-WV-jCD" secondAttribute="width" id="huD-OC-M5L"/>
+                            <constraint firstItem="vQ0-za-tmn" firstAttribute="top" secondItem="LGd-WV-jCD" secondAttribute="top" id="zXV-jS-g2y"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="T4y-UD-Hk9"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RDV-L5-NpB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5665" y="3164"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="8oY-T1-OvE">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7ab-RX-O5P" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Fzq-1P-B5D">
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="625-GZ-ncL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4659" y="2433"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="8Lr-gs-Ptg">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Aou-02-KWb" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yMt-P1-EnH">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="spq-pS-amH" kind="relationship" relationship="rootViewController" id="nG7-6d-eiX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1xC-gv-ota" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4658" y="3164"/>
         </scene>
     </scenes>
     <designables>
@@ -1429,6 +1648,12 @@
         </designable>
         <designable name="Ci7-gB-oHf">
             <size key="intrinsicContentSize" width="130" height="130"/>
+        </designable>
+        <designable name="DNJ-EW-Afc">
+            <size key="intrinsicContentSize" width="229.5" height="38"/>
+        </designable>
+        <designable name="DoI-iK-69V">
+            <size key="intrinsicContentSize" width="162" height="39"/>
         </designable>
         <designable name="FOI-cM-P0o">
             <size key="intrinsicContentSize" width="162" height="40"/>
@@ -1475,6 +1700,9 @@
         <designable name="Tkl-5W-Yw1">
             <size key="intrinsicContentSize" width="61" height="34"/>
         </designable>
+        <designable name="WmK-9N-BOX">
+            <size key="intrinsicContentSize" width="139.5" height="34.5"/>
+        </designable>
         <designable name="Wx0-kI-Yna">
             <size key="intrinsicContentSize" width="187" height="39"/>
         </designable>
@@ -1483,6 +1711,9 @@
         </designable>
         <designable name="f9j-UV-aZd">
             <size key="intrinsicContentSize" width="92.5" height="34.5"/>
+        </designable>
+        <designable name="fcx-6a-xQ0">
+            <size key="intrinsicContentSize" width="229.5" height="38"/>
         </designable>
         <designable name="gLe-ah-MOZ">
             <size key="intrinsicContentSize" width="73" height="34.5"/>
@@ -1493,8 +1724,14 @@
         <designable name="j3e-pQ-uGe">
             <size key="intrinsicContentSize" width="319" height="180"/>
         </designable>
+        <designable name="mBe-ep-aCV">
+            <size key="intrinsicContentSize" width="162" height="39"/>
+        </designable>
         <designable name="nbB-c6-ceP">
             <size key="intrinsicContentSize" width="110" height="39"/>
+        </designable>
+        <designable name="sOv-A7-hKk">
+            <size key="intrinsicContentSize" width="139.5" height="34.5"/>
         </designable>
         <designable name="v4L-i8-m8u">
             <size key="intrinsicContentSize" width="182" height="35"/>
@@ -1512,12 +1749,14 @@
     <resources>
         <image name="4x_add" width="25" height="25"/>
         <image name="CoverPhoto" width="340" height="192"/>
+        <image name="addphoto" width="25" height="25"/>
         <image name="adduser" width="28" height="28"/>
         <image name="call" width="19" height="19"/>
         <image name="chat" width="29" height="28"/>
         <image name="chat.filled" width="28" height="26"/>
         <image name="clock" width="24" height="24"/>
         <image name="defaultuser" width="278" height="278"/>
+        <image name="delete" width="24" height="24"/>
         <image name="discord" width="21" height="15"/>
         <image name="dropdown" width="30" height="30"/>
         <image name="file" width="25" height="25"/>
@@ -1530,6 +1769,7 @@
         <image name="search" width="36" height="36"/>
         <image name="search.filled" width="36" height="36"/>
         <image name="sound" width="27" height="25"/>
+        <image name="takephoto" width="22" height="17"/>
         <image name="trophy" width="17" height="15"/>
         <image name="user" width="29" height="29"/>
         <image name="user-setting" width="25" height="25"/>

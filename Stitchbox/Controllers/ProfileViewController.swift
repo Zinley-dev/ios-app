@@ -17,7 +17,6 @@ class ProfileViewController: UIViewController {
         super.viewWillDisappear(animated)
         if !hidesBottomBarWhenPushed {
             if self.tabBarController is DashboardTabBarController {
-                print("yes")
                 let tbctrl = self.tabBarController as! DashboardTabBarController
                 tbctrl.button.isHidden = false
             }
