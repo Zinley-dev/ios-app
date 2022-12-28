@@ -31,9 +31,18 @@ target 'Stitchbox' do
   
   # Sendbird SDK
   pod 'SendBirdSDK', '~> 3.1.37'
-  #pod 'SendBirdUIKit'
+  pod 'SendBirdUIKit', '~> 2.2.11'
   pod 'SendBirdCalls', '~> 1.9.7'
   
+  
+  # Image SDK
+  pod 'FLAnimatedImage', '~> 1.0'
+  pod 'RSKImageCropper'
+  pod 'NYTPhotoViewer', '~> 1.1.0'
+  pod 'AlamofireImage'
+  
+  # animation note
+  pod 'SwiftEntryKit', '1.2.6'
   
   target 'StitchboxTests' do
     inherit! :search_paths

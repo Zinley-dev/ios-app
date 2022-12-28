@@ -53,7 +53,6 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                 self.addAdditionalHeaders(route.headers, request: &request)
             }
         case .requestParameters(let parameters):
-            print("Vao param \(parameters)")
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             if route.headers != nil {
                 self.addAdditionalHeaders(route.headers, request: &request)

@@ -24,6 +24,8 @@ enum Result {
 
 struct APIManager {
     let manager = Manager<UserApi>()
+    let SBmanager = Manager<ChatApi>()
+    let searchManager = Manager<SearchApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -51,6 +53,48 @@ struct APIManager {
           completion(result)
       }
     }
+    
+    func roomIDRequest(channelUrl: String, completion: @escaping APICompletion) {
+        
+        let params = ["channel": channelUrl]
+        SBmanager.request(.roomIDRequest(params: params)) { result in
+            completion(result)
+        }
+            
+        
+    }
+    
+    func acceptSBInvitationRequest(user_id: String, channelUrl: String, completion: @escaping APICompletion) {
+        
+        let params = ["channel": channelUrl, "user_id": user_id]
+        SBmanager.request(.acceptSBInvitationRequest(params: params)) { result in
+            completion(result)
+        }
+            
+        
+    }
+    
+    
+    func channelCheckForInviation(userIds: [String], channelUrl: String, completion: @escaping APICompletion) {
+        
+        let params = ["channel": channelUrl, "userIds": userIds] as [String : Any]
+        SBmanager.request(.channelCheckForInviation(params: params)) { result in
+            completion(result)
+        }
+            
+        
+    }
+    
+    
+    func searchUsersForChat(keyword: String, completion: @escaping APICompletion) {
+        
+        let params = ["search": keyword]
+        searchManager.request(.searchUsersForChat(params: params)) { result in
+            completion(result)
+        }
+        
+    }
+    
     
 }
 

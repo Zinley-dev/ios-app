@@ -57,5 +57,10 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+		<string>voip</string>
+	</array>
 </dict>
 </plist>
