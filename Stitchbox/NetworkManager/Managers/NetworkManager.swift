@@ -49,10 +49,14 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         switch route.task {
         case .request:
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            self.addAdditionalHeaders(route.headers, request: &request)
+            if route.headers != nil {
+                self.addAdditionalHeaders(route.headers, request: &request)
+            }
         case .requestParameters(let parameters):
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            self.addAdditionalHeaders(route.headers, request: &request)
+            if route.headers != nil {
+                self.addAdditionalHeaders(route.headers, request: &request)
+            }
             self.configureParameters(parameters: parameters, request: &request)
         case .requestParametersAndHeaders(let parameters, let additionalHeaders):
             self.addAdditionalHeaders(additionalHeaders, request: &request)

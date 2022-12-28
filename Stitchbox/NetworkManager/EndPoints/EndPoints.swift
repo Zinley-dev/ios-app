@@ -23,23 +23,15 @@ extension APIBuilder: BaseURL {
         return "\(APIBuilder.APIBuilderConstants.ApiScheme)://\(APIBuilder.APIBuilderConstants.ApiHost)"
     }
 }
-
 public enum UserApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
     case phoneverify (params: [String:String])
+    case register (params: [String:String])
 }
-
 extension UserApi: EndPointType {
     var module: String {
-        switch self {
-        case .login:
-            return "/auth"
-        case .phonelogin:
-            return "/auth"
-        case .phoneverify:
-            return "/auth"
-        }
+        return "/auth"
     }
     
     var path: String {
@@ -50,7 +42,10 @@ extension UserApi: EndPointType {
             return "/phone-login"
         case .phoneverify:
             return "/phone-verify"
+        case .register:
+            return "/register"
         }
+        
     }
     
     var httpMethod: HTTPMethod {
@@ -60,6 +55,8 @@ extension UserApi: EndPointType {
         case .phonelogin:
             return .post
         case .phoneverify:
+            return .post
+        case .register:
             return .post
         }
     }
@@ -71,6 +68,8 @@ extension UserApi: EndPointType {
         case .phonelogin(let params):
             return .requestParameters(parameters: params)
         case .phoneverify(let params):
+            return .requestParameters(parameters: params)
+        case .register(let params):
             return .requestParameters(parameters: params)
         }
     }
@@ -178,4 +177,45 @@ extension SearchApi: EndPointType {
           return nil
     }
     
+}
+
+public enum SettingAPI {
+    case getSettings
+    case updateSettings (params: [String: Any])
+}
+extension SettingAPI: EndPointType {
+    var module: String {
+        return "/settings"
+    }
+    
+    var path: String {
+        switch self {
+        case .getSettings:
+            return "/"
+        case .updateSettings:
+            return "/"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getSettings:
+            return .get
+        case .updateSettings:
+            return .patch
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getSettings:
+            return .request
+        case .updateSettings(let params):
+            return .requestParameters(parameters: params)
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
 }

@@ -8,19 +8,15 @@
 import Foundation
 import UIKit
 import SwiftUI
+import RxCocoa
+import RxSwift
+import CoreMedia
 
 @IBDesignable class DashboardTabBarController: UITabBarController {
     
     var button: UIButton = UIButton()
     var actionButtonContainerView: UIView!
     
-    
-    // MARK: - Initialization
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        //        setupView()
-        self.setupMiddleButton()
-    }
     // TabBarButton – Setup Middle Button
     func setupMiddleButton() {
         button.setImage(UIImage(named: "Add 2"), for: .normal)
@@ -32,11 +28,13 @@ import SwiftUI
         button.layer.shadowOpacity = 0.1
         self.view.insertSubview(button, aboveSubview: self.tabBar)
         button.addTarget(self, action: #selector(pressedAction(_:)), for: .touchUpInside)
-
+        button.layer.zPosition = 2500
+        
+        
     }
     @objc func pressedAction(_ sender: UIButton) {
         // do your stuff here
-
+        self.selectedIndex = 2
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -45,8 +43,7 @@ import SwiftUI
         button.frame = CGRect.init(x: Int(self.view.bounds.midX) - sizeButton / 2, y: Int(self.tabBar.frame.minY) - sizeButton / 2, width: sizeButton, height: sizeButton)
     }
     func setupView() {
-        self.view.bringSubviewToFront( self.tabBar)
-        
+        self.view.bringSubviewToFront(self.tabBar)
         tabBar.layer.opacity = 1
         tabBar.tintColor = .tabbar
         tabBar.barTintColor = .tabbar
@@ -58,11 +55,11 @@ import SwiftUI
         tabBar.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
         tabBar.layer.masksToBounds = false
         tabBar.layer.cornerRadius = 20
-        
         tabBar.frame.size.height = 70
         tabBar.frame.origin.x = 50
-        tabBar.insertSubview(UIButton(), at: 3)
-        
+        UITabBar.appearance().isTranslucent = false
+        tabBar.layer.zPosition = 2000
+        setupMiddleButton()
     }
     
     // MARK: - UI Setup
@@ -73,9 +70,8 @@ import SwiftUI
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupMiddleButton()
+        
     }
-    
     
 }
 

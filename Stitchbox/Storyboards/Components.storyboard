@@ -97,7 +97,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2343" y="618"/>
+            <point key="canvasLocation" x="2499" y="648"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="GBI-6q-Oiq">
@@ -242,12 +242,12 @@
         <scene sceneID="4KR-S4-fUj">
             <objects>
                 <viewController storyboardIdentifier="OTPTextfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DIb-Wa-WRn" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="4Kt-VG-UPX">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="4Kt-VG-UPX">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="96" y="360" width="221" height="22"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="96" y="349" width="655" height="22"/>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qio-D5-8w9"/>
@@ -400,65 +400,6 @@
             </objects>
             <point key="canvasLocation" x="6544.2748091603053" y="-10.563380281690142"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="vnF-HY-fLF">
-            <objects>
-                <viewController storyboardIdentifier="CARD" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Amu-QB-ID6" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Axv-i3-wsf">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Sbf-Ub-OAo" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="57" y="340" width="300" height="216.5"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VA2-GQ-N6o">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="AC.png" imagePlacement="trailing" title="Button" imagePadding="11" titleAlignment="trailing"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L7w-Jk-YRG">
-                                        <rect key="frame" x="0.0" y="44" width="300" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEk-aL-QUY">
-                                        <rect key="frame" x="0.0" y="78.5" width="300" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vic-77-7fA">
-                                        <rect key="frame" x="0.0" y="113" width="300" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rCu-Ll-ewu">
-                                        <rect key="frame" x="0.0" y="147.5" width="300" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="txM-F3-SPX">
-                                        <rect key="frame" x="0.0" y="182" width="300" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="Y1e-hz-7zS"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="Ipm-rL-RNC"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="Sbf-Ub-OAo" firstAttribute="centerY" secondItem="Axv-i3-wsf" secondAttribute="centerY" id="1ug-An-rfB"/>
-                            <constraint firstItem="Sbf-Ub-OAo" firstAttribute="centerX" secondItem="Axv-i3-wsf" secondAttribute="centerX" id="f7l-NI-98n"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5Ff-FE-455" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2343" y="1380"/>
-        </scene>
         <!--Login Tab Bar Controller-->
         <scene sceneID="dgN-xs-ziQ">
             <objects>
@@ -478,60 +419,322 @@
             </objects>
             <point key="canvasLocation" x="5617.5572519083971" y="354.22535211267609"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="ddS-be-dfB">
+            <objects>
+                <viewController storyboardIdentifier="CARD" useStoryboardIdentifierAsRestorationIdentifier="YES" id="RWu-oB-JKT" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MV0-oY-KpJ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="RFy-NS-Qt3" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="57" y="449.5" width="300" height="251.5"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9T4-sd-AkN" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="79"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="Add 2" imagePlacement="leading" title="Button" imagePadding="11" titleAlignment="trailing"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aKE-px-xsz" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="79" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2MZ-hc-eRg" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="113.5" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6qC-xn-G04" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="148" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ccK-Cj-HEF" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="182.5" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cgn-xV-IH2" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="217" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="TOO-ab-cal"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="awR-Vv-FMz" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="57" y="148" width="300" height="251.5"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ypw-d9-p4p" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="79"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="Add 2" imagePlacement="leading" title="Button" imagePadding="11" titleAlignment="trailing"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nDz-Ak-Odc" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="79" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gtA-lh-wfX" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="113.5" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eM3-Hg-53D" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="148" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vSM-1c-vzG" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="182.5" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IMA-xb-GnT" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="217" width="300" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="ypw-d9-p4p" firstAttribute="top" secondItem="awR-Vv-FMz" secondAttribute="top" constant="20" id="AjU-ke-sbf"/>
+                                    <constraint firstAttribute="width" constant="300" id="GmN-ww-g0Q"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="border" value="NO"/>
+                                </userDefinedRuntimeAttributes>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="bMb-0n-eRb"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="awR-Vv-FMz" firstAttribute="top" secondItem="bMb-0n-eRb" secondAttribute="top" constant="100" id="4RJ-m0-f8Y"/>
+                            <constraint firstItem="RFy-NS-Qt3" firstAttribute="top" secondItem="awR-Vv-FMz" secondAttribute="bottom" constant="50" id="Y1q-sL-Ome"/>
+                            <constraint firstItem="awR-Vv-FMz" firstAttribute="centerX" secondItem="MV0-oY-KpJ" secondAttribute="centerX" id="czu-b5-chx"/>
+                            <constraint firstItem="RFy-NS-Qt3" firstAttribute="centerX" secondItem="MV0-oY-KpJ" secondAttribute="centerX" id="dIv-wb-srb"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mjy-7n-p5T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2343" y="1380"/>
+        </scene>
+        <!--Title-->
+        <scene sceneID="OXw-9m-Vcn">
+            <objects>
+                <viewController storyboardIdentifier="NavBar" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fnZ-wo-2tk" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Nd2-TT-v5N">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mBX-Ek-B9i" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="168" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dsO-Ge-Ak6" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="264" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZLS-pM-IQS" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="354" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j9A-JN-xcU" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="430" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UBH-Wi-Pzs" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="502" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ad6-AU-pO3" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="159" y="575" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="nqT-yA-PzN"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Title" prompt="asdfasdfa" largeTitleDisplayMode="always" id="OwN-sX-tgK"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LSB-nM-YUw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3264" y="676"/>
+        </scene>
     </scenes>
     <designables>
         <designable name="0dc-Cu-ADw">
-            <size key="intrinsicContentSize" width="32" height="34"/>
+            <size key="intrinsicContentSize" width="24" height="18.5"/>
+        </designable>
+        <designable name="2MZ-hc-eRg">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="3pI-w7-p8u">
-            <size key="intrinsicContentSize" width="32" height="34"/>
+            <size key="intrinsicContentSize" width="9" height="18.5"/>
         </designable>
         <designable name="4m4-dZ-2qb"/>
+        <designable name="6qC-xn-G04">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
+        <designable name="9T4-sd-AkN">
+            <size key="intrinsicContentSize" width="152" height="79"/>
+        </designable>
+        <designable name="Ad6-AU-pO3">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
+        <designable name="Cgn-xV-IH2">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
         <designable name="GhD-VW-W3q">
-            <size key="intrinsicContentSize" width="32" height="34"/>
+            <size key="intrinsicContentSize" width="38" height="34"/>
+        </designable>
+        <designable name="IMA-xb-GnT">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="L5B-yZ-Bz8">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="SiS-Qd-H9G">
-            <size key="intrinsicContentSize" width="34" height="34"/>
+            <size key="intrinsicContentSize" width="6" height="18.5"/>
         </designable>
         <designable name="SiY-Zw-rKg">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="TOz-ed-Qc3">
-            <size key="intrinsicContentSize" width="36" height="34"/>
+            <size key="intrinsicContentSize" width="8" height="18.5"/>
+        </designable>
+        <designable name="UBH-Wi-Pzs">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
+        <designable name="ZLS-pM-IQS">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
+        <designable name="aKE-px-xsz">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="bna-sl-8Ck">
-            <size key="intrinsicContentSize" width="32" height="34"/>
+            <size key="intrinsicContentSize" width="38" height="34"/>
+        </designable>
+        <designable name="ccK-Cj-HEF">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
+        <designable name="dsO-Ge-Ak6">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
+        <designable name="eM3-Hg-53D">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="eyq-xr-zUs">
-            <size key="intrinsicContentSize" width="34" height="34"/>
+            <size key="intrinsicContentSize" width="6" height="18.5"/>
         </designable>
         <designable name="gKb-Yg-1aW">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
+        <designable name="gtA-lh-wfX">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
+        <designable name="j9A-JN-xcU">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
         <designable name="k55-E0-bG7">
-            <size key="intrinsicContentSize" width="32" height="34"/>
+            <size key="intrinsicContentSize" width="24" height="18.5"/>
+        </designable>
+        <designable name="mBX-Ek-B9i">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
+        <designable name="nDz-Ak-Odc">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="ogd-UU-co2">
+            <size key="intrinsicContentSize" width="75" height="34.5"/>
+        </designable>
+        <designable name="vSM-1c-vzG">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="w6R-PB-o3b">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="yIl-ri-0s3">
-            <size key="intrinsicContentSize" width="32" height="34"/>
+            <size key="intrinsicContentSize" width="38" height="34"/>
+        </designable>
+        <designable name="ypw-d9-p4p">
+            <size key="intrinsicContentSize" width="152" height="79"/>
         </designable>
         <designable name="yz9-3w-jnS">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="z9P-lI-zda">
-            <size key="intrinsicContentSize" width="32" height="34"/>
+            <size key="intrinsicContentSize" width="24" height="18.5"/>
         </designable>
     </designables>
     <resources>
-        <image name="AC.png" width="40" height="30"/>
+        <image name="Add 2" width="66" height="65"/>
         <namedColor name="Secondary">
             <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

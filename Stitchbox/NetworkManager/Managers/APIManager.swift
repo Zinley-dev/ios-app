@@ -29,7 +29,6 @@ struct APIManager {
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
-        print("params \(params)")
         manager.request(.login(params: params)) { result in
             completion(result)
         }
@@ -37,7 +36,6 @@ struct APIManager {
     
     func phoneLogin(phone: String, completion: @escaping APICompletion) {
         let params = ["phone": phone]
-        print(params)
         manager.request(.phonelogin(params: params)) { result in
             completion(result)
         }
@@ -48,6 +46,12 @@ struct APIManager {
         manager.request(.phoneverify(params: params)) { result in
             completion(result)
         }
+    }
+  
+    func register(params: [String: String], completion: @escaping APICompletion) {
+      manager.request(.register(params: params)) { result in
+          completion(result)
+      }
     }
     
     func roomIDRequest(channelUrl: String, completion: @escaping APICompletion) {
@@ -94,3 +98,22 @@ struct APIManager {
     
 }
 
+struct SettingAPIManager{
+    let manager = Manager<SettingAPI>()
+    
+    func getSettings(completion: @escaping APICompletion) {
+        manager.request(.getSettings){
+            result in
+            completion(result)
+        }
+    }
+    
+    func updateSettings(params: [String: Any], completion: @escaping APICompletion) {
+        manager.request(.updateSettings(params: params)){
+            result in
+            completion(result)
+        }
+    }
+
+    
+}

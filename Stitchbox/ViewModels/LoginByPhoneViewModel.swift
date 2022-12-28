@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import ObjectMapper
 
 class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
     
@@ -47,8 +48,11 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
         logic()
     }
     func logic() {
+      
         sendOTPDidTapSubject.asObservable()
             .subscribe (onNext: { (phone, countryCode) in
+              
+//                self.OTPSentSubject.onNext(true)
                 print(phone, countryCode)
                 if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{3,4}$"#)
                    || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
@@ -60,6 +64,11 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
                 case .success(let apiResponse):
                     // get and process data
                     _ = apiResponse.body?["data"] as! [String: Any]?
+                    // save datasource
+                    let initMap = ["phone": "\(countryCode)\(phone)"]
+                    let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
+                    _AppCoreData.userDataSource.accept(newUserData)
+                  
                     self.OTPSentSubject.onNext(true)
                 case .failure(let error):
                     print(error)
@@ -86,6 +95,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
     }
     
     struct Output {
+        let loadingObservable: Observable<Bool>
         let successObservable: Observable<SuccessMessage>
         let errorsObservable: Observable<Error>
         var phoneNumber: String
@@ -105,6 +115,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
     private let sendOTPDidTapSubject = PublishSubject<Void>()
     private let successSubject = PublishSubject<SuccessMessage>()
     private let errorsSubject = PublishSubject<Error>()
+    private let loadingSubject = PublishSubject<Bool>()
     private let disposeBag = DisposeBag()
     
     init() {
@@ -114,7 +125,8 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
         action = Action(verifyOTPDidTap: verifyOTPDidTapSubject.asObserver(),
                         sendOTPDidTap: sendOTPDidTapSubject.asObserver())
         
-        output = Output(successObservable: successSubject.asObservable(),
+        output = Output(loadingObservable: loadingSubject.asObservable(),
+                        successObservable: successSubject.asObservable(),
                         errorsObservable: errorsSubject.asObservable(),
                         phoneNumber: "")
         
@@ -132,6 +144,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                 {(phone: $0.phone, countryCode: $1, code: $0.code)}
             .subscribe (onNext: {(phone, countryCode, code) in
                 print(phone, countryCode, code)
+//                self.successSubject.onNext(.logInSuccess);
                 // check username or password in the right format
                 if (isNotValidInput(Input: phone, RegEx: "^\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{3,4}$")
                     || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")
@@ -140,8 +153,9 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                     return;
                 }
                 // call api toward login api of backend
+                self.loadingSubject.onNext(true)
                 APIManager().phoneVerify(phone: countryCode + phone, OTP: code) { result in switch result {
-                    
+                
                 case .success(let apiResponse):
                     // get and process data
                     if (apiResponse.body?["message"] as! String == "success") {
@@ -150,31 +164,29 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                         do{
                             let account = try Account(JSONbody: data, type: .phoneLogin)
                             print(account)
-                            //                             Create JSON Encoder
-                            let encoder = JSONEncoder()
                             
-                            // Encode Note
-                            let data = try encoder.encode(account)
-                            
-                            // Write/Set Data
-                            UserDefaults.standard.set(data, forKey: "userAccount")
-                            
-                            if let data = UserDefaults.standard.data(forKey: "userAccount") {
-                                // Create JSON Decoder
-                                let decoder = JSONDecoder()
-                                
-                                // Decode Note
-                                let accountDecoded = try decoder.decode(Account.self, from: data)
-                                print(accountDecoded)
-                            }
+                          // Write/Set Data
+                          let sessionToken = SessionDataSource.init(JSONString: "{}")!
+                          sessionToken.accessToken = account.accessToken
+                          sessionToken.refreshToken = account.refreshToken
+                          _AppCoreData.userSession.accept(sessionToken)
+                          
+                          // write usr data
+                          if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
+                            _AppCoreData.userDataSource.accept(newUserData)
+                          }
                             self.successSubject.onNext(.logInSuccess);
-                            
+
                         } catch {
                             print("Unable to Create Account (\(error))")
-                        }        }
-                    
+                        }
+                          self.loadingSubject.onNext(false)
+                        
+                    }
+
                 case .failure(let error):
                     print(error)
+                    self.loadingSubject.onNext(false)
                     switch error {
                     case .authRequired(let body):
                         self.errorsSubject.onNext(NSError(domain: body?["message"] as? String ?? "Cannot verify OTP", code: 401))
@@ -183,10 +195,10 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                           domain: body?["message"] as? String ?? "Cannot verify OTP",
                           code: Int(body?["error"] as! String)!
                         ))
-                        
+
                     default:
                         self.errorsSubject.onNext(NSError(domain: "Cannot verify OTP", code: 401))
-                        
+
                     }
                 }
                 }
@@ -201,14 +213,17 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                     self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
                     return;
                 }
+                self.loadingSubject.onNext(true)
                 // call api toward login api of backend
-                APIManager().phoneLogin(phone: phone) { result in switch result {
+                APIManager().phoneLogin(phone: countryCode + phone) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
                     _ = apiResponse.body?["data"] as! [String: Any]?
                     self.successSubject.onNext(.sendCodeSuccess)
+                    self.loadingSubject.onNext(false)
                 case .failure(let error):
                     print(error)
+                    self.loadingSubject.onNext(false)
                     self.errorsSubject.onNext(NSError(domain: "Error in send OTP", code: 300))
                 }
                 }

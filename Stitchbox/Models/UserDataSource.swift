@@ -25,6 +25,10 @@ class UserDataSource: Mappable {
     //
   }
   
+  init() {
+    
+  }
+  
   func mapping(map: Map) {
     userID      <- map["ID"]
     userName    <- map["username"]
