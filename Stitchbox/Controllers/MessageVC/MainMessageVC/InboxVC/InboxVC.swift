@@ -339,7 +339,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     if count == 0 {
                         updateCell?.activeView.backgroundColor = .lightGray
                     } else {
-                        updateCell?.activeView.backgroundColor = filteredMembers.contains(where: { $0.isActive }) ? .green : .lightGray
+                        updateCell?.activeView.backgroundColor = filteredMembers.contains(where: { $0.connectionStatus.rawValue == 1 }) ? .green : .lightGray
                     }
 
                     
@@ -362,10 +362,12 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     }
     
     func updateActiveStatus() {
+     
         // Filter the channels array to include only channels with members
         let channelsWithMembers = channels.filter { $0.members != nil }
         // Iterate over the filtered array
         for channel in channelsWithMembers {
+            channel.refresh()
             // Get the members of the channel and filter out the current user
             let filteredMembers = channel.members!.compactMap { $0 as? SBDMember }.filter { $0.userId != SBDMain.getCurrentUser()?.userId }
             // Get the index of the channel in the original array
@@ -373,13 +375,17 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 // Get the cell at the index of the channel
                 if let updateCell = groupChannelsTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? GroupChannelTableViewCell {
                     // Check if there are any active members in the channel
-                    let hasActiveMember = filteredMembers.contains(where: { $0.isActive })
+                    let hasActiveMember = filteredMembers.contains(where: { $0.connectionStatus.rawValue == 1 })
                     // Update the background color of the active view based on the active status of the members
+                    print(hasActiveMember)
                     updateCell.activeView.backgroundColor = hasActiveMember ? .green : .lightGray
                 }
             }
         }
+        
     }
+    
+    
 
 
 
