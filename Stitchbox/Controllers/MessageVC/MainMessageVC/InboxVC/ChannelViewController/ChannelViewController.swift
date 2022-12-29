@@ -43,22 +43,14 @@ class ChannelViewController: SBUChannelViewController {
         let settingBarButton = UIBarButtonItem(customView: settingButton)
         
         
-        voiceCallButton.setImage(UIImage(named: "icBarCallFilled"), for: [])
+        voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
         voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
-        voiceCallButton.frame = CGRect(x: -1, y: 0, width: 40, height: 30)
+        voiceCallButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        voiceCallButton.cornerRadius = 15
         let voiceCallBarButton = UIBarButtonItem(customView: voiceCallButton)
         
-        self.voiceCallButton.setTitle("", for: .normal)
-        self.voiceCallButton.sizeToFit()
-        
-        
         self.navigationItem.rightBarButtonItems = [settingBarButton, voiceCallBarButton]
-        
-        let uiview = UIView()
-        view.backgroundColor = UIColor.red
-        view.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
-        self.view.insertSubview(uiview, at: 2)
-        
+
         
     }
     
@@ -247,17 +239,9 @@ class ChannelViewController: SBUChannelViewController {
     }
     
     func callLayout() {
-        let imageName = self.getRoom.participants.count > 0 ? "icCallFilled" : "icBarCallFilled"
-        let title = self.getRoom.participants.count > 0 ? "+" : ""
-        let animation = self.getRoom.participants.count > 0 ? "shake" : nil
-        self.voiceCallButton.setImage(UIImage(named: imageName), for: [])
-        self.voiceCallButton.setTitle(title, for: .normal)
-        self.voiceCallButton.sizeToFit()
-        if animation != nil {
-            self.voiceCallButton.shake()
-        } else {
-            self.voiceCallButton.removeAnimation()
-        }
+        
+        voiceCallButton.backgroundColor = self.getRoom.participants.count > 0 ? .secondary : nil
+        
     }
 
     

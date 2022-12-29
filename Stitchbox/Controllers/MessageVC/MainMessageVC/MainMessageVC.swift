@@ -197,16 +197,13 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
         voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
         voiceCallButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        voiceCallButton.cornerRadius = 15
+        voiceCallButton.backgroundColor = .secondary
         let voiceCallBarButton = UIBarButtonItem(customView: voiceCallButton)
         
-        voiceCallButton.setTitle("+", for: .normal)
-        voiceCallButton.sizeToFit()
         
         self.navigationItem.rightBarButtonItems = [searchBarButton, createBarButton, voiceCallBarButton]
-        
-        voiceCallButton.shake()
-    
-        
+       
     }
     
     func setupWithoutCall() {

@@ -14,7 +14,7 @@ import SwiftEntryKit
 
 var general_room: Room!
 var gereral_group_chanel_url: String!
-
+var startTime = Date()
 
 func showNote(text: String) {
     

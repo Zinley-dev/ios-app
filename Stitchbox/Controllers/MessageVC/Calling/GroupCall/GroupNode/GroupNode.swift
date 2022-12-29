@@ -25,6 +25,7 @@ class GroupNode: ASCellNode {
     var paragraphStyles = NSMutableParagraphStyle()
     
     
+    // Initialize the participant node with the given participant
     init(with participant: Participant) {
         self.participant = participant
         self.AvatarNode = ASNetworkImageNode()
@@ -33,44 +34,70 @@ class GroupNode: ASCellNode {
         self.muteIcon = ASImageNode()
         super.init()
 
-        view.backgroundColor = .clear
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.white.cgColor
-        view.layer.cornerRadius = 10
+        // Set the background color and border of the node's view
+        view.backgroundColor = .chatBackGround
+        view.layer.borderWidth = 3
+        
+        
+        // Determine the border color based on the current user's userID
+        let borderColor: UIColor
+        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
+            borderColor = userUID == participant.user.userId ? UIColor.secondary : UIColor.lightGray
+        } else {
+            borderColor = .lightGray
+        }
+        view.borderColors = borderColor
+        
+       
+        // Set the corner radius and mask of the node's viewchatBackGround
+        view.layer.cornerRadius = 17
         view.layer.masksToBounds = true
         selectionStyle = .none
         automaticallyManagesSubnodes = true
 
-        AvatarNode.contentMode = .scaleAspectFit
+        // Configure the avatar node
+        AvatarNode.contentMode = .scaleAspectFill
         AvatarNode.shouldRenderProgressImages = true
         AvatarNode.url = URL(string: participant.user.profileURL!)
         AvatarNode.backgroundColor = .clear
 
-        InfoNode.backgroundColor = .black
-        InfoNode.alpha = 0.7
+        // Set the background color and alpha of the info node
+        InfoNode.backgroundColor = .clear
+       
 
+        // Configure the mute icon node
         muteIcon.backgroundColor = .clear
         muteIcon.contentMode = .scaleAspectFit
 
+        // Set the attributed text of the name node with the participant's nickname
         let nickname = participant.user.nickname!
-        nameNode.attributedText = NSAttributedString(string: participant.user.userId == _AppCoreData.userDataSource.value?.userID ? "\(nickname) (me)" : nickname, attributes: [.font: UIFont.systemFont(ofSize: 10), .foregroundColor: UIColor.white, .paragraphStyle: paragraphStyles])
+        nameNode.attributedText = NSAttributedString(string: nickname, attributes: [.font: UIFont.boldSystemFont(ofSize: 13), .foregroundColor: UIColor.white, .paragraphStyle: paragraphStyles])
 
+        // Set the image of the mute icon based on the participant's audio enabled status
         muteIcon.image = participant.isAudioEnabled ? UIImage(named: "btnAudioOff") : UIImage(named: "btnAudioOffSelected")
-    }
 
+    }
+    
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        AvatarNode.style.preferredSize = constrainedSize.min
+               
+        muteIcon.style.preferredSize = CGSize(width: 20, height: 20)
+        let nameAndMuteStack = ASStackLayoutSpec(direction: .horizontal, spacing: 3, justifyContent: .center, alignItems: .center, children: [nameNode, muteIcon])
+                
         InfoNode.style.preferredSize = CGSize(width: constrainedSize.min.width, height: 22)
-        let insets = UIEdgeInsets(top: .infinity, left: 8, bottom: 8, right: 8)
-        let textInsetSpec = ASInsetLayoutSpec(insets: insets, child: InfoNode)
-        nameNode.frame = CGRect(x: 22, y: 6, width: constrainedSize.min.width, height: 20)
-        muteIcon.frame = CGRect(x: 2, y: 2, width: 18, height: 18)
-        InfoNode.addSubnode(nameNode)
-        InfoNode.addSubnode(muteIcon)
-        return ASOverlayLayoutSpec(child: AvatarNode, overlay: textInsetSpec)
+        let insets = UIEdgeInsets(top: .infinity, left: 0, bottom: 15, right: 0)
+        let textInsetSpec = ASInsetLayoutSpec(insets: insets, child: nameAndMuteStack)
+        
+        let size =  constrainedSize.min.width - 22 - 15 - 15
+        let mid = (constrainedSize.min.width - size) / 2
+                                
+        AvatarNode.style.preferredSize = CGSize(width: size, height: size)
+        AvatarNode.cornerRadius = size/2 
+                
+        let avatarInsetSpec = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 10, left: mid , bottom: .infinity, right: mid), child: AvatarNode)
+        return ASOverlayLayoutSpec(child: avatarInsetSpec, overlay: textInsetSpec)
+        
     }
+    
 
-    
-    
 }
