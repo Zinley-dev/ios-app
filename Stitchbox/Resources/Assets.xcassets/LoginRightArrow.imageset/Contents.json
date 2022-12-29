@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "GG.png",
+      "filename" : "Fill-35.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "GG 1.png",
+      "filename" : "Fill-35 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "GG 2.png",
+      "filename" : "Fill-35 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -19,5 +19,9 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "compression-type" : "lossless",
+    "preserves-vector-representation" : true
   }
 }
