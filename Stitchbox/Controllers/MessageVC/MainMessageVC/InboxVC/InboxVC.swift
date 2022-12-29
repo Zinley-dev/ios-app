@@ -382,7 +382,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     }
 
 
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let array = inSearchMode ? searchChannelList : channels
         emptyLabel.isHidden = array.count > 0

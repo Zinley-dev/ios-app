@@ -19,7 +19,8 @@ class StartViewController: UIViewController, ControllerType {
   private lazy var vm: ViewModelType! = ViewModelType(vc: self)
   private let disposeBag = DisposeBag()
   
-  
+    @IBOutlet weak var testImg: UIImageView!
+    
   @IBOutlet weak var btnLetStart: UIButton!
   @IBOutlet var collectionLoginProviders: [UIButton]!
   @IBOutlet weak var logo: UIImageView!
@@ -41,6 +42,8 @@ class StartViewController: UIViewController, ControllerType {
   
   // MARK: - Functions
   func bindUI(with: ViewModelType) {
+    
+      
   }
   
   func bindAction(with viewModel: ViewModelType) {
@@ -78,17 +81,47 @@ class StartViewController: UIViewController, ControllerType {
       
     }
   }
-  
+    
+    
+    
+    func testabcd () {
+        
+        if let image = testImg.image {
+            
+            if image == UIImage(named: "defaultuser") {
+                
+                testImg.image = UIImage(named: "Logo")
+                
+                
+            } else {
+                
+                testImg.image = UIImage(named: "defaultuser")
+                
+            }
+            
+            
+        } else {
+            
+            testImg.image = UIImage(named: "defaultuser")
+            
+        }
+        
+    }
+    
   @IBAction func didTapLetStart(_ sender: UIButton) {
 //    self.presentLoading()
-
-    
+      
+      testabcd()
+      
     collectionLoginProviders.forEach { (btn) in
+        
       UIView.animate(withDuration: 0.4) {
+
         btn.isHidden = !btn.isHidden
         btn.alpha = btn.alpha == 0 ? 1 : 0
         self.logo.isHidden = !btn.isHidden
         self.view.layoutIfNeeded()
+          
       }
     }
   }

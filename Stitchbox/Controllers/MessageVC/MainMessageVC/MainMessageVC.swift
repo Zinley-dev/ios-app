@@ -236,6 +236,8 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         //CreateChannelVC
         
         if let CCV = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "CreateChannelVC") as? CreateChannelVC {
+            
+            print("log: showCreateChannel button pressed")
              
             self.navigationController?.pushViewController(CCV, animated: true)
             
