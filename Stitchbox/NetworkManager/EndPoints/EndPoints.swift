@@ -114,3 +114,43 @@ extension SettingAPI: EndPointType {
         return ["Authorization": _AppCoreData.userSession.value!.accessToken]
     }
 }
+public enum UserInfoAPI {
+    case getme
+    case updateme (params: [String: Any])
+}
+extension UserInfoAPI: EndPointType {
+    var module: String {
+        return "/user"
+    }
+    
+    var path: String {
+        switch self {
+        case .getme:
+            return "/me"
+        case .updateme:
+            return "/me"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getme:
+            return .get
+        case .updateme:
+            return .patch
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getme:
+            return .request
+        case .updateme(let params):
+            return .requestParameters(parameters: params)
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}

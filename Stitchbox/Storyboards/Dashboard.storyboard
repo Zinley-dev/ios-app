@@ -1104,7 +1104,7 @@
                                                                             </segue>
                                                                         </connections>
                                                                     </button>
-                                                                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Foobar" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SjD-10-vYT" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Foobar" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SjD-10-vYT" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="160" width="140" height="36"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="36" id="gED-ht-OcW"/>
@@ -1124,6 +1124,7 @@
                                                                                 <color key="value" name="Text"/>
                                                                             </userDefinedRuntimeAttribute>
                                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="haveEditButton" value="YES"/>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="setEditable" value="NO"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </textField>
                                                                 </subviews>
@@ -1195,7 +1196,7 @@
                                                                         <color key="textColor" name="TextOnBackground"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="John Doe" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ftx-Ln-q3h" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="John Doe" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ftx-Ln-q3h" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
                                                                         <rect key="frame" x="10" y="33" width="280" height="18.5"/>
                                                                         <color key="tintColor" name="Text"/>
                                                                         <color key="textColor" name="Text"/>
@@ -1217,7 +1218,7 @@
                                                                         <color key="textColor" name="TextOnBackground"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mm/dd/yyyy" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xaK-9A-REj" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mm/dd/yyyy" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xaK-9A-REj" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
                                                                         <rect key="frame" x="10" y="80.5" width="280" height="18.5"/>
                                                                         <color key="tintColor" name="Text"/>
                                                                         <color key="textColor" name="Text"/>
@@ -1239,7 +1240,7 @@
                                                                         <color key="textColor" name="TextOnBackground"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Maximum 100 characters" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LKV-48-eKM" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
+                                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Maximum 100 characters" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LKV-48-eKM" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
                                                                         <rect key="frame" x="10" y="128" width="280" height="18.5"/>
                                                                         <color key="tintColor" name="Text"/>
                                                                         <color key="textColor" name="Text"/>

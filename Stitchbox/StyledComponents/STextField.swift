@@ -42,7 +42,7 @@ import SwiftUI
                 editButton?.setImage(UIImage(named: "edit"), for: .normal)
                 editButton?.imageEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 0)
                 editButton?.frame = CGRect(x: CGFloat(self.frame.size.width - 25), y: CGFloat(5), width: CGFloat(25), height: CGFloat(25))
-                editButton?.addTarget(self, action: #selector(self.editAllow), for: .touchUpInside)
+                editButton?.addTarget(self, action: #selector(self.editAllow), for: .touchDown)
 
                 self.rightView = editButton
                 self.rightViewMode = .always
@@ -50,13 +50,15 @@ import SwiftUI
             }
         }
     }
-    @IBAction func editAllow(_ sender: Any) {
-        if self.isUserInteractionEnabled == false {
-            self.isUserInteractionEnabled = true
+    @IBInspectable var setEditable: Bool = true {
+        didSet {
+            self.allowsEditingTextAttributes = self.setEditable
         }
-
     }
-
+    @IBAction func editAllow(_ sender: Any) {
+        self.isUserInteractionEnabled = true
+        
+    }
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)

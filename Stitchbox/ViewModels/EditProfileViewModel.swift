@@ -16,20 +16,18 @@ class EditProfileViewModel: ViewModelProtocol {
     var output: Output
     
     struct Input {
-        var allowChallenge: AnyObserver<Bool>
-        var allowDiscordLink: AnyObserver<Bool>
-        var autoMinimize: AnyObserver<Bool>
-        var autoPlaySound: AnyObserver<Bool>
-        var challengeNotification: AnyObserver<Bool>
-        var commentNotification: AnyObserver<Bool>
-        var followNotification: AnyObserver<Bool>
-        var highlightNotification: AnyObserver<Bool>
-        var mentionNotification: AnyObserver<Bool>
-        var messageNotification: AnyObserver<Bool>
+        var name: AnyObserver<String>
+        var username: AnyObserver<String>
+        var email: AnyObserver<String>
+        var phone: AnyObserver<String>
+        var avatar: AnyObserver<String>
+        var cover: AnyObserver<String>
+        var about: AnyObserver<String>
+        var bio: AnyObserver<String>
+        var friendsID: AnyObserver<String>
     }
     
     struct Action {
-        var logOutDidTap: AnyObserver<Void>
         var edit: AnyObserver<Void>
     }
     enum SuccessMessage {
@@ -39,91 +37,66 @@ class EditProfileViewModel: ViewModelProtocol {
     }
     
     struct Output {
-        var allowChallenge: Observable<Bool>
-        var allowDiscordLink: Observable<Bool>
-        var autoMinimize: Observable<Bool>
-        var autoPlaySound: Observable<Bool>
-        var challengeNotification: Observable<Bool>
-        var commentNotification: Observable<Bool>
-        var followNotification: Observable<Bool>
-        var highlightNotification: Observable<Bool>
-        var mentionNotification: Observable<Bool>
-        var messageNotification: Observable<Bool>
+        var name: Observable<String>
+        var username: Observable<String>
+        var email: Observable<String>
+        var phone: Observable<String>
+        var avatar: Observable<String>
+        var cover: Observable<String>
+        var about: Observable<String>
+        var bio: Observable<String>
+        var referralCode: Observable<String>
+        var facebook: Observable<String>
+        var google: Observable<String>
+        var tiktok: Observable<String>
+        var apple: Observable<String>
+        var friendsID: Observable<String>
         var errorsObservable: Observable<Error>
         var successObservable: Observable<SuccessMessage>
     }
     
-    var allowChallengeSubject = PublishSubject<Bool>()
-    var allowDiscordLinkSubject = PublishSubject<Bool>()
-    var autoMinimizeSubject = PublishSubject<Bool>()
-    var autoPlaySoundSubject = PublishSubject<Bool>()
-    var challengeNotificationSubject = PublishSubject<Bool>()
-    var commentNotificationSubject = PublishSubject<Bool>()
-    var followNotificationSubject = PublishSubject<Bool>()
-    var highlightNotificationSubject = PublishSubject<Bool>()
-    var mentionNotificationSubject = PublishSubject<Bool>()
-    var messageNotificationSubject = PublishSubject<Bool>()
-    var logOutSubject = PublishSubject<Void>()
+    var nameSubject = PublishSubject<String>()
+    var usernameSubject = PublishSubject<String>()
+    var emailSubject = PublishSubject<String>()
+    var phoneSubject = PublishSubject<String>()
+    var avatarSubject = PublishSubject<String>()
+    var coverSubject = PublishSubject<String>()
+    var aboutSubject = PublishSubject<String>()
+    var bioSubject = PublishSubject<String>()
+    var referralCodeSubject = PublishSubject<String>()
+    var facebookSubject = PublishSubject<String>()
+    var googleSubject = PublishSubject<String>()
+    var tiktokSubject = PublishSubject<String>()
+    var appleSubject = PublishSubject<String>()
+    var friendsIDSubject = PublishSubject<String>()
     var editSubject = PublishSubject<Void>()
     
-    var notificationObservable: Observable<[String:Any]>
-    var settingObservable: Observable<[String:Any]>
+    var updatemeObservable: Observable<[String:Any]>
     private let errorsSubject = PublishSubject<Error>()
     private let successSubject = PublishSubject<SuccessMessage>()
     private let disposeBag = DisposeBag()
     
     init() {
-        input = Input(
-            allowChallenge: allowChallengeSubject.asObserver(),
-            allowDiscordLink: allowDiscordLinkSubject.asObserver(),
-            autoMinimize: autoMinimizeSubject.asObserver(),
-            autoPlaySound: autoPlaySoundSubject.asObserver(),
-            challengeNotification: challengeNotificationSubject.asObserver(),
-            commentNotification: commentNotificationSubject.asObserver(),
-            followNotification: followNotificationSubject.asObserver(),
-            highlightNotification:  highlightNotificationSubject.asObserver(),
-            mentionNotification:  mentionNotificationSubject.asObserver(),
-            messageNotification: messageNotificationSubject.asObserver()
+        input = Input(name: nameSubject.asObserver(), username: usernameSubject.asObserver(), email: emailSubject.asObserver(), phone: phoneSubject.asObserver(), avatar: avatarSubject.asObserver(), cover: coverSubject.asObserver(), about: aboutSubject.asObserver(), bio: bioSubject.asObserver(), friendsID: friendsIDSubject.asObserver()
         )
         
         action = Action(
-            logOutDidTap: logOutSubject.asObserver(),
             edit: editSubject.asObserver())
         
-        output = Output(
-            allowChallenge: allowChallengeSubject.asObservable(),
-            allowDiscordLink: allowDiscordLinkSubject.asObservable(),
-            autoMinimize: autoMinimizeSubject.asObservable(),
-            autoPlaySound: autoPlaySoundSubject.asObservable(),
-            challengeNotification: challengeNotificationSubject.asObservable(),
-            commentNotification: commentNotificationSubject.asObservable(),
-            followNotification: followNotificationSubject.asObservable(),
-            highlightNotification:  highlightNotificationSubject.asObservable(),
-            mentionNotification:  mentionNotificationSubject.asObservable(),
-            messageNotification: messageNotificationSubject.asObservable(),
-            errorsObservable: errorsSubject.asObservable(),
-            successObservable: successSubject.asObservable()
+        output = Output(name: nameSubject.asObservable(), username: usernameSubject.asObservable(), email: emailSubject.asObservable(), phone: phoneSubject.asObservable(), avatar: avatarSubject.asObservable(), cover: coverSubject.asObservable(), about: aboutSubject.asObservable(), bio: bioSubject.asObservable(), referralCode: referralCodeSubject.asObservable(), facebook: facebookSubject.asObservable(), google: googleSubject.asObservable(), tiktok: tiktokSubject.asObservable(), apple: appleSubject.asObservable(), friendsID: friendsIDSubject.asObservable(), errorsObservable: errorsSubject.asObservable(), successObservable: successSubject.asObservable()
         )
         
-        notificationObservable = Observable<[String:Any]>.combineLatest( commentNotificationSubject.asObservable(), followNotificationSubject.asObservable(), highlightNotificationSubject.asObservable(), mentionNotificationSubject.asObservable(), messageNotificationSubject.asObservable(),
-                                                               challengeNotificationSubject.asObservable()) {
-            ["comment": $0, "follow": $1, "highlight": $2,
-             "mention": $3, "message": $4, "challenge": $5]
+        updatemeObservable = Observable<[String:Any]>.combineLatest( aboutSubject.asObservable(), emailSubject.asObservable(), nameSubject.asObservable(), phoneSubject.asObservable(), usernameSubject.asObservable()) {
+            ["about": $0, "email": $1, "name": $2,
+             "phone": $3, "username": $4]
         }
-        settingObservable = Observable<[String:Any]>.combineLatest(
-            allowChallengeSubject.asObservable(),
-            allowDiscordLinkSubject.asObservable(),
-            autoPlaySoundSubject.asObservable(),
-            autoMinimizeSubject.asObservable(),
-            notificationObservable) {
-                ["allowChallenge": $0, "allowDiscordLink": $1,
-                 "autoPlaySound": $2, "autoMinimize": $3, "notifications": $4]}
+        
         
         self.editSubject.asObservable()
             .debounce(.milliseconds(3000), scheduler: MainScheduler.instance)
-            .withLatestFrom(settingObservable).subscribe(onNext: { params in
+            .withLatestFrom(updatemeObservable).subscribe(onNext: { params in
             print(params)
-            SettingAPIManager().updateSettings(params: params) {
+            UserInfoAPIManager().updateme(params: params) {
                 result in switch result {
                 case .success(let response):
                     print(response)
@@ -156,31 +129,26 @@ class EditProfileViewModel: ViewModelProtocol {
     
     
     func logic() {
-        logOutSubject
-            .subscribe (onNext: { Void in
-                _AppCoreData.signOut()
-                self.successSubject.onNext(.logout)
-            }, onError: { (err) in
-                print("Error \(err.localizedDescription)")
-            }, onCompleted: {
-                print("Completed")
-            })
-            .disposed(by: disposeBag);
+        
     }
     
     func populatePublishers(JSONObject: [String: Any]) {
         print(JSONObject)
-        self.allowChallengeSubject.onNext((JSONObject["AllowChallenge"] as! Int == 1))
-        self.allowDiscordLinkSubject.onNext((JSONObject["AllowDiscordLink"] as! Int == 1))
-        self.autoMinimizeSubject.onNext((JSONObject["AutoMinimize"] as! Int == 1))
-        self.autoPlaySoundSubject.onNext((JSONObject["AutoPlaySound"] as! Int == 1))
-        let notifications = JSONObject["Notifications"]! as! [String: Any]
-        self.challengeNotificationSubject.onNext((notifications["Challenge"] as! Int == 1))
-        self.commentNotificationSubject.onNext((notifications["Comment"] as! Int == 1))
-        self.followNotificationSubject.onNext((notifications["Follow"] as! Int == 1))
-        self.highlightNotificationSubject.onNext((notifications["Highlight"] as! Int == 1))
-        self.mentionNotificationSubject.onNext((notifications["Mention"] as! Int == 1))
-        self.messageNotificationSubject.onNext((notifications["Message"] as! Int == 1))
+        self.nameSubject.onNext((JSONObject["name"] as! String))
+        self.usernameSubject.onNext((JSONObject["username"] as! String))
+        self.emailSubject.onNext((JSONObject["email"] as! String))
+        self.phoneSubject.onNext((JSONObject["phone"] as! String))
+        self.avatarSubject.onNext((JSONObject["avatar"] as! String))
+        self.coverSubject.onNext((JSONObject["cover"] as! String))
+        self.aboutSubject.onNext((JSONObject["about"] as! String))
+        self.bioSubject.onNext((JSONObject["bio"] as! String))
+        self.referralCodeSubject.onNext((JSONObject["referralCode"] as! String))
+        self.facebookSubject.onNext((JSONObject["facebook"] as! [String:Any])["uid"] as! String)
+        self.facebookSubject.onNext((JSONObject["facebook"] as! [String:Any])["uid"] as! String)
+        self.googleSubject.onNext((JSONObject["google"] as! [String:Any])["uid"] as! String)
+        self.tiktokSubject.onNext((JSONObject["tiktok"] as! [String:Any])["uid"] as! String)
+        self.appleSubject.onNext((JSONObject["apple"] as! [String:Any])["uid"] as! String)
+        self.friendsIDSubject.onNext((JSONObject["FriendsIds"] as! String))
         self.successSubject.onNext(.updateState)
         
     }

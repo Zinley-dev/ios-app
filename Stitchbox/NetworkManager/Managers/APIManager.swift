@@ -69,3 +69,21 @@ struct SettingAPIManager{
 
     
 }
+struct UserInfoAPIManager{
+    let manager = Manager<UserInfoAPI>()
+    
+    func getme(completion: @escaping APICompletion) {
+        manager.request(.getme){
+            result in
+            completion(result)
+        }
+    }
+    
+    func updateme(params: [String: Any], completion: @escaping APICompletion) {
+        manager.request(.updateme(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    
+}
