@@ -122,10 +122,10 @@ class StartViewController: UIViewController, ControllerType {
     @IBAction func didTapLetStart(_ sender: UIButton) {
         setupArrow()
         
-        if sender.titleLabel?.text == "Let's start" {
-            sender.setTitle("Login", for: .normal)
+        if sender.titleLabel?.text == "LET'S START" {
+            sender.setTitle("LOGIN", for: .normal)
         } else {
-            sender.setTitle("Let's start", for: .normal)
+            sender.setTitle("LET'S START", for: .normal)
         }
         
         collectionLoginProviders.forEach { (btn) in

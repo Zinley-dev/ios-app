@@ -47,6 +47,8 @@ import SwiftUI
     
     func setupView() {
         
+        self.titleLabel?.font = UIFont.boldSystemFont(ofSize: 50)
+        
         if size == 0 {
             frame.size.height = 32.0;
         } else if size == 1 {
