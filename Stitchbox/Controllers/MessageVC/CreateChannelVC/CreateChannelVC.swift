@@ -13,10 +13,8 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     
     var userListQuery: SBDApplicationUserListQuery?
     
-    
     // to override search task
     lazy var delayItem = workItem()
-    
     var inSearchMode = false
     
     @IBOutlet weak var selectedUserListView: UICollectionView!
@@ -49,7 +47,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     private lazy var _leftBarButton: UIBarButtonItem = {
         return UIBarButtonItem(
             
-            image: SBUIconSet.iconBack.resize(targetSize: CGSize(width: 25.0, height: 25.0)),
+            image: UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 15, height: 25)),
             style: .plain,
             target: self,
             action: #selector(onClickBack)
@@ -78,16 +76,13 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         setupScrollView()
         setupStyles()
         
-        
         //
         loadDefaultUsers()
         
     }
     
 
-
     // setup initial view
-    
     func setupNavigationView() {
         self.navigationItem.leftBarButtonItem = self.leftBarButton
         self.navigationItem.rightBarButtonItem = self.rightBarButton
@@ -139,7 +134,6 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         selectedUserListView.showsHorizontalScrollIndicator = false
         selectedUserListView.showsVerticalScrollIndicator = false
     }
-
     
     func setupStyles() {
 
@@ -213,22 +207,16 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        
         var user: SBUUser?
         
         if inSearchMode {
-            
             user = searchUserList[indexPath.row]
             searchController?.searchBar.text = ""
-            
         } else {
-            
             user = userList[indexPath.row]
-            
         }
         
         if inSearchMode {
-            
             if let user = self.searchUserList[exists: indexPath.row] {
                 if self.selectedUsers.contains(user) {
                     self.selectedUsers.removeObject(user)

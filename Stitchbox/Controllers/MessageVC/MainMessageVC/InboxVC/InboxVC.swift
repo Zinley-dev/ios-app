@@ -67,7 +67,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         self.refreshControl?.addTarget(self, action: #selector(InboxVC.refreshChannelList), for: .valueChanged)
         self.groupChannelsTableView.addSubview(self.refreshControl!)
         
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -312,14 +311,14 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell
                     
                     if count == 0 {
-                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
                     } else if count == 1 {
-                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!, shouldGetGame: false)
+                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!)
                     } else if count > 1 && count < 5 {
                         updateCell?.profileImagView.users = filteredMembers
                         updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
                     } else {
-                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
                     }
                     
                     if channel.name != "" && channel.name != "Group Channel" {
@@ -500,7 +499,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 
                 if pushOption == .off {
                     alarmTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOnBackgroundColor
-                    alarmIcon = UIImage(named: "Noti3x")!
+                    alarmIcon = UIImage(named: "noti3x")!
                 } else {
                     alarmTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOffBackgroundColor
                     alarmIcon  = UIImage(named: "muted")!

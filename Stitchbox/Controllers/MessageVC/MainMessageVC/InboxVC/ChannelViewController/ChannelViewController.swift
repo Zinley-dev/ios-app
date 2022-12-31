@@ -31,7 +31,6 @@ class ChannelViewController: SBUChannelViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
     
         // Do any additional setup after loading the view.
         navigationItem.rightBarButtonItem = nil
@@ -58,10 +57,8 @@ class ChannelViewController: SBUChannelViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-    
         self.tabBarController?.tabBar.isHidden = true
         self.tabBarController?.tabBar.frame = .zero
-        
         
     }
     
@@ -109,11 +106,13 @@ class ChannelViewController: SBUChannelViewController {
         
         if let selected_channel = channel {
             
-            let CSV = ChannelSettingsVC(channelUrl: selected_channel.channelUrl)
-            navigationController?.pushViewController(CSV, animated: true)
+            if let CCV = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ChannelSettingsVC") as? ChannelSettingsVC {
+                CCV.channel = selected_channel
+                self.navigationController?.pushViewController(CCV, animated: true)
+                
+            }
             
         }
-        
         
     }
     

@@ -52,6 +52,9 @@ class GroupCallViewController: UIViewController {
 
     override func viewDidLoad() {
             super.viewDidLoad()
+        
+            print(self.navigationController?.navigationBar.frame.height)
+        
             if newroom! {
                 general_room = currentRoom
                 gereral_group_chanel_url = currentChanelUrl
@@ -77,6 +80,9 @@ class GroupCallViewController: UIViewController {
             collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
             flowLayout.minimumInteritemSpacing = 5
             flowLayout.minimumLineSpacing = 5
+        
+        //
+            collectionNode.backgroundColor = UIColor.red
             wireDelegates()
             applyStyle()
             collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true

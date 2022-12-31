@@ -162,9 +162,6 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
     }
     
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
     
     func createLeftTitleItem(text: String) -> UIBarButtonItem {
         let titleLabel = UILabel()
@@ -174,6 +171,10 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         return UIBarButtonItem.init(customView: titleLabel)
     }
         
+    
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
     
     func setupWithCall() {
         
