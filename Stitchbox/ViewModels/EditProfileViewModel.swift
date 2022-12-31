@@ -33,7 +33,7 @@ class EditProfileViewModel: ViewModelProtocol {
     enum SuccessMessage {
         case logout
         case updateState
-        case other
+        case other(message: String)
     }
     
     struct Output {
@@ -69,6 +69,7 @@ class EditProfileViewModel: ViewModelProtocol {
     var tiktokSubject = PublishSubject<String>()
     var appleSubject = PublishSubject<String>()
     var friendsIDSubject = PublishSubject<String>()
+    var locationSubject = PublishSubject<String>()
     var editSubject = PublishSubject<Void>()
     
     var updatemeObservable: Observable<[String:Any]>
@@ -115,7 +116,7 @@ class EditProfileViewModel: ViewModelProtocol {
         
     }
     func getAPISetting() {
-        SettingAPIManager().getSettings{
+        UserInfoAPIManager().getme{
             result in switch result {
             case .success(let response):
                 print(response)
@@ -134,21 +135,21 @@ class EditProfileViewModel: ViewModelProtocol {
     
     func populatePublishers(JSONObject: [String: Any]) {
         print(JSONObject)
-        self.nameSubject.onNext((JSONObject["name"] as! String))
-        self.usernameSubject.onNext((JSONObject["username"] as! String))
-        self.emailSubject.onNext((JSONObject["email"] as! String))
-        self.phoneSubject.onNext((JSONObject["phone"] as! String))
-        self.avatarSubject.onNext((JSONObject["avatar"] as! String))
-        self.coverSubject.onNext((JSONObject["cover"] as! String))
-        self.aboutSubject.onNext((JSONObject["about"] as! String))
-        self.bioSubject.onNext((JSONObject["bio"] as! String))
-        self.referralCodeSubject.onNext((JSONObject["referralCode"] as! String))
-        self.facebookSubject.onNext((JSONObject["facebook"] as! [String:Any])["uid"] as! String)
-        self.facebookSubject.onNext((JSONObject["facebook"] as! [String:Any])["uid"] as! String)
-        self.googleSubject.onNext((JSONObject["google"] as! [String:Any])["uid"] as! String)
-        self.tiktokSubject.onNext((JSONObject["tiktok"] as! [String:Any])["uid"] as! String)
-        self.appleSubject.onNext((JSONObject["apple"] as! [String:Any])["uid"] as! String)
-        self.friendsIDSubject.onNext((JSONObject["FriendsIds"] as! String))
+        self.nameSubject.onNext((JSONObject["name"] as? String ?? ""))
+        self.usernameSubject.onNext((JSONObject["username"] as? String ?? ""))
+        self.emailSubject.onNext((JSONObject["email"]  as? String ?? ""))
+        self.phoneSubject.onNext((JSONObject["phone"]  as? String ?? ""))
+        self.avatarSubject.onNext((JSONObject["avatar"]  as? String ?? ""))
+        self.coverSubject.onNext((JSONObject["cover"]  as? String ?? ""))
+        self.aboutSubject.onNext((JSONObject["about"]  as? String ?? ""))
+        self.locationSubject.onNext((JSONObject["location"]  as? String ?? ""))
+        self.bioSubject.onNext((JSONObject["bio"] as? String ?? ""))
+        self.referralCodeSubject.onNext((JSONObject["referralCode"]  as? String ?? ""))
+        self.facebookSubject.onNext((JSONObject["facebook"] as! [String:Any])["uid"]  as? String ?? "")
+        self.googleSubject.onNext((JSONObject["google"] as! [String:Any])["uid"]  as? String ?? "")
+        self.tiktokSubject.onNext((JSONObject["tiktok"] as! [String:Any])["uid"]  as? String ?? "")
+        self.appleSubject.onNext((JSONObject["apple"] as! [String:Any])["uid"]  as? String ?? "")
+        self.friendsIDSubject.onNext((JSONObject["FriendsIds"]  as? String ?? ""))
         self.successSubject.onNext(.updateState)
         
     }

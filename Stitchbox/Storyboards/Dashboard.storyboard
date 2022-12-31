@@ -1022,7 +1022,7 @@
             </objects>
             <point key="canvasLocation" x="2206" y="2450"/>
         </scene>
-        <!--Edit Profile View Controller-->
+        <!--Edit Profile-->
         <scene sceneID="tzr-vY-2LI">
             <objects>
                 <viewController storyboardIdentifier="EDIT" id="Heq-RT-hug" customClass="EditProfileViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
@@ -1315,17 +1315,17 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZQb-sS-IrM">
                                                                 <rect key="frame" x="0.0" y="40" width="300" height="40"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fy1-WL-1Vx">
-                                                                        <rect key="frame" x="10" y="0.0" width="80" height="40"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fy1-WL-1Vx">
+                                                                        <rect key="frame" x="10" y="0.0" width="130" height="40"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="80" id="GIU-Xc-o9S"/>
+                                                                            <constraint firstAttribute="width" constant="130" id="GIU-Xc-o9S"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <color key="textColor" name="Text"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ts-do-18Y">
-                                                                        <rect key="frame" x="90" y="0.0" width="200" height="40"/>
+                                                                        <rect key="frame" x="140" y="0.0" width="150" height="40"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <color key="textColor" name="TextOnBackground"/>
                                                                         <nil key="highlightedColor"/>
@@ -1390,7 +1390,17 @@
                             <constraint firstItem="g9M-D9-Zh1" firstAttribute="bottom" secondItem="sSp-sN-0NR" secondAttribute="bottom" id="k90-Lo-ooS"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Nsb-RJ-aZp"/>
+                    <navigationItem key="navigationItem" title="Edit Profile" id="Nsb-RJ-aZp"/>
+                    <connections>
+                        <outlet property="avatar" destination="Ci7-gB-oHf" id="2Ij-Pp-5Es"/>
+                        <outlet property="bio" destination="LKV-48-eKM" id="yWX-lX-fRf"/>
+                        <outlet property="birthday" destination="xaK-9A-REj" id="WNR-Qn-iS8"/>
+                        <outlet property="cover" destination="j3e-pQ-uGe" id="gxT-Qb-o4m"/>
+                        <outlet property="email" destination="1cs-ba-IHp" id="gvE-Vi-ec1"/>
+                        <outlet property="name" destination="Ftx-Ln-q3h" id="YgZ-cy-5gf"/>
+                        <outlet property="phone" destination="4Ts-do-18Y" id="Ycf-HU-dq8"/>
+                        <outlet property="username" destination="SjD-10-vYT" id="nmw-mS-pdN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zcd-fM-Xd5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

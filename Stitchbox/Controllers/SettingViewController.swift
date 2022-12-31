@@ -186,6 +186,7 @@ class SettingViewController: UIViewController, ControllerType {
         }.disposed(by: disposeBag)
         
         
+        
     }
     
     func bindAction(with viewModel: SettingViewModel) {
