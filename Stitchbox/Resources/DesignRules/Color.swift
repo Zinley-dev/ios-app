@@ -15,6 +15,10 @@ extension UIColor{
     class var chatBackGround: UIColor{
         return UIColor(red: (51/255.0), green: (47.0/255.0), blue: (48.0/255.0), alpha: 1.0)
     }
+    
+    class var navigationBarColor: UIColor{
+        return UIColor.background
+    }
   
   class var secondary: UIColor{
     return UIColor(red: (254.0/255.0), green: (138.0/255.0), blue: (92.0/255.0), alpha: 1.0)

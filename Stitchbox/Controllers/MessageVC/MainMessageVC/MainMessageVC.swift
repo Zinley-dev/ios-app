@@ -97,6 +97,8 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     }
     
     
+    
+    
     func setupSearchController() {
         self.searchController = UISearchController(searchResultsController: nil)
         self.searchController?.obscuresBackgroundDuringPresentation = false
@@ -156,6 +158,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
 
     func settingUpLayoutNavView() {
         
+        self.navigationController?.navigationBar.delegate = self
         navigationItem.leftBarButtonItem = nil
         navigationItem.titleView = UIView()
         navigationItem.leftBarButtonItem = self.createLeftTitleItem(text: "Messages")
