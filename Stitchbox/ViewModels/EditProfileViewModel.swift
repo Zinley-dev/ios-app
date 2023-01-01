@@ -151,6 +151,5 @@ class EditProfileViewModel: ViewModelProtocol {
         self.appleSubject.onNext((JSONObject["apple"] as! [String:Any])["uid"]  as? String ?? "")
         self.friendsIDSubject.onNext((JSONObject["FriendsIds"]  as? String ?? ""))
         self.successSubject.onNext(.updateState)
-        
     }
 }

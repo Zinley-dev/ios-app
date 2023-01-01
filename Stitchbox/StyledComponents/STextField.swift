@@ -56,8 +56,7 @@ import SwiftUI
         }
     }
     @IBAction func editAllow(_ sender: Any) {
-        self.isUserInteractionEnabled = true
-        
+        self.becomeFirstResponder()
     }
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -112,10 +111,6 @@ import SwiftUI
             layer.borderWidth = 0.0
             layer.cornerRadius = 0
             borderStyle = .none
-//            let border = CALayer()
-//            border.backgroundColor = UIColor.secondary.cgColor
-//            border.frame = CGRect(x:0, y:self.frame.size.height - 5, width:self.frame.size.width, height:1)
-//            self.layer.addSublayer(border)
         }
     }
 

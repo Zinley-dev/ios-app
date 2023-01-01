@@ -626,7 +626,7 @@
                                                                     <constraint firstAttribute="height" constant="40" id="NHE-fo-PuR"/>
                                                                 </constraints>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" title="About us"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="about icon" title="About us" imagePadding="10"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
                                                                 </userDefinedRuntimeAttributes>
@@ -637,7 +637,7 @@
                                                                     <constraint firstAttribute="height" constant="40" id="OrP-23-eV8"/>
                                                                 </constraints>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" image="logout" title="Logout"/>
+                                                                <buttonConfiguration key="configuration" style="plain" image="logout" title="Logout" imagePadding="10"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
                                                                 </userDefinedRuntimeAttributes>
@@ -1655,7 +1655,7 @@
             <size key="intrinsicContentSize" width="86" height="34.5"/>
         </designable>
         <designable name="CZ4-93-5UE">
-            <size key="intrinsicContentSize" width="92.5" height="34.5"/>
+            <size key="intrinsicContentSize" width="122.5" height="34.5"/>
         </designable>
         <designable name="Ci7-gB-oHf">
             <size key="intrinsicContentSize" width="130" height="130"/>
@@ -1676,7 +1676,7 @@
             <size key="intrinsicContentSize" width="180.5" height="38"/>
         </designable>
         <designable name="HXp-PI-Fgg">
-            <size key="intrinsicContentSize" width="101.5" height="38"/>
+            <size key="intrinsicContentSize" width="111.5" height="38"/>
         </designable>
         <designable name="Io7-Gd-p4e">
             <size key="intrinsicContentSize" width="100" height="34.5"/>
@@ -1760,6 +1760,7 @@
     <resources>
         <image name="4x_add" width="25" height="25"/>
         <image name="CoverPhoto" width="340" height="192"/>
+        <image name="about icon" width="20" height="20"/>
         <image name="addphoto" width="25" height="25"/>
         <image name="adduser" width="28" height="28"/>
         <image name="call" width="19" height="19"/>

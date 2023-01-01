@@ -48,7 +48,7 @@ import SwiftUI
                 editButton?.imageEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 0)
                 editButton?.frame = CGRect(x: CGFloat(self.frame.size.width - 25), y: CGFloat(5), width: CGFloat(25), height: CGFloat(25))
                 editButton?.addTarget(self, action: #selector(self.editAllow), for: .touchDown)
-
+                
                 self.rightView = editButton
                 self.rightViewMode = .always
                 
@@ -56,20 +56,20 @@ import SwiftUI
         }
     }
     @IBAction func editAllow(_ sender: Any) {
-        self.isEnabled = true
+        self.becomeFirstResponder()
     }
-
+    
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
     }
-
+    
     func setupView() {
         if !self.isEnabled {
             setDisabled()
@@ -79,7 +79,7 @@ import SwiftUI
             setDefault()
         }
     }
-
+    
     // Set the default properties
     func setDefault() {
         backgroundColor = UIColor.clear
@@ -91,23 +91,21 @@ import SwiftUI
         border.frame = CGRect(x:0, y:self.frame.size.height + 5, width:self.frame.size.width, height:1)
         self.layer.addSublayer(border)
     }
-
+    
     // Set the selected properties
     func setSelected() {
-            backgroundColor = UIColor.secondary
-            tintColor = UIColor.other
-            layer.borderColor = UIColor.secondary.cgColor
+        backgroundColor = UIColor.secondary
+        tintColor = UIColor.other
+        layer.borderColor = UIColor.secondary.cgColor
         
     }
-
-
+    
+    
     // Set the deselcted properties
     func setDisabled() {
-        
-            self.backgroundColor = UIColor.other
-            tintColor = UIColor.disabled
-            self.layer.borderColor = UIColor.disabled.cgColor
-        
+        self.backgroundColor = UIColor.other
+        tintColor = UIColor.disabled
+        self.layer.borderColor = UIColor.disabled.cgColor
     }
     // MARK: - UI Setup
     override func prepareForInterfaceBuilder() {
