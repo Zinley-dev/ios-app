@@ -45,7 +45,7 @@ class SettingViewController: UIViewController, ControllerType {
             }
         }
     }
-   
+
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -53,6 +53,7 @@ class SettingViewController: UIViewController, ControllerType {
         bindUI(with: viewModel)
         bindAction(with: viewModel)
         setUpNavigationBar()
+        setUpBackButton()
         viewModel.getAPISetting()
         presentLoading()
     }
@@ -292,8 +293,46 @@ class SettingViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
     }
     
+    func setUpBackButton() {
+        let backButton = UIButton()
+        backButton.setImage(UIImage.init(named:"backButton")?.resize(targetSize: CGSize(width: 14, height: 25)), for: [])
+        backButton.addTarget(self, action: #selector(onClickBackd(_sender: )), for: .touchUpInside)
+        backButton.frame = CGRect(x: -1, y:0, width: 14, height: 25)
+        backButton.setTitle("   Settings", for: .normal)
+        backButton.titleLabel?.font = UIFont(name: "Fenwick", size: 21)
+//        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0.223529, green: 0.235294, blue: 0.25098, alpha: 1.0)
+        backButton.sizeToFit()
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+    }
+    
+    @objc func onClickBackd(_sender: AnyObject)
+    {
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
+        }
+    }
+}
+
+extension UIViewController {
+    
+    
+    func setUpNavigationBar() {
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.title = ""
+//        navigationController?.navigationBar.tintColor = .text
+//        let imgBackArrow = UIImage(named: "dropdownleft")
+//        navigationController?.navigationBar.backIndicatorImage = imgBackArrow
+//        navigationController?.navigationBar.backIndicatorTransitionMaskImage = imgBackArrow
+//        navigationController?.navigationBar.topItem?.title = ""
+        
+        
+    }
+    
+    
+   
     
 }
+
 
 
 #if canImport(SwiftUI) && DEBUG
@@ -323,14 +362,6 @@ struct SettingSwitchingView_Preview: PreviewProvider {
 }
 #endif
 
-extension UIViewController {
-    func setUpNavigationBar() {
-        navigationController?.navigationBar.tintColor = .text
-        let imgBackArrow = UIImage(named: "dropdownleft")
-        navigationController?.navigationBar.backIndicatorImage = imgBackArrow
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = imgBackArrow
-        navigationController?.navigationBar.topItem?.title = ""
-        
-        
-    }
-}
+
+
+

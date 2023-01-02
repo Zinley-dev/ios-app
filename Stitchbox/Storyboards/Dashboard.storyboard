@@ -1651,11 +1651,11 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OD5-TY-SXt">
-                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="225.5"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="227.5"/>
                                                                 <color key="backgroundColor" name="Background"/>
                                                             </view>
                                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User's referral code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gZ4-lz-XpD" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="265.5" width="314" height="36"/>
+                                                                <rect key="frame" x="0.0" y="267.5" width="314" height="36"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="36" id="sA9-bc-Dmc"/>
                                                                 </constraints>
@@ -1676,7 +1676,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </textField>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBW-Pu-Oc8">
-                                                                <rect key="frame" x="0.0" y="341.5" width="314" height="59.5"/>
+                                                                <rect key="frame" x="0.0" y="343.5" width="314" height="59.5"/>
                                                                 <color key="tintColor" name="Text"/>
                                                                 <attributedString key="attributedText">
                                                                     <fragment content="Tap the code to share it with your friends so when they sign up for Stitchbox, you and your friend get reward points!">
@@ -1689,7 +1689,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="Otd-IW-3Q6" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="441" width="314" height="280"/>
+                                                                <rect key="frame" x="0.0" y="443" width="314" height="278"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
                                                                         <size key="value" width="280" height="280"/>
@@ -1839,7 +1839,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="VJl-eg-wxc">
-                                                <rect key="frame" x="57" y="0.0" width="300" height="870.5"/>
+                                                <rect key="frame" x="57" y="0.0" width="300" height="929"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LLJ-9B-xdk">
                                                         <rect key="frame" x="0.0" y="0.0" width="300" height="50"/>
@@ -1927,10 +1927,10 @@
                                                         </constraints>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="-5" translatesAutoresizingMaskIntoConstraints="NO" id="unA-MQ-MrU">
-                                                        <rect key="frame" x="0.0" y="318" width="300" height="189.5"/>
+                                                        <rect key="frame" x="0.0" y="318" width="300" height="201.5"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CoverPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="j3e-pQ-uGe" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="180"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="192"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
                                                                         <size key="value" width="300" height="180"/>
@@ -1944,7 +1944,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </imageView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change cover photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eqg-kW-0aO">
-                                                                <rect key="frame" x="0.0" y="175" width="300" height="14.5"/>
+                                                                <rect key="frame" x="0.0" y="187" width="300" height="14.5"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                 <color key="textColor" name="Secondary"/>
                                                                 <nil key="highlightedColor"/>
@@ -1952,10 +1952,10 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="fOA-QS-Uel">
-                                                        <rect key="frame" x="0.0" y="543.5" width="300" height="171"/>
+                                                        <rect key="frame" x="0.0" y="555.5" width="300" height="217.5"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="dxt-do-rOS" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="156.5"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="203"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m8v-BA-LuH">
                                                                         <rect key="frame" x="10" y="10" width="280" height="17"/>
@@ -1964,7 +1964,7 @@
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="John Doe" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ftx-Ln-q3h" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                                                        <rect key="frame" x="10" y="33" width="280" height="18.5"/>
+                                                                        <rect key="frame" x="10" y="33" width="280" height="34"/>
                                                                         <color key="tintColor" name="Text"/>
                                                                         <color key="textColor" name="Text"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1979,13 +1979,13 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </textField>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Birthday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WiS-vv-q5b">
-                                                                        <rect key="frame" x="10" y="57.5" width="280" height="17"/>
+                                                                        <rect key="frame" x="10" y="73" width="280" height="17"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <color key="textColor" name="TextOnBackground"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="mm/dd/yyyy" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xaK-9A-REj" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                                                        <rect key="frame" x="10" y="80.5" width="280" height="18.5"/>
+                                                                        <rect key="frame" x="10" y="96" width="280" height="34"/>
                                                                         <color key="tintColor" name="Text"/>
                                                                         <color key="textColor" name="Text"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -2000,13 +2000,13 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </textField>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSi-Vt-WLZ">
-                                                                        <rect key="frame" x="10" y="105" width="280" height="17"/>
+                                                                        <rect key="frame" x="10" y="136" width="280" height="17"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <color key="textColor" name="TextOnBackground"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Maximum 100 characters" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LKV-48-eKM" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                                                        <rect key="frame" x="10" y="128" width="280" height="18.5"/>
+                                                                        <rect key="frame" x="10" y="159" width="280" height="34"/>
                                                                         <color key="tintColor" name="Text"/>
                                                                         <color key="textColor" name="Text"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -2030,7 +2030,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </stackView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit personal information" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg4-Aa-KQ7">
-                                                                <rect key="frame" x="0.0" y="156.5" width="300" height="14.5"/>
+                                                                <rect key="frame" x="0.0" y="203" width="300" height="14.5"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                 <color key="textColor" name="Secondary"/>
                                                                 <nil key="highlightedColor"/>
@@ -2038,7 +2038,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MBZ-ft-JKn" customClass="CardStackView" customModule="Stitchbox" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="750.5" width="300" height="120"/>
+                                                        <rect key="frame" x="0.0" y="809" width="300" height="120"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rHl-vD-3vp">
                                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="40"/>
@@ -2160,13 +2160,13 @@
             <size key="intrinsicContentSize" width="92.5" height="34.5"/>
         </designable>
         <designable name="Ci7-gB-oHf">
-            <size key="intrinsicContentSize" width="130" height="130"/>
+            <size key="intrinsicContentSize" width="278" height="278"/>
         </designable>
         <designable name="FOI-cM-P0o">
             <size key="intrinsicContentSize" width="162" height="40"/>
         </designable>
         <designable name="Ftx-Ln-q3h">
-            <size key="intrinsicContentSize" width="67" height="18.5"/>
+            <size key="intrinsicContentSize" width="90" height="34"/>
         </designable>
         <designable name="H2p-AI-TAt">
             <size key="intrinsicContentSize" width="180.5" height="38"/>
@@ -2187,25 +2187,25 @@
             <size key="intrinsicContentSize" width="175.5" height="39"/>
         </designable>
         <designable name="L3N-fr-Ry2">
-            <size key="intrinsicContentSize" width="136" height="34.5"/>
+            <size key="intrinsicContentSize" width="217" height="114"/>
         </designable>
         <designable name="LJd-pP-0wN">
             <size key="intrinsicContentSize" width="135" height="39"/>
         </designable>
         <designable name="LKV-48-eKM">
-            <size key="intrinsicContentSize" width="168" height="18.5"/>
+            <size key="intrinsicContentSize" width="191" height="34"/>
         </designable>
         <designable name="Otd-IW-3Q6">
-            <size key="intrinsicContentSize" width="280" height="280"/>
+            <size key="intrinsicContentSize" width="278" height="278"/>
         </designable>
         <designable name="PdQ-TC-Ctu">
             <size key="intrinsicContentSize" width="182.5" height="34.5"/>
         </designable>
         <designable name="SjD-10-vYT">
-            <size key="intrinsicContentSize" width="79.5" height="34"/>
+            <size key="intrinsicContentSize" width="73.5" height="34"/>
         </designable>
         <designable name="Tkl-5W-Yw1">
-            <size key="intrinsicContentSize" width="61" height="34"/>
+            <size key="intrinsicContentSize" width="55" height="34"/>
         </designable>
         <designable name="Wx0-kI-Yna">
             <size key="intrinsicContentSize" width="187" height="39"/>
@@ -2220,10 +2220,10 @@
             <size key="intrinsicContentSize" width="73" height="34.5"/>
         </designable>
         <designable name="gZ4-lz-XpD">
-            <size key="intrinsicContentSize" width="162" height="34"/>
+            <size key="intrinsicContentSize" width="156" height="34"/>
         </designable>
         <designable name="j3e-pQ-uGe">
-            <size key="intrinsicContentSize" width="319" height="180"/>
+            <size key="intrinsicContentSize" width="340" height="192"/>
         </designable>
         <designable name="nbB-c6-ceP">
             <size key="intrinsicContentSize" width="110" height="39"/>
@@ -2235,22 +2235,22 @@
             <size key="intrinsicContentSize" width="145" height="34.5"/>
         </designable>
         <designable name="xaK-9A-REj">
-            <size key="intrinsicContentSize" width="84" height="18.5"/>
+            <size key="intrinsicContentSize" width="107" height="34"/>
         </designable>
         <designable name="z5k-Tq-4jF">
             <size key="intrinsicContentSize" width="99" height="34.5"/>
         </designable>
     </designables>
     <resources>
+        <image name="4x_add" width="25" height="25"/>
+        <image name="CoverPhoto" width="340" height="192"/>
         <image name="Search" width="36" height="36"/>
+        <image name="adduser" width="28" height="28"/>
         <image name="back_icn_white" width="42" height="36"/>
         <image name="btnAudioOff" width="64" height="64"/>
         <image name="btnCallEnd" width="64" height="64"/>
         <image name="btnSpeaker" width="64" height="64"/>
-        <image name="4x_add" width="25" height="25"/>
-        <image name="CoverPhoto" width="340" height="192"/>
-        <image name="adduser" width="28" height="28"/>
-        <image name="call" width="19" height="19"/>
+        <image name="call" width="100" height="100"/>
         <image name="chat" width="29" height="28"/>
         <image name="chat.filled" width="28" height="26"/>
         <image name="clock" width="24" height="24"/>
@@ -2266,7 +2266,6 @@
         <image name="lock" width="25" height="25"/>
         <image name="logout" width="24" height="24"/>
         <image name="push" width="21" height="21"/>
-        <image name="search" width="36" height="36"/>
         <image name="search.filled" width="36" height="36"/>
         <image name="sound" width="27" height="25"/>
         <image name="trophy" width="17" height="15"/>
@@ -2278,10 +2277,16 @@
             <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="BorderColor">
-            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="Secondary">
             <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Text">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TextOnBackground">
+            <color red="0.73333333333333328" green="0.73333333333333328" blue="0.73333333333333328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="color_group_channel_divider">
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2291,12 +2296,6 @@
         </namedColor>
         <namedColor name="color_toast_label">
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="Text">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="TextOnBackground">
-            <color red="0.73333333333333328" green="0.73333333333333328" blue="0.73333333333333328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
