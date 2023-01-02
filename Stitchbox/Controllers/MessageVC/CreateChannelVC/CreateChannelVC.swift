@@ -47,7 +47,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     private lazy var _leftBarButton: UIBarButtonItem = {
         return UIBarButtonItem(
             
-            image: UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 15, height: 25)),
+            image: UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 10, height: 20)),
             style: .plain,
             target: self,
             action: #selector(onClickBack)
@@ -81,6 +81,20 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.tabBarController?.tabBar.isHidden = true
+        self.tabBarController?.tabBar.frame = .zero
+        
+        
+        if self.tabBarController is DashboardTabBarController {
+            let tbctrl = self.tabBarController as! DashboardTabBarController
+            tbctrl.button.isHidden = true
+        }
+        
+    }
+    
 
     // setup initial view
     func setupNavigationView() {
@@ -101,6 +115,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         self.searchController?.searchBar.tintColor = .white
         self.searchController?.searchBar.searchTextField.textColor = .white
         self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [.foregroundColor: UIColor.lightGray])
+        
         self.searchController!.searchBar.searchTextField.leftView?.tintColor = .lightGray
     }
 

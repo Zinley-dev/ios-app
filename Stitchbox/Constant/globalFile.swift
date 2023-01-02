@@ -70,3 +70,9 @@ extension UIViewController {
         return UIStoryboard(name: storyboard, bundle: nil).instantiateViewController(withIdentifier: "\(self)") as! Self
     }
 }
+
+extension UIViewController: UIViewControllerTransitioningDelegate {
+    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        PresentationController(presentedViewController: presented, presenting: presenting)
+    }
+}

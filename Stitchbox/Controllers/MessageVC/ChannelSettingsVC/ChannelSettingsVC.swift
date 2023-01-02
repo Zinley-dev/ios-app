@@ -49,7 +49,38 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         setupBackButton()
         emptyLbl()
         setupDefaultLayout()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ChannelSettingsVC.leaveChannel), name: (NSNotification.Name(rawValue: "leaveChannel")), object: nil)
+        
  
+    }
+    
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        
+    }
+    
+    @objc func leaveChannel() {
+        
+        
+        self.channel?.leave(completionHandler: { (error) in
+            if let error = error {
+                Utils.showAlertController(error: error, viewController: self)
+                print(error.localizedDescription, error.code)
+                return
+            }
+            
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "leaveChannel")), object: nil)
+            self.navigationController?.popToRootViewController(animated: true)
+            
+        })
+        
+        
+        
+       
+        
     }
     
     
@@ -198,12 +229,14 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
     func setupBackButton() {
         
+        
+        
         // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 15, height: 25)), for: [])
+        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -1, y: 0, width: 15, height: 25)
+        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("   Settings", for: .normal)
+        backButton.setTitle("     Settings", for: .normal)
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
     
@@ -214,6 +247,7 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
  
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "leaveChannel")), object: nil)
             navigationController.popViewController(animated: true)
         }
     }
@@ -257,11 +291,22 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
     @IBAction func moderationChannelBtnPressed(_ sender: Any) {
         
+        let MVC = ModerationVC(channel: self.channel!)
+        navigationController?.pushViewController(MVC, animated: true)
         
     }
     
     @IBAction func memberChannelBtnPressed(_ sender: Any) {
         
+        if let selected_channel = channel {
+            
+            if let CCV = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MemberListVC") as? MemberListVC {
+                CCV.channel = selected_channel
+                self.navigationController?.pushViewController(CCV, animated: true)
+                
+            }
+            
+        }
         
     }
     
@@ -271,6 +316,13 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     }
     
     @IBAction func leaveChannelBtnPressed(_ sender: Any) {
+        
+        
+        let LeaveView = LeaveView()
+        LeaveView.modalPresentationStyle = .custom
+        LeaveView.transitioningDelegate = self
+
+        self.present(LeaveView, animated: true, completion: nil)
         
         
     }

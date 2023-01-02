@@ -93,13 +93,15 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         self.navigationItem.largeTitleDisplayMode = .never
 
         self.searchController = UISearchController(searchResultsController: nil)
-        self.searchController?.searchBar.delegate = self
-        self.searchController?.searchBar.placeholder = "Search"
         self.searchController?.obscuresBackgroundDuringPresentation = false
+        self.searchController?.searchBar.delegate = self
         self.searchController?.searchBar.searchBarStyle = .minimal
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
-        self.searchController?.searchBar.tintColor = UIColor.white
+        self.searchController?.searchBar.tintColor = .white
+        self.searchController?.searchBar.searchTextField.textColor = .white
+        self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [.foregroundColor: UIColor.lightGray])
+        self.searchController!.searchBar.searchTextField.leftView?.tintColor = .lightGray
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -208,9 +210,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         cell.selectionStyle = .none
         let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
         cell.configure(type: .createChannel, user: user, isChecked: selectedUsers.contains(user))
+        cell.theme.backgroundColor = UIColor.clear
         return cell
     }
-
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
