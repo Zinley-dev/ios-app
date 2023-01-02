@@ -100,6 +100,13 @@ class EditProfileViewController: UIViewController, ControllerType {
                 self.name?.text = name
             }
         }.disposed(by: disposeBag)
+        
+        viewModel.output.birthday.subscribe{birthday in
+            
+            DispatchQueue.main.async {
+                self.birthday?.text = birthday
+            }
+        }.disposed(by: disposeBag)
 
         viewModel.output.bio.subscribe{bio in
             
@@ -125,6 +132,7 @@ class EditProfileViewController: UIViewController, ControllerType {
         username?.rx.text.orEmpty.subscribe(viewModel.input.username).disposed(by: disposeBag)
         name?.rx.text.orEmpty.subscribe(viewModel.input.name).disposed(by: disposeBag)
         bio?.rx.text.orEmpty.subscribe(viewModel.input.bio).disposed(by: disposeBag)
+        birthday?.rx.text.orEmpty.subscribe(viewModel.input.birthday).disposed(by: disposeBag)
         
     }
     

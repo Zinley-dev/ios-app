@@ -25,6 +25,7 @@ class EditProfileViewModel: ViewModelProtocol {
         var about: AnyObserver<String>
         var bio: AnyObserver<String>
         var friendsID: AnyObserver<String>
+        var birthday: AnyObserver<String>
     }
     
     struct Action {
@@ -51,6 +52,7 @@ class EditProfileViewModel: ViewModelProtocol {
         var tiktok: Observable<String>
         var apple: Observable<String>
         var friendsID: Observable<String>
+        var birthday: Observable<String>
         var errorsObservable: Observable<Error>
         var successObservable: Observable<SuccessMessage>
     }
@@ -68,6 +70,7 @@ class EditProfileViewModel: ViewModelProtocol {
     var googleSubject = PublishSubject<String>()
     var tiktokSubject = PublishSubject<String>()
     var appleSubject = PublishSubject<String>()
+    var birthdaySubject = PublishSubject<String>()
     var friendsIDSubject = PublishSubject<String>()
     var locationSubject = PublishSubject<String>()
     var editSubject = PublishSubject<Void>()
@@ -78,18 +81,18 @@ class EditProfileViewModel: ViewModelProtocol {
     private let disposeBag = DisposeBag()
     
     init() {
-        input = Input(name: nameSubject.asObserver(), username: usernameSubject.asObserver(), email: emailSubject.asObserver(), phone: phoneSubject.asObserver(), avatar: avatarSubject.asObserver(), cover: coverSubject.asObserver(), about: aboutSubject.asObserver(), bio: bioSubject.asObserver(), friendsID: friendsIDSubject.asObserver()
+        input = Input(name: nameSubject.asObserver(), username: usernameSubject.asObserver(), email: emailSubject.asObserver(), phone: phoneSubject.asObserver(), avatar: avatarSubject.asObserver(), cover: coverSubject.asObserver(), about: aboutSubject.asObserver(), bio: bioSubject.asObserver(), friendsID: friendsIDSubject.asObserver(), birthday: birthdaySubject.asObserver()
         )
         
         action = Action(
             edit: editSubject.asObserver())
         
-        output = Output(name: nameSubject.asObservable(), username: usernameSubject.asObservable(), email: emailSubject.asObservable(), phone: phoneSubject.asObservable(), avatar: avatarSubject.asObservable(), cover: coverSubject.asObservable(), about: aboutSubject.asObservable(), bio: bioSubject.asObservable(), referralCode: referralCodeSubject.asObservable(), facebook: facebookSubject.asObservable(), google: googleSubject.asObservable(), tiktok: tiktokSubject.asObservable(), apple: appleSubject.asObservable(), friendsID: friendsIDSubject.asObservable(), errorsObservable: errorsSubject.asObservable(), successObservable: successSubject.asObservable()
+        output = Output(name: nameSubject.asObservable(), username: usernameSubject.asObservable(), email: emailSubject.asObservable(), phone: phoneSubject.asObservable(), avatar: avatarSubject.asObservable(), cover: coverSubject.asObservable(), about: aboutSubject.asObservable(), bio: bioSubject.asObservable(), referralCode: referralCodeSubject.asObservable(), facebook: facebookSubject.asObservable(), google: googleSubject.asObservable(), tiktok: tiktokSubject.asObservable(), apple: appleSubject.asObservable(), friendsID: friendsIDSubject.asObservable(), birthday: birthdaySubject.asObservable(), errorsObservable: errorsSubject.asObservable(), successObservable: successSubject.asObservable()
         )
         
-        updatemeObservable = Observable<[String:Any]>.combineLatest( aboutSubject.asObservable(), emailSubject.asObservable(), nameSubject.asObservable(), phoneSubject.asObservable(), usernameSubject.asObservable()) {
+        updatemeObservable = Observable<[String:Any]>.combineLatest( aboutSubject.asObservable(), emailSubject.asObservable(), nameSubject.asObservable(), phoneSubject.asObservable(), usernameSubject.asObservable(), bioSubject.asObservable(), birthdaySubject.asObservable()) {
             ["about": $0, "email": $1, "name": $2,
-             "phone": $3, "username": $4]
+             "phone": $3, "username": $4, "bio": $5, "birthday": $6]
         }
         
         
@@ -150,6 +153,7 @@ class EditProfileViewModel: ViewModelProtocol {
         self.tiktokSubject.onNext((JSONObject["tiktok"] as! [String:Any])["uid"]  as? String ?? "")
         self.appleSubject.onNext((JSONObject["apple"] as! [String:Any])["uid"]  as? String ?? "")
         self.friendsIDSubject.onNext((JSONObject["FriendsIds"]  as? String ?? ""))
+        self.birthdaySubject.onNext((JSONObject["Birthday"]  as? String ?? ""))
         self.successSubject.onNext(.updateState)
     }
 }
