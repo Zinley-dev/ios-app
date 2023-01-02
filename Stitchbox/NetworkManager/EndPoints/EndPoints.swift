@@ -28,6 +28,7 @@ public enum UserApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
     case phoneverify (params: [String:String])
+    case resetpassword (params: [String:String])
 }
 extension UserApi: EndPointType {
     var module: String {
@@ -42,6 +43,8 @@ extension UserApi: EndPointType {
             return "/phone-login"
         case .phoneverify:
             return "/phone-verify"
+        case .resetpassword:
+            return "/reset-password"
         }
     }
     
@@ -53,6 +56,8 @@ extension UserApi: EndPointType {
             return .post
         case .phoneverify:
             return .post
+        case .resetpassword:
+            return .post
         }
     }
     
@@ -63,6 +68,8 @@ extension UserApi: EndPointType {
         case .phonelogin(let params):
             return .requestParameters(parameters: params)
         case .phoneverify(let params):
+            return .requestParameters(parameters: params)
+        case .resetpassword(params: let params):
             return .requestParameters(parameters: params)
         }
     }
@@ -117,6 +124,10 @@ extension SettingAPI: EndPointType {
 public enum UserInfoAPI {
     case getme
     case updateme (params: [String: Any])
+    case changepassword (params: [String: Any])
+    case uploadavatar (params: [String: Any])
+    case uploadcover (params: [String: Any])
+
 }
 extension UserInfoAPI: EndPointType {
     var module: String {
@@ -129,6 +140,12 @@ extension UserInfoAPI: EndPointType {
             return "/me"
         case .updateme:
             return "/me"
+        case .changepassword:
+            return "/change-password"
+        case .uploadcover:
+            return "/upload-cover"
+        case .uploadavatar:
+            return "/upload-avatar"
         }
     }
     
@@ -138,6 +155,12 @@ extension UserInfoAPI: EndPointType {
             return .get
         case .updateme:
             return .patch
+        case .changepassword:
+            return .post
+        case .uploadcover:
+            return .post
+        case .uploadavatar:
+            return .post
         }
     }
     
@@ -146,6 +169,12 @@ extension UserInfoAPI: EndPointType {
         case .getme:
             return .request
         case .updateme(let params):
+            return .requestParameters(parameters: params)
+        case .changepassword(params: let params):
+            return .requestParameters(parameters: params)
+        case .uploadavatar(params: let params):
+            return .requestParameters(parameters: params)
+        case .uploadcover(params: let params):
             return .requestParameters(parameters: params)
         }
     }

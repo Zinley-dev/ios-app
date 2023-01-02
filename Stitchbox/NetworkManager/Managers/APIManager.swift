@@ -48,6 +48,12 @@ struct APIManager {
         }
     }
     
+    func resetpassword(params: [String: String], completion: @escaping APICompletion) {
+        manager.request(.resetpassword(params: params)){
+            result in
+            completion(result)
+        }
+    }
 }
 
 struct SettingAPIManager{
@@ -81,6 +87,27 @@ struct UserInfoAPIManager{
     
     func updateme(params: [String: Any], completion: @escaping APICompletion) {
         manager.request(.updateme(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    
+    func changepassword(params: [String: Any], completion: @escaping APICompletion) {
+        manager.request(.changepassword(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    
+    func uploadcover(params: [String: Any], completion: @escaping APICompletion) {
+        manager.request(.uploadcover(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    
+    func uploadavatar(params: [String: Any], completion: @escaping APICompletion) {
+        manager.request(.uploadavatar(params: params)){
             result in
             completion(result)
         }
