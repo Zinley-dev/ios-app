@@ -43,6 +43,15 @@ class EditProfileViewController: UIViewController, ControllerType {
         finishBtn?.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         finishBtn?.rx.tap.subscribe(self.viewModel.action.edit).disposed(by: disposeBag)
         let item1 = UIBarButtonItem(customView: finishBtn!)
+        finishBtn?.isHidden = true
+        
+        
+        bio?.addTarget(self, action: #selector(isTextfieldChosen), for: [.editingDidBegin, .editingDidEnd])
+        username?.addTarget(self, action: #selector(isTextfieldChosen), for: [.editingDidBegin, .editingDidEnd])
+        name?.addTarget(self, action: #selector(isTextfieldChosen), for: [.editingDidBegin, .editingDidEnd])
+        birthday?.addTarget(self, action: #selector(isTextfieldChosen), for: [.editingDidBegin, .editingDidEnd])
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
+        self.view.addGestureRecognizer(tapGesture)
         
         self.navigationItem.setRightBarButton(item1, animated: true)
     }
@@ -71,20 +80,23 @@ class EditProfileViewController: UIViewController, ControllerType {
                 case .other(let message):
                     DispatchQueue.main.async {
                         self.presentMessage(message: message)
+                        
                     }
                 }
             })
             .disposed(by: disposeBag)
         
         viewModel.output.avatar.subscribe{avatarURL in
+            print(avatarURL)
             if avatarURL != "" {
-                    self.avatar?.downloaded(from: avatarURL)
+                self.avatar?.imageFromURL(urlString: avatarURL)
             }
         }.disposed(by: disposeBag)
         
         viewModel.output.cover.subscribe{coverURL in
+            print(coverURL)
             if coverURL != "" {
-                    self.cover?.downloaded(from: coverURL)
+                    self.cover?.imageFromURL(urlString: coverURL)
             }
         }.disposed(by: disposeBag)
         
@@ -134,6 +146,11 @@ class EditProfileViewController: UIViewController, ControllerType {
         bio?.rx.text.orEmpty.subscribe(viewModel.input.bio).disposed(by: disposeBag)
         birthday?.rx.text.orEmpty.subscribe(viewModel.input.birthday).disposed(by: disposeBag)
         
+        birthday?.rx.controlEvent([.allEditingEvents]).asObservable().subscribe{ _ in
+            
+                self.finishBtn?.isHidden =  !(self.birthday?.isEditing ?? false)
+        }.disposed(by: disposeBag)
+        
     }
     
     func bindAction(with viewModel: EditProfileViewModel) {
@@ -141,16 +158,20 @@ class EditProfileViewController: UIViewController, ControllerType {
     }
     
     // MARK: - UI
-    @IBAction func changeProfileImage() {
+    
+    
+    @objc func isTextfieldChosen(textField: UITextField) {
+        DispatchQueue.main.async {
+            self.finishBtn?.isHidden =  !(self.birthday?.isEditing ?? false || self.bio?.isEditing ?? false || self.name?.isEditing ?? false || self.username?.isEditing ?? false)
+        }
         
     }
     
-    @IBAction func changeCoverImage() {
-        
-    }
-    
-    @IBAction func finishEdit() {
-        
+    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+        bio?.resignFirstResponder()
+        username?.resignFirstResponder()
+        name?.resignFirstResponder()
+        birthday?.resignFirstResponder()
     }
     
     @IBAction func resetPasswordButton() {
@@ -194,22 +215,31 @@ struct EditProfileSwitchingView_Preview: PreviewProvider {
 
 
 extension UIImageView {
-    func downloaded(from url: URL, contentMode mode: ContentMode = .scaleAspectFit) {
-        contentMode = mode
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard
-                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
-                let data = data, error == nil,
-                let image = UIImage(data: data)
-                else { return }
-            DispatchQueue.main.async() { [weak self] in
-                self?.image = image
+    public func imageFromURL(urlString: String) {
+        DispatchQueue.main.async {
+            let activityIndicator = UIActivityIndicatorView(style: .medium)
+            activityIndicator.frame = CGRect.init(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
+            activityIndicator.startAnimating()
+            if self.image == nil{
+                self.addSubview(activityIndicator)
             }
-        }.resume()
-    }
-    func downloaded(from link: String, contentMode mode: ContentMode = .scaleAspectFit) {
-        guard let url = URL(string: link) else { return }
-        downloaded(from: url, contentMode: mode)
-    }
+            URLSession.shared.dataTask(with: NSURL(string: urlString)! as URL, completionHandler: { (data, response, error) -> Void in
+
+                if error != nil {
+                    print(error ?? "No Error")
+                    return
+                }
+                DispatchQueue.main.async(execute: { () -> Void in
+                    let image = UIImage(data: data!)
+                    activityIndicator.removeFromSuperview()
+                    self.image = image
+                    self.contentMode = .scaleToFill
+                })
+
+            }).resume()
+        }
+        }
+            
+
+           
 }
