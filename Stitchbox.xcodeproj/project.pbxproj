@@ -155,6 +155,7 @@
 		A5A5E4152938A30A004E9207 /* VerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5E4142938A309004E9207 /* VerifyViewController.swift */; };
 		A5DF81F7295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF81F6295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift */; };
 		A5DF81F9295C248A00E8DDB8 /* MemberListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF81F8295C248A00E8DDB8 /* MemberListVC.swift */; };
+		A5DF81FD295D3FE200E8DDB8 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF81FC295D3FE200E8DDB8 /* SearchViewController.swift */; };
 		D11C58FF5060997ECA36149E /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 803A87F561B246F99A255571 /* Pods_Stitchbox_StitchboxUITests.framework */; };
 		D26025D4ED3609CBFC8182C1 /* Pods_StitchboxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E17665445954777B0D258E /* Pods_StitchboxTests.framework */; };
 		DC76EEEFAEDC2F666DA22C34 /* Pods_StitchboxUnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0F811AEECD31BEBFDD73311 /* Pods_StitchboxUnitTests.framework */; };
@@ -347,6 +348,7 @@
 		A5A5E4142938A309004E9207 /* VerifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VerifyViewController.swift; path = LoginVC/VerifyViewController.swift; sourceTree = "<group>"; };
 		A5DF81F6295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChannelsUpdateListDelegate.swift; sourceTree = "<group>"; };
 		A5DF81F8295C248A00E8DDB8 /* MemberListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberListVC.swift; sourceTree = "<group>"; };
+		A5DF81FC295D3FE200E8DDB8 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A7E568C6D93623CEDAD33494 /* Pods-StitchboxTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.debug.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B6926265007E2A8659EA75AF /* Pods_Stitchbox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0F811AEECD31BEBFDD73311 /* Pods_StitchboxUnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StitchboxUnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -604,6 +606,7 @@
 		390FD77E29092BC10068B883 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A5DF81FB295D3FD000E8DDB8 /* SearchVC */,
 				147187EC2920B0980039B89E /* ControllerType.swift */,
 				6AAD79FB294C4BEE003E3AB6 /* MessageVC */,
 				6AAD79F9294C4BB5003E3AB6 /* LoginVC */,
@@ -1012,6 +1015,14 @@
 				A540A8DB294731750085CC45 /* TiktokSignInService.swift */,
 			);
 			path = SocialServices;
+			sourceTree = "<group>";
+		};
+		A5DF81FB295D3FD000E8DDB8 /* SearchVC */ = {
+			isa = PBXGroup;
+			children = (
+				A5DF81FC295D3FE200E8DDB8 /* SearchViewController.swift */,
+			);
+			path = SearchVC;
 			sourceTree = "<group>";
 		};
 		B57720880C6EA2FE2BD09591 /* Frameworks */ = {
@@ -1456,6 +1467,7 @@
 				A5A5E40729375FF3004E9207 /* SButton.swift in Sources */,
 				A548E5AA2955AD7500E9C971 /* LastStepViewController.swift in Sources */,
 				149F44F72956F8270084742A /* RoundedImageView.swift in Sources */,
+				A5DF81FD295D3FE200E8DDB8 /* SearchViewController.swift in Sources */,
 				6AAD7A1E294C65DD003E3AB6 /* UIApplication+QuickStart.swift in Sources */,
 				6A1235A5295034BD004B612E /* InviteUserVC.swift in Sources */,
 				6AEC6901295178E2000393D8 /* SendBirdRoomModel.swift in Sources */,
