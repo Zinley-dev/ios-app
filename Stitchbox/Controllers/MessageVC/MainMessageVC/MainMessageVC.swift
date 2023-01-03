@@ -20,9 +20,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var requestBtn: UIButton!
     @IBOutlet weak var inboxBtn: UIButton!
-    
-    let createButton: UIButton = UIButton(type: .custom)
-    let searchButton: UIButton = UIButton(type: .custom)
+
     
     
     // setup 2 childviews
@@ -92,9 +90,20 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         self.tabBarController?.tabBar.frame = oldTabbarFr
         
         
+        if !hidesBottomBarWhenPushed {
+            if self.tabBarController is DashboardTabBarController {
+                print("yes")
+                let tbctrl = self.tabBarController as! DashboardTabBarController
+                tbctrl.button.isHidden = false
+            }
+        }
+        
+        
         checkCallForLayout()
      
     }
+    
+    
     
     
     func setupSearchController() {
@@ -156,15 +165,13 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
 
     func settingUpLayoutNavView() {
         
+        self.navigationController?.navigationBar.delegate = self
         navigationItem.leftBarButtonItem = nil
         navigationItem.titleView = UIView()
         navigationItem.leftBarButtonItem = self.createLeftTitleItem(text: "Messages")
         
     }
     
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
     
     func createLeftTitleItem(text: String) -> UIBarButtonItem {
         let titleLabel = UILabel()
@@ -175,59 +182,70 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     }
         
     
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
+    
     func setupWithCall() {
-        
-        // Do any additional setup after loading the view.
+        let createButton = UIButton(type: .custom)
         createButton.setImage(UIImage(named: "4x_add"), for: [])
         createButton.addTarget(self, action: #selector(showCreateChannel(_:)), for: .touchUpInside)
         createButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let createBarButton = UIBarButtonItem(customView: createButton)
-        
-        createButton.setTitle("", for: .normal)
-        createButton.sizeToFit()
-        
+
+        let searchButton = UIButton(type: .custom)
         searchButton.setImage(UIImage(named: "search"), for: [])
         searchButton.addTarget(self, action: #selector(searchBarSetting(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let searchBarButton = UIBarButtonItem(customView: searchButton)
-    
 
-        
-        let voiceCallButton: UIButton = UIButton(type: .custom)
+        let voiceCallButton = UIButton(type: .custom)
+        voiceCallButton.semanticContentAttribute = .forceRightToLeft
+        voiceCallButton.setTitle("Join", for: .normal)
+        voiceCallButton.setTitleColor(.white, for: .normal)
+        voiceCallButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        voiceCallButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
+        voiceCallButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
         voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
-        voiceCallButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        let voiceCallBarButton = UIBarButtonItem(customView: voiceCallButton)
-        
-        voiceCallButton.setTitle("+", for: .normal)
-        voiceCallButton.sizeToFit()
-        
-        self.navigationItem.rightBarButtonItems = [searchBarButton, createBarButton, voiceCallBarButton]
-        
-        voiceCallButton.shake()
-    
-        
+        voiceCallButton.frame = CGRect(x: 0, y: 0, width: 70, height: 30)
+        voiceCallButton.backgroundColor = .secondary
+        voiceCallButton.cornerRadius = 15
+        let customView = UIView(frame: CGRect(x: 0, y: 0, width: 70, height: 30))
+        customView.addSubview(voiceCallButton)
+        voiceCallButton.center = customView.center
+        let voiceCallBarButton = UIBarButtonItem(customView: customView)
+
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+
+        self.navigationItem.rightBarButtonItems = [searchBarButton, fixedSpace, createBarButton, fixedSpace, voiceCallBarButton]
     }
+
+
+
     
     func setupWithoutCall() {
         
+        let createButton: UIButton = UIButton(type: .custom)
+        let searchButton: UIButton = UIButton(type: .custom)
+        
         // Do any additional setup after loading the view.
         createButton.setImage(UIImage(named: "4x_add"), for: [])
         createButton.addTarget(self, action: #selector(showCreateChannel(_:)), for: .touchUpInside)
         createButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let createBarButton = UIBarButtonItem(customView: createButton)
-        
-        createButton.setTitle("", for: .normal)
-        createButton.sizeToFit()
-        
-        
+      
         searchButton.setImage(UIImage(named: "search"), for: [])
         searchButton.addTarget(self, action: #selector(searchBarSetting(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        
         let searchBarButton = UIBarButtonItem(customView: searchButton)
         
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
 
-        self.navigationItem.rightBarButtonItems = [searchBarButton, createBarButton]
+        self.navigationItem.rightBarButtonItems = [searchBarButton, fixedSpace, createBarButton]
         
         
     }

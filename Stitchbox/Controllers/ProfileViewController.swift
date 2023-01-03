@@ -14,7 +14,7 @@ class ProfileViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        super.viewWillAppear(animated)
         if !hidesBottomBarWhenPushed {
             if self.tabBarController is DashboardTabBarController {
                 print("yes")

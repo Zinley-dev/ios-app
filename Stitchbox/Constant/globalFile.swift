@@ -14,7 +14,10 @@ import SwiftEntryKit
 
 var general_room: Room!
 var gereral_group_chanel_url: String!
+var startTime = Date()
 
+var global_presetingRate = 0.0
+var global_cornerRadius = 0.0
 
 func showNote(text: String) {
     
@@ -68,5 +71,11 @@ func swiftLoader(text: String) {
 extension UIViewController {
     static func instantiate(from storyboard: String) -> Self {
         return UIStoryboard(name: storyboard, bundle: nil).instantiateViewController(withIdentifier: "\(self)") as! Self
+    }
+}
+
+extension UIViewController: UIViewControllerTransitioningDelegate {
+    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        PresentationController(presentedViewController: presented, presenting: presenting)
     }
 }

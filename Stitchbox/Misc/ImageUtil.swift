@@ -165,7 +165,7 @@ class ProfileImageView: UIView {
         super.init(coder: aDecoder)
     }
     
-    func setImage(withCoverUrl coverUrl: String, shouldGetGame: Bool){
+    func setImage(withCoverUrl coverUrl: String){
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         
@@ -207,57 +207,9 @@ class ProfileImageView: UIView {
         stackView.axis = .horizontal
         self.addSubview(stackView)
         makeCircularWithSpacing(spacing: 0)
-        
-        if shouldGetGame == true {
-            
-            setGameNameLabel(withCoverUrl: coverUrl)
-            
-        }
+     
     }
     
-    func setGameNameLabel(withCoverUrl coverUrl: String){
-        
-    /*
-        
-        DataService.instance.mainFireStoreRef.collection("Support_game").whereField("url", isEqualTo: coverUrl).getDocuments { (snap, err) in
-            
-            
-            if err != nil {
-                
-                print(err!.localizedDescription)
-                return
-            }
-            
-            for itemsed in snap!.documents {
-                
-                if let short_name = itemsed.data()["short_name"] as? String {
-                                  
-                  
-                    let shadowView = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
-                    shadowView.backgroundColor = UIColor.black
-                    shadowView.alpha = 0.5
-                    self.addSubview(shadowView)
-                    
-                    let labelView = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
-                    labelView.backgroundColor = UIColor.clear
-                    labelView.textColor = UIColor.white
-                    
-                    labelView.font = UIFont(name:"URIALFONT-Bold",size: 14)!
-                    labelView.text = short_name
-                    labelView.textAlignment = .center
-                    self.addSubview(labelView)
-                    
-                  
-                    
-                }
-                
-            }
-            
-        }
-       */
-        
-        
-    }
     
     func setImage(withImage image: UIImage){
         let imageView = UIImageView(image: image)

@@ -188,11 +188,9 @@ class RequestChannelVC: SBUChannelViewController {
     func sendMedia(fileData: Data?, fileName: String, mimeType: String) {
         
         guard let fileData = fileData else { return }
-        
-        
+    
         if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
             
-
             let messageParams = SBDFileMessageParams(file: fileData)!
             messageParams.fileName = fileName
             messageParams.mimeType = mimeType
@@ -207,9 +205,8 @@ class RequestChannelVC: SBUChannelViewController {
             
             guard let channel = self.channel else { return }
             
-            
             var preSendMessage: SBDFileMessage?
-            preSendMessage = channel.sendFileMessage(
+            preSendMessage = channel.sendFileMessage (
                 with: messageParams,
                 progressHandler: { bytesSent, totalBytesSent, totalBytesExpectedToSend in
                     //// If need reload cell for progress, call reload action in here.

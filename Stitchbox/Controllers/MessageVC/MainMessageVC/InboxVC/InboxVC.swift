@@ -67,7 +67,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         self.refreshControl?.addTarget(self, action: #selector(InboxVC.refreshChannelList), for: .valueChanged)
         self.groupChannelsTableView.addSubview(self.refreshControl!)
         
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -312,14 +311,14 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell
                     
                     if count == 0 {
-                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
                     } else if count == 1 {
-                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!, shouldGetGame: false)
+                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!)
                     } else if count > 1 && count < 5 {
                         updateCell?.profileImagView.users = filteredMembers
                         updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
                     } else {
-                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
                     }
                     
                     if channel.name != "" && channel.name != "Group Channel" {
@@ -339,7 +338,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     if count == 0 {
                         updateCell?.activeView.backgroundColor = .lightGray
                     } else {
-                        updateCell?.activeView.backgroundColor = filteredMembers.contains(where: { $0.isActive }) ? .green : .lightGray
+                        updateCell?.activeView.backgroundColor = filteredMembers.contains(where: { $0.connectionStatus.rawValue == 1 }) ? .green : .lightGray
                     }
 
                     
@@ -362,10 +361,12 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     }
     
     func updateActiveStatus() {
+     
         // Filter the channels array to include only channels with members
         let channelsWithMembers = channels.filter { $0.members != nil }
         // Iterate over the filtered array
         for channel in channelsWithMembers {
+            channel.refresh()
             // Get the members of the channel and filter out the current user
             let filteredMembers = channel.members!.compactMap { $0 as? SBDMember }.filter { $0.userId != SBDMain.getCurrentUser()?.userId }
             // Get the index of the channel in the original array
@@ -373,13 +374,17 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 // Get the cell at the index of the channel
                 if let updateCell = groupChannelsTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? GroupChannelTableViewCell {
                     // Check if there are any active members in the channel
-                    let hasActiveMember = filteredMembers.contains(where: { $0.isActive })
+                    let hasActiveMember = filteredMembers.contains(where: { $0.connectionStatus.rawValue == 1 })
                     // Update the background color of the active view based on the active status of the members
+                    print(hasActiveMember)
                     updateCell.activeView.backgroundColor = hasActiveMember ? .green : .lightGray
                 }
             }
         }
+        
     }
+    
+    
 
 
 
@@ -444,8 +449,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                         height: iconSize
                 ))
                 leaveTypeView.layer.cornerRadius = iconSize/2
-                leaveTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOffBackgroundColor
-                leaveTypeView.image = UIImage(named: "leave3x")
+                leaveTypeView.backgroundColor = UIColor.primary
+                leaveTypeView.image = UIImage(named: "leave3x")!.resize(targetSize: CGSize(width: 20, height: 20))
                 leaveTypeView.contentMode = .center
                 
                 leaveAction.image = leaveTypeView.asImage()
@@ -493,11 +498,11 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 let alarmIcon: UIImage
                 
                 if pushOption == .off {
-                    alarmTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOnBackgroundColor
-                    alarmIcon = UIImage(named: "Noti3x")!
+                    alarmTypeView.backgroundColor = UIColor.primary
+                    alarmIcon = UIImage(named: "Noti3x")!.resize(targetSize: CGSize(width: 30, height: 30))
                 } else {
-                    alarmTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOffBackgroundColor
-                    alarmIcon  = UIImage(named: "muted")!
+                    alarmTypeView.backgroundColor = UIColor.primary
+                    alarmIcon  = UIImage(named: "muted")!.resize(targetSize: CGSize(width: 30, height: 30))
                 }
                 alarmTypeView.image = alarmIcon
                 alarmTypeView.contentMode = .center

@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "icCallFilled.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icCallFilled@2x.png",
+      "filename" : "Image.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icCallFilled@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
