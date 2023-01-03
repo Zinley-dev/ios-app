@@ -85,7 +85,7 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     func getNewName() {
         
         showInputDialog(subtitle: "You can add your new group name here",
-                        actionTitle: "Add",
+                        actionTitle: "Change",
                         cancelTitle: "Cancel",
                         inputPlaceholder: "Group name (Max 15 characters)",
                         inputKeyboardType: .default, actionHandler:
