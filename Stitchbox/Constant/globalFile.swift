@@ -19,6 +19,9 @@ var startTime = Date()
 var global_presetingRate = 0.0
 var global_cornerRadius = 0.0
 
+typealias DownloadComplete = () -> ()
+
+
 func showNote(text: String) {
     
     var attributes = EKAttributes.topNote
@@ -79,3 +82,4 @@ extension UIViewController: UIViewControllerTransitioningDelegate {
         PresentationController(presentedViewController: presented, presenting: presenting)
     }
 }
+

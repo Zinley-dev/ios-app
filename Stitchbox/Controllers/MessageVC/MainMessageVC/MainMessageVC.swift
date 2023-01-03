@@ -218,6 +218,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
 
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
+        voiceCallButton.shake()
 
         self.navigationItem.rightBarButtonItems = [searchBarButton, fixedSpace, createBarButton, fixedSpace, voiceCallBarButton]
     }

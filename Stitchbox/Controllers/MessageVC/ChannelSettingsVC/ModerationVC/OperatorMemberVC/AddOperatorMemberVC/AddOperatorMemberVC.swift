@@ -1,28 +1,23 @@
 //
-//  InviteUserVC.swift
+//  AddOperatorMemberVC.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 12/18/22.
+//  Created by Khoi Nguyen on 1/3/23.
 //
 
 import UIKit
-import SendBirdUIKit
 import SendBirdSDK
-import Alamofire
+import SendBirdUIKit
 
-
-class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
+class AddOperatorMemberVC: UIViewController, UISearchBarDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
     
-   
-    var userListQuery: SBDApplicationUserListQuery?
-    var query: SBDBannedUserListQuery?
     
+    var channel: SBDGroupChannel?
+    var joinedUserIds: [String] = []
     var inSearchMode = false
 
     var channelUrl: String?
-    var channel: SBDGroupChannel?
-    
-    
+ 
     // to override search task
     lazy var delayItem = workItem()
     
@@ -30,10 +25,6 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     @IBOutlet weak var selectedUserListHeight: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     
-    
-    //
-    var joinedUserIds: [String] = []
-    var bannedList: [String] = []
     //
     var searchController: UISearchController?
     var userList: [SBUUser] = []
@@ -63,6 +54,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         return titleView
     }()
     
+    
     private lazy var _leftBarButton: UIBarButtonItem = {
         
         let leftButton = UIButton(type: .custom)
@@ -71,7 +63,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
         leftButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
         leftButton.setTitleColor(UIColor.white, for: .normal)
-        leftButton.setTitle("     Add members", for: .normal)
+        leftButton.setTitle("     Add Operators", for: .normal)
         leftButton.sizeToFit()
         
         let backButtonBarButton = UIBarButtonItem(customView: leftButton)
@@ -80,18 +72,22 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     
     private lazy var _rightBarButton: UIBarButtonItem = {
             let rightItem =  UIBarButtonItem(
-                title: "Add",
+                title: "Promote",
                 style: .plain,
                 target: self,
-                action: #selector(InviteUsers)
+                action: #selector(PromoteUsers)
             )
         rightItem.setTitleTextAttributes([.font : SBUFontSet.button2], for: .normal)
         return rightItem
     }()
     
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Do any additional setup after loading the view.
+        channel?.refresh()
         // Do any additional setup after loading the view.
         self.navigationItem.leftBarButtonItem = self.leftBarButton
         self.navigationItem.rightBarButtonItem = self.rightBarButton
@@ -119,34 +115,38 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         self.setupScrollView()
         self.rightBarButton?.isEnabled = self.selectedUsers.count > 0
         
-        self.setupStyles()
         
-        self.loadBanUsers {
-            self.loadDefaultUsers()
-        }
-       
+        self.setupStyles()
+        self.getUsers()
+        
+        
     }
     
-    func loadBanUsers(completed: @escaping DownloadComplete) {
+    func getUsers() {
         
-        guard let channel = self.channel else { return }
-        self.query = channel.createBannedUserListQuery()
-        self.query?.loadNextPage { [weak self] users, error in
-            guard error == nil, let users = users, let self = self else {
-                // Handle error.
-                Utils.showAlertController(error: error!, viewController: self!)
-                return
-            }
-            // A list of banned users is successfully retrieved.
-            let sbuUsers = users.map { SBUUser(user: $0) }
-            self.bannedList += sbuUsers.sbu_getUserIds()
+        guard let members = channel?.members else { return }
+        let filteredMembers = members.compactMap { $0 as? SBDMember }
+        
+        for member in filteredMembers {
+            let addedUser = SBUUser(userId: member.userId, nickname: member.nickname, profileUrl: member.profileUrl)
             
-            completed()
-          
+            if self.channel?.getMember(addedUser.userId)?.role != .operator {
+                
+                if member.userId == SBDMain.getCurrentUser()?.userId {
+                    userList.insert(addedUser, at: 0)
+                        
+                } else {
+                    userList.append(addedUser)
+                }
+                
+                
+                
+            }
+                
         }
-        
-    }
 
+        tableView.reloadData()
+    }
     
     func setupStyles() {
 
@@ -268,152 +268,11 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
             }
             searchUserList = filteredUsers.isEmpty ? [] : filteredUsers
             tableView.reloadData()
-            if searchText != "", filteredUsers.isEmpty {
-                delayItem.perform(after: 0.35) {
-                    self.searchUsers(keyword: searchText)
-                }
-            }
+            
         }
     }
 
-    
-    func loadDefaultUsers() {
-        APIManager().searchUsersForChat(keyword: "") { result in
-            switch result {
-            case .success(let apiResponse):
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    return
-                }
-                
-                let newUserList = data.compactMap { user -> SBUUser? in
-                    do {
-                        let preloadUser = try SendBirdUser(JSONbody: user)
-                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
-                        if !self.joinedUserIds.contains(user.userId), !self.bannedList.contains(user.userId) {
-                            return user
-                        }
-                    } catch {
-                        print("Can't catch user")
-                    }
-                    return nil
-                }
 
-                self.userList = newUserList
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-
-    func searchUsers(keyword: String) {
-        APIManager().searchUsersForChat(keyword: keyword) { result in
-            switch result {
-            case .success(let apiResponse):
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    return
-                }
-                
-                let newUserList = data.compactMap { user -> SBUUser? in
-                    do {
-                        let preloadUser = try SendBirdUser(JSONbody: user)
-                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
-                        if !self.joinedUserIds.contains(user.userId), !self.bannedList.contains(user.userId) {
-                            print(user.userId)
-                            return user
-                        }
-                    } catch {
-                        print("Can't catch user")
-                    }
-                    return nil
-                }
-
-                self.searchUserList = newUserList
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-
-    
-    @objc func InviteUsers() {
-       // Check if the userUID property is not an empty string
-       if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-           // Check if there are any selected users
-           if selectedUsers.count == 0 {
-               return
-           }
-
-           // Check if the joinedUserIds array has exactly 2 elements
-           if joinedUserIds.count == 2 {
-               createNewChannel()
-           } else {
-               // Get an array of user IDs from the selectedUsers array
-               let userIds = Array(self.selectedUsers).sbu_getUserIds()
-               // Invite users to the group channel
-               inviteUsers(userIds: userIds)
-           }
-       }
-    }
-
-    
-    func createNewChannel() {
-       if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-           if selectedUsers.count == 0 {
-               return
-           }
-
-           // Create an instance of SBDGroupChannelParams
-           let channelParams = SBDGroupChannelParams()
-
-           // Set isDistinct property to true
-           channelParams.isDistinct = true
-
-           // Add user IDs of selected users and joinedUserIds to channelParams
-           let userIds = selectedUsers.map { $0.userId } + joinedUserIds
-           channelParams.addUserIds(userIds)
-
-           // Set operatorUserIds property to current user's UID
-           channelParams.operatorUserIds = [userUID]
-
-           // Create a new group channel or invite users to existing group channel
-           SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
-               guard error == nil else {
-                   self.showErrorAlert("Oops!", msg: error!.localizedDescription)
-                   return
-               }
-
-               // Check if channelUrl is not nil
-               if let url = self.channelUrl {
-                   // Get list of user IDs in the group channel
-                   if let loadList = groupChannel?.members?.sbu_getUserIds() {
-                       // Filter out current user's UID
-                       let ids = loadList.filter { $0 != userUID }
-                       // Call checkForChannelInvitation function
-                       checkForChannelInvitation(channelUrl: url, user_ids: ids)
-                   }
-               }
-
-               // Get group channel's URL
-               let channelUrl = groupChannel?.channelUrl
-               // Create an instance of ChannelViewController
-               let channelVC = ChannelViewController(channelUrl: channelUrl!, messageListParams: nil)
-               // Push ChannelViewController onto the navigation stack
-               self.navigationController?.pushViewController(channelVC, animated: true)
-               // Remove view controllers in the stack after it
-               self.navigationController?.viewControllers.removeSubrange(1...4)
-           }
-       }
-    }
-
-    
     func showErrorAlert(_ title: String, msg: String) {
                                                                                                                                            
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
@@ -424,46 +283,32 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         present(alert, animated: true, completion: nil)
         
     }
+
     
-    
-    func inviteUsers(userIds: [String]) {
-       // Get a reference to the group channel
-       guard let channel = self.channel else { return }
-
-       // Invite users to the group channel
-       channel.inviteUserIds(userIds) { [weak self] error in
-           guard let self = self else { return }
-
-           // Check if the invitation was successful
-           if let error = error {
-               print(error.localizedDescription)
-               return
-           }
-
-           // Check if the channelUrl property is not nil
-           if let url = self.channelUrl {
-               // Call checkForChannelInvitation function
-               checkForChannelInvitation(channelUrl: url, user_ids: userIds)
-           }
-
-           // Pop back to the fourth view controller in the navigation stack
-           self.navigationController?.popBack(4)
+    @objc func PromoteUsers() {
+       // Check if the userUID property is not an empty string
+        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "", !self.selectedUsers.isEmpty {
+           // Check if there are any selected users
+          
+            
+            channel?.addOperators(withUserIds: self.selectedUsers.sbu_getUserIds()) { error in
+                if let error = error {
+                    Utils.showAlertController(error: error, viewController: self)
+                    return
+                }
+                
+                let channelUrl = self.channel?.channelUrl
+                // Create an instance of ChannelViewController
+                let channelVC = ChannelViewController(channelUrl: channelUrl!, messageListParams: nil)
+                // Push ChannelViewController onto the navigation stack
+                self.navigationController?.pushViewController(channelVC, animated: true)
+                // Remove view controllers in the stack after it
+                self.navigationController?.viewControllers.removeSubrange(1...5)
+                
+            }   
+           
        }
     }
-
+   
     
-    
-    func shouldShowLoadingIndicator(){
-        SBULoading.start()
-        
-    }
-    
-    func shouldDismissLoadingIndicator() {
-        SBULoading.stop()
-    }
-
-    
-  
-
 }
-
