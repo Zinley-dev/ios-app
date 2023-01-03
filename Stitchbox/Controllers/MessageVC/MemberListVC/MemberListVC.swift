@@ -9,7 +9,7 @@ import UIKit
 import SendBirdUIKit
 import SendBirdSDK
 
-class MemberListVC: UIViewController, UISearchBarDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
+class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
     
     @IBOutlet weak var tableView: UITableView!
@@ -137,12 +137,19 @@ class MemberListVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         // Set the channelUrl and joinedUserIds properties of the invite user view controller
         inviteUserVC.channelUrl = self.channel?.channelUrl
         inviteUserVC.joinedUserIds = joinedUserIds
+        inviteUserVC.channel = self.channel
 
         // Push the invite user view controller onto the navigation stack
         navigationController?.pushViewController(inviteUserVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if userList.isEmpty {
+            tableView.setEmptyMessage("No member")
+        } else {
+            tableView.restore()
+        }
+        
         return userList.count
     }
     
@@ -161,16 +168,19 @@ class MemberListVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         cell.moreButton.tag = indexPath.row
         cell.moreButton.setImage(user.userId == SBDMain.getCurrentUser()?.userId ? UIImage(named: "noMore") : UIImage(named: "more"), for: .normal)
         cell.theme.separateColor = .clear
-
+    
+        
         switch (self.channel?.getMember(user.userId)?.role, self.channel?.getMember(user.userId)?.isMuted) {
-            case (.operator, _):
+            case (.operator, false):
                 cell.operatorLabel.text = "Operator"
-            case (nil, true):
+            case (.operator, true):
+                cell.operatorLabel.text = "Muted - Operator"
+            case (_, true):
                 cell.operatorLabel.text = "Muted"
             default:
                 cell.operatorLabel.text = ""
         }
-
+        
         cell.operatorLabel.isHidden = false
 
         return cell
@@ -261,7 +271,7 @@ class MemberListVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     
     @objc func banUser() {
         
-        channel?.banUser(withUserId: userList[selectedIndexpath].userId, seconds: 100, description: "None")  { error in
+        channel?.banUser(withUserId: userList[selectedIndexpath].userId, seconds: 259200, description: "None")  { error in
             guard error == nil else {
                 // Handle error.
                 self.presentErrorAlert(message: "Error code: \(error!.code), \(error!.localizedDescription)")

@@ -497,7 +497,7 @@ extension UITableView {
         messageLabel.textColor = .white
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
-        messageLabel.font = UIFont(name:"Roboto-Regular",size: 15)!
+        messageLabel.font = UIFont.systemFont(ofSize: 15)
         messageLabel.sizeToFit()
 
         self.backgroundView = messageLabel
@@ -517,7 +517,7 @@ extension UICollectionView {
         messageLabel.textColor = .white
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
-        messageLabel.font = UIFont(name:"Roboto-Regular",size: 15)!
+        messageLabel.font = UIFont.systemFont(ofSize: 15)
         messageLabel.sizeToFit()
 
         self.backgroundView = messageLabel
@@ -832,6 +832,10 @@ extension UIViewController {
                          actionHandler: ((_ text: String?) -> Void)? = nil) {
         
         let alert = UIAlertController(title: title, message: subtitle, preferredStyle: .alert)
+        alert.view.subviews.first?.subviews.first?.subviews.first?.backgroundColor = UIColor.background
+
+        // Accessing buttons tintcolor :
+        alert.view.tintColor = UIColor.white
         
         let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name: "Avenir-Light", size: 13)!, NSAttributedString.Key.foregroundColor: UIColor.white]
         
@@ -842,6 +846,9 @@ extension UIViewController {
         
         
         alert.addTextField { (textField:UITextField) in
+            textField.placeHolderColor = UIColor.darkText
+            textField.textColor = UIColor.white
+            textField.maxLength = 15
             textField.placeholder = inputPlaceholder
             textField.keyboardType = inputKeyboardType
         }
@@ -852,6 +859,7 @@ extension UIViewController {
             }
             actionHandler?(textField.text)
         }))
+        
         alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: cancelHandler))
         
         self.present(alert, animated: true, completion: nil)

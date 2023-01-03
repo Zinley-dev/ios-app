@@ -12,7 +12,6 @@ import Alamofire
 
 class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
-
     @IBOutlet weak var notiSwitch: UISwitch!
     @IBOutlet weak var channelName: UILabel!
     @IBOutlet weak var avatarView: UIView!
@@ -51,16 +50,12 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         setupDefaultLayout()
         
         NotificationCenter.default.addObserver(self, selector: #selector(ChannelSettingsVC.leaveChannel), name: (NSNotification.Name(rawValue: "leaveChannel")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ChannelSettingsVC.changeName), name: (NSNotification.Name(rawValue: "changeName")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ChannelSettingsVC.changeAvatar), name: (NSNotification.Name(rawValue: "changeAvatar")), object: nil)
         
  
     }
     
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        
-    }
     
     @objc func leaveChannel() {
         
@@ -77,6 +72,50 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
             
         })
         
+    }
+    
+    @objc func changeName() {
+        
+        delay(0.25) { [self] in
+            getNewName()
+        }
+        
+    }
+    
+    func getNewName() {
+        
+        showInputDialog(subtitle: "You can add your new group name here",
+                        actionTitle: "Change",
+                        cancelTitle: "Cancel",
+                        inputPlaceholder: "Group name (Max 15 characters)",
+                        inputKeyboardType: .default, actionHandler:
+                                { (input:String?) in
+                                    
+                                    
+                if let newName = input {
+                    
+                    let param = SBDGroupChannelParams()
+                    param.name = newName
+                    
+                    self.channel?.update(with: param, completionHandler: { updatedChannel, error in
+                        if let error = error {
+                            Utils.showAlertController(error: error, viewController: self)
+                            print(error.localizedDescription, error.code)
+                            return
+                        }
+                        
+                        self.channel?.refresh()
+                        self.getChannelName(channel: updatedChannel!)
+                        
+                    })
+                }
+                                        
+        })
+    }
+    
+    @objc func changeAvatar() {
+        
+      
     }
     
     
@@ -142,7 +181,7 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     func shouldAddEdit(channel: SBDGroupChannel) {
         
         if channel.myRole == .operator {
-            editButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+            editButton.addTarget(self, action: #selector(onClickEdit(_:)), for: .touchUpInside)
             editButton.frame = CGRect(x: -1, y: 0, width: 15, height: 25)
             editButton.setTitle("Edit", for: .normal)
             editButton.setTitleColor(UIColor.white, for: .normal)
@@ -225,8 +264,7 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
     func setupBackButton() {
         
-        
-        
+    
         // Do any additional setup after loading the view.
         backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
@@ -244,8 +282,22 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
             NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "leaveChannel")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "changeName")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "changeAvatar")), object: nil)
             navigationController.popViewController(animated: true)
         }
+    }
+    
+    @objc func onClickEdit(_ sender: AnyObject) {
+        
+        let EditChannelDataModView = EditChannelDataModView()
+        EditChannelDataModView.modalPresentationStyle = .custom
+        EditChannelDataModView.transitioningDelegate = self
+        
+        global_presetingRate = Double(0.25)
+        global_cornerRadius = 40
+        self.present(EditChannelDataModView, animated: true, completion: nil)
+        
     }
     
     
@@ -287,8 +339,15 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
     @IBAction func moderationChannelBtnPressed(_ sender: Any) {
         
-        let MVC = ModerationVC(channel: self.channel!)
-        navigationController?.pushViewController(MVC, animated: true)
+        if let selected_channel = channel {
+            
+            if let MDVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ModerationVC") as? ModerationVC {
+                MDVC.channel = selected_channel
+                self.navigationController?.pushViewController(MDVC, animated: true)
+                
+            }
+            
+        }
         
     }
     
@@ -318,8 +377,8 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         LeaveView.modalPresentationStyle = .custom
         LeaveView.transitioningDelegate = self
         
-        global_presetingRate = Double(0.35)
-        global_cornerRadius = 50
+        global_presetingRate = Double(0.30)
+        global_cornerRadius = 45
         self.present(LeaveView, animated: true, completion: nil)
         
         
