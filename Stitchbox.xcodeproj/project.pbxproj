@@ -742,7 +742,6 @@
 			children = (
 				6A6C30DF296402B30070167A /* ActionView */,
 				6A6C30CF296245EB0070167A /* ModerationVC */,
-				6A6C30D229626D0B0070167A /* LeaveChannelVC */,
 				6A12359E29503492004B612E /* ChannelSettingsVC.swift */,
 			);
 			path = ChannelSettingsVC;
@@ -821,13 +820,13 @@
 			path = ModerationVC;
 			sourceTree = "<group>";
 		};
-		6A6C30D229626D0B0070167A /* LeaveChannelVC */ = {
+		6A6C30D229626D0B0070167A /* LeaveChannelView */ = {
 			isa = PBXGroup;
 			children = (
 				6A6C30D429626D3C0070167A /* LeaveView.swift */,
 				6A6C30D329626D3C0070167A /* LeaveView.xib */,
 			);
-			path = LeaveChannelVC;
+			path = LeaveChannelView;
 			sourceTree = "<group>";
 		};
 		6A6C30D82963CCBA0070167A /* ModActionView */ = {
@@ -847,6 +846,7 @@
 				6A6C30FB296415590070167A /* UnmutedUserModView */,
 				6A6C30EC29640EC10070167A /* DismissOperatorModView */,
 				6A6C30D82963CCBA0070167A /* ModActionView */,
+				6A6C30D229626D0B0070167A /* LeaveChannelView */,
 			);
 			path = ActionView;
 			sourceTree = "<group>";

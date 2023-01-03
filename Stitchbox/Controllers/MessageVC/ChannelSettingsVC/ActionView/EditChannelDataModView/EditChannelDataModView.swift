@@ -36,12 +36,14 @@ class EditChannelDataModView: UIViewController{
     
     @IBAction func changeNameBtn(_ sender: Any) {
         
+        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "changeName")), object: nil)
         self.dismiss(animated: true)
         
     }
     
     @IBAction func changeAvatarBtn(_ sender: Any) {
             
+        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "changeAvatar")), object: nil)
         self.dismiss(animated: true)
     
     }

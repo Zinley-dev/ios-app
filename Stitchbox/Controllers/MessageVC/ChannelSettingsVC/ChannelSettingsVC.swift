@@ -76,8 +76,41 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
     @objc func changeName() {
         
+        delay(0.25) { [self] in
+            getNewName()
+        }
         
+    }
+    
+    func getNewName() {
         
+        showInputDialog(subtitle: "You can add your new group name here",
+                        actionTitle: "Add",
+                        cancelTitle: "Cancel",
+                        inputPlaceholder: "Group name (Max 15 characters)",
+                        inputKeyboardType: .default, actionHandler:
+                                { (input:String?) in
+                                    
+                                    
+                if let newName = input {
+                    
+                    let param = SBDGroupChannelParams()
+                    param.name = newName
+                    
+                    self.channel?.update(with: param, completionHandler: { updatedChannel, error in
+                        if let error = error {
+                            Utils.showAlertController(error: error, viewController: self)
+                            print(error.localizedDescription, error.code)
+                            return
+                        }
+                        
+                        self.channel?.refresh()
+                        self.getChannelName(channel: updatedChannel!)
+                        
+                    })
+                }
+                                        
+        })
     }
     
     @objc func changeAvatar() {

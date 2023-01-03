@@ -832,6 +832,10 @@ extension UIViewController {
                          actionHandler: ((_ text: String?) -> Void)? = nil) {
         
         let alert = UIAlertController(title: title, message: subtitle, preferredStyle: .alert)
+        alert.view.subviews.first?.subviews.first?.subviews.first?.backgroundColor = UIColor.background
+
+        // Accessing buttons tintcolor :
+        alert.view.tintColor = UIColor.white
         
         let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name: "Avenir-Light", size: 13)!, NSAttributedString.Key.foregroundColor: UIColor.white]
         
@@ -842,6 +846,7 @@ extension UIViewController {
         
         
         alert.addTextField { (textField:UITextField) in
+            textField.maxLength = 15
             textField.placeholder = inputPlaceholder
             textField.keyboardType = inputKeyboardType
         }
@@ -852,6 +857,7 @@ extension UIViewController {
             }
             actionHandler?(textField.text)
         }))
+        
         alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: cancelHandler))
         
         self.present(alert, animated: true, completion: nil)
