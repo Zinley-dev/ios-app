@@ -846,6 +846,8 @@ extension UIViewController {
         
         
         alert.addTextField { (textField:UITextField) in
+            textField.placeHolderColor = UIColor.darkText
+            textField.textColor = UIColor.white
             textField.maxLength = 15
             textField.placeholder = inputPlaceholder
             textField.keyboardType = inputKeyboardType
