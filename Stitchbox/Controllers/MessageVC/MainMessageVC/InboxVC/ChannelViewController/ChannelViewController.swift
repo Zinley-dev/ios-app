@@ -11,8 +11,6 @@ import SendBirdCalls
 
 class ChannelViewController: SBUChannelViewController {
     
-    var settingButton: UIButton = UIButton(type: .custom)
-    var voiceCallButton: UIButton = UIButton(type: .custom)
     private lazy var CleftBarButton: UIBarButtonItem? = _leftBarButton
     private lazy var _leftBarButton: UIBarButtonItem = {
         return UIBarButtonItem(
@@ -31,34 +29,11 @@ class ChannelViewController: SBUChannelViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
     
         // Do any additional setup after loading the view.
         navigationItem.rightBarButtonItem = nil
-        
+        self.callLayout()
     
-        settingButton.setImage(UIImage(named: "img_btn_channel_settings"), for: [])
-        settingButton.addTarget(self, action: #selector(showChannelSetting(_:)), for: .touchUpInside)
-        settingButton.frame = CGRect(x: -1, y: 0, width: 40, height: 30)
-        let settingBarButton = UIBarButtonItem(customView: settingButton)
-        
-        
-        voiceCallButton.setImage(UIImage(named: "icBarCallFilled"), for: [])
-        voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
-        voiceCallButton.frame = CGRect(x: -1, y: 0, width: 40, height: 30)
-        let voiceCallBarButton = UIBarButtonItem(customView: voiceCallButton)
-        
-        self.voiceCallButton.setTitle("", for: .normal)
-        self.voiceCallButton.sizeToFit()
-        
-        
-        self.navigationItem.rightBarButtonItems = [settingBarButton, voiceCallBarButton]
-        
-        let uiview = UIView()
-        view.backgroundColor = UIColor.red
-        view.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
-        self.view.insertSubview(uiview, at: 2)
-        
         
     }
     
@@ -66,10 +41,14 @@ class ChannelViewController: SBUChannelViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-    
         self.tabBarController?.tabBar.isHidden = true
         self.tabBarController?.tabBar.frame = .zero
         
+        
+        if self.tabBarController is DashboardTabBarController {
+            let tbctrl = self.tabBarController as! DashboardTabBarController
+            tbctrl.button.isHidden = true
+        }
         
     }
     
@@ -117,11 +96,13 @@ class ChannelViewController: SBUChannelViewController {
         
         if let selected_channel = channel {
             
-            let CSV = ChannelSettingsVC(channelUrl: selected_channel.channelUrl)
-            navigationController?.pushViewController(CSV, animated: true)
+            if let CCV = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ChannelSettingsVC") as? ChannelSettingsVC {
+                CCV.channel = selected_channel
+                self.navigationController?.pushViewController(CCV, animated: true)
+                
+            }
             
         }
-        
         
     }
     
@@ -180,6 +161,7 @@ class ChannelViewController: SBUChannelViewController {
                             return
                     }
                     
+                   
                     // Try to create a SendBirdRoom object from the data
                     do {
                         let SBRoomInfo = try SendBirdRoom(JSONbody: data)
@@ -190,7 +172,7 @@ class ChannelViewController: SBUChannelViewController {
                         print(error)
                         return
                     }
-                    
+                   
                     // Fetch the room from the server
                     SendBirdCall.fetchRoom(by: self.currentRoomID) { room, error in
                         // Check for errors
@@ -247,18 +229,49 @@ class ChannelViewController: SBUChannelViewController {
     }
     
     func callLayout() {
-        let imageName = self.getRoom.participants.count > 0 ? "icCallFilled" : "icBarCallFilled"
-        let title = self.getRoom.participants.count > 0 ? "+" : ""
-        let animation = self.getRoom.participants.count > 0 ? "shake" : nil
-        self.voiceCallButton.setImage(UIImage(named: imageName), for: [])
-        self.voiceCallButton.setTitle(title, for: .normal)
-        self.voiceCallButton.sizeToFit()
-        if animation != nil {
-            self.voiceCallButton.shake()
+        let settingButton = UIButton(type: .custom)
+        settingButton.setImage(UIImage(named: "img_btn_channel_settings"), for: [])
+        settingButton.addTarget(self, action: #selector(showChannelSetting(_:)), for: .touchUpInside)
+        settingButton.frame = CGRect(x: 0, y: 0, width: 40, height: 30)
+        let settingBarButton = UIBarButtonItem(customView: settingButton)
+
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+
+        let voiceCallButton: UIButton
+        let voiceCallBarButton: UIBarButtonItem
+
+        if self.getRoom != nil && self.getRoom.participants.count > 0 {
+            voiceCallButton = UIButton(type: .custom)
+            voiceCallButton.semanticContentAttribute = .forceRightToLeft
+            voiceCallButton.setTitle("Join", for: .normal)
+            voiceCallButton.setTitleColor(.white, for: .normal)
+            voiceCallButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+            voiceCallButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
+            voiceCallButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
+            voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
+            voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
+            voiceCallButton.frame = CGRect(x: 0, y: 0, width: 70, height: 30)
+            voiceCallButton.backgroundColor = .secondary
+            voiceCallButton.cornerRadius = 15
+
+            let customView = UIView(frame: CGRect(x: 0, y: 0, width: 70, height: 30))
+            customView.addSubview(voiceCallButton)
+            voiceCallButton.center = customView.center
+            voiceCallBarButton = UIBarButtonItem(customView: customView)
         } else {
-            self.voiceCallButton.removeAnimation()
+            voiceCallButton = UIButton(type: .custom)
+            voiceCallButton.setTitle("", for: .normal)
+            voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
+            voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
+            voiceCallButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+            voiceCallButton.backgroundColor = .clear
+            voiceCallBarButton = UIBarButtonItem(customView: voiceCallButton)
         }
+
+        self.navigationItem.rightBarButtonItems = [settingBarButton, fixedSpace, voiceCallBarButton]
     }
+
 
     
     

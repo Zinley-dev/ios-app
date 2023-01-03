@@ -169,14 +169,14 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                     let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell
                     
                     if count == 0 {
-                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
                     } else if count == 1 {
-                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!, shouldGetGame: false)
+                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!)
                     } else if count > 1 && count < 5 {
                         updateCell?.profileImagView.users = filteredMembers
                         updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
                     } else {
-                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!, shouldGetGame: false)
+                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
                     }
                     
                     if channel.name != "" && channel.name != "Group Channel" {

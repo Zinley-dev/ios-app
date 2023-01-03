@@ -80,6 +80,11 @@
 		6A58EA56294ECAE6005FA3CD /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA55294ECAE6005FA3CD /* ChannelViewController.swift */; };
 		6A58EA59294ECD5C005FA3CD /* SBUPendingMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA58294ECD5C005FA3CD /* SBUPendingMessageManager.swift */; };
 		6A58EA5E294ED210005FA3CD /* loading_typing.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6A58EA5D294ED210005FA3CD /* loading_typing.gif */; };
+		6A6C30D1296246040070167A /* ModerationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6C30D0296246040070167A /* ModerationVC.swift */; };
+		6A6C30D529626D3C0070167A /* LeaveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6C30D329626D3C0070167A /* LeaveView.xib */; };
+		6A6C30D629626D3C0070167A /* LeaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6C30D429626D3C0070167A /* LeaveView.swift */; };
+		6A6C30DB2963CCCD0070167A /* ModActionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6C30D92963CCCC0070167A /* ModActionView.xib */; };
+		6A6C30DC2963CCCD0070167A /* ModActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6C30DA2963CCCD0070167A /* ModActionView.swift */; };
 		6AAD79FF294C4C68003E3AB6 /* NavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD79FE294C4C68003E3AB6 /* NavigationVC.swift */; };
 		6AAD7A02294C4D1C003E3AB6 /* MainMessageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD7A01294C4D1C003E3AB6 /* MainMessageVC.swift */; };
 		6AAD7A05294C53EC003E3AB6 /* ModView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD7A04294C53EC003E3AB6 /* ModView.swift */; };
@@ -267,6 +272,11 @@
 		6A58EA55294ECAE6005FA3CD /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
 		6A58EA58294ECD5C005FA3CD /* SBUPendingMessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SBUPendingMessageManager.swift; sourceTree = "<group>"; };
 		6A58EA5D294ED210005FA3CD /* loading_typing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading_typing.gif; sourceTree = "<group>"; };
+		6A6C30D0296246040070167A /* ModerationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModerationVC.swift; sourceTree = "<group>"; };
+		6A6C30D329626D3C0070167A /* LeaveView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeaveView.xib; sourceTree = "<group>"; };
+		6A6C30D429626D3C0070167A /* LeaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeaveView.swift; sourceTree = "<group>"; };
+		6A6C30D92963CCCC0070167A /* ModActionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModActionView.xib; sourceTree = "<group>"; };
+		6A6C30DA2963CCCD0070167A /* ModActionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModActionView.swift; sourceTree = "<group>"; };
 		6AAD79FE294C4C68003E3AB6 /* NavigationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationVC.swift; sourceTree = "<group>"; };
 		6AAD7A01294C4D1C003E3AB6 /* MainMessageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessageVC.swift; sourceTree = "<group>"; };
 		6AAD7A04294C53EC003E3AB6 /* ModView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModView.swift; sourceTree = "<group>"; };
@@ -706,6 +716,8 @@
 		6A12359D29503488004B612E /* ChannelSettingsVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A6C30CF296245EB0070167A /* ModerationVC */,
+				6A6C30D229626D0B0070167A /* LeaveChannelVC */,
 				6A12359E29503492004B612E /* ChannelSettingsVC.swift */,
 			);
 			path = ChannelSettingsVC;
@@ -771,6 +783,33 @@
 				6A58EA5D294ED210005FA3CD /* loading_typing.gif */,
 			);
 			path = LoadingGif;
+			sourceTree = "<group>";
+		};
+		6A6C30CF296245EB0070167A /* ModerationVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A6C30D82963CCBA0070167A /* ModActionView */,
+				6A6C30D0296246040070167A /* ModerationVC.swift */,
+			);
+			path = ModerationVC;
+			sourceTree = "<group>";
+		};
+		6A6C30D229626D0B0070167A /* LeaveChannelVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A6C30D429626D3C0070167A /* LeaveView.swift */,
+				6A6C30D329626D3C0070167A /* LeaveView.xib */,
+			);
+			path = LeaveChannelVC;
+			sourceTree = "<group>";
+		};
+		6A6C30D82963CCBA0070167A /* ModActionView */ = {
+			isa = PBXGroup;
+			children = (
+				6A6C30DA2963CCCD0070167A /* ModActionView.swift */,
+				6A6C30D92963CCCC0070167A /* ModActionView.xib */,
+			);
+			path = ModActionView;
 			sourceTree = "<group>";
 		};
 		6AAD79F9294C4BB5003E3AB6 /* LoginVC */ = {
@@ -1185,8 +1224,10 @@
 				6AAD7A25294C65F6003E3AB6 /* ConnectionLost.mp3 in Resources */,
 				14131D7E293B3666001F7631 /* Components.storyboard in Resources */,
 				147BDB682928B1E1003511C3 /* Colors.xcassets in Resources */,
+				6A6C30D529626D3C0070167A /* LeaveView.xib in Resources */,
 				1457CCD929464DD6003C742F /* IconSet.xcassets in Resources */,
 				1429CD05295042AA00CDBCC8 /* Backups.storyboard in Resources */,
+				6A6C30DB2963CCCD0070167A /* ModActionView.xib in Resources */,
 				6AAD7A24294C65F6003E3AB6 /* Ringing.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1355,6 +1396,7 @@
 				148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */,
 				6A12359F29503492004B612E /* ChannelSettingsVC.swift in Sources */,
 				A59CB3F3294ADC2500D84D9A /* SessionDataSource.swift in Sources */,
+				6A6C30D629626D3C0070167A /* LeaveView.swift in Sources */,
 				390FD782290931900068B883 /* NormalLoginViewController.swift in Sources */,
 				390FD76F290928DA0068B883 /* APIResponse.swift in Sources */,
 				6AAD7A1D294C65DD003E3AB6 /* UIImageView+QuickStart.swift in Sources */,
@@ -1382,6 +1424,7 @@
 				6AEC690429517EA9000393D8 /* SwiftLoader.swift in Sources */,
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				A540A8D6294730C40085CC45 /* FacebookSignInService.swift in Sources */,
+				6A6C30DC2963CCCD0070167A /* ModActionView.swift in Sources */,
 				14FAEE06294DEE0B00C20B99 /* SettingViewModel.swift in Sources */,
 				A5DF81F7295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift in Sources */,
 				6AAD7A2D294C6624003E3AB6 /* SendBirdCall+QuickStart.swift in Sources */,
@@ -1457,6 +1500,7 @@
 				A548E5AA2955AD7500E9C971 /* LastStepViewController.swift in Sources */,
 				149F44F72956F8270084742A /* RoundedImageView.swift in Sources */,
 				6AAD7A1E294C65DD003E3AB6 /* UIApplication+QuickStart.swift in Sources */,
+				6A6C30D1296246040070167A /* ModerationVC.swift in Sources */,
 				6A1235A5295034BD004B612E /* InviteUserVC.swift in Sources */,
 				6AEC6901295178E2000393D8 /* SendBirdRoomModel.swift in Sources */,
 				6A58EA56294ECAE6005FA3CD /* ChannelViewController.swift in Sources */,

@@ -17,25 +17,22 @@ import SendBirdUIKit
 
 class GroupCallViewController: UIViewController {
 
+    @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var contentView: UIView!
     
     var currentRoom: Room?
     var newroom: Bool?
     var currentChanelUrl: String?
+    private var callTimer: Timer?
 
-    @IBOutlet weak var speakerButton: UIButton! {
-        didSet {
-                guard let output = AVAudioSession.sharedInstance().currentRoute.outputs.first else { return }
-            speakerButton.setBackgroundImage(output.portType.rawValue == "BluetoothHFP" ? UIImage(named: "airpod") : .audio(output: output.portType), for: .normal)
-            }
-        
-    }
+    @IBOutlet weak var speakerButton: UIButton!
     
     @IBOutlet weak var muteAudioButton: UIButton! {
         didSet {
                 let isAudioEnabled = currentRoom?.localParticipant?.isAudioEnabled ?? false
                 muteAudioButton.isSelected = isAudioEnabled
-            muteAudioButton.setBackgroundImage( .audio(isOn: !isAudioEnabled), for: .normal)
+                print("Audio: \(isAudioEnabled)")
+                muteAudioButton.setBackgroundImage( .audio(isOn: !isAudioEnabled), for: .normal)
             }
     }
     
@@ -45,29 +42,92 @@ class GroupCallViewController: UIViewController {
     
     // collection users
     var collectionNode: ASCollectionNode!
+    let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter
+    }()
 
     
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-        if newroom! {
-            general_room = currentRoom
-            gereral_group_chanel_url = currentChanelUrl
+            super.viewDidLoad()
+        
+            print(self.navigationController?.navigationBar.frame.height)
+        
+            if newroom! {
+                general_room = currentRoom
+                gereral_group_chanel_url = currentChanelUrl
+                startTime = Date()
+                delay(1) {
+                    self.checkCurrentAudio()
+                }
+                
+
+                
+            } else {
+                
+                setupSpeaker()
+                
+            }
+                
+           
+            currentRoom?.addDelegate(self, identifier: "room")
+            setupAudioOutputButton()
+            current_participants = currentRoom?.participants.filter { $0.user.userId != _AppCoreData.userDataSource.value?.userID } ?? []
+            current_participants.insert((currentRoom?.localParticipant!)!, at: 0)
+            let flowLayout = UICollectionViewFlowLayout()
+            collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
+            flowLayout.minimumInteritemSpacing = 5
+            flowLayout.minimumLineSpacing = 5
+        
+        //
+            collectionNode.backgroundColor = UIColor.red
+            wireDelegates()
+            applyStyle()
+            collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
+            contentView.addSubview(collectionNode.view)
+            startCallDurationTimer()
+            
         }
-        currentRoom?.addDelegate(self, identifier: "room")
-        setupAudioOutputButton()
-        current_participants = currentRoom?.participants.filter { $0.user.userId != _AppCoreData.userDataSource.value?.userID } ?? []
-        current_participants.insert((currentRoom?.localParticipant!)!, at: 0)
-        let flowLayout = UICollectionViewFlowLayout()
-        collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        flowLayout.minimumInteritemSpacing = 5
-        flowLayout.minimumLineSpacing = 5
-        wireDelegates()
-        applyStyle()
-        collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
-        contentView.addSubview(collectionNode.view)
+    
+
+
+    func checkCurrentAudio() {
+        let audioSession = AVAudioSession.sharedInstance()
+
+        // Get the current audio route
+        let currentRoute = audioSession.currentRoute
+
+        // Check if the outputs array of the current route includes a .headphones type
+        if currentRoute.outputs.contains(where: { $0.portType == .headphones }) {
+            // Headphones are connected, use the headphones as the audio output
+            do {
+                try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: [.allowBluetooth, .allowBluetoothA2DP])
+                try audioSession.overrideOutputAudioPort(.none)
+                //setupSpeaker()
+            } catch {
+                print("Failed to set audio route to headphones: \(error)")
+            }
+        } else {
+            // Headphones are not connected, use the speaker as the audio output
+            do {
+                try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: [.allowBluetooth, .allowBluetoothA2DP])
+                try audioSession.overrideOutputAudioPort(.speaker)
+                //setupSpeaker()
+            } catch {
+                print("Failed to set audio route to speaker: \(error)")
+            }
+        }
     }
 
+    
+    func setupSpeaker() {
+        
+        guard let output = AVAudioSession.sharedInstance().currentRoute.outputs.first else { return }
+        speakerButton.setBackgroundImage(output.portType.rawValue == "BluetoothHFP" ? UIImage(named: "airpod") : .audio(output: output.portType), for: .normal)
+        
+    }
     
     
     func applyStyle() {
@@ -94,6 +154,7 @@ class GroupCallViewController: UIViewController {
 
     @IBAction func back1BtnPressed(_ sender: Any) {
         
+        stopCallDurationTimer()
         currentRoom?.removeAllDelegates()
         self.dismiss(animated: true, completion: nil)
         
@@ -101,6 +162,7 @@ class GroupCallViewController: UIViewController {
     
     @IBAction func back2BtnPressed(_ sender: Any) {
         
+        stopCallDurationTimer()
         currentRoom?.removeAllDelegates()
         self.dismiss(animated: true, completion: nil)
         
@@ -108,23 +170,40 @@ class GroupCallViewController: UIViewController {
     
     
     @IBAction func didTapAudioOption(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        
-        self.updateLocalAudio(isEnabled: sender.isSelected)
+        // Get the current audio enabled state for the local participant
+        if let isAudioEnabled = currentRoom?.localParticipant?.isAudioEnabled {
+            // Update the mute button image based on the current audio enabled state
+            muteAudioButton.setBackgroundImage(.audio(isOn: isAudioEnabled), for: .normal)
+            // If audio is enabled, mute the microphone
+            if isAudioEnabled {
+                currentRoom?.localParticipant?.muteMicrophone()
+            // If audio is disabled, unmute the microphone
+            } else {
+                currentRoom?.localParticipant?.unmuteMicrophone()
+            }
+            // Update the first element in the current participants array with the updated local participant
+            current_participants[0] = currentRoom!.localParticipant!
+            // Reload the collection view to reflect the change in audio status for the local participant
+            collectionNode.reloadItems(at: [IndexPath(item: 0, section: 0)])
+        }
     }
+
+
     
     @IBAction func didTapEnd() {
         endButton.isEnabled = false
             currentRoom?.removeAllDelegates()
             do {
                 try currentRoom?.exit()
+                timeLbl.text = "Ending"
+                stopCallDurationTimer()
                 general_room = nil
                 gereral_group_chanel_url = nil
                 NotificationCenter.default.post(name: NSNotification.Name("checkCallForLayout"), object: nil)
                 dismiss(animated: true, completion: nil)
             } catch {
                 presentErrorAlert(message: "Can't leave the room now!")
-            }
+        }
     }
     
 }
@@ -136,6 +215,7 @@ extension GroupCallViewController {
         let height = speakerButton.frame.height
         let frame = CGRect(x: 0, y: 0, width: width, height: height)
         let routePickerView = SendBirdCall.routePickerView(frame: frame)
+        
         customize(routePickerView)
         speakerButton.addSubview(routePickerView)
     }
@@ -145,6 +225,7 @@ extension GroupCallViewController {
             guard let routePickerView = routePickerView as? AVRoutePickerView else { return }
             routePickerView.activeTintColor = .clear
             routePickerView.tintColor = .clear
+            
         } else {
             guard let volumeView = routePickerView as? MPVolumeView else { return }
             volumeView.showsVolumeSlider = true
@@ -153,20 +234,6 @@ extension GroupCallViewController {
         }
     }
 
-    func updateLocalAudio(isEnabled: Bool) {
-        muteAudioButton.setBackgroundImage(.audio(isOn: isEnabled), for: .normal)
-        if isEnabled {
-            currentRoom?.localParticipant?.muteMicrophone()
-        } else {
-            currentRoom?.localParticipant?.unmuteMicrophone()
-        }
-        current_participants[0] = (currentRoom?.localParticipant!)!
-        collectionNode.reloadItems(at: [IndexPath(item: 0, section: 0)])
-    }
-
-
-    
-    
 }
 
 extension GroupCallViewController: RoomDelegate {
@@ -190,6 +257,7 @@ extension GroupCallViewController: RoomDelegate {
 
     func didAudioDeviceChange(_ room: Room, session: AVAudioSession, previousRoute: AVAudioSessionRouteDescription, reason: AVAudioSession.RouteChangeReason) {
         guard let output = session.currentRoute.outputs.first else { return }
+        print(output.portType.rawValue)
         speakerButton.setBackgroundImage(.audio(output: output.portType), for: .normal)
     }
 
@@ -243,7 +311,6 @@ extension GroupCallViewController: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
         
-        
         if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
             
             let user = current_participants[indexPath.row]
@@ -256,11 +323,9 @@ extension GroupCallViewController: ASCollectionDataSource {
                 let chat = UIAlertAction(title: "Chat", style: .default) { (alert) in
                     
                     self.chat(user: user)
-                    
-                    
+                          
                 }
 
-                
                 let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in
                     
                 }
@@ -273,10 +338,8 @@ extension GroupCallViewController: ASCollectionDataSource {
                 
             }
             
-            
         }
-         
-        
+          
     }
     
     func chat(user: Participant) {
@@ -311,5 +374,44 @@ extension GroupCallViewController: ASCollectionDataSource {
         
         
     }
+
+}
+
+// MARK: - SendBirdCalls: Groupcall duration
+extension GroupCallViewController {
+    func startCallDurationTimer() {
+        // Get the current time and store it as the start time
+           
+           
+           // Create a timer that updates the duration display every second
+           callTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+               // Get the current time
+               let currentTime = Date()
+               
+               // Calculate the duration by subtracting the start time from the current time
+               let duration = currentTime.timeIntervalSince(startTime)
+               
+               // Update the duration display using the duration
+               self?.updateDurationDisplay(duration: duration)
+           }
+    }
+    
+    func updateDurationDisplay(duration: TimeInterval) {
+        // Use a DateComponentsFormatter to format the duration as HH:mm:ss
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .positional
+        formatter.zeroFormattingBehavior = .pad
+        let durationString = formatter.string(from: duration)
+        
+        // Update the duration label with the formatted duration
+        timeLbl.text = durationString
+    }
+
+    func stopCallDurationTimer() {
+        callTimer?.invalidate()
+        callTimer = nil
+    }
+
 
 }
