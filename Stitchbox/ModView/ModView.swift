@@ -497,7 +497,7 @@ extension UITableView {
         messageLabel.textColor = .white
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
-        messageLabel.font = UIFont(name:"Roboto-Regular",size: 15)!
+        messageLabel.font = UIFont.systemFont(ofSize: 15)
         messageLabel.sizeToFit()
 
         self.backgroundView = messageLabel
@@ -517,7 +517,7 @@ extension UICollectionView {
         messageLabel.textColor = .white
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
-        messageLabel.font = UIFont(name:"Roboto-Regular",size: 15)!
+        messageLabel.font = UIFont.systemFont(ofSize: 15)
         messageLabel.sizeToFit()
 
         self.backgroundView = messageLabel

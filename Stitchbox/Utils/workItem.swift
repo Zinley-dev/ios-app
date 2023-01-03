@@ -10,7 +10,7 @@ import UIKit
 
 class workItem {
 
-private var pendingRequestWorkItem: DispatchWorkItem?
+    private var pendingRequestWorkItem: DispatchWorkItem?
 
     func perform(after: TimeInterval, _ block: @escaping () -> Void) {
         // Cancel the currently pending item

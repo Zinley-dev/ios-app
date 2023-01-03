@@ -259,6 +259,9 @@ class ChannelViewController: SBUChannelViewController {
             customView.addSubview(voiceCallButton)
             voiceCallButton.center = customView.center
             voiceCallBarButton = UIBarButtonItem(customView: customView)
+            
+            voiceCallButton.shake()
+            
         } else {
             voiceCallButton = UIButton(type: .custom)
             voiceCallButton.setTitle("", for: .normal)
@@ -267,6 +270,7 @@ class ChannelViewController: SBUChannelViewController {
             voiceCallButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
             voiceCallButton.backgroundColor = .clear
             voiceCallBarButton = UIBarButtonItem(customView: voiceCallButton)
+            voiceCallButton.removeAnimation()
         }
 
         self.navigationItem.rightBarButtonItems = [settingBarButton, fixedSpace, voiceCallBarButton]
