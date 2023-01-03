@@ -1094,7 +1094,7 @@
                                                 <rect key="frame" x="0.0" y="55" width="382" height="40"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="tSn-Wd-rvW">
-                                                        <rect key="frame" x="16" y="5" width="156" height="30"/>
+                                                        <rect key="frame" x="16" y="5" width="160.5" height="30"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mod" translatesAutoresizingMaskIntoConstraints="NO" id="H6y-Fk-BbU">
                                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
@@ -1103,8 +1103,8 @@
                                                                     <constraint firstAttribute="height" constant="30" id="ahS-q9-nwt"/>
                                                                 </constraints>
                                                             </imageView>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Moderations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cb6-Q4-EDQ">
-                                                                <rect key="frame" x="55" y="0.0" width="101" height="30"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Moderations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cb6-Q4-EDQ">
+                                                                <rect key="frame" x="55" y="0.0" width="105.5" height="30"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
@@ -2228,11 +2228,11 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="314" height="775"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OD5-TY-SXt">
-                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="227.5"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="314" height="225.5"/>
                                                                 <color key="backgroundColor" name="Background"/>
                                                             </view>
                                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User's referral code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gZ4-lz-XpD" customClass="STextField" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="267.5" width="314" height="36"/>
+                                                                <rect key="frame" x="0.0" y="265.5" width="314" height="36"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="36" id="sA9-bc-Dmc"/>
                                                                 </constraints>
@@ -2253,7 +2253,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </textField>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBW-Pu-Oc8">
-                                                                <rect key="frame" x="0.0" y="343.5" width="314" height="59.5"/>
+                                                                <rect key="frame" x="0.0" y="341.5" width="314" height="59.5"/>
                                                                 <color key="tintColor" name="Text"/>
                                                                 <attributedString key="attributedText">
                                                                     <fragment content="Tap the code to share it with your friends so when they sign up for Stitchbox, you and your friend get reward points!">
@@ -2266,7 +2266,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="Otd-IW-3Q6" customClass="RoundedImageView" customModule="Stitchbox" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="443" width="314" height="278"/>
+                                                                <rect key="frame" x="0.0" y="441" width="314" height="280"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="size" keyPath="imageSize">
                                                                         <size key="value" width="280" height="280"/>
@@ -2773,7 +2773,7 @@
             <size key="intrinsicContentSize" width="191" height="34"/>
         </designable>
         <designable name="Otd-IW-3Q6">
-            <size key="intrinsicContentSize" width="278" height="278"/>
+            <size key="intrinsicContentSize" width="280" height="280"/>
         </designable>
         <designable name="PdQ-TC-Ctu">
             <size key="intrinsicContentSize" width="182.5" height="34.5"/>
@@ -2797,7 +2797,7 @@
             <size key="intrinsicContentSize" width="73" height="34.5"/>
         </designable>
         <designable name="gZ4-lz-XpD">
-            <size key="intrinsicContentSize" width="156" height="34"/>
+            <size key="intrinsicContentSize" width="162" height="34"/>
         </designable>
         <designable name="j3e-pQ-uGe">
             <size key="intrinsicContentSize" width="340" height="192"/>
@@ -2839,7 +2839,7 @@
         <image name="file" width="25" height="25"/>
         <image name="home" width="36" height="37"/>
         <image name="home.filled" width="24" height="26"/>
-        <image name="img_icon_nofi_off" width="100" height="100"/>
+        <image name="img_icon_nofi_off" width="48" height="48"/>
         <image name="img_toast_check" width="40" height="32"/>
         <image name="leave3x" width="45" height="41"/>
         <image name="link" width="25" height="25"/>

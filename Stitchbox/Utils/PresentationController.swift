@@ -12,7 +12,7 @@ class PresentationController: UIPresentationController {
   let blurEffectView: UIVisualEffectView!
   var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
   
-  override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
+    override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
       let blurEffect = UIBlurEffect(style: .dark)
       blurEffectView = UIVisualEffectView(effect: blurEffect)
       super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
@@ -23,9 +23,9 @@ class PresentationController: UIPresentationController {
   }
   
   override var frameOfPresentedViewInContainerView: CGRect {
-      CGRect(origin: CGPoint(x: 0, y: self.containerView!.frame.height * 0.65),
+      CGRect(origin: CGPoint(x: 0, y: self.containerView!.frame.height * (1 - global_presetingRate)),
              size: CGSize(width: self.containerView!.frame.width, height: self.containerView!.frame.height *
-                            0.35))
+                          CGFloat(global_presetingRate)))
   }
 
   override func presentationTransitionWillBegin() {
@@ -46,7 +46,7 @@ class PresentationController: UIPresentationController {
   
   override func containerViewWillLayoutSubviews() {
       super.containerViewWillLayoutSubviews()
-    presentedView!.roundCorners([.topLeft, .topRight], radius: 50)
+      presentedView!.roundCorners([.topLeft, .topRight], radius: CGFloat(global_cornerRadius))
   }
 
   override func containerViewDidLayoutSubviews() {

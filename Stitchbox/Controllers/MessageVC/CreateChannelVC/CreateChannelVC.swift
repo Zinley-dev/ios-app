@@ -37,7 +37,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         var titleView = UILabel()
         titleView.backgroundColor = UIColor.clear
         titleView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 55)
-        titleView.text = "New message"
+        titleView.text = ""
         titleView.textAlignment = .center
         titleView.textColor = UIColor.white
         
@@ -45,13 +45,19 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     }()
     
     private lazy var _leftBarButton: UIBarButtonItem = {
-        return UIBarButtonItem(
-            
-            image: UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 10, height: 20)),
-            style: .plain,
-            target: self,
-            action: #selector(onClickBack)
-        )
+        
+        
+        let leftButton = UIButton(type: .custom)
+        
+        leftButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
+        leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
+        leftButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        leftButton.setTitleColor(UIColor.white, for: .normal)
+        leftButton.setTitle("     New message", for: .normal)
+        leftButton.sizeToFit()
+        
+        let backButtonBarButton = UIBarButtonItem(customView: leftButton)
+        return backButtonBarButton
     }()
     
     private lazy var _rightBarButton: UIBarButtonItem = {

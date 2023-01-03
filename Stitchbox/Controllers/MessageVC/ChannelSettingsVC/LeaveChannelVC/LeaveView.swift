@@ -39,8 +39,6 @@ class LeaveView: UIViewController {
     }
     
     
-    
-    
     func showErrorAlert(_ title: String, msg: String) {
                                                                                                                                            
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)

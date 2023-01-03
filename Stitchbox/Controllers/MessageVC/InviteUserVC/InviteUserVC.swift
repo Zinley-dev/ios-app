@@ -58,18 +58,24 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50)
             )
         }
-        titleView.text = "Add members"
+        titleView.text = ""
         titleView.textAlignment = .center
         return titleView
     }()
     
     private lazy var _leftBarButton: UIBarButtonItem = {
-        return UIBarButtonItem(
-            image: SBUIconSet.iconBack.resize(targetSize: CGSize(width: 25.0, height: 25.0)),
-            style: .plain,
-            target: self,
-            action: #selector(onClickBack)
-        )
+        
+        let leftButton = UIButton(type: .custom)
+        
+        leftButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
+        leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
+        leftButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        leftButton.setTitleColor(UIColor.white, for: .normal)
+        leftButton.setTitle("     Add members", for: .normal)
+        leftButton.sizeToFit()
+        
+        let backButtonBarButton = UIBarButtonItem(customView: leftButton)
+        return backButtonBarButton
     }()
     
     private lazy var _rightBarButton: UIBarButtonItem = {

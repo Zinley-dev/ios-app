@@ -77,10 +77,6 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
             
         })
         
-        
-        
-       
-        
     }
     
     
@@ -321,7 +317,9 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         let LeaveView = LeaveView()
         LeaveView.modalPresentationStyle = .custom
         LeaveView.transitioningDelegate = self
-
+        
+        global_presetingRate = Double(0.35)
+        global_cornerRadius = 50
         self.present(LeaveView, animated: true, completion: nil)
         
         

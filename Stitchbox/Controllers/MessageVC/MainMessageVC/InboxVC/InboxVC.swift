@@ -449,8 +449,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                         height: iconSize
                 ))
                 leaveTypeView.layer.cornerRadius = iconSize/2
-                leaveTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOffBackgroundColor
-                leaveTypeView.image = UIImage(named: "leave3x")
+                leaveTypeView.backgroundColor = UIColor.primary
+                leaveTypeView.image = UIImage(named: "leave3x")!.resize(targetSize: CGSize(width: 20, height: 20))
                 leaveTypeView.contentMode = .center
                 
                 leaveAction.image = leaveTypeView.asImage()
@@ -498,11 +498,11 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 let alarmIcon: UIImage
                 
                 if pushOption == .off {
-                    alarmTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOnBackgroundColor
-                    alarmIcon = UIImage(named: "noti3x")!
+                    alarmTypeView.backgroundColor = UIColor.primary
+                    alarmIcon = UIImage(named: "Noti3x")!.resize(targetSize: CGSize(width: 30, height: 30))
                 } else {
-                    alarmTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOffBackgroundColor
-                    alarmIcon  = UIImage(named: "muted")!
+                    alarmTypeView.backgroundColor = UIColor.primary
+                    alarmIcon  = UIImage(named: "muted")!.resize(targetSize: CGSize(width: 30, height: 30))
                 }
                 alarmTypeView.image = alarmIcon
                 alarmTypeView.contentMode = .center
