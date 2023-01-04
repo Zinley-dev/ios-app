@@ -788,8 +788,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
 
     func channelWasChanged(_ sender: SBDBaseChannel) {
-        guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
-        groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
+        self.sortChannelList(needReload: true)
     }
 
     
