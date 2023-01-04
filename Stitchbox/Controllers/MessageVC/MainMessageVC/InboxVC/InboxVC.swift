@@ -44,6 +44,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
 
         // Do any additional setup after loading the view.
         
+        let abcd = SBUChannelListViewController()
+        
         self.groupChannelsTableView.delegate = self
         self.groupChannelsTableView.dataSource = self
         
@@ -412,8 +414,11 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let channel = inSearchMode ? searchChannelList[indexPath.row] : channels[indexPath.row]
-        let channelVC = ChannelViewController(channelUrl: channel.channelUrl, messageListParams: nil)
+        let mslp = SBDMessageListParams()
+        
+        let channelVC = ChannelViewController(channelUrl: channel.channelUrl, messageListParams: mslp)
         self.navigationController?.pushViewController(channelVC, animated: true)
+      
     }
 
     
@@ -678,6 +683,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         
         
     }
+    
+    
 
 
     
