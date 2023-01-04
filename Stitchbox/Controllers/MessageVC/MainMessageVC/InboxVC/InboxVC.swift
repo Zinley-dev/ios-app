@@ -645,24 +645,38 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     }
     
     func channel(_ sender: SBDBaseChannel, didReceive message: SBDBaseMessage) {
-        DispatchQueue.main.async {
-            if let sender = sender as? SBDGroupChannel {
-                var index: Int?
-                for (i, ch) in self.channels.enumerated() {
-                    if ch.channelUrl == sender.channelUrl {
-                        index = i
-                        break
+        
+       
+        
+        if message.customType == "SENDBIRD:AUTO_EVENT_MESSAGE" {
+            
+            guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
+            groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
+            
+        } else {
+            
+            DispatchQueue.main.async {
+                if let sender = sender as? SBDGroupChannel {
+                    var index: Int?
+                    for (i, ch) in self.channels.enumerated() {
+                        if ch.channelUrl == sender.channelUrl {
+                            index = i
+                            break
+                        }
                     }
+                    if let index = index {
+                        self.channels.remove(at: index)
+                        self.groupChannelsTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                    }
+                    self.channels.insert(sender, at: 0)
+                    self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                    self.updateTotalUnreadMessageCountBadge()
                 }
-                if let index = index {
-                    self.channels.remove(at: index)
-                    self.groupChannelsTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
-                }
-                self.channels.insert(sender, at: 0)
-                self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-                self.updateTotalUnreadMessageCountBadge()
             }
+            
         }
+        
+        
     }
 
 
