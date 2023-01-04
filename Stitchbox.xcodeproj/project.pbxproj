@@ -349,6 +349,16 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		146DD8A32965966D0008199A /* SettingVC */ = {
+			isa = PBXGroup;
+			children = (
+				14FAEE03294DED5800C20B99 /* SettingViewController.swift */,
+				14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */,
+				144022EA295CCA79009B7A58 /* ChangeProfilePhoto.swift */,
+			);
+			path = SettingVC;
+			sourceTree = "<group>";
+		};
 		147187E02920A3A20039B89E /* StitchboxUnitTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -550,13 +560,11 @@
 				390FD78529093EA00068B883 /* FeedViewController.swift */,
 				395477BC294D6BCA008EED97 /* LoginByPhoneVerifyController.swift */,
 				A5A5E40E29388F5F004E9207 /* CreateAccountViewController.swift */,
-				14FAEE03294DED5800C20B99 /* SettingViewController.swift */,
-				14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */,
+				146DD8A32965966D0008199A /* SettingVC */,
 				A5A5E410293891A2004E9207 /* LoginViewController.swift */,
 				A5A5E41229389770004E9207 /* ForgotViewController.swift */,
 				A5A5E4142938A309004E9207 /* VerifyViewController.swift */,
 				A5346487294B09B300FB6A94 /* ProfileViewController.swift */,
-				144022EA295CCA79009B7A58 /* ChangeProfilePhoto.swift */,
 				149F44F82956F98E0084742A /* EditProfileViewController.swift */,
 			);
 			path = Controllers;

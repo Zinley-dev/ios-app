@@ -16,6 +16,7 @@ target 'Stitchbox' do
   pod 'CountryPickerView', '~> 3.3.0'
   pod 'ObjectMapper', '~> 3.5'
   pod 'EzPopup'
+  pod 'PixelSDK'
 
   # Add the Firebase pod for Google Analytics
   pod 'FirebaseAnalytics', '~> 10.3.0'

@@ -1436,9 +1436,12 @@
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="changeAvatar" destination="CgQ-C9-yCl" eventType="touchDown" id="9n7-lT-fTV"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sOv-A7-hKk" userLabel="Take photo" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="36" y="127.5" width="342" height="34.5"/>
+                                        <rect key="frame" x="36" y="127.49999999999999" width="342" height="34.500000000000014"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="takephoto" title="Take Photo" imagePadding="9">
                                             <color key="baseForegroundColor" name="Text"/>
@@ -1547,9 +1550,12 @@
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="haveSwitch" value="NO"/>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="changeCover" destination="spq-pS-amH" eventType="touchDown" id="cQN-Sj-nqW"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WmK-9N-BOX" userLabel="Take photo" customClass="CardButton" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="36" y="127.5" width="342" height="34.5"/>
+                                        <rect key="frame" x="36" y="127.49999999999999" width="342" height="34.500000000000014"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="takephoto" title="Take Photo" imagePadding="9">
                                             <color key="baseForegroundColor" name="Text"/>
