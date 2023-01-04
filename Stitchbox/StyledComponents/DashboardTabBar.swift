@@ -14,7 +14,7 @@ import CoreMedia
 import SendBirdUIKit
 import SendBirdCalls
 
-@IBDesignable class DashboardTabBarController: UITabBarController {
+@IBDesignable class DashboardTabBarController: UITabBarController, UITabBarControllerDelegate {
     
     var button: UIButton = UIButton()
     var actionButtonContainerView: UIView!
@@ -72,6 +72,9 @@ import SendBirdCalls
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        
+        self.delegate = self
+        SBDMain.add(self, identifier: self.sbu_className)
         
     }
     
