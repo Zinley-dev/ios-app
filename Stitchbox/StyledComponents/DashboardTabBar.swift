@@ -11,6 +11,8 @@ import SwiftUI
 import RxCocoa
 import RxSwift
 import CoreMedia
+import SendBirdUIKit
+import SendBirdCalls
 
 @IBDesignable class DashboardTabBarController: UITabBarController {
     
@@ -73,7 +75,59 @@ import CoreMedia
         
     }
     
+    func setUnreadMessagesCount(_ totalCount: UInt) {
+        
+        var badgeValue: String?
+        
+        
+        if totalCount == 0 {
+            badgeValue = nil
+        } else if totalCount > 99 {
+            badgeValue = "99+"
+        } else {
+            badgeValue = "\(totalCount)"
+        }
+        
+    
+        if let tabItems = self.tabBar.items {
+            // In this case we want to modify the badge number of the third tab:
+           
+            let tabItem = tabItems[3]
+            
+            tabItem.badgeColor = SBUColorSet.error400
+            tabItem.badgeValue = badgeValue
+            tabItem.setBadgeTextAttributes(
+                [
+                    NSAttributedString.Key.foregroundColor : SBUColorSet.ondark01,
+                    NSAttributedString.Key.font : SBUFontSet.caption4
+                ],
+                for: .normal
+            )
+            
+        } else {
+            
+            print("No tabs")
+            
+        }
+        
+        
+        
+    }
+    
 }
+
+extension DashboardTabBarController: SBDUserEventDelegate{
+    func didUpdateTotalUnreadMessageCount(_ totalCount: Int32,
+                                          totalCountByCustomType: [String : NSNumber]?)
+    {
+        self.setUnreadMessagesCount(UInt(totalCount))
+        
+        
+        
+    }
+    
+}
+
 
 
 #if canImport(SwiftUI) && DEBUG
