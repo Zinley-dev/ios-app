@@ -140,3 +140,39 @@ extension UILabel {
         return Int(ceil(CGFloat(labelSize.height) / self.font.lineHeight))
     }
 }
+
+
+func processUpdateAvatar(channel: SBDGroupChannel, image: UIImage) {
+    
+    
+    APIManager().uploadImage(image: image) { result in
+        
+        switch result {
+        case .success(let apiResponse):
+            
+            guard apiResponse.body?["message"] as? String == "avatar uploaded successfully",
+                  let url = apiResponse.body?["url"] as? String  else {
+                    return
+            }
+            
+           
+            // update SBDGroupChannelParams()
+            let param = SBDGroupChannelParams()
+            param.coverUrl = url
+            
+            channel.update(with: param) { _, error in
+                if let error = error {
+                    print(error.localizedDescription, error.code)
+                    return
+                }
+            }
+
+
+        case .failure(let error):
+            print(error)
+        }
+        
+        
+    }
+    
+}

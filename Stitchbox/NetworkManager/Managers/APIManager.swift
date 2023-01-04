@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 public enum ErrorType: Error {
     case noInternet
@@ -26,6 +27,7 @@ struct APIManager {
     let manager = Manager<UserApi>()
     let SBmanager = Manager<ChatApi>()
     let searchManager = Manager<SearchApi>()
+    let mediaManager = Manager<MediaAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -93,6 +95,13 @@ struct APIManager {
             completion(result)
         }
         
+    }
+  
+  
+    func uploadImage(image: UIImage, completion: @escaping APICompletion) {
+      mediaManager.upload(.uploadImage, image: image) { result in
+        completion(result)
+      }
     }
     
     

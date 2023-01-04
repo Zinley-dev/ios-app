@@ -310,16 +310,27 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     let count = filteredMembers.count
                     let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell
                     
-                    if count == 0 {
+                    
+                    if channel.coverUrl != nil, !(channel.coverUrl?.contains("sendbird"))! {
+                        
                         updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
-                    } else if count == 1 {
-                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!)
-                    } else if count > 1 && count < 5 {
-                        updateCell?.profileImagView.users = filteredMembers
-                        updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
+                        
                     } else {
-                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
+                        
+                        if count == 0 {
+                            updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
+                        } else if count == 1 {
+                            updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!)
+                        } else if count > 1 && count < 5 {
+                            updateCell?.profileImagView.users = filteredMembers
+                            updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
+                        } else {
+                            updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
+                        }
+                        
                     }
+                    
+                    
                     
                     if channel.name != "" && channel.name != "Group Channel" {
                         updateCell?.channelNameLabel.text = channel.name

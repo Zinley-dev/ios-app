@@ -243,21 +243,44 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         let hasActiveMember = filteredMembers?.contains(where: { $0.connectionStatus.rawValue == 1 }) ?? false
 
         if channel.memberCount == 2 {
-            avatarView.isHidden = false
-            activeview2.backgroundColor = hasActiveMember ? .green : .lightGray
+        
+            if channel.coverUrl != nil, !(channel.coverUrl?.contains("sendbird"))!{
+                
+                avatarView.isHidden = true
+                activeview1.backgroundColor = hasActiveMember ? .green : .lightGray
+                
+                avatar1.setImage(withCoverUrl: channel.coverUrl!)
+                
+            } else {
+                
+                avatarView.isHidden = false
+                activeview2.backgroundColor = hasActiveMember ? .green : .lightGray
 
-            setAvatarImage(for: avatar2, withProfileUrl: filteredMembers?[0].profileUrl)
-            setAvatarImage(for: avatar3, withProfileUrl: SBDMain.getCurrentUser()?.profileUrl)
+                setAvatarImage(for: avatar2, withProfileUrl: filteredMembers?[0].profileUrl)
+                setAvatarImage(for: avatar3, withProfileUrl: SBDMain.getCurrentUser()?.profileUrl)
+                
+            }
+            
         } else {
             avatarView.isHidden = true
             activeview1.backgroundColor = hasActiveMember ? .green : .lightGray
-
-            if channel.memberCount > 2 && channel.memberCount < 5 {
-                avatar1.users = filteredMembers!
-                avatar1.makeCircularWithSpacing(spacing: 1)
-            } else {
+            
+            if channel.coverUrl != nil, !(channel.coverUrl?.contains("sendbird"))! {
+                
                 avatar1.setImage(withCoverUrl: channel.coverUrl!)
+                
+            } else {
+                
+                if channel.memberCount > 2 && channel.memberCount < 5 {
+                    avatar1.users = filteredMembers!
+                    avatar1.makeCircularWithSpacing(spacing: 1)
+                } else {
+                    avatar1.setImage(withCoverUrl: channel.coverUrl!)
+                }
+                
             }
+
+            
         }
     }
 
@@ -435,6 +458,7 @@ extension ChannelSettingsVC: EditControllerDelegate {
                 }
 
                 self.avatar1.setImage(withImage: uiImage!)
+                processUpdateAvatar(channel: self.channel!, image: uiImage!)
                 
             })
             
@@ -444,6 +468,8 @@ extension ChannelSettingsVC: EditControllerDelegate {
         self.dismiss(animated: true, completion: nil)
         
     }
+    
+    
     
     func editController(_ editController: EditController, didCancelEditing session: PixelSDKSession?) {
         // Called when the back button in the EditController is pressed.

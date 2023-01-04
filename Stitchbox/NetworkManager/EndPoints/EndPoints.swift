@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol BaseURL {
     static var baseURL: String { get }
@@ -218,4 +219,44 @@ extension SettingAPI: EndPointType {
     var headers: [String: String]? {
         return ["Authorization": _AppCoreData.userSession.value!.accessToken]
     }
+}
+
+public enum MediaAPI {
+  case uploadImage
+  case uploadVideo
+}
+extension MediaAPI: EndPointType {
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .uploadVideo:
+        return .post
+      case .uploadImage:
+        return .post
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .uploadImage:
+        return .request
+      case .uploadVideo:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+  }
+  
+  var module: String {
+    return "/media"
+  }
+  var path: String {
+    switch self {
+      case .uploadImage:
+        return "/upload-image"
+      case .uploadVideo:
+        return "/upload-video"
+    }
+  }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 typealias APICompletion = (Result) -> Void
 typealias DataTaskResponse = (Data?, URLResponse?, Error?) -> Void
@@ -21,10 +22,27 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     init(session: URLSessionProtocol = URLSession.shared) {
         self.session = session
     }
+  
+    func upload(_ route: EndPoint, image: UIImage, completion: @escaping APICompletion) {
+      if var request = buildRequest(from: route) {
+        
+        let uploadData = builđData(for: image, request: &request)
+        
+        task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+          if error != nil {
+            completion(.failure(ErrorType.noInternet))
+          }
+          if let response = response as? HTTPURLResponse {
+            let result = self.handleNetworkResponse(data, response)
+            completion(result)
+          }
+        })
+        self.task?.resume()
+      }
+    }
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         if let request = buildRequest(from: route) {
-            print(request)
             task = session.dataTask(with: request, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
@@ -37,6 +55,20 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             self.task?.resume()
         }
     }
+  
+  fileprivate func builđData(for image: UIImage, request: inout URLRequest) -> Data {
+      let boundary = UUID().uuidString
+    request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+      let filename = "image.png"
+      var uploadData = Data()
+      uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+      uploadData.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+      uploadData.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
+      uploadData.append(image.jpegData(compressionQuality: 0.5)!)
+      uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+      return uploadData
+    }
+    
     fileprivate func buildRequest(from route: EndPoint) -> URLRequest? {
         // Check API endpoint is valid
         guard let endpointUrl = URL(string: APIBuilder.baseURL + route.module + route.path) else {
@@ -47,18 +79,18 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                                  timeoutInterval: 30.0)
         request.httpMethod = route.httpMethod.rawValue
         switch route.task {
-        case .request:
+          case .request:
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             if route.headers != nil {
-                self.addAdditionalHeaders(route.headers, request: &request)
+              self.addAdditionalHeaders(route.headers, request: &request)
             }
-        case .requestParameters(let parameters):
+          case .requestParameters(let parameters):
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             if route.headers != nil {
-                self.addAdditionalHeaders(route.headers, request: &request)
+              self.addAdditionalHeaders(route.headers, request: &request)
             }
             self.configureParameters(parameters: parameters, request: &request)
-        case .requestParametersAndHeaders(let parameters, let additionalHeaders):
+          case .requestParametersAndHeaders(let parameters, let additionalHeaders):
             self.addAdditionalHeaders(additionalHeaders, request: &request)
             self.configureParameters(parameters: parameters, request: &request)
         }
