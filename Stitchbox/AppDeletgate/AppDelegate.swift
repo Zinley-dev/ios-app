@@ -276,13 +276,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             // If the app is in the foreground, present a ChannelViewController with the channel URL.
             // If the app is in the background, pop the current view controller and present a ChannelViewController.
             if let vc = UIViewController.currentViewController() {
-                let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+                let mlsp = SBDMessageListParams()
+                let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
                 let navigationController = UINavigationController(rootViewController: channelVC)
                 navigationController.modalPresentationStyle = .fullScreen
                 vc.present(navigationController, animated: true, completion: nil)
             } else if let current = UINavigationController.currentViewController() as? ChannelViewController {
+                let mlsp = SBDMessageListParams()
                 current.navigationController?.popViewController(animated: false)
-                let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+                let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
                 let navigationController = UINavigationController(rootViewController: channelVC)
                 navigationController.modalPresentationStyle = .fullScreen
                 current.present(navigationController, animated: true, completion: nil)
