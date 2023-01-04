@@ -31,7 +31,6 @@ class GroupCallViewController: UIViewController {
         didSet {
                 let isAudioEnabled = currentRoom?.localParticipant?.isAudioEnabled ?? false
                 muteAudioButton.isSelected = isAudioEnabled
-                print("Audio: \(isAudioEnabled)")
                 muteAudioButton.setBackgroundImage( .audio(isOn: !isAudioEnabled), for: .normal)
             }
     }
@@ -53,8 +52,7 @@ class GroupCallViewController: UIViewController {
     override func viewDidLoad() {
             super.viewDidLoad()
         
-            print(self.navigationController?.navigationBar.frame.height)
-        
+          
             if newroom! {
                 general_room = currentRoom
                 gereral_group_chanel_url = currentChanelUrl

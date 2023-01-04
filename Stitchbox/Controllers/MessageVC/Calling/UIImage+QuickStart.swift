@@ -45,7 +45,7 @@ extension UIImage {
     static func audio(output: AVAudioSession.Port) -> UIImage? {
         switch output {
         case .bluetoothA2DP, .bluetoothHFP, .bluetoothLE:
-            return QuickStart.btnBluetoothSelected.image
+            return UIImage.init(named: "airpod")
         case .builtInSpeaker:
             return QuickStart.btnSpeakerSelected.image
         default:

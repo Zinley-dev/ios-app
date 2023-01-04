@@ -14,6 +14,7 @@ import SendBirdCalls
 import PushKit
 import UserNotifications
 import SendBirdUIKit
+import PixelSDK
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -32,12 +33,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             didFinishLaunchingWithOptions: launchOptions
         )
         
-        
+        setupPixelSDK()
         sendbird_authentication()
         syncSendbirdAccount()
         attemptRegisterForNotifications(application: application)
         setupStyle()
         return true
+    }
+    
+    
+    func setupPixelSDK() {
+        
+        PixelSDK.setup(pixel_key)
+        PixelSDK.shared.maxVideoDuration = 180
+        PixelSDK.shared.primaryFilters = PixelSDK.defaultStandardFilters + PixelSDK.defaultVisualEffectFilters
+        
     }
     
     func setupStyle() {
