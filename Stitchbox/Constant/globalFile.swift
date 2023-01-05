@@ -10,6 +10,7 @@ import SendBirdSDK
 import SendBirdUIKit
 import SendBirdCalls
 import SwiftEntryKit
+import UserNotifications
 
 
 var general_room: Room!
@@ -176,3 +177,44 @@ func processUpdateAvatar(channel: SBDGroupChannel, image: UIImage) {
     }
     
 }
+
+func createLocalNotificationForActiveSendbirdUsers(title: String, body: String, channel: SBDGroupChannel) {
+    
+    // Request permission to display notifications
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
+        if granted {
+            print("Notification permissions granted")
+        } else {
+            print("Notification permissions not granted")
+        }
+    }
+
+    // Define the notification content
+    let content = UNMutableNotificationContent()
+    content.title = title
+    content.body = body
+    content.sound = UNNotificationSound.default
+
+    // Add the message text and channel to the userInfo dictionary
+    content.userInfo = ["type": "sendbird_localNoti", "channel_url": channel.channelUrl]
+
+
+    // Create a trigger for the notification
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.05, repeats: false)
+    
+
+    // Create a request for the notification
+    let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
+
+    // Add the request to the notification center
+    UNUserNotificationCenter.current().add(request) { (error) in
+        if error != nil {
+            print(error?.localizedDescription)
+        } else {
+            print("Notification scheduled")
+        }
+    }
+
+    
+}
+

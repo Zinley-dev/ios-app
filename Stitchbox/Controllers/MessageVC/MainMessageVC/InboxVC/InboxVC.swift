@@ -651,42 +651,74 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     func channel(_ sender: SBDBaseChannel, didReceive message: SBDBaseMessage) {
         
-       
+        guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
         
         if message.customType == "SENDBIRD:AUTO_EVENT_MESSAGE" {
             
-            guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
-            groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
+            if channels.contains(sender) {
+                
+                groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
+                
+            } else {
+                
+                self.channels.insert(sender, at: 0)
+                self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                
+            }
+            
             
         } else {
             
             DispatchQueue.main.async {
-                if let sender = sender as? SBDGroupChannel {
-                    var index: Int?
-                    for (i, ch) in self.channels.enumerated() {
-                        if ch.channelUrl == sender.channelUrl {
-                            index = i
-                            break
-                        }
+                var index: Int?
+                for (i, ch) in self.channels.enumerated() {
+                    if ch.channelUrl == sender.channelUrl {
+                        index = i
+                        break
                     }
-                    if let index = index {
-                        self.channels.remove(at: index)
-                        self.groupChannelsTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
-                    }
-                    self.channels.insert(sender, at: 0)
-                    self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-                    self.updateTotalUnreadMessageCountBadge()
                 }
+                if let index = index {
+                    self.channels.remove(at: index)
+                    self.groupChannelsTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                }
+                self.channels.insert(sender, at: 0)
+                self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                self.updateTotalUnreadMessageCountBadge()
             }
             
         }
+        
+        checkIfShouldPushNoti(pushChannel: sender)
         
         
     }
     
     
-
-
+    func checkIfShouldPushNoti(pushChannel: SBDGroupChannel) {
+        // Check if push notifications are enabled for the group channel
+        if pushChannel.myPushTriggerOption != .off {
+            // Get the current view controller
+            if let vc = UIViewController.currentViewController() {
+                // Check the type of the current view controller
+                switch vc {
+                case is ChannelViewController:
+                    // Check if the channelUrl property of the view controller is the same as the channelUrl property of the group channel
+                    if let channelVC = vc as? ChannelViewController, channelVC.channelUrl != pushChannel.channelUrl {
+                        createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    }
+                case is MainMessageVC:
+                    // Check if the InboxVC view is hidden
+                    if let mainMessageVC = vc as? MainMessageVC, mainMessageVC.InboxVC.view.isHidden {
+                        createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    }
+                default:
+                    // If the current view controller is neither a ChannelViewController nor a MainMessageVC, create a local notification
+                    createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                }
+            }
+        }
+    }
+    
     
     func channelDidUpdateTypingStatus(_ sender: SBDGroupChannel) {
         guard sender.isTyping(), let currentUser = SBDMain.getCurrentUser(), sender.getTypingUsers()?.firstIndex(of: currentUser) == nil else { return }

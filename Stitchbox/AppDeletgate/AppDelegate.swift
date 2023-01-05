@@ -15,6 +15,7 @@ import PushKit
 import UserNotifications
 import SendBirdUIKit
 import PixelSDK
+import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -33,6 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             didFinishLaunchingWithOptions: launchOptions
         )
         
+        UNUserNotificationCenter.current().delegate = self
+        
         setupPixelSDK()
         sendbird_authentication()
         syncSendbirdAccount()
@@ -40,8 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupStyle()
         return true
     }
-    
-    
+
     func setupPixelSDK() {
         
         PixelSDK.setup(pixel_key)
@@ -257,13 +259,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         // Extract the user info dictionary and the channel URL from the notification payload.
         // Return early if the user is not logged in or the required information is not present.
-        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty,
-            let payload = response.notification.request.content.userInfo["sendbird"] as? NSDictionary,
-            let channel = payload["channel"] as? NSDictionary,
-            let channelUrl = channel["channel_url"] as? String else {
-            return
-        }
+        
+        if let type = response.notification.request.content.userInfo["type"] as? String, type == "sendbird_localNoti" {
+            
+            guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, let channelUrl = response.notification.request.content.userInfo["channel_url"] as? String else {
+                return
+            }
+            
+            checkAndPresendChatVC(userUID: userUID, channelUrl: channelUrl)
+            
+            completionHandler()
+            
+            
+        } else if ((response.notification.request.content.userInfo["sendbird"] as? NSDictionary) != nil) {
+            
+            guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty,
+                let payload = response.notification.request.content.userInfo["sendbird"] as? NSDictionary,
+                let channel = payload["channel"] as? NSDictionary,
+                let channelUrl = channel["channel_url"] as? String else {
+                return
+            }
 
+            checkAndPresendChatVC(userUID: userUID, channelUrl: channelUrl)
+            // Call the completion handler to indicate that the method has finished executing.
+            completionHandler()
+            
+            
+        }
+        
+        
+        
+    }
+    
+    func checkAndPresendChatVC(userUID: String, channelUrl: String) {
+        
         // Initialize an instance of SBUUser with the current user's ID and connect to Sendbird.
         SBUGlobals.CurrentUser = SBUUser(userId: userUID)
         SBUMain.connectIfNeeded { _, error in
@@ -275,25 +304,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
             // If the app is in the foreground, present a ChannelViewController with the channel URL.
             // If the app is in the background, pop the current view controller and present a ChannelViewController.
-            if let vc = UIViewController.currentViewController() {
-                let mlsp = SBDMessageListParams()
-                let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
-                let navigationController = UINavigationController(rootViewController: channelVC)
-                navigationController.modalPresentationStyle = .fullScreen
-                vc.present(navigationController, animated: true, completion: nil)
-            } else if let current = UINavigationController.currentViewController() as? ChannelViewController {
-                let mlsp = SBDMessageListParams()
-                current.navigationController?.popViewController(animated: false)
-                let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
-                let navigationController = UINavigationController(rootViewController: channelVC)
-                navigationController.modalPresentationStyle = .fullScreen
-                current.present(navigationController, animated: true, completion: nil)
+            guard let currentVC = UIViewController.currentViewController() else { return }
+            if let nav = currentVC.navigationController {
+                
+                if let currentChatVC = currentVC as? ChannelViewController, currentChatVC.channel?.channelUrl == channelUrl {
+                    currentChatVC.sortAllMessageList(needReload: true)
+                } else if let currentSettingsVC = currentVC as? ChannelSettingsVC, currentSettingsVC.channel?.channelUrl == channelUrl {
+                    nav.popBack(1)
+                } else if let currentMemberVC = currentVC as? MemberListVC, currentMemberVC.channel?.channelUrl == channelUrl {
+                    nav.popBack(2)
+                } else if let currentModerationVC = currentVC as? ModerationVC, currentModerationVC.channel?.channelUrl == channelUrl {
+                    nav.popBack(2)
+                } else if let OperatorMemberVC = currentVC as? OperatorMemberVC, OperatorMemberVC.channel?.channelUrl == channelUrl {
+                    nav.popBack(3)
+                } else if let BannedMemberVC = currentVC as? BannedMemberVC, BannedMemberVC.channel?.channelUrl == channelUrl {
+                    nav.popBack(3)
+                } else if let MutedMemberVC = currentVC as? MutedMemberVC, MutedMemberVC.channel?.channelUrl == channelUrl {
+                    nav.popBack(3)
+                } else if let AddOperatorMemberVC = currentVC as? AddOperatorMemberVC, AddOperatorMemberVC.channel?.channelUrl == channelUrl {
+                    nav.popBack(4)
+                } else if let InviteUserVC = currentVC as? InviteUserVC, InviteUserVC.channel?.channelUrl == channelUrl {
+                    nav.popBack(4)
+                } else {
+                    self.presentChatWithNav(nav: nav, channelUrl: channelUrl)
+                }
+                
+            } else {
+                self.presentChatWithoutNav(vc: currentVC, channelUrl: channelUrl)
             }
-        }
-        // Call the completion handler to indicate that the method has finished executing.
-        completionHandler()
-    }
 
+            
+            
+        }
+        
+        
+    }
+    
+    func presentChatWithNav(nav: UINavigationController, channelUrl: String) {
+        
+        let mlsp = SBDMessageListParams()
+        let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
+        nav.pushViewController(channelVC, animated: true)
+        
+    }
+    
+    func presentChatWithoutNav(vc: UIViewController, channelUrl: String) {
+        
+        let mlsp = SBDMessageListParams()
+        let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
+        let navigationController = UINavigationController(rootViewController: channelVC)
+        navigationController.modalPresentationStyle = .fullScreen
+        vc.present(navigationController, animated: true, completion: nil)
+        
+    }
+    
 
     
 }
