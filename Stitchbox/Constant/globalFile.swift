@@ -10,6 +10,7 @@ import SendBirdSDK
 import SendBirdUIKit
 import SendBirdCalls
 import SwiftEntryKit
+import UserNotifications
 
 
 var general_room: Room!
@@ -81,5 +82,139 @@ extension UIViewController: UIViewControllerTransitioningDelegate {
     public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         PresentationController(presentedViewController: presented, presenting: presenting)
     }
+}
+
+extension UILabel {
+    func textWidth() -> CGFloat {
+        return UILabel.textWidth(label: self)
+    }
+
+    class func textWidth(label: UILabel) -> CGFloat {
+        return textWidth(label: label, text: label.text!)
+    }
+
+    class func textWidth(label: UILabel, text: String) -> CGFloat {
+        return textWidth(font: label.font, text: text)
+    }
+
+    class func textWidth(font: UIFont, text: String) -> CGFloat {
+        return textSize(font: font, text: text).width
+    }
+
+    class func textHeight(withWidth width: CGFloat, font: UIFont, text: String) -> CGFloat {
+        return textSize(font: font, text: text, width: width).height
+    }
+
+    class func textSize(font: UIFont, text: String, extra: CGSize) -> CGSize {
+        var size = textSize(font: font, text: text)
+        size.width = size.width + extra.width
+        size.height = size.height + extra.height
+        return size
+    }
+
+    class func textSize(font: UIFont, text: String, width: CGFloat = .greatestFiniteMagnitude, height: CGFloat = .greatestFiniteMagnitude) -> CGSize {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        label.numberOfLines = 0
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        return label.frame.size
+    }
+
+    class func countLines(font: UIFont, text: String, width: CGFloat, height: CGFloat = .greatestFiniteMagnitude) -> Int {
+        // Call self.layoutIfNeeded() if your view uses auto layout
+        let myText = text as NSString
+
+        let rect = CGSize(width: width, height: height)
+        let labelSize = myText.boundingRect(with: rect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+
+        return Int(ceil(CGFloat(labelSize.height) / font.lineHeight))
+    }
+
+    func countLines(width: CGFloat = .greatestFiniteMagnitude, height: CGFloat = .greatestFiniteMagnitude) -> Int {
+        // Call self.layoutIfNeeded() if your view uses auto layout
+        let myText = (self.text ?? "") as NSString
+
+        let rect = CGSize(width: width, height: height)
+        let labelSize = myText.boundingRect(with: rect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: self.font!], context: nil)
+
+        return Int(ceil(CGFloat(labelSize.height) / self.font.lineHeight))
+    }
+}
+
+
+func processUpdateAvatar(channel: SBDGroupChannel, image: UIImage) {
+    
+    
+    APIManager().uploadImage(image: image) { result in
+        
+        switch result {
+        case .success(let apiResponse):
+            
+            guard apiResponse.body?["message"] as? String == "avatar uploaded successfully",
+                  let url = apiResponse.body?["url"] as? String  else {
+                    return
+            }
+            
+           
+            // update SBDGroupChannelParams()
+            let param = SBDGroupChannelParams()
+            param.coverUrl = url
+            
+            channel.update(with: param) { _, error in
+                if let error = error {
+                    print(error.localizedDescription, error.code)
+                    return
+                }
+            }
+
+
+        case .failure(let error):
+            print(error)
+        }
+        
+        
+    }
+    
+}
+
+func createLocalNotificationForActiveSendbirdUsers(title: String, body: String, channel: SBDGroupChannel) {
+    
+    // Request permission to display notifications
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
+        if granted {
+            print("Notification permissions granted")
+        } else {
+            print("Notification permissions not granted")
+        }
+    }
+
+    // Define the notification content
+    let content = UNMutableNotificationContent()
+    content.title = title
+    content.body = body
+    content.sound = UNNotificationSound.default
+
+    // Add the message text and channel to the userInfo dictionary
+    content.userInfo = ["type": "sendbird_localNoti", "channel_url": channel.channelUrl]
+
+
+    // Create a trigger for the notification
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.05, repeats: false)
+    
+
+    // Create a request for the notification
+    let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
+
+    // Add the request to the notification center
+    UNUserNotificationCenter.current().add(request) { (error) in
+        if error != nil {
+            print(error?.localizedDescription)
+        } else {
+            print("Notification scheduled")
+        }
+    }
+
+    
 }
 

@@ -44,6 +44,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
 
         // Do any additional setup after loading the view.
         
+        let abcd = SBUChannelListViewController()
+        
         self.groupChannelsTableView.delegate = self
         self.groupChannelsTableView.dataSource = self
         
@@ -310,16 +312,27 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     let count = filteredMembers.count
                     let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell
                     
-                    if count == 0 {
+                    
+                    if channel.coverUrl != nil, !(channel.coverUrl?.contains("sendbird"))! {
+                        
                         updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
-                    } else if count == 1 {
-                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!)
-                    } else if count > 1 && count < 5 {
-                        updateCell?.profileImagView.users = filteredMembers
-                        updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
+                        
                     } else {
-                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
+                        
+                        if count == 0 {
+                            updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
+                        } else if count == 1 {
+                            updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!)
+                        } else if count > 1 && count < 5 {
+                            updateCell?.profileImagView.users = filteredMembers
+                            updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
+                        } else {
+                            updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
+                        }
+                        
                     }
+                    
+                    
                     
                     if channel.name != "" && channel.name != "Group Channel" {
                         updateCell?.channelNameLabel.text = channel.name
@@ -401,8 +414,11 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let channel = inSearchMode ? searchChannelList[indexPath.row] : channels[indexPath.row]
-        let channelVC = ChannelViewController(channelUrl: channel.channelUrl, messageListParams: nil)
+        let mslp = SBDMessageListParams()
+        
+        let channelVC = ChannelViewController(channelUrl: channel.channelUrl, messageListParams: mslp)
         self.navigationController?.pushViewController(channelVC, animated: true)
+      
     }
 
     
@@ -634,8 +650,26 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     }
     
     func channel(_ sender: SBDBaseChannel, didReceive message: SBDBaseMessage) {
-        DispatchQueue.main.async {
-            if let sender = sender as? SBDGroupChannel {
+        
+        guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
+        
+        if message.customType == "SENDBIRD:AUTO_EVENT_MESSAGE" {
+            
+            if channels.contains(sender) {
+                
+                groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
+                
+            } else {
+                
+                self.channels.insert(sender, at: 0)
+                self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                
+            }
+            
+            
+        } else {
+            
+            DispatchQueue.main.async {
                 var index: Int?
                 for (i, ch) in self.channels.enumerated() {
                     if ch.channelUrl == sender.channelUrl {
@@ -651,10 +685,40 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
                 self.updateTotalUnreadMessageCountBadge()
             }
+            
+        }
+        
+        checkIfShouldPushNoti(pushChannel: sender)
+        
+        
+    }
+    
+    
+    func checkIfShouldPushNoti(pushChannel: SBDGroupChannel) {
+        // Check if push notifications are enabled for the group channel
+        if pushChannel.myPushTriggerOption != .off {
+            // Get the current view controller
+            if let vc = UIViewController.currentViewController() {
+                // Check the type of the current view controller
+                switch vc {
+                case is ChannelViewController:
+                    // Check if the channelUrl property of the view controller is the same as the channelUrl property of the group channel
+                    if let channelVC = vc as? ChannelViewController, channelVC.channelUrl != pushChannel.channelUrl {
+                        createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    }
+                case is MainMessageVC:
+                    // Check if the InboxVC view is hidden
+                    if let mainMessageVC = vc as? MainMessageVC, mainMessageVC.InboxVC.view.isHidden {
+                        createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    }
+                default:
+                    // If the current view controller is neither a ChannelViewController nor a MainMessageVC, create a local notification
+                    createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                }
+            }
         }
     }
-
-
+    
     
     func channelDidUpdateTypingStatus(_ sender: SBDGroupChannel) {
         guard sender.isTyping(), let currentUser = SBDMain.getCurrentUser(), sender.getTypingUsers()?.firstIndex(of: currentUser) == nil else { return }
@@ -763,8 +827,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
 
     func channelWasChanged(_ sender: SBDBaseChannel) {
-        guard let sender = sender as? SBDGroupChannel, channels.contains(sender) else { return }
-        groupChannelsTableView?.reloadRows(at: [IndexPath(row: channels.firstIndex(of: sender)!, section: 0)], with: .automatic)
+        self.sortChannelList(needReload: true)
     }
 
     

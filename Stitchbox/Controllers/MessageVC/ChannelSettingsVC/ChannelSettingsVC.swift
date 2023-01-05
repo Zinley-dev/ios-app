@@ -9,6 +9,8 @@ import UIKit
 import SendBirdUIKit
 import SendBirdSDK
 import Alamofire
+import PixelSDK
+import Photos
 
 class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
@@ -115,7 +117,29 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
     @objc func changeAvatar() {
         
+        delay(0.25) { [self] in
+            changeAvatarRequest()
+        }
       
+    }
+    
+    func changeAvatarRequest() {
+        
+        let container = ContainerController(modes: [.library, .photo])
+        container.editControllerDelegate = self
+        
+        // Include only Image from the users photo library
+        container.libraryController.fetchPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+        // Include only Image from the users drafts
+        container.libraryController.draftMediaTypes = [.image]
+        
+        
+        let nav = UINavigationController(rootViewController: container)
+        nav.modalPresentationStyle = .fullScreen
+        
+        self.present(nav, animated: true, completion: nil)
+        
+        
     }
     
     
@@ -219,21 +243,44 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         let hasActiveMember = filteredMembers?.contains(where: { $0.connectionStatus.rawValue == 1 }) ?? false
 
         if channel.memberCount == 2 {
-            avatarView.isHidden = false
-            activeview2.backgroundColor = hasActiveMember ? .green : .lightGray
+        
+            if channel.coverUrl != nil, !(channel.coverUrl?.contains("sendbird"))!{
+                
+                avatarView.isHidden = true
+                activeview1.backgroundColor = hasActiveMember ? .green : .lightGray
+                
+                avatar1.setImage(withCoverUrl: channel.coverUrl!)
+                
+            } else {
+                
+                avatarView.isHidden = false
+                activeview2.backgroundColor = hasActiveMember ? .green : .lightGray
 
-            setAvatarImage(for: avatar2, withProfileUrl: filteredMembers?[0].profileUrl)
-            setAvatarImage(for: avatar3, withProfileUrl: SBDMain.getCurrentUser()?.profileUrl)
+                setAvatarImage(for: avatar2, withProfileUrl: filteredMembers?[0].profileUrl)
+                setAvatarImage(for: avatar3, withProfileUrl: SBDMain.getCurrentUser()?.profileUrl)
+                
+            }
+            
         } else {
             avatarView.isHidden = true
             activeview1.backgroundColor = hasActiveMember ? .green : .lightGray
-
-            if channel.memberCount > 2 && channel.memberCount < 5 {
-                avatar1.users = filteredMembers!
-                avatar1.makeCircularWithSpacing(spacing: 1)
-            } else {
+            
+            if channel.coverUrl != nil, !(channel.coverUrl?.contains("sendbird"))! {
+                
                 avatar1.setImage(withCoverUrl: channel.coverUrl!)
+                
+            } else {
+                
+                if channel.memberCount > 2 && channel.memberCount < 5 {
+                    avatar1.users = filteredMembers!
+                    avatar1.makeCircularWithSpacing(spacing: 1)
+                } else {
+                    avatar1.setImage(withCoverUrl: channel.coverUrl!)
+                }
+                
             }
+
+            
         }
     }
 
@@ -383,4 +430,62 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         
         
     }
+}
+
+extension ChannelSettingsVC: EditControllerDelegate {
+    
+    func editController(_ editController: EditController, didLoadEditing session: PixelSDKSession) {
+        // Called after the EditController's view did load.
+        
+        print("Did load here")
+    }
+    
+    func editController(_ editController: EditController, didFinishEditing session: PixelSDKSession) {
+        // Called when the Next button in the EditController is pressed.
+        // Use this time to either dismiss the UINavigationController, or push a new controller on.
+        
+        if let image = session.image {
+            
+            
+            ImageExporter.shared.export(image: image, completion: { (error, uiImage) in
+                    if let error = error {
+                        self.showErrorAlert("Oops!", msg: "Unable to export image: \(error)")
+                        return
+                    }
+                
+                if !self.avatarView.isHidden {
+                    self.avatarView.isHidden = true
+                }
+
+                self.avatar1.setImage(withImage: uiImage!)
+                processUpdateAvatar(channel: self.channel!, image: uiImage!)
+                
+            })
+            
+            
+        }
+        
+        self.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    
+    
+    func editController(_ editController: EditController, didCancelEditing session: PixelSDKSession?) {
+        // Called when the back button in the EditController is pressed.
+        
+        print("Did cancel load here")
+        
+    }
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
 }

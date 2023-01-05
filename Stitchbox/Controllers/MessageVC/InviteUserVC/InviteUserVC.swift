@@ -121,9 +121,18 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         
         self.setupStyles()
         
-        self.loadBanUsers {
-            self.loadDefaultUsers()
+        
+        if self.channel?.myRole == .operator {
+            
+            self.loadBanUsers {
+                self.loadDefaultUsers(needChecked: true)
+            }
+            
+        } else {
+            self.loadDefaultUsers(needChecked: false)
         }
+        
+        
        
     }
     
@@ -277,7 +286,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     }
 
     
-    func loadDefaultUsers() {
+    func loadDefaultUsers(needChecked: Bool) {
         APIManager().searchUsersForChat(keyword: "") { result in
             switch result {
             case .success(let apiResponse):
@@ -289,9 +298,21 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                     do {
                         let preloadUser = try SendBirdUser(JSONbody: user)
                         let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
-                        if !self.joinedUserIds.contains(user.userId), !self.bannedList.contains(user.userId) {
-                            return user
+                        
+                        if needChecked {
+                            
+                            if !self.joinedUserIds.contains(user.userId), !self.bannedList.contains(user.userId) {
+                                return user
+                            }
+                            
+                        } else {
+                            
+                            if !self.joinedUserIds.contains(user.userId) {
+                                return user
+                            }
+                            
                         }
+                        
                     } catch {
                         print("Can't catch user")
                     }
@@ -322,7 +343,6 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                         let preloadUser = try SendBirdUser(JSONbody: user)
                         let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
                         if !self.joinedUserIds.contains(user.userId), !self.bannedList.contains(user.userId) {
-                            print(user.userId)
                             return user
                         }
                     } catch {

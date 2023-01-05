@@ -71,6 +71,8 @@ class GroupNode: ASCellNode {
 
         // Set the attributed text of the name node with the participant's nickname
         let nickname = participant.user.nickname!
+        paragraphStyles.alignment = .center
+        nameNode.backgroundColor = UIColor.clear
         nameNode.attributedText = NSAttributedString(string: nickname, attributes: [.font: UIFont.boldSystemFont(ofSize: 13), .foregroundColor: UIColor.white, .paragraphStyle: paragraphStyles])
 
         // Set the image of the mute icon based on the participant's audio enabled status
@@ -80,24 +82,41 @@ class GroupNode: ASCellNode {
     
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-               
-        muteIcon.style.preferredSize = CGSize(width: 20, height: 20)
-        let nameAndMuteStack = ASStackLayoutSpec(direction: .horizontal, spacing: 3, justifyContent: .center, alignItems: .center, children: [nameNode, muteIcon])
-                
-        InfoNode.style.preferredSize = CGSize(width: constrainedSize.min.width, height: 22)
-        let insets = UIEdgeInsets(top: .infinity, left: 0, bottom: 15, right: 0)
-        let textInsetSpec = ASInsetLayoutSpec(insets: insets, child: nameAndMuteStack)
         
         let size =  constrainedSize.min.width - 22 - 15 - 15
         let mid = (constrainedSize.min.width - size) / 2
-                                
+        
         AvatarNode.style.preferredSize = CGSize(width: size, height: size)
-        AvatarNode.cornerRadius = size/2 
-                
+        AvatarNode.cornerRadius = size/2
+        
         let avatarInsetSpec = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 10, left: mid , bottom: .infinity, right: mid), child: AvatarNode)
+        
+        
+        InfoNode.style.preferredSize = CGSize(width: constrainedSize.min.width, height: 35)
+
+        // INFINITY is used to make the inset unbounded
+        let insets = UIEdgeInsets(top: CGFloat.infinity, left: 0, bottom: 20, right: 0)
+        let textInsetSpec = ASInsetLayoutSpec(insets: insets, child: InfoNode)
+        
+        //
+        DispatchQueue.main.async {
+            
+            let estimated = UILabel()
+            estimated.text = self.participant.user.nickname!
+            estimated.font = UIFont.boldSystemFont(ofSize: 13)
+            let estimatedSize = estimated.textWidth()
+            
+            self.nameNode.frame = CGRect(x: constrainedSize.min.width / 2 - (estimatedSize/2), y: 20, width: estimatedSize, height: 20)
+            self.muteIcon.frame = CGRect(x: constrainedSize.min.width / 2 + (estimatedSize/2) + 3, y: 17.5, width: 20, height: 20)
+        }
+        
+        InfoNode.addSubnode(nameNode)
+        InfoNode.addSubnode(muteIcon)
+        
         return ASOverlayLayoutSpec(child: avatarInsetSpec, overlay: textInsetSpec)
         
     }
+
     
 
 }

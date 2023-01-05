@@ -121,15 +121,18 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
             let lastMessageDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastMessageDate)
             let currDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: currDate)
 
+            /*
             if lastMessageDateComponents.year != currDateComponents.year || lastMessageDateComponents.month != currDateComponents.month || lastMessageDateComponents.day != currDateComponents.day {
                 lastMessageDateFormatter.dateStyle = .short
                 lastMessageDateFormatter.timeStyle = .none
-                cell.lastUpdatedDateLabel.text = timeForChat(lastMessageDate, numericDates: true)
+                cell.lastUpdatedDateLabel.text = ""
+                print(timeForChat(lastMessageDate, numericDates: true))
             } else {
                 lastMessageDateFormatter.dateStyle = .none
                 lastMessageDateFormatter.timeStyle = .short
                 cell.lastUpdatedDateLabel.text = lastMessageDateFormatter.string(from: lastMessageDate)
-            }
+                print(lastMessageDateFormatter.string(from: lastMessageDate))
+            }*/
 
             cell.typingIndicatorContainerView.isHidden = true
             cell.notiOffIconImageView.isHidden = true
@@ -168,15 +171,23 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                     let count = filteredMembers.count
                     let updateCell = tableView.cellForRow(at: indexPath) as? GroupChannelTableViewCell
                     
-                    if count == 0 {
+                    if channel.coverUrl != nil, !(channel.coverUrl?.contains("sendbird"))! {
+                        
                         updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
-                    } else if count == 1 {
-                        updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!)
-                    } else if count > 1 && count < 5 {
-                        updateCell?.profileImagView.users = filteredMembers
-                        updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
+                        
                     } else {
-                        updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
+                        
+                        if count == 0 {
+                            updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
+                        } else if count == 1 {
+                            updateCell?.profileImagView.setImage(withCoverUrl: filteredMembers[0].profileUrl!)
+                        } else if count > 1 && count < 5 {
+                            updateCell?.profileImagView.users = filteredMembers
+                            updateCell?.profileImagView.makeCircularWithSpacing(spacing: 1)
+                        } else {
+                            updateCell?.profileImagView.setImage(withCoverUrl: channel.coverUrl!)
+                        }
+                        
                     }
                     
                     if channel.name != "" && channel.name != "Group Channel" {
@@ -264,7 +275,7 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                         height: iconSize
                 ))
                 hideTypeView.layer.cornerRadius = iconSize/2
-                hideTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOffBackgroundColor
+                hideTypeView.backgroundColor = .primary
                 hideTypeView.image = UIImage(named: "hide3x")
                 hideTypeView.contentMode = .center
                 
@@ -295,8 +306,8 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                         height: iconSize
                 ))
                 leaveTypeView.layer.cornerRadius = iconSize/2
-                leaveTypeView.backgroundColor = SBUTheme.channelListTheme.notificationOffBackgroundColor
-                leaveTypeView.image = UIImage(named: "leave3x")
+                leaveTypeView.backgroundColor = .primary
+                leaveTypeView.image = UIImage(named: "leave3x")!.resize(targetSize: CGSize(width: 20, height: 20))
                 leaveTypeView.contentMode = .center
                 
                 leaveAction.image = leaveTypeView.asImage()
