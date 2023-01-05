@@ -65,7 +65,7 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
                     // get and process data
                     _ = apiResponse.body?["data"] as! [String: Any]?
                     // save datasource
-                    let initMap = ["phone": "\(countryCode)\(phone)"]
+                    let initMap = ["phone": "\(countryCode)\(phone)", "signinMethod": "phone"]
                     let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
                     _AppCoreData.userDataSource.accept(newUserData)
                   

@@ -42,7 +42,19 @@ struct APIManager {
             completion(result)
         }
     }
+  
+    func socialLogin(params: [String: String], completion: @escaping APICompletion) {
+      manager.request(.socialLogin(params: params)) { result in
+        completion(result)
+      }
+    }
     
+    func socialRegister(params: [String: String], completion: @escaping APICompletion) {
+      manager.request(.socialRegister(params: params)) { result in
+        completion(result)
+      }
+    }
+      
     func phoneVerify(phone: String, OTP: String, completion: @escaping APICompletion) {
         let params = ["phone": phone, "OTP": OTP]
         manager.request(.phoneverify(params: params)) { result in

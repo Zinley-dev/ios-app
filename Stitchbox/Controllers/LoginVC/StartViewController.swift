@@ -48,6 +48,19 @@ class StartViewController: UIViewController, ControllerType {
 
   
   func bindingUI() {
+    vm.output.errorsObservable
+      .subscribe(onNext: { (error) in
+        
+        DispatchQueue.main.async {
+          if (error._code == 401) {
+            self.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
+          } else {
+            self.presentError(error: error)
+          }
+        }
+      })
+      .disposed(by: disposeBag)
+    
     vm.output.loginResultObservable.subscribe(onNext: { isTrue in
       if (isTrue) {
         RedirectionHelper.redirectToDashboard()
