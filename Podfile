@@ -45,6 +45,10 @@ target 'Stitchbox' do
   # animation note
   pod 'SwiftEntryKit', '1.2.6'
   
+  # label custom
+  pod "ZSWTappableLabel", "~> 2.0"
+  pod "ZSWTaggedString/Swift", "~> 4.0"
+  
   target 'StitchboxTests' do
     inherit! :search_paths
     # Pods for testing
