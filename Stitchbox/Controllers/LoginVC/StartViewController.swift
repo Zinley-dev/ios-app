@@ -91,23 +91,38 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         super.viewDidAppear(animated)
         
         if player != nil {
-            if player?.timeControlStatus.rawValue == 0 || player?.timeControlStatus.rawValue == 2 {
-                player!.play()
-            }
+            player!.play()
         }
-            
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
         
     }
     
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
-
+        if player != nil {
+            player!.play()
+        }
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
+        
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if player != nil {
+            player!.pause()
+        }
+       
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
+        
+    }
+    
+
     
     
     func tappableLabel(_ tappableLabel: ZSWTappableLabel, tappedAt idx: Int, withAttributes attributes: [NSAttributedString.Key : Any] = [:]) {
