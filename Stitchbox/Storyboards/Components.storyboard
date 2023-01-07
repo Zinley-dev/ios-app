@@ -242,12 +242,12 @@
         <scene sceneID="4KR-S4-fUj">
             <objects>
                 <viewController storyboardIdentifier="OTPTextfield" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DIb-Wa-WRn" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="4Kt-VG-UPX">
+                    <view key="view" contentMode="scaleToFill" id="4Kt-VG-UPX">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="96" y="349" width="655" height="22"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vPx-Pg-TQW" customClass="OTPStackView" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="96" y="349" width="221" height="22"/>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qio-D5-8w9"/>
@@ -630,15 +630,14 @@
     </scenes>
     <designables>
         <designable name="0dc-Cu-ADw">
-            <size key="intrinsicContentSize" width="24" height="18.5"/>
+            <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
         <designable name="2MZ-hc-eRg">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="3pI-w7-p8u">
-            <size key="intrinsicContentSize" width="9" height="18.5"/>
+            <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
-        <designable name="4m4-dZ-2qb"/>
         <designable name="6qC-xn-G04">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
@@ -652,7 +651,7 @@
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="GhD-VW-W3q">
-            <size key="intrinsicContentSize" width="38" height="34"/>
+            <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
         <designable name="IMA-xb-GnT">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
@@ -661,13 +660,13 @@
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="SiS-Qd-H9G">
-            <size key="intrinsicContentSize" width="6" height="18.5"/>
+            <size key="intrinsicContentSize" width="34" height="34"/>
         </designable>
         <designable name="SiY-Zw-rKg">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="TOz-ed-Qc3">
-            <size key="intrinsicContentSize" width="8" height="18.5"/>
+            <size key="intrinsicContentSize" width="36" height="34"/>
         </designable>
         <designable name="UBH-Wi-Pzs">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
@@ -679,7 +678,7 @@
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="bna-sl-8Ck">
-            <size key="intrinsicContentSize" width="38" height="34"/>
+            <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
         <designable name="ccK-Cj-HEF">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
@@ -691,7 +690,7 @@
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="eyq-xr-zUs">
-            <size key="intrinsicContentSize" width="6" height="18.5"/>
+            <size key="intrinsicContentSize" width="34" height="34"/>
         </designable>
         <designable name="gKb-Yg-1aW">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
@@ -703,7 +702,7 @@
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="k55-E0-bG7">
-            <size key="intrinsicContentSize" width="24" height="18.5"/>
+            <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
         <designable name="mBX-Ek-B9i">
             <size key="intrinsicContentSize" width="75" height="34.5"/>
@@ -721,7 +720,7 @@
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="yIl-ri-0s3">
-            <size key="intrinsicContentSize" width="38" height="34"/>
+            <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
         <designable name="ypw-d9-p4p">
             <size key="intrinsicContentSize" width="152" height="79"/>
@@ -730,7 +729,7 @@
             <size key="intrinsicContentSize" width="75" height="34.5"/>
         </designable>
         <designable name="z9P-lI-zda">
-            <size key="intrinsicContentSize" width="24" height="18.5"/>
+            <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
     </designables>
     <resources>

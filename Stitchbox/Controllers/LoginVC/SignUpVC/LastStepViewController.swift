@@ -63,6 +63,14 @@ class LastStepViewController: UIViewController, ControllerType {
       })
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        usernameTextfield.addUnderLine()
+        passwordTextfield.addUnderLine()
+    
+    }
+    
     func bindAction(with viewModel: CreateAccountViewModel) {
       
       let userInputs = Observable.combineLatest(
@@ -89,6 +97,14 @@ class LastStepViewController: UIViewController, ControllerType {
           self.presentError(error: error)
         })
         .disposed(by: disposeBag)
+    }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        self.view.endEditing(true)
+        
     }
 }
 extension LastStepViewController {

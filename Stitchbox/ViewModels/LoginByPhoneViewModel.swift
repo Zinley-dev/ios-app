@@ -68,7 +68,6 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
                     let initMap = ["phone": "\(countryCode)\(phone)", "signinMethod": "phone"]
                     let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
                     _AppCoreData.userDataSource.accept(newUserData)
-                  
                     self.OTPSentSubject.onNext(true)
                 case .failure(let error):
                     print(error)
@@ -193,7 +192,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                       case .requestFailed(let body):
                         self.errorsSubject.onNext(NSError(
                           domain: body?["message"] as? String ?? "Cannot verify OTP",
-                          code: Int(body?["error"] as! String)!
+                          code: Int(body?["error"] as! String) ?? 404
                         ))
 
                     default:
