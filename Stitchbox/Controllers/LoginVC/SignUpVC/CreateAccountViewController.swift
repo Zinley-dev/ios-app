@@ -30,6 +30,7 @@ class CreateAccountViewController: UIViewController, ControllerType {
     datePicker.frame.size = CGSize(width: 0, height: 300)
     datePicker.preferredDatePickerStyle = .wheels
     txtDob.inputView = datePicker
+      
   }
   
   // MARK: - Functions

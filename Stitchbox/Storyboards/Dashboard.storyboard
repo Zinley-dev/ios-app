@@ -126,6 +126,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ieR-vM-MVA">
                                         <rect key="frame" x="0.0" y="0.0" width="200" height="34"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="Lkd-m1-ZKe"/>
                                             <constraint firstAttribute="width" constant="200" id="pN3-Sw-21g"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>

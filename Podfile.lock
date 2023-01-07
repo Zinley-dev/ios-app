@@ -9,7 +9,6 @@ PODS:
   - AppAuth/ExternalUserAgent (1.6.0):
     - AppAuth/Core
   - Cache (5.3.0)
-  - CountryPickerView (3.3.0)
   - EzPopup (1.2)
   - FBAEMKit (14.1.0):
     - FBSDKCoreKit_Basics (= 14.1.0)
@@ -181,7 +180,6 @@ DEPENDENCIES:
   - Alamofire (~> 5.6.4)
   - AlamofireImage
   - Cache (~> 5.3.0)
-  - CountryPickerView (~> 3.3.0)
   - EzPopup
   - FBSDKLoginKit (~> 14.1.0)
   - FirebaseAnalytics (~> 10.3.0)
@@ -211,7 +209,6 @@ SPEC REPOS:
     - AlamofireImage
     - AppAuth
     - Cache
-    - CountryPickerView
     - EzPopup
     - FBAEMKit
     - FBSDKCoreKit
@@ -259,7 +256,6 @@ SPEC CHECKSUMS:
   AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   Cache: 48762993ec44e1d93483c4d4a13edd18452326f4
-  CountryPickerView: 6322ada32a80b0cd721b0267282a5c24f406f263
   EzPopup: 989ac21992a82ad6d1245c747a78bf3833279ef0
   FBAEMKit: a899515e45476027f73aef377b5cffadcd56ca3a
   FBSDKCoreKit: 24f8bc8d3b5b2a8c5c656a1329492a12e8efa792
@@ -302,6 +298,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 6b825dfcc095d12a91d25fbc608df9a93ecfb9d1
+PODFILE CHECKSUM: 717d75d8cfbe6319dec28fbd23ddb371961af7de
 
 COCOAPODS: 1.11.3

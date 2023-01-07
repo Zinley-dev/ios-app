@@ -23,6 +23,8 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
   private let disposeBag = DisposeBag()
   
   
+  @IBOutlet weak var blurView: UIView!
+  @IBOutlet weak var contentView: UIView!
   @IBOutlet weak var btnLetStart: UIButton!
   @IBOutlet var collectionLoginProviders: [UIButton]!
   @IBOutlet var collectionLoginStackProviders: [UIView]!
@@ -87,27 +89,20 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     
   }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if player != nil {
-            player!.play()
-        }
-        
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
-        
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if player != nil {
             player!.play()
+            
+            delay(1) {
+                NotificationCenter.default.addObserver(self, selector: #selector(self.playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player!.currentItem)
+            }
+           
         }
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
+        
         
     }
     
@@ -116,10 +111,12 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
         if player != nil {
             player!.pause()
+            
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
         }
-       
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
+
         
+      
     }
     
 
@@ -173,7 +170,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     let playerLayer = AVPlayerLayer(player: player)
     playerLayer.frame = self.view.frame
     playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-    self.view.layer.insertSublayer(playerLayer, at: 0)
+    self.contentView.layer.insertSublayer(playerLayer, at: 0)
     player!.seek(to: CMTime.zero)
     player!.play()
     self.player?.isMuted = true
@@ -211,11 +208,36 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
       }
    
   }
+    
+  @IBAction func didTapNormalLogin(_ sender: UIButton) {
+       
+      //NormalLoginVC
+      
+      if let NLVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NormalLoginVC") as? NormalLoginVC {
+         
+          self.navigationController?.pushViewController(NLVC, animated: true)
+          
+      }
+     
+  }
   
   
   @objc func playVideoDidReachEnd() {
     player!.seek(to: CMTime.zero)
   }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.collectionLoginStackProviders.forEach { item in
+                item.isHidden = !item.isHidden
+                item.alpha = item.isHidden ? 0 : 1
+            }
+        }
+        
+    }
   
 }
 

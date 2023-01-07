@@ -4,14 +4,15 @@ import RxSwift
 import RxCocoa
 import CountryPickerView
 
-class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryPickerViewDelegate {
+
+class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryPickerViewDelegate, CountryPickerViewDataSource {
     
     typealias ViewModelType = LoginByPhoneSendCodeViewModel
     
     // MARK: - Properties
     private var viewModel: ViewModelType! = ViewModelType()
     private let disposeBag = DisposeBag()
-    private var cpv: CountryPickerView! = CountryPickerView(frame: CGRect(x: 0, y: 0, width: 120, height: 10))
+    private var cpv = CountryPickerView(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
     private var codeSubject = PublishSubject<Country>()
     
     // MARK: - UI
@@ -19,35 +20,64 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
     @IBOutlet weak var countryCodeTextfield: UITextField!
     @IBOutlet weak var phoneTextfield: UITextField!
     @IBOutlet weak var sendCodeButton: UIButton!
+    var CountryPickerVC: CountryPickerViewController!
    
     // function for changing delegate
     func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: Country) {
         countryCodeTextfield.text = cpv.selectedCountry.phoneCode
     }
     
+    func countryPickerView(_ countryPickerView: CountryPickerView, willShow viewController: CountryPickerViewController) {
+        
+        viewController.navigationController?.modalPresentationStyle = .fullScreen
+        viewController.navigationController?.navigationBar.tintColor = UIColor.white
+        viewController.navigationController?.navigationBar.barTintColor = UIColor.background
+        viewController.navigationController?.navigationBar.backgroundColor = UIColor.background
+        viewController.navigationController?.navigationBar.bottomBorderColor = UIColor.black
+        viewController.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+    
         //setup country code field
         cpv.hostViewController = self
         cpv.showCountryNameInView = true
         cpv.showPhoneCodeInView = false
-        cpv.textColor = .text
+        cpv.textColor = .white
+        
+
         countryCodeNameTextfield.leftView = cpv
         countryCodeNameTextfield.leftViewMode = .always
+       
         cpv.delegate = self
+        cpv.dataSource = self
+        
         countryCodeTextfield.text = cpv.selectedCountry.phoneCode
         bindUI(with: viewModel)
         bindAction(with: viewModel)
+        
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        countryCodeTextfield.addUnderLine()
+        countryCodeNameTextfield.addUnderLine()
+        phoneTextfield.addUnderLine()
+        
+    }
+    
+    
     // MARK: - Functions
     func bindUI(with viewModel: LoginByPhoneSendCodeViewModel) {
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
                 DispatchQueue.main.async {
+                    self.dismissLoading()
                     self.presentError(error: error)
               }
             })
@@ -66,6 +96,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
                             .subscribe(viewModel.input.countryCodeObserver)
                             .disposed(by: self.disposeBag)
               
+                        dismissLoading()
                         self.navigationController?.pushViewController(LoginByPhoneVerifyController.create(with: viewModel), animated: true)
                     }}
               
@@ -74,6 +105,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
 
     }
     func bindAction(with viewModel: LoginByPhoneSendCodeViewModel) {
+        
         sendCodeButton.rx.tap.asObservable()
             .withLatestFrom(phoneTextfield.rx.text.orEmpty.asObservable()) {
                 return ($1, self.cpv.selectedCountry.phoneCode) }
@@ -84,6 +116,14 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
             self.presentLoading()
         }.disposed(by: disposeBag)
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        self.view.endEditing(true)
+        
+    }
+    
 }
 
 extension LoginByPhoneSendCodeController {

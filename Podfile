@@ -13,7 +13,6 @@ target 'Stitchbox' do
   pod 'Alamofire', '~> 5.6.4'
   pod 'Cache', '~> 5.3.0'
   pod 'lottie-ios', '~> 4.0.1'
-  pod 'CountryPickerView', '~> 3.3.0'
   pod 'ObjectMapper', '~> 3.5'
   pod 'EzPopup'
 
