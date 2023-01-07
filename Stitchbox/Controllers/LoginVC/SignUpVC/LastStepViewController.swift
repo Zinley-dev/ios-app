@@ -63,6 +63,14 @@ class LastStepViewController: UIViewController, ControllerType {
       })
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        usernameTextfield.addUnderLine()
+        passwordTextfield.addUnderLine()
+    
+    }
+    
     func bindAction(with viewModel: CreateAccountViewModel) {
       
       let userInputs = Observable.combineLatest(

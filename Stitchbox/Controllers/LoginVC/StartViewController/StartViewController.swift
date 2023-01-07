@@ -100,10 +100,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             }
            
         }
-        
-        
-        
-        
+    
     }
     
     override func viewWillDisappear(_ animated: Bool) {
