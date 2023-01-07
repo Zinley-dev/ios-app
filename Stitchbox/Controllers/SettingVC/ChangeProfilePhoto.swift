@@ -12,8 +12,8 @@ import Photos
 
 class ChangePhotoViewController: UIViewController, EditControllerDelegate {
     enum Mode {
-         case changeAvatar
-         case changeCover
+        case changeAvatar
+        case changeCover
     }
     
     var currentMode : Mode = .changeAvatar
@@ -29,7 +29,7 @@ class ChangePhotoViewController: UIViewController, EditControllerDelegate {
         changeImage()
     }
     
-
+    
     @IBAction func dismissViewController() {
         dismiss(animated: true)
     }
@@ -38,6 +38,48 @@ class ChangePhotoViewController: UIViewController, EditControllerDelegate {
         
         if let image = session.image {
             print(image)
+            ImageExporter.shared.export(image: image, completion: {
+                (error, exportedImage) in
+                if let error = error {
+                    self.presentErrorAlert(message: "Unable to export image: \(error)")
+                    return
+                }
+                switch self.currentMode {
+                case .changeAvatar:
+                    UserInfoAPIManager().uploadavatar(image: exportedImage!) {
+                        result in switch result {
+                            
+                        case .success(let message):
+                            print(message)
+                            DispatchQueue.main.async {
+                                self.presentMessage(message: "Success upload image")
+                            }
+                        case .failure(let error):
+                            print(error)
+                            DispatchQueue.main.async {
+                                self.presentError(error: error)
+                            }
+                        }
+                    }
+                case .changeCover:
+                    UserInfoAPIManager().uploadcover(image: exportedImage!) {
+                        result in switch result {
+                            
+                        case .success(let message):
+                            print(message)
+                            DispatchQueue.main.async {
+                                self.presentMessage(message: "Success upload image")
+                            }
+                        case .failure(let error):
+                            print(error)
+                            DispatchQueue.main.async {
+                                self.presentError(error: error)
+                            }
+                        }
+                    }
+                }
+                
+            })
         }
         
         self.dismiss(animated: true)
@@ -48,7 +90,7 @@ class ChangePhotoViewController: UIViewController, EditControllerDelegate {
         container.editControllerDelegate = self
         
         // include only Image from the users photo
-        container.libraryController.fetchPredicate = NSPredicate(format: "mediatype == %d", PHAssetMediaType.image.rawValue)
+        container.libraryController.fetchPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
         // include only Image from the users drafts
         container.libraryController.draftMediaTypes =
         [.image]
@@ -58,41 +100,11 @@ class ChangePhotoViewController: UIViewController, EditControllerDelegate {
         
         self.present(nav, animated: true, completion: nil)
     }
-
     
     
     
     
-   
+    
+    
     
 }
-//
-//
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
-//
-//struct EditProfileViewControllerRepresentable: UIViewControllerRepresentable {
-//    func makeUIViewController(context: Context) -> UIViewController {
-//        return UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EDIT")
-//    }
-//    
-//    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-//        
-//    }
-//    
-//    typealias UIViewControllerType = UIViewController;
-//    
-//}
-//
-//@available(iOS 13, *)
-//struct EditProfileSwitchingView_Preview: PreviewProvider {
-//    static var previews: some View {
-//        // view controller using programmatic UI
-//        VStack{
-//            EditProfileViewControllerRepresentable()
-//        }
-//    }
-//}
-//#endif
-//
-//
