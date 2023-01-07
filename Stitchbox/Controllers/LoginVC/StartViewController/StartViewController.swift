@@ -227,12 +227,23 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        UIView.animate(withDuration: 0.3) {
-            self.collectionLoginStackProviders.forEach { item in
-                item.isHidden = !item.isHidden
-                item.alpha = item.isHidden ? 0 : 1
+        
+        let touch = touches.first
+        guard let location = touch?.location(in: self.view) else { return }
+        
+        if !termOfUseLbl.frame.contains(location) {
+            
+            UIView.animate(withDuration: 0.3) {
+                self.collectionLoginStackProviders.forEach { item in
+                    item.isHidden = !item.isHidden
+                    item.alpha = item.isHidden ? 0 : 1
+                }
             }
+            
         }
+        
+        
+        
         
     }
   

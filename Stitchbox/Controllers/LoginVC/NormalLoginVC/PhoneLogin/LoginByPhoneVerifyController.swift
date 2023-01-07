@@ -263,17 +263,15 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
         // bind View Model outputs to Controller elements
         viewModel.output.loadingObservable.subscribe { result in
           if (result) { self.presentLoading() }
-//          else { self.dismissLoading() }
         }.disposed(by: disposeBag)
       
         viewModel.output.errorsObservable
         .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
                   if (error._code == 900) {
-                      self.dismissLoading()
+                   // self.dismissLoading()
                     self.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
                   } else {
-                      self.dismissLoading()
                     self.presentError(error: error)
                   }
                 }
@@ -284,11 +282,9 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
             .subscribe(onNext: { successMessage in
                 switch successMessage{
                 case .logInSuccess:
-                    self.dismissLoading()
                     RedirectionHelper.redirectToDashboard()
                 case .sendCodeSuccess:
                     DispatchQueue.main.async {
-                        self.dismissLoading()
                         self.presentMessage(message: "New OTP Sent Sucessfully")
                     }
                 }
