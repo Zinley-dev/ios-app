@@ -15,11 +15,15 @@ public enum HTTPTask {
 
 protocol URLSessionProtocol {
     func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol
+    func uploadTask(with request: URLRequest, from data: Data, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol
 }
 
 extension URLSession: URLSessionProtocol {
     func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol {
         return dataTask(with: request, completionHandler: completionHandler) as URLSessionDataTask
+    }
+    func uploadTask(with request: URLRequest, from data: Data, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol {
+        return uploadTask(with: request, from: data, completionHandler: completionHandler) as URLSessionDataTask
     }
 }
 

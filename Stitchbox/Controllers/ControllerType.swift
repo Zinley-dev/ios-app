@@ -27,7 +27,7 @@ protocol ControllerType: UIViewController {
 //    static func create(with viewModel: ViewModelType) -> UIViewController
 }
 
-extension ControllerType {
+extension UIViewController {
     
     func presentError(error: Error) {
         

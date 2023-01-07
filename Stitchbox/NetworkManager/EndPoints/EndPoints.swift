@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol BaseURL {
     static var baseURL: String { get }
@@ -23,12 +24,14 @@ extension APIBuilder: BaseURL {
         return "\(APIBuilder.APIBuilderConstants.ApiScheme)://\(APIBuilder.APIBuilderConstants.ApiHost)"
     }
 }
-
 public enum UserApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
     case phoneverify (params: [String:String])
     case resetpassword (params: [String:String])
+    case register (params: [String:String])
+    case socialLogin (params: [String:String])
+    case socialRegister (params: [String:String])
 }
 extension UserApi: EndPointType {
     var module: String {
@@ -36,16 +39,22 @@ extension UserApi: EndPointType {
     }
     
     var path: String {
-        switch self {
+      switch self {
         case .login:
-            return "/login"
+          return "/login"
         case .phonelogin:
-            return "/phone-login"
+          return "/phone-login"
         case .phoneverify:
             return "/phone-verify"
         case .resetpassword:
             return "/reset-password"
-        }
+        case .register:
+          return "/register"
+        case .socialLogin:
+          return "/social-login"
+        case .socialRegister:
+          return "/social-register"
+      }
     }
     
     var httpMethod: HTTPMethod {
@@ -57,6 +66,12 @@ extension UserApi: EndPointType {
         case .phoneverify:
             return .post
         case .resetpassword:
+            return .post
+        case .register:
+            return .post
+        case .socialLogin:
+            return .post
+        case .socialRegister:
             return .post
         }
     }
@@ -71,6 +86,12 @@ extension UserApi: EndPointType {
             return .requestParameters(parameters: params)
         case .resetpassword(params: let params):
             return .requestParameters(parameters: params)
+        case .register(let params):
+            return .requestParameters(parameters: params)
+        case .socialLogin(let params):
+            return .requestParameters(parameters: params)
+        case .socialRegister(let params):
+            return .requestParameters(parameters: params)
         }
     }
     
@@ -79,7 +100,105 @@ extension UserApi: EndPointType {
     }
 }
 
+public enum ChatApi {
+    case roomIDRequest (params: [String:String])
+    case acceptSBInvitationRequest (params: [String:String])
+    case channelCheckForInviation (params: [String:Any])
+}
 
+extension ChatApi: EndPointType {
+
+    var module: String {
+        return "/chat"
+    }
+    
+    var path: String {
+        switch self {
+        case .roomIDRequest:
+            return "/call"
+        case .acceptSBInvitationRequest:
+            return "/channel/invite/accept"
+        case .channelCheckForInviation:
+            return "/channel"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .roomIDRequest:
+            return .post
+        case .acceptSBInvitationRequest:
+            return .post
+        case .channelCheckForInviation:
+            return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .roomIDRequest(let params):
+            return .requestParameters(parameters: params)
+        case .acceptSBInvitationRequest(let params):
+            return .requestParameters(parameters: params)
+        case .channelCheckForInviation(let params):
+            return .requestParameters(parameters: params)
+        }
+        
+    }
+    
+    var headers: [String: String]? {
+          if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
+            let headers = ["Authorization": userToken]
+            return headers
+          }
+          return nil
+    }
+    
+}
+
+
+public enum SearchApi {
+    case searchUsersForChat(params: [String:String])
+   
+}
+
+extension SearchApi: EndPointType {
+
+    var module: String {
+        return "/user"
+    }
+    
+    var path: String {
+        switch self {
+        case .searchUsersForChat(let params):
+            return "/search?search=\(params["search"] ?? "")"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .searchUsersForChat:
+            return .get
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .searchUsersForChat:
+            return .request
+        }
+        
+    }
+    
+    var headers: [String: String]? {
+          if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
+            let headers = ["Authorization": userToken]
+            return headers
+          }
+          return nil
+    }
+    
+}
 
 public enum SettingAPI {
     case getSettings
@@ -125,8 +244,8 @@ public enum UserInfoAPI {
     case getme
     case updateme (params: [String: Any])
     case changepassword (params: [String: Any])
-    case uploadavatar (params: [String: Any])
-    case uploadcover (params: [String: Any])
+    case uploadavatar
+    case uploadcover
 
 }
 extension UserInfoAPI: EndPointType {
@@ -172,14 +291,55 @@ extension UserInfoAPI: EndPointType {
             return .requestParameters(parameters: params)
         case .changepassword(params: let params):
             return .requestParameters(parameters: params)
-        case .uploadavatar(params: let params):
-            return .requestParameters(parameters: params)
-        case .uploadcover(params: let params):
-            return .requestParameters(parameters: params)
+        case .uploadavatar:
+            return .request
+        case .uploadcover:
+            return .request
         }
     }
     
     var headers: [String: String]? {
         return ["Authorization": _AppCoreData.userSession.value!.accessToken]
     }
+}
+
+public enum MediaAPI {
+  case uploadImage
+  case uploadVideo
+}
+    
+extension MediaAPI: EndPointType {
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .uploadVideo:
+        return .post
+      case .uploadImage:
+        return .post
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .uploadImage:
+        return .request
+      case .uploadVideo:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+  }
+  
+  var module: String {
+    return "/media"
+  }
+  var path: String {
+    switch self {
+      case .uploadImage:
+        return "/upload-image"
+      case .uploadVideo:
+        return "/upload-video"
+    }
+  }
 }

@@ -100,7 +100,7 @@ class EditProfileViewModel: ViewModelProtocol {
             .debounce(.milliseconds(3000), scheduler: MainScheduler.instance)
             .withLatestFrom(updatemeObservable).subscribe(onNext: { params in
             print(params)
-            UserInfoAPIManager().updateme(params: params) {
+            APIManager().updateme(params: params) {
                 result in switch result {
                 case .success(let response):
                     print(response)
@@ -119,7 +119,7 @@ class EditProfileViewModel: ViewModelProtocol {
         
     }
     func getAPISetting() {
-        UserInfoAPIManager().getme{
+        APIManager().getme{
             result in switch result {
             case .success(let response):
                 print(response)

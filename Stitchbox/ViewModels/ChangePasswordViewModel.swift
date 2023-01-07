@@ -45,7 +45,7 @@ class ChangePasswordViewModel: ViewModelProtocol {
                     return;
                 }
                 // call api toward changepassword api of backend
-                UserInfoAPIManager().changepassword(params: ["oldPassword": oldPassword, "newPassword": newPassword]) { result in switch result {
+                APIManager().changepassword(params: ["oldPassword": oldPassword, "newPassword": newPassword]) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
                     print("Response \(apiResponse)`")

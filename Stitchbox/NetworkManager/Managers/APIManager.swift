@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 public enum ErrorType: Error {
     case noInternet
@@ -24,10 +25,14 @@ enum Result {
 
 struct APIManager {
     let manager = Manager<UserApi>()
+    let SBmanager = Manager<ChatApi>()
+    let searchManager = Manager<SearchApi>()
+    let mediaManager = Manager<MediaAPI>()
+    let settingManager = Manager<SettingAPI>()
+    let userInfoManager = Manager<UserInfoAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
-        print("params \(params)")
         manager.request(.login(params: params)) { result in
             completion(result)
         }
@@ -35,8 +40,19 @@ struct APIManager {
     
     func phoneLogin(phone: String, completion: @escaping APICompletion) {
         let params = ["phone": phone]
-        print(params)
         manager.request(.phonelogin(params: params)) { result in
+            completion(result)
+        }
+    }
+    
+    func socialLogin(params: [String: String], completion: @escaping APICompletion) {
+        manager.request(.socialLogin(params: params)) { result in
+            completion(result)
+        }
+    }
+    
+    func socialRegister(params: [String: String], completion: @escaping APICompletion) {
+        manager.request(.socialRegister(params: params)) { result in
             completion(result)
         }
     }
@@ -48,69 +64,115 @@ struct APIManager {
         }
     }
     
+    func register(params: [String: String], completion: @escaping APICompletion) {
+        manager.request(.register(params: params)) { result in
+            completion(result)
+        }
+    }
+    
+    func roomIDRequest(channelUrl: String, completion: @escaping APICompletion) {
+        
+        let params = ["channel": channelUrl]
+        SBmanager.request(.roomIDRequest(params: params)) { result in
+            completion(result)
+        }
+        
+        
+    }
+    
+    func acceptSBInvitationRequest(user_id: String, channelUrl: String, completion: @escaping APICompletion) {
+        
+        let params = ["channel": channelUrl, "user_id": user_id]
+        SBmanager.request(.acceptSBInvitationRequest(params: params)) { result in
+            completion(result)
+        }
+        
+        
+    }
+    
+    
+    func channelCheckForInviation(userIds: [String], channelUrl: String, completion: @escaping APICompletion) {
+        
+        let params = ["channel": channelUrl, "userIds": userIds] as [String : Any]
+        SBmanager.request(.channelCheckForInviation(params: params)) { result in
+            completion(result)
+        }
+        
+        
+    }
+    
+    
+    func searchUsersForChat(keyword: String, completion: @escaping APICompletion) {
+        
+        let params = ["search": keyword]
+        searchManager.request(.searchUsersForChat(params: params)) { result in
+            completion(result)
+        }
+        
+    }
+    
+    
+    func uploadImage(image: UIImage, completion: @escaping APICompletion) {
+        mediaManager.upload(.uploadImage, image: image) { result in
+            completion(result)
+        }
+    }
+    
+    
     func resetpassword(params: [String: String], completion: @escaping APICompletion) {
         manager.request(.resetpassword(params: params)){
             result in
             completion(result)
         }
     }
-}
-
-struct SettingAPIManager{
-    let manager = Manager<SettingAPI>()
     
     func getSettings(completion: @escaping APICompletion) {
-        manager.request(.getSettings){
+        settingManager.request(.getSettings){
             result in
             completion(result)
         }
     }
     
     func updateSettings(params: [String: Any], completion: @escaping APICompletion) {
-        manager.request(.updateSettings(params: params)){
+        settingManager.request(.updateSettings(params: params)){
             result in
             completion(result)
         }
     }
-
     
-}
-struct UserInfoAPIManager{
-    let manager = Manager<UserInfoAPI>()
     
     func getme(completion: @escaping APICompletion) {
-        manager.request(.getme){
+        userInfoManager.request(.getme){
             result in
             completion(result)
         }
     }
     
     func updateme(params: [String: Any], completion: @escaping APICompletion) {
-        manager.request(.updateme(params: params)){
+        userInfoManager.request(.updateme(params: params)){
             result in
             completion(result)
         }
     }
     
     func changepassword(params: [String: Any], completion: @escaping APICompletion) {
-        manager.request(.changepassword(params: params)){
+        userInfoManager.request(.changepassword(params: params)){
             result in
             completion(result)
         }
     }
     
-    func uploadcover(params: [String: Any], completion: @escaping APICompletion) {
-        manager.request(.uploadcover(params: params)){
+    func uploadcover(image: UIImage, completion: @escaping APICompletion) {
+        userInfoManager.upload(.uploadcover, image: image) {
             result in
             completion(result)
         }
     }
     
-    func uploadavatar(params: [String: Any], completion: @escaping APICompletion) {
-        manager.request(.uploadavatar(params: params)){
+    func uploadavatar(image: UIImage, completion: @escaping APICompletion) {
+        userInfoManager.upload(.uploadavatar, image: image){
             result in
             completion(result)
         }
     }
-    
 }

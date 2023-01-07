@@ -46,7 +46,7 @@ class ChangePhotoViewController: UIViewController, EditControllerDelegate {
                 }
                 switch self.currentMode {
                 case .changeAvatar:
-                    UserInfoAPIManager().uploadavatar(image: exportedImage!) {
+                    APIManager().uploadavatar(image: exportedImage!) {
                         result in switch result {
                             
                         case .success(let message):
@@ -62,7 +62,7 @@ class ChangePhotoViewController: UIViewController, EditControllerDelegate {
                         }
                     }
                 case .changeCover:
-                    UserInfoAPIManager().uploadcover(image: exportedImage!) {
+                    APIManager().uploadcover(image: exportedImage!) {
                         result in switch result {
                             
                         case .success(let message):
