@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class CountryPickerViewController: UITableViewController {
+public class CountryPickerViewController: UITableViewController, UINavigationBarDelegate, UINavigationControllerDelegate {
 
     public var searchController: UISearchController?
     fileprivate var searchResults = [Country]()
@@ -33,9 +33,18 @@ public class CountryPickerViewController: UITableViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        self.view.backgroundColor = UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
+        self.tableView.backgroundColor = UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
+       
         prepareTableItems()
         prepareNavItem()
         prepareSearchBar()
+        
+    }
+    
+    public func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
     }
    
 }
@@ -73,8 +82,8 @@ extension CountryPickerViewController {
     }
     
     func prepareNavItem() {
-        navigationItem.title = dataSource.navigationTitle
-
+        navigationItem.title = "Country code"
+        
         // Add a close button if this is the root view controller
         if navigationController?.viewControllers.count == 1 {
             let closeButton = dataSource.closeButtonNavigationItem
@@ -91,11 +100,34 @@ extension CountryPickerViewController {
         }
         searchController = UISearchController(searchResultsController:  nil)
         searchController?.searchResultsUpdater = self
-        searchController?.dimsBackgroundDuringPresentation = false
+        searchController?.obscuresBackgroundDuringPresentation = false
         searchController?.hidesNavigationBarDuringPresentation = searchBarPosition == .tableViewHeader
         searchController?.definesPresentationContext = true
         searchController?.searchBar.delegate = self
         searchController?.delegate = self
+        searchController?.searchBar.tintColor = .white
+        searchController?.searchBar.backgroundColor = UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
+        searchController?.searchBar.barTintColor = UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
+       
+        
+        if #available(iOS 13.0, *) {
+            
+            searchController?.searchBar.searchTextField.textColor = .white
+            
+        } else {
+            // Fallback on earlier versions
+        }
+        if #available(iOS 13.0, *) {
+            searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [.foregroundColor: UIColor.lightGray])
+        } else {
+            // Fallback on earlier versions
+        }
+        if #available(iOS 13.0, *) {
+            searchController!.searchBar.searchTextField.leftView?.tintColor = .lightGray
+        } else {
+            // Fallback on earlier versions
+        }
+    
 
         switch searchBarPosition {
         case .tableViewHeader: tableView.tableHeaderView = searchController?.searchBar
@@ -146,12 +178,11 @@ extension CountryPickerViewController {
         
         cell.textLabel?.text = name
         cell.textLabel?.font = dataSource.cellLabelFont
-        if let color = dataSource.cellLabelColor {
-            cell.textLabel?.textColor = color
-        }
+        cell.textLabel?.textColor = .white
         cell.accessoryType = country == countryPickerView.selectedCountry &&
             dataSource.showCheckmarkInList ? .checkmark : .none
         cell.separatorInset = .zero
+        cell.backgroundColor = UIColor.clear
         return cell
     }
     
@@ -182,7 +213,7 @@ extension CountryPickerViewController {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.font = dataSource.sectionTitleLabelFont
             if let color = dataSource.sectionTitleLabelColor {
-                header.textLabel?.textColor = color
+                header.textLabel?.textColor = .white
             }
         }
     }
@@ -258,7 +289,7 @@ extension CountryPickerViewController: UISearchControllerDelegate {
     }
     
     public func willDismissSearchController(_ searchController: UISearchController) {
-        self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.navigationBar.isTranslucent = true
     }
 }
 

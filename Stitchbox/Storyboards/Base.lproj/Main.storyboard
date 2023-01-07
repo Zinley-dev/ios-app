@@ -42,10 +42,10 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="center" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dtR-yC-wh4">
-                                <rect key="frame" x="67" y="165.66666666666666" width="280" height="21"/>
+                                <rect key="frame" x="67" y="165.66666666666666" width="280" height="34"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LpY-sh-64k" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="60" height="21"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="60" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="s4v-Uk-qFT"/>
                                         </constraints>
@@ -66,7 +66,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xaI-xZ-pRH" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="80" y="0.0" width="200" height="21"/>
+                                        <rect key="frame" x="80" y="0.0" width="200" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="200" id="z2r-8b-CQu"/>
                                         </constraints>
@@ -96,7 +96,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DFa-th-4uS" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="152" y="226.66666666666666" width="110" height="29"/>
+                                <rect key="frame" x="152" y="239.66666666666666" width="110" height="28.999999999999972"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="110" id="lBB-fU-HZK"/>
                                 </constraints>
@@ -622,10 +622,10 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="9hx-Nn-t3O">
-                                <rect key="frame" x="67" y="175.66666666666666" width="280" height="81.999999999999972"/>
+                                <rect key="frame" x="67" y="175.66666666666666" width="280" height="107.99999999999997"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="NAME" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6rs-xP-DTV" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="280" height="21"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="34"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
@@ -646,7 +646,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="BIRTHDAY" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DOL-Cy-RCU" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="61" width="280" height="21"/>
+                                        <rect key="frame" x="0.0" y="74" width="280" height="34"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
@@ -672,7 +672,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FLv-Fm-qc0" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="152" y="307.66666666666669" width="110" height="29"/>
+                                <rect key="frame" x="152" y="333.66666666666669" width="110" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="110" id="mVw-4h-Wos"/>
                                 </constraints>
@@ -1111,10 +1111,10 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="957-2X-S2F">
-                                <rect key="frame" x="67" y="175.66666666666666" width="280" height="81.999999999999972"/>
+                                <rect key="frame" x="67" y="175.66666666666666" width="280" height="107.99999999999997"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="PASSWORD" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kk0-Sm-Sto" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="280" height="21"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="34"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
@@ -1132,7 +1132,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="RE-ENTER PASSWORD" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="84s-6s-FuK" customClass="UnderlineTextField" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="61" width="280" height="21"/>
+                                        <rect key="frame" x="0.0" y="74" width="280" height="34"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
@@ -1155,7 +1155,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ivc-La-cO2" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="152" y="307.66666666666669" width="110" height="29"/>
+                                <rect key="frame" x="152" y="333.66666666666669" width="110" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="110" id="ktC-a5-xE7"/>
                                 </constraints>
@@ -1611,22 +1611,22 @@
     </scenes>
     <designables>
         <designable name="3uf-b9-C82">
-            <size key="intrinsicContentSize" width="110" height="34"/>
+            <size key="intrinsicContentSize" width="104" height="34"/>
         </designable>
         <designable name="3xD-SP-On0">
             <size key="intrinsicContentSize" width="39" height="29"/>
         </designable>
         <designable name="6rs-xP-DTV">
-            <size key="intrinsicContentSize" width="57.333333333333336" height="21"/>
+            <size key="intrinsicContentSize" width="85.333333333333329" height="34"/>
         </designable>
         <designable name="84s-6s-FuK">
-            <size key="intrinsicContentSize" width="181" height="21"/>
+            <size key="intrinsicContentSize" width="204" height="34"/>
         </designable>
         <designable name="DFa-th-4uS">
             <size key="intrinsicContentSize" width="39" height="29"/>
         </designable>
         <designable name="DOL-Cy-RCU">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="21"/>
+            <size key="intrinsicContentSize" width="119.33333333333333" height="34"/>
         </designable>
         <designable name="FLv-Fm-qc0">
             <size key="intrinsicContentSize" width="39" height="29"/>
@@ -1635,13 +1635,13 @@
             <size key="intrinsicContentSize" width="39" height="29"/>
         </designable>
         <designable name="Kk0-Sm-Sto">
-            <size key="intrinsicContentSize" width="97" height="21"/>
+            <size key="intrinsicContentSize" width="120" height="34"/>
         </designable>
         <designable name="LpY-sh-64k">
-            <size key="intrinsicContentSize" width="10" height="21"/>
+            <size key="intrinsicContentSize" width="33" height="34"/>
         </designable>
         <designable name="Nhf-Gd-k7X">
-            <size key="intrinsicContentSize" width="111.66666666666667" height="34"/>
+            <size key="intrinsicContentSize" width="105.66666666666667" height="34"/>
         </designable>
         <designable name="QHM-oC-nqz">
             <size key="intrinsicContentSize" width="557" height="14.333333333333334"/>
@@ -1662,7 +1662,7 @@
             <size key="intrinsicContentSize" width="39" height="29"/>
         </designable>
         <designable name="xaI-xZ-pRH">
-            <size key="intrinsicContentSize" width="10" height="21"/>
+            <size key="intrinsicContentSize" width="33" height="34"/>
         </designable>
     </designables>
     <resources>
