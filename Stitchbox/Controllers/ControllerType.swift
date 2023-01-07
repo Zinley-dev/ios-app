@@ -64,7 +64,9 @@ extension ControllerType {
     }
   
     func dismissLoading() {
-      self.dismiss(animated: false, completion: nil)
+        DispatchQueue.main.async {
+            self.dismiss(animated: false, completion: nil)
+        }
     }
       
 }
