@@ -30,13 +30,16 @@ protocol ControllerType: UIViewController {
 extension ControllerType {
     
     func presentError(error: Error) {
-        
+    
         // For Dismissing the Popup
-        self.dismiss(animated: true){
+        self.dismiss(animated: true) {
             
             let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)}
+            self.present(alert, animated: true, completion: nil)
+            
+        }
+        
     }
     
     func presentMessage(message: String) {
@@ -49,6 +52,7 @@ extension ControllerType {
             let alert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
+            
         }
     }
     

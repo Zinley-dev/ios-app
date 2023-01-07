@@ -59,6 +59,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
         bindUI(with: viewModel)
         bindAction(with: viewModel)
         
+        
     }
     
     override func viewWillLayoutSubviews() {
@@ -70,7 +71,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
         
     }
     
-    
+
     // MARK: - Functions
     func bindUI(with viewModel: LoginByPhoneSendCodeViewModel) {
         // bind View Model outputs to Controller elements

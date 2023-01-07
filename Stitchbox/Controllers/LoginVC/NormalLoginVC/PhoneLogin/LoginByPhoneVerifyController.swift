@@ -269,7 +269,7 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
         .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
                   if (error._code == 900) {
-                   // self.dismissLoading()
+                    self.dismissLoading()
                     self.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
                   } else {
                     self.presentError(error: error)
@@ -305,6 +305,7 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
+    
         
         self.view.endEditing(true)
         

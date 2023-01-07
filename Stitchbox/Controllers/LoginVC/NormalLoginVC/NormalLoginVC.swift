@@ -18,7 +18,6 @@ class NormalLoginVC: UIViewController {
     
     lazy var LoginController: LoginController = {
         
-        
         if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginController") as? LoginController {
                     
             self.addVCAsChildVC(childViewController: controller)
