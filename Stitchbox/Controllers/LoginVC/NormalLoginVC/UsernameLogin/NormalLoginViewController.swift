@@ -14,11 +14,13 @@ class LoginController: UIViewController, ControllerType {
     @IBOutlet weak var usernameTextfield: UITextField!
     @IBOutlet weak var signInButton: UIButton!
     
+    @IBOutlet weak var forgotBtn: UIButton!
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         bindUI(with: viewModel)
         bindAction(with: viewModel)
+        
     }
     
     // MARK: - Functions

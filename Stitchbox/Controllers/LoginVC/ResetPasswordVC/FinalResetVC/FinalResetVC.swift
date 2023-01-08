@@ -1,13 +1,16 @@
 //
-//  VerifyViewController.swift
+//  FinalResetVC.swift
 //  Stitchbox
 //
-//  Created by Hisoft Hoangnm on 01/12/2022.
+//  Created by Khoi Nguyen on 1/8/23.
 //
 
 import UIKit
 
-class VerifyViewController: UIViewController {
+class FinalResetVC: UIViewController {
+    
+    
+    @IBOutlet weak var nextButton: SButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,4 +30,3 @@ class VerifyViewController: UIViewController {
     */
 
 }
-

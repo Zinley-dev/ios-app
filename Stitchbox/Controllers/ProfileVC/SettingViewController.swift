@@ -58,6 +58,8 @@ class SettingViewController: UIViewController, ControllerType {
     }
     // MARK: - Functions
     func bindUI(with viewModel: SettingViewModel) {
+        
+        /*
         viewModel.output.errorsObservable
             .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
@@ -68,7 +70,7 @@ class SettingViewController: UIViewController, ControllerType {
                     }
                 }
             })
-            .disposed(by: disposeBag)
+            .disposed(by: disposeBag)*/
         
         viewModel.output.successObservable
             .subscribe(onNext: { successMessage in
