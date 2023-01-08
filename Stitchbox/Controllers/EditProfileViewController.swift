@@ -27,7 +27,8 @@ class EditProfileViewController: UIViewController, ControllerType {
     @IBOutlet var bio: UITextField?
     @IBOutlet var email: UILabel?
     @IBOutlet var phone: UILabel?
-    
+    @IBOutlet var emailTextfield: UITextField?
+    @IBOutlet var phoneTextfield: UITextField?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -50,6 +51,9 @@ class EditProfileViewController: UIViewController, ControllerType {
         username?.addTarget(self, action: #selector(isTextfieldChosen), for: [.editingDidBegin, .editingDidEnd])
         name?.addTarget(self, action: #selector(isTextfieldChosen), for: [.editingDidBegin, .editingDidEnd])
         birthday?.addTarget(self, action: #selector(isTextfieldChosen), for: [.editingDidBegin, .editingDidEnd])
+        emailTextfield?.addTarget(self, action: #selector(isTextfieldChosen), for: [.editingDidBegin, .editingDidEnd])
+        phoneTextfield?.addTarget(self, action: #selector(isTextfieldChosen), for: [.editingDidBegin, .editingDidEnd])
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.view.addGestureRecognizer(tapGesture)
         
@@ -60,7 +64,7 @@ class EditProfileViewController: UIViewController, ControllerType {
             .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
                     if (error._code == 900) {
-                        self.navigationController?.pushViewController(CreateAccountViewController.create(), animated: true)
+//                        self.navigationController?.pushViewController(CreateAccountViewController.create(), animated: true)
                     } else {
                         self.presentError(error: error)
                     }
@@ -74,14 +78,9 @@ class EditProfileViewController: UIViewController, ControllerType {
                 case .logout:
                     RedirectionHelper.redirectToLogin()
                 case .updateState:
-                    DispatchQueue.main.async {
-                        self.dismiss(animated: true)
-                    }
-                case .other(let message):
-                    DispatchQueue.main.async {
-                        self.presentMessage(message: message)
-                        
-                    }
+                    self.resignResponders()
+                case .other(let message):                        self.presentMessage(message: message)
+                    print("there")
                 }
             })
             .disposed(by: disposeBag)
@@ -141,15 +140,27 @@ class EditProfileViewController: UIViewController, ControllerType {
             }
         }.disposed(by: disposeBag)
         
+        viewModel.output.email.subscribe{phone in
+            
+            DispatchQueue.main.async {
+                self.emailTextfield?.text = phone
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.phone.subscribe{phone in
+            
+            DispatchQueue.main.async {
+                self.phoneTextfield?.text = phone
+            }
+        }.disposed(by: disposeBag)
+        
         username?.rx.text.orEmpty.subscribe(viewModel.input.username).disposed(by: disposeBag)
         name?.rx.text.orEmpty.subscribe(viewModel.input.name).disposed(by: disposeBag)
         bio?.rx.text.orEmpty.subscribe(viewModel.input.bio).disposed(by: disposeBag)
         birthday?.rx.text.orEmpty.subscribe(viewModel.input.birthday).disposed(by: disposeBag)
-        
-        birthday?.rx.controlEvent([.allEditingEvents]).asObservable().subscribe{ _ in
-            
-                self.finishBtn?.isHidden =  !(self.birthday?.isEditing ?? false)
-        }.disposed(by: disposeBag)
+        emailTextfield?.rx.text.orEmpty.subscribe(viewModel.input.email).disposed(by: disposeBag)
+        phoneTextfield?.rx.text.orEmpty.subscribe(viewModel.input.phone).disposed(by: disposeBag)
+
         
     }
     
@@ -162,27 +173,30 @@ class EditProfileViewController: UIViewController, ControllerType {
     
     @objc func isTextfieldChosen(textField: UITextField) {
         DispatchQueue.main.async {
-            self.finishBtn?.isHidden =  !(self.birthday?.isEditing ?? false || self.bio?.isEditing ?? false || self.name?.isEditing ?? false || self.username?.isEditing ?? false)
+            self.finishBtn?.isHidden =  !(self.birthday?.isEditing ?? false || self.bio?.isEditing ?? false || self.name?.isEditing ?? false || self.username?.isEditing ?? false || self.emailTextfield?.isEditing ?? false || self.phoneTextfield?.isEditing ?? false)
         }
         
     }
     
     @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
-        bio?.resignFirstResponder()
-        username?.resignFirstResponder()
-        name?.resignFirstResponder()
-        birthday?.resignFirstResponder()
+        DispatchQueue.main.async { self.bio?.resignFirstResponder()
+            self.username?.resignFirstResponder()
+            self.name?.resignFirstResponder()
+            self.birthday?.resignFirstResponder()
+            self.phoneTextfield?.resignFirstResponder()
+            self.emailTextfield?.resignFirstResponder()
+        }
     }
     
-    @IBAction func resetPasswordButton() {
-        
+    private func resignResponders() {
+        DispatchQueue.main.async { self.bio?.resignFirstResponder()
+            self.username?.resignFirstResponder()
+            self.name?.resignFirstResponder()
+            self.birthday?.resignFirstResponder()
+            self.phoneTextfield?.resignFirstResponder()
+            self.emailTextfield?.resignFirstResponder()
+        }
     }
-    
-
-    
-    
-   
-    
 }
 
 

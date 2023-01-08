@@ -24,34 +24,57 @@ protocol ControllerType: UIViewController {
     ///
     /// - Parameter viewModel: View model object
     /// - Returns: View controller of concrete type
-//    static func create(with viewModel: ViewModelType) -> UIViewController
+    //    static func create(with viewModel: ViewModelType) -> UIViewController
 }
 
 extension UIViewController {
     
+    
     func presentError(error: Error) {
         
         // For Dismissing the Popup
-        self.dismiss(animated: true){
-            
-            let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)}
+        dismissPopup()
+        
+        let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
+        DispatchQueue.main.async {
+            if let window = UIApplication.shared.delegate?.window {
+                if let viewController = window?.rootViewController {
+                    viewController.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
     }
     
     func presentMessage(message: String) {
         
         // For Dismissing the Popup
-        self.dismiss(animated: true) {
-            
-            // Dismiss current Viewcontroller and back to ViewController B
-            self.navigationController?.popViewController(animated: true)
-            let alert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+        dismissPopup()
+        
+        // Dismiss current Viewcontroller and back to ViewController
+        let alert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
+        if let window = UIApplication.shared.delegate?.window {
+            if let viewController = window?.rootViewController {
+                DispatchQueue.main.async {
+                    viewController.present(alert, animated: true, completion: nil)
+                }
+            }
         }
     }
-    
+    func dismissPopup() {
+        // For Dismissing the Popup
+        DispatchQueue.main.async {
+            if let window = UIApplication.shared.delegate?.window {
+                if let viewController = window?.rootViewController {
+                    // handle navigation controllers
+                    if(viewController is PopupViewController){
+                        viewController.dismiss(animated: true)
+                    }
+                }
+            }
+        }
+    }
     func presentLoading() {
         let swiftUIView = LottieView(name: "loading-animation", loopMode: .loop)
             .frame(width: 100, height: 100)
@@ -61,9 +84,13 @@ extension UIViewController {
         
         viewCtrl.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
         
-        self.present(popupVC, animated: true)
-        
+        DispatchQueue.main.async {
+            if let window = UIApplication.shared.delegate?.window {
+                if let viewController = window?.rootViewController {
+                    viewController.present(popupVC, animated: true)
+                }
+            }
+        }
     }
 }
-
 

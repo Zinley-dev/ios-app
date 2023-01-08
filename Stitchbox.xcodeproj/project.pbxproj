@@ -37,6 +37,7 @@
 		149F44F92956F98E0084742A /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149F44F82956F98E0084742A /* EditProfileViewController.swift */; };
 		14C067682956EC4F002C79AE /* ReferralCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */; };
 		14C46C1C293D8DD1004D5D3A /* LoginTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */; };
+		14D67643296B0EDB00E8FE6B /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D67642296B0EDB00E8FE6B /* ResetPasswordViewController.swift */; };
 		14FAEE04294DED5800C20B99 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE03294DED5800C20B99 /* SettingViewController.swift */; };
 		14FAEE06294DEE0B00C20B99 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */; };
 		390FD7382909264D0068B883 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7372909264D0068B883 /* AppDelegate.swift */; };
@@ -191,6 +192,7 @@
 		149F44F82956F98E0084742A /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralCodeViewController.swift; sourceTree = "<group>"; };
 		14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTabBarController.swift; sourceTree = "<group>"; };
+		14D67642296B0EDB00E8FE6B /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		14FAEE03294DED5800C20B99 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		1A1F6DB1ABB03B5AC7578445 /* Pods-Stitchbox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.release.xcconfig"; sourceTree = "<group>"; };
@@ -563,6 +565,7 @@
 				146DD8A32965966D0008199A /* SettingVC */,
 				A5A5E410293891A2004E9207 /* LoginViewController.swift */,
 				A5A5E41229389770004E9207 /* ForgotViewController.swift */,
+				14D67642296B0EDB00E8FE6B /* ResetPasswordViewController.swift */,
 				A5A5E4142938A309004E9207 /* VerifyViewController.swift */,
 				A5346487294B09B300FB6A94 /* ProfileViewController.swift */,
 				149F44F82956F98E0084742A /* EditProfileViewController.swift */,
@@ -1161,6 +1164,7 @@
 				A59CB3EF294ADB1E00D84D9A /* AppNavigationController.swift in Sources */,
 				14FAEE04294DED5800C20B99 /* SettingViewController.swift in Sources */,
 				148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */,
+				14D67643296B0EDB00E8FE6B /* ResetPasswordViewController.swift in Sources */,
 				A59CB3F3294ADC2500D84D9A /* SessionDataSource.swift in Sources */,
 				390FD782290931900068B883 /* NormalLoginViewController.swift in Sources */,
 				390FD76F290928DA0068B883 /* APIResponse.swift in Sources */,

@@ -33,7 +33,7 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType {
         .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
                   if (error._code == 900) {
-                    self.navigationController?.pushViewController(CreateAccountViewController.create(), animated: true)
+//                    self.navigationController?.pushViewController(CreateAccountViewController.create(), animated: true)
                   } else {
                     self.presentError(error: error)
                   }

@@ -63,9 +63,10 @@ class Manager<EndPoint: EndPointType>: RequestManager {
       var uploadData = Data()
       uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
       uploadData.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
-      uploadData.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
+      uploadData.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
       uploadData.append(image.jpegData(compressionQuality: 0.5)!)
       uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+      print(uploadData)
       return uploadData
     }
     

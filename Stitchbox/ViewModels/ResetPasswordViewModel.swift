@@ -30,7 +30,7 @@ class ResetPasswordViewModel: ViewModelProtocol {
     private let errorsSubject = PublishSubject<Error>()
     private let disposeBag = DisposeBag()
     
-    public init(vc: UIViewController) {
+    public init() {
         input = Input(newPassword: newPassword.asObserver())
         action = Action()
         output = Output(successObservable: successObservable.asObservable(), errorsObservable: errorsSubject.asObservable())
