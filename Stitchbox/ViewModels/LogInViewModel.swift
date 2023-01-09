@@ -58,11 +58,9 @@ class LoginControllerViewModel: ViewModelProtocol {
                 APIManager().normalLogin(username: username, password: password) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
-                    print("Response \(apiResponse)`")
                     let data = apiResponse.body?["data"] as! [String: Any]?
                     do{
                         let account = try Account(JSONbody: data, type: .normalLogin)
-                        // Store account to UserDefault as "userAccount"
                         print("account \(account)")
                        
                         // Write/Set Data

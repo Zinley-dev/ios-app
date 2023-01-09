@@ -15,12 +15,13 @@ class LoginController: UIViewController, ControllerType {
     @IBOutlet weak var signInButton: UIButton!
     
     @IBOutlet weak var forgotBtn: UIButton!
+  
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         bindUI(with: viewModel)
         bindAction(with: viewModel)
-        
+        forgotBtn.addTarget(self, action: #selector(onClickForgot(_:)), for: .touchUpInside)
     }
     
     // MARK: - Functions
@@ -59,6 +60,14 @@ class LoginController: UIViewController, ControllerType {
             self.presentLoading()
         }.disposed(by: disposeBag)
     }
+  
+    @objc func onClickForgot(_ sender: AnyObject) {
+      if let navigationController = self.navigationController {
+        if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ResetPasswordVC") as? ResetPasswordVC {
+          navigationController.pushViewController(controller, animated: true)
+        }
+      }
+    }
     
 }
 
@@ -70,31 +79,3 @@ extension LoginController {
         return controller
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct NormalViewControllerRepresentable: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> UIViewController {
-        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "USERNAME")
-    }
-    
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        
-    }
-    
-    typealias UIViewControllerType = UIViewController;
-    
-}
-
-@available(iOS 13, *)
-struct NormalLoginView_Preview: PreviewProvider {
-    static var previews: some View {
-        // view controller using programmatic UI
-        VStack{
-            NormalViewControllerRepresentable()
-        }
-    }
-}
-#endif
-

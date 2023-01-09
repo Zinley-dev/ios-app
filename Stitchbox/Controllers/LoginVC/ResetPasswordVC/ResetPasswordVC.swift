@@ -29,15 +29,9 @@ class ResetPasswordVC: UIViewController {
     }()
     
     lazy var EmailResetVC: EmailResetVC = {
-        
-        
-        if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "LoginByPhoneSendCodeController") as? EmailResetVC {
-            
-    
+        if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EmailResetVC") as? EmailResetVC {
             self.addVCAsChildVC(childViewController: controller)
-            
             return controller
-            
         } else {
             return UIViewController() as! EmailResetVC
         }
@@ -60,7 +54,6 @@ class ResetPasswordVC: UIViewController {
         
         PhoneResetVC.view.isHidden = false
         EmailResetVC.view.isHidden = true
-        
     }
     
     func setupBackButton() {

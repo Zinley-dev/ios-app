@@ -180,6 +180,7 @@
 		A5DF81F7295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF81F6295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift */; };
 		A5DF81F9295C248A00E8DDB8 /* MemberListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF81F8295C248A00E8DDB8 /* MemberListVC.swift */; };
 		A5DF81FD295D3FE200E8DDB8 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF81FC295D3FE200E8DDB8 /* SearchViewController.swift */; };
+		A5F9C91C296C14ED00D339A1 /* ResetPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F9C91B296C14ED00D339A1 /* ResetPasswordViewModel.swift */; };
 		DA5069DDA0DACC3FEEF1291A /* Pods_StitchboxUnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB7BABF2C7A6DB10DCEBCC5D /* Pods_StitchboxUnitTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -393,6 +394,7 @@
 		A5DF81F6295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChannelsUpdateListDelegate.swift; sourceTree = "<group>"; };
 		A5DF81F8295C248A00E8DDB8 /* MemberListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberListVC.swift; sourceTree = "<group>"; };
 		A5DF81FC295D3FE200E8DDB8 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		A5F9C91B296C14ED00D339A1 /* ResetPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewModel.swift; sourceTree = "<group>"; };
 		BE3A3AF158F26D2D731FA654 /* Pods_Stitchbox_StitchboxUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox_StitchboxUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD76AC9379189BE560F8DA89 /* Pods-Stitchbox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.debug.xcconfig"; sourceTree = "<group>"; };
 		D72F7F0D7C6EE37CB5890EAF /* Pods-Stitchbox-StitchboxUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -717,6 +719,7 @@
 				14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */,
 				147187F22920D2830039B89E /* LoginByPhoneViewModel.swift */,
 				A540A8D3294726300085CC45 /* StartViewModel.swift */,
+				A5F9C91B296C14ED00D339A1 /* ResetPasswordViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1779,6 +1782,7 @@
 				6AEA74FA29680B53005C802B /* NormalLoginVC.swift in Sources */,
 				A5DF81FD295D3FE200E8DDB8 /* SearchViewController.swift in Sources */,
 				6AAD7A1E294C65DD003E3AB6 /* UIApplication+QuickStart.swift in Sources */,
+				A5F9C91C296C14ED00D339A1 /* ResetPasswordViewModel.swift in Sources */,
 				6A1235A5295034BD004B612E /* InviteUserVC.swift in Sources */,
 				6AEC6901295178E2000393D8 /* SendBirdRoomModel.swift in Sources */,
 				6A58EA56294ECAE6005FA3CD /* ChannelViewController.swift in Sources */,

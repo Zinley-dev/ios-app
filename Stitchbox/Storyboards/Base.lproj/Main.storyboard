@@ -13,7 +13,7 @@
         <!--Email ResetVC-->
         <scene sceneID="6RZ-kM-vpX">
             <objects>
-                <viewController id="zqY-Fp-jgb" customClass="EmailResetVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EmailResetVC" id="zqY-Fp-jgb" customClass="EmailResetVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="C7c-MY-pmv">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -22,7 +22,7 @@
                                 <rect key="frame" x="32" y="32" width="350" height="34"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="size">
@@ -78,7 +78,7 @@
         <!--Phone ResetVC-->
         <scene sceneID="hsg-j1-hcg">
             <objects>
-                <viewController id="iXW-fE-1F3" customClass="PhoneResetVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhoneResetVC" id="iXW-fE-1F3" customClass="PhoneResetVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="N2b-Sm-Zy2">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -187,6 +187,12 @@
                             <constraint firstItem="3Xm-E7-aXW" firstAttribute="leading" secondItem="mbo-sh-nRd" secondAttribute="leading" constant="32" id="p7I-SH-z6t"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="countryCodeNameTextfield" destination="Me3-ZT-Nqq" id="0Li-si-EYi"/>
+                        <outlet property="countryCodeTextfield" destination="x7Q-UZ-UcU" id="yS1-4s-AL3"/>
+                        <outlet property="phoneTextfield" destination="ZHi-ej-OiT" id="WFg-Rp-19G"/>
+                        <outlet property="sendCodeButton" destination="LfU-xY-avf" id="kNH-xr-PPp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mhd-ZU-7Nl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -195,7 +201,7 @@
         <!--Reset PasswordVC-->
         <scene sceneID="aKl-Sc-2dI">
             <objects>
-                <viewController id="RvK-UJ-AEs" customClass="ResetPasswordVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ResetPasswordVC" id="RvK-UJ-AEs" customClass="ResetPasswordVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tTy-Zj-vRn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

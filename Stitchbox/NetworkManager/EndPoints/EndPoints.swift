@@ -31,6 +31,8 @@ public enum UserApi {
     case register (params: [String:String])
     case socialLogin (params: [String:String])
     case socialRegister (params: [String:String])
+    case forgotPasswordByEmail (params: [String:String])
+    case forgotPasswordByPhone (params: [String:String])
 }
 extension UserApi: EndPointType {
     var module: String {
@@ -49,9 +51,12 @@ extension UserApi: EndPointType {
           return "/register"
         case .socialLogin:
           return "/social-login"
-          
         case .socialRegister:
           return "/social-register"
+        case .forgotPasswordByEmail:
+          return "/forgot-password"
+        case .forgotPasswordByPhone:
+          return "/forgot-password-by-phone"
       }
     }
     
@@ -69,6 +74,10 @@ extension UserApi: EndPointType {
             return .post
         case .socialRegister:
             return .post
+        case .forgotPasswordByPhone:
+            return .post
+        case .forgotPasswordByEmail:
+            return .post
         }
     }
     
@@ -85,6 +94,10 @@ extension UserApi: EndPointType {
         case .socialLogin(let params):
             return .requestParameters(parameters: params)
         case .socialRegister(let params):
+            return .requestParameters(parameters: params)
+        case .forgotPasswordByPhone(let params):
+            return .requestParameters(parameters: params)
+        case .forgotPasswordByEmail(let params):
             return .requestParameters(parameters: params)
         }
     }

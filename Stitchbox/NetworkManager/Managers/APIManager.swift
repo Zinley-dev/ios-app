@@ -99,7 +99,6 @@ struct APIManager {
         
     }
     
-    
     func searchUsersForChat(keyword: String, completion: @escaping APICompletion) {
         
         let params = ["search": keyword]
@@ -116,7 +115,17 @@ struct APIManager {
       }
     }
     
-    
+  func forgotPasswordByEmail(params: [String: String], completion: @escaping APICompletion) {
+        manager.request(.forgotPasswordByEmail(params: params)) { result in
+          completion(result)
+        }
+    }
+  
+  func forgotPasswordByPhone(params: [String: String], completion: @escaping APICompletion) {
+        manager.request(.forgotPasswordByPhone(params: params)) { result in
+          completion(result)
+        }
+    }
 }
 
 struct SettingAPIManager{

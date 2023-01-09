@@ -10,8 +10,13 @@ import RxSwift
 import RxCocoa
 import CountryPickerView
 
-class PhoneResetVC: UIViewController, CountryPickerViewDelegate, CountryPickerViewDataSource {
+class PhoneResetVC: UIViewController, CountryPickerViewDelegate, CountryPickerViewDataSource, ControllerType {
     
+    typealias ViewModelType = ResetPasswordViewModel
+    
+    // MARK: - Properties
+    private lazy var vm: ViewModelType! = ViewModelType(vc: self)
+    private let disposeBag = DisposeBag()
     
     private var cpv = CountryPickerView(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
     private var codeSubject = PublishSubject<Country>()
@@ -55,8 +60,8 @@ class PhoneResetVC: UIViewController, CountryPickerViewDelegate, CountryPickerVi
         cpv.dataSource = self
         
         countryCodeTextfield.text = cpv.selectedCountry.phoneCode
-      
-        
+        bindUI(with: vm)
+      bindAction(with: vm)
     }
     
     override func viewWillLayoutSubviews() {
@@ -73,6 +78,40 @@ class PhoneResetVC: UIViewController, CountryPickerViewDelegate, CountryPickerVi
         
         self.view.endEditing(true)
         
+    }
+  
+  
+    func bindAction(with vm: ViewModelType) {
+      sendCodeButton.rx.tap.asObservable()
+        .withLatestFrom(phoneTextfield.rx.text.orEmpty.asObservable()) {
+          return ($1, self.cpv.selectedCountry.phoneCode) }
+        .subscribe(vm.action.sendOTPDidTap)
+        .disposed(by: disposeBag)
+    }
+  
+    func bindUI(with vm: ViewModelType) {
+      // bind View Model outputs to Controller elements
+      vm.output.errorsObservable
+        .subscribe(onNext: { (error) in
+          DispatchQueue.main.async {
+            self.presentError(error: error)
+          }
+        })
+        .disposed(by: disposeBag)
+      
+      vm.output.resetResultObservable
+        .subscribe(onNext: { isTrue in
+          if(isTrue){
+            DispatchQueue.main.async {
+              if let navigationController = self.navigationController {
+                if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "PHONEVERIFY") as? LoginByPhoneVerifyController {
+                  navigationController.pushViewController(controller, animated: true)
+                }
+              }
+            }
+          }
+        })
+        .disposed(by: disposeBag)
     }
 
 }

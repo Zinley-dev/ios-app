@@ -136,30 +136,3 @@ extension LoginByPhoneSendCodeController {
         return controller
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct LoginByPhoneViewControllerRepresentable: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> UIViewController {
-        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PHONE")
-    }
-    
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        
-    }
-    
-    typealias UIViewControllerType = UIViewController;
-    
-}
-
-@available(iOS 13, *)
-struct LoginByPhonSwitchingView_Preview: PreviewProvider {
-    static var previews: some View {
-        // view controller using programmatic UI
-        VStack{
-            TabBarViewControllerRepresentable()
-        }
-    }
-}
-#endif
