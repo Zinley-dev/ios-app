@@ -1,39 +1,37 @@
 //
-//  NormalLoginVC.swift
+//  ResetPasswordVC.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 1/6/23.
+//  Created by Khoi Nguyen on 1/8/23.
 //
 
 import UIKit
 
-class NormalLoginVC: UIViewController {
+class ResetPasswordVC: UIViewController {
     
-    @IBOutlet weak var usernameBtn: UIButton!
     @IBOutlet weak var phoneBtn: UIButton!
-    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var emailBtn: UIButton!
     @IBOutlet weak var descLbl: UILabel!
     let backButton: UIButton = UIButton(type: .custom)
     
-    
-    lazy var LoginController: LoginController = {
+    lazy var PhoneResetVC: PhoneResetVC = {
         
-        if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginController") as? LoginController {
+        if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PhoneResetVC") as? PhoneResetVC {
                     
             self.addVCAsChildVC(childViewController: controller)
             
             return controller
         } else {
-            return UIViewController() as! LoginController
+            return UIViewController() as! PhoneResetVC
         }
        
         
     }()
     
-    lazy var LoginByPhoneSendCodeController: LoginByPhoneSendCodeController = {
+    lazy var EmailResetVC: EmailResetVC = {
         
         
-        if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "LoginByPhoneSendCodeController") as? LoginByPhoneSendCodeController {
+        if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "LoginByPhoneSendCodeController") as? EmailResetVC {
             
     
             self.addVCAsChildVC(childViewController: controller)
@@ -41,25 +39,27 @@ class NormalLoginVC: UIViewController {
             return controller
             
         } else {
-            return UIViewController() as! LoginByPhoneSendCodeController
+            return UIViewController() as! EmailResetVC
         }
                 
         
     }()
+
+    @IBOutlet weak var contentView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
         setupBackButton()
-        setupUsernameBtn()
+        setupPhoneBtn()
 
         
         // default load for 2 child views
         
-        LoginController.view.isHidden = false
-        LoginByPhoneSendCodeController.view.isHidden = true
-        
+        PhoneResetVC.view.isHidden = false
+        EmailResetVC.view.isHidden = true
         
     }
     
@@ -90,12 +90,13 @@ class NormalLoginVC: UIViewController {
     }
     
     
-    @IBAction func usernameBtnPressed(_ sender: Any) {
+    @IBAction func EmailBtnPressed(_ sender: Any) {
         
-        setupUsernameBtn()
+        setupEmailBtn()
         
     }
     
+
     // addChildVC Function
     
     func addVCAsChildVC(childViewController: UIViewController) {
@@ -118,40 +119,44 @@ class NormalLoginVC: UIViewController {
     }
     
     
-    func setupUsernameBtn() {
+    func setupEmailBtn() {
         
-        usernameBtn.setTitleColor(UIColor.white, for: .normal)
+        emailBtn.setTitleColor(UIColor.white, for: .normal)
         phoneBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
         
-        usernameBtn.backgroundColor = UIColor.secondary
+        emailBtn.backgroundColor = UIColor.secondary
         phoneBtn.backgroundColor = UIColor.clear
         
-        descLbl.text = "Enter your username and password"
+        descLbl.text = "Enter your email"
         
-        LoginController.view.isHidden = false
-        LoginByPhoneSendCodeController.view.isHidden = true
+        EmailResetVC.view.isHidden = false
+        PhoneResetVC.view.isHidden = true
         
        
     }
     
     func setupPhoneBtn() {
         
-        usernameBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        emailBtn.setTitleColor(UIColor.lightGray, for: .normal)
         phoneBtn.setTitleColor(UIColor.white, for: .normal)
         
         
-        usernameBtn.backgroundColor = UIColor.clear
+        emailBtn.backgroundColor = UIColor.clear
         phoneBtn.backgroundColor = UIColor.secondary
         
         descLbl.text = "Select a country and enter your phone number"
         
-        LoginController.view.isHidden = true
-        LoginByPhoneSendCodeController.view.isHidden = false
+        EmailResetVC.view.isHidden = true
+        PhoneResetVC.view.isHidden = false
         
-      
     }
     
-    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        self.view.endEditing(true)
+        
+    }
 
 }

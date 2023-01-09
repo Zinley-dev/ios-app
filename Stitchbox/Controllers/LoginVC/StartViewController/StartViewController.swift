@@ -242,9 +242,6 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             
         }
         
-        
-        
-        
     }
   
 }
