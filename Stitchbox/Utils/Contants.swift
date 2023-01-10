@@ -37,4 +37,9 @@ struct Constants {
     struct GoogleSignIn {
         static let clientId = "56078114675-c5lhtgsgsp4bod4amsc9rlfv8b4s64j8.apps.googleusercontent.com"
     }
+    struct Twitter {
+      static let CONSUMER_KEY = "V6VVpnYFFfbXKjarIsulSE13I"
+      static let CONSUMER_SECRET_KEY = "5s5OmzJZSR83hsnTPSqj8l0fSb84bGema8SK5uE35T5A9CkuZp"
+      static let CALLBACK_URL = "twitterkit-4ob6dNOQJPIjz9DQtCiLcD8VY://"
+    }
 }

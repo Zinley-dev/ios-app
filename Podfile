@@ -27,6 +27,8 @@ target 'Stitchbox' do
   # Tiktok SDK
   pod 'TikTokOpenSDK', '~> 5.0.14'
   
+  # Twitter
+  pod 'Swifter', :git => "https://github.com/mattdonnelly/Swifter.git"
   
   # Sendbird SDK
   pod 'SendBirdSDK', '~> 3.1.37'

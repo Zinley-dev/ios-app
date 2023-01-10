@@ -149,6 +149,7 @@ PODS:
   - SendBirdWebRTC (1.6.0)
   - SwiftEntryKit (1.2.6):
     - QuickLayout (= 3.0.0)
+  - Swifter (2.5.0)
   - SwiftLint (0.50.3)
   - Texture (3.1.0):
     - Texture/AssetsLibrary (= 3.1.0)
@@ -197,6 +198,7 @@ DEPENDENCIES:
   - SendBirdSDK (~> 3.1.37)
   - SendBirdUIKit (~> 2.2.11)
   - SwiftEntryKit (= 1.2.6)
+  - Swifter (from `https://github.com/mattdonnelly/Swifter.git`)
   - SwiftLint (~> 0.50.3)
   - Texture (~> 3.1.0)
   - TikTokOpenSDK (~> 5.0.14)
@@ -251,6 +253,15 @@ SPEC REPOS:
     - ZSWTaggedString
     - ZSWTappableLabel
 
+EXTERNAL SOURCES:
+  Swifter:
+    :git: https://github.com/mattdonnelly/Swifter.git
+
+CHECKOUT OPTIONS:
+  Swifter:
+    :commit: f6888d61500f46ca6d1814fe2624056339eda986
+    :git: https://github.com/mattdonnelly/Swifter.git
+
 SPEC CHECKSUMS:
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
@@ -292,12 +303,13 @@ SPEC CHECKSUMS:
   SendBirdUIKit: 248e5cafb636088be134fd0ff77eb53a787d8514
   SendBirdWebRTC: 6bbdbda7aa2f9c3f2cbedacd3e53b9536e2ac8ac
   SwiftEntryKit: 96a2fa90b2631bbbfac50d18449e9ca3d0635f13
+  Swifter: 4c2f8cf320c2f751c10128f841d8e9bd8609d988
   SwiftLint: 77f7cb2b9bb81ab4a12fcc86448ba3f11afa50c6
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
   TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 717d75d8cfbe6319dec28fbd23ddb371961af7de
+PODFILE CHECKSUM: f296efcd1499a34a85f248d9532462fd759e7259
 
 COCOAPODS: 1.11.3

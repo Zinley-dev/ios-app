@@ -311,7 +311,7 @@
 		6A6C310229641D4F0070167A /* UnbanUserModView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnbanUserModView.xib; sourceTree = "<group>"; };
 		6A6C3106296426F80070167A /* EditChannelDataModView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditChannelDataModView.swift; sourceTree = "<group>"; };
 		6A6C3107296426F80070167A /* EditChannelDataModView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditChannelDataModView.xib; sourceTree = "<group>"; };
-		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "CountryPickerView-master"; sourceTree = "<group>"; };
+		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "CountryPickerView-master"; path = "../../../../../../Downloads/CountryPickerView-master"; sourceTree = "<group>"; };
 		6AAD79FE294C4C68003E3AB6 /* NavigationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationVC.swift; sourceTree = "<group>"; };
 		6AAD7A01294C4D1C003E3AB6 /* MainMessageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessageVC.swift; sourceTree = "<group>"; };
 		6AAD7A04294C53EC003E3AB6 /* ModView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModView.swift; sourceTree = "<group>"; };

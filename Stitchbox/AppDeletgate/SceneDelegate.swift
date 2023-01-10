@@ -37,6 +37,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sourceApplication: nil,
             annotation: [UIApplication.OpenURLOptionsKey.annotation]
         )
+      
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+          _ = appDelegate.application(UIApplication.shared, open: url, options: [:])
+        }
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

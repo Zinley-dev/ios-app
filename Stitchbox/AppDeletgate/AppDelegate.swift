@@ -16,6 +16,7 @@ import UserNotifications
 import SendBirdUIKit
 import PixelSDK
 import UserNotifications
+import TikTokOpenSDK
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -33,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-        
+        TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         UNUserNotificationCenter.current().delegate = self
         
         setupPixelSDK()
@@ -138,6 +139,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey: Any])
       -> Bool {
+        
+        guard let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+              let annotation = options[UIApplication.OpenURLOptionsKey.annotation] else {
+          return false
+        }
+        
+        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
+          return true
+        }
+        
       ApplicationDelegate.shared.application(
           application,
           open: url,
@@ -146,6 +157,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
       )
       return GIDSignIn.sharedInstance.handle(url)
     }
+  
+  func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+    if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
+      return true
+    }
+    return false
+  }
+  
+  func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
+    if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: nil, annotation: "") {
+      return true
+    }
+    return false
+  }
     
     
     //

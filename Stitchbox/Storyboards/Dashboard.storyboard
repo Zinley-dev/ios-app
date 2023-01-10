@@ -1959,11 +1959,21 @@
                                     <segue destination="xuI-Xg-Q5p" kind="show" id="VQs-wP-6Xq"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B9Z-vK-ZPS">
+                                <rect key="frame" x="168" y="528" width="78" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Logout"/>
+                                <connections>
+                                    <action selector="tapedSignOut:" destination="l9I-Ci-Uq5" eventType="touchUpInside" id="9b4-Jr-CXq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ebJ-bj-z4B"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstItem="ebJ-bj-z4B" firstAttribute="bottom" secondItem="B9Z-vK-ZPS" secondAttribute="bottom" constant="250" id="1WN-QE-jM6"/>
                             <constraint firstItem="kHL-Nd-kxq" firstAttribute="centerY" secondItem="LJT-Ib-Nta" secondAttribute="centerY" id="DKz-pG-fLn"/>
+                            <constraint firstItem="B9Z-vK-ZPS" firstAttribute="centerX" secondItem="LJT-Ib-Nta" secondAttribute="centerX" id="MKk-sO-rRS"/>
                             <constraint firstItem="kHL-Nd-kxq" firstAttribute="centerX" secondItem="LJT-Ib-Nta" secondAttribute="centerX" id="O2F-qn-a5o"/>
                         </constraints>
                     </view>
@@ -2102,11 +2112,11 @@
         <scene sceneID="dta-GJ-n4h">
             <objects>
                 <viewController storyboardIdentifier="SETTING" title="Settings" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xuI-Xg-Q5p" customClass="SettingViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" clipsSubviews="YES" contentMode="top" id="TI1-Hx-BUo">
+                    <view key="view" clipsSubviews="YES" contentMode="top" ambiguous="YES" id="TI1-Hx-BUo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YNX-oy-oUd">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YNX-oy-oUd">
                                 <rect key="frame" x="0.0" y="92" width="414" height="770"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qUb-51-hjp">
