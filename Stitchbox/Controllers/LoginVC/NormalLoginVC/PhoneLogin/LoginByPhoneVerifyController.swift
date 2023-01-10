@@ -343,30 +343,3 @@ extension LoginByPhoneVerifyController {
         return controller
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct LoginByPhoneVerifyViewControllerRepresentable: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> UIViewController {
-        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PHONEVERIFY")
-    }
-    
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        
-    }
-    
-    typealias UIViewControllerType = UIViewController;
-    
-}
-
-@available(iOS 13, *)
-struct LoginByPhoneVerifySwitchingView_Preview: PreviewProvider {
-    static var previews: some View {
-        // view controller using programmatic UI
-        VStack{
-            LoginByPhoneVerifyViewControllerRepresentable()
-        }
-    }
-}
-#endif
