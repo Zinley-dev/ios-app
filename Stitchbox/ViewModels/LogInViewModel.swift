@@ -59,25 +59,23 @@ class LoginControllerViewModel: ViewModelProtocol {
                 case .success(let apiResponse):
                     // get and process data
                     let data = apiResponse.body?["data"] as! [String: Any]?
-                    do{
-                        let account = try Account(JSONbody: data, type: .normalLogin)
-                        print("account \(account)")
-                       
-                        // Write/Set Data
-                        let sessionToken = SessionDataSource.init(JSONString: "{}")!
-                        sessionToken.accessToken = account.accessToken
-                        sessionToken.refreshToken = account.refreshToken
-                        _AppCoreData.userSession.accept(sessionToken)
-                      
-                        // write usr data
-                        if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
-                          _AppCoreData.userDataSource.accept(newUserData)
-                        }
-                        
-                        self.loginResultSubject.onNext(true)
-                    }catch{
-                        self.errorsSubject.onNext(error)
+                    let account = Account(JSON: data ?? [:])
+                    
+                    print("account \(Mapper().toJSON(account!))")
+                    
+                    // Write/Set Data
+                    let sessionToken = SessionDataSource.init(JSONString: "{}")!
+                    sessionToken.accessToken = account?.accessToken
+                    sessionToken.refreshToken = account?.refreshToken
+                    _AppCoreData.userSession.accept(sessionToken)
+                    
+                    // write usr data
+                    if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
+                        _AppCoreData.userDataSource.accept(newUserData)
                     }
+                    _AppCoreData.userData.accept(account?.user)
+                    
+                    self.loginResultSubject.onNext(true)
                 case .failure:
                     self.errorsSubject.onNext(NSError(domain: "Wrong username or password", code: 400))
                 }

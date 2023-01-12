@@ -17,7 +17,7 @@ class StartViewModel: ViewModelProtocol {
         let loginResultObservable: Observable<Bool>
         let errorsObservable: Observable<Error>
     }
-        
+    
     let input: Input
     let action: Action
     let output: Output
@@ -55,49 +55,47 @@ class StartViewModel: ViewModelProtocol {
     open func completeSignIn(with authResult: AuthResult) {
         print(authResult)
         // call api --> check auth
-      var params = ["socialId": authResult.idToken!]
-      if selectedSignInMethod == .google {
-        params["provider"] = "google"
-      }
-      if selectedSignInMethod == .facebook {
-        params["provider"] = "facebook"
-      }
-      APIManager().socialLogin(params: params) { result in
-        switch result {
-          case .success(let response):
-            let data = response.body?["data"] as! [String: Any]?
-            do{
-              let account = try Account(JSONbody: data, type: .normalLogin)
-              // Store account to UserDefault as "userAccount"
-              print("account \(account)")
-              
-              // Write/Set Data
-              let sessionToken = SessionDataSource.init(JSONString: "{}")!
-              sessionToken.accessToken = account.accessToken
-              sessionToken.refreshToken = account.refreshToken
-              _AppCoreData.userSession.accept(sessionToken)
-              
-              // write usr data
-              if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
-                _AppCoreData.userDataSource.accept(newUserData)
-              }
-              
-              self.loginResultSubject.onNext(true)
-            }catch{
-              self.errorsSubject.onNext(error)
-            }
-          case .failure(let error):
-            print("**** ERROR ****")
-            print(error)
-            
-            // save datasource signinMethod for first time login
-            let initMap = ["signinMethod": params["provider"], "socialId": authResult.idToken!]
-            let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
-            _AppCoreData.userDataSource.accept(newUserData)
-            
-            self.errorsSubject.onNext(NSError(domain: "Login fail", code: 401))
+        var params = ["socialId": authResult.idToken!]
+        if selectedSignInMethod == .google {
+            params["provider"] = "google"
         }
-      }
+        if selectedSignInMethod == .facebook {
+            params["provider"] = "facebook"
+        }
+        APIManager().socialLogin(params: params) { result in
+            switch result {
+            case .success(let response):
+                let data = response.body?["data"] as! [String: Any]?
+                let account = Account(JSON: data ?? [:])
+                
+                print("account \(Mapper().toJSON(account!))")
+                
+                
+                // Write/Set Data
+                let sessionToken = SessionDataSource.init(JSONString: "{}")!
+                sessionToken.accessToken = account?.accessToken
+                sessionToken.refreshToken = account?.refreshToken
+                _AppCoreData.userSession.accept(sessionToken)
+                
+                // write usr data
+                if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
+                    _AppCoreData.userDataSource.accept(newUserData)
+                }
+                
+                _AppCoreData.userData.accept(account?.user)
+                self.loginResultSubject.onNext(true)
+            case .failure(let error):
+                print("**** ERROR ****")
+                print(error)
+                
+                // save datasource signinMethod for first time login
+                let initMap = ["signinMethod": params["provider"], "socialId": authResult.idToken!]
+                let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
+                _AppCoreData.userDataSource.accept(newUserData)
+                
+                self.errorsSubject.onNext(NSError(domain: "Login fail", code: 401))
+            }
+        }
         
     }
     
@@ -114,7 +112,7 @@ class StartViewModel: ViewModelProtocol {
     }
     
     open func logout() {
-//        signInSucceeded = false
+        //        signInSucceeded = false
         currentSignInService.logout()
     }
 }

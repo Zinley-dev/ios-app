@@ -105,7 +105,6 @@
 		6A6C310429641D4F0070167A /* UnbanUserModView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6C310229641D4F0070167A /* UnbanUserModView.xib */; };
 		6A6C3108296426F80070167A /* EditChannelDataModView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6C3106296426F80070167A /* EditChannelDataModView.swift */; };
 		6A6C3109296426F80070167A /* EditChannelDataModView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6C3107296426F80070167A /* EditChannelDataModView.xib */; };
-		6A70D50A2969F5E8008D80E6 /* CountryPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = 6A70D5092969F5E8008D80E6 /* CountryPickerView */; };
 		6AAD79FF294C4C68003E3AB6 /* NavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD79FE294C4C68003E3AB6 /* NavigationVC.swift */; };
 		6AAD7A02294C4D1C003E3AB6 /* MainMessageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD7A01294C4D1C003E3AB6 /* MainMessageVC.swift */; };
 		6AAD7A05294C53EC003E3AB6 /* ModView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD7A04294C53EC003E3AB6 /* ModView.swift */; };
@@ -414,7 +413,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A70D50A2969F5E8008D80E6 /* CountryPickerView in Frameworks */,
 				47075BF331E8859A958D2CF1 /* Pods_Stitchbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1361,7 +1359,6 @@
 			);
 			name = Stitchbox;
 			packageProductDependencies = (
-				6A70D5092969F5E8008D80E6 /* CountryPickerView */,
 			);
 			productName = Stitchbox;
 			productReference = 390FD7342909264D0068B883 /* Stitchbox.app */;
@@ -2232,10 +2229,6 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		6A4AA01D2968E87A002D6D30 /* CountryPickerView */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CountryPickerView;
-		};
-		6A70D5092969F5E8008D80E6 /* CountryPickerView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CountryPickerView;
 		};

@@ -13,6 +13,7 @@ class ApplicationCoreData: NSObject {
 
   public var userSession              = BehaviorRelay<SessionDataSource?>(value: nil)
   public var userDataSource           = BehaviorRelay<UserDataSource?>(value: nil)
+  public var userData           = BehaviorRelay<User?>(value: nil)
   
   private let disposeBag              = DisposeBag()
   
@@ -42,11 +43,19 @@ class ApplicationCoreData: NSObject {
         self.syncDown()
       }
       .disposed(by: disposeBag)
+      
+    self.userData
+      .observe(on: MainScheduler.instance)
+      .subscribe { _ in
+        self.syncDown()
+      }
+      .disposed(by: disposeBag)
   }
   
   func signOut() {
     self.userSession.accept(nil)
     self.userDataSource.accept(nil)
+    self.userData.accept(nil)
     // Stop Refresh token
     self.timerRefeshToken?.invalidate()
     self.timerRefeshToken = nil
@@ -80,27 +89,48 @@ class ApplicationCoreData: NSObject {
           UserDefaults.standard.removeObject(forKey: kUserProfile)
         }
       }
+        
+        // sync userdata
+        if UserDefaults.standard.object(forKey: kUser) is String {
+            if let data = UserDefaults.standard.object(forKey: kUser) as? String {
+                let user = User.init(JSONString: data)
+                if user != nil {
+                    self.userData.accept(user)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: kUser)
+                }
+            }
+        }
     } else {
       UserDefaults.standard.removeObject(forKey: kUserProfile)
     }
   }
 
-  private func syncDown() {
-    // Sync SessionDataSource
-    if self.userSession.value == nil {
-      UserDefaults.standard.removeObject(forKey: kUserSession)
-    } else {
-      let data = self.userSession.value?.toJSONString()
-      UserDefaults.standard.setValue(data, forKey: kUserSession)
+    private func syncDown() {
+        // Sync SessionDataSource
+        if self.userSession.value == nil {
+            UserDefaults.standard.removeObject(forKey: kUserSession)
+        } else {
+            let data = self.userSession.value?.toJSONString()
+            UserDefaults.standard.setValue(data, forKey: kUserSession)
+        }
+        
+        // Sync UserDataSource
+        if self.userDataSource.value == nil {
+            UserDefaults.standard.removeObject(forKey: kUserProfile)
+        } else {
+            let data = self.userDataSource.value?.toJSONString()
+            UserDefaults.standard.setValue(data, forKey: kUserProfile)
+        }
+        
+        // Sync UserData
+        if self.userData.value == nil {
+            UserDefaults.standard.removeObject(forKey: kUser)
+        } else {
+            let data = self.userData.value?.toJSONString()
+            UserDefaults.standard.setValue(data, forKey: kUser)
+        }
+        
     }
-    
-    // Sync UserDataSource
-    if self.userDataSource.value == nil {
-      UserDefaults.standard.removeObject(forKey: kUserProfile)
-    } else {
-      let data = self.userDataSource.value?.toJSONString()
-      UserDefaults.standard.setValue(data, forKey: kUserProfile)
-    }
-  }
 
 }

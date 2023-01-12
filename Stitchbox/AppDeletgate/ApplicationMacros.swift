@@ -16,3 +16,4 @@ let _AppCoreData                    = ApplicationCoreData.sharedInstance
 let kEnvironment = "currentEnvironment"
 let kUserSession = "UserSession"
 let kUserProfile = "UserProfile"
+let kUser = "User"
