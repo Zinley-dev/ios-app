@@ -8,6 +8,7 @@
 import UIKit
 import SendBirdUIKit
 import SendBirdCalls
+import ObjectMapper
 
 class ChannelViewController: SBUChannelViewController {
     
@@ -163,15 +164,8 @@ class ChannelViewController: SBUChannelViewController {
                     
                    
                     // Try to create a SendBirdRoom object from the data
-                    do {
-                        let SBRoomInfo = try SendBirdRoom(JSONbody: data)
-                        self.currentRoomID = SBRoomInfo.room_id
-                    } catch {
-                        self.currentRoomID = ""
-                        self.getRoom = nil
-                        print(error)
-                        return
-                    }
+                    let SBRoomInfo =  Mapper<SendBirdRoom>().map(JSONObject: data)
+                    self.currentRoomID = SBRoomInfo?.room_id ?? ""
                    
                     // Fetch the room from the server
                     SendBirdCall.fetchRoom(by: self.currentRoomID) { room, error in
