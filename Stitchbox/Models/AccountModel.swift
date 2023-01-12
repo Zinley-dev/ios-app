@@ -8,7 +8,7 @@
 import ObjectMapper
 
 class ThirdPartyCredential: Mappable {
-    private(set) var uid: String! = ""
+    private(set) var uid: String = ""
     required init?(map: ObjectMapper.Map) {
         
     }
@@ -19,8 +19,8 @@ class ThirdPartyCredential: Mappable {
     
 }
 class AgeRange: Mappable {
-    private(set) var agemax: Int? = 0
-    private(set) var agemin: Int? = 0
+    private(set) var agemax: Int = 0
+    private(set) var agemin: Int = 0
     required init?(map: ObjectMapper.Map) {
         
     }
@@ -33,25 +33,25 @@ class AgeRange: Mappable {
 }
 class User: Mappable {
     private(set) var ID: String! = ""
-    private(set) var name: String? = ""
-    private(set) var username: String? = ""
-    private(set) var password: String? = ""
-    private(set) var email: String? = ""
-    private(set) var phone: String? = ""
-    private(set) var avatar: String? = ""
-    private(set) var cover: String? = ""
-    private(set) var about: String? = ""
-    private(set) var bio: String? = ""
-    private(set) var referralCode: String? = ""
-    private(set) var Birthday: String? = ""
+    private(set) var name: String = ""
+    private(set) var username: String = ""
+    private(set) var password: String = ""
+    private(set) var email: String = ""
+    private(set) var phone: String = ""
+    private(set) var avatar: String = ""
+    private(set) var cover: String = ""
+    private(set) var about: String = ""
+    private(set) var bio: String = ""
+    private(set) var referralCode: String = ""
+    private(set) var Birthday: String = ""
     private(set) var facebook: ThirdPartyCredential?
     private(set) var google: ThirdPartyCredential?
     private(set) var twitter: ThirdPartyCredential?
     private(set) var tiktok: ThirdPartyCredential?
     private(set) var apple: ThirdPartyCredential?
-    private(set) var FriendsIds: [String]? = []
-    private(set) var gender: String? = ""
-    private(set) var location: String? = ""
+    private(set) var FriendsIds: [String] = []
+    private(set) var gender: String = ""
+    private(set) var location: String = ""
     private(set) var ageRange: AgeRange?
     
     required init?(map: Map) {

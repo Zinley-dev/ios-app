@@ -160,7 +160,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                     if (apiResponse.body?["message"] as! String == "success") {
                         // get and process data
                         let data = apiResponse.body?["data"] as! [String: Any]?
-                        let account =  Account(JSON: data ?? [:])
+                        let account =  Mapper<Account>().map(JSONObject: data)
                         
                         print("account \(Mapper().toJSON(account!))")
                         

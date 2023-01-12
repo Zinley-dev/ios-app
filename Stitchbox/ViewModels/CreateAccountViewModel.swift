@@ -117,7 +117,7 @@ class CreateAccountViewModel: ViewModelProtocol {
                         print(response)
                         
                         let data = response.body?["data"] as! [String: Any]?
-                        let account = Account(JSON: data ?? [:])
+                        let account =  Mapper<Account>().map(JSONObject: data)
                         
                         print("account \(Mapper().toJSON(account!))")
                         
