@@ -33,6 +33,7 @@
 		149F44F92956F98E0084742A /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149F44F82956F98E0084742A /* EditProfileViewController.swift */; };
 		14C067682956EC4F002C79AE /* ReferralCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */; };
 		14C46C1C293D8DD1004D5D3A /* LoginTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */; };
+		14D59CD829730D9F001D1DDC /* CountryPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = 14D59CD729730D9F001D1DDC /* CountryPickerView */; };
 		14FAEE04294DED5800C20B99 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE03294DED5800C20B99 /* SettingViewController.swift */; };
 		14FAEE06294DEE0B00C20B99 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */; };
 		390FD7382909264D0068B883 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7372909264D0068B883 /* AppDelegate.swift */; };
@@ -317,7 +318,7 @@
 		6A6C310229641D4F0070167A /* UnbanUserModView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnbanUserModView.xib; sourceTree = "<group>"; };
 		6A6C3106296426F80070167A /* EditChannelDataModView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditChannelDataModView.swift; sourceTree = "<group>"; };
 		6A6C3107296426F80070167A /* EditChannelDataModView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditChannelDataModView.xib; sourceTree = "<group>"; };
-		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "CountryPickerView-master"; path = "../../../../../../Downloads/CountryPickerView-master"; sourceTree = "<group>"; };
+		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "CountryPickerView-master"; sourceTree = "<group>"; };
 		6AAD79FE294C4C68003E3AB6 /* NavigationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationVC.swift; sourceTree = "<group>"; };
 		6AAD7A01294C4D1C003E3AB6 /* MainMessageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessageVC.swift; sourceTree = "<group>"; };
 		6AAD7A04294C53EC003E3AB6 /* ModView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModView.swift; sourceTree = "<group>"; };
@@ -413,6 +414,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14D59CD829730D9F001D1DDC /* CountryPickerView in Frameworks */,
 				47075BF331E8859A958D2CF1 /* Pods_Stitchbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1359,6 +1361,7 @@
 			);
 			name = Stitchbox;
 			packageProductDependencies = (
+				14D59CD729730D9F001D1DDC /* CountryPickerView */,
 			);
 			productName = Stitchbox;
 			productReference = 390FD7342909264D0068B883 /* Stitchbox.app */;
@@ -2228,6 +2231,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		14D59CD729730D9F001D1DDC /* CountryPickerView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CountryPickerView;
+		};
 		6A4AA01D2968E87A002D6D30 /* CountryPickerView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CountryPickerView;
