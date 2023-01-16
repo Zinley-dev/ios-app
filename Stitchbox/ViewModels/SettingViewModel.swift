@@ -124,7 +124,7 @@ class SettingViewModel: ViewModelProtocol {
             .debounce(.milliseconds(3000), scheduler: MainScheduler.instance)
             .withLatestFrom(settingObservable).subscribe(onNext: { params in
             print(params)
-            SettingAPIManager().updateSettings(params: params) {
+            APIManager().updateSettings(params: params) {
                 result in switch result {
                 case .success(let response):
                     print(response)
@@ -143,7 +143,7 @@ class SettingViewModel: ViewModelProtocol {
         
     }
     func getAPISetting() {
-        SettingAPIManager().getSettings{
+        APIManager().getSettings{
             result in switch result {
             case .success(let response):
                 print(response)

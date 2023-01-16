@@ -287,3 +287,78 @@ extension MediaAPI: EndPointType {
     }
   }
 }
+public enum AccountAPI {
+    case getBlocks
+    case insertBlocks (params: [String:Any])
+    case deleteBlocks (params: [String:Any])
+    case getFollows
+    case getFollowers
+    case insertFollows (params: [String:Any])
+    case deleteFollows (params: [String:Any])
+}
+extension AccountAPI: EndPointType {
+    var module: String {
+        return "/account"
+    }
+    
+    var path: String {
+      switch self {
+        case .getBlocks:
+          return "/block"
+        case .insertBlocks:
+          return "/block"
+        case .deleteBlocks:
+          return "/block"
+        case .getFollows:
+          return "/follow"
+        case .insertFollows:
+          return "/follow"
+        case .deleteFollows:
+          return "/follow"
+        case .getFollowers:
+          return "/follow/Follows"
+      }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getBlocks:
+            return .get
+        case .insertBlocks:
+            return .post
+        case .deleteBlocks:
+            return .delete
+        case .getFollows:
+            return .get
+        case .insertFollows:
+            return .post
+        case .deleteFollows:
+            return .delete
+        case .getFollowers:
+            return .get
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getBlocks:
+            return .request
+        case .insertBlocks(let params):
+            return .requestParameters(parameters: params)
+        case .deleteBlocks(let params):
+            return .requestParameters(parameters: params)
+        case .getFollows:
+            return .request
+        case .insertFollows(let params):
+            return .requestParameters(parameters: params)
+        case .deleteFollows(let params):
+            return .requestParameters(parameters: params)
+        case .getFollowers:
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
