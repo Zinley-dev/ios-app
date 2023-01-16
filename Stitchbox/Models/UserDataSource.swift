@@ -39,7 +39,7 @@ enum UserGender : String {
 
 class UserDataSource: Mappable {
     
-    private(set) var userID :    String? = ""
+    private(set) var userID :    String = ""
     private(set) var userName :  String = ""
     private(set) var email :     String = ""
     private(set) var phone :     String = ""
@@ -48,6 +48,7 @@ class UserDataSource: Mappable {
     private(set) var signinMethod : String = ""
     private(set) var socialId : String = ""
     
+    private(set) var name : String = ""
     private(set) var username: String = ""
     private(set) var password: String = ""
     private(set) var cover: String = ""
@@ -73,30 +74,31 @@ class UserDataSource: Mappable {
     }
     
     func mapping(map: Map) {
-        userID      <- map["ID"]
-        userName    <- map["username"]
-        email       <- map["email"]
-        phone       <- map["phone"]
-        gender      <- map["gender"]
-        avatarURL   <- map["avatar"]
-        signinMethod   <- map["signinMethod"]
-        socialId   <- map["socialId"]
-        username <- map["username"]
-        password <- map["password"]
-        email <- map["email"]
-        cover <- map["cover"]
-        about <- map["about"]
-        bio <- map["bio"]
-        referralCode <- map["referralCode"]
-        Birthday <- map["Birthday"]
-        facebook <- map["facebook"]
-        google <- map["google"]
-        twitter <- map["twitter"]
-        tiktok <- map["tiktok"]
-        apple <- map["apple"]
-        FriendsIds <- map["FriendsIds"]
-        gender <- map["gender"]
-        location <- map["location"]
-        ageRange <- map["AgeRange"]
+        userID          <- map["ID"]
+        userName        <- map["username"]
+        name            <- map["name"]
+        email           <- map["email"]
+        phone           <- map["phone"]
+        gender          <- map["gender"]
+        avatarURL       <- map["avatar"]
+        signinMethod    <- map["signinMethod"]
+        socialId        <- map["socialId"]
+        username        <- map["username"]
+        password        <- map["password"]
+        email           <- map["email"]
+        cover           <- map["cover"]
+        about           <- map["about"]
+        bio             <- map["bio"]
+        referralCode    <- map["referralCode"]
+        Birthday        <- map["Birthday"]
+        facebook        <- map["facebook"]
+        google          <- map["google"]
+        twitter         <- map["twitter"]
+        tiktok          <- map["tiktok"]
+        apple           <- map["apple"]
+        FriendsIds      <- map["FriendsIds"]
+        gender          <- map["gender"]
+        location        <- map["location"]
+        ageRange        <- map["AgeRange"]
     }
 }
