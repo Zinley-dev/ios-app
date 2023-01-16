@@ -14,8 +14,6 @@ struct uploadImageGroupModel : Codable {
     
     init(JSONbody: [String?: Any]?) throws {
         
-        print(JSONbody)
-        
         if let data = JSONbody {
             
             self.url = data["url"] as? String ?? ""
