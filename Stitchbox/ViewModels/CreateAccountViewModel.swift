@@ -133,7 +133,6 @@ class CreateAccountViewModel: ViewModelProtocol {
                             _AppCoreData.userDataSource.accept(newUserData)
                         }
                         
-                        _AppCoreData.userData.accept(account?.user)
                         self.registerResultSubject.onNext(true)
                     case .failure:
                         self.errorsSubject.onNext(NSError(domain: "Wrong username or password", code: 400))

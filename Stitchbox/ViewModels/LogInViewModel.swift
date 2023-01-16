@@ -62,7 +62,6 @@ class LoginControllerViewModel: ViewModelProtocol {
                     let account =  Mapper<Account>().map(JSONObject: data)
                     
                     print("account \(Mapper().toJSON(account!))")
-                    print(account?.user?.bio)
                     
                     // Write/Set Data
                     let sessionToken = SessionDataSource.init(JSONString: "{}")!
@@ -73,8 +72,9 @@ class LoginControllerViewModel: ViewModelProtocol {
                     // write usr data
                     if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
                         _AppCoreData.userDataSource.accept(newUserData)
+                        print("newuserdata")
+                        print(newUserData.toJSON())
                     }
-                    _AppCoreData.userData.accept(account?.user)
                     
                     self.loginResultSubject.onNext(true)
                 case .failure:

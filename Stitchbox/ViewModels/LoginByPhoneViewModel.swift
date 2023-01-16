@@ -169,7 +169,6 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                         sessionToken.accessToken = account?.accessToken
                         sessionToken.refreshToken = account?.refreshToken
                         _AppCoreData.userSession.accept(sessionToken)
-                        _AppCoreData.userData.accept(account?.user)
                         
                         // write usr data
                         if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {

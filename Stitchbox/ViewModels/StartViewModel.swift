@@ -81,8 +81,6 @@ class StartViewModel: ViewModelProtocol {
                 if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
                     _AppCoreData.userDataSource.accept(newUserData)
                 }
-                
-                _AppCoreData.userData.accept(account?.user)
                 self.loginResultSubject.onNext(true)
             case .failure(let error):
                 print("**** ERROR ****")
