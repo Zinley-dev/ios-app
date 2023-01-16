@@ -26,7 +26,10 @@ class ProfileViewController: UIViewController {
     
     private var datasource: Datasource!
     
+    @IBOutlet weak var challengeCardView: UIView!
+    @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
+    var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
 
     var demoProfileData: ProfileHeaderData {
@@ -41,6 +44,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
   
+        collectionView.delegate = self
        
         
         pullControl.tintColor = UIColor.secondary
@@ -57,8 +61,9 @@ class ProfileViewController: UIViewController {
         collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
         
         configureDatasource()
-        
+        setupChallengeView()
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -72,14 +77,44 @@ class ProfileViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        ChallengeView.frame = challengeCardView.bounds
+    }
+    
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell {
         switch item {
         case .header(_):
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileHeaderCell.reuseIdentifier, for: indexPath) as? ProfileHeaderCell {
                 
-                
+                // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
+                cell.followersBtn.addTarget(self, action: #selector(followersTapped), for: .touchUpInside)
+                cell.discordBtn.addTarget(self, action: #selector(discordTapped), for: .touchUpInside)
+                cell.FistBumpedBtn.addTarget(self, action: #selector(fistBumpedTapped), for: .touchUpInside)
+                cell.editProfileBtn.addTarget(self, action: #selector(editProfileTapped), for: .touchUpInside)
+                
+                // add target using gesture recognizer for image
+                let avatarTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.avatarTapped))
+                cell.avatarImage.isUserInteractionEnabled = true
+                cell.avatarImage.addGestureRecognizer(avatarTap)
+                
+                let coverImageTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.coverImageTapped))
+                cell.coverImage.isUserInteractionEnabled = true
+                cell.coverImage.addGestureRecognizer(coverImageTap)
+                
+                let numberOfFollowersTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followersTapped))
+                cell.numberOfFollowers.isUserInteractionEnabled = true
+                cell.numberOfFollowers.addGestureRecognizer(numberOfFollowersTap)
+                
+                
+                let numberOfFollowingTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followingTapped))
+                cell.numberOfFollowing.isUserInteractionEnabled = true
+                cell.numberOfFollowing.addGestureRecognizer(numberOfFollowingTap)
+                
+                
                 return cell
                 
             } else {
@@ -92,6 +127,12 @@ class ProfileViewController: UIViewController {
         case .challengeCard(_):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChallengerCardProfileHeaderCell.reuseIdentifier, for: indexPath) as? ChallengerCardProfileHeaderCell {
+                
+                cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
+                cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
+                cell.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)
+                cell.game3.addTarget(self, action: #selector(game3Tapped), for: .touchUpInside)
+                cell.game4.addTarget(self, action: #selector(game4Tapped), for: .touchUpInside)
                 
                 return cell
                 
@@ -133,10 +174,17 @@ class ProfileViewController: UIViewController {
         datasource.apply(snapshot(), animatingDifferences: false)
     }
     
+    
+    func setupChallengeView() {
+    
+        self.challengeCardView.addSubview(ChallengeView)
+    
+    }
+    
  
 }
 
-// selector
+// selector for header
 extension ProfileViewController {
     
     @objc func settingTapped(_ sender: UIButton) {
@@ -146,9 +194,84 @@ extension ProfileViewController {
             
         }
         
+    }
+    
+    @objc func followersTapped(_ sender: UIButton) {
+        
+        print("followersTapped")
         
     }
     
+    @objc func followingTapped(_ sender: UIButton) {
+        
+       print("followingTapped")
+        
+    }
+    
+    @objc func editProfileTapped(_ sender: UIButton) {
+        
+      print("editProfileTapped")
+        
+    }
+    
+    @objc func discordTapped(_ sender: UIButton) {
+        
+        print("discordTapped")
+        
+    }
+    
+    @objc func fistBumpedTapped(_ sender: UIButton) {
+        
+        print("fistBumpedTapped")
+        
+    }
+    
+    @objc func avatarTapped(sender: AnyObject!) {
+  
+        print("avatarTapped")
+  
+    }
+    
+    @objc func coverImageTapped(sender: AnyObject!) {
+  
+        print("coverImageTapped")
+  
+    }
+    
+}
+
+// selector for challengeCard
+extension ProfileViewController {
+    
+    @objc func editCardTapped(_ sender: UIButton) {
+        
+        print("editCardTapped")
+        
+    }
+    
+    @objc func game1Tapped(_ sender: UIButton) {
+        // make sure to check if any game is added unless peform adding game for +
+        print("game1Tapped")
+        
+    }
+    
+    @objc func game2Tapped(_ sender: UIButton) {
+        
+        print("game2Tapped")
+        
+    }
+    
+    @objc func game3Tapped(_ sender: UIButton) {
+        
+        print("game3Tapped")
+        
+    }
+    
+    @objc func game4Tapped(_ sender: UIButton) {
+        
+        print("game4Tapped")
+        
+    }
     
 }
 
@@ -225,4 +348,81 @@ extension ProfileViewController {
     }
     
 
+}
+
+extension ProfileViewController: UICollectionViewDelegate {
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
+        let item = datasource.itemIdentifier(for: indexPath)
+        
+        switch item {
+            case .header(_):
+                print("header")
+                
+            case .challengeCard(_):
+                
+                print("challengeCard")
+                showFullScreenChallengeCard()
+                
+            case .posts(_):
+                
+                print("posts")
+
+            case .none:
+                print("None")
+        }
+        
+        
+    }
+
+}
+
+// handle challenge card was tapped
+extension ProfileViewController {
+    
+    func showFullScreenChallengeCard() {
+        
+        if challengeCardView.isHidden {
+        
+            self.backgroundView.isHidden = false
+            self.challengeCardView.alpha = 1.0
+            
+            UIView.transition(with: challengeCardView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                
+                self.challengeCardView.isHidden = false
+                
+            })
+            
+        }
+        
+    }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        if challengeCardView.isHidden == false {
+            
+            let touch = touches.first
+            guard let location = touch?.location(in: self.view) else { return }
+            if !challengeCardView.frame.contains(location) {
+                
+                
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.challengeCardView.alpha = 0
+                }) { (finished) in
+                    self.challengeCardView.isHidden = finished
+                    self.backgroundView.isHidden = true
+                }
+              
+            }
+                
+        }
+        
+    }
+    
+    
 }

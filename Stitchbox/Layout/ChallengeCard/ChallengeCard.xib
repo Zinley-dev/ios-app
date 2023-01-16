@@ -29,20 +29,20 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="396" height="237"/>
+            <rect key="frame" x="0.0" y="0.0" width="396" height="246"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tvd-YK-XMD">
-                    <rect key="frame" x="0.0" y="0.0" width="396" height="237"/>
+                    <rect key="frame" x="0.0" y="0.0" width="396" height="246"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="challenge_card" translatesAutoresizingMaskIntoConstraints="NO" id="gg4-wr-mxs">
-                            <rect key="frame" x="0.0" y="0.0" width="396" height="237"/>
+                            <rect key="frame" x="0.0" y="0.0" width="396" height="246"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gs6-Im-Nde">
-                            <rect key="frame" x="255" y="10" width="131" height="165"/>
+                            <rect key="frame" x="255" y="10" width="131" height="174"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="demo_bg" translatesAutoresizingMaskIntoConstraints="NO" id="Yi1-Z4-9wG">
-                                    <rect key="frame" x="0.0" y="0.0" width="131" height="165"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="131" height="174"/>
                                     <color key="backgroundColor" red="0.25880911950000002" green="0.25883483889999997" blue="0.25097912550000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -66,22 +66,13 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CHALLENGE CARD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GfH-su-DrV">
-                            <rect key="frame" x="16" y="15.999999999999998" width="153.33333333333334" height="20.333333333333329"/>
+                            <rect key="frame" x="16" y="16" width="153.5" height="20.5"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c7g-Po-orx">
-                            <rect key="frame" x="210" y="15.333333333333336" width="35" height="22"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="35" id="A8T-gA-u8o"/>
-                                <constraint firstAttribute="height" constant="22" id="jbK-vi-mTK"/>
-                            </constraints>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" image="edit_challengeCard"/>
-                        </button>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="2ak-bm-rh5">
-                            <rect key="frame" x="16" y="44.333333333333343" width="85" height="85"/>
+                            <rect key="frame" x="16" y="44.5" width="85" height="85"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="85" id="rjg-wp-57D"/>
@@ -172,16 +163,16 @@
                             </subviews>
                         </stackView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Most Played" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="imE-iN-SuJ">
-                            <rect key="frame" x="25" y="145.33333333333334" width="86" height="18"/>
+                            <rect key="frame" x="25" y="145.5" width="86" height="18"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gkk-Af-aOb">
-                            <rect key="frame" x="16" y="179.33333333333334" width="229" height="41.666666666666657"/>
+                            <rect key="frame" x="16" y="179.5" width="229" height="50.5"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="8Fj-xb-FhM">
-                                    <rect key="frame" x="0.0" y="5" width="158" height="32"/>
+                                    <rect key="frame" x="0.0" y="9.5" width="158" height="32"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sbq-5j-YZb">
                                             <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
@@ -226,7 +217,7 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2zd-gs-Euy">
-                            <rect key="frame" x="255" y="185" width="131" height="36"/>
+                            <rect key="frame" x="255" y="194" width="131" height="36"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ImN-a6-T5x">
                                     <rect key="frame" x="8" y="0.0" width="115" height="36"/>
@@ -257,8 +248,6 @@
                         <constraint firstAttribute="trailing" secondItem="2zd-gs-Euy" secondAttribute="trailing" constant="10" id="4PC-w5-W4E"/>
                         <constraint firstItem="gkk-Af-aOb" firstAttribute="leading" secondItem="tvd-YK-XMD" secondAttribute="leading" constant="16" id="8v7-xy-aq6"/>
                         <constraint firstAttribute="trailing" secondItem="gs6-Im-Nde" secondAttribute="trailing" constant="10" id="BYL-Im-clK"/>
-                        <constraint firstItem="c7g-Po-orx" firstAttribute="centerY" secondItem="GfH-su-DrV" secondAttribute="centerY" id="Br4-PL-vLK"/>
-                        <constraint firstItem="gs6-Im-Nde" firstAttribute="leading" secondItem="c7g-Po-orx" secondAttribute="trailing" constant="10" id="EEE-q3-eWV"/>
                         <constraint firstItem="GfH-su-DrV" firstAttribute="leading" secondItem="tvd-YK-XMD" secondAttribute="leading" constant="16" id="Otq-5E-j3a"/>
                         <constraint firstItem="2ak-bm-rh5" firstAttribute="leading" secondItem="tvd-YK-XMD" secondAttribute="leading" constant="16" id="P0U-N7-OYO"/>
                         <constraint firstItem="2zd-gs-Euy" firstAttribute="width" secondItem="gs6-Im-Nde" secondAttribute="width" id="QD1-29-Euq"/>
@@ -302,7 +291,6 @@
         <image name="challenge_card" width="340" height="200"/>
         <image name="defaultuser" width="278" height="278"/>
         <image name="demo_bg" width="1600" height="1600"/>
-        <image name="edit_challengeCard" width="20.5" height="21"/>
         <image name="game_add" width="30" height="30.5"/>
     </resources>
 </document>

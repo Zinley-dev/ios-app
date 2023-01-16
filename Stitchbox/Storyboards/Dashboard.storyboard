@@ -2511,19 +2511,44 @@ Rodriguez</string>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <view hidden="YES" alpha="0.89999997615814209" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yzz-Hy-1zY">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cb6-U7-mwh">
+                                <rect key="frame" x="20" y="325" width="374" height="246"/>
+                                <color key="backgroundColor" red="0.16290172929999999" green="0.16290172929999999" blue="0.16290172929999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="246" id="XMD-DR-5Xd"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ebJ-bj-z4B"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstItem="cb6-U7-mwh" firstAttribute="centerY" secondItem="LJT-Ib-Nta" secondAttribute="centerY" id="1zp-mQ-rtG"/>
                             <constraint firstAttribute="centerX" secondItem="LJT-Ib-Nta" secondAttribute="centerX" id="MKk-sO-rRS"/>
+                            <constraint firstItem="ebJ-bj-z4B" firstAttribute="trailing" secondItem="cb6-U7-mwh" secondAttribute="trailing" constant="20" id="TL8-q4-hA1"/>
+                            <constraint firstItem="Yzz-Hy-1zY" firstAttribute="leading" secondItem="LJT-Ib-Nta" secondAttribute="leading" id="Xuq-Qm-wUv"/>
                             <constraint firstItem="2G7-ZR-t0g" firstAttribute="leading" secondItem="LJT-Ib-Nta" secondAttribute="leading" id="XvZ-vc-OP2"/>
+                            <constraint firstItem="Yzz-Hy-1zY" firstAttribute="top" secondItem="LJT-Ib-Nta" secondAttribute="top" id="cjv-rk-ReS"/>
+                            <constraint firstItem="cb6-U7-mwh" firstAttribute="leading" secondItem="ebJ-bj-z4B" secondAttribute="leading" constant="20" id="e93-aD-e1X"/>
                             <constraint firstItem="2G7-ZR-t0g" firstAttribute="top" secondItem="LJT-Ib-Nta" secondAttribute="top" id="egV-WB-wUm"/>
+                            <constraint firstAttribute="bottom" secondItem="Yzz-Hy-1zY" secondAttribute="bottom" id="j9f-7X-VJC"/>
                             <constraint firstAttribute="bottom" secondItem="2G7-ZR-t0g" secondAttribute="bottom" id="nLJ-ka-zPA"/>
+                            <constraint firstAttribute="trailing" secondItem="Yzz-Hy-1zY" secondAttribute="trailing" id="xHn-Qc-Ytu"/>
                             <constraint firstAttribute="trailing" secondItem="2G7-ZR-t0g" secondAttribute="trailing" id="zMP-5z-ywU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="VwJ-B6-X3H"/>
                     <connections>
+                        <outlet property="backgroundView" destination="Yzz-Hy-1zY" id="laM-Nv-waX"/>
+                        <outlet property="challengeCardView" destination="cb6-U7-mwh" id="MfH-iI-0rQ"/>
                         <outlet property="collectionView" destination="2G7-ZR-t0g" id="HEw-me-iSa"/>
                     </connections>
                 </viewController>

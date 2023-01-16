@@ -44,7 +44,7 @@ class ChallengerCardProfileHeaderCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let size = self.frame.width * (32/388)
+        let size = self.frame.width * (40/388)
         let cornerRadius = size/2
         
         gameWidth.constant = size
