@@ -362,3 +362,66 @@ extension AccountAPI: EndPointType {
         return ["Authorization": _AppCoreData.userSession.value!.accessToken]
     }
 }
+
+public enum UserAPI {
+    case getme
+    case updateme (params: [String: Any])
+    case changepassword (params: [String: Any])
+    case uploadavatar
+    case uploadcover
+
+}
+extension UserAPI: EndPointType {
+    var module: String {
+        return "/user"
+    }
+    
+    var path: String {
+        switch self {
+        case .getme:
+            return "/me"
+        case .updateme:
+            return "/me"
+        case .changepassword:
+            return "/change-password"
+        case .uploadcover:
+            return "/upload-cover"
+        case .uploadavatar:
+            return "/upload-avatar"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getme:
+            return .get
+        case .updateme:
+            return .patch
+        case .changepassword:
+            return .post
+        case .uploadcover:
+            return .post
+        case .uploadavatar:
+            return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getme:
+            return .request
+        case .updateme(let params):
+            return .requestParameters(parameters: params)
+        case .changepassword(params: let params):
+            return .requestParameters(parameters: params)
+        case .uploadavatar:
+            return .request
+        case .uploadcover:
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
