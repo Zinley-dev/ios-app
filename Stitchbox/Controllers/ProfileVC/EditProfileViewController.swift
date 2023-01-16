@@ -12,7 +12,7 @@ import RxSwift
 class EditProfileViewController: UIViewController, ControllerType {
     
     
-    typealias ViewModelType = EditProfileViewModel
+    typealias ViewModelType = ProfileViewModel
     
     // MARK: - Properties
     private var viewModel: ViewModelType! = ViewModelType()
@@ -24,14 +24,13 @@ class EditProfileViewController: UIViewController, ControllerType {
         bindUI(with: viewModel)
         bindAction(with: viewModel)
         setUpNavigationBar()
-        viewModel.getAPISetting()
         presentLoading()
     }
-    func bindUI(with viewModel: EditProfileViewModel) {
+    func bindUI(with viewModel: ProfileViewModel) {
     
     }
     
-    func bindAction(with viewModel: EditProfileViewModel) {
+    func bindAction(with viewModel: ProfileViewModel) {
         
     }
     

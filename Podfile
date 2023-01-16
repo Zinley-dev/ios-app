@@ -15,7 +15,6 @@ target 'Stitchbox' do
   pod 'lottie-ios', '~> 4.0.1'
   pod 'ObjectMapper', '~> 3.5'
   pod 'EzPopup'
-  pod 'CountryPickerView'
 
   # Add the Firebase pod for Google Analytics
   pod 'FirebaseAnalytics', '~> 10.3.0'

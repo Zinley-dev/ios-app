@@ -39,7 +39,7 @@ enum UserGender : String {
 
 class UserDataSource: Mappable {
     
-    private(set) var userID :    String = ""
+    private(set) var userID :    String? = ""
     private(set) var userName :  String = ""
     private(set) var email :     String = ""
     private(set) var phone :     String = ""

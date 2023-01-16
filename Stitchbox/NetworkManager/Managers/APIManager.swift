@@ -24,7 +24,7 @@ enum Result {
 }
 
 struct APIManager {
-    let manager = Manager<UserApi>()
+    let authManager = Manager<AuthApi>()
     let SBmanager = Manager<ChatApi>()
     let searchManager = Manager<SearchApi>()
     let mediaManager = Manager<MediaAPI>()
@@ -33,39 +33,39 @@ struct APIManager {
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
-        manager.request(.login(params: params)) { result in
+        authManager.request(.login(params: params)) { result in
             completion(result)
         }
     }
     
     func phoneLogin(phone: String, completion: @escaping APICompletion) {
         let params = ["phone": phone]
-        manager.request(.phonelogin(params: params)) { result in
+        authManager.request(.phonelogin(params: params)) { result in
             completion(result)
         }
     }
     
     func socialLogin(params: [String: String], completion: @escaping APICompletion) {
-        manager.request(.socialLogin(params: params)) { result in
+        authManager.request(.socialLogin(params: params)) { result in
             completion(result)
         }
     }
     
     func socialRegister(params: [String: String], completion: @escaping APICompletion) {
-        manager.request(.socialRegister(params: params)) { result in
+        authManager.request(.socialRegister(params: params)) { result in
             completion(result)
         }
     }
     
     func phoneVerify(phone: String, OTP: String, completion: @escaping APICompletion) {
         let params = ["phone": phone, "OTP": OTP]
-        manager.request(.phoneverify(params: params)) { result in
+        authManager.request(.phoneverify(params: params)) { result in
             completion(result)
         }
     }
     
     func register(params: [String: String], completion: @escaping APICompletion) {
-        manager.request(.register(params: params)) { result in
+        authManager.request(.register(params: params)) { result in
             completion(result)
         }
     }
@@ -117,13 +117,13 @@ struct APIManager {
     }
     
     func forgotPasswordByEmail(params: [String: String], completion: @escaping APICompletion) {
-        manager.request(.forgotPasswordByEmail(params: params)) { result in
+        authManager.request(.forgotPasswordByEmail(params: params)) { result in
             completion(result)
         }
     }
     
     func forgotPasswordByPhone(params: [String: String], completion: @escaping APICompletion) {
-        manager.request(.forgotPasswordByPhone(params: params)) { result in
+        authManager.request(.forgotPasswordByPhone(params: params)) { result in
             completion(result)
         }
     }

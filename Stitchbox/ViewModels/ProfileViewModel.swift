@@ -24,7 +24,7 @@ class ProfileViewModel: ViewModelProtocol {
         var cover: AnyObserver<String>
         var about: AnyObserver<String>
         var bio: AnyObserver<String>
-        var friendsID: AnyObserver<String>
+        var friendsID: AnyObserver<[String]>
         var birthday: AnyObserver<String>
     }
     
@@ -51,7 +51,7 @@ class ProfileViewModel: ViewModelProtocol {
         var google: Observable<String>
         var tiktok: Observable<String>
         var apple: Observable<String>
-        var friendsID: Observable<String>
+        var friendsID: Observable<[String]>
         var birthday: Observable<String>
         var errorsObservable: Observable<Error>
         var successObservable: Observable<SuccessMessage>
@@ -71,7 +71,7 @@ class ProfileViewModel: ViewModelProtocol {
     var tiktokSubject = PublishSubject<String>()
     var appleSubject = PublishSubject<String>()
     var birthdaySubject = PublishSubject<String>()
-    var friendsIDSubject = PublishSubject<String>()
+    var friendsIDSubject = PublishSubject<[String]>()
     var locationSubject = PublishSubject<String>()
     var editSubject = PublishSubject<Void>()
     
@@ -96,60 +96,68 @@ class ProfileViewModel: ViewModelProtocol {
         }
         
         
-        self.editSubject.asObservable()
-            .debounce(.milliseconds(3000), scheduler: MainScheduler.instance)
-            .withLatestFrom(updatemeObservable).subscribe(onNext: { params in
-            print(params)
-            APIManager().updateme(params: params) {
-                result in switch result {
-                case .success(let response):
-                    print(response)
-                    self.getAPISetting()
-                case .failure(let error):
-                    print(error)
-                    self.errorsSubject.onNext(error)
-                }
-            }
-        }, onError: { error in
-            self.errorsSubject.onNext(error)
-        }, onDisposed: disposeBag)
+//        self.editSubject.asObservable()
+//            .debounce(.milliseconds(3000), scheduler: MainScheduler.instance)
+//            .withLatestFrom(updatemeObservable).subscribe(onNext: { params in
+//            print(params)
+//            APIManager().updateme(params: params) {
+//                result in switch result {
+//                case .success(let response):
+//                    print(response)
+//                    self.getAPISetting()
+//                case .failure(let error):
+//                    print(error)
+//                    self.errorsSubject.onNext(error)
+//                }
+//            }
+//        }, onError: { error in
+//            self.errorsSubject.onNext(error)
+//        }, onDisposed: disposeBag)
         
         logic()
-        getAPISetting()
-        
     }
-    func getAPISetting() {
-        APIManager().{
-            result in switch result {
-            case .success(let response):
-                print(response)
-                let data = response.body!
-                
-            case .failure:
-                self.errorsSubject.onNext(NSError(domain: "Cannot get user's setting information", code: 400))
-            }
-        }
+    func getUserData() {
+//        APIManager().{
+//            result in switch result {
+//            case .success(let response):
+//                print(response)
+//                // write usr data
+//                if let newUserData = Mapper<UserDataSource>().map(JSON: data as! [String: Any]) {
+//                    _AppCoreData.userDataSource.accept(newUserData)
+//                    print("newuserdata")
+//                    print(newUserData.toJSON())
+//                }
+//
+//            case .failure:
+//                self.errorsSubject.onNext(NSError(domain: "Cannot get user's setting information", code: 400))
+//            }
+//        }
     }
     
     
     func logic() {
         _AppCoreData.userDataSource.subscribe(onNext: {userData in
-            self.nameSubject.onNext(userData?.name)
-            self.usernameSubject.onNext(userData?.userName)
-            self.emailSubject.onNext(userData?.email)
-            self.phoneSubject.onNext(userData?.phone)
-            self.avatarSubject.onNext(userData?.avatarURL)
-            self.coverSubject.onNext(userData?.cover)
-            self.aboutSubject.onNext(userData?.about)
-            self.locationSubject.onNext(userData?.location)
-            self.bioSubject.onNext(userData?.bio)
-            self.referralCodeSubject.onNext(userData?.referralCode)
-            self.facebookSubject.onNext(userData?.facebook?.uid)
-            self.googleSubject.onNext(userData?.google?.uid)
-            self.tiktokSubject.onNext(userData?.tiktok?.uid)
-            self.appleSubject.onNext(userData?.apple?.uid)
-            self.friendsIDSubject.onNext(userData?.FriendsIds)
-            self.birthdaySubject.onNext(userData?.birthday)
+            if let unwrapUserData = userData {
+                self.nameSubject.onNext(unwrapUserData.name)
+                self.usernameSubject.onNext(unwrapUserData.userName)
+                self.emailSubject.onNext(unwrapUserData.email)
+                self.phoneSubject.onNext(unwrapUserData.phone)
+                self.avatarSubject.onNext(unwrapUserData.avatarURL)
+                self.coverSubject.onNext(unwrapUserData.cover)
+                self.aboutSubject.onNext(unwrapUserData.about)
+                self.locationSubject.onNext(unwrapUserData.location)
+                self.bioSubject.onNext(unwrapUserData.bio)
+                self.referralCodeSubject.onNext(unwrapUserData.referralCode)
+                self.facebookSubject.onNext(unwrapUserData.facebook?.uid ?? "")
+                self.googleSubject.onNext(unwrapUserData.google?.uid ?? "")
+                self.tiktokSubject.onNext(unwrapUserData.tiktok?.uid ?? "")
+                self.appleSubject.onNext(unwrapUserData.apple?.uid ?? "")
+                self.friendsIDSubject.onNext(unwrapUserData.FriendsIds)
+                self.birthdaySubject.onNext(unwrapUserData.Birthday)
+            } else {
+                print("User info not in cache. Retrieve data from source")
+                self.getUserData()
+            }
         }, onError: {error in
             print(error)
             self.errorsSubject.onNext(error)

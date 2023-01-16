@@ -24,7 +24,7 @@ extension APIBuilder: BaseURL {
         return "\(APIBuilder.APIBuilderConstants.ApiScheme)://\(APIBuilder.APIBuilderConstants.ApiHost)"
     }
 }
-public enum UserApi {
+public enum AuthApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
     case phoneverify (params: [String:String])
@@ -34,7 +34,7 @@ public enum UserApi {
     case forgotPasswordByEmail (params: [String:String])
     case forgotPasswordByPhone (params: [String:String])
 }
-extension UserApi: EndPointType {
+extension AuthApi: EndPointType {
     var module: String {
         return "/auth"
     }
