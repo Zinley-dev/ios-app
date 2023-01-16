@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import Foundation
 import RxSwift
 
@@ -28,7 +27,6 @@ struct SendBirdRoom : Codable {
            
         }
 
-   
     }
         
 }

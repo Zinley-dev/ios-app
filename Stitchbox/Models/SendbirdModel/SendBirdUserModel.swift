@@ -19,7 +19,6 @@ struct SendBirdUser : Codable {
         
         if let data = JSONbody {
             
-
             self.userID = data["ID"] as? String ?? ""
             self.avatar = data["avatar"] as? String ?? ""
             self.username = data["username"] as? String ?? ""
@@ -31,7 +30,6 @@ struct SendBirdUser : Codable {
             self.username =  ""
            
         }
-
    
     }
         
