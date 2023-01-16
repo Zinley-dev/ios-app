@@ -30,6 +30,7 @@ struct APIManager {
     let mediaManager = Manager<MediaAPI>()
     let settingManager = Manager<SettingAPI>()
     let accountManager = Manager<AccountAPI>()
+    let userManager = Manager<UserAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -179,6 +180,40 @@ struct APIManager {
     }
     func deleteFollows(params: [String: Any], completion: @escaping APICompletion) {
         accountManager.request(.deleteFollows(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    func getme(completion: @escaping APICompletion) {
+        userManager.request(.getme){
+            result in
+            completion(result)
+        }
+    }
+    
+    func updateme(params: [String: Any], completion: @escaping APICompletion) {
+        userManager.request(.updateme(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    
+    func changepassword(params: [String: Any], completion: @escaping APICompletion) {
+        userManager.request(.changepassword(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    
+    func uploadcover(image: UIImage, completion: @escaping APICompletion) {
+        userManager.upload(.uploadcover, image: image) {
+            result in
+            completion(result)
+        }
+    }
+    
+    func uploadavatar(image: UIImage, completion: @escaping APICompletion) {
+        userManager.upload(.uploadavatar, image: image){
             result in
             completion(result)
         }
