@@ -24,6 +24,9 @@ class ChallengerCardProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var game3: UIButton!
     @IBOutlet weak var game4: UIButton!
     
+    @IBOutlet weak var gameWidth: NSLayoutConstraint!
+    @IBOutlet weak var gameHeight: NSLayoutConstraint!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,7 +38,24 @@ class ChallengerCardProfileHeaderCell: UICollectionViewCell {
         game3.setTitle("", for: .normal)
         game4.setTitle("", for: .normal)
         
+    }
+    
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
         
+        let size = self.frame.width * (32/388)
+        let cornerRadius = size/2
+        
+        gameWidth.constant = size
+        gameHeight.constant = size
+        
+      
+        game1.layer.cornerRadius = cornerRadius
+        game2.layer.cornerRadius = cornerRadius
+        game3.layer.cornerRadius = cornerRadius
+        game4.layer.cornerRadius = cornerRadius
+       
     }
     
   

@@ -2380,44 +2380,24 @@ Rodriguez</string>
                                                                             </constraints>
                                                                             <state key="normal" title="Button"/>
                                                                             <buttonConfiguration key="configuration" style="plain" image="game_add"/>
-                                                                            <userDefinedRuntimeAttributes>
-                                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                                    <real key="value" value="18"/>
-                                                                                </userDefinedRuntimeAttribute>
-                                                                            </userDefinedRuntimeAttributes>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mvu-Ks-gBd">
                                                                             <rect key="frame" x="46" y="0.0" width="36" height="36"/>
                                                                             <color key="backgroundColor" red="0.85098040100000005" green="0.85098040100000005" blue="0.85098040100000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                             <state key="normal" title="Button"/>
                                                                             <buttonConfiguration key="configuration" style="plain"/>
-                                                                            <userDefinedRuntimeAttributes>
-                                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                                    <real key="value" value="18"/>
-                                                                                </userDefinedRuntimeAttribute>
-                                                                            </userDefinedRuntimeAttributes>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dub-jL-kJZ">
                                                                             <rect key="frame" x="92" y="0.0" width="36" height="36"/>
                                                                             <color key="backgroundColor" red="0.85098040100000005" green="0.85098040100000005" blue="0.85098040100000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                             <state key="normal" title="Button"/>
                                                                             <buttonConfiguration key="configuration" style="plain"/>
-                                                                            <userDefinedRuntimeAttributes>
-                                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                                    <real key="value" value="18"/>
-                                                                                </userDefinedRuntimeAttribute>
-                                                                            </userDefinedRuntimeAttributes>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uhM-bP-Cs4">
                                                                             <rect key="frame" x="138" y="0.0" width="36" height="36"/>
                                                                             <color key="backgroundColor" red="0.85098040100000005" green="0.85098040100000005" blue="0.85098040100000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                             <state key="normal" title="Button"/>
                                                                             <buttonConfiguration key="configuration" style="plain"/>
-                                                                            <userDefinedRuntimeAttributes>
-                                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                                    <real key="value" value="18"/>
-                                                                                </userDefinedRuntimeAttribute>
-                                                                            </userDefinedRuntimeAttributes>
                                                                         </button>
                                                                     </subviews>
                                                                 </stackView>
@@ -2509,6 +2489,8 @@ Rodriguez</string>
                                             <outlet property="game2" destination="Mvu-Ks-gBd" id="c3Z-Sv-QnL"/>
                                             <outlet property="game3" destination="Dub-jL-kJZ" id="ZPH-UX-lmD"/>
                                             <outlet property="game4" destination="uhM-bP-Cs4" id="V7g-ug-SjW"/>
+                                            <outlet property="gameHeight" destination="Y4m-La-zL3" id="0ic-dO-0Gk"/>
+                                            <outlet property="gameWidth" destination="PKa-5U-2ze" id="ahV-2Y-Qyl"/>
                                             <outlet property="infoHeight" destination="VsA-QQ-9kP" id="8SN-NJ-zPO"/>
                                             <outlet property="infoLbl" destination="NcX-CY-49I" id="3rn-rZ-8sl"/>
                                             <outlet property="startTime" destination="XSt-xr-1pw" id="X9r-Sk-jAz"/>
