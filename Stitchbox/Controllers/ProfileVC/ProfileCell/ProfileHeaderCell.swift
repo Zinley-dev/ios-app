@@ -38,7 +38,7 @@ class ProfileHeaderCell: UICollectionViewCell {
         
         editProfileBtn.tintColor = .white
         followersBtn.tintColor = .white
-        
+    
     }
     
 
@@ -48,6 +48,8 @@ class ProfileHeaderCell: UICollectionViewCell {
         
         avatarImage.layer.cornerRadius = avatarImage.bounds.height/2
         
+        editProfileBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        followersBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
     }
     
   
