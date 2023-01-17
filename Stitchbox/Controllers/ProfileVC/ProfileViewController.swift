@@ -6,8 +6,20 @@
 //
 
 import UIKit
+import RxSwift
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, ControllerType {
+    
+    typealias ViewModelType = ProfileViewModel
+    var disposeBag = DisposeBag()
+    var viewModel = ViewModelType()
+    
+    func bindUI(with viewModel: ProfileViewModel) {
+    }
+    
+    func bindAction(with viewModel: ProfileViewModel) {
+        
+    }
     
     enum Section: Hashable {
         case header
@@ -33,7 +45,8 @@ class ProfileViewController: UIViewController {
     var pullControl = UIRefreshControl()
 
     var demoProfileData: ProfileHeaderData {
-        return ProfileHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
+        
+        return ProfileHeaderData(name: viewModel.nameSubject.value, username: viewModel.usernameSubject.value, bio: viewModel.bioSubject.value, cover: "", avatar: "", followers: 50, followings: 50, streamingLink: "")
     }
     
     var demoChallengeData: ChallengeCardHeaderData {
@@ -86,8 +99,15 @@ class ProfileViewController: UIViewController {
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell {
         switch item {
-        case .header(_):
+        case .header(let data):
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileHeaderCell.reuseIdentifier, for: indexPath) as? ProfileHeaderCell {
+                
+                // render data
+                cell.usernameLbl.text = data.username
+                cell.descriptionLbl.text = data.bio
+                cell.numberOfFollowers.text = String(data.followers)
+                cell.numberOfFollowing.text = String(data.followings)
+                cell.coverImage.image = UIImage(named: data.cover)
                 
                 // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)

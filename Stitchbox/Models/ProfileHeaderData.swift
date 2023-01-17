@@ -8,7 +8,14 @@
 import Foundation
 
 struct ProfileHeaderData: Hashable {
+    
     let name: String
-    let accountType: String
-    let postCount: Int
+    let username: String
+    let bio: String
+    let cover: String
+    let avatar: String
+    let followers: Int
+    let followings: Int
+    let streamingLink: String
+    
 }
