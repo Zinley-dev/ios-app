@@ -30,10 +30,8 @@
 		148C7109291B11270046FC5D /* OTPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148C7108291B11270046FC5D /* OTPTextField.swift */; };
 		1494675329419A6D007033E5 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1494675229419A6D007033E5 /* Helpers.swift */; };
 		149F44F72956F8270084742A /* RoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149F44F62956F8270084742A /* RoundedImageView.swift */; };
-		149F44F92956F98E0084742A /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149F44F82956F98E0084742A /* EditProfileViewController.swift */; };
 		14C067682956EC4F002C79AE /* ReferralCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */; };
 		14C46C1C293D8DD1004D5D3A /* LoginTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */; };
-		14FAEE04294DED5800C20B99 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE03294DED5800C20B99 /* SettingViewController.swift */; };
 		14FAEE06294DEE0B00C20B99 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */; };
 		390FD7382909264D0068B883 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7372909264D0068B883 /* AppDelegate.swift */; };
 		390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7392909264D0068B883 /* SceneDelegate.swift */; };
@@ -85,6 +83,7 @@
 		6A1235A5295034BD004B612E /* InviteUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235A4295034BD004B612E /* InviteUserVC.swift */; };
 		6A1235AA295034FF004B612E /* GroupCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235A9295034FF004B612E /* GroupCallViewController.swift */; };
 		6A1235AC2950351C004B612E /* GroupNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235AB2950351C004B612E /* GroupNode.swift */; };
+		6A495E3D297666EA001895C3 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A495E3C297666EA001895C3 /* SettingVC.swift */; };
 		6A58EA46294E997A005FA3CD /* GroupChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */; };
 		6A58EA4D294EB280005FA3CD /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */; };
 		6A58EA4E294EB280005FA3CD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA49294EB280005FA3CD /* Constants.swift */; };
@@ -121,6 +120,11 @@
 		6A6C3108296426F80070167A /* EditChannelDataModView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6C3106296426F80070167A /* EditChannelDataModView.swift */; };
 		6A6C3109296426F80070167A /* EditChannelDataModView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6C3107296426F80070167A /* EditChannelDataModView.xib */; };
 		6A70D50A2969F5E8008D80E6 /* CountryPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = 6A70D5092969F5E8008D80E6 /* CountryPickerView */; };
+		6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */; };
+		6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6329767ED500B59176 /* FindFriendsVC.swift */; };
+		6A9E4C6629767EE100B59176 /* MyReferralCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6529767EE100B59176 /* MyReferralCodeVC.swift */; };
+		6A9E4C6B29768BA100B59176 /* FindFriendsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6A29768BA100B59176 /* FindFriendsModel.swift */; };
+		6A9E4C6E29768BE100B59176 /* FindFriendsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6D29768BE100B59176 /* FindFriendsNode.swift */; };
 		6AAD79FF294C4C68003E3AB6 /* NavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD79FE294C4C68003E3AB6 /* NavigationVC.swift */; };
 		6AAD7A02294C4D1C003E3AB6 /* MainMessageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD7A01294C4D1C003E3AB6 /* MainMessageVC.swift */; };
 		6AAD7A05294C53EC003E3AB6 /* ModView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD7A04294C53EC003E3AB6 /* ModView.swift */; };
@@ -248,10 +252,8 @@
 		148C7108291B11270046FC5D /* OTPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPTextField.swift; sourceTree = "<group>"; };
 		1494675229419A6D007033E5 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		149F44F62956F8270084742A /* RoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageView.swift; sourceTree = "<group>"; };
-		149F44F82956F98E0084742A /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralCodeViewController.swift; sourceTree = "<group>"; };
 		14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTabBarController.swift; sourceTree = "<group>"; };
-		14FAEE03294DED5800C20B99 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		264872440F442FAA80DFCBDC /* Pods-StitchboxUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.release.xcconfig"; sourceTree = "<group>"; };
 		390FD7342909264D0068B883 /* Stitchbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stitchbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -312,6 +314,7 @@
 		6A1235A4295034BD004B612E /* InviteUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUserVC.swift; sourceTree = "<group>"; };
 		6A1235A9295034FF004B612E /* GroupCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCallViewController.swift; sourceTree = "<group>"; };
 		6A1235AB2950351C004B612E /* GroupNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupNode.swift; sourceTree = "<group>"; };
+		6A495E3C297666EA001895C3 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChannelTableViewCell.swift; sourceTree = "<group>"; };
 		6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
 		6A58EA49294EB280005FA3CD /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -349,6 +352,11 @@
 		6A6C3106296426F80070167A /* EditChannelDataModView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditChannelDataModView.swift; sourceTree = "<group>"; };
 		6A6C3107296426F80070167A /* EditChannelDataModView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditChannelDataModView.xib; sourceTree = "<group>"; };
 		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "CountryPickerView-master"; sourceTree = "<group>"; };
+		6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationVC.swift; sourceTree = "<group>"; };
+		6A9E4C6329767ED500B59176 /* FindFriendsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsVC.swift; sourceTree = "<group>"; };
+		6A9E4C6529767EE100B59176 /* MyReferralCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReferralCodeVC.swift; sourceTree = "<group>"; };
+		6A9E4C6A29768BA100B59176 /* FindFriendsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindFriendsModel.swift; sourceTree = "<group>"; };
+		6A9E4C6D29768BE100B59176 /* FindFriendsNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindFriendsNode.swift; sourceTree = "<group>"; };
 		6AAD79FE294C4C68003E3AB6 /* NavigationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationVC.swift; sourceTree = "<group>"; };
 		6AAD7A01294C4D1C003E3AB6 /* MainMessageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessageVC.swift; sourceTree = "<group>"; };
 		6AAD7A04294C53EC003E3AB6 /* ModView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModView.swift; sourceTree = "<group>"; };
@@ -471,6 +479,7 @@
 		143684302918C5B800FA87D7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6A9E4C6929768B9600B59176 /* FindFriendsModel */,
 				6A0D545329750F760059530C /* Profile */,
 				6AEA74F429680336005C802B /* SendbirdModel */,
 				14847405291F37F80099AA08 /* AccountModel.swift */,
@@ -701,12 +710,9 @@
 		390FD77E29092BC10068B883 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				6A9E4C6829767FDC00B59176 /* MainDashboardVC */,
 				147187EC2920B0980039B89E /* ControllerType.swift */,
-				A548E5A429555C2300E9C971 /* LoadingViewController.swift */,
-				6AEA74F329680312005C802B /* ProfileVC */,
-				6AEA74F2296802BD005C802B /* FeedVC */,
-				A5DF81FB295D3FD000E8DDB8 /* SearchVC */,
-				6AAD79FB294C4BEE003E3AB6 /* MessageVC */,
+				6A9E4C6729767FD000B59176 /* AnimationVC */,
 				6AAD79F9294C4BB5003E3AB6 /* LoginVC */,
 			);
 			path = Controllers;
@@ -961,6 +967,17 @@
 			path = PhoneLogin;
 			sourceTree = "<group>";
 		};
+		6A495E392976596E001895C3 /* SettingVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A495E3C297666EA001895C3 /* SettingVC.swift */,
+				6A9E4C6029767EAE00B59176 /* PushNotificationVC */,
+				6A9E4C5F29767EA500B59176 /* FindFriendsVC */,
+				6A9E4C5E29767E8500B59176 /* MyReferralCodeVC */,
+			);
+			path = SettingVC;
+			sourceTree = "<group>";
+		};
 		6A58EA44294E9971005FA3CD /* ViewCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1115,6 +1132,66 @@
 				6A6C3107296426F80070167A /* EditChannelDataModView.xib */,
 			);
 			path = EditChannelDataModView;
+			sourceTree = "<group>";
+		};
+		6A9E4C5E29767E8500B59176 /* MyReferralCodeVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A9E4C6529767EE100B59176 /* MyReferralCodeVC.swift */,
+			);
+			path = MyReferralCodeVC;
+			sourceTree = "<group>";
+		};
+		6A9E4C5F29767EA500B59176 /* FindFriendsVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A9E4C6C29768BD400B59176 /* FindFriendsNode */,
+				6A9E4C6329767ED500B59176 /* FindFriendsVC.swift */,
+			);
+			path = FindFriendsVC;
+			sourceTree = "<group>";
+		};
+		6A9E4C6029767EAE00B59176 /* PushNotificationVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */,
+			);
+			path = PushNotificationVC;
+			sourceTree = "<group>";
+		};
+		6A9E4C6729767FD000B59176 /* AnimationVC */ = {
+			isa = PBXGroup;
+			children = (
+				A548E5A429555C2300E9C971 /* LoadingViewController.swift */,
+			);
+			path = AnimationVC;
+			sourceTree = "<group>";
+		};
+		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
+			isa = PBXGroup;
+			children = (
+				6AEA74F329680312005C802B /* ProfileVC */,
+				6AEA74F2296802BD005C802B /* FeedVC */,
+				A5DF81FB295D3FD000E8DDB8 /* SearchVC */,
+				6AAD79FB294C4BEE003E3AB6 /* MessageVC */,
+			);
+			path = MainDashboardVC;
+			sourceTree = "<group>";
+		};
+		6A9E4C6929768B9600B59176 /* FindFriendsModel */ = {
+			isa = PBXGroup;
+			children = (
+				6A9E4C6A29768BA100B59176 /* FindFriendsModel.swift */,
+			);
+			path = FindFriendsModel;
+			sourceTree = "<group>";
+		};
+		6A9E4C6C29768BD400B59176 /* FindFriendsNode */ = {
+			isa = PBXGroup;
+			children = (
+				6A9E4C6D29768BE100B59176 /* FindFriendsNode.swift */,
+			);
+			path = FindFriendsNode;
 			sourceTree = "<group>";
 		};
 		6AAD79F9294C4BB5003E3AB6 /* LoginVC */ = {
@@ -1321,10 +1398,9 @@
 		6AEA74F329680312005C802B /* ProfileVC */ = {
 			isa = PBXGroup;
 			children = (
-				6A0D54422974E86B0059530C /* ProfileCell */,
-				14FAEE03294DED5800C20B99 /* SettingViewController.swift */,
-				149F44F82956F98E0084742A /* EditProfileViewController.swift */,
 				A5346487294B09B300FB6A94 /* ProfileViewController.swift */,
+				6A495E392976596E001895C3 /* SettingVC */,
+				6A0D54422974E86B0059530C /* ProfileCell */,
 			);
 			path = ProfileVC;
 			sourceTree = "<group>";
@@ -1766,11 +1842,11 @@
 				6AAD7A0A294C5DC8003E3AB6 /* InboxVC.swift in Sources */,
 				6AE1CE67294D590D00B1C435 /* SendBirdGlobalAuthen.swift in Sources */,
 				A59CB3EF294ADB1E00D84D9A /* AppNavigationController.swift in Sources */,
-				14FAEE04294DED5800C20B99 /* SettingViewController.swift in Sources */,
 				6A6627782965771400A4488B /* NetworkManager.swift in Sources */,
 				148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */,
 				6A12359F29503492004B612E /* ChannelSettingsVC.swift in Sources */,
 				A59CB3F3294ADC2500D84D9A /* SessionDataSource.swift in Sources */,
+				6A9E4C6B29768BA100B59176 /* FindFriendsModel.swift in Sources */,
 				6A6C30D629626D3C0070167A /* LeaveView.swift in Sources */,
 				390FD782290931900068B883 /* NormalLoginViewController.swift in Sources */,
 				6AAD7A1D294C65DD003E3AB6 /* UIImageView+QuickStart.swift in Sources */,
@@ -1783,6 +1859,7 @@
 				6A0D543B297241D30059530C /* InstantiatesFromNib.swift in Sources */,
 				14131D80293B9D8F001F7631 /* SLoading.swift in Sources */,
 				6A6627772965771400A4488B /* APIManager.swift in Sources */,
+				6A495E3D297666EA001895C3 /* SettingVC.swift in Sources */,
 				6AAD7A1A294C65DD003E3AB6 /* UIImage+QuickStart.swift in Sources */,
 				6A1235AA295034FF004B612E /* GroupCallViewController.swift in Sources */,
 				6AAD7A4F294C6995003E3AB6 /* Utils.swift in Sources */,
@@ -1825,7 +1902,9 @@
 				6A6C3108296426F80070167A /* EditChannelDataModView.swift in Sources */,
 				6A0CF63B296AAC1D00155889 /* PhoneResetVC.swift in Sources */,
 				A540A8DA294731320085CC45 /* AppleSignInService.swift in Sources */,
+				6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */,
 				6AAD7A0D294C6453003E3AB6 /* AppKey.swift in Sources */,
+				6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */,
 				6A0D54462974E9300059530C /* ChallengerCardProfileHeaderCell.swift in Sources */,
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
 				141BB195293BA4F0004F4ED7 /* CountryPicker.swift in Sources */,
@@ -1870,6 +1949,7 @@
 				390FD78629093EA00068B883 /* FeedViewController.swift in Sources */,
 				147187ED2920B0980039B89E /* ControllerType.swift in Sources */,
 				6AAD7A44294C6642003E3AB6 /* NotificationCenter+QuickStart.swift in Sources */,
+				6A9E4C6629767EE100B59176 /* MyReferralCodeVC.swift in Sources */,
 				6AB8E9372956EB1900BFF169 /* SendBirdUserModel.swift in Sources */,
 				6AAD79FF294C4C68003E3AB6 /* NavigationVC.swift in Sources */,
 				6AAD7A62294C699E003E3AB6 /* Array_compare.swift in Sources */,
@@ -1884,7 +1964,6 @@
 				6AAD7A63294C699E003E3AB6 /* DispatchQueue+Extensions.swift in Sources */,
 				6A0D545529750F8E0059530C /* postThumbnail.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
-				149F44F92956F98E0084742A /* EditProfileViewController.swift in Sources */,
 				6A66277D2965772200A4488B /* HTTPMethod.swift in Sources */,
 				395477B829425318008EED97 /* AuthResult.swift in Sources */,
 				6AAD7A31294C6630003E3AB6 /* CXCallManager.swift in Sources */,
@@ -1904,6 +1983,7 @@
 				6AAD7A35294C6637003E3AB6 /* CallStatus.swift in Sources */,
 				6A58EA46294E997A005FA3CD /* GroupChannelTableViewCell.swift in Sources */,
 				6A0CF64E296E2F0200155889 /* ProfileView.swift in Sources */,
+				6A9E4C6E29768BE100B59176 /* FindFriendsNode.swift in Sources */,
 				6AAD7A18294C65DD003E3AB6 /* AppDelegate+SoundEffects.swift in Sources */,
 				6A1235AC2950351C004B612E /* GroupNode.swift in Sources */,
 				6A123596294EFA1B004B612E /* CustomActivityIndicatorView.swift in Sources */,

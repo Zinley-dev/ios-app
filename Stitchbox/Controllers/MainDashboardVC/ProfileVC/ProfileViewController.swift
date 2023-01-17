@@ -189,8 +189,8 @@ extension ProfileViewController {
     
     @objc func settingTapped(_ sender: UIButton) {
         
-        if let SettingVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SettingViewController") as? SettingViewController {
-            self.navigationController?.pushViewController(SettingVC, animated: true)
+        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SettingVC") as? SettingVC {
+            self.navigationController?.pushViewController(SVC, animated: true)
             
         }
         
