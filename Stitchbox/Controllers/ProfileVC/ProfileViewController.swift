@@ -6,11 +6,20 @@
 //
 
 import UIKit
+import RxSwift
 
-class ProfileViewController: UIViewController {
-
+class ProfileViewController: UIViewController, ControllerType {
+    
+    
+    typealias ViewModelType = ProfileViewModel
+    // MARK: - Properties
+    private var viewModel: ViewModelType! = ViewModelType()
+    private let disposeBag = DisposeBag()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.output.name.values
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -23,20 +32,29 @@ class ProfileViewController: UIViewController {
             }
         }
     }
-
-  @IBAction func tapedSignOut(_ sender: Any) {
-    _AppCoreData.signOut()
-    sendbirdLogout()
-    RedirectionHelper.redirectToLogin()
-  }
-  /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    @IBAction func tapedSignOut(_ sender: Any) {
+        _AppCoreData.signOut()
+        sendbirdLogout()
+        RedirectionHelper.redirectToLogin()
     }
-    */
-
+    /*
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
+    
+    func bindUI(with viewModel: ProfileViewModel) {
+        
+    }
+    
+    func bindAction(with viewModel: ProfileViewModel) {
+        
+    }
+    
 }

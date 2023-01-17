@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import ObjectMapper
 
 class ProfileViewModel: ViewModelProtocol {
     var input: Input
@@ -57,24 +58,24 @@ class ProfileViewModel: ViewModelProtocol {
         var successObservable: Observable<SuccessMessage>
     }
     
-    var nameSubject = PublishSubject<String>()
-    var usernameSubject = PublishSubject<String>()
-    var emailSubject = PublishSubject<String>()
-    var phoneSubject = PublishSubject<String>()
-    var avatarSubject = PublishSubject<String>()
-    var coverSubject = PublishSubject<String>()
-    var aboutSubject = PublishSubject<String>()
-    var bioSubject = PublishSubject<String>()
-    var referralCodeSubject = PublishSubject<String>()
-    var facebookSubject = PublishSubject<String>()
-    var googleSubject = PublishSubject<String>()
-    var tiktokSubject = PublishSubject<String>()
-    var appleSubject = PublishSubject<String>()
-    var birthdaySubject = PublishSubject<String>()
-    var friendsIDSubject = PublishSubject<[String]>()
-    var locationSubject = PublishSubject<String>()
+    var nameSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.name ?? "")
+    var usernameSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.userName ?? "")
+    var emailSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.email ?? "")
+    var phoneSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.phone ?? "")
+    var avatarSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.avatarURL ?? "")
+    var coverSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.cover ?? "")
+    var aboutSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.about ?? "")
+    var bioSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.bio ?? "")
+    var referralCodeSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.referralCode ?? "")
+    var facebookSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.facebook?.uid ?? "")
+    var googleSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.google?.uid ?? "")
+    var tiktokSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.tiktok?.uid ?? "")
+    var appleSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.apple?.uid ?? "")
+    var birthdaySubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.Birthday ?? "")
+    var friendsIDSubject = BehaviorSubject<[String]>(value: _AppCoreData.userDataSource.value?.FriendsIds ?? [])
+    var locationSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.location ?? "")
+    var streamingLink = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.location ?? "")
     var editSubject = PublishSubject<Void>()
-    
     var updatemeObservable: Observable<[String:Any]>
     private let errorsSubject = PublishSubject<Error>()
     private let successSubject = PublishSubject<SuccessMessage>()
@@ -94,78 +95,84 @@ class ProfileViewModel: ViewModelProtocol {
             ["about": $0, "email": $1, "name": $2,
              "phone": $3, "username": $4, "bio": $5, "birthday": $6]
         }
-        
-        
-//        self.editSubject.asObservable()
-//            .debounce(.milliseconds(3000), scheduler: MainScheduler.instance)
-//            .withLatestFrom(updatemeObservable).subscribe(onNext: { params in
-//            print(params)
-//            APIManager().updateme(params: params) {
-//                result in switch result {
-//                case .success(let response):
-//                    print(response)
-//                    self.getAPISetting()
-//                case .failure(let error):
-//                    print(error)
-//                    self.errorsSubject.onNext(error)
-//                }
-//            }
-//        }, onError: { error in
-//            self.errorsSubject.onNext(error)
-//        }, onDisposed: disposeBag)
-        
+        self.editSubject.asObservable()
+            .debounce(.milliseconds(3000), scheduler: MainScheduler.instance)
+            .withLatestFrom(updatemeObservable).subscribe(onNext: { params in
+            print(params)
+            APIManager().updateme(params: params) {
+                result in switch result {
+                case .success(let response):
+                    print(response)
+                    self.getUserData()
+                    
+                case .failure(let error):
+                    print(error)
+                    self.errorsSubject.onNext(error)
+                }
+            }
+        }, onError: { error in
+            self.errorsSubject.onNext(error)
+        }).disposed(by: disposeBag)
+        getUserData()
         logic()
     }
     func getUserData() {
-//        APIManager().{
-//            result in switch result {
-//            case .success(let response):
-//                print(response)
-//                // write usr data
-//                if let newUserData = Mapper<UserDataSource>().map(JSON: data as! [String: Any]) {
-//                    _AppCoreData.userDataSource.accept(newUserData)
-//                    print("newuserdata")
-//                    print(newUserData.toJSON())
-//                }
-//
-//            case .failure:
-//                self.errorsSubject.onNext(NSError(domain: "Cannot get user's setting information", code: 400))
-//            }
-//        }
+        APIManager().getme{
+            result in switch result {
+            case .success(let response):
+                print(response)
+                if let data = response.body {
+                        // write usr data
+                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                            _AppCoreData.userDataSource.accept(newUserData)
+                            print("newuserdata")
+                            print(newUserData.toJSON())
+                        }
+                } else {
+                    print("Cannot convert data object")
+                    self.errorsSubject.onNext(NSError(domain: "Cannot get user's setting information", code: 400))
+                }
+                
+            case .failure:
+                self.errorsSubject.onNext(NSError(domain: "Cannot get user's setting information", code: 400))
+            }
+        }
     }
     
     
     func logic() {
         _AppCoreData.userDataSource.subscribe(onNext: {userData in
-            if let unwrapUserData = userData {
-                self.nameSubject.onNext(unwrapUserData.name)
-                self.usernameSubject.onNext(unwrapUserData.userName)
-                self.emailSubject.onNext(unwrapUserData.email)
-                self.phoneSubject.onNext(unwrapUserData.phone)
-                self.avatarSubject.onNext(unwrapUserData.avatarURL)
-                self.coverSubject.onNext(unwrapUserData.cover)
-                self.aboutSubject.onNext(unwrapUserData.about)
-                self.locationSubject.onNext(unwrapUserData.location)
-                self.bioSubject.onNext(unwrapUserData.bio)
-                self.referralCodeSubject.onNext(unwrapUserData.referralCode)
-                self.facebookSubject.onNext(unwrapUserData.facebook?.uid ?? "")
-                self.googleSubject.onNext(unwrapUserData.google?.uid ?? "")
-                self.tiktokSubject.onNext(unwrapUserData.tiktok?.uid ?? "")
-                self.appleSubject.onNext(unwrapUserData.apple?.uid ?? "")
-                self.friendsIDSubject.onNext(unwrapUserData.FriendsIds)
-                self.birthdaySubject.onNext(unwrapUserData.Birthday)
-            } else {
-                print("User info not in cache. Retrieve data from source")
-                self.getUserData()
-            }
+            print("fillupdatasource")
+            self.fillUpSubjects(userData: userData)
         }, onError: {error in
             print(error)
             self.errorsSubject.onNext(error)
         }, onCompleted: {}).disposed(by: disposeBag)
     }
     
-    func processBirthday(birthday: String) -> String {
-        return String()
+    func fillUpSubjects(userData: UserDataSource?) {
+        if let unwrapUserData = userData {
+            self.nameSubject.onNext(unwrapUserData.name)
+            self.usernameSubject.onNext(unwrapUserData.userName)
+            self.emailSubject.onNext(unwrapUserData.email)
+            self.phoneSubject.onNext(unwrapUserData.phone)
+            self.avatarSubject.onNext(unwrapUserData.avatarURL)
+            self.coverSubject.onNext(unwrapUserData.cover)
+            self.aboutSubject.onNext(unwrapUserData.about)
+            self.locationSubject.onNext(unwrapUserData.location)
+            self.bioSubject.onNext(unwrapUserData.bio)
+            self.referralCodeSubject.onNext(unwrapUserData.referralCode)
+            self.facebookSubject.onNext(unwrapUserData.facebook?.uid ?? "")
+            self.googleSubject.onNext(unwrapUserData.google?.uid ?? "")
+            self.tiktokSubject.onNext(unwrapUserData.tiktok?.uid ?? "")
+            self.appleSubject.onNext(unwrapUserData.apple?.uid ?? "")
+            self.friendsIDSubject.onNext(unwrapUserData.FriendsIds)
+            self.birthdaySubject.onNext(unwrapUserData.Birthday)
+        } else {
+            print("User info not in cache. Retrieve data from source")
+            self.getUserData()
+        }
     }
+    
     
 }
