@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import RxRelay
 import ObjectMapper
 
 class ProfileViewModel: ViewModelProtocol {
@@ -17,16 +18,16 @@ class ProfileViewModel: ViewModelProtocol {
     var output: Output
     
     struct Input {
-        var name: AnyObserver<String>
-        var username: AnyObserver<String>
-        var email: AnyObserver<String>
-        var phone: AnyObserver<String>
-        var avatar: AnyObserver<String>
-        var cover: AnyObserver<String>
-        var about: AnyObserver<String>
-        var bio: AnyObserver<String>
-        var friendsID: AnyObserver<[String]>
-        var birthday: AnyObserver<String>
+        var name: BehaviorRelay<String>
+        var username: BehaviorRelay<String>
+        var email: BehaviorRelay<String>
+        var phone: BehaviorRelay<String>
+        var avatar: BehaviorRelay<String>
+        var cover: BehaviorRelay<String>
+        var about: BehaviorRelay<String>
+        var bio: BehaviorRelay<String>
+        var friendsID: BehaviorRelay<[String]>
+        var birthday: BehaviorRelay<String>
     }
     
     struct Action {
@@ -58,23 +59,23 @@ class ProfileViewModel: ViewModelProtocol {
         var successObservable: Observable<SuccessMessage>
     }
     
-    var nameSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.name ?? "")
-    var usernameSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.userName ?? "")
-    var emailSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.email ?? "")
-    var phoneSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.phone ?? "")
-    var avatarSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.avatarURL ?? "")
-    var coverSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.cover ?? "")
-    var aboutSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.about ?? "")
-    var bioSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.bio ?? "")
-    var referralCodeSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.referralCode ?? "")
-    var facebookSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.facebook?.uid ?? "")
-    var googleSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.google?.uid ?? "")
-    var tiktokSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.tiktok?.uid ?? "")
-    var appleSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.apple?.uid ?? "")
-    var birthdaySubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.Birthday ?? "")
-    var friendsIDSubject = BehaviorSubject<[String]>(value: _AppCoreData.userDataSource.value?.FriendsIds ?? [])
-    var locationSubject = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.location ?? "")
-    var streamingLink = BehaviorSubject<String>(value: _AppCoreData.userDataSource.value?.location ?? "")
+    var nameSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.name ?? "")
+    var usernameSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.userName ?? "")
+    var emailSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.email ?? "")
+    var phoneSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.phone ?? "")
+    var avatarSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.avatarURL ?? "")
+    var coverSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.cover ?? "")
+    var aboutSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.about ?? "")
+    var bioSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.bio ?? "")
+    var referralCodeSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.referralCode ?? "")
+    var facebookSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.facebook?.uid ?? "")
+    var googleSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.google?.uid ?? "")
+    var tiktokSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.tiktok?.uid ?? "")
+    var appleSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.apple?.uid ?? "")
+    var birthdaySubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.Birthday ?? "")
+    var friendsIDSubject = BehaviorRelay<[String]>(value: _AppCoreData.userDataSource.value?.FriendsIds ?? [])
+    var locationSubject = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.location ?? "")
+    var streamingLink = BehaviorRelay<String>(value: _AppCoreData.userDataSource.value?.location ?? "")
     var editSubject = PublishSubject<Void>()
     var updatemeObservable: Observable<[String:Any]>
     private let errorsSubject = PublishSubject<Error>()
@@ -82,7 +83,7 @@ class ProfileViewModel: ViewModelProtocol {
     private let disposeBag = DisposeBag()
     
     init() {
-        input = Input(name: nameSubject.asObserver(), username: usernameSubject.asObserver(), email: emailSubject.asObserver(), phone: phoneSubject.asObserver(), avatar: avatarSubject.asObserver(), cover: coverSubject.asObserver(), about: aboutSubject.asObserver(), bio: bioSubject.asObserver(), friendsID: friendsIDSubject.asObserver(), birthday: birthdaySubject.asObserver()
+        input = Input(name: nameSubject, username: usernameSubject, email: emailSubject, phone: phoneSubject, avatar: avatarSubject, cover: coverSubject, about: aboutSubject, bio: bioSubject, friendsID: friendsIDSubject, birthday: birthdaySubject
         )
         
         action = Action(
@@ -152,22 +153,22 @@ class ProfileViewModel: ViewModelProtocol {
     
     func fillUpSubjects(userData: UserDataSource?) {
         if let unwrapUserData = userData {
-            self.nameSubject.onNext(unwrapUserData.name)
-            self.usernameSubject.onNext(unwrapUserData.userName)
-            self.emailSubject.onNext(unwrapUserData.email)
-            self.phoneSubject.onNext(unwrapUserData.phone)
-            self.avatarSubject.onNext(unwrapUserData.avatarURL)
-            self.coverSubject.onNext(unwrapUserData.cover)
-            self.aboutSubject.onNext(unwrapUserData.about)
-            self.locationSubject.onNext(unwrapUserData.location)
-            self.bioSubject.onNext(unwrapUserData.bio)
-            self.referralCodeSubject.onNext(unwrapUserData.referralCode)
-            self.facebookSubject.onNext(unwrapUserData.facebook?.uid ?? "")
-            self.googleSubject.onNext(unwrapUserData.google?.uid ?? "")
-            self.tiktokSubject.onNext(unwrapUserData.tiktok?.uid ?? "")
-            self.appleSubject.onNext(unwrapUserData.apple?.uid ?? "")
-            self.friendsIDSubject.onNext(unwrapUserData.FriendsIds)
-            self.birthdaySubject.onNext(unwrapUserData.Birthday)
+            self.nameSubject.accept(unwrapUserData.name)
+            self.usernameSubject.accept(unwrapUserData.userName)
+            self.emailSubject.accept(unwrapUserData.email)
+            self.phoneSubject.accept(unwrapUserData.phone)
+            self.avatarSubject.accept(unwrapUserData.avatarURL)
+            self.coverSubject.accept(unwrapUserData.cover)
+            self.aboutSubject.accept(unwrapUserData.about)
+            self.locationSubject.accept(unwrapUserData.location)
+            self.bioSubject.accept(unwrapUserData.bio)
+            self.referralCodeSubject.accept(unwrapUserData.referralCode)
+            self.facebookSubject.accept(unwrapUserData.facebook?.uid ?? "")
+            self.googleSubject.accept(unwrapUserData.google?.uid ?? "")
+            self.tiktokSubject.accept(unwrapUserData.tiktok?.uid ?? "")
+            self.appleSubject.accept(unwrapUserData.apple?.uid ?? "")
+            self.friendsIDSubject.accept(unwrapUserData.FriendsIds)
+            self.birthdaySubject.accept(unwrapUserData.Birthday)
         } else {
             print("User info not in cache. Retrieve data from source")
             self.getUserData()
