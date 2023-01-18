@@ -33,6 +33,8 @@
 		149F44F92956F98E0084742A /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149F44F82956F98E0084742A /* EditProfileViewController.swift */; };
 		14C067682956EC4F002C79AE /* ReferralCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */; };
 		14C46C1C293D8DD1004D5D3A /* LoginTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */; };
+		14FADBB42978141100E0A741 /* EditPostSettingsModView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14FADBB22978141100E0A741 /* EditPostSettingsModView.xib */; };
+		14FADBB52978141100E0A741 /* EditPostSettingsModView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBB32978141100E0A741 /* EditPostSettingsModView.swift */; };
 		14FAEE04294DED5800C20B99 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE03294DED5800C20B99 /* SettingViewController.swift */; };
 		14FAEE06294DEE0B00C20B99 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */; };
 		390FD7382909264D0068B883 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7372909264D0068B883 /* AppDelegate.swift */; };
@@ -251,6 +253,8 @@
 		149F44F82956F98E0084742A /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralCodeViewController.swift; sourceTree = "<group>"; };
 		14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTabBarController.swift; sourceTree = "<group>"; };
+		14FADBB22978141100E0A741 /* EditPostSettingsModView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditPostSettingsModView.xib; path = Stitchbox/Controllers/FeedVC/PostSettingModView/SettingsModView/EditPostSettingsModView.xib; sourceTree = SOURCE_ROOT; };
+		14FADBB32978141100E0A741 /* EditPostSettingsModView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditPostSettingsModView.swift; path = Stitchbox/Controllers/FeedVC/PostSettingModView/SettingsModView/EditPostSettingsModView.swift; sourceTree = SOURCE_ROOT; };
 		14FAEE03294DED5800C20B99 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		264872440F442FAA80DFCBDC /* Pods-StitchboxUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -531,6 +535,23 @@
 				149F44F62956F8270084742A /* RoundedImageView.swift */,
 			);
 			path = StyledComponents;
+			sourceTree = "<group>";
+		};
+		14FADBB0297812B100E0A741 /* PostSettingModView */ = {
+			isa = PBXGroup;
+			children = (
+				14FADBB12978136100E0A741 /* SettingsModView */,
+			);
+			path = PostSettingModView;
+			sourceTree = "<group>";
+		};
+		14FADBB12978136100E0A741 /* SettingsModView */ = {
+			isa = PBXGroup;
+			children = (
+				14FADBB32978141100E0A741 /* EditPostSettingsModView.swift */,
+				14FADBB22978141100E0A741 /* EditPostSettingsModView.xib */,
+			);
+			path = SettingsModView;
 			sourceTree = "<group>";
 		};
 		3419A7CB179E30E2AC73099D /* Frameworks */ = {
@@ -1314,6 +1335,7 @@
 			isa = PBXGroup;
 			children = (
 				390FD78529093EA00068B883 /* FeedViewController.swift */,
+				14FADBB0297812B100E0A741 /* PostSettingModView */,
 			);
 			path = FeedVC;
 			sourceTree = "<group>";
@@ -1593,6 +1615,7 @@
 				6A6C30FF2964156E0070167A /* UnmutedUserModView.xib in Resources */,
 				390FD7842909375C0068B883 /* Dashboard.storyboard in Resources */,
 				6A0CF64D296E2F0200155889 /* ProfileView.xib in Resources */,
+				14FADBB42978141100E0A741 /* EditPostSettingsModView.xib in Resources */,
 				6AAD7A26294C65F6003E3AB6 /* ConnectionRestored.mp3 in Resources */,
 				6AAD7A25294C65F6003E3AB6 /* ConnectionLost.mp3 in Resources */,
 				14131D7E293B3666001F7631 /* Components.storyboard in Resources */,
@@ -1785,6 +1808,7 @@
 				6A6627772965771400A4488B /* APIManager.swift in Sources */,
 				6AAD7A1A294C65DD003E3AB6 /* UIImage+QuickStart.swift in Sources */,
 				6A1235AA295034FF004B612E /* GroupCallViewController.swift in Sources */,
+				14FADBB52978141100E0A741 /* EditPostSettingsModView.swift in Sources */,
 				6AAD7A4F294C6995003E3AB6 /* Utils.swift in Sources */,
 				6A6C30E62964033A0070167A /* BannedMemberVC.swift in Sources */,
 				6AAD7A1B294C65DD003E3AB6 /* UIViewController+QuickStart.swift in Sources */,
