@@ -1,8 +1,8 @@
 //
-//  reportView.swift
-//  Dual
+//  EditPostSettingsModView.swift
+//  Stitchbox
 //
-//  Created by Khoi Nguyen on 1/16/21.
+//  Created by Khanh Duy Nguyen on 1/18/23.
 //
 
 import UIKit
@@ -55,13 +55,9 @@ class EditPostSettingsModView: UIViewController{
    //dismissUser
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
-        
-                                                                                       
         present(alert, animated: true, completion: nil)
-        
     }
 }
