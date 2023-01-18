@@ -253,8 +253,8 @@
 		149F44F82956F98E0084742A /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralCodeViewController.swift; sourceTree = "<group>"; };
 		14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTabBarController.swift; sourceTree = "<group>"; };
-		14FADBB22978141100E0A741 /* EditPostSettingsModView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditPostSettingsModView.xib; path = Stitchbox/Controllers/FeedVC/PostSettingModView/SettingsModView/EditPostSettingsModView.xib; sourceTree = SOURCE_ROOT; };
-		14FADBB32978141100E0A741 /* EditPostSettingsModView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditPostSettingsModView.swift; path = Stitchbox/Controllers/FeedVC/PostSettingModView/SettingsModView/EditPostSettingsModView.swift; sourceTree = SOURCE_ROOT; };
+		14FADBB22978141100E0A741 /* EditPostSettingsModView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditPostSettingsModView.xib; path = Stitchbox/Controllers/FeedVC/PostSettingModView/EditPostSettingsModView/EditPostSettingsModView.xib; sourceTree = SOURCE_ROOT; };
+		14FADBB32978141100E0A741 /* EditPostSettingsModView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditPostSettingsModView.swift; path = Stitchbox/Controllers/FeedVC/PostSettingModView/EditPostSettingsModView/EditPostSettingsModView.swift; sourceTree = SOURCE_ROOT; };
 		14FAEE03294DED5800C20B99 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		264872440F442FAA80DFCBDC /* Pods-StitchboxUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -540,18 +540,26 @@
 		14FADBB0297812B100E0A741 /* PostSettingModView */ = {
 			isa = PBXGroup;
 			children = (
-				14FADBB12978136100E0A741 /* SettingsModView */,
+				14FADBB12978136100E0A741 /* EditPostSettingsModView */,
+				14FADBB62978288700E0A741 /* ReportModView */,
 			);
 			path = PostSettingModView;
 			sourceTree = "<group>";
 		};
-		14FADBB12978136100E0A741 /* SettingsModView */ = {
+		14FADBB12978136100E0A741 /* EditPostSettingsModView */ = {
 			isa = PBXGroup;
 			children = (
 				14FADBB32978141100E0A741 /* EditPostSettingsModView.swift */,
 				14FADBB22978141100E0A741 /* EditPostSettingsModView.xib */,
 			);
-			path = SettingsModView;
+			path = EditPostSettingsModView;
+			sourceTree = "<group>";
+		};
+		14FADBB62978288700E0A741 /* ReportModView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ReportModView;
 			sourceTree = "<group>";
 		};
 		3419A7CB179E30E2AC73099D /* Frameworks */ = {
