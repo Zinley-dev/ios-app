@@ -1,73 +1,53 @@
 //
-//  PushNotificationVC.swift
+//  ResetPwdVC.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 1/17/23.
+//  Created by Khoi Nguyen on 1/18/23.
 //
 
 import UIKit
 
-class PushNotificationVC: UIViewController {
+class ResetPwdVC: UIViewController {
 
-    
+    @IBOutlet weak var saveBtn: UIButton!
+    @IBOutlet weak var confirmNewPwdTextField: UITextField!
+    @IBOutlet weak var newPwdTextField: UITextField!
+    @IBOutlet weak var currentPwdTextField: UITextField!
     let backButton: UIButton = UIButton(type: .custom)
-    
-    @IBOutlet weak var PostsSwitch: UISwitch!
-    @IBOutlet weak var CommentSwitch: UISwitch!
-    @IBOutlet weak var MentionSwitch: UISwitch!
-    @IBOutlet weak var FollowSwitch: UISwitch!
-    @IBOutlet weak var MessageSwitch: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupButtons()
+    }
+    
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        confirmNewPwdTextField.addUnderLine()
+        newPwdTextField.addUnderLine()
+        currentPwdTextField.addUnderLine()
         
     }
     
-    @IBAction func PostsSwitchPressed(_ sender: Any) {
-        
-        
-        
-    }
-    
-    @IBAction func CommentSwitchPressed(_ sender: Any) {
-        
-        
-        
-    }
-    
-    @IBAction func MentionSwitchPressed(_ sender: Any) {
-        
-        
-        
-    }
-    
-    @IBAction func FollowSwitchPressed(_ sender: Any) {
-        
-        
-        
-    }
-    
-    @IBAction func MessageSwitchPressed(_ sender: Any) {
-        
-        
-        
-    }
 
+    @IBAction func saveBtnPressed(_ sender: Any) {
+        
+        
+    }
+    
 
 }
 
-
-extension PushNotificationVC {
+extension ResetPwdVC {
     
     func setupButtons() {
         
         setupBackButton()
-        
+       
     }
-    
     
     func setupBackButton() {
         
@@ -77,15 +57,15 @@ extension PushNotificationVC {
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Push Notification", for: .normal)
+        backButton.setTitle("     Reset Password", for: .normal)
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
     
         self.navigationItem.leftBarButtonItem = backButtonBarButton
        
     }
-
     
+
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)

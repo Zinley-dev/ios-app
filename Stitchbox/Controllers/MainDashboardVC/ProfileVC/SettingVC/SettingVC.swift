@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class SettingVC: UIViewController {
 
@@ -30,7 +31,7 @@ class SettingVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupButtons()
-        wireDelegate()
+       
     }
 
     
@@ -61,31 +62,51 @@ class SettingVC: UIViewController {
     
     @IBAction func securityBtnPressed(_ sender: Any) {
         
-        
+        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SecurityVC") as? SecurityVC {
+            self.navigationController?.pushViewController(SVC, animated: true)
+            
+        }
         
     }
     
     @IBAction func accountActivityBtnPressed(_ sender: Any) {
         
-        
+        if let AAVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AccountActivityVC") as? AccountActivityVC {
+            self.navigationController?.pushViewController(AAVC, animated: true)
+            
+        }
         
     }
     
     @IBAction func blockAccountBtnPressed(_ sender: Any) {
         
-        
+        if let BLVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "BlockedListVC") as? BlockedListVC {
+            self.navigationController?.pushViewController(BLVC, animated: true)
+            
+        }
         
     }
     
     @IBAction func contactUsBtnPressed(_ sender: Any) {
         
-        
+        if let CUVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ContactUsVC") as? ContactUsVC {
+            self.navigationController?.pushViewController(CUVC, animated: true)
+            
+        }
         
     }
     
     
     @IBAction func termOfServiceBtnPressed(_ sender: Any) {
         
+        guard let urls = URL(string: "https://stitchbox.gg") else {
+            return //be safe
+        }
+        
+        let vc = SFSafariViewController(url: urls)
+        vc.modalPresentationStyle = .fullScreen
+        
+        self.present(vc, animated: true, completion: nil)
         
         
     }
@@ -93,8 +114,7 @@ class SettingVC: UIViewController {
     @IBAction func logoutBtnPressed(_ sender: Any) {
         
         
-        
-        
+
         
     }
     
@@ -120,21 +140,6 @@ class SettingVC: UIViewController {
         
     }
     
-    
-    
-}
-
-
-//setting up navigationCollection Bar
-extension SettingVC: UINavigationBarDelegate, UINavigationControllerDelegate {
-    
-    func wireDelegate() {
-        self.navigationController?.navigationBar.delegate = self
-    }
-    
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
     
     
 }

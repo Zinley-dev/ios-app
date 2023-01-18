@@ -62,6 +62,7 @@ class ProfileViewController: UIViewController {
         
         configureDatasource()
         setupChallengeView()
+        wireDelegate()
     }
     
     
@@ -422,6 +423,20 @@ extension ProfileViewController {
                 
         }
         
+    }
+    
+    
+}
+
+//setting up navigationCollection Bar
+extension ProfileViewController: UINavigationBarDelegate, UINavigationControllerDelegate {
+    
+    func wireDelegate() {
+        self.navigationController?.navigationBar.delegate = self
+    }
+    
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
     }
     
     

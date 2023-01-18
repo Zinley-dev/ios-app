@@ -41,6 +41,7 @@ class MyReferralCodeVC: UIViewController {
         // Do any additional setup after loading the view.
         setupButtons()
         setupPolicyLabel()
+        getDefaultCode()
         
     }
     
@@ -58,7 +59,6 @@ class MyReferralCodeVC: UIViewController {
         showNote(text: "Referral code copied")
         
     }
-    
     
 }
 
@@ -88,9 +88,6 @@ extension MyReferralCodeVC: ZSWTappableLabelTapDelegate {
         
         let string = NSLocalizedString("<link type='Privacy'>Learn more about the Stitchbox referral program</link>.", comment: "")
         
-        
-        
-        
         referralcodepolicy.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         referralcodepolicy.isUserInteractionEnabled = true
         
@@ -112,22 +109,6 @@ extension MyReferralCodeVC: ZSWTappableLabelTapDelegate {
         }
     }
     
-    
-    
-}
-
-//setting up navigationCollection Bar
-extension MyReferralCodeVC: UINavigationBarDelegate, UINavigationControllerDelegate {
-    
-    func wireDelegate() {
-        self.navigationController?.navigationBar.delegate = self
-    }
-    
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
-    
-    
 }
 
 
@@ -137,9 +118,7 @@ extension MyReferralCodeVC {
         
         setupBackButton()
        
-        
     }
-    
     
     func setupBackButton() {
         
@@ -155,6 +134,21 @@ extension MyReferralCodeVC {
     
         self.navigationItem.leftBarButtonItem = backButtonBarButton
        
+    }
+    
+    
+    func getDefaultCode() {
+        
+        
+        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
+            print("Sendbird: Can't get userUID")
+            return
+        }
+        
+        if let code = userDataSource.referralCode, code != "" {
+            referralCode.setTitle(code, for: .normal)
+        }
+        
     }
 
     

@@ -151,21 +151,6 @@ extension FindFriendsVC {
     
 }
 
-//setting up navigationCollection Bar
-extension FindFriendsVC: UINavigationBarDelegate, UINavigationControllerDelegate {
-    
-    func wireDelegate() {
-        self.navigationController?.navigationBar.delegate = self
-    }
-    
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
-    
-    
-}
-
-
 extension FindFriendsVC {
     
     func setupButtons() {
@@ -272,13 +257,18 @@ extension FindFriendsVC: ASTableDataSource {
             
             if let phoneNumber = contactLists[indexPath.row].phoneNumber  {
                 
+                guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
+                    print("Sendbird: Can't get userUID")
+                    return
+                }
+                
                 
                 let composeVC = MFMessageComposeViewController()
                 composeVC.messageComposeDelegate = self
 
                 // Configure the fields of the interface.
                 composeVC.recipients = [phoneNumber]
-                composeVC.body = "[Stitchbox] I am \("Demo user") on Stitchbox. To download the app and watch more gaming videos. tap:https://apps.apple.com/us/app/dual/id1576592262"
+                composeVC.body = "[Stitchbox] I am \(userDataSource.userName ?? "null") on Stitchbox. To download the app and stay connected with your gaming friends. tap:https://apps.apple.com/us/app/dual/id1576592262"
 
                 // Present the view controller modally.
                 if MFMessageComposeViewController.canSendText() {
@@ -302,7 +292,7 @@ extension FindFriendsVC {
         
         switch result {
             case .cancelled:
-                showNote(text: "Invitation cancelled.")
+                //showNote(text: "Invitation cancelled.")
                 break
             case .sent:
                 showNote(text: "Thank you, your invitation has been sent.")

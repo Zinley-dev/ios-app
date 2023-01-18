@@ -198,7 +198,47 @@ class FindFriendsNode: ASCellNode {
   
     @objc func followBtnPressed() {
         
-        
+        if desc != "" {
+            
+          
+                  
+        } else {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                
+                if vc is FindFriendsVC {
+                    
+                    if let update1 = vc as? FindFriendsVC {
+                        
+                        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
+                            print("Sendbird: Can't get userUID")
+                            return
+                        }
+                        
+                        
+                        let composeVC = MFMessageComposeViewController()
+                        composeVC.messageComposeDelegate = update1.self
+
+                        // Configure the fields of the interface.
+                        composeVC.recipients = [user.phoneNumber]
+                        composeVC.body = "[Stitchbox] I am \(userDataSource.userName ?? "null") on Stitchbox. To download the app and stay connected with your gaming friends. tap:https://apps.apple.com/us/app/dual/id1576592262"
+
+                        // Present the view controller modally.
+                        if MFMessageComposeViewController.canSendText() {
+                            update1.present(composeVC, animated: true, completion: nil)
+                        } else {
+                            print("Can't send messages.")
+                        }
+                        
+                    }
+                    
+                }
+            }
+            
+          
+            
+        }
         
     }
     
