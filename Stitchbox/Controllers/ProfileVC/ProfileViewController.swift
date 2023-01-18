@@ -11,14 +11,29 @@ import RxSwift
 class ProfileViewController: UIViewController, ControllerType {
     
     typealias ViewModelType = ProfileViewModel
+    var viewModel : ViewModelType
     var disposeBag = DisposeBag()
-    var viewModel = ViewModelType()
     
     func bindUI(with viewModel: ProfileViewModel) {
+        
     }
     
     func bindAction(with viewModel: ProfileViewModel) {
         
+    }
+    
+    init(viewModel: ViewModelType) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        bindUI(with: viewModel)
+        bindAction(with: viewModel)
+    }
+    
+    required init?(coder: NSCoder) {
+        self.viewModel = ViewModelType()
+        super.init(coder: coder)
+        bindUI(with: viewModel)
+        bindAction(with: viewModel)
     }
     
     enum Section: Hashable {
@@ -46,7 +61,7 @@ class ProfileViewController: UIViewController, ControllerType {
 
     var demoProfileData: ProfileHeaderData {
         
-        return ProfileHeaderData(name: viewModel.nameSubject.value, username: viewModel.usernameSubject.value, bio: viewModel.bioSubject.value, cover: "", avatar: "", followers: 50, followings: 50, streamingLink: "")
+        return ProfileHeaderData(name: viewModel.nameSubject.value, username: viewModel.usernameSubject.value, bio: viewModel.bioSubject.value, cover: viewModel.coverSubject.value, avatar: viewModel.avatarSubject.value, followers: 50, followings: 50, streamingLink: viewModel.streamingLink.value)
     }
     
     var demoChallengeData: ChallengeCardHeaderData {
@@ -107,7 +122,8 @@ class ProfileViewController: UIViewController, ControllerType {
                 cell.descriptionLbl.text = data.bio
                 cell.numberOfFollowers.text = String(data.followers)
                 cell.numberOfFollowing.text = String(data.followings)
-                cell.coverImage.image = UIImage(named: data.cover)
+                cell.coverImage.imageFromURL(urlString: data.cover)
+                cell.avatarImage.imageFromURL(urlString: data.avatar)
                 
                 // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
@@ -144,9 +160,12 @@ class ProfileViewController: UIViewController, ControllerType {
                 
             }
             
-        case .challengeCard(_):
+        case .challengeCard(let data):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChallengerCardProfileHeaderCell.reuseIdentifier, for: indexPath) as? ChallengerCardProfileHeaderCell {
+                
+                
+                // render data
                 
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
@@ -361,7 +380,9 @@ extension ProfileViewController {
         var snapshot = Snapshot()
 
         snapshot.appendSections([.header, .challengeCard, .posts])
-        snapshot.appendItems([.header(demoProfileData)], toSection: .header)
+        viewModel.output.headerObservable.subscribe(onNext: {newData in
+            snapshot.appendItems([.header(newData)], toSection: .header)
+        }).disposed(by: disposeBag)
         snapshot.appendItems([.challengeCard(demoChallengeData)], toSection: .challengeCard)
         snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
         return snapshot
