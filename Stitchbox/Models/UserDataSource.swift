@@ -22,6 +22,7 @@ class UserDataSource: Mappable {
   var avatarURL : String!  = "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"
   var signinMethod : String! = ""
   var socialId : String! = ""
+  var referralCode : String! = ""
   
   required init?(map: Map) {
     //
@@ -40,5 +41,6 @@ class UserDataSource: Mappable {
     avatarURL   <- map["avatar"]
     signinMethod   <- map["signinMethod"]
     socialId   <- map["socialId"]
+    referralCode   <- map["referralCode"]
   }
 }
