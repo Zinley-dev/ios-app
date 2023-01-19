@@ -211,8 +211,11 @@ extension ProfileViewController {
     
     @objc func editProfileTapped(_ sender: UIButton) {
         
-      print("editProfileTapped")
-        
+        if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
+            self.navigationController?.pushViewController(EPVC, animated: true)
+            
+        }
+    
     }
     
     @objc func discordTapped(_ sender: UIButton) {
