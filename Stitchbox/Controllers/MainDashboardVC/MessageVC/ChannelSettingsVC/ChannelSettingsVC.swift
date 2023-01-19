@@ -40,7 +40,7 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     var channel: SBDGroupChannel?
     let backButton: UIButton = UIButton(type: .custom)
     let editButton: UIButton = UIButton(type: .custom)
-    
+    let container = ContainerController(modes: [.library, .photo])
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +54,7 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         NotificationCenter.default.addObserver(self, selector: #selector(ChannelSettingsVC.leaveChannel), name: (NSNotification.Name(rawValue: "leaveChannel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ChannelSettingsVC.changeName), name: (NSNotification.Name(rawValue: "changeName")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ChannelSettingsVC.changeAvatar), name: (NSNotification.Name(rawValue: "changeAvatar")), object: nil)
-        
+        container.editControllerDelegate = self
  
     }
     
@@ -125,8 +125,6 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
     func changeAvatarRequest() {
         
-        let container = ContainerController(modes: [.library, .photo])
-        container.editControllerDelegate = self
         
         // Include only Image from the users photo library
         container.libraryController.fetchPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)

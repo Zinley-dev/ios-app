@@ -32,7 +32,7 @@ class EditPhofileVC: UIViewController {
     @IBOutlet weak var coverImage: UIImageView!
     
     let backButton: UIButton = UIButton(type: .custom)
-    
+    let container = ContainerController(modes: [.library, .photo])
     var type = ""
     
     override func viewDidLoad() {
@@ -40,6 +40,7 @@ class EditPhofileVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupButtons()
+        container.editControllerDelegate = self
         
     }
     
@@ -197,9 +198,7 @@ extension EditPhofileVC {
     
     func requestImageUpdateForAvatar() {
         
-        let container = ContainerController(modes: [.library, .photo])
-        container.editControllerDelegate = self
-        
+
         // Include only Image from the users photo library
         container.libraryController.fetchPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
         // Include only Image from the users drafts
@@ -214,10 +213,6 @@ extension EditPhofileVC {
     }
     
     func requestImageUpdateForCover() {
-        
-        let container = ContainerController(modes: [.library, .photo])
-        container.editControllerDelegate = self
-        
         // Include only Image from the users photo library
         container.libraryController.fetchPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
         // Include only Image from the users drafts
