@@ -13,6 +13,7 @@ class NormalLoginVC: UIViewController {
     @IBOutlet weak var phoneBtn: UIButton!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var descLbl: UILabel!
+  
     let backButton: UIButton = UIButton(type: .custom)
     
     

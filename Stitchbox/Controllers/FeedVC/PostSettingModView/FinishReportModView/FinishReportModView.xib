@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FinishReportModView" customModule="Stitchbox" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="OOg-0J-MIg">
+            <rect key="frame" x="0.0" y="0.0" width="408" height="350"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="universal_theme" translatesAutoresizingMaskIntoConstraints="NO" id="rEv-Xe-eSb">
+                    <rect key="frame" x="0.0" y="-50" width="408" height="400"/>
+                </imageView>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="4iC-fL-o00">
+                    <rect key="frame" x="36" y="79" width="336" height="112"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="cKQ-jz-oCk">
+                            <rect key="frame" x="0.0" y="0.0" width="336" height="48"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thank you" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M0P-dC-Nsq">
+                                    <rect key="frame" x="0.0" y="0.0" width="336" height="24"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="for letting us know!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="icG-y9-h85">
+                                    <rect key="frame" x="0.0" y="24" width="336" height="24"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="pWy-mg-5ZQ">
+                            <rect key="frame" x="27.333333333333343" y="78" width="281.33333333333326" height="34"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qx9-u1-Rwa">
+                                    <rect key="frame" x="0.0" y="0.0" width="281.33333333333331" height="17"/>
+                                    <string key="text">Your feedback is very valuable in helping us
+</string>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="maintain the Stitchbox community safe!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KKz-di-WGo">
+                                    <rect key="frame" x="0.0" y="17" width="281.33333333333331" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="cKQ-jz-oCk" secondAttribute="trailing" id="PqW-Jc-xxP"/>
+                        <constraint firstItem="cKQ-jz-oCk" firstAttribute="leading" secondItem="4iC-fL-o00" secondAttribute="leading" id="Pt1-gq-RJb"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="CgN-I3-VSN"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="rEv-Xe-eSb" firstAttribute="top" secondItem="OOg-0J-MIg" secondAttribute="top" constant="-50" id="1RZ-Ec-RZg"/>
+                <constraint firstItem="rEv-Xe-eSb" firstAttribute="leading" secondItem="OOg-0J-MIg" secondAttribute="leading" id="7T6-O6-dVR"/>
+                <constraint firstAttribute="bottom" secondItem="rEv-Xe-eSb" secondAttribute="bottom" id="A59-0G-OFj"/>
+                <constraint firstItem="CgN-I3-VSN" firstAttribute="trailing" secondItem="4iC-fL-o00" secondAttribute="trailing" constant="36" id="ZHO-g3-oxH"/>
+                <constraint firstAttribute="trailing" secondItem="rEv-Xe-eSb" secondAttribute="trailing" id="f7R-9i-tyt"/>
+                <constraint firstItem="4iC-fL-o00" firstAttribute="leading" secondItem="OOg-0J-MIg" secondAttribute="leading" constant="36" id="p4E-u1-HoW"/>
+                <constraint firstItem="4iC-fL-o00" firstAttribute="top" secondItem="CgN-I3-VSN" secondAttribute="top" constant="20" id="zzX-Re-Ttq"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="269" y="148"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="universal_theme" width="780" height="628"/>
+    </resources>
+</document>
