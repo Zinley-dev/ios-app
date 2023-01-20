@@ -8,7 +8,7 @@
 import ObjectMapper
 class NotificationModel: Mappable {
     
-    private(set) var Highlight: Bool?
+    private(set) var Posts: Bool?
     private(set) var Challenge: Bool?
     private(set) var Comment: Bool?
     private(set) var Mention: Bool?
@@ -20,7 +20,7 @@ class NotificationModel: Mappable {
     }
     
     func mapping(map: Map) {
-        Highlight <- map["Highlight"]
+        Posts <- map["Highlight"]
         Challenge <- map["Challenge"]
         Comment <- map["Comment"]
         Mention <- map["Mention"]

@@ -28,6 +28,7 @@ struct APIManager {
     let SBmanager = Manager<ChatApi>()
     let searchManager = Manager<SearchApi>()
     let mediaManager = Manager<MediaAPI>()
+    let settingManager = Manager<SettingAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -126,24 +127,18 @@ struct APIManager {
           completion(result)
         }
     }
-}
-
-struct SettingAPIManager{
-    let manager = Manager<SettingAPI>()
     
     func getSettings(completion: @escaping APICompletion) {
-        manager.request(.getSettings){
+        settingManager.request(.getSettings){
             result in
             completion(result)
         }
     }
     
     func updateSettings(params: [String: Any], completion: @escaping APICompletion) {
-        manager.request(.updateSettings(params: params)){
+        settingManager.request(.updateSettings(params: params)){
             result in
             completion(result)
         }
     }
-
-    
 }

@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 import RxSwift
+import RxRelay
+import ObjectMapper
 
 class SettingViewModel: ViewModelProtocol {
     var input: Input
@@ -17,21 +19,20 @@ class SettingViewModel: ViewModelProtocol {
     var output: Output
     
     struct Input {
-        var allowChallenge: AnyObserver<Bool>
-        var allowDiscordLink: AnyObserver<Bool>
-        var autoMinimize: AnyObserver<Bool>
-        var autoPlaySound: AnyObserver<Bool>
-        var challengeNotification: AnyObserver<Bool>
-        var commentNotification: AnyObserver<Bool>
-        var followNotification: AnyObserver<Bool>
-        var highlightNotification: AnyObserver<Bool>
-        var mentionNotification: AnyObserver<Bool>
-        var messageNotification: AnyObserver<Bool>
+        var allowChallenge: BehaviorRelay<Bool>
+        var allowDiscordLink: BehaviorRelay<Bool>
+        var privateAccount: BehaviorRelay<Bool>
+        var autoPlaySound: BehaviorRelay<Bool>
+        var challengeNotification: BehaviorRelay<Bool>
+        var commentNotification: BehaviorRelay<Bool>
+        var followNotification: BehaviorRelay<Bool>
+        var postsNotification: BehaviorRelay<Bool>
+        var mentionNotification: BehaviorRelay<Bool>
+        var messageNotification: BehaviorRelay<Bool>
     }
     
     struct Action {
-        var logOutDidTap: AnyObserver<Void>
-        var edit: AnyObserver<Void>
+        var submitChange: AnyObserver<Void>
     }
     enum SuccessMessage {
         case logout
@@ -40,115 +41,60 @@ class SettingViewModel: ViewModelProtocol {
     }
     
     struct Output {
-        var allowChallenge: Observable<Bool>
-        var allowDiscordLink: Observable<Bool>
-        var autoMinimize: Observable<Bool>
-        var autoPlaySound: Observable<Bool>
-        var challengeNotification: Observable<Bool>
-        var commentNotification: Observable<Bool>
-        var followNotification: Observable<Bool>
-        var highlightNotification: Observable<Bool>
-        var mentionNotification: Observable<Bool>
-        var messageNotification: Observable<Bool>
-        var errorsObservable: Observable<Error>
-        var successObservable: Observable<SuccessMessage>
+        //        var errorsObservable: Observable<Error>
+        //        var successObservable: Observable<SuccessMessage>
     }
     
-    var allowChallengeSubject = PublishSubject<Bool>()
-    var allowDiscordLinkSubject = PublishSubject<Bool>()
-    var autoMinimizeSubject = PublishSubject<Bool>()
-    var autoPlaySoundSubject = PublishSubject<Bool>()
-    var challengeNotificationSubject = PublishSubject<Bool>()
-    var commentNotificationSubject = PublishSubject<Bool>()
-    var followNotificationSubject = PublishSubject<Bool>()
-    var highlightNotificationSubject = PublishSubject<Bool>()
-    var mentionNotificationSubject = PublishSubject<Bool>()
-    var messageNotificationSubject = PublishSubject<Bool>()
-    var logOutSubject = PublishSubject<Void>()
-    var editSubject = PublishSubject<Void>()
-    
-    var notificationObservable: Observable<[String:Any]>
-    var settingObservable: Observable<[String:Any]>
+    private let settingSubject = BehaviorRelay<SettingModel?>(value: Mapper<SettingModel>().map(JSON: [:]))
+    private let allowChallengeRelay = BehaviorRelay<Bool>(value: true)
+    private let allowDiscordLinkRelay = BehaviorRelay<Bool>(value: true)
+    private let privateAccountRelay = BehaviorRelay<Bool>(value: true)
+    private let autoPlaySoundRelay = BehaviorRelay<Bool>(value: true)
+    private let challengeNotificationRelay = BehaviorRelay<Bool>(value: true)
+    private let commentNotificationRelay = BehaviorRelay<Bool>(value: true)
+    private let followNotificationRelay = BehaviorRelay<Bool>(value: true)
+    private let postsNotificationRelay = BehaviorRelay<Bool>(value: true)
+    private let mentionNotificationRelay = BehaviorRelay<Bool>(value: true)
+    private let messageNotificationRelay = BehaviorRelay<Bool>(value: true)
     private let errorsSubject = PublishSubject<Error>()
     private let successSubject = PublishSubject<SuccessMessage>()
+    private let submitChangeSubject = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
     
     init() {
         input = Input(
-            allowChallenge: allowChallengeSubject.asObserver(),
-            allowDiscordLink: allowDiscordLinkSubject.asObserver(),
-            autoMinimize: autoMinimizeSubject.asObserver(),
-            autoPlaySound: autoPlaySoundSubject.asObserver(),
-            challengeNotification: challengeNotificationSubject.asObserver(),
-            commentNotification: commentNotificationSubject.asObserver(),
-            followNotification: followNotificationSubject.asObserver(),
-            highlightNotification:  highlightNotificationSubject.asObserver(),
-            mentionNotification:  mentionNotificationSubject.asObserver(),
-            messageNotification: messageNotificationSubject.asObserver()
+            allowChallenge: allowChallengeRelay,
+            allowDiscordLink: allowDiscordLinkRelay,
+            privateAccount: privateAccountRelay,
+            autoPlaySound: autoPlaySoundRelay,
+            challengeNotification: challengeNotificationRelay,
+            commentNotification: commentNotificationRelay,
+            followNotification: followNotificationRelay,
+            postsNotification:  postsNotificationRelay,
+            mentionNotification:  mentionNotificationRelay,
+            messageNotification: messageNotificationRelay
         )
         
         action = Action(
-            logOutDidTap: logOutSubject.asObserver(),
-            edit: editSubject.asObserver())
-        
-        output = Output(
-            allowChallenge: allowChallengeSubject.asObservable(),
-            allowDiscordLink: allowDiscordLinkSubject.asObservable(),
-            autoMinimize: autoMinimizeSubject.asObservable(),
-            autoPlaySound: autoPlaySoundSubject.asObservable(),
-            challengeNotification: challengeNotificationSubject.asObservable(),
-            commentNotification: commentNotificationSubject.asObservable(),
-            followNotification: followNotificationSubject.asObservable(),
-            highlightNotification:  highlightNotificationSubject.asObservable(),
-            mentionNotification:  mentionNotificationSubject.asObservable(),
-            messageNotification: messageNotificationSubject.asObservable(),
-            errorsObservable: errorsSubject.asObservable(),
-            successObservable: successSubject.asObservable()
+            submitChange: submitChangeSubject.asObserver()
         )
         
-        notificationObservable = Observable<[String:Any]>.combineLatest( commentNotificationSubject.asObservable(), followNotificationSubject.asObservable(), highlightNotificationSubject.asObservable(), mentionNotificationSubject.asObservable(), messageNotificationSubject.asObservable(),
-                                                               challengeNotificationSubject.asObservable()) {
-            ["comment": $0, "follow": $1, "highlight": $2,
-             "mention": $3, "message": $4, "challenge": $5]
-        }
-        settingObservable = Observable<[String:Any]>.combineLatest(
-            allowChallengeSubject.asObservable(),
-            allowDiscordLinkSubject.asObservable(),
-            autoPlaySoundSubject.asObservable(),
-            autoMinimizeSubject.asObservable(),
-            notificationObservable) {
-                ["allowChallenge": $0, "allowDiscordLink": $1,
-                 "autoPlaySound": $2, "autoMinimize": $3, "notifications": $4]}
-        
-        self.editSubject.asObservable()
-            .debounce(.milliseconds(3000), scheduler: MainScheduler.instance)
-            .withLatestFrom(settingObservable).subscribe(onNext: { params in
-            print(params)
-            SettingAPIManager().updateSettings(params: params) {
-                result in switch result {
-                case .success(let response):
-                    print(response)
-                    self.getAPISetting()
-                case .failure(let error):
-                    print(error)
-                    self.errorsSubject.onNext(error)
-                }
-            }
-        }, onError: { error in
-            self.errorsSubject.onNext(error)
-        }).disposed(by: disposeBag)
+        output = Output(
+            
+        )
         
         logic()
         getAPISetting()
-        
     }
+    
     func getAPISetting() {
-        SettingAPIManager().getSettings{
+        APIManager().getSettings{
             result in switch result {
             case .success(let response):
                 print(response)
-                let data = response.body!
-                self.populatePublishers(JSONObject: data)
+                if let data = response.body {
+                    self.settingSubject.accept(Mapper<SettingModel>().map(JSON: data))
+                }
             case .failure:
                 self.errorsSubject.onNext(NSError(domain: "Cannot get user's setting information", code: 400))
             }
@@ -157,32 +103,46 @@ class SettingViewModel: ViewModelProtocol {
     
     
     func logic() {
-        logOutSubject
-            .subscribe (onNext: { Void in
-                _AppCoreData.signOut()
-                self.successSubject.onNext(.logout)
-            }, onError: { (err) in
-                print("Error \(err.localizedDescription)")
-            }, onCompleted: {
-                print("Completed")
-            })
-            .disposed(by: disposeBag);
-    }
-    
-    func populatePublishers(JSONObject: [String: Any]) {
-        print(JSONObject)
-        self.allowChallengeSubject.onNext((JSONObject["AllowChallenge"] as! Int == 1))
-        self.allowDiscordLinkSubject.onNext((JSONObject["AllowDiscordLink"] as! Int == 1))
-        self.autoMinimizeSubject.onNext((JSONObject["AutoMinimize"] as! Int == 1))
-        self.autoPlaySoundSubject.onNext((JSONObject["AutoPlaySound"] as! Int == 1))
-        let notifications = JSONObject["Notifications"]! as! [String: Any]
-        self.challengeNotificationSubject.onNext((notifications["Challenge"] as! Int == 1))
-        self.commentNotificationSubject.onNext((notifications["Comment"] as! Int == 1))
-        self.followNotificationSubject.onNext((notifications["Follow"] as! Int == 1))
-        self.highlightNotificationSubject.onNext((notifications["Highlight"] as! Int == 1))
-        self.mentionNotificationSubject.onNext((notifications["Mention"] as! Int == 1))
-        self.messageNotificationSubject.onNext((notifications["Message"] as! Int == 1))
-        self.successSubject.onNext(.updateState)
-        
+        settingSubject.subscribe(onNext: {
+            settingObject in
+            self.allowChallengeRelay.accept(settingObject?.AllowChallenge ?? true)
+            self.allowDiscordLinkRelay.accept(settingObject?.AllowDiscordLink ?? true)
+            self.privateAccountRelay.accept(settingObject?.PrivateAccount ?? true)
+            self.autoPlaySoundRelay.accept(settingObject?.AutoPlaySound ?? true)
+            self.challengeNotificationRelay.accept(settingObject?.Notifications?.Challenge ?? true)
+            self.commentNotificationRelay.accept(settingObject?.Notifications?.Comment ?? true)
+            self.followNotificationRelay.accept(settingObject?.Notifications?.Follow ?? true)
+            self.postsNotificationRelay.accept(settingObject?.Notifications?.Posts ?? true)
+            self.mentionNotificationRelay.accept(settingObject?.Notifications?.Mention ?? true)
+            self.messageNotificationRelay.accept(settingObject?.Notifications?.Message ?? true)
+        }).disposed(by: disposeBag)
+
+        submitChangeSubject.subscribe{
+            _ in
+            let params = [
+                "allowChallenge": self.allowChallengeRelay.value,
+                "allowDiscordLink": self.allowDiscordLinkRelay.value,
+                "autoMinimize": self.privateAccountRelay.value,
+                "autoPlaySound": self.autoPlaySoundRelay.value,
+                "notifications": [
+                  "challenge": self.challengeNotificationRelay.value,
+                  "comment": self.commentNotificationRelay.value,
+                  "follow": self.followNotificationRelay.value,
+                  "highlight": self.postsNotificationRelay.value,
+                  "mention": self.mentionNotificationRelay.value,
+                  "message": self.messageNotificationRelay.value
+                ]
+              ]
+            print(params)
+            APIManager().updateSettings(params: params) {
+                result in switch result {
+                case .success(_):
+                    print("Setting API update success")
+                    self.getAPISetting()
+                case.failure(_):
+                        self.errorsSubject.onNext(NSError(domain: "Cannot update user's setting information", code: 400))
+                }
+            }
+        }.disposed(by: disposeBag)
     }
 }

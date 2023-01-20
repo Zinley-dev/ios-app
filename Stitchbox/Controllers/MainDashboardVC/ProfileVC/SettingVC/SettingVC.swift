@@ -7,9 +7,12 @@
 
 import UIKit
 import SafariServices
+import RxCocoa
+import RxSwift
 
-class SettingVC: UIViewController {
-
+class SettingVC: UIViewController, ControllerType {
+    
+    typealias ViewModelType = SettingViewModel
     
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -26,15 +29,33 @@ class SettingVC: UIViewController {
     @IBOutlet weak var SoundSwitch: UISwitch!
     @IBOutlet weak var StreamingLinkSwitch: UISwitch!
     @IBOutlet weak var PrivateAccountSwitch: UISwitch!
+    
+    let viewModel = SettingViewModel()
+    let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
+        bindUI(with: viewModel)
+        bindAction(with: viewModel)
+        viewModel.getAPISetting()
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupButtons()
+        viewModel.getAPISetting()
        
     }
-
+    override func viewWillDisappear(_ animated: Bool) {
+        viewModel.action.submitChange.on(.next(Void()))
+    }
+    func bindUI(with viewModel: SettingViewModel) {
+        
+        (SoundSwitch.rx.isOn <-> viewModel.input.autoPlaySound).disposed(by: disposeBag)
+        (StreamingLinkSwitch.rx.isOn <-> viewModel.input.allowDiscordLink).disposed(by: disposeBag)
+        (PrivateAccountSwitch.rx.isOn <-> viewModel.input.privateAccount).disposed(by: disposeBag)
+    }
     
+    func bindAction(with viewModel: SettingViewModel) {}
+
     @IBAction func referralBtnPressed(_ sender: Any) {
         
         if let MRVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MyReferralCodeVC") as? MyReferralCodeVC {
@@ -111,36 +132,16 @@ class SettingVC: UIViewController {
         
     }
     
-    @IBAction func logoutBtnPressed(_ sender: Any) {
+    @IBAction func logOutBtnPressed(_ sender: Any) {
         
-        
-
-        
-    }
-    
-    
-    @IBAction func soundSwitchPressed(_ sender: Any) {
-        
+        _AppCoreData.signOut()
+        if let LoginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartViewController") as? StartViewController {
+            self.navigationController?.pushViewController(LoginVC, animated: true)
+            
+        }
         
         
     }
-    
-    
-    
-    @IBAction func streamingLinkSwitchPressed(_ sender: Any) {
-        
-        
-        
-    }
-    
-    
-    @IBAction func privateAccountSwitchPressed(_ sender: Any) {
-        
-        
-        
-    }
-    
-    
     
 }
 
