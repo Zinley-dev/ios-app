@@ -226,7 +226,10 @@ extension ProfileViewController {
     
     @objc func fistBumpedTapped(_ sender: UIButton) {
         
-        print("fistBumpedTapped")
+        if let FBSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "FistBumpedStatVC") as? FistBumpedStatVC {
+            self.navigationController?.pushViewController(FBSVC, animated: true)
+            
+        }
         
     }
     
@@ -249,7 +252,10 @@ extension ProfileViewController {
     
     @objc func editCardTapped(_ sender: UIButton) {
         
-        print("editCardTapped")
+        if let ECCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditChallengeCardVC") as? EditChallengeCardVC {
+            self.navigationController?.pushViewController(ECCVC, animated: true)
+            
+        }
         
     }
     
