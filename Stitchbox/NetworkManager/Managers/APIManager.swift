@@ -24,49 +24,51 @@ enum Result {
 }
 
 struct APIManager {
-    let manager = Manager<UserApi>()
+    let authManager = Manager<AuthApi>()
     let SBmanager = Manager<ChatApi>()
     let searchManager = Manager<SearchApi>()
     let mediaManager = Manager<MediaAPI>()
     let settingManager = Manager<SettingAPI>()
+    let accountManager = Manager<AccountAPI>()
+    let userManager = Manager<UserAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
-        manager.request(.login(params: params)) { result in
+        authManager.request(.login(params: params)) { result in
             completion(result)
         }
     }
     
     func phoneLogin(phone: String, completion: @escaping APICompletion) {
         let params = ["phone": phone]
-        manager.request(.phonelogin(params: params)) { result in
+        authManager.request(.phonelogin(params: params)) { result in
             completion(result)
         }
     }
-  
+    
     func socialLogin(params: [String: String], completion: @escaping APICompletion) {
-      manager.request(.socialLogin(params: params)) { result in
-        completion(result)
-      }
+        authManager.request(.socialLogin(params: params)) { result in
+            completion(result)
+        }
     }
     
     func socialRegister(params: [String: String], completion: @escaping APICompletion) {
-      manager.request(.socialRegister(params: params)) { result in
-        completion(result)
-      }
-    }
-      
-    func phoneVerify(phone: String, OTP: String, completion: @escaping APICompletion) {
-        let params = ["phone": phone, "OTP": OTP]
-        manager.request(.phoneverify(params: params)) { result in
+        authManager.request(.socialRegister(params: params)) { result in
             completion(result)
         }
     }
-  
+    
+    func phoneVerify(phone: String, OTP: String, completion: @escaping APICompletion) {
+        let params = ["phone": phone, "OTP": OTP]
+        authManager.request(.phoneverify(params: params)) { result in
+            completion(result)
+        }
+    }
+    
     func register(params: [String: String], completion: @escaping APICompletion) {
-      manager.request(.register(params: params)) { result in
-          completion(result)
-      }
+        authManager.request(.register(params: params)) { result in
+            completion(result)
+        }
     }
     
     func roomIDRequest(channelUrl: String, completion: @escaping APICompletion) {
@@ -75,7 +77,7 @@ struct APIManager {
         SBmanager.request(.roomIDRequest(params: params)) { result in
             completion(result)
         }
-            
+        
         
     }
     
@@ -85,7 +87,7 @@ struct APIManager {
         SBmanager.request(.acceptSBInvitationRequest(params: params)) { result in
             completion(result)
         }
-            
+        
         
     }
     
@@ -96,7 +98,7 @@ struct APIManager {
         SBmanager.request(.channelCheckForInviation(params: params)) { result in
             completion(result)
         }
-            
+        
         
     }
     
@@ -108,23 +110,22 @@ struct APIManager {
         }
         
     }
-  
-  
-    func uploadImage(image: UIImage, completion: @escaping APICompletion) {
-      mediaManager.upload(.uploadImage, image: image) { result in
-        completion(result)
-      }
-    }
     
-  func forgotPasswordByEmail(params: [String: String], completion: @escaping APICompletion) {
-        manager.request(.forgotPasswordByEmail(params: params)) { result in
-          completion(result)
+    func uploadImage(image: UIImage, completion: @escaping APICompletion) {
+        mediaManager.upload(.uploadImage, image: image) { result in
+            completion(result)
         }
     }
-  
-  func forgotPasswordByPhone(params: [String: String], completion: @escaping APICompletion) {
-        manager.request(.forgotPasswordByPhone(params: params)) { result in
-          completion(result)
+    
+    func forgotPasswordByEmail(params: [String: String], completion: @escaping APICompletion) {
+        authManager.request(.forgotPasswordByEmail(params: params)) { result in
+            completion(result)
+        }
+    }
+    
+    func forgotPasswordByPhone(params: [String: String], completion: @escaping APICompletion) {
+        authManager.request(.forgotPasswordByPhone(params: params)) { result in
+            completion(result)
         }
     }
     
@@ -137,6 +138,82 @@ struct APIManager {
     
     func updateSettings(params: [String: Any], completion: @escaping APICompletion) {
         settingManager.request(.updateSettings(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    func getBlocks( completion: @escaping APICompletion) {
+        accountManager.request(.getBlocks){
+            result in
+            completion(result)
+        }
+    }
+    func insertBlocks(params: [String: Any], completion: @escaping APICompletion) {
+        accountManager.request(.insertBlocks(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    func deleteBlocks(params: [String: Any], completion: @escaping APICompletion) {
+        accountManager.request(.deleteBlocks(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    func getFollows( completion: @escaping APICompletion) {
+        accountManager.request(.getFollows){
+            result in
+            completion(result)
+        }
+    }
+    func getFollowers( completion: @escaping APICompletion) {
+        accountManager.request(.getFollowers){
+            result in
+            completion(result)
+        }
+    }
+    func insertFollows(params: [String: Any], completion: @escaping APICompletion) {
+        accountManager.request(.insertFollows(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    func deleteFollows(params: [String: Any], completion: @escaping APICompletion) {
+        accountManager.request(.deleteFollows(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    func getme(completion: @escaping APICompletion) {
+        userManager.request(.getme){
+            result in
+            completion(result)
+        }
+    }
+    
+    func updateme(params: [String: Any], completion: @escaping APICompletion) {
+        userManager.request(.updateme(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    
+    func changepassword(params: [String: Any], completion: @escaping APICompletion) {
+        userManager.request(.changepassword(params: params)){
+            result in
+            completion(result)
+        }
+    }
+    
+    func uploadcover(image: UIImage, completion: @escaping APICompletion) {
+        userManager.upload(.uploadcover, image: image) {
+            result in
+            completion(result)
+        }
+    }
+    
+    func uploadavatar(image: UIImage, completion: @escaping APICompletion) {
+        userManager.upload(.uploadavatar, image: image){
             result in
             completion(result)
         }

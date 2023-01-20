@@ -4,29 +4,21 @@
 //
 //  Created by Khoi Nguyen on 12/19/22.
 //
-
-import Foundation
-import Foundation
-import RxSwift
+import ObjectMapper
 
 
-struct SendBirdRoom : Codable {
-
-    // MARK: - Properties
-    var room_id: String
+struct SendBirdRoom : Mappable {
     
-    init(JSONbody: [String?: Any]?) throws {
+    
+    // MARK: - Properties
+    private(set) var room_id: String = ""
+    
+    init?(map: ObjectMapper.Map) {
         
-        if let data = JSONbody {
-            
-            self.room_id = data["room"] as? String ?? ""
-            
-        } else {
-            
-            self.room_id =  ""
-           
-        }
-
+    }
+    
+    mutating func mapping(map: ObjectMapper.Map) {
+        room_id <- map["room"]
     }
         
 }

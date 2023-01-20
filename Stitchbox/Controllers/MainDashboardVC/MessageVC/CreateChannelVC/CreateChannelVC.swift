@@ -8,6 +8,7 @@
 import UIKit
 import SendBirdUIKit
 import SendBirdSDK
+import ObjectMapper
 
 class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
     
@@ -336,14 +337,10 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
 
                 var newUserList = [SBUUser]()
                 for user in data {
-                    do {
-                        let preloadUser = try SendBirdUser(JSONbody: user)
-                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
-                        if !self.searchUserList.contains(where: { $0.userId == user.userId }) {
-                            newUserList.append(user)
-                        }
-                    } catch {
-                        print("Can't catch user")
+                    let preloadUser =  Mapper<SendBirdUser>().map(JSONObject: user)
+                    let user = SBUUser(userId: preloadUser?.userID ?? "", nickname: preloadUser?.username ?? "", profileUrl: preloadUser?.avatar ?? "")
+                    if !self.searchUserList.contains(where: { $0.userId == user.userId }) {
+                        newUserList.append(user)
                     }
                 }
 
@@ -369,15 +366,12 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
 
                 var newUserList = [SBUUser]()
                 for user in data {
-                    do {
-                        let preloadUser = try SendBirdUser(JSONbody: user)
-                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
-                        if !self.userList.contains(where: { $0.userId == user.userId }) {
-                            newUserList.append(user)
-                        }
-                    } catch {
-                        print("Can't catch user")
+                    let preloadUser =  Mapper<SendBirdUser>().map(JSONObject: user)
+                    let user = SBUUser(userId: preloadUser?.userID ?? "", nickname: preloadUser?.username ?? "", profileUrl: preloadUser?.avatar ?? "")
+                    if !self.userList.contains(where: { $0.userId == user.userId }) {
+                        newUserList.append(user)
                     }
+                   
                 }
 
                 self.userList = newUserList

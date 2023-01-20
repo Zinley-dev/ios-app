@@ -146,8 +146,8 @@ extension MyReferralCodeVC {
             print("Sendbird: Can't get userUID")
             return
         }
-        
-        if let code = userDataSource.referralCode, code != "" {
+        let code = userDataSource.referralCode
+        if code != "" {
             referralCode.setTitle(code, for: .normal)
         }
         
