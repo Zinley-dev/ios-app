@@ -13,7 +13,7 @@ import AlamofireImage
 import Alamofire
 
 class MyReferralCodeVC: UIViewController {
-
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     @IBOutlet weak var avatarImage: UIImageView!
@@ -37,26 +37,28 @@ class MyReferralCodeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         setupPolicyLabel()
         getDefaultCode()
+        referralCode?.titleLabel?.text = _AppCoreData.userDataSource.value?.referralCode
+        if let avatarURL = _AppCoreData.userDataSource.value?.avatarURL {
+            avatarImage?.downloaded(from: avatarURL, contentMode: .scaleAspectFill)
+        }
         
     }
     
     @IBAction func referralCodePressed(_ sender: Any) {
-        
-        
         showNote(text: "Referral code copied")
-        
+        UIPasteboard.general.string = _AppCoreData.userDataSource.value?.referralCode ?? ""
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        
         showNote(text: "Referral code copied")
+        UIPasteboard.general.string = _AppCoreData.userDataSource.value?.referralCode ?? ""
         
     }
     
@@ -71,8 +73,8 @@ extension MyReferralCodeVC: ZSWTappableLabelTapDelegate {
         let options = ZSWTaggedStringOptions()
         options["link"] = .dynamic({ tagName, tagAttributes, stringAttributes in
             guard let typeString = tagAttributes["type"] as? String,
-                let type = LinkType(rawValue: typeString) else {
-                    return [NSAttributedString.Key: AnyObject]()
+                  let type = LinkType(rawValue: typeString) else {
+                return [NSAttributedString.Key: AnyObject]()
             }
             
             return [
@@ -84,7 +86,7 @@ extension MyReferralCodeVC: ZSWTappableLabelTapDelegate {
                 MyReferralCodeVC.URLAttributeName: type.URL
             ]
         })
-
+        
         
         let string = NSLocalizedString("<link type='Privacy'>Learn more about the Stitchbox referral program</link>.", comment: "")
         
@@ -95,7 +97,7 @@ extension MyReferralCodeVC: ZSWTappableLabelTapDelegate {
     
     
     func tappableLabel(_ tappableLabel: ZSWTappableLabel, tappedAt idx: Int, withAttributes attributes: [NSAttributedString.Key : Any] = [:]) {
-       
+        
         guard let URL = attributes[MyReferralCodeVC.URLAttributeName] as? URL else {
             return
         }
@@ -117,7 +119,7 @@ extension MyReferralCodeVC {
     func setupButtons() {
         
         setupBackButton()
-       
+        
     }
     
     func setupBackButton() {
@@ -131,9 +133,9 @@ extension MyReferralCodeVC {
         backButton.setTitle("     Referral Code", for: .normal)
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+        
     }
     
     
@@ -150,7 +152,7 @@ extension MyReferralCodeVC {
         }
         
     }
-
+    
     
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
