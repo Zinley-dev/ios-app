@@ -41,9 +41,9 @@ class SettingVC: UIViewController, ControllerType {
 
         // Do any additional setup after loading the view.
         setupButtons()
-        viewModel.getAPISetting()
        
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         viewModel.action.submitChange.on(.next(Void()))
     }

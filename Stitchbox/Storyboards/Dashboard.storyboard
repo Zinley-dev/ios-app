@@ -3672,9 +3672,6 @@ Rodriguez</string>
                                         <real key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="saveBtnPressed:" destination="nlR-nX-R6y" eventType="touchUpInside" id="3PW-9F-7d7"/>
-                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="iaP-N8-P4d"/>

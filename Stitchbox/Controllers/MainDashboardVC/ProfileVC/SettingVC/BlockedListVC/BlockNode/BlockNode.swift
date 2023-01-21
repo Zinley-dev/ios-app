@@ -75,8 +75,7 @@ class BlockNode: ASCellNode {
         
         
         desc = "Block"
-
-        loadInfo(uid: user.Block_uid)
+        loadInfo(uid: user.blockId)
         
         
     }
