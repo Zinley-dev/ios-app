@@ -216,11 +216,21 @@ extension ProfileViewController {
         
         print("followersTapped")
         
+        if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            self.navigationController?.pushViewController(MFVC, animated: true)
+            
+        }
+        
     }
     
     @objc func followingTapped(_ sender: UIButton) {
-        
+        //MainFollowVC
        print("followingTapped")
+        
+        if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            self.navigationController?.pushViewController(MFVC, animated: true)
+            
+        }
         
     }
     
@@ -235,7 +245,7 @@ extension ProfileViewController {
     
     @objc func discordTapped(_ sender: UIButton) {
         
-        print("discordTapped")
+        print("discordTapped - open link discord if have unless ask let user input their discord link")
         
     }
     

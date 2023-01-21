@@ -88,6 +88,7 @@
 		6A1235A5295034BD004B612E /* InviteUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235A4295034BD004B612E /* InviteUserVC.swift */; };
 		6A1235AA295034FF004B612E /* GroupCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235A9295034FF004B612E /* GroupCallViewController.swift */; };
 		6A1235AC2950351C004B612E /* GroupNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235AB2950351C004B612E /* GroupNode.swift */; };
+		6A3F0A56297B6A9000366665 /* MainFollowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A55297B6A9000366665 /* MainFollowVC.swift */; };
 		6A495E3D297666EA001895C3 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A495E3C297666EA001895C3 /* SettingVC.swift */; };
 		6A58EA46294E997A005FA3CD /* GroupChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */; };
 		6A58EA4D294EB280005FA3CD /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */; };
@@ -348,6 +349,7 @@
 		6A1235A4295034BD004B612E /* InviteUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUserVC.swift; sourceTree = "<group>"; };
 		6A1235A9295034FF004B612E /* GroupCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCallViewController.swift; sourceTree = "<group>"; };
 		6A1235AB2950351C004B612E /* GroupNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupNode.swift; sourceTree = "<group>"; };
+		6A3F0A55297B6A9000366665 /* MainFollowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFollowVC.swift; sourceTree = "<group>"; };
 		6A495E3C297666EA001895C3 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChannelTableViewCell.swift; sourceTree = "<group>"; };
 		6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
@@ -1076,6 +1078,14 @@
 			path = PhoneLogin;
 			sourceTree = "<group>";
 		};
+		6A3F0A54297B6A7500366665 /* FollowVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A3F0A55297B6A9000366665 /* MainFollowVC.swift */,
+			);
+			path = FollowVC;
+			sourceTree = "<group>";
+		};
 		6A495E392976596E001895C3 /* SettingVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -1283,6 +1293,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A3F0A54297B6A7500366665 /* FollowVC */,
 				6AEA74F329680312005C802B /* ProfileVC */,
 				6AEA74F2296802BD005C802B /* FeedVC */,
 				A5DF81FB295D3FD000E8DDB8 /* SearchVC */,
@@ -2199,6 +2210,7 @@
 				6A6C30E82964035A0070167A /* OperatorMemberVC.swift in Sources */,
 				6A66277429655D2400A4488B /* Session+TypeAlias.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
+				6A3F0A56297B6A9000366665 /* MainFollowVC.swift in Sources */,
 				6AAD7A36294C6637003E3AB6 /* DialError.swift in Sources */,
 				6AE1CE6B294D698300B1C435 /* CreateChannelVC.swift in Sources */,
 				A5DF81F9295C248A00E8DDB8 /* MemberListVC.swift in Sources */,

@@ -2573,6 +2573,21 @@
             </objects>
             <point key="canvasLocation" x="3863" y="3089"/>
         </scene>
+        <!--Main FollowVC-->
+        <scene sceneID="dC4-oo-xgp">
+            <objects>
+                <viewController storyboardIdentifier="MainFollowVC" id="zHf-wP-Fja" customClass="MainFollowVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rCL-RS-9Q9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="ONJ-cn-AYk"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UZ5-EU-VJG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4734" y="3083"/>
+        </scene>
         <!--Create ChannelVC-->
         <scene sceneID="se9-Bu-6kn">
             <objects>
