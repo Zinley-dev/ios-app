@@ -20,7 +20,15 @@ class ChallengeCard: UIView {
     @IBOutlet var contentView: UIView!
     @IBOutlet weak var infoLbl: UILabel!
     
+    @IBOutlet weak var game4: UIButton!
+    @IBOutlet weak var game3: UIButton!
+    @IBOutlet weak var game2: UIButton!
+    @IBOutlet weak var game1: UIButton!
     let kCONTENT_XIB_NAME = "ChallengeCard"
+    
+    @IBOutlet weak var gameWidth: NSLayoutConstraint!
+    @IBOutlet weak var gameHeight: NSLayoutConstraint!
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,6 +44,17 @@ class ChallengeCard: UIView {
 
         Bundle.main.loadNibNamed(kCONTENT_XIB_NAME, owner: self, options: nil)
         contentView.fixInView(self)
+        setupButtons()
+        
     }
+    
+    func setupButtons() {
+        
+        game1.setTitle("", for: .normal)
+        game2.setTitle("", for: .normal)
+        game3.setTitle("", for: .normal)
+        game4.setTitle("", for: .normal)
 
+    }
+    
 }

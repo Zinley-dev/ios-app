@@ -108,6 +108,9 @@ extension FindFriendsVC {
         store.requestAccess(for: .contacts) { (granted, error) in
             if let error = error {
                 print("failed to request access", error)
+                if error._code == 100 {
+                    self.showErrorAlert("Oops!", msg: "You have denied to grant permission to access contacts before. Please turn it on manually in your phone settings.")
+                }
                 return
             }
             if granted {
@@ -305,6 +308,21 @@ extension FindFriendsVC {
         }
         
         controller.dismiss(animated: true)
+        
+    }
+    
+}
+
+extension FindFriendsVC {
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
         
     }
     

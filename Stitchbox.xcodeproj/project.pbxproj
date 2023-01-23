@@ -72,8 +72,6 @@
 		6A0CF64E296E2F0200155889 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF64C296E2F0200155889 /* ProfileView.swift */; };
 		6A0D541B296E4E840059530C /* ChallengeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D5419296E4E840059530C /* ChallengeCard.swift */; };
 		6A0D541C296E4E840059530C /* ChallengeCard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A0D541A296E4E840059530C /* ChallengeCard.xib */; };
-		6A0D5437297241820059530C /* ProfilePostsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D5436297241820059530C /* ProfilePostsHeaderView.swift */; };
-		6A0D5439297241960059530C /* ProfilePostsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A0D5438297241960059530C /* ProfilePostsHeaderView.xib */; };
 		6A0D543B297241D30059530C /* InstantiatesFromNib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D543A297241D30059530C /* InstantiatesFromNib.swift */; };
 		6A0D543E297242140059530C /* JokeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D543C297242140059530C /* JokeProtocol.swift */; };
 		6A0D543F297242140059530C /* CellFromNib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D543D297242140059530C /* CellFromNib.swift */; };
@@ -90,6 +88,8 @@
 		6A1235A5295034BD004B612E /* InviteUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235A4295034BD004B612E /* InviteUserVC.swift */; };
 		6A1235AA295034FF004B612E /* GroupCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235A9295034FF004B612E /* GroupCallViewController.swift */; };
 		6A1235AC2950351C004B612E /* GroupNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235AB2950351C004B612E /* GroupNode.swift */; };
+		6A3F0A56297B6A9000366665 /* MainFollowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A55297B6A9000366665 /* MainFollowVC.swift */; };
+		6A3F0A59297B789400366665 /* EditSloganVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A58297B789400366665 /* EditSloganVC.swift */; };
 		6A495E3D297666EA001895C3 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A495E3C297666EA001895C3 /* SettingVC.swift */; };
 		6A58EA46294E997A005FA3CD /* GroupChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */; };
 		6A58EA4D294EB280005FA3CD /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */; };
@@ -203,6 +203,11 @@
 		6AF9733B2978FDAC00C76814 /* EditBioVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF9733A2978FDAC00C76814 /* EditBioVC.swift */; };
 		6AF9733F297A323500C76814 /* EditChallengeCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF9733E297A323500C76814 /* EditChallengeCardVC.swift */; };
 		6AF97341297A324600C76814 /* FistBumpedStatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF97340297A324600C76814 /* FistBumpedStatVC.swift */; };
+		6AF97345297B5A2A00C76814 /* BadgesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF97343297B5A2A00C76814 /* BadgesHeaderView.swift */; };
+		6AF97346297B5A2A00C76814 /* BadgesHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF97344297B5A2A00C76814 /* BadgesHeaderView.xib */; };
+		6AF97349297B5A7500C76814 /* ProfilePostsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF97347297B5A7500C76814 /* ProfilePostsHeaderView.xib */; };
+		6AF9734A297B5A7500C76814 /* ProfilePostsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF97348297B5A7500C76814 /* ProfilePostsHeaderView.swift */; };
+		6AF9734C297B5B7500C76814 /* badgeThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF9734B297B5B7500C76814 /* badgeThumbnail.swift */; };
 		729C38E660CB3C0171E1FD05 /* Pods_StitchboxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 621B4D3F180196D0C4FB48E5 /* Pods_StitchboxTests.framework */; };
 		A5346488294B09B300FB6A94 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5346487294B09B300FB6A94 /* ProfileViewController.swift */; };
 		A540A8D2294721190085CC45 /* GoogleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D1294721190085CC45 /* GoogleSignInService.swift */; };
@@ -329,8 +334,6 @@
 		6A0CF64C296E2F0200155889 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		6A0D5419296E4E840059530C /* ChallengeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChallengeCard.swift; sourceTree = "<group>"; };
 		6A0D541A296E4E840059530C /* ChallengeCard.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChallengeCard.xib; sourceTree = "<group>"; };
-		6A0D5436297241820059530C /* ProfilePostsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePostsHeaderView.swift; sourceTree = "<group>"; };
-		6A0D5438297241960059530C /* ProfilePostsHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfilePostsHeaderView.xib; sourceTree = "<group>"; };
 		6A0D543A297241D30059530C /* InstantiatesFromNib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstantiatesFromNib.swift; sourceTree = "<group>"; };
 		6A0D543C297242140059530C /* JokeProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JokeProtocol.swift; sourceTree = "<group>"; };
 		6A0D543D297242140059530C /* CellFromNib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellFromNib.swift; sourceTree = "<group>"; };
@@ -347,6 +350,8 @@
 		6A1235A4295034BD004B612E /* InviteUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUserVC.swift; sourceTree = "<group>"; };
 		6A1235A9295034FF004B612E /* GroupCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCallViewController.swift; sourceTree = "<group>"; };
 		6A1235AB2950351C004B612E /* GroupNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupNode.swift; sourceTree = "<group>"; };
+		6A3F0A55297B6A9000366665 /* MainFollowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFollowVC.swift; sourceTree = "<group>"; };
+		6A3F0A58297B789400366665 /* EditSloganVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSloganVC.swift; sourceTree = "<group>"; };
 		6A495E3C297666EA001895C3 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChannelTableViewCell.swift; sourceTree = "<group>"; };
 		6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
@@ -461,6 +466,11 @@
 		6AF9733A2978FDAC00C76814 /* EditBioVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBioVC.swift; sourceTree = "<group>"; };
 		6AF9733E297A323500C76814 /* EditChallengeCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditChallengeCardVC.swift; path = "../../../../../../../.Trash/ios-app 8.14.35 PM/Stitchbox/Controllers/MainDashboardVC/ProfileVC/EditBioVC/EditChallengeCardVC.swift"; sourceTree = "<group>"; };
 		6AF97340297A324600C76814 /* FistBumpedStatVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FistBumpedStatVC.swift; path = ../../../../../../../FistBumpedStatVC.swift; sourceTree = "<group>"; };
+		6AF97343297B5A2A00C76814 /* BadgesHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BadgesHeaderView.swift; path = Stitchbox/Layout/Profile/ProfilePostsHeaderView/BadgesHeaderView.swift; sourceTree = SOURCE_ROOT; };
+		6AF97344297B5A2A00C76814 /* BadgesHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BadgesHeaderView.xib; path = Stitchbox/Layout/Profile/ProfilePostsHeaderView/BadgesHeaderView.xib; sourceTree = SOURCE_ROOT; };
+		6AF97347297B5A7500C76814 /* ProfilePostsHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfilePostsHeaderView.xib; sourceTree = "<group>"; };
+		6AF97348297B5A7500C76814 /* ProfilePostsHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePostsHeaderView.swift; sourceTree = "<group>"; };
+		6AF9734B297B5B7500C76814 /* badgeThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = badgeThumbnail.swift; path = "../../../../../.Trash/ios-app 8.14.35 PM/Stitchbox/Models/Profile/badgeThumbnail.swift"; sourceTree = "<group>"; };
 		7E27C75040E4A23C57202C52 /* Pods-StitchboxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.release.xcconfig"; sourceTree = "<group>"; };
 		857111BDD76B0185C5183F7E /* Pods-StitchboxUnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.debug.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A5346487294B09B300FB6A94 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -933,6 +943,7 @@
 			isa = PBXGroup;
 			children = (
 				6A0D5440297244A20059530C /* ImageViewCell.swift */,
+				6AF97342297B5A1800C76814 /* BadgesHeaderView */,
 				6A0D5435297241580059530C /* ProfilePostsHeaderView */,
 			);
 			path = Profile;
@@ -941,8 +952,8 @@
 		6A0D5435297241580059530C /* ProfilePostsHeaderView */ = {
 			isa = PBXGroup;
 			children = (
-				6A0D5438297241960059530C /* ProfilePostsHeaderView.xib */,
-				6A0D5436297241820059530C /* ProfilePostsHeaderView.swift */,
+				6AF97348297B5A7500C76814 /* ProfilePostsHeaderView.swift */,
+				6AF97347297B5A7500C76814 /* ProfilePostsHeaderView.xib */,
 			);
 			path = ProfilePostsHeaderView;
 			sourceTree = "<group>";
@@ -960,6 +971,7 @@
 			isa = PBXGroup;
 			children = (
 				6A0D545429750F8E0059530C /* postThumbnail.swift */,
+				6AF9734B297B5B7500C76814 /* badgeThumbnail.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1066,6 +1078,22 @@
 				395477BC294D6BCA008EED97 /* LoginByPhoneVerifyController.swift */,
 			);
 			path = PhoneLogin;
+			sourceTree = "<group>";
+		};
+		6A3F0A54297B6A7500366665 /* FollowVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A3F0A55297B6A9000366665 /* MainFollowVC.swift */,
+			);
+			path = FollowVC;
+			sourceTree = "<group>";
+		};
+		6A3F0A57297B787D00366665 /* EditSloganVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A3F0A58297B789400366665 /* EditSloganVC.swift */,
+			);
+			path = EditSloganVC;
 			sourceTree = "<group>";
 		};
 		6A495E392976596E001895C3 /* SettingVC */ = {
@@ -1275,6 +1303,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A3F0A54297B6A7500366665 /* FollowVC */,
 				6AEA74F329680312005C802B /* ProfileVC */,
 				6AEA74F2296802BD005C802B /* FeedVC */,
 				A5DF81FB295D3FD000E8DDB8 /* SearchVC */,
@@ -1730,9 +1759,19 @@
 		6AF9733D297A321C00C76814 /* EditChallengeCardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A3F0A57297B787D00366665 /* EditSloganVC */,
 				6AF9733E297A323500C76814 /* EditChallengeCardVC.swift */,
 			);
 			path = EditChallengeCardVC;
+			sourceTree = "<group>";
+		};
+		6AF97342297B5A1800C76814 /* BadgesHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				6AF97343297B5A2A00C76814 /* BadgesHeaderView.swift */,
+				6AF97344297B5A2A00C76814 /* BadgesHeaderView.xib */,
+			);
+			path = BadgesHeaderView;
 			sourceTree = "<group>";
 		};
 		7314760A83549794B5D020AC /* Pods */ = {
@@ -1929,9 +1968,10 @@
 				390FD7442909264E0068B883 /* LaunchScreen.storyboard in Resources */,
 				6AAD7A27294C65F6003E3AB6 /* Dialing.mp3 in Resources */,
 				390FD7412909264E0068B883 /* Assets.xcassets in Resources */,
+				6AF97349297B5A7500C76814 /* ProfilePostsHeaderView.xib in Resources */,
+				6AF97346297B5A2A00C76814 /* BadgesHeaderView.xib in Resources */,
 				395477B1293FC524008EED97 /* bg.mp4 in Resources */,
 				6AAD7A6A294C69B1003E3AB6 /* README.md in Resources */,
-				6A0D5439297241960059530C /* ProfilePostsHeaderView.xib in Resources */,
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
 				14FADBBD2978418300E0A741 /* ReportFurtherInfoModView.xib in Resources */,
 				6AAD7A6B294C69B1003E3AB6 /* LICENSE in Resources */,
@@ -2166,13 +2206,13 @@
 				6A58EA53294EB301005FA3CD /* CacheConfig.swift in Sources */,
 				6A66277E2965772200A4488B /* HTTPTask.swift in Sources */,
 				6AEC690429517EA9000393D8 /* SwiftLoader.swift in Sources */,
+				6AF9734C297B5B7500C76814 /* badgeThumbnail.swift in Sources */,
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				A540A8D6294730C40085CC45 /* FacebookSignInService.swift in Sources */,
 				6A6C30E42964032C0070167A /* MutedMemberVC.swift in Sources */,
 				14FAEE06294DEE0B00C20B99 /* SettingViewModel.swift in Sources */,
 				A5DF81F7295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift in Sources */,
 				6A0D544A2974F3F10059530C /* ChallengeCardHeaderData.swift in Sources */,
-				6A0D5437297241820059530C /* ProfilePostsHeaderView.swift in Sources */,
 				6A6C30FE2964156E0070167A /* UnmutedUserModView.swift in Sources */,
 				6AAD7A2D294C6624003E3AB6 /* SendBirdCall+QuickStart.swift in Sources */,
 				6AAD7A05294C53EC003E3AB6 /* ModView.swift in Sources */,
@@ -2181,6 +2221,7 @@
 				6A6C30E82964035A0070167A /* OperatorMemberVC.swift in Sources */,
 				6A66277429655D2400A4488B /* Session+TypeAlias.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
+				6A3F0A56297B6A9000366665 /* MainFollowVC.swift in Sources */,
 				6AAD7A36294C6637003E3AB6 /* DialError.swift in Sources */,
 				6AE1CE6B294D698300B1C435 /* CreateChannelVC.swift in Sources */,
 				A5DF81F9295C248A00E8DDB8 /* MemberListVC.swift in Sources */,
@@ -2251,10 +2292,13 @@
 				6A9E4C782977AF4500B59176 /* ContactUsVC.swift in Sources */,
 				6AAD7A42294C6642003E3AB6 /* ImageCache.swift in Sources */,
 				14C067682956EC4F002C79AE /* ReferralCodeViewController.swift in Sources */,
+				6A3F0A59297B789400366665 /* EditSloganVC.swift in Sources */,
 				A59CB3ED294ADA4700D84D9A /* ApplicationMacros.swift in Sources */,
 				147187F32920D2830039B89E /* LoginByPhoneViewModel.swift in Sources */,
 				A548E5A529555C2300E9C971 /* LoadingViewController.swift in Sources */,
 				6AAD7A63294C699E003E3AB6 /* DispatchQueue+Extensions.swift in Sources */,
+				6AF97345297B5A2A00C76814 /* BadgesHeaderView.swift in Sources */,
+				6AF9734A297B5A7500C76814 /* ProfilePostsHeaderView.swift in Sources */,
 				6A0D545529750F8E0059530C /* postThumbnail.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
 				6A66277D2965772200A4488B /* HTTPMethod.swift in Sources */,
