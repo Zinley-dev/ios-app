@@ -6,8 +6,15 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ProfileViewController: UIViewController {
+    typealias ViewModelType = ProfileViewModel
+    // MARK: - Properties
+    private var viewModel: ViewModelType! = ViewModelType()
+    private let disposeBag = DisposeBag()
+
     
     enum Section: Hashable {
         case header
@@ -40,6 +47,25 @@ class ProfileViewController: UIViewController {
         return ChallengeCardHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
     }
     
+    func bindingUI() {
+        viewModel.output.followersObservable.subscribe(onNext: { count in
+            let indexPath = IndexPath(item: 0, section: 0);
+            DispatchQueue.main.async {
+                if let cell = self.datasource.itemIdentifier(for: indexPath) {
+                    if case .header(var param) = cell {
+                        param.postCount = count
+                        var snapshot = self.datasource.snapshot()
+                        // replace item
+                        snapshot.insertItems([.header(param)], beforeItem: cell)
+                        snapshot.deleteItems([cell])
+                        // update datasource
+                        self.datasource.apply(snapshot)
+                    }
+                }
+            }
+        })
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -63,6 +89,7 @@ class ProfileViewController: UIViewController {
         configureDatasource()
         setupChallengeView()
         wireDelegate()
+        bindingUI()
     }
     
     
@@ -70,6 +97,8 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        // Load follwer, follwing
+        viewModel.getFollowers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -87,9 +116,27 @@ class ProfileViewController: UIViewController {
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell {
         switch item {
-        case .header(_):
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileHeaderCell.reuseIdentifier, for: indexPath) as? ProfileHeaderCell {
+        case .header(let param):
                 
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileHeaderCell.reuseIdentifier, for: indexPath) as? ProfileHeaderCell {
+                print("-------------HEADER-------------")
+                print(indexPath)
+                // display username
+                if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
+                    cell.usernameLbl.text = username
+                }
+                if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+                    let url = URL(string: avatarUrl)
+                    cell.avatarImage.load(url: url!)
+                }
+                if let coverUrl = _AppCoreData.userDataSource.value?.coverURL, coverUrl != "" {
+                    let url = URL(string: coverUrl)
+                    cell.coverImage.load(url: url!)
+                }
+                
+                cell.numberOfFollowers.text = "\(param.postCount)"
+                
+              
                 // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
                 cell.followersBtn.addTarget(self, action: #selector(followersTapped), for: .touchUpInside)

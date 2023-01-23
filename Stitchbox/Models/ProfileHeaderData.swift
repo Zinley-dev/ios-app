@@ -8,7 +8,7 @@
 import Foundation
 
 struct ProfileHeaderData: Hashable {
-    let name: String
-    let accountType: String
-    let postCount: Int
+    var name: String
+    var accountType: String
+    var postCount: Int
 }

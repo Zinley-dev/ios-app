@@ -28,6 +28,8 @@ struct APIManager {
     let SBmanager = Manager<ChatApi>()
     let searchManager = Manager<SearchApi>()
     let mediaManager = Manager<MediaAPI>()
+    let followManager = Manager<FollowApi>()
+
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -128,6 +130,21 @@ struct APIManager {
     }
 }
 
+extension APIManager {
+    
+    func getFollower(completion: @escaping APICompletion) {
+        followManager.request(.follow) { result in
+            completion(result)
+        }
+    }
+    
+    func getFollowing(completion: @escaping APICompletion) {
+        followManager.request(.followers) { result in
+            completion(result)
+        }
+    }
+}
+
 struct SettingAPIManager{
     let manager = Manager<SettingAPI>()
     
@@ -147,3 +164,5 @@ struct SettingAPIManager{
 
     
 }
+
+

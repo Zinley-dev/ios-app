@@ -24,6 +24,51 @@ extension APIBuilder: BaseURL {
         return "\(APIBuilder.APIBuilderConstants.ApiScheme)://\(APIBuilder.APIBuilderConstants.ApiHost)"
     }
 }
+
+public enum FollowApi {
+    case follow
+    case followers
+}
+
+extension FollowApi: EndPointType {
+    var task: HTTPTask {
+        switch self {
+            case .follow:
+                return .request
+            case .followers:
+                return .request
+        }
+    }
+    
+    var headers: [String : String]? {
+        if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
+            let headers = ["Authorization": userToken]
+            return headers
+        }
+        return nil
+    }
+    
+    var module: String {
+        return "/follow"
+    }
+    var path: String {
+        switch self {
+            case .follow:
+                return "/"
+            case .followers:
+                return "/followers"
+        }
+    }
+    var httpMethod: HTTPMethod {
+        switch self {
+            case .follow:
+                return .get
+            case .followers:
+                return .get
+        }
+    }
+}
+
 public enum UserApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
