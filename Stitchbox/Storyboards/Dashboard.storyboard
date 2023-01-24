@@ -4772,7 +4772,7 @@ Rodriguez</string>
             <objects>
                 <viewController storyboardIdentifier="PostVC" modalPresentationStyle="fullScreen" id="4y3-y0-ROG" customClass="PostVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OI4-v2-71V">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="755"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="b6e-ts-mOe"/>
                         <color key="backgroundColor" name="Background"/>
@@ -5270,26 +5270,11 @@ Rodriguez</string>
                     <view key="view" contentMode="scaleToFill" id="XNC-2q-Vo8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Noneúe" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hmu-Uu-alB">
-                                <rect key="frame" x="146.66666666666666" y="350" width="82" height="29"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="cdT-qf-TUI"/>
                         <color key="backgroundColor" name="Background"/>
-                        <constraints>
-                            <constraint firstItem="Hmu-Uu-alB" firstAttribute="centerX" secondItem="XNC-2q-Vo8" secondAttribute="centerX" id="vN9-Gw-X8n"/>
-                            <constraint firstItem="Hmu-Uu-alB" firstAttribute="centerY" secondItem="XNC-2q-Vo8" secondAttribute="centerY" id="xHy-xv-Ivi"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" selectedImage="4x_add" id="gS6-OX-2fH"/>
                     <navigationItem key="navigationItem" id="5of-K2-ZzJ"/>
-                    <connections>
-                        <segue destination="nV2-3t-gMd" kind="show" identifier="moveToPostVC" id="TfO-Wf-gjh"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pZH-B8-jO7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -6141,10 +6126,10 @@ Rodriguez</string>
             </objects>
             <point key="canvasLocation" x="508.69565217391306" y="4555.5803571428569"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Post NavVC-->
         <scene sceneID="laf-c8-cVW">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="nV2-3t-gMd" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="PostNavVC" automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="nV2-3t-gMd" customClass="PostNavVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="5yK-Ra-Yb8"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="TUn-re-4sw">

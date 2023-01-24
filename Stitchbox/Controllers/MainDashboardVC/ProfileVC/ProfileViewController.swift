@@ -65,9 +65,7 @@ class ProfileViewController: UIViewController {
         configureDatasource()
         wireDelegate()
         
-        delay(5) {
-            self.setupChallengeView()
-        }
+        self.setupChallengeView()
     }
     
     
@@ -186,7 +184,7 @@ class ProfileViewController: UIViewController {
         self.challengeCardView.addSubview(ChallengeView)
         
         
-        let size = self.view.frame.width * (40/388)
+        let size = (self.view.bounds.width - 40) * (40/388)
         let cornerRadius = size/2
         
         ChallengeView.gameWidth.constant = size
