@@ -28,14 +28,14 @@ class ResetPwdVC: UIViewController, ControllerType {
         
         // Do any additional setup after loading the view.
         setupButtons()
-        
     }
     func bindUI(with viewModel: ChangePasswordViewModel) {
         confirmNewPwdTextField.rx.text.subscribe{
             retypePassword in
             DispatchQueue.main.async {
-                
-                if (String(describing: retypePassword).count > 5 || retypePassword != self.newPwdTextField.text) {
+                if (String(describing: retypePassword ?? "").count <= 5
+                    || retypePassword != self.newPwdTextField.text
+                    || String(describing: self.currentPwdTextField.text ?? "").count <= 5 ) {
                     self.saveBtn.backgroundColor = .darkGray
                     self.saveBtn.tintColor = .lightGray
                 } else {
