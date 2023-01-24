@@ -44,7 +44,7 @@ class MorePersonalInfoVC: UIViewController {
     }
     
     
-    @IBAction func editEmailPressed(_ sender: Any) {
+    @IBAction func EmailOnTapped(_ sender: Any) {
         
         if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
             
@@ -53,10 +53,10 @@ class MorePersonalInfoVC: UIViewController {
             
         }
         
+        
     }
     
-    
-    @IBAction func editPhonePressed(_ sender: Any) {
+    @IBAction func phoneTapped(_ sender: Any) {
         
         if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
             
@@ -69,7 +69,7 @@ class MorePersonalInfoVC: UIViewController {
     }
     
     
-    @IBAction func editBirthdayTxtField(_ sender: Any) {
+    @IBAction func birthdayOnTapped(_ sender: Any) {
         
         if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
             
@@ -79,8 +79,6 @@ class MorePersonalInfoVC: UIViewController {
         }
         
     }
-    
-    
     
 }
 

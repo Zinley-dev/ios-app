@@ -16,7 +16,6 @@ import UserNotifications
 var general_room: Room!
 var gereral_group_chanel_url: String!
 var startTime = Date()
-var shouldPresentPostVC = true
 
 var global_presetingRate = 0.0
 var global_cornerRadius = 0.0

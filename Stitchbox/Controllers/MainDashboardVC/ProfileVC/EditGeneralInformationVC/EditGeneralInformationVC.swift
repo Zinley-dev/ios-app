@@ -21,6 +21,7 @@ class EditGeneralInformationVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupButtons()
+        setupLbl()
         
     }
     
@@ -71,6 +72,12 @@ extension EditGeneralInformationVC {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
         }
+    }
+    
+    func setupLbl() {
+        
+        editLblName.text = "Your \(type.lowercased())"
+        
     }
 
     

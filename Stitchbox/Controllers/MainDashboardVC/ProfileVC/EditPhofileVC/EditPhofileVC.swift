@@ -68,8 +68,7 @@ class EditPhofileVC: UIViewController {
     }
     
     
-    
-    @IBAction func nameBtnPressed(_ sender: Any) {
+    @IBAction func nameOnTapped(_ sender: Any) {
         
         if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
             
@@ -78,11 +77,12 @@ class EditPhofileVC: UIViewController {
             
         }
         
+        
     }
     
     
-    @IBAction func discordLinkBtnPressed(_ sender: Any) {
-        
+    
+    @IBAction func discordDidPressed(_ sender: Any) {
         
         if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
             
@@ -91,9 +91,11 @@ class EditPhofileVC: UIViewController {
             
         }
         
+        
     }
     
-    @IBAction func BioBtnPressed(_ sender: Any) {
+    
+    @IBAction func BioDidPress(_ sender: Any) {
         
         
         if let EBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditBioVC") as? EditBioVC {
@@ -105,8 +107,7 @@ class EditPhofileVC: UIViewController {
         
     }
     
-    
-    @IBAction func moreInfoBtnPressed(_ sender: Any) {
+    @IBAction func MoreInfoOnTap(_ sender: Any) {
         
         if let MPIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MorePersonalInfoVC") as? MorePersonalInfoVC {
             self.navigationController?.pushViewController(MPIVC, animated: true)
@@ -116,17 +117,19 @@ class EditPhofileVC: UIViewController {
     }
     
     
-    @IBAction func changeCoverPhotoBtnPressed(_ sender: Any) {
+    @IBAction func changeCoverOnTapped(_ sender: Any) {
         
         requestImageUpdateForCover()
         
     }
     
-    @IBAction func changeProfilePhotoBtnPressed(_ sender: Any) {
+    
+    @IBAction func changeProfileImageOnTap(_ sender: Any) {
         
         requestImageUpdateForAvatar()
         
     }
+    
     
 
 }
