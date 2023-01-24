@@ -425,3 +425,37 @@ extension UserAPI: EndPointType {
         return ["Authorization": _AppCoreData.userSession.value!.accessToken]
     }
 }
+
+public enum ContactAPI {
+    case postContact
+}
+extension ContactAPI: EndPointType {
+    var module: String {
+        return "/contact"
+    }
+    
+    var path: String {
+      switch self {
+      case .postContact:
+          return "/"
+      }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .postContact:
+            return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .postContact:
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}

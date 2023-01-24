@@ -57,7 +57,6 @@ class BlockedListVC: UIViewController, ControllerType {
             
         }.disposed(by: disposeBag)
         
-        
         viewModel.output.successObservable.subscribe{
             result in
             DispatchQueue.main.async {

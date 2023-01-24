@@ -31,6 +31,7 @@ struct APIManager {
     let settingManager = Manager<SettingAPI>()
     let accountManager = Manager<AccountAPI>()
     let userManager = Manager<UserAPI>()
+    let contactManager = Manager<ContactAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -214,6 +215,12 @@ struct APIManager {
     
     func uploadavatar(image: UIImage, completion: @escaping APICompletion) {
         userManager.upload(.uploadavatar, image: image){
+            result in
+            completion(result)
+        }
+    }
+    func uploadContact(image: UIImage, content: String, completion: @escaping APICompletion) {
+        contactManager.upload(.postContact, image: image, content: content){
             result in
             completion(result)
         }
