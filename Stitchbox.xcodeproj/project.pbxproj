@@ -94,6 +94,7 @@
 		6A3F0A5F297CBA5600366665 /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A5E297CBA5600366665 /* PostVC.swift */; };
 		6A3F0A61297F714D00366665 /* EditChallengeCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A60297F714D00366665 /* EditChallengeCardVC.swift */; };
 		6A3F0A63297F71B900366665 /* badgeThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A62297F71B800366665 /* badgeThumbnail.swift */; };
+		6A3F0A65297F74D400366665 /* FistBumpedStatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A64297F74D400366665 /* FistBumpedStatVC.swift */; };
 		6A495E3D297666EA001895C3 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A495E3C297666EA001895C3 /* SettingVC.swift */; };
 		6A58EA46294E997A005FA3CD /* GroupChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */; };
 		6A58EA4D294EB280005FA3CD /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */; };
@@ -205,7 +206,6 @@
 		6AF973352978E4E900C76814 /* MorePersonalInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF973342978E4E900C76814 /* MorePersonalInfoVC.swift */; };
 		6AF973382978F99E00C76814 /* EditGeneralInformationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF973372978F99E00C76814 /* EditGeneralInformationVC.swift */; };
 		6AF9733B2978FDAC00C76814 /* EditBioVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF9733A2978FDAC00C76814 /* EditBioVC.swift */; };
-		6AF97341297A324600C76814 /* FistBumpedStatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF97340297A324600C76814 /* FistBumpedStatVC.swift */; };
 		6AF97345297B5A2A00C76814 /* BadgesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF97343297B5A2A00C76814 /* BadgesHeaderView.swift */; };
 		6AF97346297B5A2A00C76814 /* BadgesHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF97344297B5A2A00C76814 /* BadgesHeaderView.xib */; };
 		6AF97349297B5A7500C76814 /* ProfilePostsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF97347297B5A7500C76814 /* ProfilePostsHeaderView.xib */; };
@@ -358,6 +358,7 @@
 		6A3F0A5E297CBA5600366665 /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		6A3F0A60297F714D00366665 /* EditChallengeCardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditChallengeCardVC.swift; sourceTree = "<group>"; };
 		6A3F0A62297F71B800366665 /* badgeThumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = badgeThumbnail.swift; sourceTree = "<group>"; };
+		6A3F0A64297F74D400366665 /* FistBumpedStatVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FistBumpedStatVC.swift; sourceTree = "<group>"; };
 		6A495E3C297666EA001895C3 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChannelTableViewCell.swift; sourceTree = "<group>"; };
 		6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
@@ -470,7 +471,6 @@
 		6AF973342978E4E900C76814 /* MorePersonalInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorePersonalInfoVC.swift; sourceTree = "<group>"; };
 		6AF973372978F99E00C76814 /* EditGeneralInformationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGeneralInformationVC.swift; sourceTree = "<group>"; };
 		6AF9733A2978FDAC00C76814 /* EditBioVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBioVC.swift; sourceTree = "<group>"; };
-		6AF97340297A324600C76814 /* FistBumpedStatVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FistBumpedStatVC.swift; path = ../../../../../../../FistBumpedStatVC.swift; sourceTree = "<group>"; };
 		6AF97343297B5A2A00C76814 /* BadgesHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BadgesHeaderView.swift; path = Stitchbox/Layout/Profile/ProfilePostsHeaderView/BadgesHeaderView.swift; sourceTree = SOURCE_ROOT; };
 		6AF97344297B5A2A00C76814 /* BadgesHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BadgesHeaderView.xib; path = Stitchbox/Layout/Profile/ProfilePostsHeaderView/BadgesHeaderView.xib; sourceTree = SOURCE_ROOT; };
 		6AF97347297B5A7500C76814 /* ProfilePostsHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfilePostsHeaderView.xib; sourceTree = "<group>"; };
@@ -1773,7 +1773,7 @@
 		6AF9733C297A320C00C76814 /* FistBumpedStatVC */ = {
 			isa = PBXGroup;
 			children = (
-				6AF97340297A324600C76814 /* FistBumpedStatVC.swift */,
+				6A3F0A64297F74D400366665 /* FistBumpedStatVC.swift */,
 			);
 			path = FistBumpedStatVC;
 			sourceTree = "<group>";
@@ -2171,6 +2171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A3F0A61297F714D00366665 /* EditChallengeCardVC.swift in Sources */,
+				6A3F0A65297F74D400366665 /* FistBumpedStatVC.swift in Sources */,
 				6A9E4C832977B3C100B59176 /* AccountActivityNode.swift in Sources */,
 				6AAD7A17294C65DD003E3AB6 /* AppDelegate+VoIPPush.swift in Sources */,
 				6A0CF638296AABEC00155889 /* ResetPasswordVC.swift in Sources */,
@@ -2327,7 +2328,6 @@
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
 				6A66277D2965772200A4488B /* HTTPMethod.swift in Sources */,
 				395477B829425318008EED97 /* AuthResult.swift in Sources */,
-				6AF97341297A324600C76814 /* FistBumpedStatVC.swift in Sources */,
 				6AAD7A31294C6630003E3AB6 /* CXCallManager.swift in Sources */,
 				6AAD7A1C294C65DD003E3AB6 /* AppDelegate+SendBirdCallsDelegates.swift in Sources */,
 				390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */,
