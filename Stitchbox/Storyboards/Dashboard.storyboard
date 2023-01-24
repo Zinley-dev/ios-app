@@ -4771,6 +4771,22 @@ Rodriguez</string>
             </objects>
             <point key="canvasLocation" x="4733.6000000000004" y="1602.7093596059115"/>
         </scene>
+        <!--PostVC-->
+        <scene sceneID="9oF-fN-KKw">
+            <objects>
+                <viewController storyboardIdentifier="PostVC" modalPresentationStyle="fullScreen" id="4y3-y0-ROG" customClass="PostVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OI4-v2-71V">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="755"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="b6e-ts-mOe"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="zQz-6G-0ox"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KUy-NH-msh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3033" y="109"/>
+        </scene>
         <!--Account ActivityVC-->
         <scene sceneID="LEC-pK-IOP">
             <objects>
@@ -5251,10 +5267,10 @@ Rodriguez</string>
             </objects>
             <point key="canvasLocation" x="2260" y="876"/>
         </scene>
-        <!--View Controller-->
+        <!--AddVC-->
         <scene sceneID="gvV-m7-Zbi">
             <objects>
-                <viewController id="iuL-41-Vew" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddVC" id="iuL-41-Vew" customClass="AddVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XNC-2q-Vo8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -5267,7 +5283,7 @@ Rodriguez</string>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cdT-qf-TUI"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="Background"/>
                         <constraints>
                             <constraint firstItem="Hmu-Uu-alB" firstAttribute="centerX" secondItem="XNC-2q-Vo8" secondAttribute="centerX" id="vN9-Gw-X8n"/>
                             <constraint firstItem="Hmu-Uu-alB" firstAttribute="centerY" secondItem="XNC-2q-Vo8" secondAttribute="centerY" id="xHy-xv-Ivi"/>
@@ -5275,6 +5291,9 @@ Rodriguez</string>
                     </view>
                     <tabBarItem key="tabBarItem" title="" selectedImage="4x_add" id="gS6-OX-2fH"/>
                     <navigationItem key="navigationItem" id="5of-K2-ZzJ"/>
+                    <connections>
+                        <segue destination="nV2-3t-gMd" kind="show" identifier="moveToPostVC" id="TfO-Wf-gjh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pZH-B8-jO7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -6126,6 +6145,30 @@ Rodriguez</string>
             </objects>
             <point key="canvasLocation" x="508.69565217391306" y="4555.5803571428569"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="laf-c8-cVW">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="nV2-3t-gMd" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="5yK-Ra-Yb8"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="TUn-re-4sw">
+                        <rect key="frame" x="0.0" y="47" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <color key="barTintColor" name="Background"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="4y3-y0-ROG" kind="relationship" relationship="rootViewController" id="Xh2-3M-7E3"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iFA-Hi-SlC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2260" y="109"/>
+        </scene>
     </scenes>
     <designables>
         <designable name="FAX-Qh-QnX">
@@ -6218,9 +6261,6 @@ Rodriguez</string>
         <namedColor name="color_toast_label">
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
