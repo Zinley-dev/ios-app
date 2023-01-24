@@ -63,8 +63,9 @@ class ProfileViewController: UIViewController {
         collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
         
         configureDatasource()
-        setupChallengeView()
         wireDelegate()
+        
+        self.setupChallengeView()
     }
     
     
@@ -183,7 +184,7 @@ class ProfileViewController: UIViewController {
         self.challengeCardView.addSubview(ChallengeView)
         
         
-        let size = self.view.frame.width * (40/388)
+        let size = (self.view.bounds.width - 40) * (40/388)
         let cornerRadius = size/2
         
         ChallengeView.gameWidth.constant = size

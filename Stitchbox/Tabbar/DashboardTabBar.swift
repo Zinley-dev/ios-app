@@ -37,6 +37,8 @@ import SendBirdCalls
     @objc func pressedAction(_ sender: UIButton) {
         // do your stuff here
         self.selectedIndex = 2
+        presentPostVC()
+        
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -114,6 +116,15 @@ import SendBirdCalls
         }
         
         
+    }
+    
+    func presentPostVC() {
+        
+        if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
+            
+            PNVC.modalPresentationStyle = .fullScreen
+            self.present(PNVC, animated: true)
+        }
         
     }
     
