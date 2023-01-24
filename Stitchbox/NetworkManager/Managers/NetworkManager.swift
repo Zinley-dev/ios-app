@@ -40,6 +40,23 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         self.task?.resume()
       }
     }
+    func upload(_ route: EndPoint, image: UIImage, content: String, completion: @escaping APICompletion) {
+      if var request = buildRequest(from: route) {
+        
+        let uploadData = builđData(for: image, for: content, request: &request)
+        
+        task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+          if error != nil {
+            completion(.failure(ErrorType.noInternet))
+          }
+          if let response = response as? HTTPURLResponse {
+            let result = self.handleNetworkResponse(data, response)
+            completion(result)
+          }
+        })
+        self.task?.resume()
+      }
+    }
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         if let request = buildRequest(from: route) {
@@ -68,6 +85,23 @@ class Manager<EndPoint: EndPointType>: RequestManager {
       uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
       return uploadData
     }
+    
+    fileprivate func builđData(for image: UIImage, for content: String, request: inout URLRequest) -> Data {
+        let boundary = UUID().uuidString
+      request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        let filename = "image.png"
+        var uploadData = Data()
+        uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+        uploadData.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+        uploadData.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
+        uploadData.append(image.jpegData(compressionQuality: 0.5)!)
+        uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        uploadData.append("Content-Disposition: form-data; name=\"content\"\r\n".data(using: .utf8)!)
+        uploadData.append("Content-Type: text/plain\r\n\r\n".data(using: .utf8)!)
+        uploadData.append(content.data(using: .utf8)!)
+        uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        return uploadData
+      }
     
     fileprivate func buildRequest(from route: EndPoint) -> URLRequest? {
         // Check API endpoint is valid

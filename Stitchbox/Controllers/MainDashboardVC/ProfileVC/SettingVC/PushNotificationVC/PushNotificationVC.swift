@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
-class PushNotificationVC: UIViewController {
-
+class PushNotificationVC: UIViewController, ControllerType {
+    typealias ViewModelType = SettingViewModel
     
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -18,13 +20,32 @@ class PushNotificationVC: UIViewController {
     @IBOutlet weak var FollowSwitch: UISwitch!
     @IBOutlet weak var MessageSwitch: UISwitch!
     
+    let viewModel = SettingViewModel()
+    let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
+        bindUI(with: viewModel)
+        bindAction(with: viewModel)
+        viewModel.getAPISetting()
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupButtons()
-        
+       
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        viewModel.action.submitChange.on(.next(Void()))
+    }
+    func bindUI(with viewModel: SettingViewModel) {
+        (PostsSwitch.rx.isOn <-> viewModel.input.postsNotification).disposed(by: disposeBag)
+        (CommentSwitch.rx.isOn <-> viewModel.input.commentNotification).disposed(by: disposeBag)
+        (MentionSwitch.rx.isOn <-> viewModel.input.mentionNotification).disposed(by: disposeBag)
+        (FollowSwitch.rx.isOn <-> viewModel.input.followNotification).disposed(by: disposeBag)
+        (MessageSwitch.rx.isOn <-> viewModel.input.messageNotification).disposed(by: disposeBag)
+    }
+    
+    func bindAction(with viewModel: SettingViewModel) {}
+
     
     @IBAction func PostsSwitchPressed(_ sender: Any) {
         

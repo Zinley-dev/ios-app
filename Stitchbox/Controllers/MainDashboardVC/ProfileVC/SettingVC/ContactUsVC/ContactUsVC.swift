@@ -10,8 +10,10 @@ import MobileCoreServices
 import AVKit
 import AVFoundation
 import Alamofire
+import RxSwift
 
-class ContactUsVC: UIViewController {
+class ContactUsVC: UIViewController, ControllerType {
+    typealias ViewModelType = ContactUsViewModel
 
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -29,14 +31,43 @@ class ContactUsVC: UIViewController {
     var selectedImg: UIImage!
     var isObserved: Bool!
     
+    let viewModel = ContactUsViewModel()
+    let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
+        bindUI(with: viewModel)
+        bindAction(with: viewModel)
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupButtons()
         setupInitialSetup()
-        
+       
     }
+    func bindUI(with viewModel: ContactUsViewModel) {}
+    
+    func bindAction(with viewModel: ContactUsViewModel) {
+        sendBtn.rx.tap.subscribe{
+            _ in
+            if self.ContactTxtView.text.count >= 35 {
+                viewModel.action.submit.onNext((self.reportImg.first ?? UIImage(), self.ContactTxtView.text))
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.successObservable.subscribe{
+            result in
+            DispatchQueue.main.async {
+                showNote(text: result)
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.errorsObservable.subscribe{ (error) in
+            DispatchQueue.main.async {
+                showNote(text: error)
+            }
+        }.disposed(by: disposeBag)
+    }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

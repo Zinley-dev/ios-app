@@ -4,33 +4,26 @@
 //
 //  Created by Khoi Nguyen on 12/24/22.
 //
+import ObjectMapper
 
-import Foundation
 
-
-struct SendBirdUser : Codable {
+struct SendBirdUser : Mappable {
 
     // MARK: - Properties
-    var userID: String
-    var avatar: String
-    var username: String
+    private(set) var userID: String = ""
+    private(set) var avatar: String = ""
+    private(set) var username: String = ""
     
-    init(JSONbody: [String?: Any]?) throws {
+    
+    init?(map: ObjectMapper.Map) {
         
-        if let data = JSONbody {
-            
-            self.userID = data["ID"] as? String ?? ""
-            self.avatar = data["avatar"] as? String ?? ""
-            self.username = data["username"] as? String ?? ""
-            
-        } else {
-            
-            self.userID =  ""
-            self.avatar =  ""
-            self.username =  ""
-           
-        }
-   
     }
+    
+    mutating func mapping(map: ObjectMapper.Map) {
+        userID <- map["ID"]
+        userID <- map["avatar"]
+        userID <- map["username"]
+    }
+
         
 }

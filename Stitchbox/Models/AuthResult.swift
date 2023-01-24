@@ -5,20 +5,35 @@
 //  Created by Nghiem Minh Hoang on 09/12/2022.
 //
 
-import Foundation
+import ObjectMapper
 
-public struct AuthResult {
-    public var idToken: String?
+class AuthResult: Mappable {
+    
+    
+    private(set) var idToken: String?
     // Apple
-    public var providerID: String?
-    public var rawNonce: String?
+    private(set) var providerID: String?
+    private(set) var rawNonce: String?
     // Google
-    public var accessToken: String?
+    private(set) var accessToken: String?
     
-    public var name: String?
-    public var email: String?
-    public var phone: String?
+    private(set) var name: String?
+    private(set) var email: String?
+    private(set) var phone: String?
     
+    required init?(map: ObjectMapper.Map) {
+        idToken <- map["idToken"]
+        providerID <- map["providerID"]
+        rawNonce <- map["rawNonce"]
+        accessToken <- map["token"]
+        name <- map["name"]
+        email <- map["email"]
+        phone <- map["phone"]
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+    }
     public init(idToken: String? = nil, providerID: String? = nil, rawNonce: String? = nil, accessToken: String? = nil, name: String? = nil, email: String? = nil, phone: String? = nil) {
         self.idToken = idToken
         self.providerID = providerID
@@ -28,5 +43,6 @@ public struct AuthResult {
         self.email = email
         self.phone = phone
     }
+    
     
 }

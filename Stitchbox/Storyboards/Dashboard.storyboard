@@ -3228,7 +3228,7 @@ Rodriguez</string>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cb6-U7-mwh">
-                                <rect key="frame" x="20" y="251.66666666666663" width="335" height="226"/>
+                                <rect key="frame" x="20" y="241.66666666666663" width="335" height="246"/>
                                 <color key="backgroundColor" red="0.16290172929999999" green="0.16290172929999999" blue="0.16290172929999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="226" id="XMD-DR-5Xd"/>
@@ -3422,7 +3422,9 @@ Rodriguez</string>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="V97-k0-4mX">
                                         <rect key="frame" x="40.666666666666657" y="101" width="278" height="278"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" constant="278" id="4z2-8U-ZoD"/>
                                             <constraint firstAttribute="width" secondItem="V97-k0-4mX" secondAttribute="height" multiplier="1:1" id="POf-8d-EtQ"/>
+                                            <constraint firstAttribute="width" constant="278" id="oCq-Op-iDN"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -3706,9 +3708,6 @@ Rodriguez</string>
                                         <real key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="saveBtnPressed:" destination="nlR-nX-R6y" eventType="touchUpInside" id="3PW-9F-7d7"/>
-                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="iaP-N8-P4d"/>
@@ -3926,9 +3925,6 @@ Rodriguez</string>
                                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ttX-5c-fUC">
                                                                         <rect key="frame" x="238" y="5" width="51" height="30"/>
                                                                         <color key="onTintColor" name="Secondary"/>
-                                                                        <connections>
-                                                                            <action selector="soundSwitchPressed:" destination="a9W-Jf-Y3W" eventType="valueChanged" id="XhU-U2-Ge2"/>
-                                                                        </connections>
                                                                     </switch>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3965,9 +3961,6 @@ Rodriguez</string>
                                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TlV-he-pQO">
                                                                         <rect key="frame" x="238" y="5" width="51" height="30"/>
                                                                         <color key="onTintColor" name="Secondary"/>
-                                                                        <connections>
-                                                                            <action selector="streamingLinkSwitchPressed:" destination="a9W-Jf-Y3W" eventType="valueChanged" id="CcD-fC-qPa"/>
-                                                                        </connections>
                                                                     </switch>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4033,9 +4026,6 @@ Rodriguez</string>
                                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dki-ni-APY">
                                                                         <rect key="frame" x="238" y="5" width="51" height="30"/>
                                                                         <color key="onTintColor" name="Secondary"/>
-                                                                        <connections>
-                                                                            <action selector="privateAccountSwitchPressed:" destination="a9W-Jf-Y3W" eventType="valueChanged" id="cIY-R4-qJw"/>
-                                                                        </connections>
                                                                     </switch>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4381,9 +4371,6 @@ Rodriguez</string>
                                                                         <rect key="frame" x="0.0" y="0.0" width="311" height="40"/>
                                                                         <state key="normal" title="Button"/>
                                                                         <buttonConfiguration key="configuration" style="plain"/>
-                                                                        <connections>
-                                                                            <action selector="logoutBtnPressed:" destination="a9W-Jf-Y3W" eventType="touchUpInside" id="sQx-1d-VwS"/>
-                                                                        </connections>
                                                                     </button>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
