@@ -63,8 +63,11 @@ class ProfileViewController: UIViewController {
         collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
         
         configureDatasource()
-        setupChallengeView()
         wireDelegate()
+        
+        delay(5) {
+            self.setupChallengeView()
+        }
     }
     
     
