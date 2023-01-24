@@ -9,7 +9,7 @@ import UIKit
 import SendBirdUIKit
 import SendBirdSDK
 import Alamofire
-
+import ObjectMapper
 
 class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
     
@@ -296,8 +296,8 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 
                 let newUserList = data.compactMap { user -> SBUUser? in
                     do {
-                        let preloadUser = try SendBirdUser(JSONbody: user)
-                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
+                        let preloadUser =  Mapper<SendBirdUser>().map(JSONObject: user)
+                        let user = SBUUser(userId: preloadUser?.userID ?? "", nickname: preloadUser?.username ?? "", profileUrl: preloadUser?.avatar ?? "")
                         
                         if needChecked {
                             
@@ -339,15 +339,12 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 }
                 
                 let newUserList = data.compactMap { user -> SBUUser? in
-                    do {
-                        let preloadUser = try SendBirdUser(JSONbody: user)
-                        let user = SBUUser(userId: preloadUser.userID, nickname: preloadUser.username, profileUrl: preloadUser.avatar)
+                        let preloadUser = Mapper<SendBirdUser>().map(JSONObject: user)
+                        let user = SBUUser(userId: preloadUser?.userID ?? "", nickname: preloadUser?.username ?? "", profileUrl: preloadUser?.avatar ?? "")
                         if !self.joinedUserIds.contains(user.userId), !self.bannedList.contains(user.userId) {
                             return user
                         }
-                    } catch {
-                        print("Can't catch user")
-                    }
+                    
                     return nil
                 }
 
