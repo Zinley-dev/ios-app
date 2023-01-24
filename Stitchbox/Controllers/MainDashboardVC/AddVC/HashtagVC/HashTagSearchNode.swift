@@ -23,12 +23,7 @@ class HashTagSearchNode: ASCellNode {
     var hashtagTextNode: ASTextNode!
     var hashtagSymbolImg: ASTextNode!
     var coutNode: ASTextNode!
-   
-   
-    var desc = ""
-    
-    let selectedColor = UIColor(red: 248/255, green: 189/255, blue: 91/255, alpha: 1.0)
-    
+
     init(with hashtag: HashtagsModelFromAlgolia) {
         
         self.hashtag = hashtag
