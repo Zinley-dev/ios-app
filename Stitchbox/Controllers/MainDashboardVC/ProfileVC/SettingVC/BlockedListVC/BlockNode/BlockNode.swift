@@ -17,7 +17,6 @@ fileprivate let FontSize: CGFloat = 12
 
 class BlockNode: ASCellNode {
     
-    
     weak var user: BlockUserModel!
     var UnBlockAction : ((ASCellNode) -> Void)?
     
@@ -49,7 +48,16 @@ class BlockNode: ASCellNode {
         
         userNameNode.backgroundColor = UIColor.clear
         NameNode.backgroundColor = UIColor.clear
-        UnBlockBtnNode.backgroundColor = UIColor.clear
+        UnBlockBtnNode.backgroundColor = UIColor.tertiary
+        
+        
+        userNameNode.tintColor = UIColor.white
+        NameNode.tintColor = UIColor.white
+        AvatarNode.tintColor = UIColor.white
+        UnBlockBtnNode.tintColor  = UIColor.primary
+        
+        userNameNode.textColorFollowsTintColor = true
+        NameNode.textColorFollowsTintColor = true
         
         //
         
@@ -63,10 +71,9 @@ class BlockNode: ASCellNode {
         
         DispatchQueue.main.async {
             
-            self.UnBlockBtnNode.backgroundColor = UIColor.clear
             self.UnBlockBtnNode.layer.borderWidth = 1.0
             self.UnBlockBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
-            self.UnBlockBtnNode.layer.cornerRadius = 3.0
+            self.UnBlockBtnNode.layer.cornerRadius = 10.0
             self.UnBlockBtnNode.clipsToBounds = true
             
             self.UnBlockBtnNode.setTitle("Unblock", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
@@ -82,10 +89,7 @@ class BlockNode: ASCellNode {
     
     
     @objc func UnblockBtnPressed() {
-        
-
-        
-        
+        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "unblock")), object: nil, userInfo: ["blockId": user.blockId])
     }
     
     
@@ -148,9 +152,9 @@ class BlockNode: ASCellNode {
     }
     
     func loadInfo(uid: String ) {
-    
-      
-        
+        userNameNode.attributedText = NSAttributedString(string: user.blockUser.userName)
+        NameNode.attributedText = NSAttributedString(string: user.blockUser.name)
+        AvatarNode.url = URL(string: user.blockUser.avatarURL)
     }
     
     

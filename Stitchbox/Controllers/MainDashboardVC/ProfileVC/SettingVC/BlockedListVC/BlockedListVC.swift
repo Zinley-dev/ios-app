@@ -8,33 +8,70 @@
 import UIKit
 import Alamofire
 import AsyncDisplayKit
+import RxSwift
 
 
-class BlockedListVC: UIViewController {
-
+class BlockedListVC: UIViewController, ControllerType {
+    typealias ViewModelType = BlockAccountsViewModel
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     @IBOutlet weak var contentView: UIView!
     var BlockList = [BlockUserModel]()
     var tableNode: ASTableNode!
     
+    let viewModel = BlockAccountsViewModel()
+    let disposeBag = DisposeBag()
+    
     required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
-  
+        
     }
     
     override func viewDidLoad() {
+        bindUI(with: viewModel)
+        bindAction(with: viewModel)
+        viewModel.getAPISetting()
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         setupTableNode()
         
     }
-
+    
+    func bindUI(with viewModel: BlockAccountsViewModel) {
+        
+    }
+    
+    func bindAction(with viewModel: BlockAccountsViewModel) {
+        viewModel.input.blockAccounts.subscribe{ blockUsers in
+            self.BlockList = blockUsers.element ?? [BlockUserModel]()
+            print(self.BlockList)
+            DispatchQueue.main.async {
+                self.tableNode.reloadData()
+            }
+            
+        }.disposed(by: disposeBag)
+        
+        
+        viewModel.output.successObservable.subscribe{
+            result in
+            DispatchQueue.main.async {
+                showNote(text: result)
+            }
+        }.disposed(by: disposeBag)
+        
+        viewModel.output.errorsObservable.subscribe{ (error) in
+            DispatchQueue.main.async {
+                showNote(text: error)
+            }
+        }.disposed(by: disposeBag)
+    }
+    
 }
 
 extension BlockedListVC {
@@ -56,11 +93,11 @@ extension BlockedListVC {
         backButton.setTitle("     Blocked List", for: .normal)
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+        
     }
-
+    
     
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
@@ -100,7 +137,7 @@ extension BlockedListVC {
         self.tableNode.view.backgroundColor = UIColor.clear
         self.tableNode.view.showsVerticalScrollIndicator = false
         
-
+        
     }
     
     func wireDelegates() {
@@ -114,7 +151,7 @@ extension BlockedListVC {
 }
 
 extension BlockedListVC: ASTableDelegate {
-
+    
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
         
         let width = UIScreen.main.bounds.size.width;
@@ -122,7 +159,7 @@ extension BlockedListVC: ASTableDelegate {
         let min = CGSize(width: width, height: 40);
         let max = CGSize(width: width, height: 1000);
         return ASSizeRangeMake(min, max);
-           
+        
     }
     
     
@@ -143,7 +180,7 @@ extension BlockedListVC: ASTableDelegate {
         }
         
     }
-       
+    
     
 }
 
@@ -167,7 +204,7 @@ extension BlockedListVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
         let user = self.BlockList[indexPath.row]
-       
+        
         return {
             
             let node = BlockNode(with: user)
@@ -188,7 +225,7 @@ extension BlockedListVC {
         DispatchQueue.main.async {
             
         }
-                
+        
     }
     
     
@@ -197,7 +234,7 @@ extension BlockedListVC {
         guard newUsers.count > 0 else {
             return
         }
-
+        
         
     }
     

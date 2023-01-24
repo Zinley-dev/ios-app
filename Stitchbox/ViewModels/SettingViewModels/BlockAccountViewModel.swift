@@ -25,30 +25,15 @@ class BlockAccountsViewModel: ViewModelProtocol {
     struct Action {
         var submitChange: AnyObserver<Void>
     }
-    enum SuccessMessage {
-        case logout
-        case updateState
-        case other
-    }
     
     struct Output {
-        //        var errorsObservable: Observable<Error>
-        //        var successObservable: Observable<SuccessMessage>
+        var errorsObservable: Observable<String>
+        var successObservable: Observable<String>
     }
     
     private let blockAccountRelay = BehaviorRelay<[BlockUserModel]>(value: Mapper<BlockUserModel>().mapArray(JSONArray: []))
-    private let allowChallengeRelay = BehaviorRelay<Bool>(value: true)
-    private let allowDiscordLinkRelay = BehaviorRelay<Bool>(value: true)
-    private let privateAccountRelay = BehaviorRelay<Bool>(value: true)
-    private let autoPlaySoundRelay = BehaviorRelay<Bool>(value: true)
-    private let challengeNotificationRelay = BehaviorRelay<Bool>(value: true)
-    private let commentNotificationRelay = BehaviorRelay<Bool>(value: true)
-    private let followNotificationRelay = BehaviorRelay<Bool>(value: true)
-    private let postsNotificationRelay = BehaviorRelay<Bool>(value: true)
-    private let mentionNotificationRelay = BehaviorRelay<Bool>(value: true)
-    private let messageNotificationRelay = BehaviorRelay<Bool>(value: true)
     private let errorsSubject = PublishSubject<String>()
-    private let successSubject = PublishSubject<SuccessMessage>()
+    private let successSubject = PublishSubject<String>()
     private let submitChangeSubject = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
     
@@ -62,7 +47,8 @@ class BlockAccountsViewModel: ViewModelProtocol {
         )
         
         output = Output(
-            
+            errorsObservable: errorsSubject.asObservable(),
+            successObservable: successSubject.asObservable()
         )
         
         logic()
@@ -76,7 +62,10 @@ class BlockAccountsViewModel: ViewModelProtocol {
                 print(response)
                 if let data = response.body {
                     if let listData = data["data"] as? [[String: Any]] {
+                        print(listData)
                         self.blockAccountRelay.accept(Mapper<BlockUserModel>().mapArray(JSONArray: listData))
+                    } else {
+                        self.blockAccountRelay.accept([BlockUserModel]())
                     }
                 }
             case .failure:
@@ -85,8 +74,28 @@ class BlockAccountsViewModel: ViewModelProtocol {
         }
     }
     
+    // handle notification
+    // For swift 4.0 and above put @objc attribute in front of function Definition
+    @objc func unblock(_ notification: NSNotification) {
+        if let blockId = notification.userInfo?["blockId"] as? String {
+            // do something with your strinf
+            APIManager().deleteBlocks(params: ["blockId": blockId]){
+                result in switch result {
+                case .success(let response):
+                    print(response)
+                    self.successSubject.onNext("Successfully unblock user")
+                    self.getAPISetting()
+                case .failure:
+                    self.errorsSubject.onNext("Cannot unblock user")
+                }
+            }
+        }
+    }
     
     func logic() {
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(unblock(_:)), name: NSNotification.Name("unblock"), object: nil)
+    }
+    deinit{
+        NotificationCenter.default.removeObserver(self)
     }
 }

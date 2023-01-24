@@ -58,7 +58,6 @@ class ResetPwdVC: UIViewController, ControllerType {
             result in
             if result {
                 DispatchQueue.main.async {
-                    print("aha")
                     showNote(text: "Password changed")
                 }
             }

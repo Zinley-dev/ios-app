@@ -49,7 +49,6 @@ class UserDataSource: Mappable {
     private(set) var socialId : String = ""
     
     private(set) var name : String = ""
-    private(set) var username: String = ""
     private(set) var password: String = ""
     private(set) var cover: String = ""
     private(set) var about: String = ""
@@ -83,7 +82,6 @@ class UserDataSource: Mappable {
         avatarURL       <- map["avatar"]
         signinMethod    <- map["signinMethod"]
         socialId        <- map["socialId"]
-        username        <- map["username"]
         password        <- map["password"]
         email           <- map["email"]
         cover           <- map["cover"]
