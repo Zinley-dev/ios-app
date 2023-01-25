@@ -122,13 +122,12 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Hi0-Fv-K1G">
-                                <rect key="frame" x="-12.666666666666657" y="105" width="400.33333333333326" height="34"/>
+                                <rect key="frame" x="8" y="105" width="359" height="34"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ieR-vM-MVA">
-                                        <rect key="frame" x="0.0" y="0.0" width="200.33333333333334" height="34"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="179.66666666666666" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="Lkd-m1-ZKe"/>
-                                            <constraint firstAttribute="width" constant="200" id="pN3-Sw-21g"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -143,7 +142,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B0N-XC-xs7">
-                                        <rect key="frame" x="200.33333333333331" y="0.0" width="200" height="34"/>
+                                        <rect key="frame" x="179.66666666666663" y="0.0" width="179.33333333333337" height="34"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Request"/>
@@ -167,9 +166,11 @@
                         <color key="backgroundColor" red="0.22745099660000001" green="0.2352941036" blue="0.25098040700000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="5qK-U3-Zgn" firstAttribute="trailing" secondItem="pXo-eH-6Hr" secondAttribute="trailing" id="AQn-tj-1gt"/>
+                            <constraint firstItem="Hi0-Fv-K1G" firstAttribute="leading" secondItem="5qK-U3-Zgn" secondAttribute="leading" constant="8" id="GeX-Kb-HdQ"/>
                             <constraint firstItem="5qK-U3-Zgn" firstAttribute="trailing" secondItem="Lwv-Om-luR" secondAttribute="trailing" id="Ho6-5O-etC"/>
                             <constraint firstItem="pXo-eH-6Hr" firstAttribute="top" secondItem="Ya0-LT-VIE" secondAttribute="top" constant="90" id="IYq-nL-EIV"/>
                             <constraint firstItem="pXo-eH-6Hr" firstAttribute="leading" secondItem="5qK-U3-Zgn" secondAttribute="leading" id="PBW-iW-2ak"/>
+                            <constraint firstItem="5qK-U3-Zgn" firstAttribute="trailing" secondItem="Hi0-Fv-K1G" secondAttribute="trailing" constant="8" id="RyV-Zr-Rxd"/>
                             <constraint firstItem="Hi0-Fv-K1G" firstAttribute="top" secondItem="pXo-eH-6Hr" secondAttribute="bottom" constant="5" id="SJa-VQ-v2T"/>
                             <constraint firstItem="Lwv-Om-luR" firstAttribute="top" secondItem="Hi0-Fv-K1G" secondAttribute="bottom" constant="10" id="fL1-WZ-1EX"/>
                             <constraint firstItem="Lwv-Om-luR" firstAttribute="leading" secondItem="5qK-U3-Zgn" secondAttribute="leading" id="g1J-cB-9xs"/>
@@ -179,7 +180,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="apd-X9-DOM"/>
                     <connections>
-                        <outlet property="BtnWidthConstants" destination="pN3-Sw-21g" id="8SG-hi-pjZ"/>
                         <outlet property="buttonStackView" destination="Hi0-Fv-K1G" id="TQv-we-UJ9"/>
                         <outlet property="contentView" destination="Lwv-Om-luR" id="2FY-9e-lEO"/>
                         <outlet property="contentViewTopConstant" destination="fL1-WZ-1EX" id="FMe-bh-GHI"/>
@@ -2377,20 +2377,35 @@
             </objects>
             <point key="canvasLocation" x="3046" y="3783"/>
         </scene>
-        <!--TestVC-->
-        <scene sceneID="Zaw-ar-94j">
+        <!--FollowerVC-->
+        <scene sceneID="uWA-FI-eRr">
             <objects>
-                <viewController storyboardIdentifier="testVC" id="p6A-XF-oA7" customClass="testVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="OFe-AF-FWS">
+                <viewController storyboardIdentifier="FollowerVC" id="XUB-at-8qr" customClass="FollowerVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6tf-Ki-f57">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="hAD-pL-glG"/>
+                        <viewLayoutGuide key="safeArea" id="3zX-kK-gXG"/>
                         <color key="backgroundColor" name="Background"/>
                     </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="f4r-Qf-6hY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bHd-JY-8Nl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3863" y="3783"/>
+            <point key="canvasLocation" x="3862" y="3783"/>
+        </scene>
+        <!--FollowingVC-->
+        <scene sceneID="Ojh-yz-5HP">
+            <objects>
+                <viewController storyboardIdentifier="FollowingVC" id="jBu-YM-qFv" customClass="FollowingVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7fe-u9-vwb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Ry1-T6-Bnw"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E7z-RO-VBs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4734" y="3783"/>
         </scene>
         <!--More Personal InfoVC-->
         <scene sceneID="Fd9-wv-BR4">
@@ -2576,9 +2591,67 @@
                     <view key="view" contentMode="scaleToFill" id="rCL-RS-9Q9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Xe6-Nq-L9Q">
+                                <rect key="frame" x="8" y="55" width="359" height="34"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UIA-bv-pQ3">
+                                        <rect key="frame" x="0.0" y="0.0" width="179.66666666666666" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="E0V-PS-9wU"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Followers"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="18"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="followerBtn:" destination="zHf-wP-Fja" eventType="touchUpInside" id="dfM-1N-kMe"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GUH-SB-DUW">
+                                        <rect key="frame" x="179.66666666666663" y="0.0" width="179.33333333333337" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Following"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="18"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="followingBtn:" destination="zHf-wP-Fja" eventType="touchUpInside" id="ygl-47-K26"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uVQ-rm-LTD">
+                                <rect key="frame" x="8" y="97" width="359" height="673"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="ONJ-cn-AYk"/>
                         <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="ONJ-cn-AYk" firstAttribute="trailing" secondItem="Xe6-Nq-L9Q" secondAttribute="trailing" constant="8" id="Lk6-cO-n4m"/>
+                            <constraint firstItem="Xe6-Nq-L9Q" firstAttribute="leading" secondItem="rCL-RS-9Q9" secondAttribute="leading" constant="8" id="UMi-br-qSt"/>
+                            <constraint firstItem="ONJ-cn-AYk" firstAttribute="bottom" secondItem="uVQ-rm-LTD" secondAttribute="bottom" constant="8" id="WyH-DU-79a"/>
+                            <constraint firstItem="ONJ-cn-AYk" firstAttribute="trailing" secondItem="uVQ-rm-LTD" secondAttribute="trailing" constant="8" id="cGn-oO-GtA"/>
+                            <constraint firstItem="uVQ-rm-LTD" firstAttribute="leading" secondItem="ONJ-cn-AYk" secondAttribute="leading" constant="8" id="uVa-gH-MkZ"/>
+                            <constraint firstItem="Xe6-Nq-L9Q" firstAttribute="top" secondItem="ONJ-cn-AYk" secondAttribute="top" constant="8" id="yVN-YO-O8a"/>
+                            <constraint firstItem="uVQ-rm-LTD" firstAttribute="top" secondItem="Xe6-Nq-L9Q" secondAttribute="bottom" constant="8" id="zwh-XY-ddw"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="buttonStackView" destination="Xe6-Nq-L9Q" id="ght-cu-bhl"/>
+                        <outlet property="contentView" destination="uVQ-rm-LTD" id="EvH-qK-cr0"/>
+                        <outlet property="contentViewTopConstant" destination="zwh-XY-ddw" id="kRz-Gz-gon"/>
+                        <outlet property="followerBtn" destination="UIA-bv-pQ3" id="Vdh-lo-SYs"/>
+                        <outlet property="followingBtn" destination="GUH-SB-DUW" id="uB8-c2-ZWI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UZ5-EU-VJG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

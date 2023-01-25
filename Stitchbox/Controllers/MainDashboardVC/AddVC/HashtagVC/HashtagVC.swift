@@ -158,7 +158,9 @@ extension HashtagVC {
 extension HashtagVC {
         
     @objc func onClickBack(_ sender: AnyObject) {
-        self.dismiss(animated: true)
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
+        }
     }
     
     @objc func onClickAdd(_ sender: AnyObject) {
