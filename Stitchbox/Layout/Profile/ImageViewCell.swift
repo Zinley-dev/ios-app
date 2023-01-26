@@ -30,6 +30,11 @@ class ImageViewCell: UICollectionViewCell {
         imageView.image = image
     }
     
+    func configureWithFit(with image: UIImage) {
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = image
+    }
+    
     private func setupView() {
         contentView.addSubview(imageView)
         
