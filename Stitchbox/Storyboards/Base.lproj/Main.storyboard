@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="paH-cP-umD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ww0-w9-tZg">
     <device id="retina5_5" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -1419,7 +1419,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="jf3-zT-gJV">
-                                <rect key="frame" x="163" y="637" width="88" height="7"/>
+                                <rect key="frame" x="163" y="653" width="88" height="7"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Gc-0Q-WW8" customClass="circleView" customModule="Stitchbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="7" height="7"/>
@@ -1461,7 +1461,7 @@
                         <constraints>
                             <constraint firstItem="XDT-NC-TyD" firstAttribute="centerX" secondItem="gul-y9-TDz" secondAttribute="centerX" id="1tQ-og-vLU"/>
                             <constraint firstItem="zdZ-sv-ibT" firstAttribute="top" secondItem="gul-y9-TDz" secondAttribute="top" id="4cb-g3-eCm"/>
-                            <constraint firstItem="XDT-NC-TyD" firstAttribute="top" secondItem="jf3-zT-gJV" secondAttribute="bottom" constant="32" id="5km-Au-4W6"/>
+                            <constraint firstItem="XDT-NC-TyD" firstAttribute="top" secondItem="jf3-zT-gJV" secondAttribute="bottom" constant="16" id="5km-Au-4W6"/>
                             <constraint firstAttribute="bottom" secondItem="zdZ-sv-ibT" secondAttribute="bottom" id="DT9-Le-2UQ"/>
                             <constraint firstItem="jf3-zT-gJV" firstAttribute="centerX" secondItem="gul-y9-TDz" secondAttribute="centerX" id="P9i-zB-jqJ"/>
                             <constraint firstItem="zdZ-sv-ibT" firstAttribute="leading" secondItem="gul-y9-TDz" secondAttribute="leading" id="PNY-34-BlN"/>

@@ -1,8 +1,7 @@
 {
   "images" : [
     {
-      "compression-type" : "gpu-optimized-best",
-      "filename" : "fist bump.png",
+      "filename" : "Fist bump.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

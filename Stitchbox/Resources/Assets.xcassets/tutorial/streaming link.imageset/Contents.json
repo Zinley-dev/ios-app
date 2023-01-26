@@ -1,8 +1,7 @@
 {
   "images" : [
     {
-      "compression-type" : "gpu-optimized-best",
-      "filename" : "streaming link.png",
+      "filename" : "Streaming link.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
