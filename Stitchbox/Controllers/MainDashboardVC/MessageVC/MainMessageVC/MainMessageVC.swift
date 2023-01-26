@@ -16,7 +16,6 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
 
     @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!
-    @IBOutlet weak var BtnWidthConstants: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var requestBtn: UIButton!
     @IBOutlet weak var inboxBtn: UIButton!
@@ -83,9 +82,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        BtnWidthConstants.constant = self.view.bounds.width * (200/414)
-        
+    
         self.tabBarController?.tabBar.isHidden = false
         self.tabBarController?.tabBar.frame = oldTabbarFr
         
