@@ -34,7 +34,6 @@ class BlockedListVC: UIViewController, ControllerType {
     override func viewDidLoad() {
         bindUI(with: viewModel)
         bindAction(with: viewModel)
-        viewModel.getAPISetting()
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
@@ -48,14 +47,14 @@ class BlockedListVC: UIViewController, ControllerType {
     }
     
     func bindAction(with viewModel: BlockAccountsViewModel) {
-        viewModel.input.blockAccounts.subscribe{ blockUsers in
-            self.BlockList = blockUsers.element ?? [BlockUserModel]()
-            print(self.BlockList)
-            DispatchQueue.main.async {
-                self.tableNode.reloadData()
-            }
-            
-        }.disposed(by: disposeBag)
+//        viewModel.input.blockAccounts.subscribe{ blockUsers in
+//            self.BlockList = blockUsers.element ?? [BlockUserModel]()
+//            print(self.BlockList)
+//            DispatchQueue.main.async {
+//                self.tableNode.reloadData()
+//            }
+//
+//        }.disposed(by: disposeBag)
         
         viewModel.output.successObservable.subscribe{
             result in
@@ -220,20 +219,33 @@ extension BlockedListVC: ASTableDataSource {
 
 extension BlockedListVC {
     
-    func retrieveNextPageWithCompletion( block: @escaping ([AnyObject]) -> Void) {
+    func retrieveNextPageWithCompletion( block: @escaping ([BlockUserModel]) -> Void) {
         
-        DispatchQueue.main.async {
-            
+        viewModel.getBlocks{code in
+            DispatchQueue.main.async {
+                block(code)
+            }
         }
         
     }
     
     
-    func insertNewRowsInTableNode(newUsers: [AnyObject]) {
+    func insertNewRowsInTableNode(newUsers: [BlockUserModel]) {
         
         guard newUsers.count > 0 else {
             return
         }
+        
+        print(newUsers)
+        let section = 0
+        var indexPaths: [IndexPath] = []
+        let total = BlockList.count + newUsers.count
+        for row in BlockList.count ... total - 1 {
+            let path = IndexPath(row: row, section: section)
+            indexPaths.append(path)
+        }
+        BlockList.append(contentsOf: newUsers)
+        tableNode.insertRows(at: indexPaths, with: .none)
         
         
     }

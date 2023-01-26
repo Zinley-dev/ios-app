@@ -52,26 +52,24 @@ class BlockAccountsViewModel: ViewModelProtocol {
         )
         
         logic()
-        getAPISetting()
     }
     
-    func getAPISetting() {
+    func getBlocks(completion: ([BlockUserModel]) -> Void) {
         APIManager().getBlocks{
             result in switch result {
             case .success(let response):
-                print(response)
                 if let data = response.body {
                     if let listData = data["data"] as? [[String: Any]] {
-                        print(listData)
                         self.blockAccountRelay.accept(Mapper<BlockUserModel>().mapArray(JSONArray: listData))
                     } else {
-                        self.blockAccountRelay.accept([BlockUserModel]())
-                    }
+                        self.blockAccountRelay.accept([BlockUserModel]())                    }
                 }
             case .failure:
                 self.errorsSubject.onNext("Cannot get user's block information")
             }
         }
+        
+        completion(self.blockAccountRelay.value)
     }
     
     func unblock(blockId: String) -> Void {
@@ -79,9 +77,7 @@ class BlockAccountsViewModel: ViewModelProtocol {
         APIManager().deleteBlocks(params: ["blockId": blockId]){
             result in switch result {
             case .success(let response):
-                print(response)
                 self.successSubject.onNext("Successfully unblock user")
-                self.getAPISetting()
             case .failure:
                 self.errorsSubject.onNext("Cannot unblock user")
                 
