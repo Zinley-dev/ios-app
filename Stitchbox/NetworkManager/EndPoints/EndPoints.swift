@@ -69,7 +69,7 @@ extension FollowApi: EndPointType {
     }
 }
 
-public enum UserApi {
+public enum AuthApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
     case phoneverify (params: [String:String])
@@ -79,7 +79,7 @@ public enum UserApi {
     case forgotPasswordByEmail (params: [String:String])
     case forgotPasswordByPhone (params: [String:String])
 }
-extension UserApi: EndPointType {
+extension AuthApi: EndPointType {
     var module: String {
         return "/auth"
     }
@@ -331,4 +331,176 @@ extension MediaAPI: EndPointType {
         return "/upload-video"
     }
   }
+}
+public enum AccountAPI {
+    case getBlocks
+    case insertBlocks (params: [String:Any])
+    case deleteBlocks (params: [String:Any])
+    case getFollows
+    case getFollowers
+    case insertFollows (params: [String:Any])
+    case deleteFollows (params: [String:Any])
+}
+extension AccountAPI: EndPointType {
+    var module: String {
+        return "/account"
+    }
+    
+    var path: String {
+      switch self {
+        case .getBlocks:
+          return "/block"
+        case .insertBlocks:
+          return "/block"
+        case .deleteBlocks:
+          return "/block"
+        case .getFollows:
+          return "/follow"
+        case .insertFollows:
+          return "/follow"
+        case .deleteFollows:
+          return "/follow"
+        case .getFollowers:
+          return "/follow/Follows"
+      }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getBlocks:
+            return .get
+        case .insertBlocks:
+            return .post
+        case .deleteBlocks:
+            return .delete
+        case .getFollows:
+            return .get
+        case .insertFollows:
+            return .post
+        case .deleteFollows:
+            return .delete
+        case .getFollowers:
+            return .get
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getBlocks:
+            return .request
+        case .insertBlocks(let params):
+            return .requestParameters(parameters: params)
+        case .deleteBlocks(let params):
+            return .requestParameters(parameters: params)
+        case .getFollows:
+            return .request
+        case .insertFollows(let params):
+            return .requestParameters(parameters: params)
+        case .deleteFollows(let params):
+            return .requestParameters(parameters: params)
+        case .getFollowers:
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
+
+public enum UserAPI {
+    case getme
+    case updateme (params: [String: Any])
+    case changepassword (params: [String: Any])
+    case uploadavatar
+    case uploadcover
+
+}
+extension UserAPI: EndPointType {
+    var module: String {
+        return "/user"
+    }
+    
+    var path: String {
+        switch self {
+        case .getme:
+            return "/me"
+        case .updateme:
+            return "/me"
+        case .changepassword:
+            return "/change-password"
+        case .uploadcover:
+            return "/upload-cover"
+        case .uploadavatar:
+            return "/upload-avatar"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getme:
+            return .get
+        case .updateme:
+            return .patch
+        case .changepassword:
+            return .post
+        case .uploadcover:
+            return .post
+        case .uploadavatar:
+            return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getme:
+            return .request
+        case .updateme(let params):
+            return .requestParameters(parameters: params)
+        case .changepassword(params: let params):
+            return .requestParameters(parameters: params)
+        case .uploadavatar:
+            return .request
+        case .uploadcover:
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
+
+public enum ContactAPI {
+    case postContact
+}
+extension ContactAPI: EndPointType {
+    var module: String {
+        return "/contact"
+    }
+    
+    var path: String {
+      switch self {
+      case .postContact:
+          return "/"
+      }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .postContact:
+            return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .postContact:
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
 }

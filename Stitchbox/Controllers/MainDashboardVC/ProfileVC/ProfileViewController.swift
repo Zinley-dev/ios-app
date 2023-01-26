@@ -33,6 +33,8 @@ class ProfileViewController: UIViewController {
     
     private var datasource: Datasource!
     
+    @IBOutlet weak var selectAvatarImage: UIImageView!
+    @IBOutlet weak var selectCoverImage: UIImageView!
     @IBOutlet weak var challengeCardView: UIView!
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -40,11 +42,11 @@ class ProfileViewController: UIViewController {
     var pullControl = UIRefreshControl()
 
     var demoProfileData: ProfileHeaderData {
-        return ProfileHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
+        return ProfileHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company")
     }
     
     var demoChallengeData: ChallengeCardHeaderData {
-        return ChallengeCardHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
+        return ChallengeCardHeaderData(name: "Planet Pennies")
     }
     
     func bindingUI() {
@@ -53,13 +55,33 @@ class ProfileViewController: UIViewController {
             DispatchQueue.main.async {
                 if let cell = self.datasource.itemIdentifier(for: indexPath) {
                     if case .header(var param) = cell {
-                        param.postCount = count
-                        var snapshot = self.datasource.snapshot()
-                        // replace item
-                        snapshot.insertItems([.header(param)], beforeItem: cell)
-                        snapshot.deleteItems([cell])
-                        // update datasource
-                        self.datasource.apply(snapshot)
+                        if (param.followers != count) {
+                            param.followers = count
+                            var snapshot = self.datasource.snapshot()
+                            // replace item
+                            snapshot.insertItems([.header(param)], beforeItem: cell)
+                            snapshot.deleteItems([cell])
+                            // update datasource
+                            self.datasource.apply(snapshot)
+                        }
+                    }
+                }
+            }
+        })
+        viewModel.output.followingObservable.subscribe(onNext: { count in
+            let indexPath = IndexPath(item: 0, section: 0);
+            DispatchQueue.main.async {
+                if let cell = self.datasource.itemIdentifier(for: indexPath) {
+                    if case .header(var param) = cell {
+                        if (param.following != count) {
+                            param.following = count
+                            var snapshot = self.datasource.snapshot()
+                            // replace item
+                            snapshot.insertItems([.header(param)], beforeItem: cell)
+                            snapshot.deleteItems([cell])
+                            // update datasource
+                            self.datasource.apply(snapshot)
+                        }
                     }
                 }
             }
@@ -129,12 +151,21 @@ class ProfileViewController: UIViewController {
                     let url = URL(string: avatarUrl)
                     cell.avatarImage.load(url: url!)
                 }
-                if let coverUrl = _AppCoreData.userDataSource.value?.coverURL, coverUrl != "" {
+                if let coverUrl = _AppCoreData.userDataSource.value?.cover, coverUrl != "" {
                     let url = URL(string: coverUrl)
                     cell.coverImage.load(url: url!)
                 }
+                cell.discordLbl.text = "-"
+                if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
+                    cell.discordLbl.text = discord
+                }
+                if let about = _AppCoreData.userDataSource.value?.about {
+                    cell.descriptionLbl.text = about
+                }
                 
-                cell.numberOfFollowers.text = "\(param.postCount)"
+                cell.numberOfFollowers.text = "\(param.followers)"
+                cell.numberOfFollowing.text = "\(param.following)"
+                
                 
               
                 // add buttons target
@@ -172,9 +203,24 @@ class ProfileViewController: UIViewController {
                 
             }
             
-        case .challengeCard(_):
+        case .challengeCard(let param):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChallengerCardProfileHeaderCell.reuseIdentifier, for: indexPath) as? ChallengerCardProfileHeaderCell {
+                
+                // display username
+                if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
+                    cell.username.text = username
+                }
+                if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+                    let url = URL(string: avatarUrl)
+                    cell.userImgView.load(url: url!)
+                }
+                if let card = _AppCoreData.userDataSource.value?.challengeCard {
+                    cell.infoLbl.text = card.quote
+                }
+                
+                
+                
                 
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
@@ -226,6 +272,19 @@ class ProfileViewController: UIViewController {
     func setupChallengeView() {
     
         self.challengeCardView.addSubview(ChallengeView)
+        
+        
+        let size = self.view.frame.width * (40/388)
+        let cornerRadius = size/2
+        
+        ChallengeView.gameWidth.constant = size
+        ChallengeView.gameHeight.constant = size
+        
+      
+        ChallengeView.game1.layer.cornerRadius = cornerRadius
+        ChallengeView.game2.layer.cornerRadius = cornerRadius
+        ChallengeView.game3.layer.cornerRadius = cornerRadius
+        ChallengeView.game4.layer.cornerRadius = cornerRadius
     
     }
     
@@ -248,11 +307,21 @@ extension ProfileViewController {
         
         print("followersTapped")
         
+        if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            self.navigationController?.pushViewController(MFVC, animated: true)
+            
+        }
+        
     }
     
     @objc func followingTapped(_ sender: UIButton) {
-        
+        //MainFollowVC
        print("followingTapped")
+        
+        if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            self.navigationController?.pushViewController(MFVC, animated: true)
+            
+        }
         
     }
     
@@ -267,25 +336,30 @@ extension ProfileViewController {
     
     @objc func discordTapped(_ sender: UIButton) {
         
-        print("discordTapped")
+        print("discordTapped - open link discord if have unless ask let user input their discord link")
         
     }
     
     @objc func fistBumpedTapped(_ sender: UIButton) {
         
-        print("fistBumpedTapped")
+        if let FBSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "FistBumpedStatVC") as? FistBumpedStatVC {
+            self.navigationController?.pushViewController(FBSVC, animated: true)
+            
+        }
         
     }
     
     @objc func avatarTapped(sender: AnyObject!) {
   
         print("avatarTapped")
+        showFullScreenAvatar()
   
     }
     
     @objc func coverImageTapped(sender: AnyObject!) {
   
         print("coverImageTapped")
+        showFullScreenCover()
   
     }
     
@@ -296,7 +370,10 @@ extension ProfileViewController {
     
     @objc func editCardTapped(_ sender: UIButton) {
         
-        print("editCardTapped")
+        if let ECCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditChallengeCardVC") as? EditChallengeCardVC {
+            self.navigationController?.pushViewController(ECCVC, animated: true)
+            
+        }
         
     }
     
@@ -451,6 +528,40 @@ extension ProfileViewController {
         
     }
     
+    func showFullScreenAvatar() {
+        
+        if selectAvatarImage.isHidden {
+        
+            self.backgroundView.isHidden = false
+            self.selectAvatarImage.alpha = 1.0
+            
+            UIView.transition(with: selectAvatarImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                
+                self.selectAvatarImage.isHidden = false
+                
+            })
+            
+        }
+        
+    }
+    
+    
+    func showFullScreenCover() {
+        
+        if selectCoverImage.isHidden {
+        
+            self.backgroundView.isHidden = false
+            self.selectCoverImage.alpha = 1.0
+            
+            UIView.transition(with: selectCoverImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                
+                self.selectCoverImage.isHidden = false
+                
+            })
+            
+        }
+        
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -466,6 +577,38 @@ extension ProfileViewController {
                     self.challengeCardView.alpha = 0
                 }) { (finished) in
                     self.challengeCardView.isHidden = finished
+                    self.backgroundView.isHidden = true
+                }
+              
+            }
+                
+        } else if selectAvatarImage.isHidden == false {
+            
+            let touch = touches.first
+            guard let location = touch?.location(in: self.view) else { return }
+            if !selectAvatarImage.frame.contains(location) {
+                
+                
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.selectAvatarImage.alpha = 0
+                }) { (finished) in
+                    self.selectAvatarImage.isHidden = finished
+                    self.backgroundView.isHidden = true
+                }
+              
+            }
+                
+        } else if selectCoverImage.isHidden == false {
+            
+            let touch = touches.first
+            guard let location = touch?.location(in: self.view) else { return }
+            if !selectCoverImage.frame.contains(location) {
+                
+                
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.selectCoverImage.alpha = 0
+                }) { (finished) in
+                    self.selectCoverImage.isHidden = finished
                     self.backgroundView.isHidden = true
                 }
               

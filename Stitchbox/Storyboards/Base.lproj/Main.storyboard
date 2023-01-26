@@ -307,7 +307,7 @@
         <!--Start View Controller-->
         <scene sceneID="Jfy-3u-Q3Z">
             <objects>
-                <viewController id="bTH-hk-GcG" customClass="StartViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StartViewController" id="bTH-hk-GcG" customClass="StartViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gCR-YF-C08">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

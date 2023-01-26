@@ -48,11 +48,11 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
         logic()
     }
     func logic() {
-      
+        
         sendOTPDidTapSubject.asObservable()
             .subscribe (onNext: { (phone, countryCode) in
-              
-//                self.OTPSentSubject.onNext(true)
+                
+                //                self.OTPSentSubject.onNext(true)
                 print(phone, countryCode)
                 if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{3,4}$"#)
                    || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
@@ -138,12 +138,12 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
         }
         verifyOTPDidTapSubject
             .withLatestFrom(phoneSubject.asObservable())
-                {(phone: $1, code: $0)}
+        {(phone: $1, code: $0)}
             .withLatestFrom(countryCodeSubject.asObservable())
-                {(phone: $0.phone, countryCode: $1, code: $0.code)}
+        {(phone: $0.phone, countryCode: $1, code: $0.code)}
             .subscribe (onNext: {(phone, countryCode, code) in
                 print(phone, countryCode, code)
-//                self.successSubject.onNext(.logInSuccess);
+                //                self.successSubject.onNext(.logInSuccess);
                 // check username or password in the right format
                 if (isNotValidInput(Input: phone, RegEx: "^\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{3,4}$")
                     || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")
@@ -154,50 +154,46 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                 // call api toward login api of backend
                 self.loadingSubject.onNext(true)
                 APIManager().phoneVerify(phone: countryCode + phone, OTP: code) { result in switch result {
-                
+                    
                 case .success(let apiResponse):
                     // get and process data
                     if (apiResponse.body?["message"] as! String == "success") {
                         // get and process data
                         let data = apiResponse.body?["data"] as! [String: Any]?
-                        do{
-                            let account = try Account(JSONbody: data, type: .phoneLogin)
-                            print(account)
-                            
-                          // Write/Set Data
-                          let sessionToken = SessionDataSource.init(JSONString: "{}")!
-                          sessionToken.accessToken = account.accessToken
-                          sessionToken.refreshToken = account.refreshToken
-                          _AppCoreData.userSession.accept(sessionToken)
-                          
-                          // write usr data
-                          if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
+                        let account =  Mapper<Account>().map(JSONObject: data)
+                        
+                        print("account \(Mapper().toJSON(account!))")
+                        
+                        // Write/Set Data
+                        let sessionToken = SessionDataSource.init(JSONString: "{}")!
+                        sessionToken.accessToken = account?.accessToken
+                        sessionToken.refreshToken = account?.refreshToken
+                        _AppCoreData.userSession.accept(sessionToken)
+                        
+                        // write usr data
+                        if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
                             _AppCoreData.userDataSource.accept(newUserData)
-                          }
-                            self.successSubject.onNext(.logInSuccess);
-
-                        } catch {
-                            print("Unable to Create Account (\(error))")
                         }
-                          self.loadingSubject.onNext(false)
+                        self.successSubject.onNext(.logInSuccess)
+                        self.loadingSubject.onNext(false)
                         
                     }
-
+                    
                 case .failure(let error):
                     print(error)
                     self.loadingSubject.onNext(false)
                     switch error {
                     case .authRequired(let body):
                         self.errorsSubject.onNext(NSError(domain: body?["message"] as? String ?? "Cannot verify OTP", code: 401))
-                      case .requestFailed(let body):
+                    case .requestFailed(let body):
                         self.errorsSubject.onNext(NSError(
-                          domain: body?["message"] as? String ?? "Cannot verify OTP",
-                          code: Int(body?["error"] as! String) ?? 404
+                            domain: body?["message"] as? String ?? "Cannot verify OTP",
+                            code: Int(body?["error"] as! String) ?? 404
                         ))
-
+                        
                     default:
                         self.errorsSubject.onNext(NSError(domain: "Cannot verify OTP", code: 401))
-
+                        
                     }
                 }
                 }

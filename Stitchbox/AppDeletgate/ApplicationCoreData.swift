@@ -54,53 +54,52 @@ class ApplicationCoreData: NSObject {
   }
   
   // MARK: - Sync to local
-  private func initSync() {
-    // Sync userSession
-    
-    if UserDefaults.standard.object(forKey: kUserSession) is String {
-      if let data = UserDefaults.standard.object(forKey: kUserSession) as? String {
-        let sessionData = SessionDataSource.init(JSONString: data)
-        if sessionData != nil {
-          self.userSession.accept(sessionData)
-        } else {
-          UserDefaults.standard.removeObject(forKey: kUserSession)
+    private func initSync() {
+        // Sync userSession
+        
+        if UserDefaults.standard.object(forKey: kUserSession) is String {
+            if let data = UserDefaults.standard.object(forKey: kUserSession) as? String {
+                let sessionData = SessionDataSource.init(JSONString: data)
+                if sessionData != nil {
+                    self.userSession.accept(sessionData)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: kUserSession)
+                }
+            } else {
+                UserDefaults.standard.removeObject(forKey: kUserSession)
+            }
         }
-      }
-    } else {
-      UserDefaults.standard.removeObject(forKey: kUserSession)
-    }
-    
-    // sync userDataSource
-    if UserDefaults.standard.object(forKey: kUserProfile) is String {
-      if let data = UserDefaults.standard.object(forKey: kUserProfile) as? String {
-        let userData = UserDataSource.init(JSONString: data)
-        if userData != nil {
-          self.userDataSource.accept(userData)
-        } else {
-          UserDefaults.standard.removeObject(forKey: kUserProfile)
+        
+        // sync userDataSource
+        if UserDefaults.standard.object(forKey: kUserProfile) is String {
+            if let data = UserDefaults.standard.object(forKey: kUserProfile) as? String {
+                let userData = UserDataSource.init(JSONString: data)
+                if userData != nil {
+                    self.userDataSource.accept(userData)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: kUserProfile)
+                }
+            } else {
+                UserDefaults.standard.removeObject(forKey: kUserProfile)
+            }
         }
-      }
-    } else {
-      UserDefaults.standard.removeObject(forKey: kUserProfile)
     }
-  }
 
-  private func syncDown() {
-    // Sync SessionDataSource
-    if self.userSession.value == nil {
-      UserDefaults.standard.removeObject(forKey: kUserSession)
-    } else {
-      let data = self.userSession.value?.toJSONString()
-      UserDefaults.standard.setValue(data, forKey: kUserSession)
+    private func syncDown() {
+        // Sync SessionDataSource
+        if self.userSession.value == nil {
+            UserDefaults.standard.removeObject(forKey: kUserSession)
+        } else {
+            let data = self.userSession.value?.toJSONString()
+            UserDefaults.standard.setValue(data, forKey: kUserSession)
+        }
+        
+        // Sync UserDataSource
+        if self.userDataSource.value == nil {
+            UserDefaults.standard.removeObject(forKey: kUserProfile)
+        } else {
+            let data = self.userDataSource.value?.toJSONString()
+            UserDefaults.standard.setValue(data, forKey: kUserProfile)
+        }
     }
-    
-    // Sync UserDataSource
-    if self.userDataSource.value == nil {
-      UserDefaults.standard.removeObject(forKey: kUserProfile)
-    } else {
-      let data = self.userDataSource.value?.toJSONString()
-      UserDefaults.standard.setValue(data, forKey: kUserProfile)
-    }
-  }
-
 }

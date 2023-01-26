@@ -5,26 +5,21 @@
 //  Created by Khoi Nguyen on 1/4/23.
 //
 
-import Foundation
+import ObjectMapper
 
-struct uploadImageGroupModel : Codable {
+struct uploadImageGroupModel : Mappable {
+    
 
     // MARK: - Properties
-    var url: String
+    private(set) var url: String = ""
     
-    init(JSONbody: [String?: Any]?) throws {
+    init?(map: ObjectMapper.Map) {
         
-        if let data = JSONbody {
-            
-            self.url = data["url"] as? String ?? ""
-            
-        } else {
-            
-            self.url =  ""
-           
-        }
-
-   
     }
+    
+    mutating func mapping(map: ObjectMapper.Map) {
+        url <- map["url"]
+    }
+    
         
 }

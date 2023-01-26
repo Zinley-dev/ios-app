@@ -9,6 +9,8 @@ import Foundation
 
 struct ChallengeCardHeaderData: Hashable {
     let name: String
-    let accountType: String
-    let postCount: Int
+    let avatar: String = ""
+    let badges: String = ""
+    let quotes: String = ""
+    let createdDate: String = "12/12/2022"
 }
