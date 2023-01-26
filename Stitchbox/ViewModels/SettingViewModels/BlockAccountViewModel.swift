@@ -74,28 +74,21 @@ class BlockAccountsViewModel: ViewModelProtocol {
         }
     }
     
-    // handle notification
-    // For swift 4.0 and above put @objc attribute in front of function Definition
-    @objc func unblock(_ notification: NSNotification) {
-        if let blockId = notification.userInfo?["blockId"] as? String {
-            // do something with your strinf
-            APIManager().deleteBlocks(params: ["blockId": blockId]){
-                result in switch result {
-                case .success(let response):
-                    print(response)
-                    self.successSubject.onNext("Successfully unblock user")
-                    self.getAPISetting()
-                case .failure:
-                    self.errorsSubject.onNext("Cannot unblock user")
-                }
+    func unblock(blockId: String) -> Void {
+        // do something with your strinf
+        APIManager().deleteBlocks(params: ["blockId": blockId]){
+            result in switch result {
+            case .success(let response):
+                print(response)
+                self.successSubject.onNext("Successfully unblock user")
+                self.getAPISetting()
+            case .failure:
+                self.errorsSubject.onNext("Cannot unblock user")
+                
             }
         }
     }
     
-    func logic() {
-        NotificationCenter.default.addObserver(self, selector: #selector(unblock(_:)), name: NSNotification.Name("unblock"), object: nil)
-    }
-    deinit{
-        NotificationCenter.default.removeObserver(self)
-    }
+    func logic() {}
+    deinit{}
 }

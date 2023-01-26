@@ -18,7 +18,7 @@ fileprivate let FontSize: CGFloat = 12
 class BlockNode: ASCellNode {
     
     weak var user: BlockUserModel!
-    var UnBlockAction : ((ASCellNode) -> Void)?
+    var UnBlockAction : (() -> Void)?
     
     var userNameNode: ASTextNode!
     var NameNode: ASTextNode!
@@ -62,6 +62,7 @@ class BlockNode: ASCellNode {
         //
         
         UnBlockBtnNode.addTarget(self, action: #selector(BlockNode.UnblockBtnPressed), forControlEvents: .touchUpInside)
+        UnBlockBtnNode.contents = user.blockId
         
         //
         
@@ -89,7 +90,9 @@ class BlockNode: ASCellNode {
     
     
     @objc func UnblockBtnPressed() {
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "unblock")), object: nil, userInfo: ["blockId": user.blockId])
+        if let action = UnBlockAction {
+            action()
+        }
     }
     
     

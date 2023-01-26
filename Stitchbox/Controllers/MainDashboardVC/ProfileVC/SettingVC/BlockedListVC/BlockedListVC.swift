@@ -207,6 +207,7 @@ extension BlockedListVC: ASTableDataSource {
         return {
             
             let node = BlockNode(with: user)
+            node.UnBlockAction = { self.viewModel.unblock(blockId: user.blockId)}
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
