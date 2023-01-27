@@ -504,3 +504,38 @@ extension ContactAPI: EndPointType {
         return ["Authorization": _AppCoreData.userSession.value!.accessToken]
     }
 }
+
+public enum PostAPI {
+    case create(params: [String: Any])
+}
+extension PostAPI: EndPointType {
+    var module: String {
+        return "/post"
+    }
+    
+    var path: String {
+        switch self {
+            case .create:
+                return "/"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+            case .create:
+                return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+            case .create(let params):
+                return .requestParameters(parameters: params)
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
+

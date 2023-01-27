@@ -40,7 +40,7 @@ class UserProfileVC: UIViewController {
     }
     
     var demoChallengeData: ChallengeCardHeaderData {
-        return ChallengeCardHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
+        return ChallengeCardHeaderData(name: "Planet Pennies")
     }
     
     override func viewDidLoad() {

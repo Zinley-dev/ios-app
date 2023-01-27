@@ -15,7 +15,7 @@ class FollowingVC: UIViewController {
     @IBOutlet weak var contentView: UIView!
     
     var tableNode: ASTableNode!
-    var userList = [UserActionModel]()
+    var userList = [FollowerModel]()
     
     
     required init?(coder aDecoder: NSCoder) {

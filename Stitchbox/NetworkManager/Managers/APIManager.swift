@@ -33,6 +33,7 @@ struct APIManager {
     let accountManager = Manager<AccountAPI>()
     let userManager = Manager<UserAPI>()
     let contactManager = Manager<ContactAPI>()
+    let postManager = Manager<PostAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -247,3 +248,12 @@ extension APIManager {
 }
 
 
+extension APIManager {
+    
+    func createPost(params: [String: Any], completion: @escaping APICompletion) {
+        postManager.request(.create(params: params)) { result in
+            completion(result)
+        }
+    }
+    
+}
