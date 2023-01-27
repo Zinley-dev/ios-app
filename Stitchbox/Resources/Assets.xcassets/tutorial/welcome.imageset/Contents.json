@@ -1,8 +1,7 @@
 {
   "images" : [
     {
-      "compression-type" : "gpu-optimized-best",
-      "filename" : "welcome.jpg",
+      "filename" : "welcome.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
