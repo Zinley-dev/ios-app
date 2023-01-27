@@ -113,6 +113,9 @@
 		6A3F0A832980C50B00366665 /* UserActionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A822980C50B00366665 /* UserActionModel.swift */; };
 		6A3F0A852981FF0900366665 /* circleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A842981FF0900366665 /* circleView.swift */; };
 		6A3F0A88298201A100366665 /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A87298201A100366665 /* TutorialVC.swift */; };
+		6A3F0A8C2982331F00366665 /* UserProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A8B2982331F00366665 /* UserProfileVC.swift */; };
+		6A3F0A8F2982454400366665 /* UserProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A8E2982454400366665 /* UserProfileHeaderCell.swift */; };
+		6A3F0A912982458700366665 /* UserChallengerCardProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A902982458700366665 /* UserChallengerCardProfileHeaderCell.swift */; };
 		6A495E3D297666EA001895C3 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A495E3C297666EA001895C3 /* SettingVC.swift */; };
 		6A58EA46294E997A005FA3CD /* GroupChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */; };
 		6A58EA4D294EB280005FA3CD /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */; };
@@ -396,6 +399,9 @@
 		6A3F0A822980C50B00366665 /* UserActionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionModel.swift; sourceTree = "<group>"; };
 		6A3F0A842981FF0900366665 /* circleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = circleView.swift; sourceTree = "<group>"; };
 		6A3F0A87298201A100366665 /* TutorialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVC.swift; sourceTree = "<group>"; };
+		6A3F0A8B2982331F00366665 /* UserProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileVC.swift; sourceTree = "<group>"; };
+		6A3F0A8E2982454400366665 /* UserProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeaderCell.swift; sourceTree = "<group>"; };
+		6A3F0A902982458700366665 /* UserChallengerCardProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChallengerCardProfileHeaderCell.swift; sourceTree = "<group>"; };
 		6A495E3C297666EA001895C3 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChannelTableViewCell.swift; sourceTree = "<group>"; };
 		6A58EA48294EB280005FA3CD /* NotificationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
@@ -1260,6 +1266,24 @@
 			path = BadgesHeaderVcView;
 			sourceTree = "<group>";
 		};
+		6A3F0A8A2982330B00366665 /* UserProfileVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A3F0A8D2982452000366665 /* UserProfileCell */,
+				6A3F0A8B2982331F00366665 /* UserProfileVC.swift */,
+			);
+			path = UserProfileVC;
+			sourceTree = "<group>";
+		};
+		6A3F0A8D2982452000366665 /* UserProfileCell */ = {
+			isa = PBXGroup;
+			children = (
+				6A3F0A8E2982454400366665 /* UserProfileHeaderCell.swift */,
+				6A3F0A902982458700366665 /* UserChallengerCardProfileHeaderCell.swift */,
+			);
+			path = UserProfileCell;
+			sourceTree = "<group>";
+		};
 		6A495E392976596E001895C3 /* SettingVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -1469,6 +1493,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A3F0A8A2982330B00366665 /* UserProfileVC */,
 				6A3F0A5A297CB82800366665 /* AddVC */,
 				6A3F0A54297B6A7500366665 /* FollowVC */,
 				6AEA74F329680312005C802B /* ProfileVC */,
@@ -2335,6 +2360,7 @@
 				6A3F0A852981FF0900366665 /* circleView.swift in Sources */,
 				6A6627782965771400A4488B /* NetworkManager.swift in Sources */,
 				148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */,
+				6A3F0A8F2982454400366665 /* UserProfileHeaderCell.swift in Sources */,
 				6A12359F29503492004B612E /* ChannelSettingsVC.swift in Sources */,
 				A59CB3F3294ADC2500D84D9A /* SessionDataSource.swift in Sources */,
 				6A9E4C6B29768BA100B59176 /* FindFriendsModel.swift in Sources */,
@@ -2405,6 +2431,7 @@
 				6A0CF63B296AAC1D00155889 /* PhoneResetVC.swift in Sources */,
 				A540A8DA294731320085CC45 /* AppleSignInService.swift in Sources */,
 				6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */,
+				6A3F0A8C2982331F00366665 /* UserProfileVC.swift in Sources */,
 				6AAD7A0D294C6453003E3AB6 /* AppKey.swift in Sources */,
 				6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */,
 				6A3F0A76297FADB900366665 /* SelectedHashtagCollectionViewCell.swift in Sources */,
@@ -2495,6 +2522,7 @@
 				390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */,
 				A5A5E40729375FF3004E9207 /* SButton.swift in Sources */,
 				A548E5AA2955AD7500E9C971 /* LastStepViewController.swift in Sources */,
+				6A3F0A912982458700366665 /* UserChallengerCardProfileHeaderCell.swift in Sources */,
 				6ABA61272977D999003BFB5B /* TwoFactorAuthVC.swift in Sources */,
 				149F44F72956F8270084742A /* RoundedImageView.swift in Sources */,
 				6AEA74FA29680B53005C802B /* NormalLoginVC.swift in Sources */,

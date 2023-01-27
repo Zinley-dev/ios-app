@@ -1,8 +1,7 @@
 {
   "images" : [
     {
-      "compression-type" : "gpu-optimized-best",
-      "filename" : "challenge card.png",
+      "filename" : "Challengecard.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
