@@ -16,7 +16,7 @@ fileprivate let FontSize: CGFloat = 13
 
 class FollowNode: ASCellNode {
     
-    weak var user: UserActionModel!
+    weak var user: FollowerModel!
     var followAction : ((ASCellNode) -> Void)?
     lazy var delayItem = workItem()
     var attemptCount = 0
@@ -29,7 +29,7 @@ class FollowNode: ASCellNode {
     
     let selectedColor = UIColor(red: 248/255, green: 189/255, blue: 91/255, alpha: 1.0)
     
-    init(with user: UserActionModel) {
+    init(with user: FollowerModel) {
         
         self.user = user
         self.userNameNode = ASTextNode()
@@ -62,18 +62,26 @@ class FollowNode: ASCellNode {
         automaticallyManagesSubnodes = true
          
         
-        if user.action == "Following" {
-            
-           
-            
-            
-            
-        } else if user.action == "Follower" {
-            
-            
-            
+//        if user.action == "Following" {
+//            
+//           
+//            
+//            
+//            
+//        } else if user.action == "Follower" {
+//            
+//            
+//            
+//        
+//        }
         
-        }
+        let paragraphStyles = NSMutableParagraphStyle()
+        paragraphStyles.alignment = .left
+        self.userNameNode.attributedText = NSAttributedString(string: user.username ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+
+        
+        AvatarNode.url = URL(string: user.avatar ?? "https://st3.depositphotos.com/1767687/16607/v/450/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg")
+        
         
         
     }

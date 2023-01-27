@@ -6,8 +6,15 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ProfileViewController: UIViewController {
+    typealias ViewModelType = ProfileViewModel
+    // MARK: - Properties
+    private var viewModel: ViewModelType! = ViewModelType()
+    private let disposeBag = DisposeBag()
+
     
     enum Section: Hashable {
         case header
@@ -35,11 +42,50 @@ class ProfileViewController: UIViewController {
     var pullControl = UIRefreshControl()
 
     var demoProfileData: ProfileHeaderData {
-        return ProfileHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
+        return ProfileHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company")
     }
     
     var demoChallengeData: ChallengeCardHeaderData {
-        return ChallengeCardHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
+        return ChallengeCardHeaderData(name: "Planet Pennies")
+    }
+    
+    func bindingUI() {
+        viewModel.output.followersObservable.subscribe(onNext: { count in
+            let indexPath = IndexPath(item: 0, section: 0);
+            DispatchQueue.main.async {
+                if let cell = self.datasource.itemIdentifier(for: indexPath) {
+                    if case .header(var param) = cell {
+                        if (param.followers != count) {
+                            param.followers = count
+                            var snapshot = self.datasource.snapshot()
+                            // replace item
+                            snapshot.insertItems([.header(param)], beforeItem: cell)
+                            snapshot.deleteItems([cell])
+                            // update datasource
+                            self.datasource.apply(snapshot)
+                        }
+                    }
+                }
+            }
+        })
+        viewModel.output.followingObservable.subscribe(onNext: { count in
+            let indexPath = IndexPath(item: 0, section: 0);
+            DispatchQueue.main.async {
+                if let cell = self.datasource.itemIdentifier(for: indexPath) {
+                    if case .header(var param) = cell {
+                        if (param.following != count) {
+                            param.following = count
+                            var snapshot = self.datasource.snapshot()
+                            // replace item
+                            snapshot.insertItems([.header(param)], beforeItem: cell)
+                            snapshot.deleteItems([cell])
+                            // update datasource
+                            self.datasource.apply(snapshot)
+                        }
+                    }
+                }
+            }
+        })
     }
     
     override func viewDidLoad() {
@@ -64,6 +110,7 @@ class ProfileViewController: UIViewController {
         
         configureDatasource()
         wireDelegate()
+        bindingUI()
         
         self.setupChallengeView()
     }
@@ -73,6 +120,8 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        // Load follwer, follwing
+        viewModel.getFollowers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -90,9 +139,36 @@ class ProfileViewController: UIViewController {
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell {
         switch item {
-        case .header(_):
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileHeaderCell.reuseIdentifier, for: indexPath) as? ProfileHeaderCell {
+        case .header(let param):
                 
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileHeaderCell.reuseIdentifier, for: indexPath) as? ProfileHeaderCell {
+                print("-------------HEADER-------------")
+                print(indexPath)
+                // display username
+                if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
+                    cell.usernameLbl.text = username
+                }
+                if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+                    let url = URL(string: avatarUrl)
+                    cell.avatarImage.load(url: url!)
+                }
+                if let coverUrl = _AppCoreData.userDataSource.value?.cover, coverUrl != "" {
+                    let url = URL(string: coverUrl)
+                    cell.coverImage.load(url: url!)
+                }
+                cell.discordLbl.text = "-"
+                if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
+                    cell.discordLbl.text = discord
+                }
+                if let about = _AppCoreData.userDataSource.value?.about {
+                    cell.descriptionLbl.text = about
+                }
+                
+                cell.numberOfFollowers.text = "\(param.followers)"
+                cell.numberOfFollowing.text = "\(param.following)"
+                
+                
+              
                 // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
                 cell.followersBtn.addTarget(self, action: #selector(followersTapped), for: .touchUpInside)
@@ -128,9 +204,24 @@ class ProfileViewController: UIViewController {
                 
             }
             
-        case .challengeCard(_):
+        case .challengeCard(let param):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChallengerCardProfileHeaderCell.reuseIdentifier, for: indexPath) as? ChallengerCardProfileHeaderCell {
+                
+                // display username
+                if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
+                    cell.username.text = username
+                }
+                if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+                    let url = URL(string: avatarUrl)
+                    cell.userImgView.load(url: url!)
+                }
+                if let card = _AppCoreData.userDataSource.value?.challengeCard {
+                    cell.infoLbl.text = card.quote
+                }
+                
+                
+                
                 
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)

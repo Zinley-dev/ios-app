@@ -24,6 +24,51 @@ extension APIBuilder: BaseURL {
         return "\(APIBuilder.APIBuilderConstants.ApiScheme)://\(APIBuilder.APIBuilderConstants.ApiHost)"
     }
 }
+
+public enum FollowApi {
+    case follow
+    case followers
+}
+
+extension FollowApi: EndPointType {
+    var task: HTTPTask {
+        switch self {
+            case .follow:
+                return .request
+            case .followers:
+                return .request
+        }
+    }
+    
+    var headers: [String : String]? {
+        if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
+            let headers = ["Authorization": userToken]
+            return headers
+        }
+        return nil
+    }
+    
+    var module: String {
+        return "/follow"
+    }
+    var path: String {
+        switch self {
+            case .follow:
+                return "/"
+            case .followers:
+                return "/followers"
+        }
+    }
+    var httpMethod: HTTPMethod {
+        switch self {
+            case .follow:
+                return .get
+            case .followers:
+                return .get
+        }
+    }
+}
+
 public enum AuthApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
@@ -459,3 +504,38 @@ extension ContactAPI: EndPointType {
         return ["Authorization": _AppCoreData.userSession.value!.accessToken]
     }
 }
+
+public enum PostAPI {
+    case create(params: [String: Any])
+}
+extension PostAPI: EndPointType {
+    var module: String {
+        return "/post"
+    }
+    
+    var path: String {
+        switch self {
+            case .create:
+                return "/"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+            case .create:
+                return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+            case .create(let params):
+                return .requestParameters(parameters: params)
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
+

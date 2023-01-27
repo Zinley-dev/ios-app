@@ -29,7 +29,7 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     
     var demoChallengeData: ChallengeCardHeaderData {
-        return ChallengeCardHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
+        return ChallengeCardHeaderData(name: "Planet Pennies")
     }
     
     

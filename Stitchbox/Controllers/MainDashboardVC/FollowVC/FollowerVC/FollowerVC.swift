@@ -9,14 +9,20 @@ import UIKit
 import Alamofire
 import AsyncDisplayKit
 import SendBirdUIKit
+import RxSwift
 
 class FollowerVC: UIViewController {
+    
+    typealias ViewModelType = ProfileViewModel
+    // MARK: - Properties
+    private var viewModel: ViewModelType! = ViewModelType()
+    private let disposeBag = DisposeBag()
     
     @IBOutlet weak var contentView: UIView!
     
     var tableNode: ASTableNode!
-    var userList = [UserActionModel]()
-    
+    var userList = [FollowerModel]()
+    var asContext: ASBatchContext!
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -28,10 +34,39 @@ class FollowerVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setupTableNode()
         // Do any additional setup after loading the view.
+        bindingUI()
     }
     
+    func bindingUI() {
+        viewModel.output.followerListObservable.subscribe(onNext: { list in
+            guard self.asContext != nil else  {
+                return
+            }
+
+            guard list.count > 0 else {
+                self.asContext.completeBatchFetching(true)
+                return
+            }
+
+            let lastItemAt = self.userList.count
+            let section = 0
+
+            self.userList.append(contentsOf: list)
+            
+            var paths: [IndexPath] = []
+            for row in lastItemAt...self.userList.count - 1 {
+                let path = IndexPath(row: row, section: section)
+                paths.append(path)
+            }
+            DispatchQueue.main.async {
+                self.tableNode.insertRows(at: paths, with: .none)
+                self.asContext.completeBatchFetching(true)
+            }
+            
+        })
+    }
 
 
 }
@@ -93,15 +128,12 @@ extension FollowerVC: ASTableDelegate {
     }
         
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-            
-        
-            
+        print("willBegin......")
+        asContext = context
+        self.viewModel.getFollowers() // get next page
     }
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-        
-        
-     
         
     }
            
@@ -149,8 +181,6 @@ extension FollowerVC {
     
     func retrieveNextPageWithCompletion( block: @escaping ([AnyObject]) -> Void) {
         
-       
-                
     }
     
 
@@ -159,8 +189,6 @@ extension FollowerVC {
         guard newUsers.count > 0 else {
             return
         }
-        
-        
         
     }
     

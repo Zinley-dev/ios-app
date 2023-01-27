@@ -7,6 +7,21 @@
 
 import ObjectMapper
 
+class ChallengeCardData: Mappable {
+    private(set) var badge: String = ""
+    private(set) var quote: String = ""
+    private(set) var games: [String] = []
+    required init?(map: ObjectMapper.Map) {
+        
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        badge <- map["badge"]
+        quote <- map["quote"]
+        games <- map["games"]
+    }
+}
+
 class ThirdPartyCredential: Mappable {
     private(set) var uid: String = ""
     required init?(map: ObjectMapper.Map) {
@@ -47,6 +62,7 @@ class UserDataSource: Mappable {
     private(set) var avatarURL : String  = "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"
     private(set) var signinMethod : String = ""
     private(set) var socialId : String = ""
+    private(set) var discordUrl : String = ""
     
     private(set) var name : String = ""
     private(set) var password: String = ""
@@ -54,16 +70,16 @@ class UserDataSource: Mappable {
     private(set) var about: String = ""
     private(set) var bio: String = ""
     private(set) var referralCode: String = ""
-    private(set) var Birthday: String = ""
+    private(set) var birthday: String = ""
     private(set) var facebook: ThirdPartyCredential?
     private(set) var google: ThirdPartyCredential?
     private(set) var twitter: ThirdPartyCredential?
     private(set) var tiktok: ThirdPartyCredential?
     private(set) var apple: ThirdPartyCredential?
-    private(set) var FriendsIds: [String] = []
+    private(set) var friendsIds: [String] = []
     private(set) var location: String = ""
     private(set) var ageRange: AgeRange?
-    
+    private(set) var challengeCard: ChallengeCardData?
     required init?(map: Map) {
         //
     }
@@ -88,15 +104,17 @@ class UserDataSource: Mappable {
         about           <- map["about"]
         bio             <- map["bio"]
         referralCode    <- map["referralCode"]
-        Birthday        <- map["Birthday"]
+        birthday        <- map["Birthday"]
         facebook        <- map["facebook"]
         google          <- map["google"]
         twitter         <- map["twitter"]
         tiktok          <- map["tiktok"]
         apple           <- map["apple"]
-        FriendsIds      <- map["FriendsIds"]
+        friendsIds      <- map["FriendsIds"]
         gender          <- map["gender"]
         location        <- map["location"]
         ageRange        <- map["AgeRange"]
+        discordUrl      <- map["discordLink"]
+        challengeCard   <- map["challengeCard"]
     }
 }

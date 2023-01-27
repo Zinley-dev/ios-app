@@ -28,10 +28,12 @@ struct APIManager {
     let SBmanager = Manager<ChatApi>()
     let searchManager = Manager<SearchApi>()
     let mediaManager = Manager<MediaAPI>()
+    let followManager = Manager<FollowApi>()
     let settingManager = Manager<SettingAPI>()
     let accountManager = Manager<AccountAPI>()
     let userManager = Manager<UserAPI>()
     let contactManager = Manager<ContactAPI>()
+    let postManager = Manager<PostAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -129,6 +131,24 @@ struct APIManager {
             completion(result)
         }
     }
+}
+
+extension APIManager {
+    
+    func getFollower(completion: @escaping APICompletion) {
+        followManager.request(.follow) { result in
+            completion(result)
+        }
+    }
+    
+    func getFollowing(completion: @escaping APICompletion) {
+        followManager.request(.followers) { result in
+            completion(result)
+        }
+    }
+}
+
+extension APIManager {
     
     func getSettings(completion: @escaping APICompletion) {
         settingManager.request(.getSettings){
@@ -225,4 +245,15 @@ struct APIManager {
             completion(result)
         }
     }
+}
+
+
+extension APIManager {
+    
+    func createPost(params: [String: Any], completion: @escaping APICompletion) {
+        postManager.request(.create(params: params)) { result in
+            completion(result)
+        }
+    }
+    
 }
