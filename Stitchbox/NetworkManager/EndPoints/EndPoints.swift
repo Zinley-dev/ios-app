@@ -288,11 +288,11 @@ extension MediaAPI: EndPointType {
   }
 }
 public enum AccountAPI {
-    case getBlocks
+    case getBlocks (params: [String:Any])
     case insertBlocks (params: [String:Any])
     case deleteBlocks (params: [String:Any])
-    case getFollows
-    case getFollowers
+    case getFollows (params: [String:Any])
+    case getFollowers (params: [String:Any])
     case insertFollows (params: [String:Any])
     case deleteFollows (params: [String:Any])
 }
@@ -341,20 +341,20 @@ extension AccountAPI: EndPointType {
     
     var task: HTTPTask {
         switch self {
-        case .getBlocks:
-            return .request
+        case .getBlocks(let params):
+            return .requestParameters(parameters: params)
         case .insertBlocks(let params):
             return .requestParameters(parameters: params)
         case .deleteBlocks(let params):
             return .requestParameters(parameters: params)
-        case .getFollows:
-            return .request
+        case .getFollows(let params):
+            return .requestParameters(parameters: params)
         case .insertFollows(let params):
             return .requestParameters(parameters: params)
         case .deleteFollows(let params):
             return .requestParameters(parameters: params)
-        case .getFollowers:
-            return .request
+        case .getFollowers(let params):
+            return .requestParameters(parameters: params)
         }
     }
     

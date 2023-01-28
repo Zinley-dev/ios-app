@@ -143,8 +143,8 @@ struct APIManager {
             completion(result)
         }
     }
-    func getBlocks( completion: @escaping APICompletion) {
-        accountManager.request(.getBlocks){
+    func getBlocks(params: [String: Any], completion: @escaping APICompletion) {
+        accountManager.request(.getBlocks(params: params)){
             result in
             completion(result)
         }
@@ -161,14 +161,14 @@ struct APIManager {
             completion(result)
         }
     }
-    func getFollows( completion: @escaping APICompletion) {
-        accountManager.request(.getFollows){
+    func getFollows(params: [String: Any], completion: @escaping APICompletion) {
+        accountManager.request(.getFollowers(params: params)){
             result in
             completion(result)
         }
     }
-    func getFollowers( completion: @escaping APICompletion) {
-        accountManager.request(.getFollowers){
+    func getFollowers(params: [String: Any], completion: @escaping APICompletion) {
+        accountManager.request(.getFollowers(params: params)){
             result in
             completion(result)
         }
