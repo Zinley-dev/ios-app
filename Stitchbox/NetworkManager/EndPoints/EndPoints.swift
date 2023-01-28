@@ -342,19 +342,19 @@ extension AccountAPI: EndPointType {
     var task: HTTPTask {
         switch self {
         case .getBlocks(let params):
-            return .requestParameters(parameters: params)
+            return .requestQuery(parameters: params)
         case .insertBlocks(let params):
             return .requestParameters(parameters: params)
         case .deleteBlocks(let params):
             return .requestParameters(parameters: params)
         case .getFollows(let params):
-            return .requestParameters(parameters: params)
+            return .requestQuery(parameters: params)
         case .insertFollows(let params):
             return .requestParameters(parameters: params)
         case .deleteFollows(let params):
             return .requestParameters(parameters: params)
         case .getFollowers(let params):
-            return .requestParameters(parameters: params)
+            return .requestQuery(parameters: params)
         }
     }
     

@@ -36,6 +36,11 @@ class BlockAccountsViewModel: ViewModelProtocol {
     private let successSubject = PublishSubject<String>()
     private let submitChangeSubject = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
+    private let limitFetch = 1
+    private let pagingSubject = BehaviorRelay<PagingModel>(value: Mapper<PagingModel>().map(JSON: [
+        "limit": 1,
+        "page": -1,
+        "total": 1])!)
     
     init() {
         input = Input(
@@ -54,17 +59,31 @@ class BlockAccountsViewModel: ViewModelProtocol {
         logic()
     }
     
-    func getBlocks(completion: ([BlockUserModel]) -> Void) {
-        APIManager().getBlocks{
-            result in switch result {
+    func getBlocks(completion: ([BlockUserModel]) -> Void) -> Void  {
+        if (pagingSubject.value.isEndOfPage()) {
+            return
+        }
+        let newPagingObject = ["limit": limitFetch, "page": pagingSubject.value.page + 1]
+        APIManager().getBlocks(params: newPagingObject){
+            result in
+            print("here is request")
+            print(result)
+            switch result {
             case .success(let response):
                 if let data = response.body {
                     if let listData = data["data"] as? [[String: Any]] {
                         self.blockAccountRelay.accept(Mapper<BlockUserModel>().mapArray(JSONArray: listData))
                     } else {
                         self.blockAccountRelay.accept([BlockUserModel]())                    }
+                    if let pagingInfo = data["paging"] as? [String: Any] {
+                        self.pagingSubject.accept(Mapper<PagingModel>().map(JSON: pagingInfo) ?? Mapper<PagingModel>().map(JSON: [
+                            "limit": 1,
+                            "page": -1,
+                            "total": 1])!)
+                    }
                 }
-            case .failure:
+            case .failure(let error):
+                print(error)
                 self.errorsSubject.onNext("Cannot get user's block information")
             }
         }
@@ -76,7 +95,7 @@ class BlockAccountsViewModel: ViewModelProtocol {
         // do something with your strinf
         APIManager().deleteBlocks(params: ["blockId": blockId]){
             result in switch result {
-            case .success(let response):
+            case .success(_):
                 self.successSubject.onNext("Successfully unblock user")
             case .failure:
                 self.errorsSubject.onNext("Cannot unblock user")
