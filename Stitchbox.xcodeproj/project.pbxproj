@@ -156,6 +156,7 @@
 		6A78485B2984D1BA008B2263 /* PostNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485A2984D1BA008B2263 /* PostNode.swift */; };
 		6A78485E2984D1F6008B2263 /* NotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485D2984D1F6008B2263 /* NotificationVC.swift */; };
 		6A7848612984D221008B2263 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7848602984D221008B2263 /* PostModel.swift */; };
+		6A7848642985096F008B2263 /* StreamingLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7848632985096F008B2263 /* StreamingLinkVC.swift */; };
 		6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */; };
 		6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6329767ED500B59176 /* FindFriendsVC.swift */; };
 		6A9E4C6629767EE100B59176 /* MyReferralCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6529767EE100B59176 /* MyReferralCodeVC.swift */; };
@@ -447,7 +448,8 @@
 		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "CountryPickerView-master"; sourceTree = "<group>"; };
 		6A78485A2984D1BA008B2263 /* PostNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNode.swift; sourceTree = "<group>"; };
 		6A78485D2984D1F6008B2263 /* NotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationVC.swift; sourceTree = "<group>"; };
-		6A7848602984D221008B2263 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PostModel.swift; path = "/Users/hs.hoangnm/Documents/workspace/DUAL/ios-app/Stitchbox/Models/PostModel/PostModel.swift"; sourceTree = "<absolute>"; };
+		6A7848602984D221008B2263 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PostModel.swift; path = "/Users/khoinguyen/Desktop/ios-app/Stitchbox/Models/PostModel/PostModel.swift"; sourceTree = "<absolute>"; };
+		6A7848632985096F008B2263 /* StreamingLinkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingLinkVC.swift; sourceTree = "<group>"; };
 		6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationVC.swift; sourceTree = "<group>"; };
 		6A9E4C6329767ED500B59176 /* FindFriendsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsVC.swift; sourceTree = "<group>"; };
 		6A9E4C6529767EE100B59176 /* MyReferralCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReferralCodeVC.swift; sourceTree = "<group>"; };
@@ -518,7 +520,7 @@
 		6AEC6900295178E2000393D8 /* SendBirdRoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBirdRoomModel.swift; sourceTree = "<group>"; };
 		6AEC690329517EA9000393D8 /* SwiftLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLoader.swift; sourceTree = "<group>"; };
 		6AEC690529518020000393D8 /* UIColor+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Utils.swift"; sourceTree = "<group>"; };
-		6AF9733129789D6500C76814 /* EditPhofileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditPhofileVC.swift; path = "/Users/hs.hoangnm/Documents/workspace/DUAL/ios-app/Stitchbox/Controllers/MainDashboardVC/ProfileVC/EditPhofileVC/EditPhofileVC.swift"; sourceTree = "<absolute>"; };
+		6AF9733129789D6500C76814 /* EditPhofileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditPhofileVC.swift; path = "/Users/khoinguyen/Desktop/ios-app/Stitchbox/Controllers/MainDashboardVC/ProfileVC/EditPhofileVC/EditPhofileVC.swift"; sourceTree = "<absolute>"; };
 		6AF973342978E4E900C76814 /* MorePersonalInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorePersonalInfoVC.swift; sourceTree = "<group>"; };
 		6AF973372978F99E00C76814 /* EditGeneralInformationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGeneralInformationVC.swift; sourceTree = "<group>"; };
 		6AF9733A2978FDAC00C76814 /* EditBioVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBioVC.swift; sourceTree = "<group>"; };
@@ -1179,6 +1181,7 @@
 		6A3F0A5A297CB82800366665 /* AddVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A78486229850953008B2263 /* StreamingLinkVC */,
 				6A3F0A6A297FA42800366665 /* HashtagVC */,
 				6A3F0A5D297CBA4300366665 /* PostVC */,
 				6A3F0A5B297CB83F00366665 /* AddVC.swift */,
@@ -1493,6 +1496,14 @@
 				A5D1E9EC2984DA2000839311 /* CreatePostRequest.swift */,
 			);
 			path = PostModel;
+			sourceTree = "<group>";
+		};
+		6A78486229850953008B2263 /* StreamingLinkVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A7848632985096F008B2263 /* StreamingLinkVC.swift */,
+			);
+			path = StreamingLinkVC;
 			sourceTree = "<group>";
 		};
 		6A9E4C5E29767E8500B59176 /* MyReferralCodeVC */ = {
@@ -2036,7 +2047,6 @@
 		A5D1E9E92984D96F00839311 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				A5D1E9E12984722200839311 /* CreatePostRequest.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -2410,6 +2420,7 @@
 				6AF9733229789D6500C76814 /* EditPhofileVC.swift in Sources */,
 				6AAD7A0A294C5DC8003E3AB6 /* InboxVC.swift in Sources */,
 				6A9E4C862977B8F000B59176 /* BlockNode.swift in Sources */,
+				6A7848642985096F008B2263 /* StreamingLinkVC.swift in Sources */,
 				6AF973382978F99E00C76814 /* EditGeneralInformationVC.swift in Sources */,
 				6AE1CE67294D590D00B1C435 /* SendBirdGlobalAuthen.swift in Sources */,
 				A59CB3EF294ADB1E00D84D9A /* AppNavigationController.swift in Sources */,
@@ -2534,7 +2545,6 @@
 				6A0D541B296E4E840059530C /* ChallengeCard.swift in Sources */,
 				390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */,
 				1457CCD72945898F003C742F /* CardStackView.swift in Sources */,
-				A5D1E9E22984722200839311 /* CreatePostRequest.swift in Sources */,
 				6A58EA59294ECD5C005FA3CD /* SBUPendingMessageManager.swift in Sources */,
 				6ABA61252977D946003BFB5B /* ResetPwdVC.swift in Sources */,
 				390FD77C29092B9C0068B883 /* Contants.swift in Sources */,

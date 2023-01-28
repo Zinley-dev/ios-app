@@ -146,7 +146,7 @@ extension HashtagVC {
         
         hashtagTxtField.delegate = self
         
-        hashtagTxtField.becomeFirstResponder()
+        //hashtagTxtField.becomeFirstResponder()
         
     }
     

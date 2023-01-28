@@ -19,6 +19,10 @@ class PostVC: UIViewController {
     }
     
     
+    @IBOutlet weak var onlyMeLbl: UILabel!
+    @IBOutlet weak var followLbl: UILabel!
+    @IBOutlet weak var publicLbl: UILabel!
+    @IBOutlet weak var streamingLinkBtn: UIButton!
     @IBOutlet weak var avatarImage: UIImageView!
     @IBOutlet weak var settingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var collectionHeight: NSLayoutConstraint!
@@ -85,6 +89,10 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
+        publicLbl.textColor = .secondary
+        followLbl.textColor = .lightGray
+        onlyMeLbl.textColor = .lightGray
+        
     }
     
     
@@ -96,6 +104,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
+        publicLbl.textColor = .lightGray
+        followLbl.textColor = .secondary
+        onlyMeLbl.textColor = .lightGray
     }
     
     @IBAction func privateBtnPressed(_ sender: Any) {
@@ -105,6 +116,11 @@ class PostVC: UIViewController {
         globalBtn.setImage(UIImage(named: "public"), for: .normal)
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+        
+        
+        publicLbl.textColor = .lightGray
+        followLbl.textColor = .lightGray
+        onlyMeLbl.textColor = .secondary
         
         
     }
@@ -117,6 +133,16 @@ class PostVC: UIViewController {
         
     }
     
+    @IBAction func StreamingLinkBtnPressed(_ sender: Any) {
+        
+        
+        if let SLVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingLinkVC") as? StreamingLinkVC {
+            
+            self.navigationController?.pushViewController(SLVC, animated: true)
+            
+        }
+        
+    }
 }
 
 extension PostVC {
@@ -178,13 +204,14 @@ extension PostVC {
         privateBtn.setTitle("", for: .normal)
         followingBtn.setTitle("", for: .normal)
         hashtagBtn.setTitle("", for: .normal)
+        streamingLinkBtn.setTitle("", for: .normal)
         
     }
     
     func setupDefaultView() {
         
         collectionHeight.constant = 0.0
-        settingViewHeight.constant = 275 - 70
+        settingViewHeight.constant = 335 - 70
         
     }
 
