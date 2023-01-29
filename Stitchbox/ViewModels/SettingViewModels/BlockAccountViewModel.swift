@@ -36,11 +36,12 @@ class BlockAccountsViewModel: ViewModelProtocol {
     private let successSubject = PublishSubject<String>()
     private let submitChangeSubject = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
-    private let limitFetch = 1
+    private let limitFetch = 10
     private let pagingSubject = BehaviorRelay<PagingModel>(value: Mapper<PagingModel>().map(JSON: [
         "limit": 1,
         "page": -1,
         "total": 1])!)
+//    private let group = DispatchGroup()
     
     init() {
         input = Input(
@@ -59,36 +60,39 @@ class BlockAccountsViewModel: ViewModelProtocol {
         logic()
     }
     
-    func getBlocks(completion: ([BlockUserModel]) -> Void) -> Void  {
-        if (pagingSubject.value.isEndOfPage()) {
-            return
-        }
-        let newPagingObject = ["limit": limitFetch, "page": pagingSubject.value.page + 1]
-        APIManager().getBlocks(params: newPagingObject){
+    func getBlocks(page: Int) -> Void  {
+//        group.enter()
+//        print(pagingSubject.value.toJSON())
+//        if (pagingSubject.value.isEndOfPage()) {
+//            return
+//        }
+//        let newPagingObject = ["limit": limitFetch, "page": page]
+        APIManager().getBlocks(page: page){
             result in
-            print("here is request")
-            print(result)
             switch result {
             case .success(let response):
                 if let data = response.body {
                     if let listData = data["data"] as? [[String: Any]] {
+                        print("runned here")
+                        print(listData)
                         self.blockAccountRelay.accept(Mapper<BlockUserModel>().mapArray(JSONArray: listData))
                     } else {
                         self.blockAccountRelay.accept([BlockUserModel]())                    }
-                    if let pagingInfo = data["paging"] as? [String: Any] {
-                        self.pagingSubject.accept(Mapper<PagingModel>().map(JSON: pagingInfo) ?? Mapper<PagingModel>().map(JSON: [
-                            "limit": 1,
-                            "page": -1,
-                            "total": 1])!)
-                    }
+//                    if let pagingInfo = data["paging"] as? [String: Any] {
+//                        self.pagingSubject.accept(Mapper<PagingModel>().map(JSON: pagingInfo) ?? Mapper<PagingModel>().map(JSON: [
+//                            "limit": 1,
+//                            "page": 1,
+//                            "total": 1])!)
+//                    }
+                    
                 }
             case .failure(let error):
                 print(error)
                 self.errorsSubject.onNext("Cannot get user's block information")
             }
         }
-        
-        completion(self.blockAccountRelay.value)
+//        group.leave()
+//        completion(self.blockAccountRelay.value)
     }
     
     func unblock(blockId: String) -> Void {
@@ -103,6 +107,21 @@ class BlockAccountsViewModel: ViewModelProtocol {
             }
         }
     }
+    
+    func follow(userId: String) -> Void {
+        // do something with your strinf
+        APIManager().insertFollows(params: ["blockId": userId]){
+            result in switch result {
+            case .success(_):
+                self.successSubject.onNext("Successfully unblock user")
+            case .failure:
+                self.errorsSubject.onNext("Cannot unblock user")
+                
+            }
+        }
+    }
+    
+    
     
     func logic() {}
     deinit{}

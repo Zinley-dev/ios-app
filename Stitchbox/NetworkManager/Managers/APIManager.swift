@@ -143,8 +143,8 @@ struct APIManager {
             completion(result)
         }
     }
-    func getBlocks(params: [String: Any], completion: @escaping APICompletion) {
-        accountManager.request(.getBlocks(params: params)){
+    func getBlocks(page: Int, completion: @escaping APICompletion) {
+        accountManager.request(.getBlocks(params: ["page": page, "limit": 10])){
             result in
             completion(result)
         }
@@ -174,10 +174,11 @@ struct APIManager {
         }
     }
     func insertFollows(params: [String: Any], completion: @escaping APICompletion) {
-        accountManager.request(.insertFollows(params: params)){
-            result in
-            completion(result)
-        }
+//        accountManager.request(.insertFollows(params: params)){
+//            result in
+//            completion(result)
+//        }
+        print("call insertAPI")
     }
     func deleteFollows(params: [String: Any], completion: @escaping APICompletion) {
         accountManager.request(.deleteFollows(params: params)){

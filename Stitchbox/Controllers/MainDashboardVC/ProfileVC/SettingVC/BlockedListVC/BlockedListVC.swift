@@ -16,11 +16,14 @@ class BlockedListVC: UIViewController, ControllerType {
     
     let backButton: UIButton = UIButton(type: .custom)
     
+    let group = DispatchGroup()
+    
     @IBOutlet weak var contentView: UIView!
     var BlockList = [BlockUserModel]()
     var tableNode: ASTableNode!
     
     let viewModel = BlockAccountsViewModel()
+    var currentPage = 1
     let disposeBag = DisposeBag()
     
     required init?(coder aDecoder: NSCoder) {
@@ -47,14 +50,9 @@ class BlockedListVC: UIViewController, ControllerType {
     }
     
     func bindAction(with viewModel: BlockAccountsViewModel) {
-//        viewModel.input.blockAccounts.subscribe{ blockUsers in
-//            self.BlockList = blockUsers.element ?? [BlockUserModel]()
-//            print(self.BlockList)
-//            DispatchQueue.main.async {
-//                self.tableNode.reloadData()
-//            }
-//
-//        }.disposed(by: disposeBag)
+        viewModel.input.blockAccounts.subscribe{ blockUsers in
+            self.insertNewRowsInTableNode(newUsers: blockUsers)
+        }.disposed(by: disposeBag)
         
         viewModel.output.successObservable.subscribe{
             result in
@@ -206,7 +204,18 @@ extension BlockedListVC: ASTableDataSource {
         return {
             
             let node = BlockNode(with: user)
-            node.UnBlockAction = { self.viewModel.unblock(blockId: user.blockId)}
+            node.UnBlockAction = {
+                self.viewModel.unblock(blockId: user.blockId)
+                
+                node.user.isBlock = false
+                // remove node from table
+                DispatchQueue.main.async {
+                    self.tableNode.reloadRows(at: [indexPath], with: .none)
+                }
+            }
+            node.FollowAction = {
+                self.viewModel.follow(userId: user.userId)
+            }
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -221,11 +230,8 @@ extension BlockedListVC {
     
     func retrieveNextPageWithCompletion( block: @escaping ([BlockUserModel]) -> Void) {
         
-        viewModel.getBlocks{code in
-            DispatchQueue.main.async {
-                block(code)
-            }
-        }
+        viewModel.getBlocks(page: currentPage)
+        currentPage += 1
         
     }
     
@@ -237,15 +243,19 @@ extension BlockedListVC {
         }
         
         print(newUsers)
+        print("appened")
         let section = 0
         var indexPaths: [IndexPath] = []
         let total = BlockList.count + newUsers.count
+        
         for row in BlockList.count ... total - 1 {
             let path = IndexPath(row: row, section: section)
             indexPaths.append(path)
         }
         BlockList.append(contentsOf: newUsers)
-        tableNode.insertRows(at: indexPaths, with: .none)
+        DispatchQueue.main.async {
+            self.tableNode.insertRows(at: indexPaths, with: .none)
+        }
         
         
     }

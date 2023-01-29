@@ -19,11 +19,14 @@ class BlockNode: ASCellNode {
     
     weak var user: BlockUserModel!
     var UnBlockAction : (() -> Void)?
+    var FollowAction : (() -> Void)?
     
     var userNameNode: ASTextNode!
     var NameNode: ASTextNode!
     var AvatarNode: ASNetworkImageNode!
     var UnBlockBtnNode: ASButtonNode!
+    var FollowBtnNode: ASButtonNode!
+    
     lazy var delayItem = workItem()
     var desc = ""
     var attemptCount = 0
@@ -35,6 +38,7 @@ class BlockNode: ASCellNode {
         self.userNameNode = ASTextNode()
         self.AvatarNode = ASNetworkImageNode()
         self.UnBlockBtnNode = ASButtonNode()
+        self.FollowBtnNode = ASButtonNode()
         self.NameNode = ASTextNode()
         
         super.init()
@@ -49,12 +53,14 @@ class BlockNode: ASCellNode {
         userNameNode.backgroundColor = UIColor.clear
         NameNode.backgroundColor = UIColor.clear
         UnBlockBtnNode.backgroundColor = UIColor.tertiary
+        FollowBtnNode.backgroundColor = UIColor.primary
         
         
         userNameNode.tintColor = UIColor.white
         NameNode.tintColor = UIColor.white
         AvatarNode.tintColor = UIColor.white
         UnBlockBtnNode.tintColor  = UIColor.primary
+        FollowBtnNode.tintColor  = UIColor.white
         
         userNameNode.textColorFollowsTintColor = true
         NameNode.textColorFollowsTintColor = true
@@ -62,7 +68,7 @@ class BlockNode: ASCellNode {
         //
         
         UnBlockBtnNode.addTarget(self, action: #selector(BlockNode.UnblockBtnPressed), forControlEvents: .touchUpInside)
-        UnBlockBtnNode.contents = user.blockId
+        FollowBtnNode.addTarget(self, action: #selector(BlockNode.FollowUnfollowBtnPressed), forControlEvents: .touchUpInside)
         
         //
         
@@ -78,6 +84,12 @@ class BlockNode: ASCellNode {
             self.UnBlockBtnNode.clipsToBounds = true
             
             self.UnBlockBtnNode.setTitle("Unblock", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+            
+            self.FollowBtnNode.layer.borderWidth = 1.0
+            self.FollowBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
+            self.FollowBtnNode.layer.cornerRadius = 10.0
+            self.FollowBtnNode.clipsToBounds = true
+            self.FollowBtnNode.setTitle("Follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
         }
         
         
@@ -91,6 +103,11 @@ class BlockNode: ASCellNode {
     
     @objc func UnblockBtnPressed() {
         if let action = UnBlockAction {
+            action()
+        }
+    }
+    @objc func FollowUnfollowBtnPressed() {
+        if let action = FollowAction {
             action()
         }
     }
@@ -134,6 +151,7 @@ class BlockNode: ASCellNode {
         
         AvatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
         UnBlockBtnNode.style.preferredSize = CGSize(width: 120.0, height: 25.0)
+        FollowBtnNode.style.preferredSize = CGSize(width: 120.0, height: 25.0)
         
         headerSubStack.style.flexShrink = 16.0
         headerSubStack.style.flexGrow = 16.0
@@ -148,7 +166,7 @@ class BlockNode: ASCellNode {
         headerStack.spacing = 10
         headerStack.justifyContent = ASStackLayoutJustifyContent.start
         
-        headerStack.children = [AvatarNode, headerSubStack, UnBlockBtnNode]
+        headerStack.children = [AvatarNode, headerSubStack, user.isBlock ? UnBlockBtnNode : FollowBtnNode]
         
         return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16), child: headerStack)
             

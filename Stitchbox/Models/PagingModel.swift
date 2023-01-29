@@ -23,6 +23,6 @@ class PagingModel: Mappable {
         total   <- map["total"]
     }
     func isEndOfPage() -> Bool {
-        return page + limit >= total 
+        return page * limit >= total 
     }
 }
