@@ -19,6 +19,21 @@ var startTime = Date()
 
 var global_presetingRate = 0.0
 var global_cornerRadius = 0.0
+var global_host = ""
+var global_fullLink = ""
+
+
+ let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
+ let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
+ let data3 = StreamingDomainModel(postKey: "3", streamingDomainModel: ["company": "Twitch", "domain": ["twitch.tv", "m.twitch.tv"], "status": true])
+ let data4 = StreamingDomainModel(postKey: "4", streamingDomainModel: ["company": "Facebook gaming", "domain": ["facebook.com", "m.facebook.com"], "status": true])
+ let data5 = StreamingDomainModel(postKey: "5", streamingDomainModel: ["company": "Bigo Live", "domain": ["bigo.tv"], "status": true])
+ let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company": "Nonolive", "domain": ["nonolive.com"], "status": true])
+ let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
+ 
+
+var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
+
 
 typealias DownloadComplete = () -> ()
 
@@ -198,11 +213,9 @@ func createLocalNotificationForActiveSendbirdUsers(title: String, body: String, 
     // Add the message text and channel to the userInfo dictionary
     content.userInfo = ["type": "sendbird_localNoti", "channel_url": channel.channelUrl]
 
-
     // Create a trigger for the notification
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.05, repeats: false)
     
-
     // Create a request for the notification
     let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
 
@@ -215,11 +228,15 @@ func createLocalNotificationForActiveSendbirdUsers(title: String, body: String, 
         }
     }
 
-    
 }
 
 extension UICollectionReusableView {
     static var reuseIdentifier: String {
         return String(describing: Self.self)
     }
+}
+
+
+func check_Url(host: String) -> Bool {
+    return streaming_domain.contains { $0.domain.contains(host) }
 }

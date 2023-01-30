@@ -19,6 +19,8 @@ class HashtagVC: UIViewController {
     var completionHandler: ((String) -> Void)?
     var tableNode: ASTableNode!
     
+    var isVerified = false
+    
     var searchHashtagList = [HashtagsModelFromAlgolia]()
     
     struct SearchRecord {
@@ -95,9 +97,11 @@ extension HashtagVC {
     
     func createDisableAddBtn() {
         
+        isVerified = false
+        
         let createButton = UIButton(type: .custom)
         createButton.semanticContentAttribute = .forceRightToLeft
-        createButton.addTarget(self, action: #selector(onClickAdd(_:)), for: .touchUpInside)
+        //createButton.addTarget(self, action: #selector(onClickAdd(_:)), for: .touchUpInside)
         createButton.setTitle("Add", for: .normal)
         createButton.setTitleColor(.lightGray, for: .normal)
         createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
@@ -105,6 +109,33 @@ extension HashtagVC {
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
         createButton.backgroundColor = .disableButtonBackground
+        createButton.cornerRadius = 15
+        let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
+        customView.addSubview(createButton)
+        createButton.center = customView.center
+        let createBarButton = UIBarButtonItem(customView: customView)
+
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+      
+        self.navigationItem.rightBarButtonItem = createBarButton
+         
+    }
+    
+    func createAddAddBtn() {
+        
+        isVerified = true
+        
+        let createButton = UIButton(type: .custom)
+        createButton.semanticContentAttribute = .forceRightToLeft
+        createButton.addTarget(self, action: #selector(onClickAdd(_:)), for: .touchUpInside)
+        createButton.setTitle("Add", for: .normal)
+        createButton.setTitleColor(.white, for: .normal)
+        createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
+        createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
+        createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
+        createButton.backgroundColor = .primary
         createButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
         customView.addSubview(createButton)
@@ -165,6 +196,22 @@ extension HashtagVC {
     
     @objc func onClickAdd(_ sender: AnyObject) {
         print("Added")
+        
+        var updateText = ""
+        if let text = self.hashtagTxtField.text {
+            updateText = self.hashtagTxtField.text!
+            if text.last == "#" {
+                updateText.removeLast()
+            }
+            
+            completionHandler?(updateText)
+        }
+        
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
+        }
+        
+        
     }
     
 }
@@ -194,14 +241,17 @@ extension HashtagVC: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         if let text = textField.text, !text.isEmpty {
             
-            if text.last != " " && text.last != "#" {
-                let searchText = String(getCurrentSearchHashTag(text: text).dropFirst(1))
+            if text.findMHashtagText().isEmpty != true {
                 
-                self.searchHashTags(searchText: searchText)
+                createAddAddBtn()
+                
             } else {
-                self.searchHashtagList = [HashtagsModelFromAlgolia]()
-                self.tableNode.reloadData(completion: nil)
+                
+                createDisableAddBtn()
+                
             }
+        } else {
+            createDisableAddBtn()
         }
     }
 }

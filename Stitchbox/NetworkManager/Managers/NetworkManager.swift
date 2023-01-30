@@ -40,6 +40,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         self.task?.resume()
       }
     }
+    
     func upload(_ route: EndPoint, image: UIImage, content: String, completion: @escaping APICompletion) {
       if var request = buildRequest(from: route) {
         
