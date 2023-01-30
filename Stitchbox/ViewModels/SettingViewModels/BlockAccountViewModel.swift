@@ -59,18 +59,21 @@ class BlockAccountsViewModel: ViewModelProtocol {
         logic()
     }
     
-    func getBlocks(page: Int) -> Void  {
+    func getBlocks(page: Int, completion: @escaping () -> Void = {}) -> Void  {
         APIManager().getBlocks(page: page){
             result in
             switch result {
             case .success(let response):
+                print("page number \(page)")
                 if let data = response.body {
                     if let listData = data["data"] as? [[String: Any]] {
-                        print("runned here")
-                        print(listData)
                         self.blockAccountRelay.accept(Mapper<BlockUserModel>().mapArray(JSONArray: listData))
+                        if (!listData.isEmpty) {
+                            completion()
+                        }
                     } else {
-                        self.blockAccountRelay.accept([BlockUserModel]())                    }
+                        self.blockAccountRelay.accept([BlockUserModel]())
+                    }
                 }
             case .failure(let error):
                 print(error)
