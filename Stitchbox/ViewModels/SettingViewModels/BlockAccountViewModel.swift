@@ -28,20 +28,19 @@ class BlockAccountsViewModel: ViewModelProtocol {
     
     struct Output {
         var errorsObservable: Observable<String>
-        var successObservable: Observable<String>
+        var successObservable: Observable<successMessage>
+    }
+    enum successMessage {
+        case unblock(messsage: String = "Successfully unblock user")
+        case follow(messsage: String = "Successfully follow user")
+        case unfollow(messsage: String = "Successfully unfollow user")
     }
     
     private let blockAccountRelay = BehaviorRelay<[BlockUserModel]>(value: Mapper<BlockUserModel>().mapArray(JSONArray: []))
     private let errorsSubject = PublishSubject<String>()
-    private let successSubject = PublishSubject<String>()
+    private let successSubject = PublishSubject<successMessage>()
     private let submitChangeSubject = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
-    private let limitFetch = 10
-    private let pagingSubject = BehaviorRelay<PagingModel>(value: Mapper<PagingModel>().map(JSON: [
-        "limit": 1,
-        "page": -1,
-        "total": 1])!)
-//    private let group = DispatchGroup()
     
     init() {
         input = Input(
@@ -61,12 +60,6 @@ class BlockAccountsViewModel: ViewModelProtocol {
     }
     
     func getBlocks(page: Int) -> Void  {
-//        group.enter()
-//        print(pagingSubject.value.toJSON())
-//        if (pagingSubject.value.isEndOfPage()) {
-//            return
-//        }
-//        let newPagingObject = ["limit": limitFetch, "page": page]
         APIManager().getBlocks(page: page){
             result in
             switch result {
@@ -78,29 +71,21 @@ class BlockAccountsViewModel: ViewModelProtocol {
                         self.blockAccountRelay.accept(Mapper<BlockUserModel>().mapArray(JSONArray: listData))
                     } else {
                         self.blockAccountRelay.accept([BlockUserModel]())                    }
-//                    if let pagingInfo = data["paging"] as? [String: Any] {
-//                        self.pagingSubject.accept(Mapper<PagingModel>().map(JSON: pagingInfo) ?? Mapper<PagingModel>().map(JSON: [
-//                            "limit": 1,
-//                            "page": 1,
-//                            "total": 1])!)
-//                    }
-                    
                 }
             case .failure(let error):
                 print(error)
                 self.errorsSubject.onNext("Cannot get user's block information")
             }
         }
-//        group.leave()
-//        completion(self.blockAccountRelay.value)
     }
     
-    func unblock(blockId: String) -> Void {
+    func unblock(blockId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
         APIManager().deleteBlocks(params: ["blockId": blockId]){
             result in switch result {
             case .success(_):
-                self.successSubject.onNext("Successfully unblock user")
+                self.successSubject.onNext(.unblock())
+                completion()
             case .failure:
                 self.errorsSubject.onNext("Cannot unblock user")
                 
@@ -108,15 +93,28 @@ class BlockAccountsViewModel: ViewModelProtocol {
         }
     }
     
-    func follow(userId: String) -> Void {
+    func follow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().insertFollows(params: ["blockId": userId]){
+        APIManager().insertFollows(params: ["FollowId": userId]){
             result in switch result {
             case .success(_):
-                self.successSubject.onNext("Successfully unblock user")
+                self.successSubject.onNext(.follow())
+                completion()
             case .failure:
-                self.errorsSubject.onNext("Cannot unblock user")
-                
+                self.errorsSubject.onNext("Cannot follow user")
+            }
+        }
+    }
+    
+    func unfollow(userId: String, completion: @escaping () -> Void = {}) -> Void {
+        // do something with your strinf
+        APIManager().deleteFollows(params: ["FollowId": userId]){
+            result in switch result {
+            case .success(_):
+                self.successSubject.onNext(.unfollow())
+                completion()
+            case .failure:
+                self.errorsSubject.onNext("Cannot unfollow user")
             }
         }
     }

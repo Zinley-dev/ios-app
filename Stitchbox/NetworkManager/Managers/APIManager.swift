@@ -32,6 +32,7 @@ struct APIManager {
     let accountManager = Manager<AccountAPI>()
     let userManager = Manager<UserAPI>()
     let contactManager = Manager<ContactAPI>()
+    let followManager = Manager<FollowAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -144,7 +145,7 @@ struct APIManager {
         }
     }
     func getBlocks(page: Int, completion: @escaping APICompletion) {
-        accountManager.request(.getBlocks(params: ["page": page, "limit": 10])){
+        accountManager.request(.getBlocks(page: page)){
             result in
             completion(result)
         }
@@ -161,27 +162,27 @@ struct APIManager {
             completion(result)
         }
     }
-    func getFollows(params: [String: Any], completion: @escaping APICompletion) {
-        accountManager.request(.getFollowers(params: params)){
+    func getFollows(page: Int, completion: @escaping APICompletion) {
+        followManager.request(.getFollows(page: page)){
             result in
             completion(result)
         }
     }
-    func getFollowers(params: [String: Any], completion: @escaping APICompletion) {
-        accountManager.request(.getFollowers(params: params)){
+    func getFollowers(page: Int, completion: @escaping APICompletion) {
+        followManager.request(.getFollowers(page: page)){
             result in
             completion(result)
         }
     }
     func insertFollows(params: [String: Any], completion: @escaping APICompletion) {
-//        accountManager.request(.insertFollows(params: params)){
-//            result in
-//            completion(result)
-//        }
+        followManager.request(.insertFollows(params: params)){
+            result in
+            completion(result)
+        }
         print("call insertAPI")
     }
     func deleteFollows(params: [String: Any], completion: @escaping APICompletion) {
-        accountManager.request(.deleteFollows(params: params)){
+        followManager.request(.deleteFollows(params: params)){
             result in
             completion(result)
         }

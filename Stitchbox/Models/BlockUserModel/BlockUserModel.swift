@@ -11,8 +11,9 @@ class BlockUserModel: Mappable {
     
     private(set) var blockId: String = ""
     private(set) var userId: String = ""
-    private(set) var blockUser: UserDataSource = UserDataSource()
+    private(set) var blockUser: ListDisplayDataSource = ListDisplayDataSource()
     var isBlock = true
+    var isFollowing = false
     
     required init?(map: ObjectMapper.Map) {
         

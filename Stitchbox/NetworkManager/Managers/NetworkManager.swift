@@ -127,27 +127,8 @@ class Manager<EndPoint: EndPointType>: RequestManager {
           case .requestParametersAndHeaders(let parameters, let additionalHeaders):
             self.addAdditionalHeaders(additionalHeaders, request: &request)
             self.configureParameters(parameters: parameters, request: &request)
-        case .requestQuery(let parameters):
-            print(parameters)
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            self.configureParametersQuery(parameters: parameters, request: &request)
-            if route.headers != nil {
-                self.addAdditionalHeaders(route.headers, request: &request)
-            }
-            print(request.url)
-        
         }
         return request
-    }
-    fileprivate func configureParametersQuery(parameters: [String: Any]?, request: inout URLRequest) {
-        if let params = parameters {
-            for (key, value) in params {
-                print(key, "+", value)
-                print(String(describing: value))
-                request.url = request.url?.appending(key, value: String(describing: value))
-            }
-        }
-        
     }
     fileprivate func configureParameters(parameters: [String: Any]?, request: inout URLRequest) {
         let jsonData = try? JSONSerialization.data(withJSONObject: parameters ?? Data())
@@ -186,28 +167,4 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         return apiResponse
     }
     
-}
-
-extension URL {
-
-    func appending(_ queryItem: String, value: String?) -> URL {
-
-        guard var urlComponents = URLComponents(string: absoluteString) else { return absoluteURL }
-
-        // Create array of existing query items
-        var queryItems: [URLQueryItem] = urlComponents.queryItems ??  []
-
-        // Create query item
-        let queryItem = URLQueryItem(name: queryItem, value: value)
-        print(queryItem.value)
-
-        // Append the new query item in the existing query items array
-        queryItems.append(queryItem)
-        
-        // Append updated query items array in the url component object
-        urlComponents.queryItems = queryItems
-
-        // Returns the url from new url components
-        return urlComponents.url!
-    }
 }

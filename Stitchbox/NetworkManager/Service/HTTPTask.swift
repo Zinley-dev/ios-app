@@ -11,7 +11,6 @@ public enum HTTPTask {
     case request
     case requestParameters(parameters: [String: Any]?)
     case requestParametersAndHeaders(bodyParameters: [String: Any]?, additionHeaders: [String: String]?)
-    case requestQuery(parameters: [String: Any]?)
 }
 
 protocol URLSessionProtocol {

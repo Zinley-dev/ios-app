@@ -288,13 +288,9 @@ extension MediaAPI: EndPointType {
   }
 }
 public enum AccountAPI {
-    case getBlocks (params: [String:Any])
+    case getBlocks (page: Int, limit: Int = 10)
     case insertBlocks (params: [String:Any])
     case deleteBlocks (params: [String:Any])
-    case getFollows (params: [String:Any])
-    case getFollowers (params: [String:Any])
-    case insertFollows (params: [String:Any])
-    case deleteFollows (params: [String:Any])
 }
 extension AccountAPI: EndPointType {
     var module: String {
@@ -303,20 +299,12 @@ extension AccountAPI: EndPointType {
     
     var path: String {
       switch self {
-        case .getBlocks:
-          return "/block"
+        case .getBlocks(let page, let lim):
+          return "/block?page=\(page)&limit=\(lim)"
         case .insertBlocks:
           return "/block"
         case .deleteBlocks:
           return "/block"
-        case .getFollows:
-          return "/follow"
-        case .insertFollows:
-          return "/follow"
-        case .deleteFollows:
-          return "/follow"
-        case .getFollowers:
-          return "/follow/Follows"
       }
     }
     
@@ -328,33 +316,17 @@ extension AccountAPI: EndPointType {
             return .post
         case .deleteBlocks:
             return .delete
-        case .getFollows:
-            return .get
-        case .insertFollows:
-            return .post
-        case .deleteFollows:
-            return .delete
-        case .getFollowers:
-            return .get
         }
     }
     
     var task: HTTPTask {
         switch self {
-        case .getBlocks(let params):
-            return .requestQuery(parameters: params)
+        case .getBlocks:
+            return .request
         case .insertBlocks(let params):
             return .requestParameters(parameters: params)
         case .deleteBlocks(let params):
             return .requestParameters(parameters: params)
-        case .getFollows(let params):
-            return .requestQuery(parameters: params)
-        case .insertFollows(let params):
-            return .requestParameters(parameters: params)
-        case .deleteFollows(let params):
-            return .requestParameters(parameters: params)
-        case .getFollowers(let params):
-            return .requestQuery(parameters: params)
         }
     }
     
@@ -369,7 +341,6 @@ public enum UserAPI {
     case changepassword (params: [String: Any])
     case uploadavatar
     case uploadcover
-
 }
 extension UserAPI: EndPointType {
     var module: String {
@@ -459,3 +430,59 @@ extension ContactAPI: EndPointType {
         return ["Authorization": _AppCoreData.userSession.value!.accessToken]
     }
 }
+
+public enum FollowAPI {
+    case getFollows (page: Int, lim: Int = 10)
+    case getFollowers (page: Int, lim: Int = 10)
+    case insertFollows (params: [String:Any])
+    case deleteFollows (params: [String:Any])
+}
+extension FollowAPI: EndPointType {
+    var module: String {
+        return "/follow"
+    }
+    
+    var path: String {
+      switch self {
+      case .getFollows(let page, let lim):
+        return "?page=\(page)&limit=\(lim)"
+      case .insertFollows:
+        return "/"
+      case .deleteFollows:
+        return "/unfollow"
+      case .getFollowers(let page, let lim):
+          return "/followers?page=\(page)&limit=\(lim)"
+      }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getFollows:
+            return .get
+        case .insertFollows:
+            return .post
+        case .deleteFollows:
+            return .delete
+        case .getFollowers:
+            return .get
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getFollows:
+            return .request
+        case .insertFollows(let params):
+            return .requestParameters(parameters: params)
+        case .deleteFollows(let params):
+            return .requestParameters(parameters: params)
+        case .getFollowers:
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
+

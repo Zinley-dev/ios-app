@@ -57,7 +57,16 @@ class BlockedListVC: UIViewController, ControllerType {
         viewModel.output.successObservable.subscribe{
             result in
             DispatchQueue.main.async {
-                showNote(text: result)
+                switch result.element{
+                case .unblock(let message):
+                    showNote(text: message)
+                case .unfollow(let message):
+                    showNote(text: message)
+                case .follow(let message):
+                    showNote(text: message)
+                default:
+                    break
+                }
             }
         }.disposed(by: disposeBag)
         
@@ -205,16 +214,35 @@ extension BlockedListVC: ASTableDataSource {
             
             let node = BlockNode(with: user)
             node.UnBlockAction = {
-                self.viewModel.unblock(blockId: user.blockId)
-                
-                node.user.isBlock = false
-                // remove node from table
-                DispatchQueue.main.async {
-                    self.tableNode.reloadRows(at: [indexPath], with: .none)
+                self.viewModel.unblock(blockId: user.blockId) {
+                    node.user.isBlock = false
+                    node.user.isFollowing = false
+                    // remove node from table
+                    DispatchQueue.main.async {
+                        self.tableNode.reloadRows(at: [indexPath], with: .none)
+                        
+                    }
                 }
             }
             node.FollowAction = {
-                self.viewModel.follow(userId: user.userId)
+                self.viewModel.follow(userId: user.userId) {
+                    node.user.isBlock = false
+                    node.user.isFollowing = true
+                    // remove node from table
+                    DispatchQueue.main.async {
+                        self.tableNode.reloadRows(at: [indexPath], with: .none)
+                    }
+                }
+            }
+            node.UnfollowAction = {
+                self.viewModel.unfollow(userId: user.userId) {
+                    node.user.isBlock = false
+                    node.user.isFollowing = false
+                    // remove node from table
+                    DispatchQueue.main.async {
+                        self.tableNode.reloadRows(at: [indexPath], with: .none)
+                    }
+                }
             }
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
