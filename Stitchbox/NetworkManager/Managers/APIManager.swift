@@ -113,11 +113,17 @@ struct APIManager {
         }
         
     }
-    
+  
     func uploadImage(image: UIImage, completion: @escaping APICompletion) {
-        mediaManager.upload(.uploadImage, image: image) { result in
-            completion(result)
-        }
+      mediaManager.upload(.uploadImage, image: image) { result in
+        completion(result)
+      }
+    }
+  
+    func uploadVideo(video: Data, completion: @escaping APICompletion) {
+      mediaManager.upload(.uploadVideo, video: video) { result in
+        completion(result)
+      }
     }
     
     func forgotPasswordByEmail(params: [String: String], completion: @escaping APICompletion) {
