@@ -113,9 +113,6 @@ struct APIManager {
         }
         
     }
-<<<<<<< Updated upstream
-=======
-  
   
     func uploadImage(image: UIImage, completion: @escaping APICompletion) {
       mediaManager.upload(.uploadImage, image: image) { result in
@@ -123,12 +120,11 @@ struct APIManager {
       }
     }
   
-  func uploadVideo(video: Data, completion: @escaping APICompletion) {
-    mediaManager.upload(.uploadVideo, video: video) { result in
-      completion(result)
+    func uploadVideo(video: Data, completion: @escaping APICompletion) {
+      mediaManager.upload(.uploadVideo, video: video) { result in
+        completion(result)
+      }
     }
-  }
->>>>>>> Stashed changes
     
     func uploadImage(image: UIImage, completion: @escaping APICompletion) {
         mediaManager.upload(.uploadImage, image: image) { result in
