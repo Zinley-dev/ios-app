@@ -17,7 +17,7 @@ fileprivate let FontSize: CGFloat = 13
 class FollowNode: ASCellNode {
     
     weak var user: FollowerModel!
-    var followAction : ((ASCellNode) -> Void)?
+    var followAction : ((FollowNode) -> Void)?
     lazy var delayItem = workItem()
     var attemptCount = 0
     var userNameNode: ASTextNode!
@@ -51,29 +51,32 @@ class FollowNode: ASCellNode {
    
         userNameNode.backgroundColor = UIColor.clear
         NameNode.backgroundColor = UIColor.clear
-        followBtnNode.backgroundColor = UIColor.clear
-        
+        followBtnNode.backgroundColor = UIColor.tertiary
+        followBtnNode.tintColor  = UIColor.primary
+
           //
         
         followBtnNode.addTarget(self, action: #selector(FollowNode.followBtnPressed), forControlEvents: .touchUpInside)
         
-       //
-        
+        //
         automaticallyManagesSubnodes = true
          
         
-//        if user.action == "Following" {
-//            
-//           
-//            
-//            
-//            
-//        } else if user.action == "Follower" {
-//            
-//            
-//            
-//        
-//        }
+        if user.action == "Following" {
+            
+        } else if user.action == "Follower" {
+            
+            DispatchQueue.main.async {
+                self.followBtnNode.layer.borderWidth = 1.0
+                self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
+                self.followBtnNode.layer.cornerRadius = 10.0
+                self.followBtnNode.clipsToBounds = true
+                
+                self.followBtnNode.setTitle("+ Follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+            }
+            
+
+        }
         
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
@@ -89,7 +92,7 @@ class FollowNode: ASCellNode {
     
     @objc func followBtnPressed() {
         
-        
+        followAction?(self)
         
     }
 

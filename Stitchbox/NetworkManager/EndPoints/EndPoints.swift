@@ -26,7 +26,7 @@ extension APIBuilder: BaseURL {
 }
 
 public enum FollowApi {
-    case follow
+    case follow(page: Int = 1)
     case followers
 }
 
@@ -53,8 +53,8 @@ extension FollowApi: EndPointType {
     }
     var path: String {
         switch self {
-            case .follow:
-                return "/"
+            case .follow(let page):
+                return "/?page=\(page)"
             case .followers:
                 return "/followers"
         }

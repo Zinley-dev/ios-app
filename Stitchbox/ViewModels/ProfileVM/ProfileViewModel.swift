@@ -67,27 +67,20 @@ class ProfileViewModel: ViewModelProtocol {
             }
         }
     }
-    func getFollowers() {
-        APIManager().getFollower { result in
+    func getFollowers(page: Int = 0) {
+        print("LOAD PAGE \(page)")
+        APIManager().getFollower(page: page) { result in
             switch result {
                 case .success(let response):
-                    print("===================XXX==============================")
-                    // get and process data
                     guard response.body?["message"] as? String == "success",
-                          let data = response.body?["data"] as? [FollowerModel] else {
-                        print("err")
-//                        print(response.body?["data"])
-                        
-                        
-                        let follower = FollowerModel(JSONString: "{\"avatar\": \"https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png\",\"userId\": \"639e674eab2572f58918d2e2\",\"username\":\"kai1004pro\"}")!
-                        
-                        self.followerListSubject.onNext([follower, follower, follower, follower, follower, follower, follower, follower, follower, follower, follower, follower])
+                          let data = response.body?["data"] as? [[String: Any]] else {
                         return
                     }
-                    print(data)
+                    let list = data.map { item in
+                        return FollowerModel(JSON: item)!
+                    }
                     self.followersSubject.onNext(data.count)
-                    self.followerListSubject.onNext(data)
-                    print("=================================================")
+                    self.followerListSubject.onNext(list)
                 case .failure(let error):
                     print(error)
             }

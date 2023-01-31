@@ -15,6 +15,7 @@ class FollowerVC: UIViewController {
     
     typealias ViewModelType = ProfileViewModel
     // MARK: - Properties
+    private var currPage = 1
     private var viewModel: ViewModelType! = ViewModelType()
     private let disposeBag = DisposeBag()
     
@@ -52,7 +53,7 @@ class FollowerVC: UIViewController {
 
             let lastItemAt = self.userList.count
             let section = 0
-
+            self.currPage += 1
             self.userList.append(contentsOf: list)
             
             var paths: [IndexPath] = []
@@ -128,9 +129,9 @@ extension FollowerVC: ASTableDelegate {
     }
         
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        print("willBegin......")
+        print("getFollowers......")
         asContext = context
-        self.viewModel.getFollowers() // get next page
+        self.viewModel.getFollowers(page: currPage)
     }
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
@@ -167,6 +168,12 @@ extension FollowerVC: ASTableDataSource {
             node = FollowNode(with: user)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
+            node.followAction = { item in
+                print("Pressed Id= \(item.user.userId) Name= \(item.user.username)")
+//                if (item.user.status == "") {
+//
+//                }
+            }
             
             return node
         }
