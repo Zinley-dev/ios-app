@@ -2910,7 +2910,7 @@
                                                     </subviews>
                                                 </stackView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="GZO-oM-4zS">
-                                                    <rect key="frame" x="16" y="328" width="380" height="127.66666666666669"/>
+                                                    <rect key="frame" x="16" y="328" width="380" height="40"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="lkx-nY-b5u">
                                                             <rect key="frame" x="0.0" y="0.0" width="380" height="40"/>
@@ -2948,17 +2948,17 @@
                                                                 </stackView>
                                                             </subviews>
                                                         </stackView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="THi-3n-7ng">
-                                                            <rect key="frame" x="0.0" y="50.000000000000007" width="380" height="77.666666666666686"/>
-                                                            <string key="text">Stitchbox LLC shall employ Ramon Rodriguez III as a(n) User Acquisition Specialist
-and Social Media Manager. Ramon Rodriguez III shall provide to Stitchbox LLC duties as needed. Ramon
-Rodriguez</string>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                     </subviews>
                                                 </stackView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="THi-3n-7ng">
+                                                    <rect key="frame" x="16" y="372" width="380" height="105"/>
+                                                    <string key="text">Stitchbox LLC shall employ Ramon Rodriguez III as a(n) User Acquisition Specialist
+and Social Media Manager. Ramon Rodriguez III shall provide to Stitchbox LLC duties as needed. Ramon
+Rodriguez</string>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4WR-jf-Ptn">
                                                     <rect key="frame" x="364" y="25" width="32" height="32"/>
                                                     <constraints>
@@ -2975,18 +2975,26 @@ Rodriguez</string>
                                                 <constraint firstItem="vnK-Bb-OAW" firstAttribute="leading" secondItem="B1B-ma-e4c" secondAttribute="leading" id="4UX-Wc-FWW"/>
                                                 <constraint firstAttribute="trailing" secondItem="u1E-ZP-71K" secondAttribute="trailing" constant="10" id="53i-on-Oib"/>
                                                 <constraint firstItem="qsm-2v-h3J" firstAttribute="top" secondItem="dWT-4K-F5x" secondAttribute="top" id="9UC-sr-15v"/>
+                                                <constraint firstItem="THi-3n-7ng" firstAttribute="leading" secondItem="dWT-4K-F5x" secondAttribute="leading" constant="16" id="DL2-vd-RT2"/>
                                                 <constraint firstAttribute="trailing" secondItem="4WR-jf-Ptn" secondAttribute="trailing" constant="16" id="HzK-WC-oX8"/>
+                                                <constraint firstAttribute="bottom" secondItem="THi-3n-7ng" secondAttribute="bottom" constant="4" id="I2j-c6-xOI"/>
                                                 <constraint firstItem="u1E-ZP-71K" firstAttribute="leading" secondItem="dWT-4K-F5x" secondAttribute="leading" constant="10" id="JDb-0j-Inh"/>
+                                                <constraint firstItem="THi-3n-7ng" firstAttribute="top" secondItem="GZO-oM-4zS" secondAttribute="bottom" constant="4" id="M0Y-1M-8Nn"/>
                                                 <constraint firstItem="u1E-ZP-71K" firstAttribute="top" secondItem="vnK-Bb-OAW" secondAttribute="bottom" constant="8" id="OXY-K4-WJW"/>
                                                 <constraint firstItem="GZO-oM-4zS" firstAttribute="leading" secondItem="dWT-4K-F5x" secondAttribute="leading" constant="16" id="Pdz-of-BJL"/>
+                                                <constraint firstAttribute="trailing" secondItem="THi-3n-7ng" secondAttribute="trailing" constant="16" id="PyY-79-aza"/>
                                                 <constraint firstItem="tVe-bG-06c" firstAttribute="top" secondItem="qsm-2v-h3J" secondAttribute="bottom" constant="16" id="RBn-Dd-mcc"/>
                                                 <constraint firstItem="B1B-ma-e4c" firstAttribute="top" secondItem="qsm-2v-h3J" secondAttribute="bottom" constant="-35" id="WjO-vi-Iwg"/>
+                                                <constraint firstItem="THi-3n-7ng" firstAttribute="leading" secondItem="dWT-4K-F5x" secondAttribute="leading" constant="16" id="aIn-jy-ZfX"/>
                                                 <constraint firstAttribute="trailing" secondItem="tVe-bG-06c" secondAttribute="trailing" constant="16" id="aZ8-e3-sFg"/>
                                                 <constraint firstItem="qsm-2v-h3J" firstAttribute="leading" secondItem="dWT-4K-F5x" secondAttribute="leading" id="gCn-5i-saO"/>
                                                 <constraint firstItem="4WR-jf-Ptn" firstAttribute="top" secondItem="dWT-4K-F5x" secondAttribute="top" constant="25" id="jkL-bL-e3T"/>
                                                 <constraint firstAttribute="trailing" secondItem="qsm-2v-h3J" secondAttribute="trailing" id="oS2-Xn-IYl"/>
                                                 <constraint firstAttribute="trailing" secondItem="GZO-oM-4zS" secondAttribute="trailing" constant="16" id="pMg-11-gPN"/>
                                                 <constraint firstItem="GZO-oM-4zS" firstAttribute="top" secondItem="u1E-ZP-71K" secondAttribute="bottom" constant="4" id="qkw-iR-hse"/>
+                                                <constraint firstAttribute="trailing" secondItem="THi-3n-7ng" secondAttribute="trailing" constant="16" id="vqT-QT-ayj"/>
+                                                <constraint firstItem="THi-3n-7ng" firstAttribute="top" secondItem="GZO-oM-4zS" secondAttribute="bottom" constant="4" id="x6j-8W-NJT"/>
+                                                <constraint firstAttribute="bottom" secondItem="THi-3n-7ng" secondAttribute="bottom" constant="4" id="z1I-ON-fwr"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="412" height="481"/>
@@ -3334,9 +3342,9 @@ Rodriguez</string>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CoverPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="d0V-yx-YB1">
-                                <rect key="frame" x="0.0" y="277" width="375" height="175"/>
+                                <rect key="frame" x="0.0" y="264.66666666666669" width="375" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="175" id="Fur-RG-f2N"/>
+                                    <constraint firstAttribute="height" constant="200" id="Fur-RG-f2N"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -3373,7 +3381,7 @@ Rodriguez</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nTI-3j-Y1h" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1414" y="1615"/>
+            <point key="canvasLocation" x="1413.5999999999999" y="1614.5320197044337"/>
         </scene>
         <!--Dashboard Tab Bar Controller-->
         <scene sceneID="fBc-IB-QuR">
@@ -5669,6 +5677,40 @@ Rodriguez</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view hidden="YES" alpha="0.89999997615814209" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DRU-BB-Hhd">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xiJ-QA-RpX">
+                                <rect key="frame" x="20" y="293" width="335" height="226"/>
+                                <color key="backgroundColor" red="0.16290172929999999" green="0.16290172929999999" blue="0.16290172929999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="226" id="P10-cz-9Xp"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CoverPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="mE2-tR-Xej">
+                                <rect key="frame" x="17.666666666666657" y="306" width="340" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="vwC-Hx-rDI"/>
+                                </constraints>
+                            </imageView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="uat-3R-ldY">
+                                <rect key="frame" x="123.66666666666669" y="342" width="128" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="LfK-nB-SQ6"/>
+                                    <constraint firstAttribute="width" constant="128" id="URE-dJ-4oD"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="64"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ThJ-0F-4Nr">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -5842,7 +5884,7 @@ Rodriguez</string>
                                                     </subviews>
                                                 </stackView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="3KE-sb-zEN">
-                                                    <rect key="frame" x="16" y="328" width="380" height="127.66666666666669"/>
+                                                    <rect key="frame" x="16" y="328" width="380" height="40"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="VA0-US-sxm">
                                                             <rect key="frame" x="0.0" y="0.0" width="380" height="40"/>
@@ -5893,17 +5935,18 @@ Rodriguez</string>
                                                                 </button>
                                                             </subviews>
                                                         </stackView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BOE-Zn-vCa">
-                                                            <rect key="frame" x="0.0" y="50.000000000000007" width="380" height="77.666666666666686"/>
-                                                            <string key="text">Stitchbox LLC shall employ Ramon Rodriguez III as a(n) User Acquisition Specialist
-and Social Media Manager. Ramon Rodriguez III shall provide to Stitchbox LLC duties as needed. Ramon
-Rodriguez</string>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                     </subviews>
                                                 </stackView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BOE-Zn-vCa">
+                                                    <rect key="frame" x="16" y="400" width="380" height="77.666666666666657"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <string key="text">Stitchbox LLC shall employ Ramon Rodriguez III as a(n) User Acquisition Specialist
+and Social Media Manager. Ramon Rodriguez III shall provide to Stitchbox LLC duties as needed. Ramon
+Rodriguez</string>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Vtj-E3-kqg" firstAttribute="leading" secondItem="klq-P4-Pp6" secondAttribute="leading" id="0X2-HQ-Ugw"/>
@@ -6226,40 +6269,6 @@ Rodriguez</string>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <view hidden="YES" alpha="0.89999997615814209" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DRU-BB-Hhd">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xiJ-QA-RpX">
-                                <rect key="frame" x="20" y="293" width="335" height="226"/>
-                                <color key="backgroundColor" red="0.16290172929999999" green="0.16290172929999999" blue="0.16290172929999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="226" id="P10-cz-9Xp"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="15"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CoverPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="mE2-tR-Xej">
-                                <rect key="frame" x="17.666666666666657" y="318.66666666666669" width="340" height="175"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="175" id="vwC-Hx-rDI"/>
-                                </constraints>
-                            </imageView>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="uat-3R-ldY">
-                                <rect key="frame" x="123.66666666666669" y="342" width="128" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="LfK-nB-SQ6"/>
-                                    <constraint firstAttribute="width" constant="128" id="URE-dJ-4oD"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="64"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="PRm-gE-N59"/>
                         <color key="backgroundColor" name="Background"/>
