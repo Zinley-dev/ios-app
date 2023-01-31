@@ -42,22 +42,22 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     }
   
     func upload(_ route: EndPoint, video: Data, completion: @escaping APICompletion) {
-    if var request = buildRequest(from: route) {
-      
-      let uploadData = builđData(for: video, request: &request)
-      
-      task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
-        if error != nil {
-          completion(.failure(ErrorType.noInternet))
-        }
-        if let response = response as? HTTPURLResponse {
-          let result = self.handleNetworkResponse(data, response)
-          completion(result)
-        }
-      })
-      self.task?.resume()
+      if var request = buildRequest(from: route) {
+          
+          let uploadData = builđData(for: video, request: &request)
+          
+          task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+            if error != nil {
+              completion(.failure(ErrorType.noInternet))
+            }
+            if let response = response as? HTTPURLResponse {
+              let result = self.handleNetworkResponse(data, response)
+              completion(result)
+            }
+          })
+          self.task?.resume()
+      }
     }
-  }
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         if let request = buildRequest(from: route) {
