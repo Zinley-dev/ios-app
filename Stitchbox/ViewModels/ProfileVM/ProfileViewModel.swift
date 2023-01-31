@@ -22,6 +22,7 @@ class ProfileViewModel: ViewModelProtocol {
         let followersObservable: Observable<Int>
         let followingObservable: Observable<Int>
         let followerListObservable: Observable<[FollowerModel]>
+        let followingListObservable: Observable<[FollowerModel]>
     }
     
     
@@ -33,14 +34,15 @@ class ProfileViewModel: ViewModelProtocol {
     private let followersSubject = PublishSubject<Int>()
     private let followingSubject = PublishSubject<Int>()
     private let followerListSubject = PublishSubject<[FollowerModel]>()
-    
+    private let followingListSubject = PublishSubject<[FollowerModel]>()
     init() {
         input = Input()
         action = Action()
         output = Output(
             followersObservable: followersSubject.asObserver(),
             followingObservable: followingSubject.asObserver(),
-            followerListObservable: followerListSubject.asObserver()
+            followerListObservable: followerListSubject.asObserver(),
+            followingListObservable: followerListSubject.asObserver()
         )
         logic()
     }
@@ -48,20 +50,19 @@ class ProfileViewModel: ViewModelProtocol {
     func logic() {
         
     }
-    func getFollowing() {
-        APIManager().getFollowing() { result in
+    func getFollowing(page: Int = 0) {
+        APIManager().getFollowing(page:page) { result in
             switch result {
                 case .success(let response):
-                    print("================XXX=================================")
-                    // get and process data
                     guard response.body?["message"] as? String == "success",
-                        let data = response.body?["data"] as? [FollowerModel] else {
-                        print("err")
+                          let data = response.body?["data"] as? [[String: Any]] else {
                         return
                     }
-                    print(data.count)
+                    let list = data.map { item in
+                        return FollowerModel(JSON: item)!
+                    }
                     self.followingSubject.onNext(data.count)
-                    print("=================================================")
+                    self.followingListSubject.onNext(list)
                 case .failure(let error):
                     print(error)
             }

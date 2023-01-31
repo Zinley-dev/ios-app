@@ -9,14 +9,21 @@ import UIKit
 import Alamofire
 import AsyncDisplayKit
 import SendBirdUIKit
+import RxSwift
 
 class FollowingVC: UIViewController {
 
     @IBOutlet weak var contentView: UIView!
     
+    typealias ViewModelType = ProfileViewModel
+    // MARK: - Properties
+    private var currPage = 1
+    private var viewModel: ViewModelType! = ViewModelType()
+    private let disposeBag = DisposeBag()
+    
     var tableNode: ASTableNode!
     var userList = [FollowerModel]()
-    
+    var asContext: ASBatchContext!
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -28,10 +35,39 @@ class FollowingVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setupTableNode()
         // Do any additional setup after loading the view.
+        bindingUI()
+ 
     }
-    
+    func bindingUI() {
+        viewModel.output.followingListObservable.subscribe(onNext: { list in
+            guard self.asContext != nil else  {
+                return
+            }
+
+            guard list.count > 0 else {
+                self.asContext.completeBatchFetching(true)
+                return
+            }
+
+            let lastItemAt = self.userList.count
+            let section = 0
+            self.currPage += 1
+            self.userList.append(contentsOf: list)
+            
+            var paths: [IndexPath] = []
+            for row in lastItemAt...self.userList.count - 1 {
+                let path = IndexPath(row: row, section: section)
+                paths.append(path)
+            }
+            DispatchQueue.main.async {
+                self.tableNode.insertRows(at: paths, with: .none)
+                self.asContext.completeBatchFetching(true)
+            }
+            
+        })
+    }
 
 }
 
@@ -93,7 +129,9 @@ extension FollowingVC: ASTableDelegate {
         
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
             
-        
+        print("getFollowing......")
+        asContext = context
+        self.viewModel.getFollowers(page: currPage)
             
     }
     
@@ -113,7 +151,7 @@ extension FollowingVC: ASTableDataSource {
             
         if self.userList.count == 0 {
             
-            tableNode.view.setEmptyMessage("No follower")
+            tableNode.view.setEmptyMessage("No following")
             
         } else {
             tableNode.view.restore()
@@ -134,7 +172,12 @@ extension FollowingVC: ASTableDataSource {
             node = FollowNode(with: user)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            
+            node.followAction = { item in
+                print("Pressed Id= \(item.user.userId) Name= \(item.user.username)")
+//                if (item.user.status == "") {
+//
+//                }
+            }
             return node
         }
             

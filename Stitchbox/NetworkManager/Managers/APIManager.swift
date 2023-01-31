@@ -141,8 +141,8 @@ extension APIManager {
         }
     }
     
-    func getFollowing(completion: @escaping APICompletion) {
-        followManager.request(.followers) { result in
+    func getFollowing(page: Int, completion: @escaping APICompletion) {
+        followManager.request(.follow(page: page)) { result in
             completion(result)
         }
     }
