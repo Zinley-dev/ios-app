@@ -40,6 +40,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         self.task?.resume()
       }
     }
+<<<<<<< Updated upstream
     func upload(_ route: EndPoint, image: UIImage, content: String, completion: @escaping APICompletion) {
       if var request = buildRequest(from: route) {
         
@@ -57,6 +58,26 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         self.task?.resume()
       }
     }
+=======
+  
+    func upload(_ route: EndPoint, video: Data, completion: @escaping APICompletion) {
+    if var request = buildRequest(from: route) {
+      
+      let uploadData = builđData(for: video, request: &request)
+      
+      task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+        if error != nil {
+          completion(.failure(ErrorType.noInternet))
+        }
+        if let response = response as? HTTPURLResponse {
+          let result = self.handleNetworkResponse(data, response)
+          completion(result)
+        }
+      })
+      self.task?.resume()
+    }
+  }
+>>>>>>> Stashed changes
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         if let request = buildRequest(from: route) {
@@ -85,6 +106,19 @@ class Manager<EndPoint: EndPointType>: RequestManager {
       uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
       return uploadData
     }
+  
+  fileprivate func builđData(for video: Data, request: inout URLRequest) -> Data {
+    let boundary = UUID().uuidString
+    request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+    let filename = "video.mov"
+    var uploadData = Data()
+    uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+    uploadData.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+    uploadData.append("Content-Type: video/quicktime\r\n\r\n".data(using: .utf8)!)
+    uploadData.append(video)
+    uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+    return uploadData
+  }
     
     fileprivate func builđData(for image: UIImage, for content: String, request: inout URLRequest) -> Data {
         let boundary = UUID().uuidString
