@@ -41,12 +41,12 @@ class ProfileViewController: UIViewController {
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
 
-    var demoProfileData: ProfileHeaderData {
-        return ProfileHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company")
+    var profileData: ProfileHeaderData {
+        return ProfileHeaderData(name: "Defaults", accountType: "Defaults/Public")
     }
     
-    var demoChallengeData: ChallengeCardHeaderData {
-        return ChallengeCardHeaderData(name: "Planet Pennies")
+    var challengeData: ChallengeCardHeaderData {
+        return ChallengeCardHeaderData(name: "Defaults")
     }
     
     func bindingUI() {
@@ -470,8 +470,8 @@ extension ProfileViewController {
         var snapshot = Snapshot()
 
         snapshot.appendSections([.header, .challengeCard, .posts])
-        snapshot.appendItems([.header(demoProfileData)], toSection: .header)
-        snapshot.appendItems([.challengeCard(demoChallengeData)], toSection: .challengeCard)
+        snapshot.appendItems([.header(profileData)], toSection: .header)
+        snapshot.appendItems([.challengeCard(challengeData)], toSection: .challengeCard)
         snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
         return snapshot
     }

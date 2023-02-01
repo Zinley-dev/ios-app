@@ -77,7 +77,6 @@ import SendBirdCalls
         
         self.delegate = self
         SBDMain.add(self, identifier: self.sbu_className)
-        NotificationCenter.default.addObserver(self, selector: #selector(DashboardTabBarController.switchvc), name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
         
     }
     
@@ -119,6 +118,19 @@ import SendBirdCalls
         
     }
     
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        
+        if let index = viewController.tabBarController?.selectedIndex {
+            
+            if index != 2 {
+                
+                selectedTabIndex = index
+                
+            }
+            
+        }
+    }
+    
     func presentPostVC() {
         
         if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
@@ -126,17 +138,6 @@ import SendBirdCalls
             PNVC.modalPresentationStyle = .fullScreen
             self.present(PNVC, animated: true)
         }
-        
-    }
-    
-}
-
-extension DashboardTabBarController {
-    
-    @objc func switchvc() {
-    
-        print("switch request")
-        self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![0]
         
     }
     

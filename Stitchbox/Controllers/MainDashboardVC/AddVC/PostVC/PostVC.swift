@@ -286,6 +286,27 @@ extension PostVC {
         
         if self.selectedVideo.duration.seconds > 3.0 {
             
+            print("Start exporting")
+            self.exportVideo(video: self.selectedVideo){
+                            
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                    //showNote(text: "Thank you, your video is being uploaded!")
+                    self.dismiss(animated: true, completion: nil)
+                    NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
+                   
+                }
+
+                
+                Dispatch.background {
+                    
+                    print("Start uploading video to db")
+                    self.uploadVideoToDB(url: self.exportedURL)
+                    
+                }
+                    
+                                    
+            }
           
             
         } else {
@@ -340,10 +361,7 @@ extension PostVC {
                 }
                 
                 self.writeContentImageToDB(imageUrl: url)
-            
-                
-                //url
-    
+
 
             case .failure(let error):
                 print(error)
@@ -354,6 +372,67 @@ extension PostVC {
         
         
     }
+    
+    func exportVideo(video: SessionVideo, completed: @escaping DownloadComplete) {
+        
+        VideoExporter.shared.export(video: video, progress: { progress in
+            DispatchQueue.main.async {
+                self.swiftLoader(progress: "Exporting: \(String(format:"%.2f", Float(progress) * 100))%")
+            }
+        }, completion: {  error in
+            if let error = error {
+                
+                
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                }
+                
+                print("Unable to export video: \(error)")
+                self.showErrorAlert("Ops!", msg: "Unable to export video: \(error)")
+                    return
+            }
+                    
+            self.exportedURL = video.exportedVideoURL
+            
+            self.origin_width = video.renderSize.width
+            self.origin_height = video.renderSize.height
+            self.length = video.duration.seconds
+
+            completed()
+         
+        })
+        
+        
+    }
+    
+    
+    func uploadVideoToDB(url: URL) {
+    
+        let data = try! Data(contentsOf: url)
+        
+        APIManager().uploadVideo(video: data) { result in
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+
+            case .failure(let error):
+                global_percentComplete = 0.00
+                print(error)
+            }
+            
+        } process: { percent in
+            global_percentComplete = Double(percent)
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "updateProgressBar")), object: nil)
+            print("Uploading ... \(percent)%")
+        }
+
+    
+        
+    }
+    
+    
     
     func writeContentImageToDB(imageUrl: String) {
         
@@ -595,18 +674,30 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
 extension PostVC {
     
     @objc func onClickBack(_ sender: AnyObject) {
-        self.dismiss(animated: true)
+        
+        if let navigationController = self.navigationController {
+            navigationController.dismiss(animated: true)
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvcToIndex")), object: nil)
+        }
     }
     
     @objc func onClickPost(_ sender: AnyObject) {
         
-        if mediaType == "image" {
-            uploadImage()
-        } else if mediaType == "video" {
-            uploadVideo()
+        
+        if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
+            if mediaType == "image" {
+                uploadImage()
+            } else if mediaType == "video" {
+                uploadVideo()
+            } else {
+                showErrorAlert("Oops!", msg: "Unknown media type selected, please try again.")
+            }
         } else {
-            showErrorAlert("Oops!", msg: "Unknown media type selected, please try again")
+            self.showErrorAlert("Oops!", msg: "Your current post is being uploaded, please try again later.")
         }
+        
+        
+        
       
     }
     
