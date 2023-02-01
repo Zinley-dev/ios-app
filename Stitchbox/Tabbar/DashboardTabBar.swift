@@ -77,6 +77,7 @@ import SendBirdCalls
         
         self.delegate = self
         SBDMain.add(self, identifier: self.sbu_className)
+        NotificationCenter.default.addObserver(self, selector: #selector(DashboardTabBarController.switchvc), name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
         
     }
     
@@ -125,6 +126,17 @@ import SendBirdCalls
             PNVC.modalPresentationStyle = .fullScreen
             self.present(PNVC, animated: true)
         }
+        
+    }
+    
+}
+
+extension DashboardTabBarController {
+    
+    @objc func switchvc() {
+    
+        print("switch request")
+        self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![0]
         
     }
     
