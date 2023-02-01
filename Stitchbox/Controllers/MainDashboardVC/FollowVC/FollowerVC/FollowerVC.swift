@@ -168,19 +168,14 @@ extension FollowerVC: ASTableDataSource {
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             node.followAction = { item in
-                print("Pressed Id= \(item.user.userId) Name= \(item.user.username)")
-//                if (item.user.status == "") {
-//
-//                }
+                self.viewModel.insertfollow(userId: item.user.userId ?? "")
             }
             
             return node
         }
             
     }
-        
-
-            
+                    
 }
     
 extension FollowerVC {

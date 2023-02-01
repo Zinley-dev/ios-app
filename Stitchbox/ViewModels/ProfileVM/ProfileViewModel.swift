@@ -13,7 +13,7 @@ class ProfileViewModel: ViewModelProtocol {
     struct Input {
         
     }
-     
+    
     struct Action {
         
     }
@@ -42,7 +42,7 @@ class ProfileViewModel: ViewModelProtocol {
             followersObservable: followersSubject.asObserver(),
             followingObservable: followingSubject.asObserver(),
             followerListObservable: followerListSubject.asObserver(),
-            followingListObservable: followerListSubject.asObserver()
+            followingListObservable: followingListSubject.asObserver()
         )
         logic()
     }
@@ -50,60 +50,68 @@ class ProfileViewModel: ViewModelProtocol {
     func logic() {
         
     }
-    func getFollowing(page: Int = 0) {
+    func getFollowing(page: Int = 1) {
+        print("LOAD PAGE \(page)")
         APIManager().getFollowing(page:page) { result in
             switch result {
-                case .success(let response):
-                    guard response.body?["message"] as? String == "success",
-                          let data = response.body?["data"] as? [[String: Any]] else {
-                        return
-                    }
-                    let list = data.map { item in
-                        return FollowerModel(JSON: item)!
-                    }
-                    self.followingSubject.onNext(data.count)
-                    self.followingListSubject.onNext(list)
-                case .failure(let error):
-                    print(error)
+            case .success(let response):
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["data"] as? [[String: Any]] else {
+                    return
+                }
+                let list = data.map { item in
+                    return FollowerModel(JSON: item)!
+                }
+                print("Following List: ", list)
+                self.followingSubject.onNext(data.count)
+                self.followingListSubject.onNext(list)
+            case .failure(let error):
+                print("Error loading following: ", error)
             }
         }
     }
-    func getFollowers(page: Int = 0) {
+    func getFollowers(page: Int = 1) {
         print("LOAD PAGE \(page)")
         APIManager().getFollower(page: page) { result in
             switch result {
-                case .success(let response):
-                    guard response.body?["message"] as? String == "success",
-                          let data = response.body?["data"] as? [[String: Any]] else {
-                        return
-                    }
-                    let list = data.map { item in
-                        return FollowerModel(JSON: item)!
-                    }
-                    self.followersSubject.onNext(data.count)
-                    self.followerListSubject.onNext(list)
-                case .failure(let error):
-                    print(error)
+            case .success(let response):
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["data"] as? [[String: Any]] else {
+                    return
+                }
+                let list = data.map { item in
+                    return FollowerModel(JSON: item)!
+                }
+                print("Follower List: ", list)
+                self.followersSubject.onNext(data.count)
+                self.followerListSubject.onNext(list)
+            case .failure(let error):
+                print(error)
             }
         }
     }
+    func unfollow(userId: String = "") {
+        APIManager().deleteFollow(params: ["FollowId": userId]) { result in
+            switch result {
+            case .success(_):
+                showNote(text: "Unfollowed!")
+            case .failure(_):
+                showNote(text: "Something happened!")
+            }
+            
+        }
+    }
     
-//    func createPost(body req: CreatePostRequest) {
-//        let params = [
-//            "content": req.content,
-//            "images": req.images,
-//            "video": req.video,
-//            "tags": req.tags,
-//            "setting": req.setting
-//        ] as [String : Any]
-//        APIManager().createPost(params: params) { result in
-//            switch result {
-//                case .success(let response):
-//                    print("success")
-//                case .failure(let err):
-//                    print("err")
-//            }
-//        }
-//    }
-//
+    
+    func insertfollow(userId: String = "") {
+        APIManager().insertFollow(params: ["FollowId": userId]) { result in
+            switch result {
+            case .success(_):
+                showNote(text: "Followed!")
+            case .failure(_):
+                showNote(text: "Something happened!")
+            }
+            
+        }
+    }
 }

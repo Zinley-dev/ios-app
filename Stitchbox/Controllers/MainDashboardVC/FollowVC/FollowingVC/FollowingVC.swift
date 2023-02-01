@@ -131,7 +131,7 @@ extension FollowingVC: ASTableDelegate {
             
         print("getFollowing......")
         asContext = context
-        self.viewModel.getFollowers(page: currPage)
+        self.viewModel.getFollowing(page: currPage)
             
     }
     
@@ -165,18 +165,17 @@ extension FollowingVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
             
         let user = userList[indexPath.row]
-            
+        
         return {
             var node: FollowNode!
-            
+            user.action = "Following"
             node = FollowNode(with: user)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             node.followAction = { item in
                 print("Pressed Id= \(item.user.userId) Name= \(item.user.username)")
-//                if (item.user.status == "") {
-//
-//                }
+                self.viewModel.unfollow(userId: item.user.userId ?? "")
+                
             }
             return node
         }
@@ -191,8 +190,6 @@ extension FollowingVC {
     
     func retrieveNextPageWithCompletion( block: @escaping ([AnyObject]) -> Void) {
         
-       
-                
     }
     
 

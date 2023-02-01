@@ -24,10 +24,9 @@ class FollowNode: ASCellNode {
     var NameNode: ASTextNode!
     var AvatarNode: ASNetworkImageNode!
     var followBtnNode: ASButtonNode!
-   
     var desc = ""
     
-    let selectedColor = UIColor(red: 248/255, green: 189/255, blue: 91/255, alpha: 1.0)
+    var selectedColor = UIColor(red: 53, green: 46, blue: 113, alpha: 0.4)
     
     init(with user: FollowerModel) {
         
@@ -51,7 +50,7 @@ class FollowNode: ASCellNode {
    
         userNameNode.backgroundColor = UIColor.clear
         NameNode.backgroundColor = UIColor.clear
-        followBtnNode.backgroundColor = UIColor.tertiary
+        followBtnNode.backgroundColor = user.action == "Following" ? UIColor.primary : UIColor.white
         followBtnNode.tintColor  = UIColor.primary
 
           //
@@ -63,7 +62,13 @@ class FollowNode: ASCellNode {
          
         
         if user.action == "Following" {
-            
+            DispatchQueue.main.async {
+                self.followBtnNode.layer.borderWidth = 1.0
+                self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
+                self.followBtnNode.layer.cornerRadius = 10.0
+                self.followBtnNode.clipsToBounds = true
+                self.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.white, for: .normal)
+            }
         } else if user.action == "Follower" {
             
             DispatchQueue.main.async {

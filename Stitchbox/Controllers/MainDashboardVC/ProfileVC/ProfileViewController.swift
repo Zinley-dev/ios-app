@@ -122,6 +122,7 @@ class ProfileViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         // Load follwer, follwing
         viewModel.getFollowers()
+        viewModel.getFollowing()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

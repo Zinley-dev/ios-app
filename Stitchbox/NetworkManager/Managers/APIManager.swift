@@ -136,7 +136,7 @@ struct APIManager {
 extension APIManager {
     
     func getFollower(page: Int, completion: @escaping APICompletion) {
-        followManager.request(.follow(page: page)) { result in
+        followManager.request(.followers(page: page)) { result in
             completion(result)
         }
     }
@@ -145,6 +145,21 @@ extension APIManager {
         followManager.request(.follow(page: page)) { result in
             completion(result)
         }
+    }
+    
+    func insertFollow(params: [String: Any], completion: @escaping APICompletion) {
+            followManager.request(.insertfollow(params: params)){
+                result in
+                completion(result)
+            }
+            print("call insertAPI")
+        }
+    func deleteFollow(params: [String: Any], completion: @escaping APICompletion) {
+        followManager.request(.unfollow(params: params)){
+            result in
+            completion(result)
+        }
+        
     }
 }
 

@@ -27,9 +27,10 @@ extension APIBuilder: BaseURL {
 
 public enum FollowApi {
     case follow(page: Int = 1)
-    case followers
+    case followers(page: Int = 1)
+    case unfollow (params: [String:Any])
+    case insertfollow (params: [String:Any])
 }
-
 extension FollowApi: EndPointType {
     var task: HTTPTask {
         switch self {
@@ -37,6 +38,10 @@ extension FollowApi: EndPointType {
                 return .request
             case .followers:
                 return .request
+            case .unfollow(let params):
+                return .requestParameters(parameters: params)
+            case .insertfollow(let params):
+                return .requestParameters(parameters: params)
         }
     }
     
@@ -55,8 +60,12 @@ extension FollowApi: EndPointType {
         switch self {
             case .follow(let page):
                 return "/?page=\(page)"
-            case .followers:
-                return "/followers"
+            case .followers(let page):
+                return "/followers?page=\(page)"
+            case .unfollow:
+                return "/unfollow"
+            case .insertfollow:
+                return "/"
         }
     }
     var httpMethod: HTTPMethod {
@@ -65,6 +74,10 @@ extension FollowApi: EndPointType {
                 return .get
             case .followers:
                 return .get
+            case .unfollow:
+                return .delete
+            case .insertfollow:
+            return .post
         }
     }
 }
