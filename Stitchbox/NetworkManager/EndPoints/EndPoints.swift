@@ -25,50 +25,6 @@ extension APIBuilder: BaseURL {
     }
 }
 
-public enum FollowApi {
-    case follow
-    case followers
-}
-
-extension FollowApi: EndPointType {
-    var task: HTTPTask {
-        switch self {
-            case .follow:
-                return .request
-            case .followers:
-                return .request
-        }
-    }
-    
-    var headers: [String : String]? {
-        if let userToken = _AppCoreData.userSession.value?.accessToken, userToken != "" {
-            let headers = ["Authorization": userToken]
-            return headers
-        }
-        return nil
-    }
-    
-    var module: String {
-        return "/follow"
-    }
-    var path: String {
-        switch self {
-            case .follow:
-                return "/"
-            case .followers:
-                return "/followers"
-        }
-    }
-    var httpMethod: HTTPMethod {
-        switch self {
-            case .follow:
-                return .get
-            case .followers:
-                return .get
-        }
-    }
-}
-
 public enum AuthApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
@@ -333,13 +289,9 @@ extension MediaAPI: EndPointType {
   }
 }
 public enum AccountAPI {
-    case getBlocks
+    case getBlocks (page: Int, limit: Int = 10)
     case insertBlocks (params: [String:Any])
     case deleteBlocks (params: [String:Any])
-    case getFollows
-    case getFollowers
-    case insertFollows (params: [String:Any])
-    case deleteFollows (params: [String:Any])
 }
 extension AccountAPI: EndPointType {
     var module: String {
@@ -348,20 +300,12 @@ extension AccountAPI: EndPointType {
     
     var path: String {
       switch self {
-        case .getBlocks:
-          return "/block"
+        case .getBlocks(let page, let lim):
+          return "/block?page=\(page)&limit=\(lim)"
         case .insertBlocks:
           return "/block"
         case .deleteBlocks:
           return "/block"
-        case .getFollows:
-          return "/follow"
-        case .insertFollows:
-          return "/follow"
-        case .deleteFollows:
-          return "/follow"
-        case .getFollowers:
-          return "/follow/Follows"
       }
     }
     
@@ -373,14 +317,6 @@ extension AccountAPI: EndPointType {
             return .post
         case .deleteBlocks:
             return .delete
-        case .getFollows:
-            return .get
-        case .insertFollows:
-            return .post
-        case .deleteFollows:
-            return .delete
-        case .getFollowers:
-            return .get
         }
     }
     
@@ -392,14 +328,6 @@ extension AccountAPI: EndPointType {
             return .requestParameters(parameters: params)
         case .deleteBlocks(let params):
             return .requestParameters(parameters: params)
-        case .getFollows:
-            return .request
-        case .insertFollows(let params):
-            return .requestParameters(parameters: params)
-        case .deleteFollows(let params):
-            return .requestParameters(parameters: params)
-        case .getFollowers:
-            return .request
         }
     }
     
@@ -414,7 +342,6 @@ public enum UserAPI {
     case changepassword (params: [String: Any])
     case uploadavatar
     case uploadcover
-
 }
 extension UserAPI: EndPointType {
     var module: String {
@@ -539,3 +466,57 @@ extension PostAPI: EndPointType {
     }
 }
 
+public enum FollowApi {
+  case getFollows (page: Int, lim: Int = 10)
+  case getFollowers (page: Int, lim: Int = 10)
+  case insertFollows (params: [String:Any])
+  case deleteFollows (params: [String:Any])
+}
+extension FollowApi: EndPointType {
+  var module: String {
+    return "/follow"
+  }
+  
+  var path: String {
+    switch self {
+      case .getFollows(let page, let lim):
+        return "?page=\(page)&limit=\(lim)"
+      case .insertFollows:
+        return "/"
+      case .deleteFollows:
+        return "/unfollow"
+      case .getFollowers(let page, let lim):
+        return "/followers?page=\(page)&limit=\(lim)"
+    }
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getFollows:
+        return .get
+      case .insertFollows:
+        return .post
+      case .deleteFollows:
+        return .delete
+      case .getFollowers:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getFollows:
+        return .request
+      case .insertFollows(let params):
+        return .requestParameters(parameters: params)
+      case .deleteFollows(let params):
+        return .requestParameters(parameters: params)
+      case .getFollowers:
+        return .request
+    }
+  }
+  
+  var headers: [String: String]? {
+    return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+  }
+}

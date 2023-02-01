@@ -49,7 +49,7 @@ class ProfileViewModel: ViewModelProtocol {
         
     }
     func getFollowing() {
-        APIManager().getFollowing() { result in
+      APIManager().getFollows(page: 1){ result in
             switch result {
                 case .success(let response):
                     print("================XXX=================================")
@@ -68,7 +68,7 @@ class ProfileViewModel: ViewModelProtocol {
         }
     }
     func getFollowers() {
-        APIManager().getFollower { result in
+      APIManager().getFollowers(page: 1) { result in
             switch result {
                 case .success(let response):
                     print("===================XXX==============================")

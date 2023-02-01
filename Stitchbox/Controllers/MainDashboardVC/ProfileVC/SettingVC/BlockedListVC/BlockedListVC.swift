@@ -16,11 +16,14 @@ class BlockedListVC: UIViewController, ControllerType {
     
     let backButton: UIButton = UIButton(type: .custom)
     
+    let group = DispatchGroup()
+    
     @IBOutlet weak var contentView: UIView!
     var BlockList = [BlockUserModel]()
     var tableNode: ASTableNode!
     
     let viewModel = BlockAccountsViewModel()
+    var currentPage = 1
     let disposeBag = DisposeBag()
     
     required init?(coder aDecoder: NSCoder) {
@@ -34,7 +37,6 @@ class BlockedListVC: UIViewController, ControllerType {
     override func viewDidLoad() {
         bindUI(with: viewModel)
         bindAction(with: viewModel)
-        viewModel.getAPISetting()
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
@@ -49,18 +51,22 @@ class BlockedListVC: UIViewController, ControllerType {
     
     func bindAction(with viewModel: BlockAccountsViewModel) {
         viewModel.input.blockAccounts.subscribe{ blockUsers in
-            self.BlockList = blockUsers.element ?? [BlockUserModel]()
-            print(self.BlockList)
-            DispatchQueue.main.async {
-                self.tableNode.reloadData()
-            }
-            
+            self.insertNewRowsInTableNode(newUsers: blockUsers)
         }.disposed(by: disposeBag)
         
         viewModel.output.successObservable.subscribe{
             result in
             DispatchQueue.main.async {
-                showNote(text: result)
+                switch result.element{
+                case .unblock(let message):
+                    showNote(text: message)
+                case .unfollow(let message):
+                    showNote(text: message)
+                case .follow(let message):
+                    showNote(text: message)
+                default:
+                    break
+                }
             }
         }.disposed(by: disposeBag)
         
@@ -120,7 +126,7 @@ extension BlockedListVC {
         self.tableNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
         self.applyStyle()
-        self.tableNode.leadingScreensForBatching = 5
+        self.tableNode.leadingScreensForBatching = 1.0
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
         
@@ -132,7 +138,7 @@ extension BlockedListVC {
         
         self.tableNode.view.separatorStyle = .none
         self.tableNode.view.separatorColor = UIColor.lightGray
-        self.tableNode.view.isPagingEnabled = false
+        self.tableNode.view.isPagingEnabled = true
         self.tableNode.view.backgroundColor = UIColor.clear
         self.tableNode.view.showsVerticalScrollIndicator = false
         
@@ -169,10 +175,8 @@ extension BlockedListVC: ASTableDelegate {
     }
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        
-        self.retrieveNextPageWithCompletion { (newUsers) in
-            
-            self.insertNewRowsInTableNode(newUsers: newUsers)
+        print("batchfetching start")
+        self.retrieveNextPageWithCompletion {
             
             context.completeBatchFetching(true)
             
@@ -207,6 +211,37 @@ extension BlockedListVC: ASTableDataSource {
         return {
             
             let node = BlockNode(with: user)
+            node.UnBlockAction = {
+                self.viewModel.unblock(blockId: user.blockId) {
+                    node.user.isBlock = false
+                    node.user.isFollowing = false
+                    // reload node from table
+                    DispatchQueue.main.async {
+                        self.tableNode.reloadRows(at: [indexPath], with: .none)
+                        
+                    }
+                }
+            }
+            node.FollowAction = {
+                self.viewModel.follow(userId: user.userId) {
+                    node.user.isBlock = false
+                    node.user.isFollowing = true
+                    // reload node from table
+                    DispatchQueue.main.async {
+                        self.tableNode.reloadRows(at: [indexPath], with: .none)
+                    }
+                }
+            }
+            node.UnfollowAction = {
+                self.viewModel.unfollow(userId: user.userId) {
+                    node.user.isBlock = false
+                    node.user.isFollowing = false
+                    // reload node from table
+                    DispatchQueue.main.async {
+                        self.tableNode.reloadRows(at: [indexPath], with: .none)
+                    }
+                }
+            }
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -219,19 +254,33 @@ extension BlockedListVC: ASTableDataSource {
 
 extension BlockedListVC {
     
-    func retrieveNextPageWithCompletion( block: @escaping ([AnyObject]) -> Void) {
+    func retrieveNextPageWithCompletion( block: @escaping () -> Void) {
         
-        DispatchQueue.main.async {
-            
+        viewModel.getBlocks(page: currentPage) { [self] in
+            currentPage += 1
+            block()
         }
         
     }
     
     
-    func insertNewRowsInTableNode(newUsers: [AnyObject]) {
+    func insertNewRowsInTableNode(newUsers: [BlockUserModel]) {
         
         guard newUsers.count > 0 else {
             return
+        }
+        
+        let section = 0
+        var indexPaths: [IndexPath] = []
+        let total = BlockList.count + newUsers.count
+        
+        for row in BlockList.count ... total - 1 {
+            let path = IndexPath(row: row, section: section)
+            indexPaths.append(path)
+        }
+        BlockList.append(contentsOf: newUsers)
+        DispatchQueue.main.async {
+            self.tableNode.insertRows(at: indexPaths, with: .none)
         }
         
         

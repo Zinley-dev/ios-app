@@ -10,8 +10,10 @@ import ObjectMapper
 class BlockUserModel: Mappable {
     
     private(set) var blockId: String = ""
-    private(set) var blockUser: UserDataSource = UserDataSource()
-    
+    private(set) var userId: String = ""
+    private(set) var blockUser: ListDisplayDataSource = ListDisplayDataSource()
+    var isBlock = true
+    var isFollowing = false
     
     required init?(map: ObjectMapper.Map) {
         
@@ -20,7 +22,8 @@ class BlockUserModel: Mappable {
     func mapping(map: ObjectMapper.Map) {
         print(map)
         blockId <- map["blockId"]
-        blockUser <- map ["blockList.0"]
+        userId <- map["userId"]
+        blockUser <- map ["blockList"]
     }
     
     

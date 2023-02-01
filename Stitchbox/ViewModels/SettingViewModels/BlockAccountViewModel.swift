@@ -28,12 +28,17 @@ class BlockAccountsViewModel: ViewModelProtocol {
     
     struct Output {
         var errorsObservable: Observable<String>
-        var successObservable: Observable<String>
+        var successObservable: Observable<successMessage>
+    }
+    enum successMessage {
+        case unblock(messsage: String = "Successfully unblock user")
+        case follow(messsage: String = "Successfully follow user")
+        case unfollow(messsage: String = "Successfully unfollow user")
     }
     
     private let blockAccountRelay = BehaviorRelay<[BlockUserModel]>(value: Mapper<BlockUserModel>().mapArray(JSONArray: []))
     private let errorsSubject = PublishSubject<String>()
-    private let successSubject = PublishSubject<String>()
+    private let successSubject = PublishSubject<successMessage>()
     private let submitChangeSubject = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
     
@@ -52,50 +57,73 @@ class BlockAccountsViewModel: ViewModelProtocol {
         )
         
         logic()
-        getAPISetting()
     }
     
-    func getAPISetting() {
-        APIManager().getBlocks{
-            result in switch result {
+    func getBlocks(page: Int, completion: @escaping () -> Void = {}) -> Void  {
+        APIManager().getBlocks(page: page){
+            result in
+            switch result {
             case .success(let response):
-                print(response)
+                print("page number \(page)")
                 if let data = response.body {
                     if let listData = data["data"] as? [[String: Any]] {
-                        print(listData)
                         self.blockAccountRelay.accept(Mapper<BlockUserModel>().mapArray(JSONArray: listData))
+                        if (!listData.isEmpty) {
+                            completion()
+                        }
                     } else {
                         self.blockAccountRelay.accept([BlockUserModel]())
                     }
                 }
-            case .failure:
+            case .failure(let error):
+                print(error)
                 self.errorsSubject.onNext("Cannot get user's block information")
             }
         }
     }
     
-    // handle notification
-    // For swift 4.0 and above put @objc attribute in front of function Definition
-    @objc func unblock(_ notification: NSNotification) {
-        if let blockId = notification.userInfo?["blockId"] as? String {
-            // do something with your strinf
-            APIManager().deleteBlocks(params: ["blockId": blockId]){
-                result in switch result {
-                case .success(let response):
-                    print(response)
-                    self.successSubject.onNext("Successfully unblock user")
-                    self.getAPISetting()
-                case .failure:
-                    self.errorsSubject.onNext("Cannot unblock user")
-                }
+    func unblock(blockId: String, completion: @escaping () -> Void = {}) -> Void {
+        // do something with your strinf
+        APIManager().deleteBlocks(params: ["blockId": blockId]){
+            result in switch result {
+            case .success(_):
+                self.successSubject.onNext(.unblock())
+                completion()
+            case .failure:
+                self.errorsSubject.onNext("Cannot unblock user")
+                
             }
         }
     }
     
-    func logic() {
-        NotificationCenter.default.addObserver(self, selector: #selector(unblock(_:)), name: NSNotification.Name("unblock"), object: nil)
+    func follow(userId: String, completion: @escaping () -> Void = {}) -> Void {
+        // do something with your strinf
+        APIManager().insertFollows(params: ["FollowId": userId]){
+            result in switch result {
+            case .success(_):
+                self.successSubject.onNext(.follow())
+                completion()
+            case .failure:
+                self.errorsSubject.onNext("Cannot follow user")
+            }
+        }
     }
-    deinit{
-        NotificationCenter.default.removeObserver(self)
+    
+    func unfollow(userId: String, completion: @escaping () -> Void = {}) -> Void {
+        // do something with your strinf
+        APIManager().deleteFollows(params: ["FollowId": userId]){
+            result in switch result {
+            case .success(_):
+                self.successSubject.onNext(.unfollow())
+                completion()
+            case .failure:
+                self.errorsSubject.onNext("Cannot unfollow user")
+            }
+        }
     }
+    
+    
+    
+    func logic() {}
+    deinit{}
 }

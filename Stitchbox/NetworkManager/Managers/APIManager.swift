@@ -144,21 +144,6 @@ struct APIManager {
 
 extension APIManager {
     
-    func getFollower(completion: @escaping APICompletion) {
-        followManager.request(.follow) { result in
-            completion(result)
-        }
-    }
-    
-    func getFollowing(completion: @escaping APICompletion) {
-        followManager.request(.followers) { result in
-            completion(result)
-        }
-    }
-}
-
-extension APIManager {
-    
     func getSettings(completion: @escaping APICompletion) {
         settingManager.request(.getSettings){
             result in
@@ -172,8 +157,8 @@ extension APIManager {
             completion(result)
         }
     }
-    func getBlocks( completion: @escaping APICompletion) {
-        accountManager.request(.getBlocks){
+    func getBlocks(page: Int, completion: @escaping APICompletion) {
+        accountManager.request(.getBlocks(page: page)){
             result in
             completion(result)
         }
@@ -190,26 +175,27 @@ extension APIManager {
             completion(result)
         }
     }
-    func getFollows( completion: @escaping APICompletion) {
-        accountManager.request(.getFollows){
+    func getFollows(page: Int, completion: @escaping APICompletion) {
+        followManager.request(.getFollows(page: page)){
             result in
             completion(result)
         }
     }
-    func getFollowers( completion: @escaping APICompletion) {
-        accountManager.request(.getFollowers){
+    func getFollowers(page: Int, completion: @escaping APICompletion) {
+        followManager.request(.getFollowers(page: page)){
             result in
             completion(result)
         }
     }
     func insertFollows(params: [String: Any], completion: @escaping APICompletion) {
-        accountManager.request(.insertFollows(params: params)){
+        followManager.request(.insertFollows(params: params)){
             result in
             completion(result)
         }
+        print("call insertAPI")
     }
     func deleteFollows(params: [String: Any], completion: @escaping APICompletion) {
-        accountManager.request(.deleteFollows(params: params)){
+        followManager.request(.deleteFollows(params: params)){
             result in
             completion(result)
         }
