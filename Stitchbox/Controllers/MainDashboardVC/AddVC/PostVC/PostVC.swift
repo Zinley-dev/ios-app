@@ -9,6 +9,7 @@ import UIKit
 import PixelSDK
 import Alamofire
 import Photos
+import ObjectMapper
 
 class PostVC: UIViewController {
 
@@ -354,7 +355,6 @@ extension PostVC {
             switch result {
             case .success(let apiResponse):
                 
-            
                 guard apiResponse.body?["message"] as? String == "avatar uploaded successfully",
                       let url = apiResponse.body?["url"] as? String  else {
                         return
@@ -414,8 +414,24 @@ extension PostVC {
             
             switch result {
             case .success(let apiResponse):
+            
                 
-                print(apiResponse)
+                guard apiResponse.body?["message"] as? String == "video uploaded successfully",
+                    let data = apiResponse.body?["data"] as? [String: Any] else {
+                        return
+                }
+                
+
+                // Try to create a SendBirdRoom object from the data
+                let videoInfo =  Mapper<VideoPostModel>().map(JSONObject: data)
+                let downloadedUrl = videoInfo?.video_url ?? ""
+               
+                if downloadedUrl != "" {
+                    self.writeContentVideoToDB(videoUrl: downloadedUrl)
+                } else {
+                    print("Couldn't get video url")
+                }
+                
 
             case .failure(let error):
                 global_percentComplete = 0.00
@@ -472,13 +488,62 @@ extension PostVC {
             
 
             case .failure(let error):
-                DispatchQueue.main.async {
-                    SwiftLoader.hide()
-                }
                 print(error)
             }
         }
         
+        
+    }
+    
+    
+    
+    func writeContentVideoToDB(videoUrl: String) {
+ 
+        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
+            print("Can't get userDataSource")
+            return
+        }
+        
+        
+        let videoData =  ["raw_url": videoUrl
+                          ,"stream_url": videoUrl]
+        
+        
+        let loadUsername = userDataSource.userName
+        
+        var contentPost = [String: Any]()
+        
+        contentPost = ["content": selectedDescTxtView, "video": videoData, "tags": [userUID]]
+        
+        var update_hashtaglist = [String]()
+        
+        if hashtagList.isEmpty == true {
+            
+            update_hashtaglist = ["#\(loadUsername)"]
+            
+        } else {
+            
+            update_hashtaglist = hashtagList
+            if !update_hashtaglist.contains("#\(loadUsername)") {
+                update_hashtaglist.insert("#\(loadUsername)", at: 0)
+            }
+            
+        }
+        
+        contentPost["setting"] = ["mode": mode as Any, "allow_comment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
+
+        APIManager().createPost(params: contentPost) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print("Posted successfully \(apiResponse)")
+            
+
+            case .failure(let error):
+                print(error)
+            }
+        }
+
         
     }
     
