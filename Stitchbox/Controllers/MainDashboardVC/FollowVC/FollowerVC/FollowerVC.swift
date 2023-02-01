@@ -23,6 +23,7 @@ class FollowerVC: UIViewController {
     
     var tableNode: ASTableNode!
     var userList = [FollowerModel]()
+    var followingList = [FollowerModel]()
     var asContext: ASBatchContext!
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,9 +31,9 @@ class FollowerVC: UIViewController {
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
-  
+        
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableNode()
@@ -45,12 +46,12 @@ class FollowerVC: UIViewController {
             guard self.asContext != nil else  {
                 return
             }
-
+            
             guard list.count > 0 else {
                 self.asContext.completeBatchFetching(true)
                 return
             }
-
+            
             let lastItemAt = self.userList.count
             let section = 0
             self.currPage += 1
@@ -67,8 +68,12 @@ class FollowerVC: UIViewController {
             }
             
         })
+        viewModel.output.followingListObservable.subscribe(onNext: {
+            list in
+            self.followingList = list
+        })
     }
-
+    
 }
 
 extension FollowerVC {
@@ -97,7 +102,7 @@ extension FollowerVC {
         self.tableNode.view.isPagingEnabled = false
         self.tableNode.view.backgroundColor = UIColor.clear
         self.tableNode.view.showsVerticalScrollIndicator = false
-            
+        
     }
     
     func wireDelegates() {
@@ -107,43 +112,45 @@ extension FollowerVC {
     }
     
 }
-    
-extension FollowerVC: ASTableDelegate {
 
+extension FollowerVC: ASTableDelegate {
+    
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
-            
+        
         let width = UIScreen.main.bounds.size.width;
-            
+        
         let min = CGSize(width: width, height: 40);
         let max = CGSize(width: width, height: 1000);
         return ASSizeRangeMake(min, max);
-               
+        
     }
-        
-        
+    
+    
     func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
-            
-        return true
-            
-    }
         
+        return true
+        
+    }
+    
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         print("getFollowers......")
         asContext = context
+        self.viewModel.getFollowing() //get all following
         self.viewModel.getFollowers(page: currPage)
+        
     }
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
     }
-           
-}
     
+}
+
 extension FollowerVC: ASTableDataSource {
-        
+    
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-            
-            
+        
+        
         if self.userList.count == 0 {
             
             tableNode.view.setEmptyMessage("No follower")
@@ -153,38 +160,62 @@ extension FollowerVC: ASTableDataSource {
         }
         
         return self.userList.count
-            
-            
-    }
         
+        
+    }
+    
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-            
+        
         let user = userList[indexPath.row]
+        func follow(item: FollowNode) {
+            self.viewModel.insertfollow(userId: item.user.userId ?? "")
+            item.followAction = unfollow
+            item.followBtnNode.backgroundColor = UIColor.primary
+            item.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.white, for: .normal)
             
+        }
+        func unfollow(item: FollowNode) {
+            self.viewModel.unfollow(userId: item.user.userId ?? "")
+            item.followAction = follow
+            item.followBtnNode.backgroundColor = UIColor.white
+            item.followBtnNode.setTitle("+ Follow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.primary, for: .normal)
+        }
         return {
             var node: FollowNode!
-            
+            // if user in the following list, this should be a following node.
+            let isFollowing = !self.followingList.contains{$0.userId == user.userId}
+            if isFollowing {
+                print("-------------")
+                print(self.followingList)
+                print(user)
+                print("-------------")
+            }
+            user.action = isFollowing ? "Follower" : "Following"
             node = FollowNode(with: user)
+            node.followAction = {
+                item in
+                if isFollowing {follow(item: item) }
+                else { unfollow(item: item)}
+            }
+            
+            
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            node.followAction = { item in
-                self.viewModel.insertfollow(userId: item.user.userId ?? "")
-            }
             
             return node
         }
-            
+        
     }
-                    
-}
     
+}
+
 extension FollowerVC {
     
     func retrieveNextPageWithCompletion( block: @escaping ([AnyObject]) -> Void) {
         
     }
     
-
+    
     func insertNewRowsInTableNode(newUsers: [AnyObject]) {
         
         guard newUsers.count > 0 else {

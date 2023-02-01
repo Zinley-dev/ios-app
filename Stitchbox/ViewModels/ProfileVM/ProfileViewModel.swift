@@ -95,10 +95,11 @@ class ProfileViewModel: ViewModelProtocol {
             switch result {
             case .success(_):
                 showNote(text: "Unfollowed!")
+                
             case .failure(_):
                 showNote(text: "Something happened!")
+                
             }
-            
         }
     }
     
