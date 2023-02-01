@@ -19,9 +19,10 @@ var startTime = Date()
 
 var global_presetingRate = 0.0
 var global_cornerRadius = 0.0
+var global_percentComplete = 0.0
 var global_host = ""
 var global_fullLink = ""
-
+var selectedTabIndex = 0
 
  let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
  let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])

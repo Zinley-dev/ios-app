@@ -51,6 +51,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QjB-Ff-npc" customClass="ProgressBar" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="32" y="123" width="35" height="35"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="XuL-D6-Oyi"/>
+                                    <constraint firstAttribute="width" constant="35" id="kA7-76-xoT"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="startGradientColor">
+                                        <color key="value" name="Secondary"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="endGradientColor">
+                                        <color key="value" name="Secondary"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HOME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nRW-GJ-eXT">
                                 <rect key="frame" x="153" y="350" width="69" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
@@ -62,12 +81,15 @@
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
                             <constraint firstItem="nRW-GJ-eXT" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="6gc-wi-Wjm"/>
+                            <constraint firstItem="QjB-Ff-npc" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="32" id="FAH-dq-see"/>
+                            <constraint firstItem="QjB-Ff-npc" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="32" id="Wbn-Yc-2Lj"/>
                             <constraint firstItem="nRW-GJ-eXT" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="h8L-tr-6lU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="lDt-lA-xKs"/>
                     <connections>
                         <outlet property="lblHome" destination="nRW-GJ-eXT" id="xHn-ZR-B0L"/>
+                        <outlet property="progressBar" destination="QjB-Ff-npc" id="AWD-Qc-Mjw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -264,7 +286,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Typing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bM6-fT-FPi" userLabel="Typing Indicator Label">
-                                                            <rect key="frame" x="28" y="1.3333333333333321" width="214" height="14"/>
+                                                            <rect key="frame" x="28" y="1.333333333333333" width="214" height="14.333333333333336"/>
                                                             <fontDescription key="fontDescription" name="Roboto-Italic" family="Roboto" pointSize="12"/>
                                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -445,7 +467,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cHs-eb-zXR" userLabel="Toast Message Label">
-                                        <rect key="frame" x="37.666666666666671" y="73" width="44.333333333333329" height="21"/>
+                                        <rect key="frame" x="38.333333333333329" y="73" width="43.333333333333329" height="21.333333333333329"/>
                                         <fontDescription key="fontDescription" name="Roboto-BoldItalic" family="Roboto" pointSize="18"/>
                                         <color key="textColor" name="color_toast_label"/>
                                         <nil key="highlightedColor"/>
@@ -559,7 +581,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Typing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cmt-1o-CDM" userLabel="Typing Indicator Label">
-                                                            <rect key="frame" x="28" y="1.3333333333333321" width="214" height="14"/>
+                                                            <rect key="frame" x="28" y="1.333333333333333" width="214" height="14.333333333333336"/>
                                                             <fontDescription key="fontDescription" name="Roboto-Italic" family="Roboto" pointSize="12"/>
                                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -740,7 +762,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VFy-QJ-Jp3" userLabel="Toast Message Label">
-                                        <rect key="frame" x="37.666666666666671" y="73" width="44.333333333333329" height="21"/>
+                                        <rect key="frame" x="38.333333333333329" y="73" width="43.333333333333329" height="21.333333333333329"/>
                                         <fontDescription key="fontDescription" name="Roboto-BoldItalic" family="Roboto" pointSize="18"/>
                                         <color key="textColor" name="color_toast_label"/>
                                         <nil key="highlightedColor"/>
