@@ -36,9 +36,11 @@ class FollowerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //must happen before setting up tablenode otherwise data is not enough to render
+        bindingUI()
         setupTableNode()
         // Do any additional setup after loading the view.
-        bindingUI()
+        
     }
     
     func bindingUI() {
@@ -68,8 +70,9 @@ class FollowerVC: UIViewController {
             }
             
         })
-        viewModel.output.followingListObservable.subscribe(onNext: {
+        viewModel.output.allFollowingListObservable.subscribe(onNext: {
             list in
+            print("All Following: ",list)
             self.followingList = list
         })
     }
@@ -135,7 +138,7 @@ extension FollowerVC: ASTableDelegate {
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         print("getFollowers......")
         asContext = context
-        self.viewModel.getFollowing() //get all following
+        self.viewModel.getAllFollowing() //get all following
         self.viewModel.getFollowers(page: currPage)
         
     }
@@ -184,11 +187,12 @@ extension FollowerVC: ASTableDataSource {
             var node: FollowNode!
             // if user in the following list, this should be a following node.
             let isFollowing = !self.followingList.contains{$0.userId == user.userId}
+            print("-------------")
+            print(self.followingList)
+            print(user)
+            print("-------------")
             if isFollowing {
-                print("-------------")
-                print(self.followingList)
-                print(user)
-                print("-------------")
+                
             }
             user.action = isFollowing ? "Follower" : "Following"
             node = FollowNode(with: user)

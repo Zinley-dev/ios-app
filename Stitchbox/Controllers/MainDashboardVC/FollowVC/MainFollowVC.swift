@@ -19,7 +19,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     @IBOutlet weak var buttonStackView: UIStackView!
     
     var searchController: UISearchController?
-    
+    var showFollowerFirst = false
     var type = ""
     var ownerID = ""
     
@@ -60,7 +60,13 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
 
         // Do any additional setup after loading the view.
         setupButtons()
-        setupFollowersView()
+        if showFollowerFirst
+        {
+            setupFollowersView()
+        }
+        else {
+            setupFollowingView()
+        }
         setupSearchController()
         
     }

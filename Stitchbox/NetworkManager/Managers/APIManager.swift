@@ -161,6 +161,12 @@ extension APIManager {
         }
         
     }
+    func getAllFollow(completion: @escaping APICompletion) {
+        followManager.request(.allfollow) { result in
+            completion(result)
+        }
+    }
+    
 }
 
 extension APIManager {

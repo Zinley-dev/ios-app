@@ -310,6 +310,7 @@ extension ProfileViewController {
         print("followersTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            MFVC.showFollowerFirst = true
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -321,6 +322,7 @@ extension ProfileViewController {
        print("followingTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            MFVC.showFollowerFirst = false
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }

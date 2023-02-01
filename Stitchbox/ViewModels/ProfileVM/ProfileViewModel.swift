@@ -23,6 +23,7 @@ class ProfileViewModel: ViewModelProtocol {
         let followingObservable: Observable<Int>
         let followerListObservable: Observable<[FollowerModel]>
         let followingListObservable: Observable<[FollowerModel]>
+        let allFollowingListObservable: Observable<[FollowerModel]>
     }
     
     
@@ -35,6 +36,7 @@ class ProfileViewModel: ViewModelProtocol {
     private let followingSubject = PublishSubject<Int>()
     private let followerListSubject = PublishSubject<[FollowerModel]>()
     private let followingListSubject = PublishSubject<[FollowerModel]>()
+    private let allFollowingListSubject = PublishSubject<[FollowerModel]>()
     init() {
         input = Input()
         action = Action()
@@ -42,7 +44,8 @@ class ProfileViewModel: ViewModelProtocol {
             followersObservable: followersSubject.asObserver(),
             followingObservable: followingSubject.asObserver(),
             followerListObservable: followerListSubject.asObserver(),
-            followingListObservable: followingListSubject.asObserver()
+            followingListObservable: followingListSubject.asObserver(),
+            allFollowingListObservable: allFollowingListSubject.asObserver()
         )
         logic()
     }
@@ -113,6 +116,24 @@ class ProfileViewModel: ViewModelProtocol {
                 showNote(text: "Something happened!")
             }
             
+        }
+    }
+    func getAllFollowing() {
+        APIManager().getAllFollow { result in
+            switch result {
+            case .success(let response):
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["data"] as? [[String: Any]] else {
+                    return
+                }
+                let list = data.map { item in
+                    return FollowerModel(JSON: item)!
+                }
+                print("Following List: ", list)
+                self.allFollowingListSubject.onNext(list)
+            case .failure(let error):
+                print("Error loading following: ", error)
+            }
         }
     }
 }
