@@ -505,8 +505,7 @@ extension PostVC {
         }
         
         
-        let videoData =  ["raw_url": videoUrl
-                          ,"stream_url": videoUrl]
+        let videoData =  ["raw_url": videoUrl]
         
         
         let loadUsername = userDataSource.userName
