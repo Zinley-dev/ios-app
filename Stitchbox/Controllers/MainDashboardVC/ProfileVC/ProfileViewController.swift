@@ -52,24 +52,10 @@ class ProfileViewController: UIViewController {
     func bindingUI() {
       
         viewModel.output.myPostObservable.subscribe(onNext: { posts in
-          var arr:[ProfileViewController.Item] = []
-          for myPost in posts {
-            var url = URL(string: "")
-            if myPost.image[0] != "" {
-              url = URL(string: myPost.image[0])
-            } else {
-              url = URL(string: "https://image.mux.com/\(myPost.muxPlaybackId)/thumbnail.png?width=400&height=200&fit_mode=smartcrop&time=1")
-            }
-            DispatchQueue.global().async {
-              let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-              let a = Item.posts(postThumbnail(image: UIImage(data: data!)!))
-              
-              DispatchQueue.main.async {
-                var snapshot = self.datasource.snapshot()
-                snapshot.appendItems([a], toSection: .posts)
-                self.datasource.apply(snapshot, animatingDifferences: true)
-              }
-            }
+          DispatchQueue.main.async {
+            var snapshot = self.datasource.snapshot()
+            snapshot.appendItems(posts.map({ Item.posts($0) }), toSection: .posts)
+            self.datasource.apply(snapshot, animatingDifferences: true)
           }
         })
       
@@ -265,20 +251,12 @@ class ProfileViewController: UIViewController {
             }
             
         case .posts(let data):
-            
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
-                
-                cell.configure(with: data.image)
+                cell.configureWithUrl(with: data.imageUrl)
                 return cell
-                
             } else {
-                
-            
                 return ImageViewCell()
-                
             }
-
-            
         }
     }
     

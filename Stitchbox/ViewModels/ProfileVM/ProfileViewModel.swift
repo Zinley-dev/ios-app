@@ -22,7 +22,7 @@ class ProfileViewModel: ViewModelProtocol {
         let followersObservable: Observable<Int>
         let followingObservable: Observable<Int>
         let followerListObservable: Observable<[FollowerModel]>
-        let myPostObservable: Observable<[MyPost]>
+        let myPostObservable: Observable<[postThumbnail]>
     }
     
     
@@ -34,7 +34,7 @@ class ProfileViewModel: ViewModelProtocol {
     private let followersSubject = PublishSubject<Int>()
     private let followingSubject = PublishSubject<Int>()
     private let followerListSubject = PublishSubject<[FollowerModel]>()
-    private let myPostSubject = PublishSubject<[MyPost]>()
+    private let myPostSubject = PublishSubject<[postThumbnail]>()
   
     init() {
         input = Input()
@@ -63,7 +63,7 @@ class ProfileViewModel: ViewModelProtocol {
                         return
                     }
                     let posts = data.map { item in
-                      let mypost = MyPost(JSON: item)!
+                      let mypost = postThumbnail(JSON: item)!
                       return mypost
                     }
                 self.myPostSubject.onNext(posts)
