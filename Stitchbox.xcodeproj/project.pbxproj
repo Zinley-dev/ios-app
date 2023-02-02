@@ -16,6 +16,7 @@
 		1457CCD72945898F003C742F /* CardStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457CCD62945898F003C742F /* CardStackView.swift */; };
 		1457CCD929464DD6003C742F /* IconSet.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1457CCD829464DD6003C742F /* IconSet.xcassets */; };
 		1457CDEC294862DF003C742F /* DashboardTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457CDEB294862DF003C742F /* DashboardTabBar.swift */; };
+		14621E32298B374B0023694D /* FistBumpUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14621E31298B374B0023694D /* FistBumpUserModel.swift */; };
 		147187E22920A3A20039B89E /* StitchboxUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187E12920A3A20039B89E /* StitchboxUnitTests.swift */; };
 		147187E92920AD520039B89E /* LogInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187E82920AD520039B89E /* LogInViewModel.swift */; };
 		147187EB2920AF6E0039B89E /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147187EA2920AF6D0039B89E /* ViewModelProtocol.swift */; };
@@ -305,6 +306,7 @@
 		1457CCD62945898F003C742F /* CardStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackView.swift; sourceTree = "<group>"; };
 		1457CCD829464DD6003C742F /* IconSet.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = IconSet.xcassets; sourceTree = "<group>"; };
 		1457CDEB294862DF003C742F /* DashboardTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTabBar.swift; sourceTree = "<group>"; };
+		14621E31298B374B0023694D /* FistBumpUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FistBumpUserModel.swift; sourceTree = "<group>"; };
 		147187DF2920A3A20039B89E /* StitchboxUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StitchboxUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		147187E12920A3A20039B89E /* StitchboxUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchboxUnitTests.swift; sourceTree = "<group>"; };
 		147187E82920AD520039B89E /* LogInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewModel.swift; sourceTree = "<group>"; };
@@ -617,6 +619,7 @@
 			isa = PBXGroup;
 			children = (
 				6A78486A2986291E008B2263 /* StreamingDomainModel */,
+				14621E30298B370C0023694D /* FistBumperModel */,
 				A5D1E9DD2984420D00839311 /* FollowModel */,
 				6A78485F2984D216008B2263 /* PostModel */,
 				6A3F0A812980C4FD00366665 /* UserModel */,
@@ -636,6 +639,14 @@
 				6A0D54492974F3F10059530C /* ChallengeCardHeaderData.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		14621E30298B370C0023694D /* FistBumperModel */ = {
+			isa = PBXGroup;
+			children = (
+				14621E31298B374B0023694D /* FistBumpUserModel.swift */,
+			);
+			path = FistBumperModel;
 			sourceTree = "<group>";
 		};
 		147187E02920A3A20039B89E /* StitchboxUnitTests */ = {
@@ -2672,6 +2683,7 @@
 				A5F9C91C296C14ED00D339A1 /* ResetPasswordViewModel.swift in Sources */,
 				6A1235A5295034BD004B612E /* InviteUserVC.swift in Sources */,
 				6AEC6901295178E2000393D8 /* SendBirdRoomModel.swift in Sources */,
+				14621E32298B374B0023694D /* FistBumpUserModel.swift in Sources */,
 				6A58EA56294ECAE6005FA3CD /* ChannelViewController.swift in Sources */,
 				14FADBC6297A000000E0A741 /* SettingModel.swift in Sources */,
 				1457CDEC294862DF003C742F /* DashboardTabBar.swift in Sources */,

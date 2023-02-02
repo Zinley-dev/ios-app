@@ -20,7 +20,6 @@ class BlockUserModel: Mappable {
     }
     
     func mapping(map: ObjectMapper.Map) {
-        print(map)
         blockId <- map["blockId"]
         userId <- map["userId"]
         blockUser <- map ["blockList"]
