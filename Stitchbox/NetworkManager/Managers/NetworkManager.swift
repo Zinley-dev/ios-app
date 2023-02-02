@@ -141,16 +141,18 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     
     fileprivate func builđData(for images: [UIImage], for content: String, request: inout URLRequest) -> Data {
         let boundary = UUID().uuidString
-      request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         var uploadData = ""
         
         // build uploadData images
         for image in images {
+            let fileData = image.jpegData(compressionQuality: 0.5)
+            let fileContent = fileData?.base64EncodedString()
             uploadData += "--\(boundary)\r\n"
             uploadData += "Content-Disposition:form-data; name=\"file[]\""
-            uploadData += "\r\nContent-Type: file"
+            uploadData += "\r\nContent-Type: image/png"
             uploadData += "; filename=\"\(UUID().uuidString).png\"\r\n"
-              + "Content-Type: \"content-type header\"\r\n\r\n\(image.jpegData(compressionQuality: 0.5)!)\r\n"
+            + "Content-Type: \"content-type header\"\r\n\r\n\(fileContent ?? "")\r\n"
         }
         
         // build uploadData content
@@ -160,6 +162,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         uploadData += "\r\n\r\n\(content)\r\n"
         
         uploadData += "--\(boundary)\r\n"
+        print(uploadData)
         return uploadData.data(using: .utf8)!
       }
     
