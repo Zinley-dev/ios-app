@@ -10,6 +10,8 @@ import UIKit
 class FeedViewController: UIViewController {
 
     @IBOutlet weak var lblHome: UILabel!
+    @IBOutlet weak var progressBar: ProgressBar!
+    
     let homeButton: UIButton = UIButton(type: .custom)
     
     var post_list = [PostModel]()
@@ -21,9 +23,40 @@ class FeedViewController: UIViewController {
         lblHome.text = _AppCoreData.userDataSource.value?.userName
         setupButtons()
                 
-    }
         
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
+        
+    }
+     
 
+}
+
+extension FeedViewController {
+    
+    @objc func updateProgressBar() {
+        
+        
+        if (global_percentComplete == 0.00) || (global_percentComplete == 100.0) {
+            
+            DispatchQueue.main.async {
+                self.progressBar.isHidden = true
+               
+            }
+            global_percentComplete = 0.00
+            
+        } else {
+            
+            
+            DispatchQueue.main.async {
+                self.progressBar.isHidden = false
+                self.progressBar.progress = (CGFloat(global_percentComplete)/100)
+               
+            }
+
+        }
+        
+    }
+    
 }
 
 extension FeedViewController {

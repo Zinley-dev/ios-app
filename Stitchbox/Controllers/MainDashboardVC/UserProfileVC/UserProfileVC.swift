@@ -138,7 +138,7 @@ class UserProfileVC: UIViewController {
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
                 
-                cell.configure(with: data.image)
+                cell.configureWithUrl(with: data.imageUrl)
                 return cell
                 
             } else {
@@ -319,7 +319,7 @@ extension UserProfileVC {
 extension UserProfileVC {
     
     func createHeaderSection() -> NSCollectionLayoutSection {
-        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)))
         let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)), subitems: [headerItem])
         
         return NSCollectionLayoutSection(group: headerGroup)
@@ -384,7 +384,7 @@ extension UserProfileVC {
         snapshot.appendSections([.header, .challengeCard, .posts])
         snapshot.appendItems([.header(demoProfileData)], toSection: .header)
         snapshot.appendItems([.challengeCard(demoChallengeData)], toSection: .challengeCard)
-        snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
+//        snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
         return snapshot
     }
     

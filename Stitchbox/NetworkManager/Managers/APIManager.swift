@@ -113,11 +113,20 @@ struct APIManager {
         }
         
     }
-    
-    func uploadImage(image: UIImage, completion: @escaping APICompletion) {
-        mediaManager.upload(.uploadImage, image: image) { result in
-            completion(result)
-        }
+  
+  func uploadImage(image: UIImage, completion: @escaping APICompletion) {
+      mediaManager.upload(.uploadImage, image: image) { result in
+        completion(result)
+      }
+    }
+  
+    func uploadVideo(video: Data, completion: @escaping APICompletion, process: @escaping UploadInprogress) {
+      mediaManager.upload(.uploadVideo, video: video) { result in
+        completion(result)
+      } inprogress: { percent in
+        process(percent)
+      }
+
     }
     
     func forgotPasswordByEmail(params: [String: String], completion: @escaping APICompletion) {
@@ -135,42 +144,6 @@ struct APIManager {
 
 extension APIManager {
     
-    func getFollower(page: Int, completion: @escaping APICompletion) {
-        followManager.request(.followers(page: page)) { result in
-            completion(result)
-        }
-    }
-    
-    func getFollowing(page: Int, completion: @escaping APICompletion) {
-        followManager.request(.follow(page: page)) { result in
-            completion(result)
-        }
-    }
-    
-    func insertFollow(params: [String: Any], completion: @escaping APICompletion) {
-            followManager.request(.insertfollow(params: params)){
-                result in
-                completion(result)
-            }
-            print("call insertAPI")
-        }
-    func deleteFollow(params: [String: Any], completion: @escaping APICompletion) {
-        followManager.request(.unfollow(params: params)){
-            result in
-            completion(result)
-        }
-        
-    }
-    func getAllFollow(completion: @escaping APICompletion) {
-        followManager.request(.allfollow) { result in
-            completion(result)
-        }
-    }
-    
-}
-
-extension APIManager {
-    
     func getSettings(completion: @escaping APICompletion) {
         settingManager.request(.getSettings){
             result in
@@ -184,8 +157,8 @@ extension APIManager {
             completion(result)
         }
     }
-    func getBlocks( completion: @escaping APICompletion) {
-        accountManager.request(.getBlocks){
+    func getBlocks(page: Int, completion: @escaping APICompletion) {
+        accountManager.request(.getBlocks(page: page)){
             result in
             completion(result)
         }
@@ -202,26 +175,27 @@ extension APIManager {
             completion(result)
         }
     }
-    func getFollows( completion: @escaping APICompletion) {
-        accountManager.request(.getFollows){
+    func getFollows(page: Int, completion: @escaping APICompletion) {
+        followManager.request(.getFollows(page: page)){
             result in
             completion(result)
         }
     }
-    func getFollowers( completion: @escaping APICompletion) {
-        accountManager.request(.getFollowers){
+    func getFollowers(page: Int, completion: @escaping APICompletion) {
+        followManager.request(.getFollowers(page: page)){
             result in
             completion(result)
         }
     }
     func insertFollows(params: [String: Any], completion: @escaping APICompletion) {
-        accountManager.request(.insertFollows(params: params)){
+        followManager.request(.insertFollows(params: params)){
             result in
             completion(result)
         }
+        print("call insertAPI")
     }
     func deleteFollows(params: [String: Any], completion: @escaping APICompletion) {
-        accountManager.request(.deleteFollows(params: params)){
+        followManager.request(.deleteFollows(params: params)){
             result in
             completion(result)
         }
@@ -261,10 +235,12 @@ extension APIManager {
         }
     }
     func uploadContact(image: UIImage, content: String, completion: @escaping APICompletion) {
-        contactManager.upload(.postContact, image: image, content: content){
+        // TODO: miss content
+        contactManager.upload(.postContact, image: image){
             result in
             completion(result)
         }
+        
     }
 }
 
@@ -275,6 +251,11 @@ extension APIManager {
         postManager.request(.create(params: params)) { result in
             completion(result)
         }
+    }
+    func getMyPost(page: Int, completion: @escaping APICompletion) {
+      postManager.request(.getMyPost(page: page)) { result in
+        completion(result)
+      }
     }
     
 }

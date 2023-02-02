@@ -34,6 +34,16 @@ class ImageViewCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.image = image
     }
+  
+    func configureWithUrl(with url: URL) {
+      DispatchQueue.global().async {
+        if let data = try? Data(contentsOf: url) {
+          DispatchQueue.main.async {
+            self.imageView.image = UIImage(data: data)
+          }
+        }
+      }
+    }
     
     private func setupView() {
         contentView.addSubview(imageView)

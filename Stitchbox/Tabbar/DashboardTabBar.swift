@@ -118,6 +118,19 @@ import SendBirdCalls
         
     }
     
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        
+        if let index = viewController.tabBarController?.selectedIndex {
+            
+            if index != 2 {
+                
+                selectedTabIndex = index
+                
+            }
+            
+        }
+    }
+    
     func presentPostVC() {
         
         if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {

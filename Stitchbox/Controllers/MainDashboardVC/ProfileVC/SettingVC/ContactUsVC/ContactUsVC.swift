@@ -14,10 +14,10 @@ import RxSwift
 
 class ContactUsVC: UIViewController, ControllerType {
     typealias ViewModelType = ContactUsViewModel
-
+    
     let backButton: UIButton = UIButton(type: .custom)
     
-
+    
     @IBOutlet weak var sendBtn: UIButton!
     @IBOutlet weak var ContactTxtView: UITextView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -34,15 +34,15 @@ class ContactUsVC: UIViewController, ControllerType {
     let viewModel = ContactUsViewModel()
     let disposeBag = DisposeBag()
     
+    
     override func viewDidLoad() {
         bindUI(with: viewModel)
         bindAction(with: viewModel)
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         setupInitialSetup()
-       
     }
     func bindUI(with viewModel: ContactUsViewModel) {}
     
@@ -67,11 +67,10 @@ class ContactUsVC: UIViewController, ControllerType {
             }
         }.disposed(by: disposeBag)
     }
-
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
@@ -82,7 +81,7 @@ class ContactUsVC: UIViewController, ControllerType {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
+        
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -158,7 +157,7 @@ extension ContactUsVC: UICollectionViewDataSource, UICollectionViewDelegate, UIC
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ContactUsImageCell", for: indexPath) as? ContactUsImageCell {
             
             //cell.btn.addTarget(self, action: #selector(buttonSelected), for: .touchUpInside)
@@ -181,7 +180,7 @@ extension ContactUsVC: UICollectionViewDataSource, UICollectionViewDelegate, UIC
         
         selectedImg = reportImg[indexPath.row]
         selectedIndex = indexPath.row
- 
+        
         isObserved = true
         
         
@@ -202,16 +201,16 @@ extension ContactUsVC: UICollectionViewDataSource, UICollectionViewDelegate, UIC
         
     }
     
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
         return 10.0
         
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
-
+        
     }
     
 }
@@ -254,7 +253,7 @@ extension ContactUsVC: UITextViewDelegate {
                 sendBtn.titleLabel?.textColor = .lightGray
                 
             }
-
+            
             characterCountLbl.text = "\(ContactTxtView.text.count) characters"
             
         } else {
@@ -267,17 +266,17 @@ extension ContactUsVC: UITextViewDelegate {
         }
         
     }
-
+    
     
 }
 
 extension ContactUsVC {
     
     @objc func handleKeyboardShow(notification: Notification) {
-    
+        
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-              
-          
+            
+            
             
             UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
                 self.view.layoutIfNeeded()
@@ -290,8 +289,8 @@ extension ContactUsVC {
     
     @objc func handleKeyboardHide(notification: Notification) {
         
-      
-
+        
+        
         UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
             self.view.layoutIfNeeded()
         }, completion: { (completed) in
@@ -330,10 +329,10 @@ extension ContactUsVC {
             self.collectionView.reloadData()
             
         }
-    
+        
     }
     
-
+    
     
 }
 
@@ -355,7 +354,7 @@ extension ContactUsVC {
     func setupButtons() {
         
         setupBackButton()
-       
+        
         
     }
     
@@ -371,11 +370,11 @@ extension ContactUsVC {
         backButton.setTitle("     Contact Us", for: .normal)
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+        
     }
-
+    
     
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
@@ -391,7 +390,7 @@ extension ContactUsVC {
     func album() {
         
         self.getMediaFrom(kUTTypeImage as String)
-       
+        
     }
     
     func camera() {
@@ -412,7 +411,7 @@ extension ContactUsVC {
     }
     
     func getMediaCamera(_ type: String) {
-           
+        
         let mediaPicker = UIImagePickerController()
         mediaPicker.delegate = self
         mediaPicker.allowsEditing = true
@@ -440,7 +439,7 @@ extension ContactUsVC: UIImagePickerControllerDelegate, UINavigationControllerDe
         if let editedImage = info[.editedImage] as? UIImage {
             getImage(image: editedImage)
         } else if let originalImage =
-            info[.originalImage] as? UIImage {
+                    info[.originalImage] as? UIImage {
             getImage(image: originalImage)
         }
         
@@ -455,12 +454,12 @@ extension ContactUsVC: UIImagePickerControllerDelegate, UINavigationControllerDe
 extension ContactUsVC {
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }

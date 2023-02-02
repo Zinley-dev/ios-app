@@ -734,14 +734,13 @@ class UISwitchCustom: UISwitch {
 
 extension String {
     func findMHashtagText() -> [String] {
-        var arr_hasStrings:[String] = []
-        let regex = try? NSRegularExpression(pattern: "(#[a-zA-Z0-9_\\p{L}\\p{N}]*)", options: [.useUnicodeWordBoundaries, .caseInsensitive])
-        if let matches = regex?.matches(in: self, options:[], range:NSMakeRange(0, self.count)) {
-            for match in matches {
-                arr_hasStrings.append(NSString(string: self).substring(with: NSRange(location:match.range.location, length: match.range.length )))
-            }
+        let regex = try? NSRegularExpression(pattern: "(#[a-zA-Z0-9_\\p{L}\\p{N}]+\\b)", options: [.useUnicodeWordBoundaries, .caseInsensitive])
+        guard let matches = regex?.matches(in: self, options:[], range:NSMakeRange(0, self.utf16.count)) else { return [] }
+        var hashtags: [String] = []
+        for match in matches {
+            hashtags.append(String(self[Range(match.range, in: self)!]))
         }
-        return arr_hasStrings
+        return hashtags
     }
     
     func findMentiontagText() -> [String] {
@@ -811,14 +810,15 @@ extension String{
 
 }
 
-func verifyUrl (urlString: String?) -> Bool {
-    if let urlString = urlString {
-        if let url = NSURL(string: urlString) {
-            return UIApplication.shared.canOpenURL(url as URL)
-        }
-    }
-    
-    return false
+func verifyUrl(urlString: String?) -> Bool {
+    guard let urlString = urlString else {return false}
+    guard let url = NSURL(string: urlString) else {return false}
+    if !UIApplication.shared.canOpenURL(url as URL) {return false}
+
+    //
+    let regEx = "((https|http)://)((\\w|-)+)(([.]|[/])((\\w|-)+))+"
+    let predicate = NSPredicate(format:"SELF MATCHES %@", argumentArray:[regEx])
+    return predicate.evaluate(with: urlString)
 }
 
 extension UIViewController {

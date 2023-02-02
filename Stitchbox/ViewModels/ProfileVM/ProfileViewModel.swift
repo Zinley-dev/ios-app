@@ -24,6 +24,7 @@ class ProfileViewModel: ViewModelProtocol {
         let followerListObservable: Observable<[FollowerModel]>
         let followingListObservable: Observable<[FollowerModel]>
         let allFollowingListObservable: Observable<[FollowerModel]>
+        let myPostObservable: Observable<[postThumbnail]>
     }
     
     
@@ -37,6 +38,8 @@ class ProfileViewModel: ViewModelProtocol {
     private let followerListSubject = PublishSubject<[FollowerModel]>()
     private let followingListSubject = PublishSubject<[FollowerModel]>()
     private let allFollowingListSubject = PublishSubject<[FollowerModel]>()
+    private let myPostSubject = PublishSubject<[postThumbnail]>()
+  
     init() {
         input = Input()
         action = Action()
@@ -45,7 +48,8 @@ class ProfileViewModel: ViewModelProtocol {
             followingObservable: followingSubject.asObserver(),
             followerListObservable: followerListSubject.asObserver(),
             followingListObservable: followingListSubject.asObserver(),
-            allFollowingListObservable: allFollowingListSubject.asObserver()
+            allFollowingListObservable: allFollowingListSubject.asObserver(),
+            myPostObservable: myPostSubject.asObserver()
         )
         logic()
     }
@@ -53,9 +57,30 @@ class ProfileViewModel: ViewModelProtocol {
     func logic() {
         
     }
+    func getMyPost(page: Int = 1) {
+        APIManager().getMyPost(page: page) { result in
+            switch result {
+                case .success(let response):
+                    print("================ooooOOOoooo=================================")
+                    
+                    guard response.body?["message"] as? String == "success",
+                          let data = response.body?["data"] as? [[String: Any]] else {
+                        print("err")
+                        return
+                    }
+                    let posts = data.map { item in
+                      let mypost = postThumbnail(JSON: item)!
+                      return mypost
+                    }
+                self.myPostSubject.onNext(posts)
+                case .failure(let error):
+                  print(error)
+            }
+        }
+    }
     func getFollowing(page: Int = 1) {
         print("LOAD PAGE \(page)")
-        APIManager().getFollowing(page:page) { result in
+        APIManager().getFollows(page:page) { result in
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -75,7 +100,7 @@ class ProfileViewModel: ViewModelProtocol {
     }
     func getFollowers(page: Int = 1) {
         print("LOAD PAGE \(page)")
-        APIManager().getFollower(page: page) { result in
+        APIManager().getFollowers(page: page) { result in
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -94,7 +119,7 @@ class ProfileViewModel: ViewModelProtocol {
         }
     }
     func unfollow(userId: String = "") {
-        APIManager().deleteFollow(params: ["FollowId": userId]) { result in
+        APIManager().deleteFollows(params: ["FollowId": userId]) { result in
             switch result {
             case .success(_):
                 showNote(text: "Unfollowed!")
@@ -108,7 +133,7 @@ class ProfileViewModel: ViewModelProtocol {
     
     
     func insertfollow(userId: String = "") {
-        APIManager().insertFollow(params: ["FollowId": userId]) { result in
+        APIManager().insertFollows(params: ["FollowId": userId]) { result in
             switch result {
             case .success(_):
                 showNote(text: "Followed!")
@@ -118,22 +143,22 @@ class ProfileViewModel: ViewModelProtocol {
             
         }
     }
-    func getAllFollowing() {
-        APIManager().getAllFollow { result in
-            switch result {
-            case .success(let response):
-                guard response.body?["message"] as? String == "success",
-                      let data = response.body?["data"] as? [[String: Any]] else {
-                    return
-                }
-                let list = data.map { item in
-                    return FollowerModel(JSON: item)!
-                }
-                print("Following List: ", list)
-                self.allFollowingListSubject.onNext(list)
-            case .failure(let error):
-                print("Error loading following: ", error)
-            }
-        }
-    }
+//    func getAllFollowing() {
+//        APIManager().getAllFollow { result in
+//            switch result {
+//            case .success(let response):
+//                guard response.body?["message"] as? String == "success",
+//                      let data = response.body?["data"] as? [[String: Any]] else {
+//                    return
+//                }
+//                let list = data.map { item in
+//                    return FollowerModel(JSON: item)!
+//                }
+//                print("Following List: ", list)
+//                self.allFollowingListSubject.onNext(list)
+//            case .failure(let error):
+//                print("Error loading following: ", error)
+//            }
+//        }
+//    }
 }

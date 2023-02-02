@@ -138,7 +138,7 @@ extension FollowerVC: ASTableDelegate {
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         print("getFollowers......")
         asContext = context
-        self.viewModel.getAllFollowing() //get all following
+//        self.viewModel.getAllFollowing() //get all following
         self.viewModel.getFollowers(page: currPage)
         
     }

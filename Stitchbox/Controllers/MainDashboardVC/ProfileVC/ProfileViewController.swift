@@ -41,15 +41,25 @@ class ProfileViewController: UIViewController {
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
 
-    var demoProfileData: ProfileHeaderData {
-        return ProfileHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company")
+    var profileData: ProfileHeaderData {
+        return ProfileHeaderData(name: "Defaults", accountType: "Defaults/Public")
     }
     
-    var demoChallengeData: ChallengeCardHeaderData {
-        return ChallengeCardHeaderData(name: "Planet Pennies")
+    var challengeData: ChallengeCardHeaderData {
+        return ChallengeCardHeaderData(name: "Defaults")
     }
     
     func bindingUI() {
+      
+        viewModel.output.myPostObservable.subscribe(onNext: { posts in
+          DispatchQueue.main.async {
+            var snapshot = self.datasource.snapshot()
+            snapshot.appendItems(posts.map({ Item.posts($0) }), toSection: .posts)
+            self.datasource.apply(snapshot, animatingDifferences: true)
+          }
+        })
+      
+      
         viewModel.output.followersObservable.subscribe(onNext: { count in
             let indexPath = IndexPath(item: 0, section: 0);
             DispatchQueue.main.async {
@@ -122,6 +132,7 @@ class ProfileViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         // Load follwer, follwing
         viewModel.getFollowers()
+        viewModel.getMyPost(page: 1)
         viewModel.getFollowing()
     }
     
@@ -240,20 +251,12 @@ class ProfileViewController: UIViewController {
             }
             
         case .posts(let data):
-            
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
-                
-                cell.configure(with: data.image)
+                cell.configureWithUrl(with: data.imageUrl)
                 return cell
-                
             } else {
-                
-            
                 return ImageViewCell()
-                
             }
-
-            
         }
     }
     
@@ -410,7 +413,7 @@ extension ProfileViewController {
 extension ProfileViewController {
     
     func createHeaderSection() -> NSCollectionLayoutSection {
-        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)))
         let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)), subitems: [headerItem])
         
         return NSCollectionLayoutSection(group: headerGroup)
@@ -473,9 +476,9 @@ extension ProfileViewController {
         var snapshot = Snapshot()
 
         snapshot.appendSections([.header, .challengeCard, .posts])
-        snapshot.appendItems([.header(demoProfileData)], toSection: .header)
-        snapshot.appendItems([.challengeCard(demoChallengeData)], toSection: .challengeCard)
-        snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
+        snapshot.appendItems([.header(profileData)], toSection: .header)
+        snapshot.appendItems([.challengeCard(challengeData)], toSection: .challengeCard)
+//        snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
         return snapshot
     }
     
