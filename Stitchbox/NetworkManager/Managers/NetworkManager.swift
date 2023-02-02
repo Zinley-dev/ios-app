@@ -159,10 +159,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         uploadData += "\r\nContent-Type: text"
         uploadData += "\r\n\r\n\(content)\r\n"
         
-        
-        
         uploadData += "--\(boundary)\r\n"
-        print(uploadData)
         return uploadData.data(using: .utf8)!
       }
     
