@@ -12,7 +12,6 @@ import Alamofire
 // user, post, content. search
 
 class PostModel {
-    
     fileprivate var _origin_height: CGFloat!
     fileprivate var _origin_width: CGFloat!
     fileprivate var _reporting_nickname: String!

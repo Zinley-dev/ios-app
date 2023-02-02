@@ -13,6 +13,7 @@ class FollowerModel: Mappable {
     private(set) var avatar: String?
     private(set) var username: String?
     private(set) var userId: String?
+    var action: String = "Follower"
     
     required init?(map: Map) {
         //

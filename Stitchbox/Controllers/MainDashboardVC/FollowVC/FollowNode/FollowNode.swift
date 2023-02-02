@@ -17,17 +17,16 @@ fileprivate let FontSize: CGFloat = 13
 class FollowNode: ASCellNode {
     
     weak var user: FollowerModel!
-    var followAction : ((ASCellNode) -> Void)?
+    var followAction : ((FollowNode) -> Void)?
     lazy var delayItem = workItem()
     var attemptCount = 0
     var userNameNode: ASTextNode!
     var NameNode: ASTextNode!
     var AvatarNode: ASNetworkImageNode!
     var followBtnNode: ASButtonNode!
-   
     var desc = ""
     
-    let selectedColor = UIColor(red: 248/255, green: 189/255, blue: 91/255, alpha: 1.0)
+    var selectedColor = UIColor(red: 53, green: 46, blue: 113, alpha: 0.4)
     
     init(with user: FollowerModel) {
         
@@ -51,29 +50,38 @@ class FollowNode: ASCellNode {
    
         userNameNode.backgroundColor = UIColor.clear
         NameNode.backgroundColor = UIColor.clear
-        followBtnNode.backgroundColor = UIColor.clear
-        
+        followBtnNode.backgroundColor = user.action == "Following" ? UIColor.primary : UIColor.white
+        followBtnNode.tintColor  = UIColor.primary
+
           //
         
         followBtnNode.addTarget(self, action: #selector(FollowNode.followBtnPressed), forControlEvents: .touchUpInside)
         
-       //
-        
+        //
         automaticallyManagesSubnodes = true
          
         
-//        if user.action == "Following" {
-//            
-//           
-//            
-//            
-//            
-//        } else if user.action == "Follower" {
-//            
-//            
-//            
-//        
-//        }
+        if user.action == "Following" {
+            DispatchQueue.main.async {
+                self.followBtnNode.layer.borderWidth = 1.0
+                self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
+                self.followBtnNode.layer.cornerRadius = 10.0
+                self.followBtnNode.clipsToBounds = true
+                self.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.white, for: .normal)
+            }
+        } else if user.action == "Follower" {
+            
+            DispatchQueue.main.async {
+                self.followBtnNode.layer.borderWidth = 1.0
+                self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
+                self.followBtnNode.layer.cornerRadius = 10.0
+                self.followBtnNode.clipsToBounds = true
+                
+                self.followBtnNode.setTitle("+ Follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+            }
+            
+
+        }
         
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
@@ -89,7 +97,7 @@ class FollowNode: ASCellNode {
     
     @objc func followBtnPressed() {
         
-        
+        followAction?(self)
         
     }
 
