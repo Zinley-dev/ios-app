@@ -21,7 +21,7 @@ class ContactUsViewModel: ViewModelProtocol {
     }
     
     struct Action {
-        var submit: AnyObserver<(UIImage, String)>
+        var submit: AnyObserver<([UIImage], String)>
     }
     
     struct Output {
@@ -30,7 +30,7 @@ class ContactUsViewModel: ViewModelProtocol {
     }
     private let errorsSubject = PublishSubject<String>()
     private let successSubject = PublishSubject<String>()
-    private let submitSubject = PublishSubject<(UIImage, String)>()
+    private let submitSubject = PublishSubject<([UIImage], String)>()
     private let disposeBag = DisposeBag()
     
     init() {
@@ -50,13 +50,14 @@ class ContactUsViewModel: ViewModelProtocol {
     }
     
     func logic() {
-        submitSubject.subscribe{(image, content) in
-            APIManager().uploadContact(image: image, content: content) {
+        submitSubject.subscribe{(images, content) in
+            APIManager().uploadContact(images: images, content: content) {
                 result in switch result {
                 case .success(let response):
                     print(response)
                     self.successSubject.onNext("Successfully sent replies")
-                case .failure:
+                case .failure(let error):
+                    print(error)
                     self.errorsSubject.onNext("Cannot send replies")
                 }
             }

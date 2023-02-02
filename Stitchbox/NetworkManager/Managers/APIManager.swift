@@ -234,9 +234,9 @@ extension APIManager {
             completion(result)
         }
     }
-    func uploadContact(image: UIImage, content: String, completion: @escaping APICompletion) {
+    func uploadContact(images: [UIImage], content: String, completion: @escaping APICompletion) {
         // TODO: miss content
-        contactManager.upload(.postContact, image: image){
+        contactManager.upload(.postContact, images: images, content: content){
             result in
             completion(result)
         }
