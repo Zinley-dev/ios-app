@@ -15,6 +15,8 @@ class FollowingVC: UIViewController {
 
     @IBOutlet weak var contentView: UIView!
     
+    
+    
     typealias ViewModelType = ProfileViewModel
     // MARK: - Properties
     private var currPage = 1
@@ -25,12 +27,27 @@ class FollowingVC: UIViewController {
     var userList = [FollowerModel]()
     var asContext: ASBatchContext!
     
+    lazy var AreYouSureVC: AreYouSureVC = {
+        
+        
+        if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AreYouSureVC") as? AreYouSureVC {
+                    
+            self.addVCAsChildVC(childViewController: controller)
+            
+            return controller
+        } else {
+            return UIViewController() as! AreYouSureVC
+        }
+       
+        
+    }()
+    
     required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
-  
+        
     }
 
     override func viewDidLoad() {
@@ -175,13 +192,16 @@ extension FollowingVC: ASTableDataSource {
             node.followAction = { item in
                 print("Pressed Id= \(item.user.userId) Name= \(item.user.username)")
                 self.viewModel.unfollow(userId: item.user.userId ?? "")
-                
+                self.openConfirmPopUp()
             }
             return node
         }
             
     }
         
+    func openConfirmPopUp() {
+        AreYouSureVC.view.isHidden = false
+    }
 
             
 }
@@ -204,4 +224,18 @@ extension FollowingVC {
     }
     
     
+}
+
+extension FollowingVC {
+    func addVCAsChildVC(childViewController: UIViewController) {
+        
+        addChild(childViewController)
+        contentView.addSubview(childViewController.view)
+        
+        childViewController.view.frame = contentView.bounds
+        childViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        childViewController.didMove(toParent: self)
+        
+        
+    }
 }
