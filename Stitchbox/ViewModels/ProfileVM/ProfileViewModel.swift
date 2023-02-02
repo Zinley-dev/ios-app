@@ -22,6 +22,7 @@ class ProfileViewModel: ViewModelProtocol {
         let followersObservable: Observable<Int>
         let followingObservable: Observable<Int>
         let followerListObservable: Observable<[FollowerModel]>
+        let myPostObservable: Observable<[MyPost]>
     }
     
     
@@ -33,20 +34,43 @@ class ProfileViewModel: ViewModelProtocol {
     private let followersSubject = PublishSubject<Int>()
     private let followingSubject = PublishSubject<Int>()
     private let followerListSubject = PublishSubject<[FollowerModel]>()
-    
+    private let myPostSubject = PublishSubject<[MyPost]>()
+  
     init() {
         input = Input()
         action = Action()
         output = Output(
             followersObservable: followersSubject.asObserver(),
             followingObservable: followingSubject.asObserver(),
-            followerListObservable: followerListSubject.asObserver()
+            followerListObservable: followerListSubject.asObserver(),
+            myPostObservable: myPostSubject.asObserver()
         )
         logic()
     }
     
     func logic() {
         
+    }
+    func getMyPost(page: Int) {
+        APIManager().getMyPost(page: page) { result in
+            switch result {
+                case .success(let response):
+                    print("================ooooOOOoooo=================================")
+                    
+                    guard response.body?["message"] as? String == "success",
+                          let data = response.body?["data"] as? [[String: Any]] else {
+                        print("err")
+                        return
+                    }
+                    let posts = data.map { item in
+                      let mypost = MyPost(JSON: item)!
+                      return mypost
+                    }
+                self.myPostSubject.onNext(posts)
+                case .failure(let error):
+                  print(error)
+            }
+        }
     }
     func getFollowing() {
       APIManager().getFollows(page: 1){ result in

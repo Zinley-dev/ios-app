@@ -434,6 +434,7 @@ extension ContactAPI: EndPointType {
 
 public enum PostAPI {
     case create(params: [String: Any])
+    case getMyPost(page: Int)
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -444,6 +445,8 @@ extension PostAPI: EndPointType {
         switch self {
             case .create:
                 return "/"
+            case .getMyPost(let page):
+                return "/me?page=\(page)&limit=10"
         }
     }
     
@@ -451,6 +454,8 @@ extension PostAPI: EndPointType {
         switch self {
             case .create:
                 return .post
+            case .getMyPost:
+              return .get
         }
     }
     
@@ -458,6 +463,8 @@ extension PostAPI: EndPointType {
         switch self {
             case .create(let params):
                 return .requestParameters(parameters: params)
+            case .getMyPost:
+                return .request
         }
     }
     

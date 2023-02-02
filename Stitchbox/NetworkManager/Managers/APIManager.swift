@@ -252,5 +252,10 @@ extension APIManager {
             completion(result)
         }
     }
+    func getMyPost(page: Int, completion: @escaping APICompletion) {
+      postManager.request(.getMyPost(page: page)) { result in
+        completion(result)
+      }
+    }
     
 }

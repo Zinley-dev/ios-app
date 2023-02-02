@@ -50,6 +50,30 @@ class ProfileViewController: UIViewController {
     }
     
     func bindingUI() {
+      
+        viewModel.output.myPostObservable.subscribe(onNext: { posts in
+          var arr:[ProfileViewController.Item] = []
+          for myPost in posts {
+            var url = URL(string: "")
+            if myPost.image[0] != "" {
+              url = URL(string: myPost.image[0])
+            } else {
+              url = URL(string: "https://image.mux.com/\(myPost.muxPlaybackId)/thumbnail.png?width=400&height=200&fit_mode=smartcrop&time=1")
+            }
+            DispatchQueue.global().async {
+              let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+              let a = Item.posts(postThumbnail(image: UIImage(data: data!)!))
+              
+              DispatchQueue.main.async {
+                var snapshot = self.datasource.snapshot()
+                snapshot.appendItems([a], toSection: .posts)
+                self.datasource.apply(snapshot, animatingDifferences: true)
+              }
+            }
+          }
+        })
+      
+      
         viewModel.output.followersObservable.subscribe(onNext: { count in
             let indexPath = IndexPath(item: 0, section: 0);
             DispatchQueue.main.async {
@@ -122,6 +146,8 @@ class ProfileViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         // Load follwer, follwing
         viewModel.getFollowers()
+        viewModel.getMyPost(page: 1)
+        viewModel.getFollowing()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -472,7 +498,7 @@ extension ProfileViewController {
         snapshot.appendSections([.header, .challengeCard, .posts])
         snapshot.appendItems([.header(profileData)], toSection: .header)
         snapshot.appendItems([.challengeCard(challengeData)], toSection: .challengeCard)
-        snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
+//        snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
         return snapshot
     }
     
