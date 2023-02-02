@@ -142,22 +142,28 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     fileprivate func builđData(for images: [UIImage], for content: String, request: inout URLRequest) -> Data {
         let boundary = UUID().uuidString
       request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        var uploadData = Data()
-        uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        uploadData.append("Content-Disposition: form-data; name=\"content\"\r\n".data(using: .utf8)!)
-        uploadData.append("Content-Type: text/plain\r\n\r\n".data(using: .utf8)!)
-        uploadData.append(content.data(using: .utf8)!)
-        uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        var uploadData = ""
+        
+        // build uploadData images
         for image in images {
-            print(image)
-            let filename = "image_" + UUID().uuidString + ".jpeg"
-            uploadData.append("Content-Disposition: form-data; name=\"file[]\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
-            uploadData.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
-            uploadData.append(image.jpegData(compressionQuality: 0.5)!)
-            uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+            uploadData += "--\(boundary)\r\n"
+            uploadData += "Content-Disposition:form-data; name=\"file[]\""
+            uploadData += "\r\nContent-Type: file"
+            uploadData += "; filename=\"\(UUID().uuidString).png\"\r\n"
+              + "Content-Type: \"content-type header\"\r\n\r\n\(image.jpegData(compressionQuality: 0.5)!)\r\n"
         }
+        
+        // build uploadData content
+        uploadData += "--\(boundary)\r\n"
+        uploadData += "Content-Disposition:form-data; name=\"content\""
+        uploadData += "\r\nContent-Type: text"
+        uploadData += "\r\n\r\n\(content)\r\n"
+        
+        
+        
+        uploadData += "--\(boundary)\r\n"
         print(uploadData)
-        return uploadData
+        return uploadData.data(using: .utf8)!
       }
     
     fileprivate func buildRequest(from route: EndPoint) -> URLRequest? {
