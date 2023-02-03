@@ -68,7 +68,6 @@
 		395477B829425318008EED97 /* AuthResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477B729425318008EED97 /* AuthResult.swift */; };
 		395477BD294D6BCA008EED97 /* LoginByPhoneVerifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477BC294D6BCA008EED97 /* LoginByPhoneVerifyController.swift */; };
 		395477BF294D714F008EED97 /* CreateAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477BE294D714F008EED97 /* CreateAccountViewModel.swift */; };
-		39E80462298B715A002F13A5 /* MyPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E80461298B715A002F13A5 /* MyPost.swift */; };
 		47075BF331E8859A958D2CF1 /* Pods_Stitchbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B60ADC3054EBB55B6DF2A9 /* Pods_Stitchbox.framework */; };
 		5F3B1064CC05A1DF10D66482 /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE3A3AF158F26D2D731FA654 /* Pods_Stitchbox_StitchboxUITests.framework */; };
 		6A0CF638296AABEC00155889 /* ResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF637296AABEC00155889 /* ResetPasswordVC.swift */; };
@@ -156,7 +155,6 @@
 		6A6C3109296426F80070167A /* EditChannelDataModView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6C3107296426F80070167A /* EditChannelDataModView.xib */; };
 		6A78485B2984D1BA008B2263 /* PostNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485A2984D1BA008B2263 /* PostNode.swift */; };
 		6A78485E2984D1F6008B2263 /* NotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485D2984D1F6008B2263 /* NotificationVC.swift */; };
-		6A7848612984D221008B2263 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7848602984D221008B2263 /* PostModel.swift */; };
 		6A7848642985096F008B2263 /* StreamingLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7848632985096F008B2263 /* StreamingLinkVC.swift */; };
 		6A784868298628CE008B2263 /* StreamingListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A784866298628CE008B2263 /* StreamingListVC.swift */; };
 		6A784869298628CE008B2263 /* StreamingListVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A784867298628CE008B2263 /* StreamingListVC.xib */; };
@@ -367,7 +365,6 @@
 		395477B929479BBE008EED97 /* Stitchbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stitchbox.entitlements; sourceTree = "<group>"; };
 		395477BC294D6BCA008EED97 /* LoginByPhoneVerifyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginByPhoneVerifyController.swift; sourceTree = "<group>"; };
 		395477BE294D714F008EED97 /* CreateAccountViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewModel.swift; sourceTree = "<group>"; };
-		39E80461298B715A002F13A5 /* MyPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPost.swift; sourceTree = "<group>"; };
 		3BE8E38750FD1A4A8E1C36B2 /* Pods-Stitchbox-StitchboxUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		50B60ADC3054EBB55B6DF2A9 /* Pods_Stitchbox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5612FE20EE31DA981C40A381 /* Pods-StitchboxTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.debug.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -538,7 +535,6 @@
 		6AEC6900295178E2000393D8 /* SendBirdRoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBirdRoomModel.swift; sourceTree = "<group>"; };
 		6AEC690329517EA9000393D8 /* SwiftLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLoader.swift; sourceTree = "<group>"; };
 		6AEC690529518020000393D8 /* UIColor+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Utils.swift"; sourceTree = "<group>"; };
-		6AF9733129789D6500C76814 /* EditPhofileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhofileVC.swift; sourceTree = "<group>"; };
 		6AF973342978E4E900C76814 /* MorePersonalInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorePersonalInfoVC.swift; sourceTree = "<group>"; };
 		6AF973372978F99E00C76814 /* EditGeneralInformationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGeneralInformationVC.swift; sourceTree = "<group>"; };
 		6AF9733A2978FDAC00C76814 /* EditBioVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBioVC.swift; sourceTree = "<group>"; };
@@ -1076,7 +1072,6 @@
 			children = (
 				6A3F0A62297F71B800366665 /* badgeThumbnail.swift */,
 				6A0D545429750F8E0059530C /* postThumbnail.swift */,
-				39E80461298B715A002F13A5 /* MyPost.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -2481,7 +2476,6 @@
 				6A3F0A61297F714D00366665 /* EditChallengeCardVC.swift in Sources */,
 				6A3F0A65297F74D400366665 /* FistBumpedStatVC.swift in Sources */,
 				6A9E4C832977B3C100B59176 /* AccountActivityNode.swift in Sources */,
-				39E80462298B715A002F13A5 /* MyPost.swift in Sources */,
 				14FADBD1297FBA4800E0A741 /* ContactUsViewModel.swift in Sources */,
 				6AAD7A17294C65DD003E3AB6 /* AppDelegate+VoIPPush.swift in Sources */,
 				6A0CF638296AABEC00155889 /* ResetPasswordVC.swift in Sources */,
