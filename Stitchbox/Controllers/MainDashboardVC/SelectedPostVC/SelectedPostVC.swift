@@ -94,48 +94,16 @@ extension SelectedPostVC {
             self.navigationController?.setNavigationBarHidden(false, animated: true)
         }
         
-        willIndex = cell.indexPath?.row
-        
-        
-        if currentIndex == nil {
-            currentIndex = cell.indexPath?.row
-            playPreviousVideoIfNeed(playIndex: currentIndex)
-        }
-        
-        
-        if willIndex != nil && endIndex != nil {
+        if willIndex == nil {
             
-            print(willIndex, endIndex)
-            
-            if willIndex - endIndex >= 2 {
-                
-                if posts[endIndex + 1].muxPlaybackId != "" {
-                    pausePreviousVideoIfNeed(pauseIndex: endIndex + 1)
-                    endIndex = endIndex + 1
-                }
-                
-                if posts[willIndex - 1].muxPlaybackId != "" {
-                    playPreviousVideoIfNeed(playIndex: willIndex - 1)
-                    currentIndex = willIndex - 1
-                }
-                
-            } else if endIndex - willIndex >= 2 {
-                
-                if posts[endIndex - 1].muxPlaybackId != "" {
-                    pausePreviousVideoIfNeed(pauseIndex: endIndex - 1)
-                    endIndex = endIndex - 1
-                }
-                
-                if posts[willIndex + 1].muxPlaybackId != "" {
-                    playPreviousVideoIfNeed(playIndex: willIndex + 1)
-                    currentIndex = willIndex + 1
-                }
-               
+            if posts[cell.indexPath!.row].muxPlaybackId != "" {
+                playPreviousVideoIfNeed(playIndex: cell.indexPath!.row)
             }
-            
         }
         
-       //print("Willing at \(willIndex)")
+        
+        willIndex = cell.indexPath?.row
+      
       
     }
     
@@ -144,48 +112,34 @@ extension SelectedPostVC {
         guard let cell = node as? PostNode else { return }
         
         endIndex = cell.indexPath?.row
-        currentIndex = willIndex
-        
-        print("Will at: \(willIndex), current at \(currentIndex), end at \(endIndex)")
-        
-        if endIndex != nil {
-            if posts[endIndex].muxPlaybackId != "" {
-                pausePreviousVideoIfNeed(pauseIndex: endIndex)
-            }
+     
+        if posts[endIndex].muxPlaybackId != "" {
+            pausePreviousVideoIfNeed(pauseIndex: endIndex)
         }
         
-        if currentIndex != nil {
-            if posts[currentIndex].muxPlaybackId != "" {
-                playPreviousVideoIfNeed(playIndex: currentIndex)
-            }
-        }
-        
-        
-        
-        /*
-        if endIndex != nil {
-            if posts[endIndex].muxPlaybackId != "" {
-                pausePreviousVideoIfNeed(pauseIndex: endIndex)
-            }
-        }
-        
-        if currentIndex == endIndex {
+        if willIndex > endIndex {
             
-            currentIndex = prevIndex
+            if posts[endIndex + 1].muxPlaybackId != "" {
+                playPreviousVideoIfNeed(playIndex: endIndex + 1)
+            }
+             
+        } else if willIndex < endIndex {
             
-        }
-        
-        if prevIndex == endIndex {
-        
-            if posts[currentIndex].muxPlaybackId != "" {
-                playPreviousVideoIfNeed(playIndex: currentIndex)
+            if endIndex - willIndex <= 2 {
+                
+                if posts[endIndex - 1].muxPlaybackId != "" {
+                    playPreviousVideoIfNeed(playIndex: endIndex - 1)
+                }
+                
             }
             
-        }
         
-        if posts[currentIndex].muxPlaybackId != "" {
-            playPreviousVideoIfNeed(playIndex: currentIndex)
-        } */
+        } else {
+            
+            if posts[willIndex].muxPlaybackId != "" {
+                playPreviousVideoIfNeed(playIndex: willIndex)
+            }
+        }
         
     }
     
