@@ -34,6 +34,7 @@ struct APIManager {
     let userManager = Manager<UserAPI>()
     let contactManager = Manager<ContactAPI>()
     let postManager = Manager<PostAPI>()
+    let likePostManager = Manager<LikePostApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -259,3 +260,20 @@ extension APIManager {
     }
     
 }
+
+
+extension APIManager {
+  
+  func likePost(id: String, completion: @escaping APICompletion) {
+    likePostManager.request(.like(params: ["id": id])) { result in
+      completion(result)
+    }
+  }
+  func unlikePost(id: String, completion: @escaping APICompletion) {
+    likePostManager.request(.dislike(params: ["id": id])) { result in
+      completion(result)
+    }
+  }
+  
+}
+

@@ -527,3 +527,44 @@ extension FollowApi: EndPointType {
     return ["Authorization": _AppCoreData.userSession.value!.accessToken]
   }
 }
+
+public enum LikePostApi {
+  case like (params: [String: Any])
+  case unlike (params: [String: Any])
+}
+extension LikePostApi: EndPointType {
+  var module: String {
+    return "/likepost"
+  }
+  
+  var path: String {
+    switch self {
+      case .like(let params):
+        return "/\(params["id"])"
+      case .unlike(let params):
+        return "/\(params["id"])"
+    }
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .like:
+        return .post
+      case .unlike:
+        return .delete
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .like:
+        return .request
+      case .unlike:
+        return .request
+    }
+  }
+  
+  var headers: [String: String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+}

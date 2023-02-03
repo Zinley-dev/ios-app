@@ -50,6 +50,9 @@ class PostModel: Mappable {
     streamUrl <- map ["video.streamurl"]
     setting["allowcomment"] <- map["setting.allowcomment"]
     setting["mode"] <- map["setting.mode"]
+    setting["languageCode"] <- map["setting.languageCode"]
+    setting["mediaType"] <- map["setting.mediaType"]
+    setting["isTitleGet"] <- map["setting.isTitleGet"]
     metadata <- map["metadata"]
     
     if image[0] != "" {
