@@ -21,6 +21,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     
     weak var post: PostModel!
     
+    var videoNode: ASVideoNode
     var imageNode: ASImageNode
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
@@ -28,7 +29,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
-    let demoText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas auctor eu enim in lacinia. Nulla at felis sodales, congue purus eget, tincidunt tortor."
+
     
     //var copyImageNode: ASNetworkImageNode
     
@@ -38,10 +39,10 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
         self.buttonsNode = ASDisplayNode()
-        
+        self.videoNode = ASVideoNode()
         super.init()
         
-        
+    
         DispatchQueue.main.async {
             
             self.headerView = PostHeader()
@@ -89,7 +90,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         headerNode.backgroundColor = UIColor.clear
         buttonsNode.backgroundColor = UIColor.clear
         
-        self.contentNode.attributedText = NSAttributedString(string: demoText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+        self.contentNode.attributedText = NSAttributedString(string: post.content, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
         
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: post.imageUrl) {
@@ -97,6 +98,23 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
               self.imageNode.image = UIImage(data: data)
             }
           }
+        }
+        
+        
+        if post.muxPlaybackId != "" {
+            self.videoNode.url = self.getThumbnailVideoNodeURL(post: post)
+            self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
+            self.videoNode.shouldAutoplay = true
+            self.videoNode.shouldAutorepeat = true
+            self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+            self.videoNode.contentMode = .scaleAspectFill
+            self.videoNode.muted = false
+            
+            
+            DispatchQueue.main.async {
+                self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
+ 
+            }
         }
     
     }
@@ -119,9 +137,9 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
         
        
-        let imageSize: CGSize
+        let mediaSize: CGSize
         
-        if demoText != "" {
+        if post.content != "" {
             
             let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 16)
             let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
@@ -129,21 +147,27 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             children.append(contentInsetSpec)
         }
         
-        if isHorizontal() {
-            imageSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width / 1.91)
+        if post.metadata?.width == post.metadata?.height {
+            mediaSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width)
         } else {
-    
-            if post.metadata?.width == post.metadata?.height {
-                imageSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width)
-            } else {
-                imageSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width * 0.8)
-            }
-
+            mediaSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width * (post.metadata?.height ?? constrainedSize.max.width) / (post.metadata?.width ?? constrainedSize.max.width) )
         }
         
-
-        imageNode.style.preferredSize = imageSize
-        children.append(imageNode)
+        if post.muxPlaybackId != "" {
+            
+            videoNode.style.preferredSize = mediaSize
+            children.append(videoNode)
+            
+        } else {
+            
+           
+            imageNode.style.preferredSize = mediaSize
+            children.append(imageNode)
+            
+            
+        }
+        
+        
         
        
         buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
@@ -158,19 +182,36 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         return verticalStack
     }
     
-    func isHorizontal() -> Bool {
+    
+    func getThumbnailVideoNodeURL(post: PostModel) -> URL? {
         
-        if let width = post.metadata?.width, let height = post.metadata?.height {
+        if post.muxPlaybackId != "" {
             
-            if (width/height) >= 1.5 {
-                
-                return true
-            }
+            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.png?time=0.025"
             
+            return URL(string: urlString)
+            
+        } else {
+            return nil
         }
         
-        return false
-        
     }
+    
+    func getVideoURLForRedundant_stream(post: PostModel) -> URL? {
+        
+        
+        if post.muxPlaybackId != "" {
+            
+            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true"
+            return URL(string: urlString)
+            
+        } else {
+            
+            return nil
+        }
+
+       
+    }
+    
 
 }

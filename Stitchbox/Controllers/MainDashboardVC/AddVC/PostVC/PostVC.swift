@@ -816,7 +816,7 @@ extension PostVC: EditControllerDelegate {
         
         if let video = session.video {
             
-            print("Selected Video")
+          
             mediaType = "video"
             selectedVideo = video
            
@@ -824,7 +824,7 @@ extension PostVC: EditControllerDelegate {
         } else if let image = session.image {
             selectedImage = image
             mediaType = "image"
-            print("Selected Image")
+          
             
         }
         

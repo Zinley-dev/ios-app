@@ -16,6 +16,16 @@ class ImageViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    
+    private lazy var videoSignView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage.init(named: "play")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -35,14 +45,18 @@ class ImageViewCell: UICollectionViewCell {
         imageView.image = image
     }
   
-    func configureWithUrl(with url: URL) {
+    func configureWithUrl(with data: PostModel) {
       DispatchQueue.global().async {
-        if let data = try? Data(contentsOf: url) {
+        if let data = try? Data(contentsOf: data.imageUrl) {
           DispatchQueue.main.async {
             self.imageView.image = UIImage(data: data)
           }
         }
       }
+        
+        print(data.setting)
+    
+        
     }
     
     private func setupView() {
@@ -54,6 +68,18 @@ class ImageViewCell: UICollectionViewCell {
             contentView.topAnchor.constraint(equalTo: imageView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
         ])
+        
+        contentView.addSubview(videoSignView)
+        
+        NSLayoutConstraint.activate([
+           
+            videoSignView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            videoSignView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            videoSignView.widthAnchor.constraint(equalToConstant: 25),
+            videoSignView.heightAnchor.constraint(equalToConstant: 25)
+           
+        ])
+        
     }
     
 }
