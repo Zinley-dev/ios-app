@@ -14,7 +14,7 @@ class ProfileViewController: UIViewController {
     // MARK: - Properties
     private var viewModel: ViewModelType! = ViewModelType()
     private let disposeBag = DisposeBag()
-
+    private var currpage = 1
     
     enum Section: Hashable {
         case header
@@ -41,6 +41,7 @@ class ProfileViewController: UIViewController {
     
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
+    
 
     var profileData: ProfileHeaderData {
         return ProfileHeaderData(name: "Defaults", accountType: "Defaults/Public")
@@ -53,10 +54,28 @@ class ProfileViewController: UIViewController {
     func bindingUI() {
       
         viewModel.output.myPostObservable.subscribe(onNext: { posts in
+            if posts.count == 10 {
+                self.currpage += 1
+            }
           DispatchQueue.main.async {
             var snapshot = self.datasource.snapshot()
-            snapshot.appendItems(posts.map({ Item.posts($0) }), toSection: .posts)
-            self.datasource.apply(snapshot, animatingDifferences: true)
+              let items = snapshot.itemIdentifiers(inSection: .posts)
+              if items.count > 0 {
+                  if case Item.posts(let param) = items[items.count - 1] {
+                      if param.imageUrl != posts[posts.count - 1].imageUrl {
+                          snapshot.appendItems(posts.map({ Item.posts($0) }), toSection: .posts)
+                          self.datasource.apply(snapshot, animatingDifferences: true)
+                      }
+                  }
+              } else {
+                  snapshot.appendItems(posts.map({ Item.posts($0) }), toSection: .posts)
+                  self.datasource.apply(snapshot, animatingDifferences: true)
+                  
+              }
+              self.pullControl.endRefreshing()
+              
+              
+            
           }
         })
       
@@ -107,7 +126,7 @@ class ProfileViewController: UIViewController {
        
         
         pullControl.tintColor = UIColor.secondary
-        //pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if #available(iOS 10.0, *) {
             collectionView.refreshControl = pullControl
@@ -123,6 +142,11 @@ class ProfileViewController: UIViewController {
         wireDelegate()
         bindingUI()
         oldTabbarFr = self.tabBarController?.tabBar.frame ?? .zero
+        // Load follwer, follwing
+        viewModel.getFollowers()
+        viewModel.getMyPost(page: currpage)
+        viewModel.getFollowing()
+        
         self.setupChallengeView()
     }
     
@@ -132,13 +156,7 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        navigationController?.hidesBarsOnSwipe = false
-        // Load follwer, follwing
-        viewModel.getFollowers()
-        viewModel.getMyPost(page: 1)
-        viewModel.getFollowing()
-    
-        
+        navigationController?.hidesBarsOnSwipe = false        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -160,8 +178,6 @@ class ProfileViewController: UIViewController {
         case .header(let param):
                 
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileHeaderCell.reuseIdentifier, for: indexPath) as? ProfileHeaderCell {
-                print("-------------HEADER-------------")
-                print(indexPath)
                 // display username
                 if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
                     cell.usernameLbl.text = username
@@ -304,6 +320,18 @@ class ProfileViewController: UIViewController {
 
 // selector for header
 extension ProfileViewController {
+    
+    @objc func refreshListData(_ sender: Any) {
+        print("REFRESH....")
+        // Load follwer, follwing
+        viewModel.getFollowers()
+        viewModel.getMyPost(page: 1)
+        viewModel.getFollowing()
+        
+//        DispatchQueue.main.async {
+//            self.pullControl.endRefreshing()
+//        }
+    }
     
     @objc func settingTapped(_ sender: UIButton) {
         
