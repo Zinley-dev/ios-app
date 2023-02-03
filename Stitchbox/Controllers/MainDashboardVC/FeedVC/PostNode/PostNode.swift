@@ -104,11 +104,12 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         if post.muxPlaybackId != "" {
             self.videoNode.url = self.getThumbnailVideoNodeURL(post: post)
             self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
-            self.videoNode.shouldAutoplay = true
+            self.videoNode.shouldAutoplay = false
             self.videoNode.shouldAutorepeat = true
             self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
             self.videoNode.contentMode = .scaleAspectFill
             self.videoNode.muted = false
+            self.videoNode.delegate = self
             
             
             DispatchQueue.main.async {
@@ -214,4 +215,24 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     }
     
 
+}
+
+extension PostNode {
+    
+    
+    func didTap(_ videoNode: ASVideoNode) {
+        
+        if videoNode.isPlaying() {
+            
+            if videoNode.muted == true {
+                videoNode.muted = false
+            } else {
+                videoNode.muted = true
+            }
+            
+        }
+      
+    }
+    
+    
 }

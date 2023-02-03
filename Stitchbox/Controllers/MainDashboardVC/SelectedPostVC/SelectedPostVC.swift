@@ -19,17 +19,17 @@ class SelectedPostVC: UIViewController {
     var selectedPost = [PostModel]()
     var posts = [PostModel]()
     var selectedIndexPath = 0
-    var isFirstLoad = true
     var selected_item: PostModel!
     var collectionNode: ASCollectionNode!
     
-    var willIndex: Int!
-    var endIndex: Int!
+   
     var startIndex: Int!
     var currentIndex: Int!
-
+    var endIndex: Int!
+    var willIndex: Int!
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
+    lazy var delayItem2 = workItem()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,20 +94,109 @@ extension SelectedPostVC {
             self.navigationController?.setNavigationBarHidden(false, animated: true)
         }
         
+        willIndex = cell.indexPath?.row
+        
+        
+        if currentIndex == nil {
+            currentIndex = cell.indexPath?.row
+            playPreviousVideoIfNeed(playIndex: currentIndex)
+        }
+        
+        
+        if willIndex != nil && endIndex != nil {
+            
+            print(willIndex, endIndex)
+            
+            if willIndex - endIndex >= 2 {
+                
+                if posts[endIndex + 1].muxPlaybackId != "" {
+                    pausePreviousVideoIfNeed(pauseIndex: endIndex + 1)
+                    endIndex = endIndex + 1
+                }
+                
+                if posts[willIndex - 1].muxPlaybackId != "" {
+                    playPreviousVideoIfNeed(playIndex: willIndex - 1)
+                    currentIndex = willIndex - 1
+                }
+                
+            } else if endIndex - willIndex >= 2 {
+                
+                if posts[endIndex - 1].muxPlaybackId != "" {
+                    pausePreviousVideoIfNeed(pauseIndex: endIndex - 1)
+                    endIndex = endIndex - 1
+                }
+                
+                if posts[willIndex + 1].muxPlaybackId != "" {
+                    playPreviousVideoIfNeed(playIndex: willIndex + 1)
+                    currentIndex = willIndex + 1
+                }
+               
+            }
+            
+        }
+        
+       //print("Willing at \(willIndex)")
+      
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, didEndDisplayingItemWith node: ASCellNode) {
         
         guard let cell = node as? PostNode else { return }
         
+        endIndex = cell.indexPath?.row
+        currentIndex = willIndex
+        
+        print("Will at: \(willIndex), current at \(currentIndex), end at \(endIndex)")
+        
+        if endIndex != nil {
+            if posts[endIndex].muxPlaybackId != "" {
+                pausePreviousVideoIfNeed(pauseIndex: endIndex)
+            }
+        }
+        
+        if currentIndex != nil {
+            if posts[currentIndex].muxPlaybackId != "" {
+                playPreviousVideoIfNeed(playIndex: currentIndex)
+            }
+        }
+        
+        
+        
+        /*
+        if endIndex != nil {
+            if posts[endIndex].muxPlaybackId != "" {
+                pausePreviousVideoIfNeed(pauseIndex: endIndex)
+            }
+        }
+        
+        if currentIndex == endIndex {
+            
+            currentIndex = prevIndex
+            
+        }
+        
+        if prevIndex == endIndex {
+        
+            if posts[currentIndex].muxPlaybackId != "" {
+                playPreviousVideoIfNeed(playIndex: currentIndex)
+            }
+            
+        }
+        
+        if posts[currentIndex].muxPlaybackId != "" {
+            playPreviousVideoIfNeed(playIndex: currentIndex)
+        } */
+        
     }
+    
+    
 }
 
 extension SelectedPostVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: self.view.layer.frame.height);
+        let max = CGSize(width: self.view.layer.frame.width, height: 1000);
         
         return ASSizeRangeMake(min, max);
     }
@@ -151,68 +240,83 @@ extension SelectedPostVC {
     
     func loadPosts() {
 
-        guard selectedPost.count > 0 else {
-            return
-        }
-        
-        if selectedPost.count > 150 {
+           guard selectedPost.count > 0 else {
+               return
+           }
+           
+           if selectedPost.count > 150 {
+               
+               let count = selectedPost.count
+             
+               if currentIndex - 0 <= 75 {
+                   
+                   selectedPost.removeSubrange(150...count-1)
+                   
+               } else {
+                   
+                   if (0...selectedPost.count - 151).contains(currentIndex) == false {
+                       selectedPost.removeSubrange(0...selectedPost.count - 151)
+                   }
+                 
+               }
+               
+               
+               
+           }
+           
+           
+           
+           let section = 0
+           var items = [PostModel]()
+           var indexPaths: [IndexPath] = []
+           let total = self.posts.count + selectedPost.count
+           
+           for row in self.posts.count...total-1 {
+               let path = IndexPath(row: row, section: section)
+               indexPaths.append(path)
+           }
+           
+           for item in selectedPost {
+               
+               items.append(item)
+             
+           }
+           
+           self.posts.append(contentsOf: items)
+           self.collectionNode.reloadData()
             
-            let count = selectedPost.count
+           guard startIndex != nil else {
+               return
+           }
+           
           
-            if currentIndex - 0 <= 75 {
-                
-                selectedPost.removeSubrange(150...count-1)
-                
-            } else {
-                
-                if (0...selectedPost.count - 151).contains(currentIndex) == false {
-                    selectedPost.removeSubrange(0...selectedPost.count - 151)
-                }
-              
-            }
-            
-            
-            
-        }
-        
-        
-        
-        let section = 0
-        var items = [PostModel]()
-        var indexPaths: [IndexPath] = []
-        let total = self.posts.count + selectedPost.count
-        
-        for row in self.posts.count...total-1 {
-            let path = IndexPath(row: row, section: section)
-            indexPaths.append(path)
-        }
-        
-        for item in selectedPost {
-            
-            items.append(item)
-          
-        }
-        
-        self.posts.append(contentsOf: items)
-        self.collectionNode.reloadData()
-         
-        guard startIndex != nil else {
-            return
-        }
-        
-       
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100000)) {
-            
-            self.currentIndex = self.startIndex
-            
-            self.collectionNode.scrollToItem(at: IndexPath(row: self.startIndex, section: 0), at: .top, animated: false)
- 
-        }
-        
-        
-    }
+           
+           DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100000)) {
+               
+               self.currentIndex = self.startIndex
+               
+               self.collectionNode.scrollToItem(at: IndexPath(row: self.startIndex, section: 0), at: .top, animated: false)
+               
+               if self.currentIndex != 0 {
+                   
+                   self.delayItem.perform(after: 0.25) {
+                       if self.currentIndex != 0, self.currentIndex != nil {
+                           
+                           playPreviousVideoIfNeed(playIndex: self.currentIndex)
+                           
+                       }
+                       
+                   }
+               
+               
+               }
+               
     
+           }
+           
+           
+       }
+
     
 }
 

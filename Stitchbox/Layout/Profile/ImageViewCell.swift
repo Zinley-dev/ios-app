@@ -54,9 +54,17 @@ class ImageViewCell: UICollectionViewCell {
         }
       }
         
-        print(data.setting)
-    
         
+        if let type = data.setting["mediaType"] as? String {
+            if type == "video" {
+                videoSignView.isHidden = false
+            } else {
+                videoSignView.isHidden = true
+            }
+        } else {
+            videoSignView.isHidden = true
+        }
+      
     }
     
     private func setupView() {

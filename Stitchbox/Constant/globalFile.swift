@@ -265,3 +265,61 @@ extension UITextView {
         return newFrame.height
     }
 }
+
+
+
+func pausePreviousVideoIfNeed(pauseIndex: Int) {
+  
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is SelectedPostVC {
+            
+            if let update1 = vc as? SelectedPostVC {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+                    
+                    if cell.videoNode.isPlaying() {
+                        
+                        //cell.videoNode.player?.seek(to: CMTime.zero)
+                        cell.videoNode.pause()
+                        //cell.videoNode.player?.seek(to: CMTime.zero)
+                    
+                    }
+                    
+                }
+                
+            }
+            
+        }
+             
+        
+    }
+}
+
+
+func playPreviousVideoIfNeed(playIndex: Int) {
+  
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is SelectedPostVC {
+            
+            if let update1 = vc as? SelectedPostVC {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
+                    
+                    if !cell.videoNode.isPlaying() {
+                        
+                        cell.videoNode.muted = true
+                        cell.videoNode.play()
+                      
+                    }
+                    
+                }
+                
+            }
+            
+        }
+             
+        
+    }
+}
