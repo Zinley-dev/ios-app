@@ -270,7 +270,7 @@ extension APIManager {
     }
   }
   func unlikePost(id: String, completion: @escaping APICompletion) {
-    likePostManager.request(.dislike(params: ["id": id])) { result in
+    likePostManager.request(.unlike(params: ["id": id])) { result in
       completion(result)
     }
   }
