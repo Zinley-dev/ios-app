@@ -18,7 +18,7 @@ class UserProfileVC: UIViewController {
     enum Item: Hashable {
         case header(ProfileHeaderData)
         case challengeCard(ChallengeCardHeaderData)
-        case posts(postThumbnail)
+        case posts(PostModel)
     }
     
     
