@@ -132,7 +132,7 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-    
+        navigationController?.hidesBarsOnSwipe = false
         // Load follwer, follwing
         viewModel.getFollowers()
         viewModel.getMyPost(page: 1)
