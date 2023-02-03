@@ -17,85 +17,85 @@ protocol RequestManager {
     func request(_ route: EndPoint, completion: @escaping APICompletion)
 }
 class RequestDelegate: NSObject, URLSessionTaskDelegate {
-  var process: UploadInprogress
-  override init() {
-    self.process = { percent in
-      print(percent)
+    var process: UploadInprogress
+    override init() {
+        self.process = { percent in
+            print(percent)
+        }
     }
-  }
-  func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
-    let uploadProgress = Float(totalBytesSent) / Float(totalBytesExpectedToSend) * 100
-    process(uploadProgress)
-  }
+    func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+        let uploadProgress = Float(totalBytesSent) / Float(totalBytesExpectedToSend) * 100
+        process(uploadProgress)
+    }
 }
 
 class Manager<EndPoint: EndPointType>: RequestManager {
     private var task: URLSessionDataTaskProtocol?
     private let session: URLSessionProtocol
     private let requestDelegate: RequestDelegate
-  
+    
     init(session: URLSessionProtocol = URLSession.shared) {
-      let configuration = URLSessionConfiguration.default
-      configuration.waitsForConnectivity = true
-      requestDelegate = RequestDelegate.init()
-      self.session = URLSession(configuration: configuration, delegate: requestDelegate, delegateQueue: nil)
+        let configuration = URLSessionConfiguration.default
+        configuration.waitsForConnectivity = true
+        requestDelegate = RequestDelegate.init()
+        self.session = URLSession(configuration: configuration, delegate: requestDelegate, delegateQueue: nil)
     }
-  
-  
-  func upload(_ route: EndPoint, image: UIImage, completion: @escaping APICompletion) {
-      if var request = buildRequest(from: route) {
-        
-        let uploadData = builđData(for: image, request: &request)
-        
-        
-        task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
-          if error != nil {
-            completion(.failure(ErrorType.noInternet))
-          }
-          if let response = response as? HTTPURLResponse {
-            let result = self.handleNetworkResponse(data, response)
-            completion(result)
-          }
-        })
-        self.task?.resume()
-      }
+    
+    
+    func upload(_ route: EndPoint, image: UIImage, completion: @escaping APICompletion) {
+        if var request = buildRequest(from: route) {
+            
+            let uploadData = builđData(for: image, request: &request)
+            
+            
+            task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+                if error != nil {
+                    completion(.failure(ErrorType.noInternet))
+                }
+                if let response = response as? HTTPURLResponse {
+                    let result = self.handleNetworkResponse(data, response)
+                    completion(result)
+                }
+            })
+            self.task?.resume()
+        }
     }
     
     func upload(_ route: EndPoint, images: [UIImage], content: String, completion: @escaping APICompletion) {
         if var request = buildRequest(from: route) {
-          
+            
             let uploadData = builđData(for: images, for: content, request: &request)
-          
-          
-          task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
-            if error != nil {
-              completion(.failure(ErrorType.noInternet))
-            }
-            if let response = response as? HTTPURLResponse {
-              let result = self.handleNetworkResponse(data, response)
-              completion(result)
-            }
-          })
-          self.task?.resume()
+            
+            
+            task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+                if error != nil {
+                    completion(.failure(ErrorType.noInternet))
+                }
+                if let response = response as? HTTPURLResponse {
+                    let result = self.handleNetworkResponse(data, response)
+                    completion(result)
+                }
+            })
+            self.task?.resume()
         }
-      }
-  
+    }
+    
     func upload(_ route: EndPoint, video: Data, completion: @escaping APICompletion, inprogress: @escaping UploadInprogress) {
-      if var request = buildRequest(from: route) {
-          
-          let uploadData = builđData(for: video, request: &request)
-          requestDelegate.process = inprogress
-          task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
-            if error != nil {
-              completion(.failure(ErrorType.noInternet))
-            }
-            if let response = response as? HTTPURLResponse {
-              let result = self.handleNetworkResponse(data, response)
-              completion(result)
-            }
-          })
-          self.task?.resume()
-      }
+        if var request = buildRequest(from: route) {
+            
+            let uploadData = builđData(for: video, request: &request)
+            requestDelegate.process = inprogress
+            task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+                if error != nil {
+                    completion(.failure(ErrorType.noInternet))
+                }
+                if let response = response as? HTTPURLResponse {
+                    let result = self.handleNetworkResponse(data, response)
+                    completion(result)
+                }
+            })
+            self.task?.resume()
+        }
     }
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
@@ -112,59 +112,62 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             self.task?.resume()
         }
     }
-  
-  fileprivate func builđData(for image: UIImage, request: inout URLRequest) -> Data {
-      let boundary = UUID().uuidString
-    request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-      let filename = "image.png"
-      var uploadData = Data()
-      uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-      uploadData.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
-      uploadData.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
-      uploadData.append(image.jpegData(compressionQuality: 0.5)!)
-      uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-      return uploadData
-    }
-  
-  fileprivate func builđData(for video: Data, request: inout URLRequest) -> Data {
-    let boundary = UUID().uuidString
-    request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-    let filename = "video.mp4"
-    var uploadData = Data()
-    uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-    uploadData.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
-    uploadData.append("Content-Type: video/mp4\r\n\r\n".data(using: .utf8)!)
-    uploadData.append(video)
-    uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-    return uploadData
-  }
     
-    fileprivate func builđData(for images: [UIImage], for content: String, request: inout URLRequest) -> Data {
+    fileprivate func builđData(for image: UIImage, request: inout URLRequest) -> Data {
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        var uploadData = ""
+        let filename = "image.png"
+        var uploadData = Data()
+        uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+        uploadData.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+        uploadData.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
+        uploadData.append(image.jpegData(compressionQuality: 0.5)!)
+        uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        return uploadData
+    }
+    
+    fileprivate func builđData(for video: Data, request: inout URLRequest) -> Data {
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        let filename = "video.mp4"
+        var uploadData = Data()
+        uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+        uploadData.append("Content-Disposition: form-data; name=\"file[]\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+        uploadData.append("Content-Type: video/mp4\r\n\r\n".data(using: .utf8)!)
+        uploadData.append(video)
+        uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        return uploadData
+    }
+    
+    fileprivate func builđData(for images: [UIImage], for content: String, request: inout URLRequest) -> Data {
         
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        var uploadData = Data()
+        
+        var imagesData = Data()
         // build uploadData images
         for image in images {
-            let fileData = image.jpegData(compressionQuality: 0.5)
-            let fileContent = fileData?.base64EncodedString()
-            uploadData += "--\(boundary)\r\n"
-            uploadData += "Content-Disposition:form-data; name=\"file[]\""
-            uploadData += "\r\nContent-Type: image/png"
-            uploadData += "; filename=\"\(UUID().uuidString).png\"\r\n"
-            + "Content-Type: \"content-type header\"\r\n\r\n\(fileContent ?? "")\r\n"
+            imagesData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+            imagesData.append("Content-Disposition: form-data; name=\"file[]\"; filename=\"\(UUID().uuidString)\"\r\n".data(using: .utf8)!)
+            imagesData.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
+            imagesData.append(image.jpegData(compressionQuality: 0.5)!)
         }
+        uploadData.append(imagesData)
         
         // build uploadData content
-        uploadData += "--\(boundary)\r\n"
-        uploadData += "Content-Disposition:form-data; name=\"content\""
-        uploadData += "\r\nContent-Type: text"
-        uploadData += "\r\n\r\n\(content)\r\n"
+        var contentData = ""
+        contentData += "\r\n--\(boundary)\r\n"
+        contentData += "Content-Disposition:form-data; name=\"content\""
+        contentData += "\r\nContent-Type: text"
+        contentData += "\r\n\r\n\(content)\r\n"
         
-        uploadData += "--\(boundary)\r\n"
+        contentData += "--\(boundary)\r\n"
+        uploadData.append(contentData.data(using: .utf8)!)
         print(uploadData)
-        return uploadData.data(using: .utf8)!
-      }
+        
+        return uploadData
+    }
     
     fileprivate func buildRequest(from route: EndPoint) -> URLRequest? {
         // Check API endpoint is valid
@@ -176,18 +179,18 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                                  timeoutInterval: 30.0)
         request.httpMethod = route.httpMethod.rawValue
         switch route.task {
-          case .request:
+        case .request:
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             if route.headers != nil {
-              self.addAdditionalHeaders(route.headers, request: &request)
+                self.addAdditionalHeaders(route.headers, request: &request)
             }
-          case .requestParameters(let parameters):
+        case .requestParameters(let parameters):
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             if route.headers != nil {
-              self.addAdditionalHeaders(route.headers, request: &request)
+                self.addAdditionalHeaders(route.headers, request: &request)
             }
             self.configureParameters(parameters: parameters, request: &request)
-          case .requestParametersAndHeaders(let parameters, let additionalHeaders):
+        case .requestParametersAndHeaders(let parameters, let additionalHeaders):
             self.addAdditionalHeaders(additionalHeaders, request: &request)
             self.configureParameters(parameters: parameters, request: &request)
         }
