@@ -286,7 +286,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Typing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bM6-fT-FPi" userLabel="Typing Indicator Label">
-                                                            <rect key="frame" x="28" y="1.333333333333333" width="214" height="14.333333333333336"/>
+                                                            <rect key="frame" x="28" y="1.3333333333333321" width="214" height="14"/>
                                                             <fontDescription key="fontDescription" name="Roboto-Italic" family="Roboto" pointSize="12"/>
                                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -467,7 +467,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cHs-eb-zXR" userLabel="Toast Message Label">
-                                        <rect key="frame" x="38.333333333333329" y="73" width="43.333333333333329" height="21.333333333333329"/>
+                                        <rect key="frame" x="37.666666666666671" y="73" width="44.333333333333329" height="21"/>
                                         <fontDescription key="fontDescription" name="Roboto-BoldItalic" family="Roboto" pointSize="18"/>
                                         <color key="textColor" name="color_toast_label"/>
                                         <nil key="highlightedColor"/>
@@ -581,7 +581,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Typing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cmt-1o-CDM" userLabel="Typing Indicator Label">
-                                                            <rect key="frame" x="28" y="1.333333333333333" width="214" height="14.333333333333336"/>
+                                                            <rect key="frame" x="28" y="1.3333333333333321" width="214" height="14"/>
                                                             <fontDescription key="fontDescription" name="Roboto-Italic" family="Roboto" pointSize="12"/>
                                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -762,7 +762,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VFy-QJ-Jp3" userLabel="Toast Message Label">
-                                        <rect key="frame" x="38.333333333333329" y="73" width="43.333333333333329" height="21.333333333333329"/>
+                                        <rect key="frame" x="37.666666666666671" y="73" width="44.333333333333329" height="21"/>
                                         <fontDescription key="fontDescription" name="Roboto-BoldItalic" family="Roboto" pointSize="18"/>
                                         <color key="textColor" name="color_toast_label"/>
                                         <nil key="highlightedColor"/>
@@ -5693,6 +5693,21 @@ Rodriguez</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zbf-Ks-lcV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4733.6000000000004" y="2329.0640394088673"/>
+        </scene>
+        <!--Selected PostVC-->
+        <scene sceneID="Gek-QX-C9c">
+            <objects>
+                <viewController storyboardIdentifier="SelectedPostVC" id="qDR-Mg-g6T" customClass="SelectedPostVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="87l-QF-AP9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="c8J-Xm-nT3"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GV1-tl-3iF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5676" y="2325"/>
         </scene>
         <!--User ProfileVC-->
         <scene sceneID="xKc-ah-h1R">

@@ -7,7 +7,7 @@
 import Foundation
 import ObjectMapper
 
-class postThumbnail: Mappable {
+class PostModel: Mappable {
   let id = UUID()
 
   var imageUrl: URL = URL(string: "https://via.placeholder.com/150")!
@@ -17,12 +17,14 @@ class postThumbnail: Mappable {
   private(set) var muxAssetId: String = ""
   private(set) var videoUrl: String = ""
   private(set) var streamUrl: String = ""
+  private(set) var setting: [String: Any] = ["": ""]
   
   required init?(map: ObjectMapper.Map) {
     
   }
   
   func mapping(map: ObjectMapper.Map) {
+    setting <- map["content"]
     content <- map["content"]
     image <- map["images"]
     muxPlaybackId <- map ["mux.playbackid"]
@@ -36,8 +38,8 @@ class postThumbnail: Mappable {
     }
   }
 }
-extension postThumbnail: Hashable {
-  static func == (lhs: postThumbnail, rhs: postThumbnail) -> Bool {
+extension PostModel: Hashable {
+  static func == (lhs: PostModel, rhs: PostModel) -> Bool {
     return lhs.id == rhs.id
   }
   

@@ -25,7 +25,7 @@ class ProfileViewController: UIViewController {
     enum Item: Hashable {
         case header(ProfileHeaderData)
         case challengeCard(ChallengeCardHeaderData)
-        case posts(postThumbnail)
+        case posts(PostModel)
     }
 
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -38,6 +38,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var challengeCardView: UIView!
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
+    
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
     
@@ -140,7 +141,7 @@ class ProfileViewController: UIViewController {
         configureDatasource()
         wireDelegate()
         bindingUI()
-        
+        oldTabbarFr = self.tabBarController?.tabBar.frame ?? .zero
         // Load follwer, follwing
         viewModel.getFollowers()
         viewModel.getMyPost(page: currpage)
@@ -150,17 +151,19 @@ class ProfileViewController: UIViewController {
     }
     
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        
+        navigationController?.hidesBarsOnSwipe = false        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Show the Navigation Bar
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
+      
     }
     
     override func viewWillLayoutSubviews() {
@@ -333,6 +336,8 @@ extension ProfileViewController {
     @objc func settingTapped(_ sender: UIButton) {
         
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SettingVC") as? SettingVC {
+            
+            //self.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(SVC, animated: true)
             
         }
@@ -344,6 +349,7 @@ extension ProfileViewController {
         print("followersTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            //self.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = true
             self.navigationController?.pushViewController(MFVC, animated: true)
             
@@ -356,6 +362,7 @@ extension ProfileViewController {
        print("followingTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            //self.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = false
             self.navigationController?.pushViewController(MFVC, animated: true)
             
@@ -366,6 +373,7 @@ extension ProfileViewController {
     @objc func editProfileTapped(_ sender: UIButton) {
         
         if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
+            //self.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(EPVC, animated: true)
             
         }
@@ -381,6 +389,7 @@ extension ProfileViewController {
     @objc func fistBumpedTapped(_ sender: UIButton) {
         
         if let FBSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "FistBumpedStatVC") as? FistBumpedStatVC {
+            //self.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(FBSVC, animated: true)
             
         }
@@ -409,6 +418,7 @@ extension ProfileViewController {
     @objc func editCardTapped(_ sender: UIButton) {
         
         if let ECCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditChallengeCardVC") as? EditChallengeCardVC {
+            //self.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(ECCVC, animated: true)
             
         }
@@ -488,7 +498,7 @@ extension ProfileViewController {
     
     func sectionFor(index: Int, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let section = datasource.snapshot().sectionIdentifiers[index]
-        
+    
         switch section {
         case .header:
             return createHeaderSection()
@@ -509,7 +519,7 @@ extension ProfileViewController {
         snapshot.appendSections([.header, .challengeCard, .posts])
         snapshot.appendItems([.header(profileData)], toSection: .header)
         snapshot.appendItems([.challengeCard(challengeData)], toSection: .challengeCard)
-//        snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
+
         return snapshot
     }
     
@@ -521,9 +531,8 @@ extension ProfileViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        
         let item = datasource.itemIdentifier(for: indexPath)
-        
+       
         switch item {
             case .header(_):
                 print("header")
@@ -535,8 +544,29 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
             case .posts(_):
                 
-                print("posts")
+                let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
+                var selectedPost = [PostModel]()
+                
+                for test in snap {
+                    switch test {
+                    case .posts(let p):
+                        selectedPost.append(p)
+                    default:
+                        break
+                   
+                    }
+                }
+            
 
+            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                SPVC.selectedPost = selectedPost
+                SPVC.startIndex = indexPath.row
+                //self.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(SPVC, animated: true)
+            }
+          
+
+             
             case .none:
                 print("None")
         }
