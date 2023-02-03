@@ -14,6 +14,8 @@ import Alamofire
 
 class SelectedPostVC: UIViewController {
 
+    @IBOutlet weak var topConstraint: NSLayoutConstraint!
+    @IBOutlet weak var contentView: UIView!
     var selectedPost = [PostModel]()
     var posts = [PostModel]()
     var selectedIndexPath = 0
@@ -87,7 +89,10 @@ extension SelectedPostVC {
     func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
         
         guard let cell = node as? PostNode else { return }
-        
+      
+        if cell.indexPath?.row == 0 {
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+        }
         
     }
     
@@ -199,31 +204,10 @@ extension SelectedPostVC {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100000)) {
             
-            
             self.currentIndex = self.startIndex
             
-            self.collectionNode.scrollToItem(at: IndexPath(row: self.startIndex, section: 0), at: .centeredVertically, animated: false)
-            
-            if self.currentIndex != 0 {
-                
-                self.delayItem.perform(after: 0.25) {
-                    if self.currentIndex != 0, self.currentIndex != nil {
-                        
-                        
-                        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: self.currentIndex, section: 0)) as? PostNode {
-                            
-                            //self.openCell(cell: cell)
-                            self.isFirstLoad = false
-                            
-                        }
-                    }
-                    
-                }
-            
-            
-            }
-            
-            
+            self.collectionNode.scrollToItem(at: IndexPath(row: self.startIndex, section: 0), at: .top, animated: false)
+ 
         }
         
         
@@ -239,17 +223,17 @@ extension SelectedPostVC {
         let flowLayout = UICollectionViewFlowLayout()
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.minimumLineSpacing = 0
+        flowLayout.minimumInteritemSpacing = 10.0
+        flowLayout.minimumLineSpacing = 10.0
         
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         
-        self.view.addSubview(collectionNode.view)
+        self.contentView.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
-        self.collectionNode.view.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-        self.collectionNode.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-        self.collectionNode.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
+        self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
+        self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
         self.applyStyle()
         self.wireDelegates()
