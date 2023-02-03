@@ -264,6 +264,11 @@ extension APIManager {
 
 extension APIManager {
   
+  func hasLikedPost(id: String, completion: @escaping APICompletion) {
+    likePostManager.request(.isLike(params: ["id": id])) { result in
+      completion(result)
+    }
+  }
   func likePost(id: String, completion: @escaping APICompletion) {
     likePostManager.request(.like(params: ["id": id])) { result in
       completion(result)

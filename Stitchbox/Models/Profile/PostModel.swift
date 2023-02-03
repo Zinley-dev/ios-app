@@ -48,11 +48,11 @@ class PostModel: Mappable {
     muxPlaybackId <- map ["mux.playbackid"]
     muxAssetId <- map ["mux.assetid"]
     streamUrl <- map ["video.streamurl"]
-    setting["allowcomment"] <- map["setting.allowcomment"]
-    setting["mode"] <- map["setting.mode"]
-    setting["languageCode"] <- map["setting.languageCode"]
-    setting["mediaType"] <- map["setting.mediaType"]
-    setting["isTitleGet"] <- map["setting.isTitleGet"]
+    setting["allowcomment"] <- map["settings.allowcomment"]
+    setting["mode"] <- map["settings.mode"]
+    setting["languageCode"] <- map["settings.languageCode"]
+    setting["mediaType"] <- map["settings.mediaType"]
+    setting["isTitleGet"] <- map["settings.isTitleGet"]
     metadata <- map["metadata"]
     
     if image[0] != "" {
