@@ -24,6 +24,14 @@ class LoginController: UIViewController, ControllerType {
         forgotBtn.addTarget(self, action: #selector(onClickForgot(_:)), for: .touchUpInside)
     }
     
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        self.view.endEditing(true)
+        
+    }
+    
     // MARK: - Functions
     func bindUI(with: ViewModelType) {
         // bind View Model outputs to Controller elements

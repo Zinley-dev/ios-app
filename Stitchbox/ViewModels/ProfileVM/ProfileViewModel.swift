@@ -24,7 +24,7 @@ class ProfileViewModel: ViewModelProtocol {
         let followerListObservable: Observable<[FollowerModel]>
         let followingListObservable: Observable<[FollowerModel]>
         let allFollowingListObservable: Observable<[FollowerModel]>
-        let myPostObservable: Observable<[postThumbnail]>
+        let myPostObservable: Observable<[PostModel]>
     }
     
     
@@ -38,7 +38,7 @@ class ProfileViewModel: ViewModelProtocol {
     private let followerListSubject = PublishSubject<[FollowerModel]>()
     private let followingListSubject = PublishSubject<[FollowerModel]>()
     private let allFollowingListSubject = PublishSubject<[FollowerModel]>()
-    private let myPostSubject = PublishSubject<[postThumbnail]>()
+    private let myPostSubject = PublishSubject<[PostModel]>()
   
     init() {
         input = Input()
@@ -62,14 +62,13 @@ class ProfileViewModel: ViewModelProtocol {
             switch result {
                 case .success(let response):
                     print("================ooooOOOoooo=================================")
-                    
                     guard response.body?["message"] as? String == "success",
                           let data = response.body?["data"] as? [[String: Any]] else {
                         print("err")
                         return
                     }
                     let posts = data.map { item in
-                      let mypost = postThumbnail(JSON: item)!
+                      let mypost = PostModel(JSON: item)!
                       return mypost
                     }
                 self.myPostSubject.onNext(posts)

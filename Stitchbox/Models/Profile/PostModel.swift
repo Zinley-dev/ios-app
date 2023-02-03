@@ -6,10 +6,27 @@
 //
 import Foundation
 import ObjectMapper
+class PostMetadata: Mappable {
+  private(set) var contentmode: String = ""
+  private(set) var height: Int = 0
+  private(set) var lenght: Int = 0
+  private(set) var width: Int = 0
 
-class postThumbnail: Mappable {
+  required init?(map: ObjectMapper.Map) {
+    
+  }
+  
+  func mapping(map: ObjectMapper.Map) {
+    contentmode <- map["contentmode"]
+    height <- map["height"]
+    lenght <- map["lenght"]
+    width <- map["width"]
+  }
+}
+
+class PostModel: Mappable {
   let id = UUID()
-
+  
   var imageUrl: URL = URL(string: "https://via.placeholder.com/150")!
   private(set) var content: String = ""
   private(set) var image: [String] = [""]
@@ -17,17 +34,23 @@ class postThumbnail: Mappable {
   private(set) var muxAssetId: String = ""
   private(set) var videoUrl: String = ""
   private(set) var streamUrl: String = ""
+  private(set) var setting: [String: Any] = ["": ""]
+  private(set) var metadata: PostMetadata?
   
   required init?(map: ObjectMapper.Map) {
     
   }
   
   func mapping(map: ObjectMapper.Map) {
+    setting <- map["content"]
     content <- map["content"]
     image <- map["images"]
     muxPlaybackId <- map ["mux.playbackid"]
     muxAssetId <- map ["mux.assetid"]
     streamUrl <- map ["video.streamurl"]
+    setting["allowcomment"] <- map["setting.allowcomment"]
+    setting["mode"] <- map["setting.mode"]
+    metadata <- map["metadata"]
     
     if image[0] != "" {
       imageUrl = URL(string: image[0])!
@@ -36,8 +59,8 @@ class postThumbnail: Mappable {
     }
   }
 }
-extension postThumbnail: Hashable {
-  static func == (lhs: postThumbnail, rhs: postThumbnail) -> Bool {
+extension PostModel: Hashable {
+  static func == (lhs: PostModel, rhs: PostModel) -> Bool {
     return lhs.id == rhs.id
   }
   
