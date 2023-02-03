@@ -8,9 +8,9 @@ import Foundation
 import ObjectMapper
 class PostMetadata: Mappable {
   private(set) var contentmode: String = ""
-  private(set) var height: Int = 0
-  private(set) var lenght: Int = 0
-  private(set) var width: Int = 0
+    private(set) var height: CGFloat = 0.0
+    private(set) var lenght: Int = 0
+    private(set) var width: CGFloat = 0.0
 
   required init?(map: ObjectMapper.Map) {
     
