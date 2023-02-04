@@ -16,7 +16,7 @@ class ProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var discordView: UIView!
     @IBOutlet weak var editBtn: UIButton!
     @IBOutlet weak var FistBumpedBtn: UIButton!
-    @IBOutlet weak var followersBtn: UIButton!
+    @IBOutlet weak var fistBumpedListBtn: UIButton!
     @IBOutlet weak var discordBtn: UIButton!
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet weak var numberOfFollowing: UILabel!
@@ -35,10 +35,10 @@ class ProfileHeaderCell: UICollectionViewCell {
         discordBtn.setTitle("", for: .normal)
         FistBumpedBtn.setTitle("", for: .normal)
         editProfileBtn.setTitleColor(.white, for: .normal)
-        followersBtn.setTitleColor(.white, for: .normal)
+        fistBumpedListBtn.setTitleColor(.white, for: .normal)
         
         editProfileBtn.tintColor = .white
-        followersBtn.tintColor = .white
+        fistBumpedListBtn.tintColor = .white
     
     }
     
@@ -50,7 +50,7 @@ class ProfileHeaderCell: UICollectionViewCell {
         avatarImage.layer.cornerRadius = avatarImage.bounds.height/2
         
         editProfileBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        followersBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        fistBumpedListBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
     }
     
   

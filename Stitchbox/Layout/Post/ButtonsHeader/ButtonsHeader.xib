@@ -119,10 +119,10 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="B1q-ab-Jis" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="7fS-x7-jHp"/>
+                <constraint firstItem="HAX-A2-4zS" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Sd4-Hc-FWS"/>
                 <constraint firstAttribute="trailing" secondItem="HAX-A2-4zS" secondAttribute="trailing" id="TKF-Q0-A86"/>
                 <constraint firstItem="B1q-ab-Jis" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="VGf-LG-CHU"/>
-                <constraint firstItem="B1q-ab-Jis" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="aVz-TB-1aa"/>
-                <constraint firstItem="HAX-A2-4zS" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="uSd-c0-6BQ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <userDefinedRuntimeAttributes>
@@ -130,7 +130,7 @@
                     <real key="value" value="25"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="-395.6521739130435" y="-308.70535714285711"/>
+            <point key="canvasLocation" x="-395.6521739130435" y="-302.67857142857139"/>
         </view>
     </objects>
     <resources>

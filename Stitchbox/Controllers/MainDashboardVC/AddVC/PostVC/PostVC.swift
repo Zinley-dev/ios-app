@@ -444,10 +444,7 @@ extension PostVC {
             print("Uploading ... \(percent)%")
         }
 
-    
-        
     }
-    
     
     
     func writeContentImageToDB(imageUrl: String) {
@@ -921,7 +918,6 @@ extension PostVC {
         
         SwiftLoader.show(title: progress, animated: true)
         
- 
     }
     
 }

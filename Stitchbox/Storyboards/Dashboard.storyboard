@@ -2327,7 +2327,7 @@
                                 <rect key="frame" x="32" y="79" width="311" height="120"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="z2g-kn-6qJ">
-                                        <rect key="frame" x="0.0" y="17.666666666666671" width="311" height="85"/>
+                                        <rect key="frame" x="0.0" y="17.666666666666671" width="311" height="84.999999999999986"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jm9-nd-GhK">
                                                 <rect key="frame" x="0.0" y="0.0" width="311" height="85"/>
@@ -2962,7 +2962,7 @@
                                                                             <rect key="frame" x="246" y="0.0" width="134" height="40"/>
                                                                             <color key="backgroundColor" red="0.51372551919999998" green="0.52549022440000004" blue="0.54509806630000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                             <state key="normal" title="Button"/>
-                                                                            <buttonConfiguration key="configuration" style="plain" title="Followers"/>
+                                                                            <buttonConfiguration key="configuration" style="plain" title="Fist Bumped"/>
                                                                             <userDefinedRuntimeAttributes>
                                                                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                                     <real key="value" value="20"/>
@@ -3033,8 +3033,8 @@ Rodriguez</string>
                                             <outlet property="discordView" destination="ZZK-Q2-imX" id="1d8-6x-wMX"/>
                                             <outlet property="editBtn" destination="4WR-jf-Ptn" id="R0b-dd-29y"/>
                                             <outlet property="editProfileBtn" destination="Y18-um-T0h" id="L4M-eq-57H"/>
+                                            <outlet property="fistBumpedListBtn" destination="fah-qR-IIG" id="JuD-mk-bw4"/>
                                             <outlet property="fistBumpedView" destination="He0-iI-C24" id="YHx-YX-SFO"/>
-                                            <outlet property="followersBtn" destination="fah-qR-IIG" id="4h9-Hz-SwC"/>
                                             <outlet property="numberOfFollowers" destination="va1-A6-Mok" id="iFe-6g-LgB"/>
                                             <outlet property="numberOfFollowing" destination="fiL-Ja-IPg" id="mAk-Gb-i61"/>
                                             <outlet property="usernameLbl" destination="vnK-Bb-OAW" id="LWN-br-Yds"/>
@@ -5725,6 +5725,21 @@ Rodriguez</string>
             </objects>
             <point key="canvasLocation" x="5676" y="2325"/>
         </scene>
+        <!--StatsVC-->
+        <scene sceneID="waV-jb-ULH">
+            <objects>
+                <viewController storyboardIdentifier="StatsVC" id="Aok-UV-3s8" customClass="StatsVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uHO-BS-2rd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="LRz-aW-B8A"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M1T-eE-MbH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6682" y="2329"/>
+        </scene>
         <!--User ProfileVC-->
         <scene sceneID="xKc-ah-h1R">
             <objects>
@@ -6358,6 +6373,21 @@ Rodriguez</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qK-3t-hXy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5676" y="1603"/>
+        </scene>
+        <!--Edit PostVC-->
+        <scene sceneID="zfR-Vh-9eg">
+            <objects>
+                <viewController storyboardIdentifier="EditPostVC" id="Okv-FM-SYo" customClass="EditPostVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ae7-DV-3kV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="LPX-Yt-eOj"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bvG-x5-qgb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6682" y="1603"/>
         </scene>
         <!--Push NotificationVC-->
         <scene sceneID="VIF-zx-OGs">

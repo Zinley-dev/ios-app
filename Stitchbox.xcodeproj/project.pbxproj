@@ -234,6 +234,14 @@
 		6AEA33F0298CE4A6005A4C5D /* PostHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AEA33EE298CE4A6005A4C5D /* PostHeader.xib */; };
 		6AEA33F3298CE4AB005A4C5D /* ButtonsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AEA33F1298CE4AB005A4C5D /* ButtonsHeader.xib */; };
 		6AEA33F4298CE4AB005A4C5D /* ButtonsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33F2298CE4AB005A4C5D /* ButtonsHeader.swift */; };
+		6AEA33F8298DC8E1005A4C5D /* HashtagView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AEA33F6298DC8E1005A4C5D /* HashtagView.xib */; };
+		6AEA33F9298DC8E1005A4C5D /* HashtagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33F7298DC8E1005A4C5D /* HashtagView.swift */; };
+		6AEA33FD298DCAC0005A4C5D /* HashtagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33FB298DCABF005A4C5D /* HashtagCell.swift */; };
+		6AEA33FE298DCAC0005A4C5D /* HashtagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AEA33FC298DCABF005A4C5D /* HashtagCell.xib */; };
+		6AEA3402298DDA04005A4C5D /* PostSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA3400298DDA04005A4C5D /* PostSettingVC.swift */; };
+		6AEA3403298DDA04005A4C5D /* PostSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AEA3401298DDA04005A4C5D /* PostSettingVC.xib */; };
+		6AEA3408298DE1AB005A4C5D /* EditPostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA3407298DE1AB005A4C5D /* EditPostVC.swift */; };
+		6AEA340A298DE1BC005A4C5D /* StatsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA3409298DE1BC005A4C5D /* StatsVC.swift */; };
 		6AEA74FA29680B53005C802B /* NormalLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA74F929680B53005C802B /* NormalLoginVC.swift */; };
 		6AEC6901295178E2000393D8 /* SendBirdRoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEC6900295178E2000393D8 /* SendBirdRoomModel.swift */; };
 		6AEC690429517EA9000393D8 /* SwiftLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEC690329517EA9000393D8 /* SwiftLoader.swift */; };
@@ -540,6 +548,14 @@
 		6AEA33EE298CE4A6005A4C5D /* PostHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PostHeader.xib; sourceTree = "<group>"; };
 		6AEA33F1298CE4AB005A4C5D /* ButtonsHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonsHeader.xib; sourceTree = "<group>"; };
 		6AEA33F2298CE4AB005A4C5D /* ButtonsHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonsHeader.swift; sourceTree = "<group>"; };
+		6AEA33F6298DC8E1005A4C5D /* HashtagView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HashtagView.xib; sourceTree = "<group>"; };
+		6AEA33F7298DC8E1005A4C5D /* HashtagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashtagView.swift; sourceTree = "<group>"; };
+		6AEA33FB298DCABF005A4C5D /* HashtagCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashtagCell.swift; sourceTree = "<group>"; };
+		6AEA33FC298DCABF005A4C5D /* HashtagCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HashtagCell.xib; sourceTree = "<group>"; };
+		6AEA3400298DDA04005A4C5D /* PostSettingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostSettingVC.swift; sourceTree = "<group>"; };
+		6AEA3401298DDA04005A4C5D /* PostSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PostSettingVC.xib; sourceTree = "<group>"; };
+		6AEA3407298DE1AB005A4C5D /* EditPostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostVC.swift; sourceTree = "<group>"; };
+		6AEA3409298DE1BC005A4C5D /* StatsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsVC.swift; sourceTree = "<group>"; };
 		6AEA74F929680B53005C802B /* NormalLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalLoginVC.swift; sourceTree = "<group>"; };
 		6AEC6900295178E2000393D8 /* SendBirdRoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBirdRoomModel.swift; sourceTree = "<group>"; };
 		6AEC690329517EA9000393D8 /* SwiftLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLoader.swift; sourceTree = "<group>"; };
@@ -1020,6 +1036,7 @@
 		6A0CF644296E2E2B00155889 /* Layout */ = {
 			isa = PBXGroup;
 			children = (
+				6AEA33FA298DCAB4005A4C5D /* HashtagCell */,
 				6AEA33EA298CE474005A4C5D /* Post */,
 				6A784865298628C0008B2263 /* StreamingListVC */,
 				6A3F0A72297FAD3800366665 /* Message */,
@@ -1598,6 +1615,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6AEA3405298DE181005A4C5D /* PostSetting */,
 				6AEA33E7298C7D17005A4C5D /* SelectedPostVC */,
 				6A3F0A8A2982330B00366665 /* UserProfileVC */,
 				6A3F0A5A297CB82800366665 /* AddVC */,
@@ -1960,6 +1978,7 @@
 		6AEA33EA298CE474005A4C5D /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				6AEA33F5298DC8CF005A4C5D /* HashtagView */,
 				6AEA33EC298CE48A005A4C5D /* ButtonsHeader */,
 				6AEA33EB298CE47A005A4C5D /* PostHeader */,
 			);
@@ -1982,6 +2001,59 @@
 				6AEA33F1298CE4AB005A4C5D /* ButtonsHeader.xib */,
 			);
 			path = ButtonsHeader;
+			sourceTree = "<group>";
+		};
+		6AEA33F5298DC8CF005A4C5D /* HashtagView */ = {
+			isa = PBXGroup;
+			children = (
+				6AEA33F7298DC8E1005A4C5D /* HashtagView.swift */,
+				6AEA33F6298DC8E1005A4C5D /* HashtagView.xib */,
+			);
+			path = HashtagView;
+			sourceTree = "<group>";
+		};
+		6AEA33FA298DCAB4005A4C5D /* HashtagCell */ = {
+			isa = PBXGroup;
+			children = (
+				6AEA33FB298DCABF005A4C5D /* HashtagCell.swift */,
+				6AEA33FC298DCABF005A4C5D /* HashtagCell.xib */,
+			);
+			path = HashtagCell;
+			sourceTree = "<group>";
+		};
+		6AEA33FF298DD9D1005A4C5D /* PostSettingVC */ = {
+			isa = PBXGroup;
+			children = (
+				6AEA3400298DDA04005A4C5D /* PostSettingVC.swift */,
+				6AEA3401298DDA04005A4C5D /* PostSettingVC.xib */,
+			);
+			path = PostSettingVC;
+			sourceTree = "<group>";
+		};
+		6AEA3404298DE16E005A4C5D /* StatsVC */ = {
+			isa = PBXGroup;
+			children = (
+				6AEA3409298DE1BC005A4C5D /* StatsVC.swift */,
+			);
+			path = StatsVC;
+			sourceTree = "<group>";
+		};
+		6AEA3405298DE181005A4C5D /* PostSetting */ = {
+			isa = PBXGroup;
+			children = (
+				6AEA3406298DE191005A4C5D /* EditPostVC */,
+				6AEA3404298DE16E005A4C5D /* StatsVC */,
+				6AEA33FF298DD9D1005A4C5D /* PostSettingVC */,
+			);
+			path = PostSetting;
+			sourceTree = "<group>";
+		};
+		6AEA3406298DE191005A4C5D /* EditPostVC */ = {
+			isa = PBXGroup;
+			children = (
+				6AEA3407298DE1AB005A4C5D /* EditPostVC.swift */,
+			);
+			path = EditPostVC;
 			sourceTree = "<group>";
 		};
 		6AEA74F2296802BD005C802B /* FeedVC */ = {
@@ -2343,11 +2415,13 @@
 				6A3F0A77297FADB900366665 /* SelectedHashtagCollectionViewCell.xib in Resources */,
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
 				6AEA33F0298CE4A6005A4C5D /* PostHeader.xib in Resources */,
+				6AEA3403298DDA04005A4C5D /* PostSettingVC.xib in Resources */,
 				14FADBBD2978418300E0A741 /* ReportFurtherInfoModView.xib in Resources */,
 				6AAD7A6B294C69B1003E3AB6 /* LICENSE in Resources */,
 				6A6C310429641D4F0070167A /* UnbanUserModView.xib in Resources */,
 				141BB197293BA946004F4ED7 /* loading-animation.json in Resources */,
 				6A0D541C296E4E840059530C /* ChallengeCard.xib in Resources */,
+				6AEA33FE298DCAC0005A4C5D /* HashtagCell.xib in Resources */,
 				6A6C3109296426F80070167A /* EditChannelDataModView.xib in Resources */,
 				6A6C30FF2964156E0070167A /* UnmutedUserModView.xib in Resources */,
 				390FD7842909375C0068B883 /* Dashboard.storyboard in Resources */,
@@ -2360,6 +2434,7 @@
 				147BDB682928B1E1003511C3 /* Colors.xcassets in Resources */,
 				6A6C30D529626D3C0070167A /* LeaveView.xib in Resources */,
 				1457CCD929464DD6003C742F /* IconSet.xcassets in Resources */,
+				6AEA33F8298DC8E1005A4C5D /* HashtagView.xib in Resources */,
 				6AAD7A24294C65F6003E3AB6 /* Ringing.mp3 in Resources */,
 				6A784869298628CE008B2263 /* StreamingListVC.xib in Resources */,
 			);
@@ -2600,6 +2675,7 @@
 				6A6C30FE2964156E0070167A /* UnmutedUserModView.swift in Sources */,
 				6A3F0A7B2980BE3400366665 /* FollowingVC.swift in Sources */,
 				6AAD7A2D294C6624003E3AB6 /* SendBirdCall+QuickStart.swift in Sources */,
+				6AEA33FD298DCAC0005A4C5D /* HashtagCell.swift in Sources */,
 				6AAD7A05294C53EC003E3AB6 /* ModView.swift in Sources */,
 				6A6627822965773400A4488B /* EndPoints.swift in Sources */,
 				395477B629425274008EED97 /* LoginCoordinatorProtocol.swift in Sources */,
@@ -2625,6 +2701,7 @@
 				141BB195293BA4F0004F4ED7 /* CountryPicker.swift in Sources */,
 				6A58EA51294EB280005FA3CD /* ImageUtil.swift in Sources */,
 				6A3F0A63297F71B900366665 /* badgeThumbnail.swift in Sources */,
+				6AEA3402298DDA04005A4C5D /* PostSettingVC.swift in Sources */,
 				6AAD7A45294C6642003E3AB6 /* Bundle+QuickStart.swift in Sources */,
 				A5346488294B09B300FB6A94 /* ProfileViewController.swift in Sources */,
 				6AF973352978E4E900C76814 /* MorePersonalInfoVC.swift in Sources */,
@@ -2635,6 +2712,7 @@
 				A5D1E9ED2984DA2000839311 /* CreatePostRequest.swift in Sources */,
 				6A3F0A5C297CB83F00366665 /* AddVC.swift in Sources */,
 				6A0CF643296AB19200155889 /* NewPasswordVC.swift in Sources */,
+				6AEA33F9298DC8E1005A4C5D /* HashtagView.swift in Sources */,
 				6A3F0A832980C50B00366665 /* UserActionModel.swift in Sources */,
 				6AAD7A64294C699E003E3AB6 /* GifImageConfig.swift in Sources */,
 				6AEC690629518021000393D8 /* UIColor+Utils.swift in Sources */,
@@ -2686,6 +2764,7 @@
 				6A9E4C6629767EE100B59176 /* MyReferralCodeVC.swift in Sources */,
 				A5E2A41A2979B9CD0045F110 /* ProfileViewModel.swift in Sources */,
 				6A9E4C8B2977C4FC00B59176 /* ContactUsImageCell.swift in Sources */,
+				6AEA340A298DE1BC005A4C5D /* StatsVC.swift in Sources */,
 				6AB8E9372956EB1900BFF169 /* SendBirdUserModel.swift in Sources */,
 				6AAD79FF294C4C68003E3AB6 /* NavigationVC.swift in Sources */,
 				6AAD7A62294C699E003E3AB6 /* Array_compare.swift in Sources */,
@@ -2723,6 +2802,7 @@
 				6AAD7A1E294C65DD003E3AB6 /* UIApplication+QuickStart.swift in Sources */,
 				A5F9C91C296C14ED00D339A1 /* ResetPasswordViewModel.swift in Sources */,
 				6A1235A5295034BD004B612E /* InviteUserVC.swift in Sources */,
+				6AEA3408298DE1AB005A4C5D /* EditPostVC.swift in Sources */,
 				6AEC6901295178E2000393D8 /* SendBirdRoomModel.swift in Sources */,
 				6A58EA56294ECAE6005FA3CD /* ChannelViewController.swift in Sources */,
 				14FADBC6297A000000E0A741 /* SettingModel.swift in Sources */,

@@ -26,12 +26,17 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
     var buttonsNode: ASDisplayNode
+    var hashtagsNode: ASDisplayNode
     
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
-
+    var hashtagView: HashtagView!
     
     //var copyImageNode: ASNetworkImageNode
+    
+    var likeCount = 0
+    
+    var settingBtn : ((ASCellNode) -> Void)?
     
     init(with post: PostModel) {
         self.post = post
@@ -39,6 +44,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
         self.buttonsNode = ASDisplayNode()
+        self.hashtagsNode = ASDisplayNode()
         self.videoNode = ASVideoNode()
         super.init()
         
@@ -46,7 +52,6 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         DispatchQueue.main.async {
             
             self.headerView = PostHeader()
-            
             self.headerNode.view.addSubview(self.headerView)
             self.headerView.settingBtn.setTitle("", for: .normal)
             
@@ -57,14 +62,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
             
             
-            
-            /*
-             ButtonsHeader
-             */
-            
-            
             self.buttonsView = ButtonsHeader()
-            
             self.buttonsNode.view.addSubview(self.buttonsView)
             self.buttonsView.likeBtn.setTitle("", for: .normal)
             self.buttonsView.commentBtn.setTitle("", for: .normal)
@@ -76,7 +74,53 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             self.buttonsView.bottomAnchor.constraint(equalTo: self.buttonsNode.view.bottomAnchor, constant: 0).isActive = true
             self.buttonsView.leadingAnchor.constraint(equalTo: self.buttonsNode.view.leadingAnchor, constant: 0).isActive = true
             self.buttonsView.trailingAnchor.constraint(equalTo: self.buttonsNode.view.trailingAnchor, constant: 0).isActive = true
+            
+            self.hashtagView = HashtagView()
+            self.hashtagsNode.view.addSubview(self.hashtagView)
+            
+            self.hashtagView.translatesAutoresizingMaskIntoConstraints = false
+            self.hashtagView.topAnchor.constraint(equalTo: self.hashtagsNode.view.topAnchor, constant: 0).isActive = true
+            self.hashtagView.bottomAnchor.constraint(equalTo: self.hashtagsNode.view.bottomAnchor, constant: 0).isActive = true
+            self.hashtagView.leadingAnchor.constraint(equalTo: self.hashtagsNode.view.leadingAnchor, constant: 0).isActive = true
+            self.hashtagView.trailingAnchor.constraint(equalTo: self.hashtagsNode.view.trailingAnchor, constant: 0).isActive = true
               
+            
+            
+            let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.shareTapped))
+            shareTap.numberOfTapsRequired = 1
+            self.buttonsView.shareBtn.addGestureRecognizer(shareTap)
+            
+            
+            let likeTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.likeTapped))
+            shareTap.numberOfTapsRequired = 1
+            self.buttonsView.likeBtn.addGestureRecognizer(likeTap)
+            
+            
+            let commentTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.cmtTapped))
+            commentTap.numberOfTapsRequired = 1
+            self.buttonsView.commentBtn.addGestureRecognizer(commentTap)
+            
+            
+            let settingTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.settingTapped))
+            settingTap.numberOfTapsRequired = 1
+            self.headerView.settingBtn.addGestureRecognizer(settingTap)
+            
+            
+            let profileTap = UITapGestureRecognizer(target: self, action: #selector(PostNode.profileTapped))
+            self.headerView.avatarImage.isUserInteractionEnabled = true
+            self.headerView.avatarImage.addGestureRecognizer(profileTap)
+            
+            let streamLinkTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.streamingLinkTapped))
+            streamLinkTap.numberOfTapsRequired = 1
+            self.buttonsView.streamlinkBtn.addGestureRecognizer(streamLinkTap)
+            
+            
+            let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.likeHandle))
+            doubleTap.numberOfTapsRequired = 2
+            self.view.addGestureRecognizer(doubleTap)
+            
+            doubleTap.delaysTouchesBegan = true
+            
         }
        
         
@@ -92,13 +136,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
         self.contentNode.attributedText = NSAttributedString(string: post.content, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
         
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: post.imageUrl) {
-            DispatchQueue.main.async {
-              self.imageNode.image = UIImage(data: data)
-            }
-          }
-        }
+        
         
         
         if post.muxPlaybackId != "" {
@@ -116,6 +154,16 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
  
             }
+        } else {
+            
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: post.imageUrl) {
+                DispatchQueue.main.async {
+                  self.imageNode.image = UIImage(data: data)
+                }
+              }
+            }
+            
         }
     
     }
@@ -129,7 +177,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
-        //contentNode.style.contentInsets = UIEdgeInsets(top: 0, left: 32, bottom: 0, right: 32)
+       
         let headerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
         
@@ -147,6 +195,9 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
             children.append(contentInsetSpec)
         }
+        
+        hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 25)
+        children.append(hashtagsNode)
         
         if post.metadata?.width == post.metadata?.height {
             mediaSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width)
@@ -167,8 +218,6 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             
         }
-        
-        
         
        
         buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
@@ -236,3 +285,162 @@ extension PostNode {
     
     
 }
+
+
+extension PostNode {
+    
+    func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
+    
+    
+        hashtagView.collectionView.delegate = dataSourceDelegate
+        hashtagView.collectionView.dataSource = dataSourceDelegate
+        hashtagView.collectionView.tag = row
+        hashtagView.collectionView.setContentOffset(hashtagView.collectionView.contentOffset, animated:true) // Stops collection view if it was scrolling.
+        hashtagView.collectionView.register(HashtagCell.nib(), forCellWithReuseIdentifier: HashtagCell.cellReuseIdentifier())
+        hashtagView.collectionView.reloadData()
+        
+    }
+
+}
+
+
+extension PostNode {
+    
+    @objc func shareTapped() {
+    
+        
+        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
+            print("Sendbird: Can't get userUID")
+            return
+        }
+        
+        let loadUsername = userDataSource.userName
+        
+        let items: [Any] = ["Hi I am \(loadUsername) from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(post.id)")!]
+        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
+                       
+            
+        }
+        
+        
+        if let vc = UIViewController.currentViewController() {
+             
+            if vc is SelectedPostVC {
+                
+                if let update1 = vc as? SelectedPostVC {
+                    
+                    update1.present(ac, animated: true, completion: nil)
+                    
+                }
+                
+            }
+                 
+            
+        }
+        
+      
+    }
+    
+    
+    @objc func cmtTapped() {
+     
+        print("cmtTapped")
+        
+    }
+    
+    @objc func likeTapped() {
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "liked"), for: .normal)
+            }, completion: { _ in
+              // Step 2
+              UIView.animate(withDuration: 0.1, animations: {
+                  self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+              })
+            })
+        
+    }
+    
+    @objc func settingTapped() {
+        
+        settingBtn?(self)
+        
+    }
+    
+    @objc func profileTapped() {
+        
+        print("profileTapped")
+        
+    }
+    
+    @objc func streamingLinkTapped() {
+        
+        print("streamingLinkTapped")
+        print(post.streamUrl)
+        
+        
+    }
+    
+    
+    
+    @objc func likeHandle() {
+        
+        
+        let imgView = UIImageView()
+        imgView.image = UIImage(named: "likePopUp")
+        imgView.frame.size = CGSize(width: 70, height: 70)
+       
+        if let vc = UIViewController.currentViewController() {
+             
+            if vc is SelectedPostVC {
+                
+                if let update1 = vc as? SelectedPostVC {
+                    
+                    imgView.center = update1.view.center
+                    update1.view.addSubview(imgView)
+                    
+                }
+                
+            }
+                   
+        }
+        
+        
+        imgView.transform = CGAffineTransform.identity
+        
+        UIView.animate(withDuration: 1) {
+            
+            imgView.alpha = 0
+            
+        }
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            
+            if imgView.alpha == 0 {
+                
+                imgView.removeFromSuperview()
+                
+            }
+            
+        }
+        
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "liked"), for: .normal)
+            }, completion: { _ in
+              // Step 2
+              UIView.animate(withDuration: 0.1, animations: {
+                  self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+              })
+            })
+    
+    }
+
+}
+
+
