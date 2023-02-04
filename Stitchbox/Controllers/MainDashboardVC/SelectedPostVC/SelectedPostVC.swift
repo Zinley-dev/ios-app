@@ -311,6 +311,7 @@ extension SelectedPostVC {
                
                self.delayItem.perform(after: 0.25) {
                    self.isfirstLoad = false
+                   self.currentIndex = self.startIndex
                    playPreviousVideoIfNeed(playIndex: self.startIndex)
                    self.willIndex = self.startIndex
                    
@@ -439,6 +440,7 @@ extension SelectedPostVC {
         if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC {
             
             pausePreviousVideoIfNeed(pauseIndex: currentIndex)
+            EPVC.selectedPost = editeddPost
             self.navigationController?.pushViewController(EPVC, animated: true)
             
         }

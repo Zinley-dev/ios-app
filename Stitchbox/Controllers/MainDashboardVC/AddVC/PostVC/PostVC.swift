@@ -475,7 +475,7 @@ extension PostVC {
             
         }
         
-        contentPost["setting"] = ["mode": mode as Any, "allow_comment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
+        contentPost["setting"] = ["mode": mode as Any, "allowcomment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
 
         APIManager().createPost(params: contentPost) { result in
             switch result {
@@ -526,7 +526,7 @@ extension PostVC {
             
         }
         
-        contentPost["setting"] = ["mode": mode as Any, "allow_comment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
+        contentPost["setting"] = ["mode": mode as Any, "allowcomment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
 
         APIManager().createPost(params: contentPost) { result in
             switch result {
@@ -793,7 +793,6 @@ extension PostVC: UINavigationBarDelegate, UINavigationControllerDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
-    
     
 }
 

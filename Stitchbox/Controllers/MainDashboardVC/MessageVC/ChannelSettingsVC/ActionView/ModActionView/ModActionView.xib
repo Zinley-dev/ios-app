@@ -27,8 +27,8 @@
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="universal_theme" translatesAutoresizingMaskIntoConstraints="NO" id="WhI-Fy-luK">
                     <rect key="frame" x="0.0" y="-50" width="408" height="662"/>
                 </imageView>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="hKr-NG-5QU">
-                    <rect key="frame" x="36" y="88" width="336" height="198"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="hKr-NG-5QU">
+                    <rect key="frame" x="36" y="88" width="336" height="218"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="g3M-j5-SZF">
                             <rect key="frame" x="0.0" y="0.0" width="336" height="56"/>
@@ -77,7 +77,7 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="oVg-O0-80Z">
-                            <rect key="frame" x="0.0" y="71" width="336" height="56"/>
+                            <rect key="frame" x="0.0" y="81" width="336" height="56"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MZc-T6-sbf">
                                     <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
@@ -123,7 +123,7 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="nB0-wB-TAq">
-                            <rect key="frame" x="0.0" y="142" width="336" height="56"/>
+                            <rect key="frame" x="0.0" y="162" width="336" height="56"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bz6-g0-xmb">
                                     <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>

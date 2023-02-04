@@ -47,7 +47,9 @@ class PostSettingVC: UIViewController{
         shareBtn.setTitle("", for: .normal)
         downloadBtn.setTitle("", for: .normal)
         editBtn.setTitle("", for: .normal)
-      
+        cancelBtn.setTitle("", for: .normal)
+        sendBtn.setTitle("", for: .normal)
+        copyLinkBtn.setTitle("", for: .normal)
     }
     
     @IBAction func editBtnPressed(_ sender: Any) {
