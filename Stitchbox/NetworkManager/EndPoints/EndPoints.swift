@@ -245,7 +245,7 @@ extension SettingAPI: EndPointType {
     }
     
     var headers: [String: String]? {
-        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+        return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
     }
 }
 
@@ -434,6 +434,7 @@ extension ContactAPI: EndPointType {
 
 public enum PostAPI {
     case create(params: [String: Any])
+    case getMyPost(page: Int)
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -444,6 +445,8 @@ extension PostAPI: EndPointType {
         switch self {
             case .create:
                 return "/"
+            case .getMyPost(let page):
+                return "/me?page=\(page)&limit=10"
         }
     }
     
@@ -451,6 +454,8 @@ extension PostAPI: EndPointType {
         switch self {
             case .create:
                 return .post
+            case .getMyPost:
+              return .get
         }
     }
     
@@ -458,6 +463,8 @@ extension PostAPI: EndPointType {
         switch self {
             case .create(let params):
                 return .requestParameters(parameters: params)
+            case .getMyPost:
+                return .request
         }
     }
     
@@ -518,5 +525,53 @@ extension FollowApi: EndPointType {
   
   var headers: [String: String]? {
     return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+  }
+}
+
+public enum LikePostApi {
+  case isLike (params: [String: Any])
+  case like (params: [String: Any])
+  case unlike (params: [String: Any])
+}
+extension LikePostApi: EndPointType {
+  var module: String {
+    return "/likepost"
+  }
+  
+  var path: String {
+    switch self {
+      case .isLike(let params):
+        return "/\(params["id"])"
+      case .like(let params):
+        return "/\(params["id"])"
+      case .unlike(let params):
+        return "/\(params["id"])"
+    }
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .isLike:
+        return .get
+      case .like:
+        return .post
+      case .unlike:
+        return .delete
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .isLike:
+        return .request
+      case .like:
+        return .request
+      case .unlike:
+        return .request
+    }
+  }
+  
+  var headers: [String: String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
   }
 }

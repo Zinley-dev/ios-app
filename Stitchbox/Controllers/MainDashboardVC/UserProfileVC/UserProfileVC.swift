@@ -18,7 +18,7 @@ class UserProfileVC: UIViewController {
     enum Item: Hashable {
         case header(ProfileHeaderData)
         case challengeCard(ChallengeCardHeaderData)
-        case posts(postThumbnail)
+        case posts(PostModel)
     }
     
     
@@ -138,7 +138,7 @@ class UserProfileVC: UIViewController {
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
                 
-                cell.configure(with: data.image)
+                cell.configureWithUrl(with: data.imageUrl)
                 return cell
                 
             } else {
@@ -384,7 +384,6 @@ extension UserProfileVC {
         snapshot.appendSections([.header, .challengeCard, .posts])
         snapshot.appendItems([.header(demoProfileData)], toSection: .header)
         snapshot.appendItems([.challengeCard(demoChallengeData)], toSection: .challengeCard)
-        snapshot.appendItems(postThumbnail.demoPhotos.map({ Item.posts($0) }), toSection: .posts)
         return snapshot
     }
     

@@ -21,8 +21,8 @@ struct SendBirdUser : Mappable {
     
     mutating func mapping(map: ObjectMapper.Map) {
         userID <- map["ID"]
-        userID <- map["avatar"]
-        userID <- map["username"]
+        avatar <- map["avatar"]
+        username <- map["username"]
     }
 
         
