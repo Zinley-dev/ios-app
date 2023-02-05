@@ -136,7 +136,7 @@ extension SelectedPostVC {
             
             guard let cell = node as? PostNode else { return }
           
-            if cell.indexPath?.row == 0 {
+            if cell.indexPath?.row == 0 ||  cell.indexPath?.row == 1 {
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
             }
             
@@ -184,10 +184,14 @@ extension SelectedPostVC {
             
             } else {
                 
-                if posts[willIndex - 1].muxPlaybackId != "" {
-                    currentIndex = willIndex - 1
-                    playPreviousVideoIfNeed(playIndex: currentIndex)
+                if posts.count > willIndex - 1 {
+                    if posts[willIndex - 1].muxPlaybackId != "" {
+                        currentIndex = willIndex - 1
+                        playPreviousVideoIfNeed(playIndex: currentIndex)
+                    }
                 }
+                
+                
             }
             
         }

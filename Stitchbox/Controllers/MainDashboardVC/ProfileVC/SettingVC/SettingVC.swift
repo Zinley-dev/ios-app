@@ -135,12 +135,12 @@ class SettingVC: UIViewController, ControllerType {
     @IBAction func logOutBtnPressed(_ sender: Any) {
         
         _AppCoreData.signOut()
-        if let LoginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartViewController") as? StartViewController {
+        
+        
+        if let SNVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartNavVC") as? StartNavVC {
             
-            LoginVC.modalPresentationStyle = .fullScreen
-            self.present(LoginVC, animated: true)
-            //self.navigationController?.pushViewController(LoginVC, animated: true)
-            
+            SNVC.modalPresentationStyle = .fullScreen
+            self.present(SNVC, animated: true)
         }
         
         

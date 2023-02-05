@@ -346,7 +346,26 @@ extension PostNode {
     
     @objc func cmtTapped() {
      
-        print("cmtTapped")
+        
+        if let vc = UIViewController.currentViewController() {
+             
+            if vc is SelectedPostVC {
+                
+                if let update1 = vc as? SelectedPostVC {
+                    
+                    let slideVC = CommentVC()
+                      
+                    slideVC.modalPresentationStyle = .custom
+                    slideVC.transitioningDelegate = update1.self
+                    global_presetingRate = Double(0.55)
+                    global_cornerRadius = 45
+                    update1.present(slideVC, animated: true, completion: nil)
+                    
+                }
+                
+            }
+                   
+        }
         
     }
     
