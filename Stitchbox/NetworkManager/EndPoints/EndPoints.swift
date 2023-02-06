@@ -628,21 +628,21 @@ extension FistBumpAPI: EndPointType {
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .getFistBumpee(userID: _, page: _, limit: _):
+        case .getFistBumpee:
             return .get
-        case .getFistBumper(userID: _, page: _, limit: _):
+        case .getFistBumper:
             return .get
-        case .getFistBumperCount(userID: _):
+        case .getFistBumperCount:
             return .get
-        case .getFistBumpeeCount(userID: _):
+        case .getFistBumpeeCount:
             return .get
-        case .isFistBumper(userID: _):
+        case .isFistBumper:
             return .get
-        case .isFistBumpee(userID: _):
+        case .isFistBumpee:
             return .get
-        case .addFistBump(userID: _):
+        case .addFistBump:
             return .post
-        case .deleteFistBump(userID: _):
+        case .deleteFistBump:
             return .delete
         }
     }
