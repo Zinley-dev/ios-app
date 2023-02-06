@@ -201,6 +201,21 @@ extension APIManager {
             completion(result)
         }
     }
+    
+    func searchFollows(query: String, userid: String, page: Int, completion: @escaping APICompletion) {
+        let params = ["query": query, "userid": userid]
+        followManager.request(.searchFollower(params: params, page: page)) { result in
+            completion(result)
+        }
+    }
+    
+    func searchFollowing(query: String, userid: String, page: Int, completion: @escaping APICompletion) {
+        let params = ["query": query, "userid": userid]
+        followManager.request(.searchFollowing(params: params, page: page)) { result in
+            completion(result)
+        }
+    }
+    
     func getme(completion: @escaping APICompletion) {
         userManager.request(.getme){
             result in
