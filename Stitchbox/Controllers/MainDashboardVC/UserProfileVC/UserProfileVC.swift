@@ -138,7 +138,7 @@ class UserProfileVC: UIViewController {
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
                 
-                cell.configureWithUrl(with: data.imageUrl)
+                cell.configureWithUrl(with: data)
                 return cell
                 
             } else {

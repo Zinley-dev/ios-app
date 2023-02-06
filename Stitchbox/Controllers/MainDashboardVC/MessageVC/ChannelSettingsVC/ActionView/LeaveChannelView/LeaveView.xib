@@ -24,22 +24,22 @@
                     <rect key="frame" x="0.0" y="-50" width="387" height="490"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Leave channel?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzX-3g-dWT">
-                    <rect key="frame" x="132.5" y="80" width="122" height="20.5"/>
-                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                    <rect key="frame" x="135.5" y="80" width="116" height="19.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You will stop receiving messages from this conversation and people will see that you left." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZxW-kd-Hp0">
-                    <rect key="frame" x="58.5" y="116.5" width="270" height="61"/>
+                    <rect key="frame" x="58.5" y="115.5" width="270" height="54"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="270" id="3II-QR-WOn"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="22" translatesAutoresizingMaskIntoConstraints="NO" id="Lcd-rq-9pw">
-                    <rect key="frame" x="92.5" y="207.5" width="202" height="25"/>
+                    <rect key="frame" x="92.5" y="199.5" width="202" height="25"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VHg-68-rCy">
                             <rect key="frame" x="0.0" y="0.0" width="90" height="25"/>
@@ -48,7 +48,9 @@
                                 <constraint firstAttribute="height" constant="25" id="BLS-q7-WTp"/>
                             </constraints>
                             <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="Leave"/>
+                            <buttonConfiguration key="configuration" style="plain" title="Leave">
+                                <fontDescription key="titleFontDescription" type="boldSystem" pointSize="15"/>
+                            </buttonConfiguration>
                             <connections>
                                 <action selector="leaveBtnPressed:" destination="-1" eventType="touchUpInside" id="6uc-QD-CBa"/>
                             </connections>
@@ -61,7 +63,9 @@
                                 <constraint firstAttribute="height" constant="25" id="jdM-im-ng9"/>
                             </constraints>
                             <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="Cancel"/>
+                            <buttonConfiguration key="configuration" style="plain" title="Cancel">
+                                <fontDescription key="titleFontDescription" type="boldSystem" pointSize="15"/>
+                            </buttonConfiguration>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                     <real key="value" value="10"/>
