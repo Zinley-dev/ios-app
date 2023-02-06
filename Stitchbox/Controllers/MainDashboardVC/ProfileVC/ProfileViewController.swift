@@ -205,7 +205,7 @@ class ProfileViewController: UIViewController {
               
                 // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
-                cell.followersBtn.addTarget(self, action: #selector(followersTapped), for: .touchUpInside)
+                cell.fistBumpedListBtn.addTarget(self, action: #selector(fistBumpedlistTapped), for: .touchUpInside)
                 cell.discordBtn.addTarget(self, action: #selector(discordTapped), for: .touchUpInside)
                 cell.FistBumpedBtn.addTarget(self, action: #selector(fistBumpedTapped), for: .touchUpInside)
                 cell.editProfileBtn.addTarget(self, action: #selector(editProfileTapped), for: .touchUpInside)
@@ -238,7 +238,7 @@ class ProfileViewController: UIViewController {
                 
             }
             
-        case .challengeCard(let param):
+        case .challengeCard(_):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChallengerCardProfileHeaderCell.reuseIdentifier, for: indexPath) as? ChallengerCardProfileHeaderCell {
                 
@@ -274,7 +274,7 @@ class ProfileViewController: UIViewController {
             
         case .posts(let data):
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
-                cell.configureWithUrl(with: data.imageUrl)
+                cell.configureWithUrl(with: data)
                 return cell
             } else {
                 return ImageViewCell()
@@ -342,6 +342,14 @@ extension ProfileViewController {
             
         }
         
+    }
+    
+    
+    @objc func fistBumpedlistTapped(_ sender: UIButton) {
+        
+        print("fistBumpedlistTapped")
+        
+       
     }
     
     @objc func followersTapped(_ sender: UIButton) {

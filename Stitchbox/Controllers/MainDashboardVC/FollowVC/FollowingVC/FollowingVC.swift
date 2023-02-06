@@ -26,21 +26,7 @@ class FollowingVC: UIViewController {
     var tableNode: ASTableNode!
     var userList = [FollowerModel]()
     var asContext: ASBatchContext!
-    
-    lazy var AreYouSureVC: AreYouSureVC = {
-        
-        
-        if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AreYouSureVC") as? AreYouSureVC {
-                    
-            self.addVCAsChildVC(childViewController: controller)
-            
-            return controller
-        } else {
-            return UIViewController() as! AreYouSureVC
-        }
-       
-        
-    }()
+
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -192,16 +178,13 @@ extension FollowingVC: ASTableDataSource {
             node.followAction = { item in
                 print("Pressed Id= \(item.user.userId) Name= \(item.user.username)")
                 self.viewModel.unfollow(userId: item.user.userId ?? "")
-                self.openConfirmPopUp()
+                
             }
             return node
         }
             
     }
         
-    func openConfirmPopUp() {
-        AreYouSureVC.view.isHidden = false
-    }
 
             
 }

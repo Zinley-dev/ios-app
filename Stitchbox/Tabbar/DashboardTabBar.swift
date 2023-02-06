@@ -149,8 +149,7 @@ extension DashboardTabBarController: SBDUserEventDelegate{
     {
         self.setUnreadMessagesCount(UInt(totalCount))
         
-        
-        
+    
     }
     
 }

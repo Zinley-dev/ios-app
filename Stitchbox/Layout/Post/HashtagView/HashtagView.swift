@@ -7,19 +7,19 @@
 
 import UIKit
 
-class ButtonsHeader: UIView {
+class HashtagView: UIView {
+
+    @IBOutlet weak var collectionView: UICollectionView!
     
-
-  
-    @IBOutlet weak var shareBtn: UIButton!
-    @IBOutlet weak var commentBtn: UIButton!
-    @IBOutlet weak var commentCountLbl: UILabel!
-    @IBOutlet weak var likeBtn: UIButton!
-    @IBOutlet weak var likeCountLbl: UILabel!
-    @IBOutlet weak var streamlinkBtn: UIButton!
+    @IBOutlet weak var collectionLayout: UICollectionViewFlowLayout! {
+        didSet {
+            collectionLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        }
+    }
+    
     @IBOutlet var contentView: UIView!
-
-    let kCONTENT_XIB_NAME = "ButtonsHeader"
+    
+    let kCONTENT_XIB_NAME = "HashtagView"
     
     override init(frame: CGRect) {
         super.init(frame: frame)

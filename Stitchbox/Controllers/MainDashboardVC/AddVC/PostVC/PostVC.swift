@@ -444,10 +444,7 @@ extension PostVC {
             print("Uploading ... \(percent)%")
         }
 
-    
-        
     }
-    
     
     
     func writeContentImageToDB(imageUrl: String) {
@@ -478,7 +475,7 @@ extension PostVC {
             
         }
         
-        contentPost["setting"] = ["mode": mode as Any, "allow_comment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
+        contentPost["setting"] = ["mode": mode as Any, "allowcomment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
 
         APIManager().createPost(params: contentPost) { result in
             switch result {
@@ -529,7 +526,7 @@ extension PostVC {
             
         }
         
-        contentPost["setting"] = ["mode": mode as Any, "allow_comment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
+        contentPost["setting"] = ["mode": mode as Any, "allowcomment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
 
         APIManager().createPost(params: contentPost) { result in
             switch result {
@@ -797,7 +794,6 @@ extension PostVC: UINavigationBarDelegate, UINavigationControllerDelegate {
         return .topAttached
     }
     
-    
 }
 
 
@@ -816,7 +812,7 @@ extension PostVC: EditControllerDelegate {
         
         if let video = session.video {
             
-            print("Selected Video")
+          
             mediaType = "video"
             selectedVideo = video
            
@@ -824,7 +820,7 @@ extension PostVC: EditControllerDelegate {
         } else if let image = session.image {
             selectedImage = image
             mediaType = "image"
-            print("Selected Image")
+          
             
         }
         
@@ -921,7 +917,6 @@ extension PostVC {
         
         SwiftLoader.show(title: progress, animated: true)
         
- 
     }
     
 }
