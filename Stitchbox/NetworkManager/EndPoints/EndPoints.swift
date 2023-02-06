@@ -474,8 +474,8 @@ extension PostAPI: EndPointType {
 }
 
 public enum FollowApi {
-  case getFollows (page: Int, lim: Int = 10)
-  case getFollowers (page: Int, lim: Int = 10)
+  case getFollows (userId: String, page: Int, lim: Int = 10)
+  case getFollowers (userId: String, page: Int, lim: Int = 10)
   case searchFollower (params: [String:Any], page: Int, lim: Int = 10)
   case searchFollowing (params: [String:Any], page: Int, lim: Int = 10)
   case insertFollows (params: [String:Any])
@@ -488,14 +488,14 @@ extension FollowApi: EndPointType {
   
   var path: String {
     switch self {
-      case .getFollows(let page, let lim):
-        return "?page=\(page)&limit=\(lim)"
+      case .getFollows(let userId, let page, let lim):
+        return "/\(userId)?page=\(page)&limit=\(lim)"
       case .insertFollows:
         return "/"
       case .deleteFollows:
         return "/unfollow"
-      case .getFollowers(let page, let lim):
-        return "/followers?page=\(page)&limit=\(lim)"
+      case .getFollowers(let userId, let page, let lim):
+        return "/followers/\(userId)?page=\(page)&limit=\(lim)"
       case .searchFollower(let params, let page, let lim):
         return "/search/\(params["userid"])?search=\(params["search"])&page=\(page)&limit=\(lim)"
       case .searchFollowing(let params, let page, let lim):
