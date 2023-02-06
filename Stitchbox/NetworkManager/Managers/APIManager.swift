@@ -35,6 +35,7 @@ struct APIManager {
     let contactManager = Manager<ContactAPI>()
     let postManager = Manager<PostAPI>()
     let likePostManager = Manager<LikePostApi>()
+    let fistBumpManager = Manager<FistBumpAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -139,6 +140,55 @@ struct APIManager {
     func forgotPasswordByPhone(params: [String: String], completion: @escaping APICompletion) {
         authManager.request(.forgotPasswordByPhone(params: params)) { result in
             completion(result)
+        }
+    }
+    
+    func getFistBumper(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+        fistBumpManager.request(.getFistBumper(userID: userID, page: page, limit: limit)) {
+            result in
+                completion(result)
+        }
+    }
+    func getFistBumpee(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+        fistBumpManager.request(.getFistBumpee(userID: userID, page: page, limit: limit)) {
+            result in
+                completion(result)
+        }
+    }
+    func getFistBumperCount(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.getFistBumperCount(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func getFistBumpeeCount(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.getFistBumpeeCount(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func getIsFistBumper(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.isFistBumper(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func getIsFistBumpee(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.isFistBumpee(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func addFistBump(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.addFistBump(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func deleteFistBump(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.deleteFistBump(userID: userID)) {
+            result in
+                completion(result)
         }
     }
 }

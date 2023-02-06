@@ -575,3 +575,86 @@ extension LikePostApi: EndPointType {
     return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
   }
 }
+public enum FistBumpAPI {
+    case getFistBumpee(userID: String, page: Int, limit: Int)
+    case getFistBumper(userID: String, page: Int, limit: Int)
+    case getFistBumperCount(userID: String)
+    case getFistBumpeeCount(userID: String)
+    case isFistBumper(userID: String)
+    case isFistBumpee(userID: String)
+    case addFistBump(userID: String)
+    case deleteFistBump(userID: String)
+}
+extension FistBumpAPI: EndPointType {
+    var module: String {
+        return "/fistbump"
+    }
+    
+    var path: String {
+        switch self {
+            
+        case .getFistBumpee(userID: let userID, page: let page, limit: let limit):
+            return "/fistbumpee/\(userID)?limit=\(limit)&page=\(page)"
+        case .getFistBumper(userID: let userID, page: let page, limit: let limit):
+            return "/fistbumper/\(userID)?limit=\(limit)&page=\(page)"
+        case .getFistBumperCount(userID: let userID):
+            return "/fistbumper/count/\(userID)"
+        case .getFistBumpeeCount(userID: let userID):
+            return "/fistbumpee/count/\(userID)"
+        case .isFistBumper(userID: let userID):
+            return "/isfistbumper/\(userID)"
+        case .isFistBumpee(userID: let userID):
+            return "/isfistbumpee/\(userID)"
+        case .addFistBump(userID: let userID):
+            return "/\(userID)"
+        case .deleteFistBump(userID: let userID):
+            return "/\(userID)"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getFistBumpee(userID: _, page: _, limit: _):
+            return .get
+        case .getFistBumper(userID: _, page: _, limit: _):
+            return .get
+        case .getFistBumperCount(userID: _):
+            return .get
+        case .getFistBumpeeCount(userID: _):
+            return .get
+        case .isFistBumper(userID: _):
+            return .get
+        case .isFistBumpee(userID: _):
+            return .get
+        case .addFistBump(userID: _):
+            return .post
+        case .deleteFistBump(userID: _):
+            return .delete
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getFistBumpee(userID: _, page: _, limit: _):
+            return .request
+        case .getFistBumper(userID: _, page: _, limit: _):
+            return .request
+        case .getFistBumperCount(userID: _):
+            return .request
+        case .getFistBumpeeCount(userID: _):
+            return .request
+        case .isFistBumper(userID: _):
+            return .request
+        case .isFistBumpee(userID: _):
+            return .request
+        case .addFistBump(userID: _):
+            return .request
+        case .deleteFistBump(userID: _):
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
