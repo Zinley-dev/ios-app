@@ -365,9 +365,10 @@ extension ProfileViewController {
         
     }
     
+    
     @objc func followingTapped(_ sender: UIButton) {
-        //MainFollowVC
-       print("followingTapped")
+        
+        print("followingTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
             //self.hidesBottomBarWhenPushed = true
@@ -377,6 +378,7 @@ extension ProfileViewController {
         }
         
     }
+
     
     @objc func editProfileTapped(_ sender: UIButton) {
         

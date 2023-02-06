@@ -122,11 +122,6 @@ extension SelectedPostVC {
     
 }
 
-extension SelectedPostVC {
-    
-    // process hashtag list
-    
-}
 
 extension SelectedPostVC {
     
@@ -202,6 +197,33 @@ extension SelectedPostVC {
     
 }
 
+extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
+        let item = posts[collectionView.tag]
+        
+     
+        cell.hashTagLabel.text = item.hashtags[indexPath.row]
+        
+        return cell
+        
+        
+    }
+    
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+       
+        return posts[collectionView.tag].hashtags.count
+        
+    }
+    
+}
+
 extension SelectedPostVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
@@ -243,6 +265,12 @@ extension SelectedPostVC: ASCollectionDataSource {
             
                 self.settingVideo(item: post)
                   
+            }
+            
+            delay(0.3) {
+                if node.headerView != nil {
+                    node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
+                }
             }
             
             //
