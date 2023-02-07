@@ -70,50 +70,6 @@ class FistBumpViewModel: ViewModelProtocol {
         logic()
     }
     
-    func getMyFistBumper(page: Int, completion: @escaping () -> Void = {}) -> Void  {
-        APIManager().getFistBumper(page: page){
-            result in
-            switch result {
-            case .success(let response):
-                print("page number \(page)")
-                if let data = response.body {
-                    if let listData = data["data"] as? [[String: Any]] {
-                        self.fistBumperAccountRelay.accept(Mapper<FistBumpUserModel>().mapArray(JSONArray: listData))
-                        if (!listData.isEmpty) {
-                            completion()
-                        }
-                    } else {
-                        self.fistBumperAccountRelay.accept([FistBumpUserModel]())
-                    }
-                }
-            case .failure(let error):
-                print(error)
-                self.errorsSubject.onNext("Cannot get user's fistBump information")
-            }
-        }
-    }
-    func getMyFistBumpee(page: Int, completion: @escaping () -> Void = {}) -> Void  {
-        APIManager().getFistBumpee(page: page){
-            result in
-            switch result {
-            case .success(let response):
-                print("page number \(page)")
-                if let data = response.body {
-                    if let listData = data["data"] as? [[String: Any]] {
-                        self.fistBumpeeAccountRelay.accept(Mapper<FistBumpUserModel>().mapArray(JSONArray: listData))
-                        if (!listData.isEmpty) {
-                            completion()
-                        }
-                    } else {
-                        self.fistBumpeeAccountRelay.accept([FistBumpUserModel]())
-                    }
-                }
-            case .failure(let error):
-                print(error)
-                self.errorsSubject.onNext("Cannot get user's fistBump information")
-            }
-        }
-    }
     func getFistBumper(page: Int, completion: @escaping () -> Void = {}) -> Void  {
         APIManager().getFistBumper(userID: input.userID, page: page){
             result in
@@ -122,6 +78,8 @@ class FistBumpViewModel: ViewModelProtocol {
                 print("page number \(page)")
                 if let data = response.body {
                     if let listData = data["data"] as? [[String: Any]] {
+                        print("fistbumper data")
+                        print(listData)
                         self.fistBumperAccountRelay.accept(Mapper<FistBumpUserModel>().mapArray(JSONArray: listData))
                         if (!listData.isEmpty) {
                             completion()
@@ -137,13 +95,15 @@ class FistBumpViewModel: ViewModelProtocol {
         }
     }
     func getFistBumpee(page: Int, completion: @escaping () -> Void = {}) -> Void  {
-        APIManager().getFistBumper(userID: input.userID, page: page){
+        APIManager().getFistBumpee(userID: input.userID, page: page){
             result in
             switch result {
             case .success(let response):
                 print("page number \(page)")
                 if let data = response.body {
                     if let listData = data["data"] as? [[String: Any]] {
+                        print("fistbumpee data")
+                        print(listData)
                         self.fistBumpeeAccountRelay.accept(Mapper<FistBumpUserModel>().mapArray(JSONArray: listData))
                         if (!listData.isEmpty) {
                             completion()
@@ -165,7 +125,6 @@ class FistBumpViewModel: ViewModelProtocol {
             case .success(let response):
                 if let data = response.body {
                     if let message = data["message"] as? String, message == "success"{
-                        print("go here")
                         if let bodyData = data["data"] as? [[String: Any]] {
                             if let count = bodyData.first?["count"] as? Int {
                                 self.fistBumpeeAccountsCountRelay.accept(count)
@@ -190,7 +149,6 @@ class FistBumpViewModel: ViewModelProtocol {
             case .success(let response):
                 if let data = response.body {
                     if let message = data["message"] as? String, message == "success"{
-                        print("go here")
                         if let bodyData = data["data"] as? [[String: Any]] {
                             if let count = bodyData.first?["count"] as? Int {
                                 self.fistBumperAccountsCountRelay.accept(count)

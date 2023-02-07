@@ -18,15 +18,15 @@ class FistBumpUserModel: Mappable {
     
     private(set) var userID: String = ""
     private(set) var userName: String = ""
-    var isFollowing = false
+    var isFollowing: Bool = false
     
     required init?(map: Map) {
         
     }
     
     func mapping(map: ObjectMapper.Map) {
-        isFollowing <- map["isFollowing"]
-        userName <- map ["userName"]
+        avatar <- map["avatar"]
+        userName <- map ["username"]
         isFollowing <- map ["isFollowing"]
         userID <- map["userId"]
     }

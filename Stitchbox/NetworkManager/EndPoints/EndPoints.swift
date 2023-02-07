@@ -607,10 +607,10 @@ extension FistBumpAPI: EndPointType {
     var path: String {
         switch self {
             
-        case .getFistBumpee(userID: let userID, page: let page, limit: let limit):
-            return "/fistbumpee/\(userID)?limit=\(limit)&page=\(page)"
         case .getFistBumper(userID: let userID, page: let page, limit: let limit):
             return "/fistbumper/\(userID)?limit=\(limit)&page=\(page)"
+        case .getFistBumpee(userID: let userID, page: let page, limit: let limit):
+            return "/fistbumpee/\(userID)?limit=\(limit)&page=\(page)"
         case .getFistBumperCount(userID: let userID):
             return "/fistbumper/count/\(userID)"
         case .getFistBumpeeCount(userID: let userID):
