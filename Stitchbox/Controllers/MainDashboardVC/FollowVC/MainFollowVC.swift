@@ -341,7 +341,7 @@ extension MainFollowVC {
               
                 delayItem.perform(after: 0.35) {
                     print("Search following using api")
-                    self.searcFollowings(for: searchText)
+                    self.searchFollowings(for: searchText)
                 }
             }
             
@@ -371,7 +371,7 @@ extension MainFollowVC {
     }
     
     
-    func searcFollowings(for searchText: String) {
+    func searchFollowings(for searchText: String) {
         
         if let userUID = _AppCoreData.userDataSource.value?.userID {
             
