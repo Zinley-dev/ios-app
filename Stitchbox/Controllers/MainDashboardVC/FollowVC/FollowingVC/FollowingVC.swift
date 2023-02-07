@@ -22,8 +22,9 @@ class FollowingVC: UIViewController {
     private var currPage = 1
     private var viewModel: ViewModelType! = ViewModelType()
     private let disposeBag = DisposeBag()
-    
+    var inSearchMode = false
     var tableNode: ASTableNode!
+    var searchUserList = [FollowerModel]()
     var userList = [FollowerModel]()
     var asContext: ASBatchContext!
 
@@ -152,22 +153,25 @@ extension FollowingVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
             
             
-        if self.userList.count == 0 {
+        let array = inSearchMode ? searchUserList : userList
+        
+        
+        if array.count == 0 {
             
-            tableNode.view.setEmptyMessage("No following")
+            tableNode.view.setEmptyMessage("No follower")
             
         } else {
             tableNode.view.restore()
         }
         
-        return self.userList.count
+        return array.count
             
             
     }
         
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
             
-        let user = userList[indexPath.row]
+        let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
         
         return {
             var node: FollowNode!
@@ -187,26 +191,6 @@ extension FollowingVC: ASTableDataSource {
         
 
             
-}
-    
-extension FollowingVC {
-    
-    func retrieveNextPageWithCompletion( block: @escaping ([AnyObject]) -> Void) {
-        
-    }
-    
-
-    func insertNewRowsInTableNode(newUsers: [AnyObject]) {
-        
-        guard newUsers.count > 0 else {
-            return
-        }
-        
-        
-        
-    }
-    
-    
 }
 
 extension FollowingVC {

@@ -68,8 +68,6 @@ class PostSettingVC: UIViewController{
     
     @IBAction func shareBtnPressed(_ sender: Any) {
         
-        //NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share")), object: nil)
-        //self.dismiss(animated: true)
         shareView.isHidden = false
         
     }

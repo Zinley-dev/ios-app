@@ -135,7 +135,7 @@ class SettingVC: UIViewController, ControllerType {
     @IBAction func logOutBtnPressed(_ sender: Any) {
         
         _AppCoreData.signOut()
-        
+        sendbirdLogout()
         
         if let SNVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartNavVC") as? StartNavVC {
             
