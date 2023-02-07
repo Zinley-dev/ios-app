@@ -226,17 +226,35 @@ extension APIManager {
             completion(result)
         }
     }
-    func getFollows(page: Int, completion: @escaping APICompletion) {
-        followManager.request(.getFollows(page: page)){
-            result in
-            completion(result)
+    func getFollows(userId: String? = nil, page: Int, completion: @escaping APICompletion) {
+      if let id = userId {
+        followManager.request(.getFollows(userId: id, page: page)){
+          result in
+          completion(result)
         }
+      } else if let id = _AppCoreData.userDataSource.value?.userID {
+        followManager.request(.getFollows(userId: id, page: page)){
+          result in
+          completion(result)
+        }
+      } else {
+        completion(.failure(.invalidResponse))
+      }
     }
-    func getFollowers(page: Int, completion: @escaping APICompletion) {
-        followManager.request(.getFollowers(page: page)){
+    func getFollowers(userId: String? = nil, page: Int, completion: @escaping APICompletion) {
+      if let id = userId {
+        followManager.request(.getFollowers(userId: id, page: page)){
+          result in
+          completion(result)
+        }
+      } else if let id = _AppCoreData.userDataSource.value?.userID {
+          followManager.request(.getFollowers(userId: id, page: page)){
             result in
             completion(result)
-        }
+          }
+      } else {
+          completion(.failure(.invalidResponse))
+      }
     }
     func insertFollows(params: [String: Any], completion: @escaping APICompletion) {
         followManager.request(.insertFollows(params: params)){

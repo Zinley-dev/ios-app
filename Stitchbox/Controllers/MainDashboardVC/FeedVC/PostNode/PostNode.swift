@@ -35,6 +35,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     //var copyImageNode: ASNetworkImageNode
     
     var likeCount = 0
+    var isLike = false
     
     var settingBtn : ((ASCellNode) -> Void)?
     
@@ -121,6 +122,17 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             doubleTap.delaysTouchesBegan = true
             
+            
+            //-------------------------------------//
+            
+            if let time = post.createdAt {
+                
+                self.headerView.timeLbl.text = timeAgoSinceDate(time, numericDates: true)
+                
+            } else {
+                self.headerView.timeLbl.text = ""
+            }
+          
         }
        
         
@@ -165,9 +177,10 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             }
             
         }
-    
+  
+        checkIfLike()
+        
     }
-    
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
             
@@ -184,8 +197,6 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
         var children: [ASLayoutElement] = [headerInsetSpec]
         
-        
-       
         let mediaSize: CGSize
         
         if post.content != "" {
@@ -197,7 +208,12 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         }
         
         hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 25)
-        children.append(hashtagsNode)
+        
+        let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+        let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
+        
+        
+        children.append(hashtagsInsetSpec)
         
         if post.metadata?.width == post.metadata?.height {
             mediaSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width)
@@ -371,16 +387,12 @@ extension PostNode {
     
     @objc func likeTapped() {
         
-        UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "liked"), for: .normal)
-            }, completion: { _ in
-              // Step 2
-              UIView.animate(withDuration: 0.1, animations: {
-                  self.buttonsView.likeBtn.transform = CGAffineTransform.identity
-              })
-            })
-        
+        if isLike == false {
+            performLike()
+        } else {
+            performUnLike()
+        }
+  
     }
     
     @objc func settingTapped() {
@@ -447,6 +459,72 @@ extension PostNode {
             
         }
         
+        if isLike == false {
+            performLike()
+        } else {
+            performUnLike()
+        }
+        
+    
+    }
+    
+    func checkIfLike() {
+        
+        APIManager().hasLikedPost(id: post.id) { result in
+            
+            switch result {
+            case .success(let apiResponse):
+                
+               print(apiResponse)
+
+
+            case .failure(let error):
+                print(error)
+            }
+        
+        }
+    }
+    
+    func performLike() {
+        
+        APIManager().likePost(id: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                self.likeAnimation()
+                self.isLike = true
+                self.likeCount += 1
+                self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
+               print(apiResponse)
+
+
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+    }
+    
+    func performUnLike() {
+        
+        APIManager().unlikePost(id: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                self.unlikeAnimation()
+                self.isLike = false
+                self.likeCount -= 1
+                self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
+               print(apiResponse)
+
+
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func likeAnimation() {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
@@ -457,7 +535,21 @@ extension PostNode {
                   self.buttonsView.likeBtn.transform = CGAffineTransform.identity
               })
             })
+        
+    }
     
+    func unlikeAnimation() {
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "like"), for: .normal)
+            }, completion: { _ in
+              // Step 2
+              UIView.animate(withDuration: 0.1, animations: {
+                  self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+              })
+            })
+        
     }
 
 }
