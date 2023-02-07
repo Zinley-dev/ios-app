@@ -80,7 +80,7 @@ class ProfileViewController: UIViewController {
         })
       
       
-        viewModel.output.followersObservable.subscribe(onNext: { count in
+        viewModel.output.followersObservable.subscribe{ count in
             let indexPath = IndexPath(item: 0, section: 0);
             DispatchQueue.main.async {
                 if let cell = self.datasource.itemIdentifier(for: indexPath) {
@@ -97,8 +97,8 @@ class ProfileViewController: UIViewController {
                     }
                 }
             }
-        })
-        viewModel.output.followingObservable.subscribe(onNext: { count in
+        }.disposed(by: disposeBag)
+        viewModel.output.followingObservable.subscribe{ count in
             let indexPath = IndexPath(item: 0, section: 0);
             DispatchQueue.main.async {
                 if let cell = self.datasource.itemIdentifier(for: indexPath) {
@@ -115,7 +115,26 @@ class ProfileViewController: UIViewController {
                     }
                 }
             }
-        })
+        }.disposed(by: disposeBag)
+        viewModel.output.fistbumpObservable.subscribe{ count in
+            let indexPath = IndexPath(item: 0, section: 0);
+            DispatchQueue.main.async {
+                if let cell = self.datasource.itemIdentifier(for: indexPath) {
+                    if case .header(var param) = cell {
+                        if (param.fistBumped != count) {
+                            param.fistBumped = count
+                            print("here is number of fistBumped \(count)")
+                            var snapshot = self.datasource.snapshot()
+                            // replace item
+                            snapshot.insertItems([.header(param)], beforeItem: cell)
+                            snapshot.deleteItems([cell])
+                            // update datasource
+                            self.datasource.apply(snapshot)
+                        }
+                    }
+                }
+            }
+        }.disposed(by: disposeBag)
     }
     
     override func viewDidLoad() {
@@ -146,6 +165,7 @@ class ProfileViewController: UIViewController {
         viewModel.getFollowers()
         viewModel.getMyPost(page: currpage)
         viewModel.getFollowing()
+        viewModel.getFistBumperCount()
         
         self.setupChallengeView()
     }
@@ -200,8 +220,7 @@ class ProfileViewController: UIViewController {
                 
                 cell.numberOfFollowers.text = "\(param.followers)"
                 cell.numberOfFollowing.text = "\(param.following)"
-                
-                
+                cell.numberOfFistBumps.text = "\(param.fistBumped) Fist Bumped"
               
                 // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
