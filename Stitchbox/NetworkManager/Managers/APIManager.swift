@@ -34,6 +34,7 @@ struct APIManager {
     let userManager = Manager<UserAPI>()
     let contactManager = Manager<ContactAPI>()
     let postManager = Manager<PostAPI>()
+    let commentManager = Manager<CommentApi>()
     let likePostManager = Manager<LikePostApi>()
     let fistBumpManager = Manager<FistBumpAPI>()
     
@@ -191,6 +192,12 @@ struct APIManager {
                 completion(result)
         }
     }
+    func getStat(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.getStat(userID: userID)) {
+            result in
+            completion(result)
+        }
+    }
 }
 
 extension APIManager {
@@ -341,7 +348,11 @@ extension APIManager {
         completion(result)
       }
     }
-    
+    func updatePost(params: [String: Any], completion: @escaping APICompletion) {
+      postManager.request(.update(params: params)) { result in
+        completion(result)
+      }
+    }
 }
 
 
@@ -365,3 +376,45 @@ extension APIManager {
   
 }
 
+extension APIManager {
+  func getComment(postId: String, page: Int = 1, completion: @escaping APICompletion) {
+    commentManager.request(.get(postId: postId, page: page, limit: 5)) { result in
+      completion(result)
+    }
+  }
+  func createComment(params: [String: Any], completion: @escaping APICompletion) {
+    commentManager.request(.create(params: params)) { result in
+      completion(result)
+    }
+  }
+  func updateComment(params: [String: Any], completion: @escaping APICompletion) {
+    commentManager.request(.update(params: params)) { result in
+      completion(result)
+    }
+  }
+  func deleteComment(commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.delete(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+  func likeComment(comment commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.like(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+  func islike(comment commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.islike(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+  func unlike(comment commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.unlike(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+  func countLike(comment commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.countLike(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+}

@@ -140,6 +140,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         options: [UIApplication.OpenURLOptionsKey: Any])
       -> Bool {
         
+        if let scheme = url.scheme,
+           scheme.localizedCaseInsensitiveCompare("stitchbox") == .orderedSame,
+           let view = url.host {
+          
+            var parameters: [String: String] = [:]
+            URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.forEach {
+              parameters[$0.name] = $0.value
+            }
+            
+          // TODO implement
+          // redirect(to: view, with: parameters)
+        }
+        
         guard let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
               let annotation = options[UIApplication.OpenURLOptionsKey.annotation] else {
           return false
