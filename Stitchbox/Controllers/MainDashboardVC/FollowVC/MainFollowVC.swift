@@ -304,7 +304,22 @@ extension MainFollowVC {
 
     func searchUsers(for searchText: String) {
         
-    
+        if !FollowerVC.view.isHidden {
+           
+            delayItem.perform(after: 0.35) {
+                print("Search followers using api")
+                self.searchFollowers(for: searchText)
+            }
+           
+        } else {
+          
+            delayItem.perform(after: 0.35) {
+                print("Search following using api")
+                self.searchFollowings(for: searchText)
+            }
+        }
+        
+    /*
         let follows = !FollowerVC.view.isHidden ? FollowerVC.userList : FollowingVC.userList
         
         let searchUserList = follows.filter { follow in
@@ -346,6 +361,7 @@ extension MainFollowVC {
             }
             
         }
+        */
 
     }
     
@@ -353,7 +369,7 @@ extension MainFollowVC {
         
         if let userUID = _AppCoreData.userDataSource.value?.userID {
             
-            APIManager().searchFollows(query: searchText, userid: userUID, page: 0) { result in
+            APIManager().searchFollows(query: searchText, userid: userUID, page: 1) { result in
                 switch result {
                 case .success(let apiResponse):
                 
@@ -375,7 +391,7 @@ extension MainFollowVC {
         
         if let userUID = _AppCoreData.userDataSource.value?.userID {
             
-            APIManager().searchFollowing(query: searchText, userid: userUID, page: 0) { result in
+            APIManager().searchFollowing(query: searchText, userid: userUID, page: 1) { result in
                 switch result {
                 case .success(let apiResponse):
                     
