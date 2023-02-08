@@ -21,6 +21,7 @@ class ProfileViewModel: ViewModelProtocol {
     struct Output {
         let followersObservable: Observable<Int>
         let followingObservable: Observable<Int>
+        let fistbumpObservable: Observable<Int>
         let followerListObservable: Observable<[FollowerModel]>
         let followingListObservable: Observable<[FollowerModel]>
         let allFollowingListObservable: Observable<[FollowerModel]>
@@ -35,6 +36,7 @@ class ProfileViewModel: ViewModelProtocol {
     
     private let followersSubject = PublishSubject<Int>()
     private let followingSubject = PublishSubject<Int>()
+    private let fistbumpSubject = PublishSubject<Int>()
     private let followerListSubject = PublishSubject<[FollowerModel]>()
     private let followingListSubject = PublishSubject<[FollowerModel]>()
     private let allFollowingListSubject = PublishSubject<[FollowerModel]>()
@@ -44,8 +46,9 @@ class ProfileViewModel: ViewModelProtocol {
         input = Input()
         action = Action()
         output = Output(
-            followersObservable: followersSubject.asObserver(),
-            followingObservable: followingSubject.asObserver(),
+            followersObservable: followersSubject.asObservable(),
+            followingObservable: followingSubject.asObservable(),
+            fistbumpObservable: fistbumpSubject.asObservable(),
             followerListObservable: followerListSubject.asObserver(),
             followingListObservable: followingListSubject.asObserver(),
             allFollowingListObservable: allFollowingListSubject.asObserver(),
@@ -112,6 +115,29 @@ class ProfileViewModel: ViewModelProtocol {
                 print("Follower List: ", list)
                 self.followersSubject.onNext(data.count)
                 self.followerListSubject.onNext(list)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    func getFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping (Int) -> Void = {_ in}) -> Void  {
+        APIManager().getFistBumperCount(userID: userID){
+            result in
+            switch result {
+            case .success(let response):
+                if let data = response.body {
+                    if let message = data["message"] as? String, message == "success"{
+                        print("go here")
+                        if let bodyData = data["data"] as? [[String: Any]] {
+                            if let count = bodyData.first?["count"] as? Int {
+                                self.fistbumpSubject.onNext(count)
+                                completion(count)
+                            }
+                        } else {
+                            self.fistbumpSubject.onNext(0)
+                        }
+                    }
+                }
             case .failure(let error):
                 print(error)
             }

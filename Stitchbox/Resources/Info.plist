@@ -5,19 +5,19 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.56078114675-c5lhtgsgsp4bod4amsc9rlfv8b4s64j8</string>
+				<string>aw3hzih2me6rk0vg</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.mobile.gg.Stitchbox1</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb663026798636026</string>
+				<string>stitchbox</string>
 			</array>
 		</dict>
 	</array>
@@ -27,6 +27,15 @@
 	<string>ebe6a3e720a966c49e3c9fc345cf9b5c</string>
 	<key>FacebookDisplayName</key>
 	<string>Stitchbox</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tiktokopensdk</string>
+		<string>tiktoksharesdk</string>
+		<string>snssdk1180</string>
+		<string>snssdk1233</string>
+	</array>
+	<key>TikTokAppID</key>
+	<string>aw3hzih2me6rk0vg</string>
 	<key>UIAppFonts</key>
 	<array>
 		<dict>
@@ -62,25 +71,5 @@
 		<string>bluetooth-central</string>
 		<string>voip</string>
 	</array>
-  
-  <key>LSApplicationQueriesSchemes</key>
-  <array>
-    <string>tiktokopensdk</string>
-    <string>tiktoksharesdk</string>
-    <string>snssdk1180</string>
-    <string>snssdk1233</string>
-  </array>
-  <key>TikTokAppID</key>
-  <string>aw3hzih2me6rk0vg</string>
-  <key>CFBundleURLTypes</key>
-  <array>
-    <dict>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <string>aw3hzih2me6rk0vg</string>
-      </array>
-    </dict>
-  </array>
-  
 </dict>
 </plist>

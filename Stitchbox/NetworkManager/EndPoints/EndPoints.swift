@@ -434,6 +434,7 @@ extension ContactAPI: EndPointType {
 
 public enum PostAPI {
     case create(params: [String: Any])
+    case update(params: [String: Any])
     case getMyPost(page: Int)
 }
 extension PostAPI: EndPointType {
@@ -445,6 +446,8 @@ extension PostAPI: EndPointType {
         switch self {
             case .create:
                 return "/"
+            case .update(let params):
+                return "/\(params["id"] ?? "")"
             case .getMyPost(let page):
                 return "/me?page=\(page)&limit=10"
         }
@@ -454,6 +457,8 @@ extension PostAPI: EndPointType {
         switch self {
             case .create:
                 return .post
+            case .update:
+                return .post
             case .getMyPost:
               return .get
         }
@@ -462,6 +467,8 @@ extension PostAPI: EndPointType {
     var task: HTTPTask {
         switch self {
             case .create(let params):
+                return .requestParameters(parameters: params)
+            case .update(let params):
                 return .requestParameters(parameters: params)
             case .getMyPost:
                 return .request
@@ -497,9 +504,9 @@ extension FollowApi: EndPointType {
       case .getFollowers(let userId, let page, let lim):
         return "/followers/\(userId)?page=\(page)&limit=\(lim)"
       case .searchFollower(let params, let page, let lim):
-        return "/search/\(params["userid"])?search=\(params["search"])&page=\(page)&limit=\(lim)"
+        return "/search/\(params["userid"] ?? "")?search=\(params["search"] ?? "")&page=\(page)&limit=\(lim)"
       case .searchFollowing(let params, let page, let lim):
-        return "/followers/search/\(params["userid"])?search=\(params["search"])&page=\(page)&limit=\(lim)"
+        return "/followers/search/\(params["userid"] ?? "")?search=\(params["search"] ?? "")&page=\(page)&limit=\(lim)"
     }
   }
   
@@ -530,10 +537,10 @@ extension FollowApi: EndPointType {
         return .requestParameters(parameters: params)
       case .getFollowers:
         return .request
-        case .searchFollower:
-            return .request
-        case .searchFollowing:
-            return .request
+      case .searchFollower:
+          return .request
+      case .searchFollowing:
+          return .request
     }
   }
   
@@ -543,6 +550,7 @@ extension FollowApi: EndPointType {
 }
 
 public enum LikePostApi {
+    case count (postId: String)
   case isLike (params: [String: Any])
   case like (params: [String: Any])
   case unlike (params: [String: Any])
@@ -555,16 +563,20 @@ extension LikePostApi: EndPointType {
   var path: String {
     switch self {
       case .isLike(let params):
-        return "/\(params["id"])"
+        return "/\(params["id"] ?? "")"
       case .like(let params):
-        return "/\(params["id"])"
+        return "/\(params["id"] ?? "")"
       case .unlike(let params):
-        return "/\(params["id"])"
+        return "/\(params["id"] ?? "")"
+      case .count(let postId):
+        return "/\(postId)/count"
     }
   }
   
   var httpMethod: HTTPMethod {
     switch self {
+      case .count:
+        return .get
       case .isLike:
         return .get
       case .like:
@@ -576,6 +588,8 @@ extension LikePostApi: EndPointType {
   
   var task: HTTPTask {
     switch self {
+      case .count:
+        return .request
       case .isLike:
         return .request
       case .like:
@@ -588,4 +602,178 @@ extension LikePostApi: EndPointType {
   var headers: [String: String]? {
     return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
   }
+}
+public enum FistBumpAPI {
+    case getFistBumpee(userID: String, page: Int, limit: Int)
+    case getFistBumper(userID: String, page: Int, limit: Int)
+    case getFistBumperCount(userID: String)
+    case getFistBumpeeCount(userID: String)
+    case isFistBumper(userID: String)
+    case isFistBumpee(userID: String)
+    case addFistBump(userID: String)
+    case deleteFistBump(userID: String)
+    case getStat(userID: String)
+}
+extension FistBumpAPI: EndPointType {
+    var module: String {
+        return "/fistbump"
+    }
+    
+    var path: String {
+        switch self {
+            
+        case .getFistBumper(userID: let userID, page: let page, limit: let limit):
+            return "/fistbumper/\(userID)?limit=\(limit)&page=\(page)"
+        case .getFistBumpee(userID: let userID, page: let page, limit: let limit):
+            return "/fistbumpee/\(userID)?limit=\(limit)&page=\(page)"
+        case .getFistBumperCount(userID: let userID):
+            return "/fistbumper/count/\(userID)"
+        case .getFistBumpeeCount(userID: let userID):
+            return "/fistbumpee/count/\(userID)"
+        case .isFistBumper(userID: let userID):
+            return "/isfistbumper/\(userID)"
+        case .isFistBumpee(userID: let userID):
+            return "/isfistbumpee/\(userID)"
+        case .addFistBump(userID: let userID):
+            return "/\(userID)"
+        case .deleteFistBump(userID: let userID):
+            return "/\(userID)"
+        case .getStat(userID: let userID):
+            return "/\(userID)/stat"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .getFistBumpee:
+            return .get
+        case .getFistBumper:
+            return .get
+        case .getFistBumperCount:
+            return .get
+        case .getFistBumpeeCount:
+            return .get
+        case .isFistBumper:
+            return .get
+        case .isFistBumpee:
+            return .get
+        case .addFistBump:
+            return .post
+        case .deleteFistBump:
+            return .delete
+        case .getStat:
+            return .get
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+        case .getFistBumpee(userID: _, page: _, limit: _):
+            return .request
+        case .getFistBumper(userID: _, page: _, limit: _):
+            return .request
+        case .getFistBumperCount(userID: _):
+            return .request
+        case .getFistBumpeeCount(userID: _):
+            return .request
+        case .isFistBumper(userID: _):
+            return .request
+        case .isFistBumpee(userID: _):
+            return .request
+        case .addFistBump(userID: _):
+            return .request
+        case .deleteFistBump(userID: _):
+            return .request
+          case .getStat:
+            return .request
+        }
+    }
+    
+    var headers: [String: String]? {
+        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+    }
+}
+public enum CommentApi {
+  case get(postId: String, page: Int, limit: Int)
+  case create(params: [String: Any])
+  case update(params: [String: Any])
+  case delete(commentId: String)
+  case like(commentId: String)
+  case islike(commentId: String)
+  case unlike(commentId: String)
+  case countLike(commentId: String)
+}
+extension CommentApi: EndPointType {
+  var path: String {
+    switch self {
+      case .get(let postId, let page, let limit):
+        return "/\(postId)?page=\(page)&limit=\(limit)"
+      case .create:
+        return "/"
+      case .update(let params):
+        return "/\(params["id"] ?? "")"
+      case .delete(let commentId):
+        return "/\(commentId)"
+      case .like(let commentId):
+        return "/\(commentId)/like"
+      case .islike(let commentId):
+        return "/\(commentId)/like"
+      case .unlike(let commentId):
+        return "/\(commentId)/like"
+      case .countLike(let commentId):
+        return "/\(commentId)/likes"
+    }
+  }
+  
+  var module: String {
+    return "/comment"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .get:
+        return .get
+      case .create:
+        return .post
+      case .update:
+        return .patch
+      case .delete:
+        return .delete
+      case .like:
+        return .post
+      case .islike:
+        return .get
+      case .unlike:
+        return .delete
+      case .countLike:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .get:
+        return .request
+      case .create(let params):
+        return .requestParameters(parameters: params)
+      case .update(let params):
+        return .requestParameters(parameters: params)
+      case .delete:
+        return .request
+      case .like:
+        return .request
+      case .islike:
+        return .request
+      case .unlike:
+        return .request
+      case .countLike:
+        return .request
+    }
+  }
+  
+  var headers: [String: String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+  
+  
 }

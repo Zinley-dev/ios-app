@@ -105,13 +105,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recent searches" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iS4-3u-FW6">
-                                <rect key="frame" x="20.000000000000007" y="111" width="120.66666666666669" height="19.666666666666629"/>
+                                <rect key="frame" x="20.000000000000007" y="111" width="120.66666666666669" height="19.666666666666657"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search history" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kqI-Nf-ROj">
-                                <rect key="frame" x="250.66666666666666" y="111" width="104.33333333333334" height="19.666666666666629"/>
+                                <rect key="frame" x="250.66666666666666" y="111" width="104.33333333333334" height="19.666666666666657"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" name="Secondary"/>
                                 <nil key="highlightedColor"/>
@@ -2327,7 +2327,7 @@
                                 <rect key="frame" x="32" y="79" width="311" height="120"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="z2g-kn-6qJ">
-                                        <rect key="frame" x="0.0" y="17.666666666666671" width="311" height="84.999999999999986"/>
+                                        <rect key="frame" x="0.0" y="17.666666666666671" width="311" height="85"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jm9-nd-GhK">
                                                 <rect key="frame" x="0.0" y="0.0" width="311" height="85"/>
@@ -3035,6 +3035,7 @@ Rodriguez</string>
                                             <outlet property="editProfileBtn" destination="Y18-um-T0h" id="L4M-eq-57H"/>
                                             <outlet property="fistBumpedListBtn" destination="fah-qR-IIG" id="JuD-mk-bw4"/>
                                             <outlet property="fistBumpedView" destination="He0-iI-C24" id="YHx-YX-SFO"/>
+                                            <outlet property="numberOfFistBumps" destination="4he-CQ-DCA" id="sH3-mS-BvY"/>
                                             <outlet property="numberOfFollowers" destination="va1-A6-Mok" id="iFe-6g-LgB"/>
                                             <outlet property="numberOfFollowing" destination="fiL-Ja-IPg" id="mAk-Gb-i61"/>
                                             <outlet property="usernameLbl" destination="vnK-Bb-OAW" id="LWN-br-Yds"/>
@@ -3676,7 +3677,7 @@ Rodriguez</string>
                                 <rect key="frame" x="32" y="79" width="311" height="300"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ZG8-xV-GRV">
-                                        <rect key="frame" x="0.0" y="17.666666666666686" width="311" height="264.99999999999994"/>
+                                        <rect key="frame" x="0.0" y="17.666666666666686" width="311" height="265"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c2C-vi-cUj">
                                                 <rect key="frame" x="0.0" y="0.0" width="311" height="85"/>
@@ -4890,7 +4891,7 @@ Rodriguez</string>
                                 <rect key="frame" x="32" y="79" width="311" height="120"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="yn0-A5-ENq">
-                                        <rect key="frame" x="0.0" y="17.666666666666671" width="311" height="84.999999999999986"/>
+                                        <rect key="frame" x="0.0" y="17.666666666666671" width="311" height="85"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uZr-Fz-gCR">
                                                 <rect key="frame" x="0.0" y="0.0" width="311" height="85"/>
@@ -7655,10 +7656,31 @@ Rodriguez</string>
                                             </stackView>
                                         </subviews>
                                     </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgc-G0-8Xd">
+                                        <rect key="frame" x="0.0" y="330" width="359" height="34.333333333333314"/>
+                                        <color key="tintColor" name="Primary"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="View Fist Bump List">
+                                            <color key="baseForegroundColor" systemColor="labelColor"/>
+                                            <color key="baseBackgroundColor" name="Primary"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="30"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <segue destination="CK5-89-pFT" kind="show" id="rzg-re-pZY"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="pgc-G0-8Xd" firstAttribute="leading" secondItem="zjJ-Ph-eTb" secondAttribute="leading" id="O3Q-mj-MEu"/>
                                     <constraint firstItem="fob-2G-hL9" firstAttribute="centerX" secondItem="zjJ-Ph-eTb" secondAttribute="centerX" id="cSA-gE-UXc"/>
+                                    <constraint firstAttribute="trailing" secondItem="pgc-G0-8Xd" secondAttribute="trailing" id="dIZ-ig-8l7"/>
+                                    <constraint firstItem="pgc-G0-8Xd" firstAttribute="top" secondItem="fob-2G-hL9" secondAttribute="bottom" constant="30" id="ebM-If-NTt"/>
                                     <constraint firstItem="fob-2G-hL9" firstAttribute="top" secondItem="zjJ-Ph-eTb" secondAttribute="top" constant="16" id="wG6-SN-eXI"/>
                                 </constraints>
                             </view>
@@ -7694,7 +7716,7 @@ Rodriguez</string>
                                 <rect key="frame" x="32" y="79" width="311" height="100"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="CAd-OQ-Cxl">
-                                        <rect key="frame" x="0.0" y="7.6666666666666714" width="311" height="84.999999999999986"/>
+                                        <rect key="frame" x="0.0" y="7.6666666666666714" width="311" height="85"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iH8-GM-LPW">
                                                 <rect key="frame" x="0.0" y="0.0" width="311" height="85"/>
@@ -7870,6 +7892,116 @@ Rodriguez</string>
             </objects>
             <point key="canvasLocation" x="-1442" y="876"/>
         </scene>
+        <!--Main Fist BumpVC-->
+        <scene sceneID="vkN-EW-38w">
+            <objects>
+                <viewController storyboardIdentifier="MainFistBumpListVC" id="CK5-89-pFT" customClass="MainFistBumpVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="39L-TM-HEq">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="755"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="rzB-CV-cip">
+                                <rect key="frame" x="0.0" y="57" width="375" height="34"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1mM-mC-HrY">
+                                        <rect key="frame" x="0.0" y="0.0" width="187.66666666666666" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="Ffg-fI-0vX"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Fist Bumpers"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="18"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="fistBumperBtn:" destination="CK5-89-pFT" eventType="touchUpInside" id="nZA-rc-JMn"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wYG-ln-kzf">
+                                        <rect key="frame" x="187.66666666666663" y="0.0" width="187.33333333333337" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Fist Bumpees"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="18"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="fistBumpeeBtn:" destination="CK5-89-pFT" eventType="touchUpInside" id="LGF-M4-wIs"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6QZ-66-CmY">
+                                <rect key="frame" x="0.0" y="101" width="375" height="654"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Mst-0l-5xg"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="6QZ-66-CmY" firstAttribute="leading" secondItem="Mst-0l-5xg" secondAttribute="leading" id="0WC-S8-NpR"/>
+                            <constraint firstItem="Mst-0l-5xg" firstAttribute="bottom" secondItem="6QZ-66-CmY" secondAttribute="bottom" id="J1k-hO-2zW"/>
+                            <constraint firstItem="6QZ-66-CmY" firstAttribute="top" secondItem="rzB-CV-cip" secondAttribute="bottom" constant="10" id="L02-Aj-I7Q"/>
+                            <constraint firstItem="Mst-0l-5xg" firstAttribute="trailing" secondItem="6QZ-66-CmY" secondAttribute="trailing" id="P2a-u6-jfi"/>
+                            <constraint firstItem="rzB-CV-cip" firstAttribute="leading" secondItem="Mst-0l-5xg" secondAttribute="leading" id="Sxz-xj-ZP4"/>
+                            <constraint firstItem="rzB-CV-cip" firstAttribute="top" secondItem="Mst-0l-5xg" secondAttribute="top" constant="10" id="uiP-e5-uoc"/>
+                            <constraint firstItem="Mst-0l-5xg" firstAttribute="trailing" secondItem="rzB-CV-cip" secondAttribute="trailing" id="w0a-z3-R3n"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="BoE-wu-6sQ"/>
+                    <connections>
+                        <outlet property="buttonStackView" destination="rzB-CV-cip" id="5PV-Xw-WHs"/>
+                        <outlet property="contentView" destination="6QZ-66-CmY" id="WFc-0U-ReJ"/>
+                        <outlet property="contentViewTopConstant" destination="L02-Aj-I7Q" id="Gdu-Od-hsJ"/>
+                        <outlet property="fistBumpeeBtn" destination="wYG-ln-kzf" id="5ki-jl-agQ"/>
+                        <outlet property="fistBumperBtn" destination="1mM-mC-HrY" id="hiG-sx-B1D"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XN8-lL-3YE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3861.5999999999999" y="4553.9408866995072"/>
+        </scene>
+        <!--Fist BumperVC-->
+        <scene sceneID="Y7F-AA-VNI">
+            <objects>
+                <viewController storyboardIdentifier="fistBumperVC" id="wyk-1V-4ai" customClass="fistBumperVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6A5-Y4-nd2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="n49-Fe-wRe"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="6A5-Y4-nd2" id="UoL-hx-EEY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sR5-Y2-P0H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4734" y="4554"/>
+        </scene>
+        <!--Fist BumpeeVC-->
+        <scene sceneID="eK5-UN-5BP">
+            <objects>
+                <viewController storyboardIdentifier="fistBumpeeVC" id="Dsl-lr-6bx" customClass="fistBumpeeVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kRd-dw-lzn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="NSL-g2-hIU"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="kRd-dw-lzn" id="Ag0-hM-qyY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Sb-Fp-dng" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4734" y="4554"/>
+        </scene>
     </scenes>
     <designables>
         <designable name="FAX-Qh-QnX">
@@ -7967,6 +8099,9 @@ Rodriguez</string>
         <namedColor name="color_toast_label">
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

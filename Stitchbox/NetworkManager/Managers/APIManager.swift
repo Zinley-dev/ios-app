@@ -34,7 +34,9 @@ struct APIManager {
     let userManager = Manager<UserAPI>()
     let contactManager = Manager<ContactAPI>()
     let postManager = Manager<PostAPI>()
+    let commentManager = Manager<CommentApi>()
     let likePostManager = Manager<LikePostApi>()
+    let fistBumpManager = Manager<FistBumpAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -138,6 +140,61 @@ struct APIManager {
     
     func forgotPasswordByPhone(params: [String: String], completion: @escaping APICompletion) {
         authManager.request(.forgotPasswordByPhone(params: params)) { result in
+            completion(result)
+        }
+    }
+    
+    func getFistBumper(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+        fistBumpManager.request(.getFistBumper(userID: userID, page: page, limit: limit)) {
+            result in
+                completion(result)
+        }
+    }
+    func getFistBumpee(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+        fistBumpManager.request(.getFistBumpee(userID: userID, page: page, limit: limit)) {
+            result in
+                completion(result)
+        }
+    }
+    func getFistBumperCount(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.getFistBumperCount(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func getFistBumpeeCount(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.getFistBumpeeCount(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func getIsFistBumper(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.isFistBumper(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func getIsFistBumpee(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.isFistBumpee(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func addFistBump(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.addFistBump(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func deleteFistBump(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.deleteFistBump(userID: userID)) {
+            result in
+                completion(result)
+        }
+    }
+    func getStat(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.getStat(userID: userID)) {
+            result in
             completion(result)
         }
     }
@@ -268,9 +325,9 @@ extension APIManager {
             completion(result)
         }
     }
-    func uploadContact(image: UIImage, content: String, completion: @escaping APICompletion) {
+    func uploadContact(images: [UIImage], content: String, completion: @escaping APICompletion) {
         // TODO: miss content
-        contactManager.upload(.postContact, image: image){
+        contactManager.upload(.postContact, images: images, content: content){
             result in
             completion(result)
         }
@@ -291,12 +348,20 @@ extension APIManager {
         completion(result)
       }
     }
-    
+    func updatePost(params: [String: Any], completion: @escaping APICompletion) {
+      postManager.request(.update(params: params)) { result in
+        completion(result)
+      }
+    }
 }
 
 
 extension APIManager {
-  
+    func countLikedPost(id: String, completion: @escaping APICompletion) {
+        likePostManager.request(.count(postId: id)) { result in
+            completion(result)
+        }
+    }
   func hasLikedPost(id: String, completion: @escaping APICompletion) {
     likePostManager.request(.isLike(params: ["id": id])) { result in
       completion(result)
@@ -315,3 +380,45 @@ extension APIManager {
   
 }
 
+extension APIManager {
+  func getComment(postId: String, page: Int = 1, completion: @escaping APICompletion) {
+    commentManager.request(.get(postId: postId, page: page, limit: 5)) { result in
+      completion(result)
+    }
+  }
+  func createComment(params: [String: Any], completion: @escaping APICompletion) {
+    commentManager.request(.create(params: params)) { result in
+      completion(result)
+    }
+  }
+  func updateComment(params: [String: Any], completion: @escaping APICompletion) {
+    commentManager.request(.update(params: params)) { result in
+      completion(result)
+    }
+  }
+  func deleteComment(commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.delete(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+  func likeComment(comment commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.like(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+  func islike(comment commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.islike(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+  func unlike(comment commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.unlike(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+  func countLike(comment commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.countLike(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+}

@@ -50,7 +50,7 @@ class ContactUsVC: UIViewController, ControllerType {
         sendBtn.rx.tap.subscribe{
             _ in
             if self.ContactTxtView.text.count >= 35 {
-                viewModel.action.submit.onNext((self.reportImg.first ?? UIImage(), self.ContactTxtView.text))
+                viewModel.action.submit.onNext((self.reportImg, self.ContactTxtView.text))
             }
         }.disposed(by: disposeBag)
         
@@ -195,7 +195,6 @@ extension ContactUsVC: UICollectionViewDataSource, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         
         return CGSize(width: 80, height: 80)
         
