@@ -550,6 +550,7 @@ extension FollowApi: EndPointType {
 }
 
 public enum LikePostApi {
+    case count (postId: String)
   case isLike (params: [String: Any])
   case like (params: [String: Any])
   case unlike (params: [String: Any])
@@ -567,11 +568,15 @@ extension LikePostApi: EndPointType {
         return "/\(params["id"] ?? "")"
       case .unlike(let params):
         return "/\(params["id"] ?? "")"
+      case .count(let postId):
+        return "/\(postId)/count"
     }
   }
   
   var httpMethod: HTTPMethod {
     switch self {
+      case .count:
+        return .get
       case .isLike:
         return .get
       case .like:
@@ -583,6 +588,8 @@ extension LikePostApi: EndPointType {
   
   var task: HTTPTask {
     switch self {
+      case .count:
+        return .request
       case .isLike:
         return .request
       case .like:
