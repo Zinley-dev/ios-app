@@ -483,6 +483,31 @@ extension SelectedPostVC {
         
         print("Share requested")
         
+        guard let userDataSource = _AppCoreData.userDataSource.value else {
+            print("Sendbird: Can't get userUID")
+            return
+        }
+        
+        if let postID = editeddPost?.id, postID != "" {
+            
+            let items: [Any] = ["Hi I am \(userDataSource.userName) from Stitchbox, let's check out this with me!", URL(string: "https://dualteam.page.link/dual?p=\(postID)")!]
+            let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+            
+            ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
+                           
+                
+            }
+           
+            delay(0.1) {
+                self.present(ac, animated: true, completion: nil)
+            }
+           
+            
+        } else {
+            print("Can't get postID")
+        }
+    
+        
     }
     
     @objc func onClickStats(_ sender: AnyObject) {
@@ -500,13 +525,21 @@ extension SelectedPostVC {
     
     @objc func onClickCopyLink(_ sender: AnyObject) {
         
+        if let postID = editeddPost?.id, postID != "" {
+            
+            let link = "https://dualteam.page.link/dual?p=\(postID)"
+            
+            UIPasteboard.general.string = link
+            showNote(text: "Post link is copied")
+            
+        } else {
+            print("Can't get postID")
+        }
        
         
     }
     
     @objc func onClickDownload(_ sender: AnyObject) {
-        
-        print("Download requested")
         
         if let post = editeddPost {
             

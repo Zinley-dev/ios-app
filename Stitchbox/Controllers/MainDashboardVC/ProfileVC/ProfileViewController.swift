@@ -27,6 +27,11 @@ class ProfileViewController: UIViewController {
         case challengeCard(ChallengeCardHeaderData)
         case posts(PostModel)
     }
+    
+    
+    var followerCount = 0
+    var followingCount = 0
+    
 
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
@@ -80,7 +85,7 @@ class ProfileViewController: UIViewController {
         })
       
       
-        viewModel.output.followersObservable.subscribe{ count in
+        viewModel.output.followersObservable.subscribe(onNext: { count in
             let indexPath = IndexPath(item: 0, section: 0);
             DispatchQueue.main.async {
                 if let cell = self.datasource.itemIdentifier(for: indexPath) {
@@ -97,8 +102,8 @@ class ProfileViewController: UIViewController {
                     }
                 }
             }
-        }.disposed(by: disposeBag)
-        viewModel.output.followingObservable.subscribe{ count in
+        })
+        viewModel.output.followingObservable.subscribe(onNext: { count in
             let indexPath = IndexPath(item: 0, section: 0);
             DispatchQueue.main.async {
                 if let cell = self.datasource.itemIdentifier(for: indexPath) {
@@ -115,26 +120,7 @@ class ProfileViewController: UIViewController {
                     }
                 }
             }
-        }.disposed(by: disposeBag)
-        viewModel.output.fistbumpObservable.subscribe{ count in
-            let indexPath = IndexPath(item: 0, section: 0);
-            DispatchQueue.main.async {
-                if let cell = self.datasource.itemIdentifier(for: indexPath) {
-                    if case .header(var param) = cell {
-                        if (param.fistBumped != count) {
-                            param.fistBumped = count
-                            print("here is number of fistBumped \(count)")
-                            var snapshot = self.datasource.snapshot()
-                            // replace item
-                            snapshot.insertItems([.header(param)], beforeItem: cell)
-                            snapshot.deleteItems([cell])
-                            // update datasource
-                            self.datasource.apply(snapshot)
-                        }
-                    }
-                }
-            }
-        }.disposed(by: disposeBag)
+        })
     }
     
     override func viewDidLoad() {
@@ -165,7 +151,6 @@ class ProfileViewController: UIViewController {
         viewModel.getFollowers()
         viewModel.getMyPost(page: currpage)
         viewModel.getFollowing()
-        viewModel.getFistBumperCount()
         
         self.setupChallengeView()
     }
@@ -218,10 +203,14 @@ class ProfileViewController: UIViewController {
                     cell.descriptionLbl.text = about
                 }
                 
-                cell.numberOfFollowers.text = "\(param.followers)"
-                cell.numberOfFollowing.text = "\(param.following)"
-                cell.numberOfFistBumps.text = "\(param.fistBumped) Fist Bumped"
-              
+                
+                followerCount = param.followers
+                followingCount = param.following
+               
+                cell.numberOfFollowers.text = "\(formatPoints(num: Double(param.followers)))"
+                cell.numberOfFollowing.text = "\(formatPoints(num: Double(param.following)))"
+                
+                
                 // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
                 cell.fistBumpedListBtn.addTarget(self, action: #selector(fistBumpedlistTapped), for: .touchUpInside)
@@ -378,6 +367,8 @@ extension ProfileViewController {
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
             //self.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = true
+            MFVC.followerCount = followerCount
+            MFVC.followingCount = followingCount
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -392,6 +383,8 @@ extension ProfileViewController {
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
             //self.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = false
+            MFVC.followerCount = followerCount
+            MFVC.followingCount = followingCount
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }

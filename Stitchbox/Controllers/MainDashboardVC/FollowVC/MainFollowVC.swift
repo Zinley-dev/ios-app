@@ -23,6 +23,12 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     var type = ""
     var ownerID = ""
     
+    var followerCount = 0
+    var followingCount = 0
+    
+    // to override search task
+    lazy var delayItem = workItem()
+    
     
     lazy var FollowerVC: FollowerVC = {
         
@@ -157,6 +163,11 @@ extension MainFollowVC {
         FollowerVC.view.isHidden = false
         FollowingVC.view.isHidden = true
         
+        followerBtn.setTitle("\(followerCount) Followers", for: .normal)
+        followingBtn.setTitle("\(followingCount) Followings", for: .normal)
+        
+        self.searchController?.searchBar.text = ""
+        
     }
     
     func setupFollowingView() {
@@ -171,6 +182,12 @@ extension MainFollowVC {
         
         FollowerVC.view.isHidden = true
         FollowingVC.view.isHidden = false
+        
+        
+        followerBtn.setTitle("\(followerCount) Followers", for: .normal)
+        followingBtn.setTitle("\(followingCount) Followings", for: .normal)
+        
+        self.searchController?.searchBar.text = ""
         
     }
     
@@ -205,11 +222,9 @@ extension MainFollowVC {
        
         if FollowerVC.view.isHidden == false {
             
-            /*
-            FollowerVC.searchChannelList.removeAll()
+            FollowerVC.searchUserList.removeAll()
             FollowerVC.inSearchMode = false
-            FollowerVC.groupChannelsTableView.reloadData()
-             */
+            FollowerVC.tableNode.reloadData()
             
             return
             
@@ -218,11 +233,9 @@ extension MainFollowVC {
         
         if FollowingVC.view.isHidden == false {
             
-            /*
-            FollowingVC.searchChannelList.removeAll()
+            FollowingVC.searchUserList.removeAll()
             FollowingVC.inSearchMode = false
-            FollowingVC.groupChannelsTableView.reloadData()
-             */
+            FollowingVC.tableNode.reloadData()
             
             return
             
@@ -239,11 +252,11 @@ extension MainFollowVC {
         
         if FollowerVC.view.isHidden == false {
             
-            /*
-            FollowerVC.searchChannelList = InboxVC.channels
+            
+            FollowerVC.searchUserList = FollowerVC.userList
             FollowerVC.inSearchMode = true
-            FollowerVC.groupChannelsTableView.reloadData()
-            */
+            FollowerVC.tableNode.reloadData()
+            
             
             return
             
@@ -252,16 +265,147 @@ extension MainFollowVC {
         
         if FollowingVC.view.isHidden == false {
             
-            /*
-            FollowingVC.searchChannelList = RequestVC.channels
+            
+            FollowingVC.searchUserList = FollowingVC.userList
             FollowingVC.inSearchMode = true
-            FollowingVC.groupChannelsTableView.reloadData()
-             */
+            FollowingVC.tableNode.reloadData()
             
             return
             
         }
  
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            clearSearchResults()
+        } else {
+            searchUsers(for: searchText)
+        }
+    }
+
+    func clearSearchResults() {
+        // Clear the search results for both view controllers
+        FollowerVC.searchUserList.removeAll()
+        FollowingVC.searchUserList.removeAll()
+
+        // Check which view controller is currently visible
+        if !FollowerVC.view.isHidden {
+            // Set the searchUserList variable of the FollowerVC to the full list of users and reload the table view
+            FollowerVC.searchUserList = FollowerVC.userList
+            FollowerVC.tableNode.reloadData()
+        } else if !FollowingVC.view.isHidden {
+            // Set the searchUserList variable of the FollowingVC to the full list of users and reload the table view
+            FollowingVC.searchUserList = FollowingVC.userList
+            FollowingVC.tableNode.reloadData()
+        }
+    }
+
+
+    func searchUsers(for searchText: String) {
+        
+        if !FollowerVC.view.isHidden {
+           
+            delayItem.perform(after: 0.35) {
+                print("Search followers using api")
+                self.searchFollowers(for: searchText)
+            }
+           
+        } else {
+          
+            delayItem.perform(after: 0.35) {
+                print("Search following using api")
+                self.searchFollowings(for: searchText)
+            }
+        }
+        
+    /*
+        let follows = !FollowerVC.view.isHidden ? FollowerVC.userList : FollowingVC.userList
+        
+        let searchUserList = follows.filter { follow in
+            
+            if let username = follow.username {
+                
+                return (username.range(of: searchText, options: .caseInsensitive) != nil)
+                
+            }
+            
+            return true
+        }
+        
+        if !searchUserList.isEmpty {
+            
+            if !FollowerVC.view.isHidden {
+                FollowerVC.searchUserList = searchUserList
+                FollowerVC.tableNode.reloadData()
+            } else {
+                FollowingVC.searchUserList = searchUserList
+                FollowingVC.tableNode.reloadData()
+            }
+            
+        } else {
+            
+            if !FollowerVC.view.isHidden {
+               
+                delayItem.perform(after: 0.35) {
+                    print("Search followers using api")
+                    self.searchFollowers(for: searchText)
+                }
+               
+            } else {
+              
+                delayItem.perform(after: 0.35) {
+                    print("Search following using api")
+                    self.searchFollowings(for: searchText)
+                }
+            }
+            
+        }
+        */
+
+    }
+    
+    func searchFollowers(for searchText: String) {
+        
+        if let userUID = _AppCoreData.userDataSource.value?.userID {
+            
+            APIManager().searchFollows(query: searchText, userid: userUID, page: 1) { result in
+                switch result {
+                case .success(let apiResponse):
+                
+                   print(apiResponse)
+
+
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            
+        }
+        
+        
+    }
+    
+    
+    func searchFollowings(for searchText: String) {
+        
+        if let userUID = _AppCoreData.userDataSource.value?.userID {
+            
+            APIManager().searchFollowing(query: searchText, userid: userUID, page: 1) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+    
+                   print(apiResponse)
+
+
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            
+        }
+        
     }
     
 }

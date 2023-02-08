@@ -436,6 +436,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
 
 
     func searchChannels(for searchText: String) {
+    
         let channels = !InboxVC.view.isHidden ? InboxVC.channels : RequestVC.channels
         let searchChannelList = channels.filter { channel in
             let finalChannelName = channel.name != "" && channel.name != "Group Channel" ? channel.name : getChannelName(channel: channel)

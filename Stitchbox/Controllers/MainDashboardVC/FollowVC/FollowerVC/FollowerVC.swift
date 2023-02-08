@@ -20,8 +20,9 @@ class FollowerVC: UIViewController {
     private let disposeBag = DisposeBag()
     
     @IBOutlet weak var contentView: UIView!
-    
+    var inSearchMode = false
     var tableNode: ASTableNode!
+    var searchUserList = [FollowerModel]()
     var userList = [FollowerModel]()
     var followingList = [FollowerModel]()
     var asContext: ASBatchContext!
@@ -154,7 +155,10 @@ extension FollowerVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
         
         
-        if self.userList.count == 0 {
+        let array = inSearchMode ? searchUserList : userList
+        
+        
+        if array.count == 0 {
             
             tableNode.view.setEmptyMessage("No follower")
             
@@ -162,27 +166,14 @@ extension FollowerVC: ASTableDataSource {
             tableNode.view.restore()
         }
         
-        return self.userList.count
-        
+        return array.count
         
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
+        //let array = inSearchMode ? searchChannelList : channels
+        let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
         
-        let user = userList[indexPath.row]
-        func follow(item: FollowNode) {
-            self.viewModel.insertfollow(userId: item.user.userId ?? "")
-            item.followAction = unfollow
-            item.followBtnNode.backgroundColor = UIColor.primary
-            item.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.white, for: .normal)
-            
-        }
-        func unfollow(item: FollowNode) {
-            self.viewModel.unfollow(userId: item.user.userId ?? "")
-            item.followAction = follow
-            item.followBtnNode.backgroundColor = UIColor.white
-            item.followBtnNode.setTitle("+ Follow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.primary, for: .normal)
-        }
         return {
             var node: FollowNode!
             // if user in the following list, this should be a following node.
@@ -198,8 +189,8 @@ extension FollowerVC: ASTableDataSource {
             node = FollowNode(with: user)
             node.followAction = {
                 item in
-                if isFollowing {follow(item: item) }
-                else { unfollow(item: item)}
+                if isFollowing {self.follow(item: item) }
+                else { self.unfollow(item: item)}
             }
             
             
@@ -215,18 +206,20 @@ extension FollowerVC: ASTableDataSource {
 
 extension FollowerVC {
     
-    func retrieveNextPageWithCompletion( block: @escaping ([AnyObject]) -> Void) {
+    func follow(item: FollowNode) {
+        self.viewModel.insertfollow(userId: item.user.userId ?? "")
+        item.followAction = unfollow
+        item.followBtnNode.backgroundColor = UIColor.primary
+        item.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.white, for: .normal)
         
     }
-    
-    
-    func insertNewRowsInTableNode(newUsers: [AnyObject]) {
-        
-        guard newUsers.count > 0 else {
-            return
-        }
-        
+    func unfollow(item: FollowNode) {
+        self.viewModel.unfollow(userId: item.user.userId ?? "")
+        item.followAction = follow
+        item.followBtnNode.backgroundColor = UIColor.white
+        item.followBtnNode.setTitle("+ Follow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.primary, for: .normal)
     }
     
     
 }
+
