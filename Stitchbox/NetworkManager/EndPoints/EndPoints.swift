@@ -447,7 +447,7 @@ extension PostAPI: EndPointType {
             case .create:
                 return "/"
             case .update(let params):
-                return "/\(params["id"])"
+                return "/\(params["id"] ?? "")"
             case .getMyPost(let page):
                 return "/me?page=\(page)&limit=10"
         }
@@ -504,9 +504,9 @@ extension FollowApi: EndPointType {
       case .getFollowers(let userId, let page, let lim):
         return "/followers/\(userId)?page=\(page)&limit=\(lim)"
       case .searchFollower(let params, let page, let lim):
-        return "/search/\(params["userid"])?search=\(params["search"])&page=\(page)&limit=\(lim)"
+        return "/search/\(params["userid"] ?? "")?search=\(params["search"] ?? "")&page=\(page)&limit=\(lim)"
       case .searchFollowing(let params, let page, let lim):
-        return "/followers/search/\(params["userid"])?search=\(params["search"])&page=\(page)&limit=\(lim)"
+        return "/followers/search/\(params["userid"] ?? "")?search=\(params["search"] ?? "")&page=\(page)&limit=\(lim)"
     }
   }
   
@@ -562,11 +562,11 @@ extension LikePostApi: EndPointType {
   var path: String {
     switch self {
       case .isLike(let params):
-        return "/\(params["id"])"
+        return "/\(params["id"] ?? "")"
       case .like(let params):
-        return "/\(params["id"])"
+        return "/\(params["id"] ?? "")"
       case .unlike(let params):
-        return "/\(params["id"])"
+        return "/\(params["id"] ?? "")"
     }
   }
   
@@ -704,7 +704,7 @@ extension CommentApi: EndPointType {
       case .create:
         return "/"
       case .update(let params):
-        return "/\(params["id"])"
+        return "/\(params["id"] ?? "")"
       case .delete(let commentId):
         return "/\(commentId)"
       case .like(let commentId):
