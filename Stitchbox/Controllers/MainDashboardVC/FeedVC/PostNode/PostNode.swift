@@ -179,6 +179,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         }
   
         checkIfLike()
+        totalLikeCount()
+        totalCmtCount()
         
     }
     
@@ -474,10 +476,20 @@ extension PostNode {
             
             switch result {
             case .success(let apiResponse):
+                print(apiResponse)
                 
-               print(apiResponse)
-
-
+                guard apiResponse.body?["message"] as? String == "success",
+                      let checkIsLike = apiResponse.body?["islike"] as? Bool  else {
+                        return
+                }
+                
+                self.isLike = checkIsLike
+                if self.isLike {
+                    DispatchQueue.main.async {
+                        self.buttonsView.likeBtn.setImage(UIImage(named: "liked"), for: .normal)
+                    }
+                }
+                
             case .failure(let error):
                 print(error)
             }
@@ -486,15 +498,19 @@ extension PostNode {
     }
     
     func performLike() {
+
+        self.likeCount += 1
+        DispatchQueue.main.async {
+            self.likeAnimation()
+            self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
+        }
         
         APIManager().likePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
                 
-                self.likeAnimation()
                 self.isLike = true
-                self.likeCount += 1
-                self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
+              
                print(apiResponse)
 
 
@@ -507,16 +523,19 @@ extension PostNode {
     
     func performUnLike() {
         
+        
+        self.likeCount -= 1
+        DispatchQueue.main.async {
+            self.unlikeAnimation()
+            self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
+        }
+        
         APIManager().unlikePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
                 
-                self.unlikeAnimation()
                 self.isLike = false
-                self.likeCount -= 1
-                self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
                print(apiResponse)
-
 
             case .failure(let error):
                 print(error)
@@ -552,6 +571,49 @@ extension PostNode {
         
     }
 
+}
+
+extension PostNode {
+    
+    func totalLikeCount() {
+        
+        //APIManager().like
+        APIManager().countLikedPost(id: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                self.isLike = false
+               print(apiResponse)
+
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+    }
+    
+    func totalCmtCount() {
+        
+        
+        APIManager().getComment(postId: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                self.isLike = false
+               print(apiResponse)
+
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        //APIManager().comment
+        
+    }
+    
+    
+    
+    
 }
 
 
