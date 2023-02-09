@@ -304,22 +304,6 @@ extension MainFollowVC {
 
     func searchUsers(for searchText: String) {
         
-        if !FollowerVC.view.isHidden {
-           
-            delayItem.perform(after: 0.35) {
-                print("Search followers using api")
-                self.searchFollowers(for: searchText)
-            }
-           
-        } else {
-          
-            delayItem.perform(after: 0.35) {
-                print("Search following using api")
-                self.searchFollowings(for: searchText)
-            }
-        }
-        
-    /*
         let follows = !FollowerVC.view.isHidden ? FollowerVC.userList : FollowingVC.userList
         
         let searchUserList = follows.filter { follow in
@@ -361,7 +345,7 @@ extension MainFollowVC {
             }
             
         }
-        */
+        
 
     }
     
@@ -372,10 +356,22 @@ extension MainFollowVC {
             APIManager().searchFollows(query: searchText, userid: userUID, page: 1) { result in
                 switch result {
                 case .success(let apiResponse):
-                
-                   print(apiResponse)
 
-
+                    guard apiResponse.body?["message"] as? String == "success",
+                          let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        return
+                    }
+                    
+                    let list = data.map { item in
+                        return FollowerModel(JSON: item)!
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.FollowerVC.searchUserList = list
+                        self.FollowerVC.tableNode.reloadData()
+                    }
+                   
+        
                 case .failure(let error):
                     print(error)
                 }
@@ -396,8 +392,19 @@ extension MainFollowVC {
                 case .success(let apiResponse):
                     
     
-                   print(apiResponse)
-
+                    guard apiResponse.body?["message"] as? String == "success",
+                          let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        return
+                    }
+                    
+                    let list = data.map { item in
+                        return FollowerModel(JSON: item)!
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.FollowingVC.searchUserList = list
+                        self.FollowingVC.tableNode.reloadData()
+                    }
 
                 case .failure(let error):
                     print(error)

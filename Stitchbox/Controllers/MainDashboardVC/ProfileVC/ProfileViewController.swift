@@ -595,6 +595,34 @@ extension ProfileViewController: UICollectionViewDelegate {
         
         
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        let item = datasource.itemIdentifier(for: indexPath)
+       
+        switch item {
+            case .header(_):
+                print("header")
+                
+            case .challengeCard(_):
+                
+                print("challengeCard")
+                //showFullScreenChallengeCard()
+                
+            case .posts(_):
+                
+                let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
+                if indexPath.row == snap.count - 5 {
+                    
+                    print("Load next")
+                    
+                }
+        
+            case .none:
+                print("None")
+        }
+        
+    }
 
 }
 
