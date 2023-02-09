@@ -504,9 +504,9 @@ extension FollowApi: EndPointType {
       case .getFollowers(let userId, let page, let lim):
         return "/followers/\(userId)?page=\(page)&limit=\(lim)"
       case .searchFollower(let params, let page, let lim):
-        return "/search/\(params["userid"] ?? "")?search=\(params["search"] ?? "")&page=\(page)&limit=\(lim)"
+        return "/followers/search/\(params["userid"] ?? "")?search=\(params["query"] ?? "")&page=\(page)&limit=\(lim)"
       case .searchFollowing(let params, let page, let lim):
-        return "/followers/search/\(params["userid"] ?? "")?search=\(params["search"] ?? "")&page=\(page)&limit=\(lim)"
+        return "/search/\(params["userid"] ?? "")?search=\(params["query"] ?? "")&page=\(page)&limit=\(lim)"
     }
   }
   

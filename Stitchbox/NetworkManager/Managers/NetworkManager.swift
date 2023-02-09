@@ -100,6 +100,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         if let request = buildRequest(from: route) {
+          print("ABC \(request.url)")
             task = session.dataTask(with: request, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
