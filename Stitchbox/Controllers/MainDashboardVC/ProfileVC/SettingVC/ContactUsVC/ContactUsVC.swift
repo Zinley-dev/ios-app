@@ -68,23 +68,6 @@ class ContactUsVC: UIViewController, ControllerType {
         }.disposed(by: disposeBag)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
-                                               name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
-                                               name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-    }
-    
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -266,37 +249,10 @@ extension ContactUsVC: UITextViewDelegate {
         
     }
     
-    
 }
 
 extension ContactUsVC {
     
-    @objc func handleKeyboardShow(notification: Notification) {
-        
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            
-            
-            
-            UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
-                self.view.layoutIfNeeded()
-            }, completion: { (completed) in
-                
-            })
-        }
-    }
-    
-    
-    @objc func handleKeyboardHide(notification: Notification) {
-        
-        
-        
-        UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
-            self.view.layoutIfNeeded()
-        }, completion: { (completed) in
-            
-        })
-        
-    }
     
     @objc func buttonSelected(sender: UIButton) {
         

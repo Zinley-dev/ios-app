@@ -168,12 +168,31 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             }
         } else {
             
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: post.imageUrl) {
-                DispatchQueue.main.async {
-                  self.imageNode.image = UIImage(data: data)
+            
+            imageStorage.async.object(forKey: post.imageUrl.absoluteString) { result in
+                if case .value(let image) = result {
+                    
+                    DispatchQueue.main.async {
+                        self.imageNode.image = image
+                    }
+                   
+                    
+                } else {
+                    
+                    AF.request(post.imageUrl).responseImage { response in
+                                          
+                       switch response.result {
+                        case let .success(value):
+                           self.imageNode.image = value
+                           try? imageStorage.setObject(value, forKey: post.imageUrl.absoluteString, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+                                              
+                               case let .failure(error):
+                                   print(error)
+                            }
+                                          
+                      }
+                    
                 }
-              }
             }
             
         }

@@ -7,21 +7,35 @@
 
 import UIKit
 
-class EditGeneralInformationVC: UIViewController {
+class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
 
     
+    @IBOutlet weak var saveBtn: UIButton!
     let backButton: UIButton = UIButton(type: .custom)
     var type = ""
     
-    @IBOutlet weak var infoTxtField: UITextField!
+    @IBOutlet weak var infoTxtField: UITextField! {
+        didSet {
+            let redPlaceholderText = NSAttributedString(string: "Your info?",
+                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            
+            infoTxtField.attributedPlaceholder = redPlaceholderText
+        }
+    }
+    
     @IBOutlet weak var editLblName: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        infoTxtField.delegate = self
+        infoTxtField.addTarget(self, action: #selector(StreamingLinkVC.textFieldDidChange(_:)), for: .editingChanged)
+        
+
         setupButtons()
         setupLbl()
+        loadDefaultInfo()
         
     }
     
@@ -40,6 +54,70 @@ class EditGeneralInformationVC: UIViewController {
         self.view.endEditing(true)
         
     }
+    
+    @IBAction func saveBtnPressed(_ sender: Any) {
+        
+        if type == "Name" {
+            
+            
+        } else if type == "Username" {
+            
+            
+        } else if type == "Discord Link" {
+            
+            processDiscord()
+            
+        } else if type == "Email" {
+            
+            
+        } else if type == "Phone" {
+            
+            
+        } else if type == "Birthday" {
+            
+            
+        }
+        
+        
+    }
+}
+
+extension EditGeneralInformationVC {
+    
+    func processDiscord() {
+        
+        if let urlString = infoTxtField.text {
+            
+            if let url = URL(string: urlString) {
+                
+                if let domain = url.host {
+                    
+                    print(domain)
+                    
+                    if discord_verify(host: domain) == true {
+                        
+                        self.infoTxtField.placeholder = urlString
+                        self.infoTxtField.text = ""
+                        
+                       
+                      
+                        
+                    } else {
+                        
+                        self.infoTxtField.text = ""
+                        self.showErrorAlert("Oops!", msg: "Your current discord link isn't valid/supported now, please check and correct it.")
+                        return
+                        
+                    }
+                    
+                }
+            }
+            
+        }
+        
+        
+    }
+    
     
 }
 
@@ -67,12 +145,6 @@ extension EditGeneralInformationVC {
        
     }
     
-   
-    @objc func onClickBack(_ sender: AnyObject) {
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
-        }
-    }
     
     func setupLbl() {
         
@@ -80,5 +152,122 @@ extension EditGeneralInformationVC {
         
     }
 
+    
+    func loadDefaultInfo() {
+        
+        if type == "Name" {
+            
+            if let name = _AppCoreData.userDataSource.value?.name, name != "" {
+                infoTxtField.placeholder = name
+            } else {
+                infoTxtField.placeholder = "Your name"
+            }
+            
+        } else if type == "Username" {
+            
+            if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
+                infoTxtField.placeholder = username
+            }
+            
+        } else if type == "Discord Link" {
+            
+            if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
+                infoTxtField.placeholder = discord
+            } else {
+                infoTxtField.placeholder = "https://discord.gg/TFD4Y8yt"
+            }
+            
+        } else if type == "Email" {
+            
+            if let email = _AppCoreData.userDataSource.value?.email, email != "" {
+                infoTxtField.placeholder = email
+            } else {
+                infoTxtField.placeholder = "Email"
+            }
+            
+        } else if type == "Phone" {
+            
+            if let phone = _AppCoreData.userDataSource.value?.phone, phone != "" {
+                infoTxtField.placeholder = phone
+            } else {
+                infoTxtField.placeholder = "+1 ..."
+            }
+            
+        } else if type == "Birthday" {
+            
+            if let birthday = _AppCoreData.userDataSource.value?.birthday, birthday != "" {
+                infoTxtField.placeholder = birthday
+            } else {
+                infoTxtField.placeholder = "MM/DD/YYYY"
+            }
+            
+        }
+        
+
+        
+    }
+    
+}
+
+extension EditGeneralInformationVC {
+    
+    
+    @objc func onClickBack(_ sender: AnyObject) {
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
+        }
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+
+        if let text = infoTxtField.text, text != "" {
+            
+            
+            if type == "Discord Link" {
+                
+                if verifyUrl(urlString: text) == true {
+                    
+                 
+                    saveBtn.backgroundColor = .primary
+                    saveBtn.titleLabel?.textColor = .white
+                    
+                } else {
+                    
+                  
+                    saveBtn.backgroundColor = .disableButtonBackground
+                    saveBtn.titleLabel?.textColor = .lightGray
+                    
+                }
+                
+            } else {
+                
+                saveBtn.backgroundColor = .primary
+                saveBtn.titleLabel?.textColor = .white
+                
+            }
+            
+            
+            
+        } else {
+            
+           
+            saveBtn.backgroundColor = .disableButtonBackground
+            saveBtn.titleLabel?.textColor = .lightGray
+            
+        }
+        
+    }
+    
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 }

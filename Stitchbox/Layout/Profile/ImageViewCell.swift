@@ -38,22 +38,18 @@ class ImageViewCell: UICollectionViewCell {
     
     func configure(with image: UIImage) {
         imageView.image = image
+        videoSignView.isHidden = true
     }
     
     func configureWithFit(with image: UIImage) {
         imageView.contentMode = .scaleAspectFit
         imageView.image = image
+        videoSignView.isHidden = true
     }
   
     func configureWithUrl(with data: PostModel) {
-      DispatchQueue.global().async {
-        if let data = try? Data(contentsOf: data.imageUrl) {
-          DispatchQueue.main.async {
-            self.imageView.image = UIImage(data: data)
-          }
-        }
-      }
-        
+   
+        self.imageView.load(url: data.imageUrl, str: data.imageUrl.absoluteString)
         
         if let type = data.setting["mediaType"] as? String {
             if type == "video" {

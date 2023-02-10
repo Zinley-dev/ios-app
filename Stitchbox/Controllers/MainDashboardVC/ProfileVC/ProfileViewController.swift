@@ -31,7 +31,6 @@ class ProfileViewController: UIViewController {
     
     var followerCount = 0
     var followingCount = 0
-    
 
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
@@ -658,16 +657,28 @@ extension ProfileViewController {
     
     func showFullScreenAvatar() {
         
-        if selectAvatarImage.isHidden {
-        
-            self.backgroundView.isHidden = false
-            self.selectAvatarImage.alpha = 1.0
+        if selectAvatarImage.image != nil {
             
-            UIView.transition(with: selectAvatarImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            if selectAvatarImage.isHidden {
+            
+                self.backgroundView.isHidden = false
+                self.selectAvatarImage.alpha = 1.0
                 
-                self.selectAvatarImage.isHidden = false
+                UIView.transition(with: selectAvatarImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                    
+                    self.selectAvatarImage.isHidden = false
+                    
+                })
                 
-            })
+            }
+            
+        } else {
+            
+            if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
+                //self.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(EPVC, animated: true)
+                
+            }
             
         }
         
@@ -676,16 +687,28 @@ extension ProfileViewController {
     
     func showFullScreenCover() {
         
-        if selectCoverImage.isHidden {
-        
-            self.backgroundView.isHidden = false
-            self.selectCoverImage.alpha = 1.0
+        if selectCoverImage.image != nil {
             
-            UIView.transition(with: selectCoverImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            if selectCoverImage.isHidden {
+            
+                self.backgroundView.isHidden = false
+                self.selectCoverImage.alpha = 1.0
                 
-                self.selectCoverImage.isHidden = false
+                UIView.transition(with: selectCoverImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                    
+                    self.selectCoverImage.isHidden = false
+                    
+                })
                 
-            })
+            }
+            
+        } else {
+            
+            if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
+                //self.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(EPVC, animated: true)
+                
+            }
             
         }
         

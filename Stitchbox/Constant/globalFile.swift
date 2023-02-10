@@ -31,10 +31,12 @@ var selectedTabIndex = 0
  let data5 = StreamingDomainModel(postKey: "5", streamingDomainModel: ["company": "Bigo Live", "domain": ["bigo.tv"], "status": true])
  let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company": "Nonolive", "domain": ["nonolive.com"], "status": true])
  let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
+
  
 
 var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
 var back_frame = CGRect(x: -10, y: 0, width: 35, height: 25)
+var discord_domain = ["discordapp.com", "discord.com", "discord.co", "discord.gg", "watchanimeattheoffice.com", "dis.gd", "discord.media", "discordapp.net", "discordstatus.com" ]
 
 typealias DownloadComplete = () -> ()
 
@@ -64,7 +66,7 @@ func showNote(text: String) {
     
 }
 
-func swiftLoader(text: String) {
+func presentSwiftLoaderWithText(text: String) {
     
     var config : SwiftLoader.Config = SwiftLoader.Config()
     config.size = 170
@@ -355,4 +357,14 @@ func presentSwiftLoader() {
     
     SwiftLoader.show(title: "", animated: true)
 
+}
+
+
+func discord_verify(host: String) -> Bool  {
+    
+    if discord_domain.contains(host) {
+        return true
+    }
+    
+    return false
 }

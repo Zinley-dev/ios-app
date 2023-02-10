@@ -363,7 +363,7 @@ class ChannelViewController: SBUChannelViewController {
     func reauthenticateUser(shouldAnimate: Bool) {
         if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
             if shouldAnimate {
-                swiftLoader(text: "Authenticating...")
+                presentSwiftLoaderWithText(text: "Authenticating...")
             }
             SBUGlobals.CurrentUser = SBUUser(userId: userUID)
             SBUMain.connect { usr, error in

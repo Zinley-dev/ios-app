@@ -744,7 +744,6 @@ extension PostVC {
     
     @objc func onClickPost(_ sender: AnyObject) {
         
-        
         if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
             if mediaType == "image" {
                 uploadImage()
@@ -757,9 +756,6 @@ extension PostVC {
             self.showErrorAlert("Oops!", msg: "Your current post is being uploaded, please try again later.")
         }
         
-        
-        
-      
     }
     
     @objc func handleKeyboardShow(notification: Notification) {
