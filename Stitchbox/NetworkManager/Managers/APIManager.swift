@@ -333,6 +333,11 @@ extension APIManager {
         }
         
     }
+    func checkUsernameExist(username: String, completion: @escaping APICompletion) {
+      userManager.request(.usernameExist(params: ["username": username])) { result in
+        completion(result)
+      }
+    }
 }
 
 

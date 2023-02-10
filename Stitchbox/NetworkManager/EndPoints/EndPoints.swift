@@ -342,6 +342,7 @@ public enum UserAPI {
     case changepassword (params: [String: Any])
     case uploadavatar
     case uploadcover
+    case usernameExist(params: [String: Any])
 }
 extension UserAPI: EndPointType {
     var module: String {
@@ -360,6 +361,8 @@ extension UserAPI: EndPointType {
             return "/upload-cover"
         case .uploadavatar:
             return "/upload-avatar"
+          case .usernameExist:
+            return "/username-exists"
         }
     }
     
@@ -374,6 +377,8 @@ extension UserAPI: EndPointType {
         case .uploadcover:
             return .post
         case .uploadavatar:
+            return .post
+          case .usernameExist:
             return .post
         }
     }
@@ -390,6 +395,8 @@ extension UserAPI: EndPointType {
             return .request
         case .uploadcover:
             return .request
+          case .usernameExist(params: let params):
+            return .requestParameters(parameters: params)
         }
     }
     
