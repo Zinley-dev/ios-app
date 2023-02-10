@@ -22,7 +22,7 @@ class MorePersonalInfoVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupBackButton()
-        
+        setupDefaultInfo()
     }
     
     override func viewWillLayoutSubviews() {
@@ -71,9 +71,8 @@ class MorePersonalInfoVC: UIViewController {
     
     @IBAction func birthdayOnTapped(_ sender: Any) {
         
-        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
-            
-            EGIVC.type = "Birthday"
+        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditBirthdayVC") as? EditBirthdayVC {
+        
             self.navigationController?.pushViewController(EGIVC, animated: true)
             
         }
@@ -84,6 +83,23 @@ class MorePersonalInfoVC: UIViewController {
 
 
 extension MorePersonalInfoVC {
+    
+    
+    func setupDefaultInfo() {
+        
+        if let birthday = _AppCoreData.userDataSource.value?.birthday, birthday != "" {
+            birthdayTxtField.text = birthday
+        }
+    
+        if let phone = _AppCoreData.userDataSource.value?.phone, phone != "" {
+            phoneTxtField.text = phone
+        }
+        if let email = _AppCoreData.userDataSource.value?.email, email != "" {
+            emailTxtField.text = email
+        }
+        
+    }
+    
     
     func setupButtons() {
         

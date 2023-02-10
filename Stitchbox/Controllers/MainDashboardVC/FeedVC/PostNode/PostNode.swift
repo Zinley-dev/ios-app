@@ -134,6 +134,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             }
          
             
+            print(post.hashtags)
+            
             self.checkIfLike()
             self.totalLikeCount()
             self.totalCmtCount()
@@ -612,18 +614,24 @@ extension PostNode {
     }
     
     func totalCmtCount() {
-    
-        APIManager().getComment(postId: post.id) { result in
+        
+        APIManager().countComment(post: post.id) { result in
             switch result {
             case .success(let apiResponse):
              
-               print(apiResponse)
-
+                guard apiResponse.body?["message"] as? String == "success",
+                      let commentsCountFromQuery = apiResponse.body?["comments"] as? Int  else {
+                        return
+                }
+                
+                DispatchQueue.main.async {
+                    self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(commentsCountFromQuery)))"
+                }
+                
             case .failure(let error):
                 print("CmtCount: \(error)")
             }
         }
-    
         
     }
     

@@ -14,6 +14,9 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var availaleUsernameLbl: UILabel!
     let backButton: UIButton = UIButton(type: .custom)
     var type = ""
+    var isUsernameVerify = false
+    // to override search task
+    lazy var delayItem = workItem()
     
     @IBOutlet weak var infoTxtField: UITextField! {
         didSet {
@@ -31,12 +34,10 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
 
         // Do any additional setup after loading the view.
         infoTxtField.delegate = self
-        infoTxtField.addTarget(self, action: #selector(StreamingLinkVC.textFieldDidChange(_:)), for: .editingChanged)
+        infoTxtField.addTarget(self, action: #selector(EditGeneralInformationVC.textFieldDidChange(_:)), for: .editingChanged)
         
-        if type == "Name" {
+        if type == "Name" || type == "Username" {
             infoTxtField.maxLength = 15
-        } else if type == "Username" {
-            infoTxtField.maxLength = 10
         }
 
         setupButtons()
@@ -64,14 +65,21 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
     @IBAction func saveBtnPressed(_ sender: Any) {
         
         if type == "Name" {
-            
+        
             processName()
             
         } else if type == "Username" {
             
+            if isUsernameVerify == true {
+            
+                processUsername()
+                
+            } else {
+                showErrorAlert("Oops!", msg: "Please type your new username and get it verified to be available and try again")
+            }
             
         } else if type == "Discord Link" {
-            
+        
             processDiscord()
             
         } else if type == "Email" {
@@ -80,12 +88,7 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
         } else if type == "Phone" {
             
             
-        } else if type == "Birthday" {
-            
-            
-            
         }
-        
         
     }
 }
@@ -103,7 +106,7 @@ extension EditGeneralInformationVC {
                     if discord_verify(host: domain) == true {
 
                         self.view.endEditing(true)
-                        
+                        presentSwiftLoader()
                         APIManager().updateme(params: ["discordLink": urlString]) { result in
                             switch result {
                             case .success(let apiResponse):
@@ -113,17 +116,23 @@ extension EditGeneralInformationVC {
                                 }
                                 
                                 DispatchQueue.main {
+                                    SwiftLoader.hide()
                                     self.infoTxtField.text = ""
                                     self.infoTxtField.placeholder = urlString
                                     showNote(text: "Updated successfully")
                                 }
                                 
                             case .failure(let error):
-                                self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                                DispatchQueue.main {
+                                    SwiftLoader.hide()
+                                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                                }
+                            
                             }
                         }
                         
                     } else {
+                        
                         
                         self.infoTxtField.text = ""
                         self.showErrorAlert("Oops!", msg: "Your current discord link isn't valid/supported now, please check and correct it.")
@@ -144,6 +153,8 @@ extension EditGeneralInformationVC {
         
         if let name = infoTxtField.text, name != "" {
     
+            self.view.endEditing(true)
+            presentSwiftLoader()
             APIManager().updateme(params: ["name": name]) { result in
                 switch result {
                 case .success(let apiResponse):
@@ -152,13 +163,22 @@ extension EditGeneralInformationVC {
                             return
                     }
                     
-                    showNote(text: "Updated successfully")
                     
-                    self.infoTxtField.placeholder = name
-                    self.infoTxtField.text = ""
-
+                    DispatchQueue.main {
+                        
+                        SwiftLoader.hide()
+                        showNote(text: "Updated successfully")
+                
+                        self.infoTxtField.placeholder = name
+                        self.infoTxtField.text = ""
+                        
+                    }
+                    
                 case .failure(let error):
-                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                    DispatchQueue.main {
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                    }
                 }
             }
             
@@ -169,8 +189,85 @@ extension EditGeneralInformationVC {
     
     func processUsername() {
         
+        if let username = infoTxtField.text, username != "" {
+            
+            presentSwiftLoader()
+            view.endEditing(true)
+            APIManager().checkUsernameExist(username: username) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    if let message = apiResponse.body?["message"] as? String  {
+                        
+                        if message == "username has not been registered" {
+                            
+                            self.saveUserName(username: username)
+                            
+                        } else {
+                            
+                            
+                            
+                            DispatchQueue.main.async {
+                                SwiftLoader.hide()
+                                self.showErrorAlert("Oops!", msg: "Your username has been registered")
+                                self.isUsernameVerify = false
+                                self.availaleUsernameLbl.isHidden = true
+                                self.infoTxtField.text = ""
+                            }
+                            
+                        }
+                        
+                        
+                    }
+                    
+        
+                case .failure(let error):
+                    
+                    DispatchQueue.main.async {
+                        self.availaleUsernameLbl.isHidden = true
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                    }
+                    
+                    
+                }
+            }
+            
+            
+        }
         
         
+    }
+    
+    func saveUserName(username: String) {
+        
+        APIManager().updateme(params: ["username": username]) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard apiResponse.body?["message"] as? String == "success" else {
+                        return
+                }
+                
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                    showNote(text: "Updated successfully")
+                    self.infoTxtField.placeholder = username
+                    self.infoTxtField.text = ""
+                    self.availaleUsernameLbl.isHidden = true
+                    self.saveBtn.backgroundColor = .disableButtonBackground
+                    self.saveBtn.titleLabel?.textColor = .lightGray
+        
+                }
+            case .failure(let error):
+                
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                }
+              
+            }
+        }
         
     }
     
@@ -249,18 +346,7 @@ extension EditGeneralInformationVC {
                 infoTxtField.placeholder = "+1 ..."
             }
             
-        } else if type == "Birthday" {
-            
-            if let birthday = _AppCoreData.userDataSource.value?.birthday, birthday != "" {
-                infoTxtField.placeholder = birthday
-            } else {
-                infoTxtField.placeholder = "MM/DD/YYYY"
-            }
-            
         }
-        
-
-        
     }
     
 }
@@ -278,7 +364,6 @@ extension EditGeneralInformationVC {
 
         if let text = infoTxtField.text, text != "" {
             
-            
             if type == "Discord Link" {
                 
                 if verifyUrl(urlString: text) == true {
@@ -295,6 +380,16 @@ extension EditGeneralInformationVC {
                     
                 }
                 
+            } else if type == "Username" {
+                
+                
+                delayItem.perform(after: 0.25) {
+                    if text != "" {
+                        self.checkAvailaleName(searchText: text)
+                    }
+                }
+               
+                
             } else {
                 
                 saveBtn.backgroundColor = .primary
@@ -306,7 +401,7 @@ extension EditGeneralInformationVC {
             
         } else {
             
-           
+            availaleUsernameLbl.isHidden = true
             saveBtn.backgroundColor = .disableButtonBackground
             saveBtn.titleLabel?.textColor = .lightGray
             
@@ -323,6 +418,57 @@ extension EditGeneralInformationVC {
         
                                                                                        
         present(alert, animated: true, completion: nil)
+        
+    }
+    
+    
+    func checkAvailaleName(searchText: String) {
+        
+        APIManager().checkUsernameExist(username: searchText) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                if let message = apiResponse.body?["message"] as? String  {
+                    
+                    if message == "username has not been registered" {
+                        
+                        self.isUsernameVerify = true
+                        
+                        DispatchQueue.main.async {
+                            self.availaleUsernameLbl.isHidden = false
+                            self.saveBtn.backgroundColor = .primary
+                            self.saveBtn.titleLabel?.textColor = .white
+                        }
+                        
+                    } else {
+                        
+                        self.isUsernameVerify = false
+                        
+                        DispatchQueue.main.async {
+                            self.availaleUsernameLbl.isHidden = true
+                            self.saveBtn.backgroundColor = .disableButtonBackground
+                            self.saveBtn.titleLabel?.textColor = .lightGray
+                        }
+                        
+                    }
+                    
+                    
+                }
+                
+    
+            case .failure(let error):
+                
+                DispatchQueue.main.async {
+                    self.availaleUsernameLbl.isHidden = true
+                    self.saveBtn.backgroundColor = .disableButtonBackground
+                    self.saveBtn.titleLabel?.textColor = .lightGray
+                }
+                
+                
+                print(error)
+            }
+        }
+        
         
     }
     

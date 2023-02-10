@@ -320,9 +320,6 @@ extension EditPhofileVC: EditControllerDelegate {
                                 return
                         }
                         
-                        
-                        
-
 
                     case .failure(let error):
                         print(error)

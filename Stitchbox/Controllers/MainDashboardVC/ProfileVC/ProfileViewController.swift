@@ -61,6 +61,9 @@ class ProfileViewController: UIViewController {
             if posts.count == 10 {
                 self.currpage += 1
             }
+            
+            
+           
           DispatchQueue.main.async {
             var snapshot = self.datasource.snapshot()
               let items = snapshot.itemIdentifiers(inSection: .posts)
