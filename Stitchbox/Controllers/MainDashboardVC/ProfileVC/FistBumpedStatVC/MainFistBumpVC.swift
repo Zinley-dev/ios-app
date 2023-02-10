@@ -120,8 +120,11 @@ extension MainFistBumpVC {
         }
 
         let loadUsername = userDataSource.userName
-        
-        self.navigationItem.title = loadUsername
+        if loadUsername != "" {
+            self.navigationItem.title = loadUsername
+        } else {
+            self.navigationItem.title = "FistBump"
+        }
        
        
     }
@@ -205,11 +208,11 @@ extension MainFistBumpVC {
        
         if fistBumperVC.view.isHidden == false {
             
-            /*
-            fistBumperVC.searchChannelList.removeAll()
+            
+            fistBumperVC.searchUserList.removeAll()
             fistBumperVC.inSearchMode = false
-            fistBumperVC.groupChannelsTableView.reloadData()
-             */
+            fistBumperVC.tableNode.reloadData()
+             
             
             return
             
@@ -218,11 +221,11 @@ extension MainFistBumpVC {
         
         if fistBumpeeVC.view.isHidden == false {
             
-            /*
-            fistBumpeeVC.searchChannelList.removeAll()
+            
+            fistBumpeeVC.searchUserList.removeAll()
             fistBumpeeVC.inSearchMode = false
-            fistBumpeeVC.groupChannelsTableView.reloadData()
-             */
+            fistBumpeeVC.tableNode.reloadData()
+             
             
             return
             
@@ -239,11 +242,11 @@ extension MainFistBumpVC {
         
         if fistBumperVC.view.isHidden == false {
             
-            /*
-            fistBumperVC.searchChannelList = InboxVC.channels
+            
+            fistBumperVC.searchUserList = fistBumpeeVC.FistBumpList
             fistBumperVC.inSearchMode = true
-            fistBumperVC.groupChannelsTableView.reloadData()
-            */
+            fistBumperVC.tableNode.reloadData()
+            
             
             return
             
@@ -252,17 +255,63 @@ extension MainFistBumpVC {
         
         if fistBumpeeVC.view.isHidden == false {
             
-            /*
-            fistBumpeeVC.searchChannelList = RequestVC.channels
+            
+            fistBumpeeVC.searchUserList = fistBumpeeVC.FistBumpList
             fistBumpeeVC.inSearchMode = true
-            fistBumpeeVC.groupChannelsTableView.reloadData()
-             */
+            fistBumpeeVC.tableNode.reloadData()
+             
             
             return
             
         }
  
     }
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            clearSearchResults()
+        } else {
+            searchUsers(for: searchText)
+        }
+    }
+
+    func clearSearchResults() {
+        // Clear the search results for both view controllers
+        fistBumpeeVC.searchUserList.removeAll()
+        fistBumperVC.searchUserList.removeAll()
+
+        // Check which view controller is currently visible
+        if !fistBumperVC.view.isHidden {
+            // Set the searchUserList variable of the fistBumperVC to the full list of users and reload the table view
+            fistBumperVC.searchUserList = fistBumperVC.FistBumpList
+            fistBumperVC.tableNode.reloadData()
+        } else if !fistBumpeeVC.view.isHidden {
+            // Set the searchUserList variable of the fistBumpeeVC to the full list of users and reload the table view
+            fistBumpeeVC.searchUserList = fistBumpeeVC.FistBumpList
+            fistBumpeeVC.tableNode.reloadData()
+        }
+    }
+
+
+    func searchUsers(for searchText: String) {
+            
+            let fistbump = !fistBumpeeVC.view.isHidden ? fistBumperVC.FistBumpList : fistBumpeeVC.FistBumpList
+            
+            let searchUserList = fistbump.filter { $0.userName.range(of: searchText, options: .caseInsensitive) != nil }
+            
+            let targetVC = !fistBumperVC.view.isHidden ? fistBumperVC : fistBumpeeVC
+    
+            if let updateVC = targetVC as? fistBumperVC {
+                updateVC.searchUserList = searchUserList
+                updateVC.tableNode.reloadData()
+            } else if let updateVC = targetVC as? fistBumpeeVC {
+                updateVC.searchUserList = searchUserList
+                updateVC.tableNode.reloadData()
+            }
+        }
+
+
     
 }
 

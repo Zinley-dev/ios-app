@@ -7716,6 +7716,9 @@
                             <constraint firstItem="Rjw-54-1pE" firstAttribute="top" secondItem="mFq-7h-36g" secondAttribute="bottom" constant="16" id="p09-2D-ZqF"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="fistBumpListBtn" destination="pgc-G0-8Xd" id="C3D-VS-W0Z"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="abA-TM-ET0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -7912,20 +7915,20 @@
         <!--Main Fist BumpVC-->
         <scene sceneID="vkN-EW-38w">
             <objects>
-                <viewController storyboardIdentifier="MainFistBumpListVC" id="CK5-89-pFT" customClass="MainFistBumpVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainFistBumpListVC" modalPresentationStyle="fullScreen" id="CK5-89-pFT" customClass="MainFistBumpVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="39L-TM-HEq">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="755"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="rzB-CV-cip">
-                                <rect key="frame" x="0.0" y="57" width="375" height="34"/>
+                                <rect key="frame" x="8" y="57" width="359" height="34"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1mM-mC-HrY">
-                                        <rect key="frame" x="0.0" y="0.0" width="187.66666666666666" height="34"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="179.66666666666666" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="Ffg-fI-0vX"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Fist Bumpers"/>
                                         <userDefinedRuntimeAttributes>
@@ -7938,8 +7941,8 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wYG-ln-kzf">
-                                        <rect key="frame" x="187.66666666666663" y="0.0" width="187.33333333333337" height="34"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                        <rect key="frame" x="179.66666666666663" y="0.0" width="179.33333333333337" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Fist Bumpees"/>
                                         <userDefinedRuntimeAttributes>
@@ -7954,7 +7957,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6QZ-66-CmY">
-                                <rect key="frame" x="0.0" y="101" width="375" height="654"/>
+                                <rect key="frame" x="0.0" y="101" width="375" height="677"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
@@ -7965,9 +7968,9 @@
                             <constraint firstItem="Mst-0l-5xg" firstAttribute="bottom" secondItem="6QZ-66-CmY" secondAttribute="bottom" id="J1k-hO-2zW"/>
                             <constraint firstItem="6QZ-66-CmY" firstAttribute="top" secondItem="rzB-CV-cip" secondAttribute="bottom" constant="10" id="L02-Aj-I7Q"/>
                             <constraint firstItem="Mst-0l-5xg" firstAttribute="trailing" secondItem="6QZ-66-CmY" secondAttribute="trailing" id="P2a-u6-jfi"/>
-                            <constraint firstItem="rzB-CV-cip" firstAttribute="leading" secondItem="Mst-0l-5xg" secondAttribute="leading" id="Sxz-xj-ZP4"/>
+                            <constraint firstItem="rzB-CV-cip" firstAttribute="leading" secondItem="Mst-0l-5xg" secondAttribute="leading" constant="8" id="Sxz-xj-ZP4"/>
                             <constraint firstItem="rzB-CV-cip" firstAttribute="top" secondItem="Mst-0l-5xg" secondAttribute="top" constant="10" id="uiP-e5-uoc"/>
-                            <constraint firstItem="Mst-0l-5xg" firstAttribute="trailing" secondItem="rzB-CV-cip" secondAttribute="trailing" id="w0a-z3-R3n"/>
+                            <constraint firstItem="Mst-0l-5xg" firstAttribute="trailing" secondItem="rzB-CV-cip" secondAttribute="trailing" constant="8" id="w0a-z3-R3n"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="BoE-wu-6sQ"/>

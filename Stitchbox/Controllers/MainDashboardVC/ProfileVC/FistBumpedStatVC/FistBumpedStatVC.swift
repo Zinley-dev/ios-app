@@ -9,6 +9,7 @@ import UIKit
 
 class FistBumpedStatVC: UIViewController {
 
+    @IBOutlet weak var fistBumpListBtn: UIButton!
     let backButton: UIButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
@@ -27,6 +28,7 @@ extension FistBumpedStatVC {
     func setupButtons() {
         
         setupBackButton()
+        fistBumpListBtn.titleLabel?.textColor = .white
     
     }
     

@@ -24,6 +24,8 @@ class fistBumperVC: UIViewController, ControllerType {
     var viewModel = FistBumpViewModel()
     var currentPage = 1
     let disposeBag = DisposeBag()
+    var inSearchMode = false
+    var searchUserList = [FistBumpUserModel]()
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -207,14 +209,14 @@ extension fistBumperVC: ASTableDataSource {
             tableNode.view.restore()
         }
         
-        return self.FistBumpList.count
+        return inSearchMode ? searchUserList.count : FistBumpList.count
         
         
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
-        let user = self.FistBumpList[indexPath.row]
+        let user = inSearchMode ? searchUserList[indexPath.row] : FistBumpList[indexPath.row]
         
         return {
             
@@ -245,6 +247,20 @@ extension fistBumperVC: ASTableDataSource {
         
     }
     
+    
+    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+        
+        let user = inSearchMode ? searchUserList[indexPath.row] : FistBumpList[indexPath.row]
+        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            //self.hidesBottomBarWhenPushed = true
+            UPVC.userId = user.userID
+            UPVC.nickname = user.userName
+            self.navigationController?.pushViewController(UPVC, animated: true)
+            
+        }
+        
+    }
 }
 
 extension fistBumperVC {
