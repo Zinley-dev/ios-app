@@ -27,6 +27,13 @@ class FeedViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        showMiddleBtn(vc: self)
+        
+    }
      
 
 }
@@ -111,6 +118,8 @@ extension FeedViewController {
     @objc func onClickNoti(_ sender: AnyObject) {
         if let NVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "NotificationVC") as? NotificationVC {
             
+            NVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(NVC, animated: true)
             
         }
