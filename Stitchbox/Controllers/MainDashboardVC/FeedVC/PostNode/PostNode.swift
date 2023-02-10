@@ -132,7 +132,12 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             } else {
                 self.headerView.timeLbl.text = ""
             }
-          
+         
+            
+            self.checkIfLike()
+            self.totalLikeCount()
+            self.totalCmtCount()
+            
         }
        
         
@@ -197,10 +202,6 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
         }
   
-        checkIfLike()
-        totalLikeCount()
-        totalCmtCount()
-        
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -486,7 +487,6 @@ extension PostNode {
             performUnLike()
         }
         
-    
     }
     
     func checkIfLike() {
@@ -495,8 +495,7 @@ extension PostNode {
             
             switch result {
             case .success(let apiResponse):
-                print(apiResponse)
-                
+    
                 guard apiResponse.body?["message"] as? String == "success",
                       let checkIsLike = apiResponse.body?["islike"] as? Bool  else {
                         return
@@ -522,17 +521,13 @@ extension PostNode {
         DispatchQueue.main.async {
             self.likeAnimation()
             self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
+            self.isLike = true
         }
         
         APIManager().likePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
-                
-                self.isLike = true
-              
                print(apiResponse)
-
-
             case .failure(let error):
                 print(error)
             }
@@ -547,15 +542,13 @@ extension PostNode {
         DispatchQueue.main.async {
             self.unlikeAnimation()
             self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
+            self.isLike = false
         }
         
         APIManager().unlikePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
-                
-                self.isLike = false
-               print(apiResponse)
-
+                print(apiResponse)
             case .failure(let error):
                 print(error)
             }
@@ -580,7 +573,7 @@ extension PostNode {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "like"), for: .normal)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty"), for: .normal)
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {
@@ -596,42 +589,43 @@ extension PostNode {
     
     func totalLikeCount() {
         
-        //APIManager().like
         APIManager().countLikedPost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
+    
+                guard apiResponse.body?["message"] as? String == "success",
+                      let likeCountFromQuery = apiResponse.body?["likes"] as? Int  else {
+                        return
+                }
                 
-                self.isLike = false
-               print(apiResponse)
-
+                self.likeCount = likeCountFromQuery
+                
+                DispatchQueue.main.async {
+                    self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(likeCountFromQuery)))"
+                }
+               
             case .failure(let error):
-                print(error)
+                print("LikeCount: \(error)")
             }
         }
         
     }
     
     func totalCmtCount() {
-        
-        
+    
         APIManager().getComment(postId: post.id) { result in
             switch result {
             case .success(let apiResponse):
-                
-                self.isLike = false
+             
                print(apiResponse)
 
             case .failure(let error):
-                print(error)
+                print("CmtCount: \(error)")
             }
         }
-        
-        //APIManager().comment
+    
         
     }
-    
-    
-    
     
 }
 

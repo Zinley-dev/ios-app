@@ -18,6 +18,7 @@ class EditBioVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupButtons()
+        setupDefaultBio()
         bioTextView.delegate = self
     }
     
@@ -28,6 +29,27 @@ class EditBioVC: UIViewController {
         
     }
     @IBAction func saveBtnPressed(_ sender: Any) {
+        
+        if let bio = bioTextView.text {
+    
+            APIManager().updateme(params: ["about": bio]) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard apiResponse.body?["message"] as? String == "success" else {
+                            return
+                    }
+                    
+                    DispatchQueue.main.async {
+                        showNote(text: "Updated successfully")
+                    }
+                  
+                case .failure(let error):
+                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                }
+            }
+            
+        }
         
     }
     
@@ -56,6 +78,28 @@ extension EditBioVC {
         self.navigationItem.leftBarButtonItem = backButtonBarButton
        
     }
+    
+    func setupDefaultBio() {
+        
+        if let about = _AppCoreData.userDataSource.value?.about, about != "" {
+            bioTextView.text = about
+        } else {
+            bioTextView.text = "Tell other player about yourself?"
+        }
+        
+    }
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
     
    
     @objc func onClickBack(_ sender: AnyObject) {
@@ -92,7 +136,7 @@ extension EditBioVC: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         
-        if bioTextView.text != "Tell other player about yourself?", bioTextView.text != "" {
+        if bioTextView.text != "Tell other player about yourself?" {
             
             saveBtn.backgroundColor = .primary
             saveBtn.titleLabel?.textColor = .white

@@ -11,6 +11,7 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
 
     
     @IBOutlet weak var saveBtn: UIButton!
+    @IBOutlet weak var availaleUsernameLbl: UILabel!
     let backButton: UIButton = UIButton(type: .custom)
     var type = ""
     
@@ -34,6 +35,8 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
         
         if type == "Name" {
             infoTxtField.maxLength = 15
+        } else if type == "Username" {
+            infoTxtField.maxLength = 10
         }
 
         setupButtons()
@@ -99,6 +102,8 @@ extension EditGeneralInformationVC {
                     
                     if discord_verify(host: domain) == true {
 
+                        self.view.endEditing(true)
+                        
                         APIManager().updateme(params: ["discordLink": urlString]) { result in
                             switch result {
                             case .success(let apiResponse):
@@ -107,10 +112,11 @@ extension EditGeneralInformationVC {
                                         return
                                 }
                                 
-                                showNote(text: "Updated successfully")
-    
-                                self.infoTxtField.placeholder = urlString
-                                self.infoTxtField.text = ""
+                                DispatchQueue.main {
+                                    self.infoTxtField.text = ""
+                                    self.infoTxtField.placeholder = urlString
+                                    showNote(text: "Updated successfully")
+                                }
                                 
                             case .failure(let error):
                                 self.showErrorAlert("Oops!", msg: error.localizedDescription)
