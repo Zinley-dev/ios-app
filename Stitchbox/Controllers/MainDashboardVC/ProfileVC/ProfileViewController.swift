@@ -160,7 +160,11 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        navigationController?.hidesBarsOnSwipe = false        
+        navigationController?.hidesBarsOnSwipe = false
+        
+        // tabbar
+        showMiddleBtn(vc: self)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -348,7 +352,8 @@ extension ProfileViewController {
         
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SettingVC") as? SettingVC {
             
-            //self.hidesBottomBarWhenPushed = true
+            SVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(SVC, animated: true)
             
         }
@@ -362,7 +367,8 @@ extension ProfileViewController {
     
         //MainFistBumpVC
         if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
-            //self.hidesBottomBarWhenPushed = true
+            MFBVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(MFBVC, animated: true)
             
         }
@@ -374,10 +380,11 @@ extension ProfileViewController {
         print("followersTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
-            //self.hidesBottomBarWhenPushed = true
+            MFVC.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = true
             MFVC.followerCount = followerCount
             MFVC.followingCount = followingCount
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -390,10 +397,11 @@ extension ProfileViewController {
         print("followingTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
-            //self.hidesBottomBarWhenPushed = true
+            MFVC.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = false
             MFVC.followerCount = followerCount
             MFVC.followingCount = followingCount
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -404,7 +412,8 @@ extension ProfileViewController {
     @objc func editProfileTapped(_ sender: UIButton) {
         
         if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
-            //self.hidesBottomBarWhenPushed = true
+            EPVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(EPVC, animated: true)
             
         }
@@ -420,7 +429,8 @@ extension ProfileViewController {
     @objc func fistBumpedTapped(_ sender: UIButton) {
         
         if let FBSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "FistBumpedStatVC") as? FistBumpedStatVC {
-            //self.hidesBottomBarWhenPushed = true
+            FBSVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(FBSVC, animated: true)
             
         }
@@ -449,7 +459,9 @@ extension ProfileViewController {
     @objc func editCardTapped(_ sender: UIButton) {
         
         if let ECCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditChallengeCardVC") as? EditChallengeCardVC {
-            //self.hidesBottomBarWhenPushed = true
+        
+            ECCVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(ECCVC, animated: true)
             
         }
@@ -592,7 +604,8 @@ extension ProfileViewController: UICollectionViewDelegate {
             if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
                 SPVC.selectedPost = selectedPost
                 SPVC.startIndex = indexPath.row
-                //self.hidesBottomBarWhenPushed = true
+                SPVC.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
                 self.navigationController?.pushViewController(SPVC, animated: true)
             }
           
@@ -675,7 +688,8 @@ extension ProfileViewController {
         } else {
             
             if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
-                //self.hidesBottomBarWhenPushed = true
+                EPVC.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
                 self.navigationController?.pushViewController(EPVC, animated: true)
                 
             }
@@ -705,7 +719,8 @@ extension ProfileViewController {
         } else {
             
             if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
-                //self.hidesBottomBarWhenPushed = true
+                EPVC.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
                 self.navigationController?.pushViewController(EPVC, animated: true)
                 
             }

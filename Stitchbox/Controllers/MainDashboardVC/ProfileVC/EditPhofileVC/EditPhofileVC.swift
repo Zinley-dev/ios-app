@@ -45,7 +45,7 @@ class EditPhofileVC: UIViewController {
         super.viewWillAppear(animated)
         
         setupDefaultInfo()
-        
+ 
     }
     
     override func viewWillLayoutSubviews() {

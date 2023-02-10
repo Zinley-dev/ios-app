@@ -46,38 +46,29 @@ import SendBirdCalls
         // safe place to set the frame of button manually
         button.frame = CGRect.init(x: Int(self.view.bounds.midX) - sizeButton / 2, y: Int(self.tabBar.frame.minY) - sizeButton / 2, width: sizeButton, height: sizeButton)
     }
-    func setupView() {
-        self.view.bringSubviewToFront(self.tabBar)
-        tabBar.layer.opacity = 1
-        tabBar.tintColor = .tabbar
-        tabBar.barTintColor = .tabbar
-        tabBar.backgroundColor = .tabbarbackground
-        tabBar.layer.shadowColor = UIColor.black.cgColor
-        tabBar.layer.shadowOffset = CGSize(width: 0.0, height: -6.0)
-        tabBar.layer.shadowRadius = 4
-        tabBar.layer.shadowOpacity = 0.1
-        tabBar.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
-        tabBar.layer.masksToBounds = false
-        tabBar.layer.cornerRadius = 20
-        tabBar.frame.size.height = 70
-        tabBar.frame.origin.x = 50
-        UITabBar.appearance().isTranslucent = false
-        tabBar.layer.zPosition = 2000
-        setupMiddleButton()
-    }
+
     
-    // MARK: - UI Setup
-    override func prepareForInterfaceBuilder() {
-        super.prepareForInterfaceBuilder()
-        setupView()
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        //setupView()
         
         self.delegate = self
+        setupMiddleButton()
         SBDMain.add(self, identifier: self.sbu_className)
         
+    }
+    
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
+            return true
+        }
+
+        if selectedIndex == 2 {
+            return false
+        }
+        
+        return true
     }
     
     func setUnreadMessagesCount(_ totalCount: UInt) {

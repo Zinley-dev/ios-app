@@ -117,7 +117,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i42-YU-zt9">
-                                <rect key="frame" x="-15" y="513" width="374" height="44"/>
+                                <rect key="frame" x="-16" y="513" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -3454,8 +3454,12 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" name="Tertiary"/>
+                        <color key="selectedImageTintColor" name="Tertiary"/>
                         <tabBarAppearance key="standardAppearance">
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <color key="shadowColor" name="Tertiary"/>
+                            <color key="selectionIndicatorTintColor" name="Tertiary"/>
                         </tabBarAppearance>
                     </tabBar>
                     <connections>
@@ -7018,7 +7022,9 @@
                         <viewLayoutGuide key="safeArea" id="cdT-qf-TUI"/>
                         <color key="backgroundColor" name="Background"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" selectedImage="4x_add" id="gS6-OX-2fH"/>
+                    <tabBarItem key="tabBarItem" title="" id="gS6-OX-2fH">
+                        <inset key="imageInsets" minX="0.0" minY="-45" maxX="0.0" maxY="0.0"/>
+                    </tabBarItem>
                     <navigationItem key="navigationItem" id="5of-K2-ZzJ"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pZH-B8-jO7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -8076,7 +8082,6 @@
         </designable>
     </designables>
     <resources>
-        <image name="4x_add" width="20" height="20"/>
         <image name="FistBumped" width="64" height="34"/>
         <image name="Noti3x" width="60" height="61"/>
         <image name="Stats1week" width="36" height="40"/>

@@ -73,8 +73,6 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         InboxVC.view.isHidden = false
         RequestVC.view.isHidden = true
-        oldTabbarFr = self.tabBarController?.tabBar.frame ?? .zero
-        
         
         NotificationCenter.default.addObserver(self, selector: #selector(MainMessageVC.checkCallForLayout), name: (NSNotification.Name(rawValue: "checkCallForLayout")), object: nil)
         
@@ -82,20 +80,21 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    
-        self.tabBarController?.tabBar.isHidden = false
-        self.tabBarController?.tabBar.frame = oldTabbarFr
-        
-        
-        if !hidesBottomBarWhenPushed {
-            if self.tabBarController is DashboardTabBarController {
-                print("yes")
-                let tbctrl = self.tabBarController as! DashboardTabBarController
-                tbctrl.button.isHidden = false
+
+        if self.tabBarController is DashboardTabBarController {
+            
+            if let updateBar = self.tabBarController as? DashboardTabBarController {
+                
+                //hidesBottomBarWhenPushed = false
+                updateBar.button.isHidden = false
+                updateBar.tabBar.isHidden = false
+                
             }
+           
         }
         
-        
+        // tabbar
+        showMiddleBtn(vc: self)
         checkCallForLayout()
      
     }
@@ -252,7 +251,9 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         //CreateChannelVC
         
         if let CCV = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "CreateChannelVC") as? CreateChannelVC {
-             
+            
+            hideMiddleBtn(vc: self)
+            CCV.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(CCV, animated: true)
             
         }

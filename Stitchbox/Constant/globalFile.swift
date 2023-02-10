@@ -368,3 +368,21 @@ func discord_verify(host: String) -> Bool  {
     
     return false
 }
+
+
+func hideMiddleBtn(vc: UIViewController) {
+    
+    if let tabbar = vc.tabBarController as? DashboardTabBarController {
+        tabbar.button.isHidden = true
+    }
+    
+}
+
+
+func showMiddleBtn(vc: UIViewController) {
+    
+    if let tabbar = vc.tabBarController as? DashboardTabBarController {
+        tabbar.button.isHidden = false
+    }
+    
+}

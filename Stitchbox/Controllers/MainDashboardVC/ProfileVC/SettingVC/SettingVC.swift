@@ -44,6 +44,20 @@ class SettingVC: UIViewController, ControllerType {
        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.tabBarController?.tabBar.isHidden = true
+        self.tabBarController?.tabBar.frame = .zero
+        
+        
+        if self.tabBarController is DashboardTabBarController {
+            let tbctrl = self.tabBarController as! DashboardTabBarController
+            tbctrl.button.isHidden = true
+        }
+        
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         viewModel.action.submitChange.on(.next(Void()))
     }

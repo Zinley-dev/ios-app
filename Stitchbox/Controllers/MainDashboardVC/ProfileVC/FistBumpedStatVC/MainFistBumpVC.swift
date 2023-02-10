@@ -70,7 +70,7 @@ class MainFistBumpVC: UIViewController, UINavigationBarDelegate, UINavigationCon
         setupSearchController()
         
     }
-     
+
     
     @IBAction func fistBumperBtn(_ sender: Any) {
         
