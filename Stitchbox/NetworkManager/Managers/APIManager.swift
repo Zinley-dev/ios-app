@@ -333,6 +333,11 @@ extension APIManager {
         }
         
     }
+    func checkUsernameExist(username: String, completion: @escaping APICompletion) {
+      userManager.request(.usernameExist(params: ["username": username])) { result in
+        completion(result)
+      }
+    }
 }
 
 
@@ -382,7 +387,7 @@ extension APIManager {
 
 extension APIManager {
   func getComment(postId: String, page: Int = 1, completion: @escaping APICompletion) {
-    commentManager.request(.get(postId: postId, page: page, limit: 5)) { result in
+    commentManager.request(.getComment(postId: postId, page: page, limit: 5)) { result in
       completion(result)
     }
   }
@@ -418,6 +423,11 @@ extension APIManager {
   }
   func countLike(comment commentId: String, completion: @escaping APICompletion) {
     commentManager.request(.countLike(commentId: commentId)) { result in
+      completion(result)
+    }
+  }
+  func countComment(post postId: String, completion: @escaping APICompletion) {
+    commentManager.request(.count(postId: postId)) { result in
       completion(result)
     }
   }

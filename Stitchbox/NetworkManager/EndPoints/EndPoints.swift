@@ -342,6 +342,7 @@ public enum UserAPI {
     case changepassword (params: [String: Any])
     case uploadavatar
     case uploadcover
+    case usernameExist(params: [String: Any])
 }
 extension UserAPI: EndPointType {
     var module: String {
@@ -360,6 +361,8 @@ extension UserAPI: EndPointType {
             return "/upload-cover"
         case .uploadavatar:
             return "/upload-avatar"
+          case .usernameExist:
+            return "/username-exists"
         }
     }
     
@@ -374,6 +377,8 @@ extension UserAPI: EndPointType {
         case .uploadcover:
             return .post
         case .uploadavatar:
+            return .post
+          case .usernameExist:
             return .post
         }
     }
@@ -390,6 +395,8 @@ extension UserAPI: EndPointType {
             return .request
         case .uploadcover:
             return .request
+          case .usernameExist(params: let params):
+            return .requestParameters(parameters: params)
         }
     }
     
@@ -694,7 +701,8 @@ extension FistBumpAPI: EndPointType {
     }
 }
 public enum CommentApi {
-  case get(postId: String, page: Int, limit: Int)
+  case getComment(postId: String, page: Int, limit: Int)
+  case count(postId: String)
   case create(params: [String: Any])
   case update(params: [String: Any])
   case delete(commentId: String)
@@ -706,8 +714,10 @@ public enum CommentApi {
 extension CommentApi: EndPointType {
   var path: String {
     switch self {
-      case .get(let postId, let page, let limit):
+      case .getComment(let postId, let page, let limit):
         return "/\(postId)?page=\(page)&limit=\(limit)"
+      case .count(let postId):
+        return "/\(postId)/count"
       case .create:
         return "/"
       case .update(let params):
@@ -731,7 +741,9 @@ extension CommentApi: EndPointType {
   
   var httpMethod: HTTPMethod {
     switch self {
-      case .get:
+      case .getComment:
+        return .get
+      case .count:
         return .get
       case .create:
         return .post
@@ -752,7 +764,9 @@ extension CommentApi: EndPointType {
   
   var task: HTTPTask {
     switch self {
-      case .get:
+      case .getComment:
+        return .request
+      case .count:
         return .request
       case .create(let params):
         return .requestParameters(parameters: params)
