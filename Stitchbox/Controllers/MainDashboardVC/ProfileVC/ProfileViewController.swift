@@ -261,6 +261,7 @@ class ProfileViewController: UIViewController {
                 // display username
                 if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
                     cell.username.text = username
+                    ChallengeView.username.text = username
                 }
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
                     let url = URL(string: avatarUrl)
