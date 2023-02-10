@@ -44,8 +44,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
 
         // Do any additional setup after loading the view.
         
-        let abcd = SBUChannelListViewController()
-        
         self.groupChannelsTableView.delegate = self
         self.groupChannelsTableView.dataSource = self
         

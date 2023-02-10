@@ -69,7 +69,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         
         leftButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
-        leftButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        leftButton.frame = back_frame
         leftButton.setTitleColor(UIColor.white, for: .normal)
         leftButton.setTitle("     Add members", for: .normal)
         leftButton.sizeToFit()

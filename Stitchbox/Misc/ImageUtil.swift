@@ -50,16 +50,37 @@ extension UIImageView {
         }
     }
     
-    func load(url: URL) {
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.image = image
-                    }
+    func load(url: URL, str: String) {
+        
+        imageStorage.async.object(forKey: str) { result in
+            if case .value(let image) = result {
+                
+                DispatchQueue.main.async {
+                    self.image = image
                 }
+               
+                
+            } else {
+                
+                AF.request(url).responseImage { response in
+                                      
+                   switch response.result {
+                    case let .success(value):
+                       self.image = value
+                       try? imageStorage.setObject(value, forKey: str, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+                                          
+                           case let .failure(error):
+                               print(error)
+                        }
+                                      
+                  }
+                
             }
         }
+        
+        
+
+        
     }
 }
 

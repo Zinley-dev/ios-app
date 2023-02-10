@@ -78,7 +78,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
         viewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
                 DispatchQueue.main.async {
-                    self.dismissLoading()
+                    SwiftLoader.hide()
                     self.presentError(error: error)
               }
             })
@@ -97,7 +97,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
                             .subscribe(viewModel.input.countryCodeObserver)
                             .disposed(by: self.disposeBag)
               
-                        dismissLoading()
+                        SwiftLoader.hide()
                         self.navigationController?.pushViewController(LoginByPhoneVerifyController.create(with: viewModel), animated: true)
                     }}
               
@@ -114,7 +114,7 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
             .disposed(by: disposeBag)
         
         sendCodeButton.rx.tap.asObservable().subscribe { Void in
-            self.presentLoading()
+            presentSwiftLoader()
         }.disposed(by: disposeBag)
     }
     

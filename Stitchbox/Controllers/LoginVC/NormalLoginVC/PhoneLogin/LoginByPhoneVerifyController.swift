@@ -262,14 +262,14 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
     func bindUI(with viewModel: LoginByPhoneVerifyViewModel) {
         // bind View Model outputs to Controller elements
         viewModel.output.loadingObservable.subscribe { result in
-          if (result) { self.presentLoading() }
+          if (result) { presentSwiftLoader() }
         }.disposed(by: disposeBag)
       
         viewModel.output.errorsObservable
         .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
                   if (error._code == 900) {
-                    self.dismissLoading()
+                      SwiftLoader.hide()
                     self.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
                   } else {
                     self.presentError(error: error)

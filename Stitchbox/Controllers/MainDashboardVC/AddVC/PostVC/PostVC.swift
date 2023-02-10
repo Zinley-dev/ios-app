@@ -639,7 +639,7 @@ extension PostVC {
         // Do any additional setup after loading the view.
         backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("     Create Post", for: .normal)
         backButton.sizeToFit()

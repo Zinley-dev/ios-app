@@ -65,7 +65,7 @@ class LoginController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         signInButton.rx.tap.asObservable().subscribe { Void in
-            self.presentLoading()
+            presentSwiftLoader()
         }.disposed(by: disposeBag)
     }
   

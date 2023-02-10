@@ -73,7 +73,7 @@ extension FeedViewController {
         // Do any additional setup after loading the view.
         homeButton.setImage(UIImage.init(named: "Logo")?.resize(targetSize: CGSize(width: 35, height: 35)), for: [])
         homeButton.addTarget(self, action: #selector(onClickHome(_:)), for: .touchUpInside)
-        homeButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        homeButton.frame = back_frame
         homeButton.setTitleColor(UIColor.white, for: .normal)
         homeButton.setTitle("", for: .normal)
         homeButton.sizeToFit()
@@ -90,7 +90,7 @@ extension FeedViewController {
         // Do any additional setup after loading the view.
         notiButton.setImage(UIImage.init(named: "homeNoti")?.resize(targetSize: CGSize(width: 35, height: 35)), for: [])
         notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
-        notiButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        notiButton.frame = back_frame
         notiButton.setTitleColor(UIColor.white, for: .normal)
         notiButton.setTitle("", for: .normal)
         notiButton.sizeToFit()

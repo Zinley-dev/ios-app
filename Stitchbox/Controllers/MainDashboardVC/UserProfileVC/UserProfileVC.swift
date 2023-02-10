@@ -21,6 +21,7 @@ class UserProfileVC: UIViewController {
         case posts(PostModel)
     }
     
+    let backButton: UIButton = UIButton(type: .custom)
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
@@ -42,6 +43,9 @@ class UserProfileVC: UIViewController {
     var demoChallengeData: ChallengeCardHeaderData {
         return ChallengeCardHeaderData(name: "Planet Pennies")
     }
+    
+    var userId: String?
+    var nickname: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +70,7 @@ class UserProfileVC: UIViewController {
         configureDatasource()
        
         self.setupChallengeView()
+        self.setupButtons()
     }
     
     override func viewWillLayoutSubviews() {
@@ -98,13 +103,13 @@ class UserProfileVC: UIViewController {
                 cell.coverImage.addGestureRecognizer(coverImageTap)
                 
                 let numberOfFollowersTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followersTapped))
-                cell.numberOfFollowers.isUserInteractionEnabled = true
-                cell.numberOfFollowers.addGestureRecognizer(numberOfFollowersTap)
+                cell.followerStack.isUserInteractionEnabled = true
+                cell.followerStack.addGestureRecognizer(numberOfFollowersTap)
                 
                 
                 let numberOfFollowingTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followingTapped))
-                cell.numberOfFollowing.isUserInteractionEnabled = true
-                cell.numberOfFollowing.addGestureRecognizer(numberOfFollowingTap)
+                cell.followingStack.isUserInteractionEnabled = true
+                cell.followingStack.addGestureRecognizer(numberOfFollowingTap)
                 
                 
                 return cell
@@ -528,6 +533,47 @@ extension UserProfileVC {
                 
         }
         
+    }
+    
+    
+}
+
+
+extension UserProfileVC {
+    
+    func setupButtons() {
+        
+        setupBackButton()
+        setupTitle()
+    }
+    
+    func setupBackButton() {
+        
+        
+        // Do any additional setup after loading the view.
+        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        backButton.frame = back_frame
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        backButton.setTitle("", for: .normal)
+        backButton.sizeToFit()
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+        
+        self.navigationItem.leftBarButtonItem = backButtonBarButton
+        
+    }
+    
+    func setupTitle() {
+        
+        navigationItem.title = nickname
+        
+    }
+    
+    
+    @objc func onClickBack(_ sender: AnyObject) {
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
+        }
     }
     
     

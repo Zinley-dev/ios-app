@@ -189,16 +189,21 @@ class ProfileViewController: UIViewController {
                 }
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
                     let url = URL(string: avatarUrl)
-                    cell.avatarImage.load(url: url!)
+                    cell.avatarImage.load(url: url!, str: avatarUrl)
+                    selectAvatarImage.load(url: url!, str: avatarUrl)
                 }
                 if let coverUrl = _AppCoreData.userDataSource.value?.cover, coverUrl != "" {
                     let url = URL(string: coverUrl)
-                    cell.coverImage.load(url: url!)
+                    cell.coverImage.load(url: url!, str: coverUrl)
+                    selectCoverImage.load(url: url!, str: coverUrl)
                 }
-                cell.discordLbl.text = "-"
+               
                 if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
                     cell.discordLbl.text = discord
+                } else {
+                    cell.discordLbl.text = "None"
                 }
+                
                 if let about = _AppCoreData.userDataSource.value?.about {
                     cell.descriptionLbl.text = about
                 }
@@ -228,13 +233,13 @@ class ProfileViewController: UIViewController {
                 cell.coverImage.addGestureRecognizer(coverImageTap)
                 
                 let numberOfFollowersTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followersTapped))
-                cell.numberOfFollowers.isUserInteractionEnabled = true
-                cell.numberOfFollowers.addGestureRecognizer(numberOfFollowersTap)
+                cell.followerStack.isUserInteractionEnabled = true
+                cell.followerStack.addGestureRecognizer(numberOfFollowersTap)
                 
                 
                 let numberOfFollowingTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followingTapped))
-                cell.numberOfFollowing.isUserInteractionEnabled = true
-                cell.numberOfFollowing.addGestureRecognizer(numberOfFollowingTap)
+                cell.followingStack.isUserInteractionEnabled = true
+                cell.followingStack.addGestureRecognizer(numberOfFollowingTap)
                 
                 
                 return cell
@@ -256,15 +261,14 @@ class ProfileViewController: UIViewController {
                 }
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
                     let url = URL(string: avatarUrl)
-                    cell.userImgView.load(url: url!)
+                    cell.userImgView.load(url: url!, str: avatarUrl)
+                    ChallengeView.userImgView.load(url: url!, str: avatarUrl)
                 }
                 if let card = _AppCoreData.userDataSource.value?.challengeCard {
                     cell.infoLbl.text = card.quote
                 }
                 
-                
-                
-                
+
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
                 cell.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)

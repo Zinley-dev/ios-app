@@ -44,7 +44,7 @@ class MyReferralCodeVC: UIViewController {
         getDefaultCode()
         referralCode?.titleLabel?.text = _AppCoreData.userDataSource.value?.referralCode
         if let avatarURL = _AppCoreData.userDataSource.value?.avatarURL {
-            avatarImage?.downloaded(from: avatarURL, contentMode: .scaleAspectFill)
+            avatarImage?.load(url: URL(string: avatarURL)!, str: avatarURL)
         }
         
     }
@@ -128,7 +128,7 @@ extension MyReferralCodeVC {
         // Do any additional setup after loading the view.
         backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("     Referral Code", for: .normal)
         backButton.sizeToFit()

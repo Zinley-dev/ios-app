@@ -34,7 +34,7 @@ var selectedTabIndex = 0
  
 
 var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
-
+var back_frame = CGRect(x: -10, y: 0, width: 35, height: 25)
 
 typealias DownloadComplete = () -> ()
 
@@ -332,4 +332,27 @@ class ImageSaver: NSObject {
     @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         showNote(text: "Save finished!")
     }
+}
+
+
+func presentSwiftLoader() {
+    
+    var config : SwiftLoader.Config = SwiftLoader.Config()
+    config.size = 170
+    
+    config.backgroundColor = UIColor.clear
+    config.spinnerColor = UIColor.white
+    config.titleTextColor = UIColor.white
+    
+    
+    config.spinnerLineWidth = 3.0
+    config.foregroundColor = UIColor.black
+    config.foregroundAlpha = 0.7
+    
+    
+    SwiftLoader.setConfig(config: config)
+    
+    
+    SwiftLoader.show(title: "", animated: true)
+
 }
