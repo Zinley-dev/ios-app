@@ -12,7 +12,15 @@ class StreamingLinkVC: UIViewController {
     let backButton: UIButton = UIButton(type: .custom)
     var isVerified = false
     
-    @IBOutlet weak var streamingLinkTxt: UITextField!
+    @IBOutlet weak var streamingLinkTxt: UITextField! {
+        didSet {
+            let redPlaceholderText = NSAttributedString(string: "Your streaming link. Ex: youtube, facebook, twitch ... etc",
+                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            
+            streamingLinkTxt.attributedPlaceholder = redPlaceholderText
+        }
+    }
+    
     @IBOutlet weak var saveBtn: UIButton!
     
     override func viewDidLoad() {
