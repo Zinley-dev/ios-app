@@ -12,7 +12,15 @@ class EditSloganVC: UIViewController {
     let backButton: UIButton = UIButton(type: .custom)
     
     
-    @IBOutlet weak var sloganTextField: UITextField!
+    @IBOutlet weak var sloganTextField: UITextField! {
+        didSet {
+            let redPlaceholderText = NSAttributedString(string: "Best adc NA?",
+                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            
+            sloganTextField.attributedPlaceholder = redPlaceholderText
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

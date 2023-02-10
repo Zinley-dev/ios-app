@@ -32,6 +32,9 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
         infoTxtField.delegate = self
         infoTxtField.addTarget(self, action: #selector(StreamingLinkVC.textFieldDidChange(_:)), for: .editingChanged)
         
+        if type == "Name" {
+            infoTxtField.maxLength = 15
+        }
 
         setupButtons()
         setupLbl()
@@ -59,6 +62,7 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
         
         if type == "Name" {
             
+            processName()
             
         } else if type == "Username" {
             
@@ -74,6 +78,7 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
             
             
         } else if type == "Birthday" {
+            
             
             
         }
@@ -92,15 +97,25 @@ extension EditGeneralInformationVC {
                 
                 if let domain = url.host {
                     
-                    print(domain)
-                    
                     if discord_verify(host: domain) == true {
-                        
-                        self.infoTxtField.placeholder = urlString
-                        self.infoTxtField.text = ""
-                        
-                       
-                      
+
+                        APIManager().updateme(params: ["discordLink": urlString]) { result in
+                            switch result {
+                            case .success(let apiResponse):
+                                
+                                guard apiResponse.body?["message"] as? String == "success" else {
+                                        return
+                                }
+                                
+                                showNote(text: "Updated successfully")
+    
+                                self.infoTxtField.placeholder = urlString
+                                self.infoTxtField.text = ""
+                                
+                            case .failure(let error):
+                                self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                            }
+                        }
                         
                     } else {
                         
@@ -114,6 +129,41 @@ extension EditGeneralInformationVC {
             }
             
         }
+        
+        
+    }
+    
+    
+    func processName() {
+        
+        if let name = infoTxtField.text, name != "" {
+    
+            APIManager().updateme(params: ["name": name]) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard apiResponse.body?["message"] as? String == "success" else {
+                            return
+                    }
+                    
+                    showNote(text: "Updated successfully")
+                    
+                    self.infoTxtField.placeholder = name
+                    self.infoTxtField.text = ""
+
+                case .failure(let error):
+                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                }
+            }
+            
+        }
+        
+    }
+    
+    
+    func processUsername() {
+        
+        
         
         
     }

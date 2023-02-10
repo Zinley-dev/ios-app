@@ -422,7 +422,35 @@ extension ProfileViewController {
     
     @objc func discordTapped(_ sender: UIButton) {
         
-        print("discordTapped - open link discord if have unless ask let user input their discord link")
+        if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
+           
+            if discord != ""
+            {
+                guard let requestUrl = URL(string: discord) else {
+                    return
+                }
+
+                if UIApplication.shared.canOpenURL(requestUrl) {
+                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                } else {
+                    showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(discord)")
+                }
+                
+            } else {
+                
+                showErrorAlert("Oops!", msg: "Can't open this link")
+                
+            }
+            
+        } else {
+            
+            if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
+                EPVC.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
+                self.navigationController?.pushViewController(EPVC, animated: true)
+                
+            }
+        }
         
     }
     
@@ -784,6 +812,17 @@ extension ProfileViewController {
         
     }
     
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 }
 
