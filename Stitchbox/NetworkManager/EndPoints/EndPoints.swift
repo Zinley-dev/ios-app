@@ -339,12 +339,16 @@ extension AccountAPI: EndPointType {
 public enum UserAPI {
     case getme
     case updateme (params: [String: Any])
+    case updatePhone (params: [String: Any])
+    case verifyPhone (params: [String: Any])
+    case updateEmail (params: [String: Any])
+    case verifyEmail (params: [String: Any])
     case changepassword (params: [String: Any])
     case uploadavatar
     case uploadcover
     case usernameExist(params: [String: Any])
-  case phoneExist(params: [String: Any])
-  case emailExist(params: [String: Any])
+    case phoneExist(params: [String: Any])
+    case emailExist(params: [String: Any])
 }
 extension UserAPI: EndPointType {
     var module: String {
@@ -357,18 +361,26 @@ extension UserAPI: EndPointType {
             return "/me"
         case .updateme:
             return "/me"
+        case .updateEmail:
+          return "/email"
+        case .updatePhone:
+          return "/phone"
+        case .verifyPhone:
+          return "/phone-update-verify"
+        case .verifyEmail:
+          return "/email-update-verify"
         case .changepassword:
             return "/change-password"
         case .uploadcover:
             return "/upload-cover"
         case .uploadavatar:
             return "/upload-avatar"
-          case .usernameExist:
-            return "/username-exists"
-          case .phoneExist:
-            return "/phone-exists"
-          case .emailExist:
-            return "/email-exists"
+        case .usernameExist:
+          return "/username-exists"
+        case .phoneExist:
+          return "/phone-exists"
+        case .emailExist:
+          return "/email-exists"
         }
     }
     
@@ -377,6 +389,14 @@ extension UserAPI: EndPointType {
         case .getme:
             return .get
         case .updateme:
+            return .patch
+          case .updatePhone:
+            return .patch
+          case .updateEmail:
+            return .patch
+          case .verifyEmail:
+            return .patch
+          case .verifyPhone:
             return .patch
         case .changepassword:
             return .post
@@ -398,6 +418,14 @@ extension UserAPI: EndPointType {
         case .getme:
             return .request
         case .updateme(let params):
+            return .requestParameters(parameters: params)
+        case .updatePhone(let params):
+            return .requestParameters(parameters: params)
+        case .updateEmail(let params):
+            return .requestParameters(parameters: params)
+        case .verifyEmail(let params):
+            return .requestParameters(parameters: params)
+        case .verifyPhone(let params):
             return .requestParameters(parameters: params)
         case .changepassword(params: let params):
             return .requestParameters(parameters: params)

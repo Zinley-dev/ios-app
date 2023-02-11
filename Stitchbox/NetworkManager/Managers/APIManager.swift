@@ -304,6 +304,30 @@ extension APIManager {
             completion(result)
         }
     }
+    func updatePhone(phone: String, completion: @escaping APICompletion) {
+      userManager.request(.updatePhone(params: ["phone": phone])){
+          result in
+          completion(result)
+        }
+      }
+    func updateEmail(email: String, completion: @escaping APICompletion) {
+      userManager.request(.updateEmail(params: ["email": email])){
+        result in
+        completion(result)
+      }
+    }
+    func verifyUpdatePhone(params: [String: Any], completion: @escaping APICompletion) {
+      userManager.request(.verifyPhone(params: params)){
+        result in
+        completion(result)
+      }
+    }
+    func verifyUpdateEmail(params: [String: Any], completion: @escaping APICompletion) {
+      userManager.request(.verifyEmail(params: params)){
+        result in
+        completion(result)
+      }
+    }
     
     func changepassword(params: [String: Any], completion: @escaping APICompletion) {
         userManager.request(.changepassword(params: params)){
