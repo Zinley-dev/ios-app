@@ -137,7 +137,7 @@ extension EditBirthdayVC {
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Edit birthday", for: .normal)
+        backButton.setTitle("     Edit Birthday", for: .normal)
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
     

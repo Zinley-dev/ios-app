@@ -352,6 +352,8 @@ extension EditPhofileVC: EditControllerDelegate {
                               let url = apiResponse.body?["url"] as? String  else {
                                 return
                         }
+                        
+                        print(url)
 
 
                     case .failure(let error):

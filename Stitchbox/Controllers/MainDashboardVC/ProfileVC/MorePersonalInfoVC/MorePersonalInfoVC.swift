@@ -46,10 +46,9 @@ class MorePersonalInfoVC: UIViewController {
     
     @IBAction func EmailOnTapped(_ sender: Any) {
         
-        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
+        if let EEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditEmailVC") as? EditEmailVC {
             
-            EGIVC.type = "Email"
-            self.navigationController?.pushViewController(EGIVC, animated: true)
+            self.navigationController?.pushViewController(EEVC, animated: true)
             
         }
         
@@ -58,13 +57,11 @@ class MorePersonalInfoVC: UIViewController {
     
     @IBAction func phoneTapped(_ sender: Any) {
         
-        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
+        if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhoneVC") as? EditPhoneVC {
             
-            EGIVC.type = "Phone"
-            self.navigationController?.pushViewController(EGIVC, animated: true)
+            self.navigationController?.pushViewController(EPVC, animated: true)
             
         }
-        
         
     }
     
