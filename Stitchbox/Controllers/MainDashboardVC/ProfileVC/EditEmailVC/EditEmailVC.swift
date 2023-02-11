@@ -10,17 +10,82 @@ import UIKit
 class EditEmailVC: UIViewController {
 
     let backButton: UIButton = UIButton(type: .custom)
+    @IBOutlet weak var emailTxtField: UITextField!
     
+    @IBOutlet weak var nextBtn: SButton!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupButtons()
+        setupDefaultInfo()
+        
     }
     
-    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        emailTxtField.addUnderLine()
+    }
     
 
+    @IBAction func nextBtnPressed(_ sender: Any) {
+        
+        if let email = emailTxtField.text, email != "", email.contains("@") == true, email.contains(".") == true {
+                
+            checkEmail(email: email)
+            
+        } else {
+            
+            showErrorAlert("Oops !", msg: "Please enter your valid email.")
+            
+        }
+        
+    }
+    
+    func checkEmail(email: String) {
+        
+        let lowercaseEmail = email.lowercased().stringByRemovingWhitespaces
+        presentSwiftLoader()
+   
+        
+        APIManager().checkEmailExist(email: lowercaseEmail) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard apiResponse.body?["message"] as? String == "email has not been registered" else {
+                    
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "This email has been registered")
+                        self.emailTxtField.text = ""
+                    }
+                    
+                    
+                    return
+                }
+                
+                
+                self.processVerify()
+            
+            case .failure(let error):
+                
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                    self.emailTxtField.text = ""
+                }
+                
+            }
+        }
+        
+    }
+    
+    func processVerify() {
+        
+        
+        
+    }
+    
 }
 
 extension EditEmailVC {
@@ -29,9 +94,9 @@ extension EditEmailVC {
     func setupDefaultInfo() {
         
         if let email = _AppCoreData.userDataSource.value?.email, email != "" {
-            //birthdayTxtField.placeholder = birthday
+            emailTxtField.placeholder = email
         } else {
-            //birthdayTxtField.placeholder = ""
+            emailTxtField.placeholder = "Your email"
         }
         
     }
@@ -61,6 +126,14 @@ extension EditEmailVC {
     
 }
 
+
+extension EditEmailVC {
+    
+    
+    
+    
+}
+
 extension EditEmailVC {
     
     
@@ -68,6 +141,19 @@ extension EditEmailVC {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
         }
+    }
+    
+    // func show error alert
+    
+    func showErrorAlert(_ title: String, msg: String) {
+        
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+        
+        present(alert, animated: true, completion: nil)
+        
     }
     
 }
