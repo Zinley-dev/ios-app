@@ -338,6 +338,16 @@ extension APIManager {
         completion(result)
       }
     }
+  func checkPhoneExist(phone: String, completion: @escaping APICompletion) {
+    userManager.request(.phoneExist(params: ["phone": phone])) { result in
+      completion(result)
+    }
+  }
+  func checkEmailExist(email: String, completion: @escaping APICompletion) {
+    userManager.request(.emailExist(params: ["email": email])) { result in
+      completion(result)
+    }
+  }
 }
 
 

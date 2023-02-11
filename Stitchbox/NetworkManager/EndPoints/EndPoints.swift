@@ -343,6 +343,8 @@ public enum UserAPI {
     case uploadavatar
     case uploadcover
     case usernameExist(params: [String: Any])
+  case phoneExist(params: [String: Any])
+  case emailExist(params: [String: Any])
 }
 extension UserAPI: EndPointType {
     var module: String {
@@ -363,6 +365,10 @@ extension UserAPI: EndPointType {
             return "/upload-avatar"
           case .usernameExist:
             return "/username-exists"
+          case .phoneExist:
+            return "/phone-exists"
+          case .emailExist:
+            return "/email-exists"
         }
     }
     
@@ -380,6 +386,10 @@ extension UserAPI: EndPointType {
             return .post
           case .usernameExist:
             return .post
+          case .phoneExist:
+            return .post
+          case .emailExist:
+            return .post
         }
     }
     
@@ -395,7 +405,11 @@ extension UserAPI: EndPointType {
             return .request
         case .uploadcover:
             return .request
-          case .usernameExist(params: let params):
+          case .usernameExist(let params):
+            return .requestParameters(parameters: params)
+          case .phoneExist(let params):
+            return .requestParameters(parameters: params)
+          case .emailExist(let params):
             return .requestParameters(parameters: params)
         }
     }
