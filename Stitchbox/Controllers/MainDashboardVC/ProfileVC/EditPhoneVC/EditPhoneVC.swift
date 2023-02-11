@@ -86,11 +86,15 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
                 return;
             }
             
-            APIManager().checkPhoneExist(phone: countryCode + phone) { result in
+            self.view.endEditing(true)
+            
+            APIManager().updatePhone(phone: countryCode + phone) { result in
                 switch result {
                 case .success(let apiResponse):
                     
-                    guard apiResponse.body?["message"] as? String == "phone has not been registered" else {
+                    print(apiResponse)
+                    
+                    guard apiResponse.body?["message"] as? String == "OTP sent" else {
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
@@ -102,21 +106,22 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
                         return
                     }
                     
-                    
-                    self.processVerify()
-                
-                case .failure(let error):
-                    
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
-                        self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                        self.moveToVerifyVC(phone: countryCode + phone)
+                    }
+                  
+                case .failure(let error):
+                
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                        print(error)
+                        self.showErrorAlert("Oops!", msg: "This phone number may already exists or another error occurs, please try again")
                         self.phoneTextfield.text = ""
                     }
                     
                 }
             }
-            
-            
             
         } else {
             self.showErrorAlert("Oops!", msg: "Please input your country code and phone in correct format")
@@ -124,78 +129,17 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
         
     }
     
-    
-    func processVerify() {
+    func moveToVerifyVC(phone: String) {
         
-        
-        if let countryCode = countryCodeTextfield.text, countryCode != "", let phone = phoneTextfield.text, phone != "" {
+        if let VCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "VerifyCodeVC") as? VerifyCodeVC {
             
-            APIManager().phoneLogin(phone: countryCode + phone) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    print(apiResponse)
-                    
-                    guard apiResponse.body?["message"] as? String == "phone has not been registered" else {
-                        
-                        /*
-                        DispatchQueue.main.async {
-                            SwiftLoader.hide()
-                            //self.showErrorAlert("Oops!", msg: "Can't request f")
-                            self.phoneTextfield.text = ""
-                        }
-                        */
-                        
-                        return
-                    }
-                    
-                    
-                    
-                
-                case .failure(let error):
-                    
-                    DispatchQueue.main.async {
-                        SwiftLoader.hide()
-                        self.showErrorAlert("Oops!", msg: error.localizedDescription)
-                        self.phoneTextfield.text = ""
-                    }
-                    
-                }
-            }
-            
-            
-        } else {
-            
-            SwiftLoader.hide()
-            self.showErrorAlert("Oops!", msg: "Please input your country code and phone in correct format")
+            VCVC.type = "phone"
+            VCVC.phone = phone
+            self.navigationController?.pushViewController(VCVC, animated: true)
             
         }
         
-    
     }
-    
-    /*
-     if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{3,4}$"#)
-        || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
-         self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
-         return;
-     }
-     // call api toward login api of backend
-     APIManager().phoneLogin(phone: countryCode + phone) { result in switch result {
-     case .success(let apiResponse):
-         // get and process data
-         _ = apiResponse.body?["data"] as! [String: Any]?
-         // save datasource
-         let initMap = ["phone": "\(countryCode)\(phone)", "signinMethod": "phone"]
-         let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
-         _AppCoreData.userDataSource.accept(newUserData)
-         self.OTPSentSubject.onNext(true)
-     case .failure(let error):
-         print(error)
-         self.errorsSubject.onNext(NSError(domain: "Error in send OTP", code: 300))
-     }
-     }
-     */
     
 }
 

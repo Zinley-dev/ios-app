@@ -48,11 +48,13 @@ class EditEmailVC: UIViewController {
         presentSwiftLoader()
    
         
-        APIManager().checkEmailExist(email: lowercaseEmail) { result in
+        APIManager().updateEmail(email: lowercaseEmail) { result in
             switch result {
             case .success(let apiResponse):
                 
-                guard apiResponse.body?["message"] as? String == "email has not been registered" else {
+                print(apiResponse)
+                
+                guard apiResponse.body?["message"] as? String == "OTP sent" else {
                     
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
@@ -64,14 +66,17 @@ class EditEmailVC: UIViewController {
                     return
                 }
                 
-                
-                self.processVerify()
-            
-            case .failure(let error):
-                
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
-                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                    self.moveToVerifyVC(email: lowercaseEmail)
+                }
+              
+            case .failure(let error):
+            
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                    print(error)
+                    self.showErrorAlert("Oops!", msg: "This email may already exists or another error occurs, please try again")
                     self.emailTxtField.text = ""
                 }
                 
@@ -80,11 +85,19 @@ class EditEmailVC: UIViewController {
         
     }
     
-    func processVerify() {
+    func moveToVerifyVC(email: String) {
         
-        
+        if let VCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "VerifyCodeVC") as? VerifyCodeVC {
+            
+            VCVC.type = "email"
+            VCVC.email = email
+            self.navigationController?.pushViewController(VCVC, animated: true)
+            
+        }
         
     }
+    
+
     
 }
 

@@ -8177,7 +8177,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z2f-4D-DWQ">
-                                <rect key="frame" x="32" y="337.66666666666669" width="311" height="33.333333333333314"/>
+                                <rect key="frame" x="50" y="337.66666666666669" width="275.33333333333331" height="33.333333333333314"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Didn’t get the code? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V4w-Wo-3dO">
                                         <rect key="frame" x="0.0" y="0.0" width="151.66666666666666" height="33.333333333333336"/>
@@ -8186,21 +8186,19 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7hG-08-WWE">
-                                        <rect key="frame" x="151.66666666666663" y="0.0" width="159.33333333333337" height="33.333333333333336"/>
+                                        <rect key="frame" x="151.66666666666666" y="0.0" width="123.66666666666666" height="33.333333333333336"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Resend code">
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="16"/>
                                             <color key="baseForegroundColor" name="Secondary"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="resendBtnPressed:" destination="SHZ-ab-jOY" eventType="touchUpInside" id="ngQ-42-T25"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pm1-Se-qww">
-                                <rect key="frame" x="32" y="188.66666666666666" width="311" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain"/>
-                            </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="hdD-TE-aiF">
                                 <rect key="frame" x="32" y="79" width="311" height="77.666666666666686"/>
                                 <subviews>
@@ -8240,13 +8238,16 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Next"/>
+                                <state key="normal" title="Save"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="size">
                                         <integer key="value" value="2"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="saveBtnPressed:" destination="SHZ-ab-jOY" eventType="touchUpInside" id="ZPE-cQ-QeU"/>
+                                </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="kT0-mf-Pmd">
                                 <rect key="frame" x="32" y="188.66666666666666" width="311" height="35"/>
@@ -8299,6 +8300,11 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pm1-Se-qww">
+                                <rect key="frame" x="32" y="188.66666666666666" width="311" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="xCM-NK-rPQ"/>
                         <color key="backgroundColor" name="Background"/>
@@ -8307,9 +8313,9 @@
                             <constraint firstItem="z2f-4D-DWQ" firstAttribute="top" secondItem="ndo-RW-FbN" secondAttribute="bottom" constant="30" id="FQ8-wu-SHF"/>
                             <constraint firstItem="pm1-Se-qww" firstAttribute="centerY" secondItem="kT0-mf-Pmd" secondAttribute="centerY" id="IEP-hM-h2W"/>
                             <constraint firstItem="kT0-mf-Pmd" firstAttribute="leading" secondItem="xCM-NK-rPQ" secondAttribute="leading" constant="32" id="NTw-vQ-qxm"/>
+                            <constraint firstItem="z2f-4D-DWQ" firstAttribute="centerX" secondItem="7aK-HA-ntV" secondAttribute="centerX" id="Nfl-pL-JJR"/>
                             <constraint firstItem="pm1-Se-qww" firstAttribute="width" secondItem="kT0-mf-Pmd" secondAttribute="width" id="fM7-cw-xgh"/>
                             <constraint firstItem="ndo-RW-FbN" firstAttribute="top" secondItem="kT0-mf-Pmd" secondAttribute="bottom" constant="40" id="g64-fl-Er5"/>
-                            <constraint firstItem="xCM-NK-rPQ" firstAttribute="trailing" secondItem="z2f-4D-DWQ" secondAttribute="trailing" constant="32" id="gtL-Ac-CbZ"/>
                             <constraint firstItem="pm1-Se-qww" firstAttribute="height" secondItem="kT0-mf-Pmd" secondAttribute="height" id="hWd-Mx-8Jf"/>
                             <constraint firstItem="hdD-TE-aiF" firstAttribute="top" secondItem="xCM-NK-rPQ" secondAttribute="top" constant="32" id="iHZ-Ra-jQn"/>
                             <constraint firstItem="cKi-cO-Xso" firstAttribute="centerX" secondItem="7aK-HA-ntV" secondAttribute="centerX" id="kn0-Ac-sQq"/>
@@ -8317,13 +8323,22 @@
                             <constraint firstAttribute="trailing" secondItem="kT0-mf-Pmd" secondAttribute="trailing" constant="32" id="m0m-Yc-YOJ"/>
                             <constraint firstItem="kT0-mf-Pmd" firstAttribute="top" secondItem="hdD-TE-aiF" secondAttribute="bottom" constant="32" id="pIw-so-Ocp"/>
                             <constraint firstItem="ndo-RW-FbN" firstAttribute="centerX" secondItem="7aK-HA-ntV" secondAttribute="centerX" id="tk7-Lu-QI7"/>
-                            <constraint firstItem="z2f-4D-DWQ" firstAttribute="leading" secondItem="xCM-NK-rPQ" secondAttribute="leading" constant="32" id="vYz-I5-0sG"/>
                             <constraint firstItem="hdD-TE-aiF" firstAttribute="leading" secondItem="7aK-HA-ntV" secondAttribute="leading" constant="32" id="xA9-Gm-dML"/>
                             <constraint firstItem="xCM-NK-rPQ" firstAttribute="bottom" secondItem="cKi-cO-Xso" secondAttribute="bottom" constant="-100" id="xWU-sO-Doy"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="HidenTxtView" destination="cKi-cO-Xso" id="nUp-hd-SHo"/>
+                        <outlet property="label1" destination="VYE-aL-rBs" id="myC-oZ-mr4"/>
+                        <outlet property="label2" destination="Xr6-Hk-fJy" id="dx6-D6-qk7"/>
+                        <outlet property="label3" destination="8jV-a9-d1L" id="1SH-9U-2yL"/>
+                        <outlet property="label4" destination="4YE-G0-dWm" id="Qud-g4-xgs"/>
+                        <outlet property="label5" destination="zM7-Up-27X" id="uch-ko-IHB"/>
+                        <outlet property="label6" destination="ijw-8d-Qy8" id="L3V-kN-0kd"/>
+                        <outlet property="openKeyBoardBtn" destination="pm1-Se-qww" id="OJc-ta-kP4"/>
+                        <outlet property="sendCodeButton" destination="7hG-08-WWE" id="vrW-iA-ESu"/>
                         <outlet property="sentAddressLbl" destination="2iN-sU-xyz" id="snG-64-fV6"/>
+                        <outlet property="verifyButton" destination="ndo-RW-FbN" id="4bw-dX-DbL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zPr-dY-3Kx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -8602,7 +8617,7 @@
             <size key="intrinsicContentSize" width="377" height="15.666666666666666"/>
         </designable>
         <designable name="ndo-RW-FbN">
-            <size key="intrinsicContentSize" width="33" height="29"/>
+            <size key="intrinsicContentSize" width="34" height="29"/>
         </designable>
         <designable name="oCK-8i-kzD">
             <size key="intrinsicContentSize" width="33" height="29"/>
