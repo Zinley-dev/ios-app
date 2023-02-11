@@ -215,6 +215,21 @@ extension APIManager {
             completion(result)
         }
     }
+    func turnOn2fa(method: String, completion: @escaping APICompletion) {
+      settingManager.request(.turnOn2fa(params: ["deviceType": method])) { result in
+        completion(result)
+      }
+    }
+    func turnOff2fa(method: String, completion: @escaping APICompletion) {
+      settingManager.request(.turnOff2fa(params: ["deviceType": method])) { result in
+        completion(result)
+      }
+    }
+    func verify2fa(otp: String, method: String, completion: @escaping APICompletion) {
+      settingManager.request(.verify2fa(params: ["deviceType": method, "otp": otp])) { result in
+        completion(result)
+      }
+    }
     func getBlocks(page: Int, completion: @escaping APICompletion) {
         accountManager.request(.getBlocks(page: page)){
             result in
@@ -304,6 +319,14 @@ extension APIManager {
             completion(result)
         }
     }
+  
+  func updateChallengeCard(params: [String: Any], completion: @escaping APICompletion) {
+    userManager.request(.updateChallengeCard(params: params)){
+      result in
+      completion(result)
+    }
+  }
+  
     func updatePhone(phone: String, completion: @escaping APICompletion) {
       userManager.request(.updatePhone(params: ["phone": phone])){
           result in

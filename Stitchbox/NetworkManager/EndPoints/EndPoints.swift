@@ -211,6 +211,9 @@ extension SearchApi: EndPointType {
 public enum SettingAPI {
     case getSettings
     case updateSettings (params: [String: Any])
+    case turnOn2fa(params: [String: Any])
+    case turnOff2fa(params: [String: Any])
+    case verify2fa(params: [String: Any])
 }
 extension SettingAPI: EndPointType {
     var module: String {
@@ -223,6 +226,12 @@ extension SettingAPI: EndPointType {
             return "/"
         case .updateSettings:
             return "/"
+          case .turnOn2fa:
+            return "/two-factor/on"
+          case .turnOff2fa:
+            return "/two-factor/off"
+          case .verify2fa:
+            return "/two-factor/verify"
         }
     }
     
@@ -232,6 +241,12 @@ extension SettingAPI: EndPointType {
             return .get
         case .updateSettings:
             return .patch
+          case .turnOn2fa:
+            return .patch
+          case .turnOff2fa:
+            return .patch
+          case .verify2fa:
+            return .patch
         }
     }
     
@@ -240,6 +255,12 @@ extension SettingAPI: EndPointType {
         case .getSettings:
             return .request
         case .updateSettings(let params):
+            return .requestParameters(parameters: params)
+          case .turnOn2fa(let params):
+            return .requestParameters(parameters: params)
+          case .turnOff2fa(let params):
+            return .requestParameters(parameters: params)
+          case .verify2fa(let params):
             return .requestParameters(parameters: params)
         }
     }
@@ -339,6 +360,7 @@ extension AccountAPI: EndPointType {
 public enum UserAPI {
     case getme
     case updateme (params: [String: Any])
+    case updateChallengeCard (params: [String: Any])
     case updatePhone (params: [String: Any])
     case verifyPhone (params: [String: Any])
     case updateEmail (params: [String: Any])
@@ -349,6 +371,8 @@ public enum UserAPI {
     case usernameExist(params: [String: Any])
     case phoneExist(params: [String: Any])
     case emailExist(params: [String: Any])
+    case addGameChallengeCard(params: [String: Any])
+    case deleteGameChallengeCard(params: [String: Any])
 }
 extension UserAPI: EndPointType {
     var module: String {
@@ -361,6 +385,8 @@ extension UserAPI: EndPointType {
             return "/me"
         case .updateme:
             return "/me"
+          case .updateChallengeCard:
+            return "/me/challenge-card"
         case .updateEmail:
           return "/email"
         case .updatePhone:
@@ -381,6 +407,10 @@ extension UserAPI: EndPointType {
           return "/phone-exists"
         case .emailExist:
           return "/email-exists"
+          case .addGameChallengeCard:
+            return "/challenge-card"
+          case .deleteGameChallengeCard:
+            return "/challenge-card"
         }
     }
     
@@ -389,6 +419,8 @@ extension UserAPI: EndPointType {
         case .getme:
             return .get
         case .updateme:
+            return .patch
+          case .updateChallengeCard:
             return .patch
           case .updatePhone:
             return .patch
@@ -410,6 +442,10 @@ extension UserAPI: EndPointType {
             return .post
           case .emailExist:
             return .post
+          case .addGameChallengeCard:
+            return .post
+          case .deleteGameChallengeCard:
+            return .delete
         }
     }
     
@@ -418,6 +454,8 @@ extension UserAPI: EndPointType {
         case .getme:
             return .request
         case .updateme(let params):
+            return .requestParameters(parameters: params)
+          case .updateChallengeCard(let params):
             return .requestParameters(parameters: params)
         case .updatePhone(let params):
             return .requestParameters(parameters: params)
@@ -438,6 +476,10 @@ extension UserAPI: EndPointType {
           case .phoneExist(let params):
             return .requestParameters(parameters: params)
           case .emailExist(let params):
+            return .requestParameters(parameters: params)
+          case .addGameChallengeCard(let params):
+            return .requestParameters(parameters: params)
+          case .deleteGameChallengeCard(let params):
             return .requestParameters(parameters: params)
         }
     }
