@@ -53,24 +53,68 @@ enum UserGender : String {
 }
 
 class UserDataSource: Mappable {
+    private(set) var userID: String?
     
-    private(set) var userID :    String? = ""
-    private(set) var userName :  String = ""
-    private(set) var email :     String = ""
-    private(set) var phone :     String = ""
+    private var _userName :  String? = ""
+    var userName: String? {
+      set(newValue) { _userName = newValue }
+      get { return _userName}
+    }
+  
+    private var _email :     String = ""
+    var email: String {
+      set(newValue) { _email = newValue}
+      get { return _email }
+    }
+  
+    private var _phone :     String = ""
+    var phone: String {
+      set(newValue) { _phone = newValue}
+      get { return _phone }
+    }
+  
     private(set) var gender :    UserGender = .male
-    private(set) var avatarURL : String  = "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"
+    private var _avatarURL : String  = "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"
+    var avatarURL: String {
+      set(newValue) { _avatarURL = newValue}
+      get { return _avatarURL }
+    }
+  
     private(set) var signinMethod : String = ""
     private(set) var socialId : String = ""
     private(set) var discordUrl : String = ""
     
-    private(set) var name : String = ""
+    private var _name : String = ""
+    var name: String {
+      set(newValue) { _name = newValue}
+      get { return _name }
+    }
     private(set) var password: String = ""
-    private(set) var cover: String = ""
-    private(set) var about: String = ""
-    private(set) var bio: String = ""
-    private(set) var referralCode: String = ""
-    private(set) var birthday: String = ""
+    private var _cover: String = ""
+    var cover: String {
+      set(newValue) { _cover = newValue}
+      get { return _cover }
+    }
+    private var _about: String = ""
+    var about: String {
+      set(newValue) { _about = newValue}
+      get { return _about }
+    }
+    private var _bio: String = ""
+    var bio: String {
+      set(newValue) { _bio = newValue}
+      get { return _bio }
+    }
+    private var _referralCode: String = ""
+    var referralCode: String {
+      set(newValue) { _referralCode = newValue}
+      get { return _referralCode }
+    }
+    private var _birthday: String = ""
+    var birthday: String {
+      set(newValue) { _birthday = newValue}
+      get { return _birthday }
+    }
     private(set) var facebook: ThirdPartyCredential?
     private(set) var google: ThirdPartyCredential?
     private(set) var twitter: ThirdPartyCredential?
