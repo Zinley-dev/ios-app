@@ -25,6 +25,8 @@ class fistBumpeeVC: UIViewController, ControllerType {
     var viewModel = FistBumpViewModel()
     var currentPage = 1
     let disposeBag = DisposeBag()
+    var inSearchMode = false
+    var searchUserList = [FistBumpUserModel]()
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -102,7 +104,7 @@ extension fistBumpeeVC {
         // Do any additional setup after loading the view.
         backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("     FistBumped List", for: .normal)
         backButton.sizeToFit()
@@ -208,15 +210,15 @@ extension fistBumpeeVC: ASTableDataSource {
             tableNode.view.restore()
         }
         
-        return self.FistBumpList.count
+        return inSearchMode ? searchUserList.count : FistBumpList.count
         
         
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
-        let user = self.FistBumpList[indexPath.row]
-        print(user.toJSON())
+        let user = inSearchMode ? searchUserList[indexPath.row] : FistBumpList[indexPath.row]
+        
         return {
             
             let node = FistBumpNode(with: user)
@@ -242,6 +244,20 @@ extension fistBumpeeVC: ASTableDataSource {
             node.debugName = "Node \(indexPath.row)"
             
             return node
+        }
+        
+    }
+    
+    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+        
+        let user = inSearchMode ? searchUserList[indexPath.row] : FistBumpList[indexPath.row]
+        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            //self.hidesBottomBarWhenPushed = true
+            UPVC.userId = user.userID
+            UPVC.nickname = user.userName
+            self.navigationController?.pushViewController(UPVC, animated: true)
+            
         }
         
     }

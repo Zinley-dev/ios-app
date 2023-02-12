@@ -141,7 +141,15 @@ extension FollowingVC: ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
+        let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
         
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            //self.hidesBottomBarWhenPushed = true
+            UPVC.userId = user.userId
+            UPVC.nickname = user.username
+            self.navigationController?.pushViewController(UPVC, animated: true)
+            
+        }
      
         
     }

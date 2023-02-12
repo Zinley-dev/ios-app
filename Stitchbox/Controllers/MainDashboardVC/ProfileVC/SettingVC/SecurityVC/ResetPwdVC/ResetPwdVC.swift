@@ -13,9 +13,34 @@ class ResetPwdVC: UIViewController, ControllerType {
     typealias ViewModelType = ChangePasswordViewModel
     
     @IBOutlet weak var saveBtn: UIButton!
-    @IBOutlet weak var confirmNewPwdTextField: UITextField!
-    @IBOutlet weak var newPwdTextField: UITextField!
-    @IBOutlet weak var currentPwdTextField: UITextField!
+    @IBOutlet weak var confirmNewPwdTextField: UITextField! {
+        didSet {
+            let redPlaceholderText = NSAttributedString(string: "Confirm your new password",
+                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            
+            confirmNewPwdTextField.attributedPlaceholder = redPlaceholderText
+        }
+    }
+    
+    @IBOutlet weak var newPwdTextField: UITextField! {
+        didSet {
+            let redPlaceholderText = NSAttributedString(string: "Your new password",
+                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            
+            newPwdTextField.attributedPlaceholder = redPlaceholderText
+        }
+        
+    }
+    @IBOutlet weak var currentPwdTextField: UITextField! {
+        didSet {
+            let redPlaceholderText = NSAttributedString(string: "Your current password",
+                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            
+            currentPwdTextField.attributedPlaceholder = redPlaceholderText
+        }
+    }
+    
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     let viewModel = ChangePasswordViewModel()
@@ -94,7 +119,7 @@ extension ResetPwdVC {
         // Do any additional setup after loading the view.
         backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("     Reset Password", for: .normal)
         backButton.sizeToFit()

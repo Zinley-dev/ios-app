@@ -52,7 +52,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
         leftButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
-        leftButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        leftButton.frame = back_frame
         leftButton.setTitleColor(UIColor.white, for: .normal)
         leftButton.setTitle("     New message", for: .normal)
         leftButton.sizeToFit()
@@ -87,21 +87,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         loadDefaultUsers()
         
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.tabBarController?.tabBar.isHidden = true
-        self.tabBarController?.tabBar.frame = .zero
-        
-        
-        if self.tabBarController is DashboardTabBarController {
-            let tbctrl = self.tabBarController as! DashboardTabBarController
-            tbctrl.button.isHidden = true
-        }
-        
-    }
-    
+
 
     // setup initial view
     func setupNavigationView() {

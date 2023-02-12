@@ -44,8 +44,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
 
         // Do any additional setup after loading the view.
         
-        let abcd = SBUChannelListViewController()
-        
         self.groupChannelsTableView.delegate = self
         self.groupChannelsTableView.dataSource = self
         
@@ -417,6 +415,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         let mslp = SBDMessageListParams()
         
         let channelVC = ChannelViewController(channelUrl: channel.channelUrl, messageListParams: mslp)
+        hideMiddleBtn(vc: self)
+        channelVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(channelVC, animated: true)
       
     }

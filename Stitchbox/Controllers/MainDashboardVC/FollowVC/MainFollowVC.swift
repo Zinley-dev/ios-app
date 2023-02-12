@@ -78,6 +78,20 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     }
      
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.tabBarController?.tabBar.isHidden = true
+        self.tabBarController?.tabBar.frame = .zero
+        
+        
+        if self.tabBarController is DashboardTabBarController {
+            let tbctrl = self.tabBarController as! DashboardTabBarController
+            tbctrl.button.isHidden = true
+        }
+        
+    }
+    
     @IBAction func followerBtn(_ sender: Any) {
         
         setupFollowersView()
@@ -108,7 +122,7 @@ extension MainFollowVC {
         // Do any additional setup after loading the view.
         backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         backButton.sizeToFit()
@@ -125,9 +139,13 @@ extension MainFollowVC {
             return
         }
 
-        let loadUsername = userDataSource.userName ?? "default"
-        
-        self.navigationItem.title = loadUsername
+        let loadUsername = userDataSource.userName
+        if loadUsername != "" {
+            self.navigationItem.title = loadUsername
+        } else {
+            self.navigationItem.title = "Follow"
+        }
+       
        
        
     }

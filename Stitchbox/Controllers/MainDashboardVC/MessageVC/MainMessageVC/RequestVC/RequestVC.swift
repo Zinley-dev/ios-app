@@ -239,6 +239,7 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         
         let channel = inSearchMode ? searchChannelList[indexPath.row] : channels[indexPath.row]
         let channelVC = RequestChannelVC(channelUrl: channel.channelUrl, messageListParams: nil)
+        channelVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(channelVC, animated: true)
 
         

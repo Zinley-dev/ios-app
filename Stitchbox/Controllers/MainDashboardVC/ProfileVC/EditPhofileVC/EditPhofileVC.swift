@@ -12,10 +12,6 @@ import Photos
 
 class EditPhofileVC: UIViewController {
     
-    enum updateMedia {
-        case avatar
-        case cover
-    }
 
     @IBOutlet weak var morePersonalInfoBtn: UIButton!
     @IBOutlet weak var changeCoverPhotoBtn: UIButton!
@@ -34,6 +30,7 @@ class EditPhofileVC: UIViewController {
     let backButton: UIButton = UIButton(type: .custom)
     let container = ContainerController(modes: [.library, .photo])
     var type = ""
+    var renderedImage: UIImage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +39,13 @@ class EditPhofileVC: UIViewController {
         setupButtons()
         container.editControllerDelegate = self
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setupDefaultInfo()
+ 
     }
     
     override func viewWillLayoutSubviews() {
@@ -119,6 +123,7 @@ class EditPhofileVC: UIViewController {
     
     @IBAction func changeCoverOnTapped(_ sender: Any) {
         
+        type = "cover"
         requestImageUpdateForCover()
         
     }
@@ -126,6 +131,7 @@ class EditPhofileVC: UIViewController {
     
     @IBAction func changeProfileImageOnTap(_ sender: Any) {
         
+        type = "profile"
         requestImageUpdateForAvatar()
         
     }
@@ -136,11 +142,41 @@ class EditPhofileVC: UIViewController {
 
 extension EditPhofileVC {
     
+    
+    func setupDefaultInfo() {
+        
+        if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
+            usernameTxtField.text = username
+        }
+    
+        if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+            let url = URL(string: avatarUrl)
+            avatarImage.load(url: url!, str: avatarUrl)
+        }
+        if let coverUrl = _AppCoreData.userDataSource.value?.cover, coverUrl != "" {
+            let url = URL(string: coverUrl)
+            coverImage.load(url: url!, str: coverUrl)
+            
+        }
+        
+        if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
+            discordTxtField.text = discord
+        }
+        
+        
+        if let about = _AppCoreData.userDataSource.value?.about, about != "" {
+            bioTextField.text = about
+        }
+        
+        
+    }
+    
     func setupButtons() {
         
         setupBackButton()
         colorButtonLabel()
         setupGesture()
+        
     }
     
     
@@ -149,7 +185,7 @@ extension EditPhofileVC {
         // Do any additional setup after loading the view.
         backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("     Edit Profile", for: .normal)
         backButton.sizeToFit()
@@ -247,22 +283,112 @@ extension EditPhofileVC: EditControllerDelegate {
         
         if let image = session.image {
             
-            
             ImageExporter.shared.export(image: image, completion: { (error, uiImage) in
                     if let error = error {
                         self.showErrorAlert("Oops!", msg: "Unable to export image: \(error)")
                         return
                     }
-                
-                print("Export completed")
+    
+                if self.type == "cover" {
+                    self.uploadAndSetupImageForCover(getImage: image)
+                } else {
+                    self.uploadAndSetupImageForProfile(getImage: image)
+                }
                 
             })
-            
             
         }
         
         self.dismiss(animated: true, completion: nil)
         
+    }
+    
+    func uploadAndSetupImageForProfile(getImage: SessionImage) {
+        
+        self.exportImage(currentImage: getImage) {
+            
+            self.avatarImage.image = self.renderedImage
+            
+            Dispatch.background {
+                
+                APIManager().uploadavatar(image: self.renderedImage) { result in
+                    switch result {
+                    case .success(let apiResponse):
+                        
+                        guard apiResponse.body?["message"] as? String == "avatar uploaded successfully",
+                              let url = apiResponse.body?["url"] as? String  else {
+                                return
+                        }
+                        
+
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+                
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    
+    func uploadAndSetupImageForCover(getImage: SessionImage) {
+        
+        self.exportImage(currentImage: getImage) {
+            
+            self.coverImage.contentMode = .scaleAspectFill
+            self.coverImage.image = self.renderedImage
+            
+            Dispatch.background {
+                
+                APIManager().uploadcover(image: self.renderedImage) { result in
+                    switch result {
+                    case .success(let apiResponse):
+                        
+                        guard apiResponse.body?["message"] as? String == "cover uploaded successfully",
+                              let url = apiResponse.body?["url"] as? String  else {
+                                return
+                        }
+                        
+                        print(url)
+
+
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+    
+            
+        }
+        
+    }
+    
+    
+    func exportImage(currentImage: SessionImage, completed: @escaping DownloadComplete) {
+        ImageExporter.shared.export(images: [currentImage], progress: { progress in
+            
+            
+        }, completion: { [weak self] error, imageList  in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Unable to export image: \(error)")
+                self.showErrorAlert("Ops!", msg: "Unable to export image: \(error)")
+                return
+            }
+            if let exportedImage = imageList?.first {
+                self.renderedImage = exportedImage
+                completed()
+            } else {
+                print("Unable to export image: image list is nil or empty")
+                self.showErrorAlert("Ops!", msg: "Unable to export image: image list is nil or empty")
+            }
+            
+        })
     }
     
     

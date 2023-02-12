@@ -106,7 +106,7 @@ class LastStepViewController: UIViewController, ControllerType {
         .disposed(by: disposeBag)
       
       submitButton.rx.tap.asObservable().subscribe { Void in
-        self.presentLoading()
+          presentSwiftLoader()
       }.disposed(by: disposeBag)
       
       viewModel.output.registerSuccessObservable

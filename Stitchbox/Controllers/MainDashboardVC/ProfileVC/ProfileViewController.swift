@@ -31,7 +31,6 @@ class ProfileViewController: UIViewController {
     
     var followerCount = 0
     var followingCount = 0
-    
 
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
@@ -62,6 +61,9 @@ class ProfileViewController: UIViewController {
             if posts.count == 10 {
                 self.currpage += 1
             }
+            
+            
+           
           DispatchQueue.main.async {
             var snapshot = self.datasource.snapshot()
               let items = snapshot.itemIdentifiers(inSection: .posts)
@@ -161,7 +163,11 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        navigationController?.hidesBarsOnSwipe = false        
+        navigationController?.hidesBarsOnSwipe = false
+        
+        // tabbar
+        showMiddleBtn(vc: self)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -189,16 +195,21 @@ class ProfileViewController: UIViewController {
                 }
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
                     let url = URL(string: avatarUrl)
-                    cell.avatarImage.load(url: url!)
+                    cell.avatarImage.load(url: url!, str: avatarUrl)
+                    selectAvatarImage.load(url: url!, str: avatarUrl)
                 }
                 if let coverUrl = _AppCoreData.userDataSource.value?.cover, coverUrl != "" {
                     let url = URL(string: coverUrl)
-                    cell.coverImage.load(url: url!)
+                    cell.coverImage.load(url: url!, str: coverUrl)
+                    selectCoverImage.load(url: url!, str: coverUrl)
                 }
-                cell.discordLbl.text = "-"
+               
                 if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
                     cell.discordLbl.text = discord
+                } else {
+                    cell.discordLbl.text = "None"
                 }
+                
                 if let about = _AppCoreData.userDataSource.value?.about {
                     cell.descriptionLbl.text = about
                 }
@@ -228,13 +239,13 @@ class ProfileViewController: UIViewController {
                 cell.coverImage.addGestureRecognizer(coverImageTap)
                 
                 let numberOfFollowersTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followersTapped))
-                cell.numberOfFollowers.isUserInteractionEnabled = true
-                cell.numberOfFollowers.addGestureRecognizer(numberOfFollowersTap)
+                cell.followerStack.isUserInteractionEnabled = true
+                cell.followerStack.addGestureRecognizer(numberOfFollowersTap)
                 
                 
                 let numberOfFollowingTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followingTapped))
-                cell.numberOfFollowing.isUserInteractionEnabled = true
-                cell.numberOfFollowing.addGestureRecognizer(numberOfFollowingTap)
+                cell.followingStack.isUserInteractionEnabled = true
+                cell.followingStack.addGestureRecognizer(numberOfFollowingTap)
                 
                 
                 return cell
@@ -253,18 +264,18 @@ class ProfileViewController: UIViewController {
                 // display username
                 if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
                     cell.username.text = username
+                    ChallengeView.username.text = username
                 }
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
                     let url = URL(string: avatarUrl)
-                    cell.userImgView.load(url: url!)
+                    cell.userImgView.load(url: url!, str: avatarUrl)
+                    ChallengeView.userImgView.load(url: url!, str: avatarUrl)
                 }
                 if let card = _AppCoreData.userDataSource.value?.challengeCard {
                     cell.infoLbl.text = card.quote
                 }
                 
-                
-                
-                
+
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
                 cell.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)
@@ -345,7 +356,8 @@ extension ProfileViewController {
         
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SettingVC") as? SettingVC {
             
-            //self.hidesBottomBarWhenPushed = true
+            SVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(SVC, animated: true)
             
         }
@@ -356,7 +368,14 @@ extension ProfileViewController {
     @objc func fistBumpedlistTapped(_ sender: UIButton) {
         
         print("fistBumpedlistTapped")
-        
+    
+        //MainFistBumpVC
+        if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
+            MFBVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(MFBVC, animated: true)
+            
+        }
        
     }
     
@@ -365,10 +384,11 @@ extension ProfileViewController {
         print("followersTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
-            //self.hidesBottomBarWhenPushed = true
+            MFVC.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = true
             MFVC.followerCount = followerCount
             MFVC.followingCount = followingCount
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -381,10 +401,11 @@ extension ProfileViewController {
         print("followingTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
-            //self.hidesBottomBarWhenPushed = true
+            MFVC.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = false
             MFVC.followerCount = followerCount
             MFVC.followingCount = followingCount
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -395,7 +416,8 @@ extension ProfileViewController {
     @objc func editProfileTapped(_ sender: UIButton) {
         
         if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
-            //self.hidesBottomBarWhenPushed = true
+            EPVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(EPVC, animated: true)
             
         }
@@ -404,14 +426,43 @@ extension ProfileViewController {
     
     @objc func discordTapped(_ sender: UIButton) {
         
-        print("discordTapped - open link discord if have unless ask let user input their discord link")
+        if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
+           
+            if discord != ""
+            {
+                guard let requestUrl = URL(string: discord) else {
+                    return
+                }
+
+                if UIApplication.shared.canOpenURL(requestUrl) {
+                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                } else {
+                    showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(discord)")
+                }
+                
+            } else {
+                
+                showErrorAlert("Oops!", msg: "Can't open this link")
+                
+            }
+            
+        } else {
+            
+            if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
+                EPVC.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
+                self.navigationController?.pushViewController(EPVC, animated: true)
+                
+            }
+        }
         
     }
     
     @objc func fistBumpedTapped(_ sender: UIButton) {
         
         if let FBSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "FistBumpedStatVC") as? FistBumpedStatVC {
-            //self.hidesBottomBarWhenPushed = true
+            FBSVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(FBSVC, animated: true)
             
         }
@@ -440,7 +491,9 @@ extension ProfileViewController {
     @objc func editCardTapped(_ sender: UIButton) {
         
         if let ECCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditChallengeCardVC") as? EditChallengeCardVC {
-            //self.hidesBottomBarWhenPushed = true
+        
+            ECCVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(ECCVC, animated: true)
             
         }
@@ -583,7 +636,8 @@ extension ProfileViewController: UICollectionViewDelegate {
             if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
                 SPVC.selectedPost = selectedPost
                 SPVC.startIndex = indexPath.row
-                //self.hidesBottomBarWhenPushed = true
+                SPVC.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
                 self.navigationController?.pushViewController(SPVC, animated: true)
             }
           
@@ -648,16 +702,29 @@ extension ProfileViewController {
     
     func showFullScreenAvatar() {
         
-        if selectAvatarImage.isHidden {
-        
-            self.backgroundView.isHidden = false
-            self.selectAvatarImage.alpha = 1.0
+        if selectAvatarImage.image != nil {
             
-            UIView.transition(with: selectAvatarImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            if selectAvatarImage.isHidden {
+            
+                self.backgroundView.isHidden = false
+                self.selectAvatarImage.alpha = 1.0
                 
-                self.selectAvatarImage.isHidden = false
+                UIView.transition(with: selectAvatarImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                    
+                    self.selectAvatarImage.isHidden = false
+                    
+                })
                 
-            })
+            }
+            
+        } else {
+            
+            if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
+                EPVC.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
+                self.navigationController?.pushViewController(EPVC, animated: true)
+                
+            }
             
         }
         
@@ -666,16 +733,29 @@ extension ProfileViewController {
     
     func showFullScreenCover() {
         
-        if selectCoverImage.isHidden {
-        
-            self.backgroundView.isHidden = false
-            self.selectCoverImage.alpha = 1.0
+        if selectCoverImage.image != nil {
             
-            UIView.transition(with: selectCoverImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            if selectCoverImage.isHidden {
+            
+                self.backgroundView.isHidden = false
+                self.selectCoverImage.alpha = 1.0
                 
-                self.selectCoverImage.isHidden = false
+                UIView.transition(with: selectCoverImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                    
+                    self.selectCoverImage.isHidden = false
+                    
+                })
                 
-            })
+            }
+            
+        } else {
+            
+            if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
+                EPVC.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
+                self.navigationController?.pushViewController(EPVC, animated: true)
+                
+            }
             
         }
         
@@ -737,6 +817,17 @@ extension ProfileViewController {
     }
     
     
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
 }
 
 //setting up navigationCollection Bar
@@ -749,6 +840,4 @@ extension ProfileViewController: UINavigationBarDelegate, UINavigationController
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
-    
-    
 }

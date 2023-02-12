@@ -26,6 +26,9 @@ class UserProfileHeaderCell: UICollectionViewCell {
     
     let kCONTENT_XIB_NAME = "ProfileView"
     
+    @IBOutlet weak var followerStack: UIStackView!
+    @IBOutlet weak var followingStack: UIStackView!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

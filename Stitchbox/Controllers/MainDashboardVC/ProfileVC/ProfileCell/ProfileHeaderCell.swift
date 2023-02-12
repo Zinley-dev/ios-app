@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import AlamofireImage
+import Cache
+import Alamofire
 
 class ProfileHeaderCell: UICollectionViewCell {
     
@@ -25,6 +28,10 @@ class ProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var avatarImage: UIImageView!
     @IBOutlet weak var coverImage: UIImageView!
     @IBOutlet weak var discordLbl: UILabel!
+    
+    @IBOutlet weak var followerStack: UIStackView!
+    @IBOutlet weak var followingStack: UIStackView!
+    
     let kCONTENT_XIB_NAME = "ProfileView"
     
     
@@ -54,11 +61,6 @@ class ProfileHeaderCell: UICollectionViewCell {
         fistBumpedListBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
     }
     
-  
-    func configure() {
-       
-        
-    }
-    
+
     
 }

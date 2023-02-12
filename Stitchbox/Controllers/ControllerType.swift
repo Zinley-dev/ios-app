@@ -56,6 +56,7 @@ extension ControllerType {
         }
     }
     
+    /*
     func presentLoading() {
       self.dismiss(animated: true) {
         let popupVC = LoadingViewController()
@@ -72,6 +73,7 @@ extension ControllerType {
             self.dismiss(animated: false, completion: nil)
         }
     }
+     */
       
 }
 

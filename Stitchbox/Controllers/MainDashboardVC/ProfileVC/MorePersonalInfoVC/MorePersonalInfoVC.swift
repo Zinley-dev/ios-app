@@ -25,6 +25,12 @@ class MorePersonalInfoVC: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupDefaultInfo()
+        
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -46,10 +52,9 @@ class MorePersonalInfoVC: UIViewController {
     
     @IBAction func EmailOnTapped(_ sender: Any) {
         
-        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
+        if let EEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditEmailVC") as? EditEmailVC {
             
-            EGIVC.type = "Email"
-            self.navigationController?.pushViewController(EGIVC, animated: true)
+            self.navigationController?.pushViewController(EEVC, animated: true)
             
         }
         
@@ -58,22 +63,19 @@ class MorePersonalInfoVC: UIViewController {
     
     @IBAction func phoneTapped(_ sender: Any) {
         
-        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
+        if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhoneVC") as? EditPhoneVC {
             
-            EGIVC.type = "Phone"
-            self.navigationController?.pushViewController(EGIVC, animated: true)
+            self.navigationController?.pushViewController(EPVC, animated: true)
             
         }
-        
         
     }
     
     
     @IBAction func birthdayOnTapped(_ sender: Any) {
         
-        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
-            
-            EGIVC.type = "Birthday"
+        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditBirthdayVC") as? EditBirthdayVC {
+        
             self.navigationController?.pushViewController(EGIVC, animated: true)
             
         }
@@ -84,6 +86,23 @@ class MorePersonalInfoVC: UIViewController {
 
 
 extension MorePersonalInfoVC {
+    
+    
+    func setupDefaultInfo() {
+        
+        if let birthday = _AppCoreData.userDataSource.value?.birthday, birthday != "" {
+            birthdayTxtField.text = birthday
+        }
+    
+        if let phone = _AppCoreData.userDataSource.value?.phone, phone != "" {
+            phoneTxtField.text = phone
+        }
+        if let email = _AppCoreData.userDataSource.value?.email, email != "" {
+            emailTxtField.text = email
+        }
+        
+    }
+    
     
     func setupButtons() {
         
@@ -97,7 +116,7 @@ extension MorePersonalInfoVC {
         // Do any additional setup after loading the view.
         backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
+        backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("     Personal Information", for: .normal)
         backButton.sizeToFit()

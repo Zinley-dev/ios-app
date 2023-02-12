@@ -31,10 +31,12 @@ var selectedTabIndex = 0
  let data5 = StreamingDomainModel(postKey: "5", streamingDomainModel: ["company": "Bigo Live", "domain": ["bigo.tv"], "status": true])
  let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company": "Nonolive", "domain": ["nonolive.com"], "status": true])
  let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
+
  
 
 var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
-
+var back_frame = CGRect(x: -10, y: 0, width: 35, height: 25)
+var discord_domain = ["discordapp.com", "discord.com", "discord.co", "discord.gg", "watchanimeattheoffice.com", "dis.gd", "discord.media", "discordapp.net", "discordstatus.com" ]
 
 typealias DownloadComplete = () -> ()
 
@@ -64,7 +66,7 @@ func showNote(text: String) {
     
 }
 
-func swiftLoader(text: String) {
+func presentSwiftLoaderWithText(text: String) {
     
     var config : SwiftLoader.Config = SwiftLoader.Config()
     config.size = 170
@@ -332,4 +334,127 @@ class ImageSaver: NSObject {
     @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         showNote(text: "Save finished!")
     }
+}
+
+
+func presentSwiftLoader() {
+    
+    var config : SwiftLoader.Config = SwiftLoader.Config()
+    config.size = 170
+    
+    config.backgroundColor = UIColor.clear
+    config.spinnerColor = UIColor.white
+    config.titleTextColor = UIColor.white
+    
+    
+    config.spinnerLineWidth = 3.0
+    config.foregroundColor = UIColor.black
+    config.foregroundAlpha = 0.7
+    
+    
+    SwiftLoader.setConfig(config: config)
+    
+    
+    SwiftLoader.show(title: "", animated: true)
+
+}
+
+
+func discord_verify(host: String) -> Bool  {
+    
+    if discord_domain.contains(host) {
+        return true
+    }
+    
+    return false
+}
+
+
+func hideMiddleBtn(vc: UIViewController) {
+    
+    if let tabbar = vc.tabBarController as? DashboardTabBarController {
+        tabbar.button.isHidden = true
+    }
+    
+}
+
+
+func showMiddleBtn(vc: UIViewController) {
+    
+    if let tabbar = vc.tabBarController as? DashboardTabBarController {
+        tabbar.button.isHidden = false
+    }
+    
+}
+
+func turnOn2FAForEmail() {
+    
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is TwoFactorAuthVC {
+            
+            if let update1 = vc as? TwoFactorAuthVC {
+                update1.isEmail = true
+                update1.EmailSwitch.setOn(true, animated: true)
+            }
+            
+        }
+             
+        
+    }
+    
+}
+
+func turnOn2FAForPhone() {
+    
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is TwoFactorAuthVC {
+            
+            if let update1 = vc as? TwoFactorAuthVC {
+                update1.isPhone = true
+                update1.PhoneSwitch.setOn(true, animated: true)
+            }
+            
+        }
+             
+        
+    }
+    
+}
+
+func turnOff2FAForEmail() {
+    
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is TwoFactorAuthVC {
+            
+            if let update1 = vc as? TwoFactorAuthVC {
+                update1.isEmail = false
+                update1.EmailSwitch.setOn(false, animated: true)
+            }
+            
+        }
+             
+        
+    }
+    
+}
+
+func turnOff2FAForPhone() {
+    
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is TwoFactorAuthVC {
+            
+            if let update1 = vc as? TwoFactorAuthVC {
+                update1.isPhone = false
+                update1.PhoneSwitch.setOn(false, animated: true)
+            }
+            
+        }
+             
+        
+    }
+    
 }
