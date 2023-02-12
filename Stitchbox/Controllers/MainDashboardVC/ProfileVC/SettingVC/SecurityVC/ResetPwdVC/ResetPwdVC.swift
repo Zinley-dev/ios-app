@@ -13,9 +13,34 @@ class ResetPwdVC: UIViewController, ControllerType {
     typealias ViewModelType = ChangePasswordViewModel
     
     @IBOutlet weak var saveBtn: UIButton!
-    @IBOutlet weak var confirmNewPwdTextField: UITextField!
-    @IBOutlet weak var newPwdTextField: UITextField!
-    @IBOutlet weak var currentPwdTextField: UITextField!
+    @IBOutlet weak var confirmNewPwdTextField: UITextField! {
+        didSet {
+            let redPlaceholderText = NSAttributedString(string: "Confirm your new password",
+                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            
+            confirmNewPwdTextField.attributedPlaceholder = redPlaceholderText
+        }
+    }
+    
+    @IBOutlet weak var newPwdTextField: UITextField! {
+        didSet {
+            let redPlaceholderText = NSAttributedString(string: "Your new password",
+                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            
+            newPwdTextField.attributedPlaceholder = redPlaceholderText
+        }
+        
+    }
+    @IBOutlet weak var currentPwdTextField: UITextField! {
+        didSet {
+            let redPlaceholderText = NSAttributedString(string: "Your current password",
+                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            
+            currentPwdTextField.attributedPlaceholder = redPlaceholderText
+        }
+    }
+    
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     let viewModel = ChangePasswordViewModel()
