@@ -386,3 +386,75 @@ func showMiddleBtn(vc: UIViewController) {
     }
     
 }
+
+func turnOn2FAForEmail() {
+    
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is TwoFactorAuthVC {
+            
+            if let update1 = vc as? TwoFactorAuthVC {
+                update1.isEmail = true
+                update1.EmailSwitch.setOn(true, animated: true)
+            }
+            
+        }
+             
+        
+    }
+    
+}
+
+func turnOn2FAForPhone() {
+    
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is TwoFactorAuthVC {
+            
+            if let update1 = vc as? TwoFactorAuthVC {
+                update1.isPhone = true
+                update1.PhoneSwitch.setOn(true, animated: true)
+            }
+            
+        }
+             
+        
+    }
+    
+}
+
+func turnOff2FAForEmail() {
+    
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is TwoFactorAuthVC {
+            
+            if let update1 = vc as? TwoFactorAuthVC {
+                update1.isEmail = false
+                update1.EmailSwitch.setOn(false, animated: true)
+            }
+            
+        }
+             
+        
+    }
+    
+}
+
+func turnOff2FAForPhone() {
+    
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is TwoFactorAuthVC {
+            
+            if let update1 = vc as? TwoFactorAuthVC {
+                update1.isPhone = false
+                update1.PhoneSwitch.setOn(false, animated: true)
+            }
+            
+        }
+             
+        
+    }
+    
+}

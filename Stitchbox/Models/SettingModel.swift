@@ -9,42 +9,43 @@ import ObjectMapper
 class NotificationModel: Mappable {
     
     private(set) var Posts: Bool?
-    private(set) var Challenge: Bool?
     private(set) var Comment: Bool?
     private(set) var Mention: Bool?
     private(set) var Follow: Bool?
     private(set) var Message: Bool?
+    
     
     required init?(map: Map) {
         
     }
     
     func mapping(map: Map) {
-        Posts <- map["Highlight"]
-        Challenge <- map["Challenge"]
-        Comment <- map["Comment"]
-        Mention <- map["Mention"]
-        Follow <- map["Follow"]
-        Message <- map["Message"]
+        Posts <- map["posts"]
+        Comment <- map["comment"]
+        Mention <- map["mention"]
+        Follow <- map["follow"]
+        Message <- map["message"]
     }
 }
 class SettingModel: Mappable {
-    
-    private(set) var AllowChallenge: Bool?
-    private(set) var AllowDiscordLink: Bool?
+
     private(set) var AutoPlaySound: Bool?
     private(set) var PrivateAccount: Bool?
+    private(set) var EnableEmailTwoFactor: Bool?
+    private(set) var EnablePhoneTwoFactor: Bool?
     private(set) var Notifications: NotificationModel?
+    private(set) var AllowStreamingLink: Bool?
     
     required init?(map: Map) {
         //
     }
 
     func mapping(map: Map) {
-        AllowChallenge <- map["AllowChallenge"]
-        AllowDiscordLink <- map["AllowDiscordLink"]
-        AutoPlaySound <- map["AutoPlaySound"]
-        PrivateAccount <- map["AutoMinimize"]
-        Notifications <- map["Notifications"]
+        AutoPlaySound <- map["autoPlaySound"]
+        PrivateAccount <- map["privateAccount"]
+        AllowStreamingLink <- map["allowStreamingLink"]
+        Notifications <- map["notifications"]
+        EnablePhoneTwoFactor <- map["enablePhoneTwoFactor"]
+        EnableEmailTwoFactor <- map["enableEmailTwoFactor"]
     }
 }

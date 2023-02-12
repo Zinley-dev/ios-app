@@ -54,6 +54,8 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
         } else if type == "email" {
             sentAddressLbl.text = email
             
+        } else {
+            sentAddressLbl.text = "\(type) method"
         }
         
         
@@ -266,6 +268,14 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
         } else if type == "email" {
             resendCodeForEmail()
             
+        } else {
+            
+            if type == "2FA - phone" {
+                resendCodeFor2FAPhone()
+            } else if type == "2FA - email" {
+                resendCodeFor2FAEmail()
+            }
+            
         }
         
     }
@@ -279,6 +289,8 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
                 verifyPhone(code: code)
             } else if type == "email" {
                 verifyEmail(code: code)
+            } else {
+                verify2FA(code: code)
             }
             
         } else {
@@ -435,6 +447,66 @@ extension VerifyCodeVC {
         
     }
     
+    func verify2FA(code: String) {
+        
+        var typeMethod = ""
+        
+        if type == "2FA - phone" {
+            typeMethod = "phone"
+        } else if type == "2FA - email" {
+            typeMethod = "email"
+        }
+        
+        
+        APIManager().verify2fa(otp: code, method: typeMethod) { result in
+            switch result {
+            case .success(let apiResponse):
+            
+                print(apiResponse)
+                
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                    self.navigationController?.popBack(2)
+                    
+                    if self.type == "2FA - phone" {
+                        turnOn2FAForPhone()
+                    } else if self.type == "2FA - email" {
+                        turnOn2FAForEmail()
+                    }
+                    
+                }
+                
+                
+            case .failure(let error):
+                
+                print(error)
+                
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: "Unable to verify your code, please try again")
+                    
+                    self.border1.backgroundColor = self.emptyColor.cgColor
+                    self.border2.backgroundColor = self.emptyColor.cgColor
+                    self.border3.backgroundColor = self.emptyColor.cgColor
+                    self.border4.backgroundColor = self.emptyColor.cgColor
+                    self.border5.backgroundColor = self.emptyColor.cgColor
+                    self.border6.backgroundColor = self.emptyColor.cgColor
+                    
+                    self.label1.text = ""
+                    self.label2.text = ""
+                    self.label3.text = ""
+                    self.label4.text = ""
+                    self.label5.text = ""
+                    self.label6.text = ""
+                    
+                    self.HidenTxtView.text = ""
+                }
+               
+            }
+        }
+        
+    }
+    
     func resendCodeForEmail() {
         
         presentSwiftLoader()
@@ -507,6 +579,74 @@ extension VerifyCodeVC {
         
     }
     
+    func resendCodeFor2FAEmail() {
+        
+        APIManager().turnOn2fa(method: "email") { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard apiResponse.body?["message"] as? String == "OTP sent" else {
+                    
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "Cannot request for 2fa verification this time, please try again")
+                        
+                    }
+                    
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    showNote(text: "A new code has been sent to \(self.type) method")
+                    SwiftLoader.hide()
+                }
+
+            case .failure(let error):
+
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please try again")
+                }
+              
+                print(error)
+            }
+        }
+        
+    }
+    
+    func resendCodeFor2FAPhone() {
+        
+        APIManager().turnOn2fa(method: "phone") { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard apiResponse.body?["message"] as? String == "OTP sent" else {
+                    
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "Cannot request for 2fa verification this time, please try again")
+                        
+                    }
+                    
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    showNote(text: "A new code has been sent to \(self.type) method")
+                    SwiftLoader.hide()
+                }
+
+            case .failure(let error):
+
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please try again")
+                }
+              
+                print(error)
+            }
+        }
+        
+    }
+    
 }
 
 extension VerifyCodeVC {
@@ -542,6 +682,12 @@ extension VerifyCodeVC {
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
+            
+            if self.type == "2FA - phone" {
+                turnOff2FAForPhone()
+            } else if self.type == "2FA - email" {
+                turnOff2FAForEmail()
+            }
         }
     }
     

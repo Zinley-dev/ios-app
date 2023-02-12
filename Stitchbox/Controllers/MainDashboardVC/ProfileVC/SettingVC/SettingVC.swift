@@ -9,10 +9,9 @@ import UIKit
 import SafariServices
 import RxCocoa
 import RxSwift
+import ObjectMapper
 
-class SettingVC: UIViewController, ControllerType {
-    
-    typealias ViewModelType = SettingViewModel
+class SettingVC: UIViewController {
     
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -30,16 +29,13 @@ class SettingVC: UIViewController, ControllerType {
     @IBOutlet weak var StreamingLinkSwitch: UISwitch!
     @IBOutlet weak var PrivateAccountSwitch: UISwitch!
     
-    let viewModel = SettingViewModel()
-    let disposeBag = DisposeBag()
+    var settings: SettingModel!
+    var isStreamLink = false
+    var isSound = false
+    var isPrivate = false
     
     override func viewDidLoad() {
-        bindUI(with: viewModel)
-        bindAction(with: viewModel)
-        viewModel.getAPISetting()
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         setupButtons()
        
     }
@@ -47,29 +43,10 @@ class SettingVC: UIViewController, ControllerType {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.tabBarController?.tabBar.isHidden = true
-        self.tabBarController?.tabBar.frame = .zero
-        
-        
-        if self.tabBarController is DashboardTabBarController {
-            let tbctrl = self.tabBarController as! DashboardTabBarController
-            tbctrl.button.isHidden = true
-        }
+        loadSettings()
         
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        viewModel.action.submitChange.on(.next(Void()))
-    }
-    func bindUI(with viewModel: SettingViewModel) {
-        
-        (SoundSwitch.rx.isOn <-> viewModel.input.autoPlaySound).disposed(by: disposeBag)
-        (StreamingLinkSwitch.rx.isOn <-> viewModel.input.allowDiscordLink).disposed(by: disposeBag)
-        (PrivateAccountSwitch.rx.isOn <-> viewModel.input.privateAccount).disposed(by: disposeBag)
-    }
-    
-    func bindAction(with viewModel: SettingViewModel) {}
-
     @IBAction func referralBtnPressed(_ sender: Any) {
         
         if let MRVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MyReferralCodeVC") as? MyReferralCodeVC {
@@ -89,6 +66,7 @@ class SettingVC: UIViewController, ControllerType {
     @IBAction func pushNotificationBtnPressed(_ sender: Any) {
         
         if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PushNotificationVC") as? PushNotificationVC {
+            PNVC.settings = settings
             self.navigationController?.pushViewController(PNVC, animated: true)
             
         }
@@ -98,6 +76,7 @@ class SettingVC: UIViewController, ControllerType {
     @IBAction func securityBtnPressed(_ sender: Any) {
         
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SecurityVC") as? SecurityVC {
+            SVC.settings = settings
             self.navigationController?.pushViewController(SVC, animated: true)
             
         }
@@ -160,6 +139,99 @@ class SettingVC: UIViewController, ControllerType {
         
     }
     
+    
+    @IBAction func SoundSwitchPressed(_ sender: Any) {
+        
+        var params = ["autoPlaySound": false]
+        
+        if isSound {
+            
+            params = ["autoPlaySound": false]
+            isSound = false
+            
+        } else {
+            
+            params = ["autoPlaySound": true]
+            isSound = true
+            
+        }
+
+        APIManager().updateSettings(params: params) {
+                        result in switch result {
+                        case .success(_):
+                            print("Setting API update success")
+                            
+                        case.failure(let error):
+                            DispatchQueue.main.async {
+                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                            }
+                        }
+                    }
+        
+        
+    }
+    
+    @IBAction func StreamingLinkSwitchPressed(_ sender: Any) {
+        
+        var params = ["allowStreamingLink": false]
+        
+        if isStreamLink {
+            
+            params = ["allowStreamingLink": false]
+            isStreamLink = false
+            
+        } else {
+            
+            params = ["allowStreamingLink": true]
+            isStreamLink = true
+        }
+        
+        APIManager().updateSettings(params: params) {
+                        result in switch result {
+                        case .success(_):
+                            print("Setting API update success")
+                            
+                        case.failure(let error):
+                            DispatchQueue.main.async {
+                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                            }
+                        }
+                    }
+        
+        
+    }
+    
+    @IBAction func PrivateSwitchPressed(_ sender: Any) {
+        
+        var params = ["privateAccount": false]
+        
+        if isPrivate {
+            
+            params = ["privateAccount": false]
+            isPrivate = false
+            
+        } else {
+            
+            params = ["privateAccount": true]
+            isPrivate = true
+            
+        }
+
+        
+        APIManager().updateSettings(params: params) {
+                        result in switch result {
+                        case .success(_):
+                            print("Setting API update success")
+                            
+                        case.failure(let error):
+                            DispatchQueue.main.async {
+                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                            }
+                        }
+                    }
+        
+    }
+    
 }
 
 
@@ -213,5 +285,79 @@ extension SettingVC {
         
     }
       
+    
+}
+
+extension SettingVC {
+    
+    func loadSettings() {
+        
+        APIManager().getSettings { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body else {
+                        return
+                }
+
+                self.settings =  Mapper<SettingModel>().map(JSONObject: data)
+                
+                DispatchQueue.main {
+                    self.processDefaultData()
+                }
+                
+            case .failure(let error):
+            
+                DispatchQueue.main {
+                    self.showErrorAlert("Oops!", msg: "Unable to retrieve your setting \(error.localizedDescription)")
+                }
+               
+            }
+        }
+        
+        
+    }
+    
+    func processDefaultData() {
+        
+        if self.settings != nil {
+            if self.settings.AutoPlaySound == true {
+                self.SoundSwitch.setOn(true, animated: true)
+                isSound = true
+            } else {
+                self.SoundSwitch.setOn(false, animated: true)
+                isSound = false
+            }
+            
+            if self.settings.AllowStreamingLink == true {
+                self.StreamingLinkSwitch.setOn(true, animated: true)
+                isStreamLink = true
+            } else {
+                self.StreamingLinkSwitch.setOn(false, animated: true)
+                isStreamLink = false
+            }
+            
+            if self.settings.PrivateAccount == true {
+                self.PrivateAccountSwitch.setOn(true, animated: true)
+                isPrivate = true
+            } else {
+                self.PrivateAccountSwitch.setOn(false, animated: true)
+                isPrivate = false
+            }
+            
+        }
+        
+    }
+
+    func showErrorAlert(_ title: String, msg: String) {
+        
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 }

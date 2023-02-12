@@ -15,6 +15,8 @@ class SecurityVC: UIViewController {
     @IBOutlet weak var twoFactorAuthBtn: UIButton!
     @IBOutlet weak var resetPasswordBtn: UIButton!
     
+    var settings: SettingModel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,6 +30,7 @@ class SecurityVC: UIViewController {
     @IBAction func resetPwdBtnPressed(_ sender: Any) {
         
         if let RPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ResetPwdVC") as? ResetPwdVC {
+            
             self.navigationController?.pushViewController(RPVC, animated: true)
             
         }
@@ -38,6 +41,8 @@ class SecurityVC: UIViewController {
     @IBAction func twoFactorAuthBtnPressed(_ sender: Any) {
         
         if let TFAVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "TwoFactorAuthVC") as? TwoFactorAuthVC {
+            
+            TFAVC.settings = settings
             self.navigationController?.pushViewController(TFAVC, animated: true)
             
         }

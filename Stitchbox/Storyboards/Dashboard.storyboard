@@ -4236,6 +4236,9 @@
                                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ttX-5c-fUC">
                                                                         <rect key="frame" x="238" y="5" width="51" height="30"/>
                                                                         <color key="onTintColor" name="Secondary"/>
+                                                                        <connections>
+                                                                            <action selector="SoundSwitchPressed:" destination="a9W-Jf-Y3W" eventType="valueChanged" id="cjP-pw-38N"/>
+                                                                        </connections>
                                                                     </switch>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4272,6 +4275,9 @@
                                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TlV-he-pQO">
                                                                         <rect key="frame" x="238" y="5" width="51" height="30"/>
                                                                         <color key="onTintColor" name="Secondary"/>
+                                                                        <connections>
+                                                                            <action selector="StreamingLinkSwitchPressed:" destination="a9W-Jf-Y3W" eventType="valueChanged" id="Brr-NE-VwT"/>
+                                                                        </connections>
                                                                     </switch>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4337,6 +4343,9 @@
                                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dki-ni-APY">
                                                                         <rect key="frame" x="238" y="5" width="51" height="30"/>
                                                                         <color key="onTintColor" name="Secondary"/>
+                                                                        <connections>
+                                                                            <action selector="PrivateSwitchPressed:" destination="a9W-Jf-Y3W" eventType="valueChanged" id="VdJ-eV-c4D"/>
+                                                                        </connections>
                                                                     </switch>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -5007,6 +5016,9 @@
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qiZ-sc-S2B">
                                         <rect key="frame" x="262" y="0.0" width="51" height="31"/>
                                         <color key="onTintColor" name="Secondary"/>
+                                        <connections>
+                                            <action selector="PhoneSwitchPressed:" destination="Y6Q-Cx-Nlv" eventType="valueChanged" id="HVb-nc-Gz5"/>
+                                        </connections>
                                     </switch>
                                 </subviews>
                             </stackView>
@@ -5032,6 +5044,9 @@
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r8Y-TV-MTS">
                                         <rect key="frame" x="262" y="0.0" width="51" height="31"/>
                                         <color key="onTintColor" name="Secondary"/>
+                                        <connections>
+                                            <action selector="EmailSwitchPressed:" destination="Y6Q-Cx-Nlv" eventType="valueChanged" id="sUa-dB-gBo"/>
+                                        </connections>
                                     </switch>
                                 </subviews>
                             </stackView>
@@ -5063,6 +5078,10 @@
                             <constraint firstItem="mQ7-db-ueA" firstAttribute="leading" secondItem="TMN-ZF-BL2" secondAttribute="leading" constant="32" id="wHY-YJ-VAE"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="EmailSwitch" destination="r8Y-TV-MTS" id="Zw1-rv-CFw"/>
+                        <outlet property="PhoneSwitch" destination="qiZ-sc-S2B" id="UBf-oS-4oe"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YjD-qU-d9H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -8601,8 +8620,17 @@
         </scene>
     </scenes>
     <designables>
+        <designable name="11L-Oy-Qe3">
+            <size key="intrinsicContentSize" width="36" height="30"/>
+        </designable>
+        <designable name="13Z-bo-nkG">
+            <size key="intrinsicContentSize" width="36" height="30"/>
+        </designable>
         <designable name="ASU-jX-Q9U">
             <size key="intrinsicContentSize" width="39" height="29"/>
+        </designable>
+        <designable name="Bdb-Cc-13C">
+            <size key="intrinsicContentSize" width="36" height="30"/>
         </designable>
         <designable name="FAX-Qh-QnX">
             <size key="intrinsicContentSize" width="670.33333333333337" height="15.333333333333334"/>
@@ -8610,8 +8638,20 @@
         <designable name="JXw-RP-eFG">
             <size key="intrinsicContentSize" width="303" height="16.333333333333332"/>
         </designable>
+        <designable name="LoH-Az-krb">
+            <size key="intrinsicContentSize" width="36" height="30"/>
+        </designable>
+        <designable name="NoW-0j-0aB">
+            <size key="intrinsicContentSize" width="36" height="30"/>
+        </designable>
         <designable name="UB3-9W-WJT">
             <size key="intrinsicContentSize" width="329" height="15.666666666666666"/>
+        </designable>
+        <designable name="bzb-HO-UxG">
+            <size key="intrinsicContentSize" width="36" height="30"/>
+        </designable>
+        <designable name="f1f-he-Mm3">
+            <size key="intrinsicContentSize" width="53" height="30"/>
         </designable>
         <designable name="mQ7-db-ueA">
             <size key="intrinsicContentSize" width="377" height="15.666666666666666"/>

@@ -9,8 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class PushNotificationVC: UIViewController, ControllerType {
-    typealias ViewModelType = SettingViewModel
+class PushNotificationVC: UIViewController {
     
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -20,60 +19,233 @@ class PushNotificationVC: UIViewController, ControllerType {
     @IBOutlet weak var FollowSwitch: UISwitch!
     @IBOutlet weak var MessageSwitch: UISwitch!
     
-    let viewModel = SettingViewModel()
-    let disposeBag = DisposeBag()
+    var settings: SettingModel!
+    var isCommentNoti = false
+    var isMessageNoti = false
+    var isPostNoti = false
+    var isFollowNoti = false
+    var isMentionNoti = false
+    
     
     override func viewDidLoad() {
-        bindUI(with: viewModel)
-        bindAction(with: viewModel)
-        viewModel.getAPISetting()
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupButtons()
+        loadDefaultsValue()
        
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        viewModel.action.submitChange.on(.next(Void()))
-    }
-    func bindUI(with viewModel: SettingViewModel) {
-        (PostsSwitch.rx.isOn <-> viewModel.input.postsNotification).disposed(by: disposeBag)
-        (CommentSwitch.rx.isOn <-> viewModel.input.commentNotification).disposed(by: disposeBag)
-        (MentionSwitch.rx.isOn <-> viewModel.input.mentionNotification).disposed(by: disposeBag)
-        (FollowSwitch.rx.isOn <-> viewModel.input.followNotification).disposed(by: disposeBag)
-        (MessageSwitch.rx.isOn <-> viewModel.input.messageNotification).disposed(by: disposeBag)
-    }
     
-    func bindAction(with viewModel: SettingViewModel) {}
-
+    func loadDefaultsValue() {
+        
+        if settings.Notifications?.Posts == true {
+            
+            PostsSwitch.setOn(true, animated: true)
+            isPostNoti = true
+            
+        } else {
+            
+            PostsSwitch.setOn(false, animated: true)
+            isPostNoti = false
+            
+        }
+        
+        if settings.Notifications?.Message == true {
+            
+            MessageSwitch.setOn(true, animated: true)
+            isMessageNoti = true
+            
+        } else {
+            
+            MessageSwitch.setOn(false, animated: true)
+            isMessageNoti = false
+            
+        }
+        
+        if settings.Notifications?.Mention == true {
+            
+            MentionSwitch.setOn(true, animated: true)
+            isMentionNoti = true
+            
+        } else {
+            
+            MentionSwitch.setOn(false, animated: true)
+            isMentionNoti = false
+            
+        }
+        
+        if settings.Notifications?.Follow == true {
+            
+            FollowSwitch.setOn(true, animated: true)
+            isFollowNoti = true
+            
+        } else {
+            
+            FollowSwitch.setOn(false, animated: true)
+            isFollowNoti = false
+            
+        }
+        
+        if settings.Notifications?.Comment == true {
+            
+            CommentSwitch.setOn(true, animated: true)
+            isCommentNoti = true
+            
+        } else {
+            
+            CommentSwitch.setOn(false, animated: true)
+            isCommentNoti = false
+            
+        }
+        
+        
+        
+        
+    }
     
     @IBAction func PostsSwitchPressed(_ sender: Any) {
         
+        var params = ["notifications": ["posts": false]]
+        
+        if isPostNoti {
+            
+            params = ["notifications": ["posts": false]]
+            isPostNoti = false
+            
+        } else {
+            
+            params = ["notifications": ["posts": true]]
+            isPostNoti = true
+        }
+        
+        APIManager().updateSettings(params: params) {
+                        result in switch result {
+                        case .success(_):
+                            print("Setting API update success")
+                            
+                        case.failure(let error):
+                            DispatchQueue.main.async {
+                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                            }
+                        }
+                    }
         
         
     }
     
     @IBAction func CommentSwitchPressed(_ sender: Any) {
         
+        var params = ["notifications": ["comment": false]]
         
+        if isCommentNoti {
+            
+            params = ["notifications": ["comment": false]]
+            isCommentNoti = false
+            
+        } else {
+            
+            params = ["notifications": ["comment": false]]
+            isCommentNoti = true
+        }
+        
+        APIManager().updateSettings(params: params) {
+                        result in switch result {
+                        case .success(_):
+                            print("Setting API update success")
+                            
+                        case.failure(let error):
+                            DispatchQueue.main.async {
+                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                            }
+                        }
+                    }
         
     }
     
     @IBAction func MentionSwitchPressed(_ sender: Any) {
         
+        var params = ["notifications": ["mention": false]]
         
+        if isMentionNoti {
+            
+            params = ["notifications": ["mention": false]]
+            isMentionNoti = false
+            
+        } else {
+            
+            params = ["notifications": ["mention": true]]
+            isMentionNoti = true
+        }
+        
+        APIManager().updateSettings(params: params) {
+                        result in switch result {
+                        case .success(_):
+                            print("Setting API update success")
+                            
+                        case.failure(let error):
+                            DispatchQueue.main.async {
+                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                            }
+                        }
+                    }
         
     }
     
     @IBAction func FollowSwitchPressed(_ sender: Any) {
         
+        var params = ["notifications": ["follow": false]]
         
+        if isFollowNoti {
+            
+            params = ["notifications": ["follow": false]]
+            isFollowNoti = false
+            
+        } else {
+            
+            params = ["notifications": ["follow": true]]
+            isFollowNoti = true
+        }
+        
+        APIManager().updateSettings(params: params) {
+                        result in switch result {
+                        case .success(_):
+                            print("Setting API update success")
+                            
+                        case.failure(let error):
+                            DispatchQueue.main.async {
+                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                            }
+                        }
+                    }
         
     }
     
     @IBAction func MessageSwitchPressed(_ sender: Any) {
         
+        var params = ["notifications": ["message": false]]
         
+        if isMessageNoti {
+            
+            params = ["notifications": ["message": false]]
+            isMessageNoti = false
+            
+        } else {
+            
+            params = ["notifications": ["message": true]]
+            isMessageNoti = true
+        }
+        
+        APIManager().updateSettings(params: params) {
+                        result in switch result {
+                        case .success(_):
+                            print("Setting API update success")
+                            
+                        case.failure(let error):
+                            DispatchQueue.main.async {
+                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                            }
+                        }
+                    }
         
     }
 
@@ -113,5 +285,15 @@ extension PushNotificationVC {
         }
     }
     
+    func showErrorAlert(_ title: String, msg: String) {
+        
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 }

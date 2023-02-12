@@ -50,7 +50,6 @@
 		14FADBCD297B072100E0A741 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBCC297B072100E0A741 /* ChangePasswordViewModel.swift */; };
 		14FADBCF297C44E800E0A741 /* BlockAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBCE297C44E800E0A741 /* BlockAccountViewModel.swift */; };
 		14FADBD1297FBA4800E0A741 /* ContactUsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBD0297FBA4800E0A741 /* ContactUsViewModel.swift */; };
-		14FAEE06294DEE0B00C20B99 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */; };
 		14FFF78229857C860086E2D9 /* CountryPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = 14FFF78129857C860086E2D9 /* CountryPickerView */; };
 		14FFF78829881EA40086E2D9 /* ListDisplayDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFF78729881EA40086E2D9 /* ListDisplayDataSource.swift */; };
 		390FD7382909264D0068B883 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7372909264D0068B883 /* AppDelegate.swift */; };
@@ -366,7 +365,6 @@
 		14FADBCC297B072100E0A741 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
 		14FADBCE297C44E800E0A741 /* BlockAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockAccountViewModel.swift; sourceTree = "<group>"; };
 		14FADBD0297FBA4800E0A741 /* ContactUsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsViewModel.swift; sourceTree = "<group>"; };
-		14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		14FFF78429857CAA0086E2D9 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "CountryPickerView-master"; path = "Stitchbox/CountryPickerView-master"; sourceTree = "<group>"; };
 		14FFF78729881EA40086E2D9 /* ListDisplayDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDisplayDataSource.swift; sourceTree = "<group>"; };
 		264872440F442FAA80DFCBDC /* Pods-StitchboxUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -801,7 +799,6 @@
 		14FADBCB297B06AC00E0A741 /* SettingViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				14FAEE05294DEE0B00C20B99 /* SettingViewModel.swift */,
 				14FADBCC297B072100E0A741 /* ChangePasswordViewModel.swift */,
 				14FADBCE297C44E800E0A741 /* BlockAccountViewModel.swift */,
 				14FADBD0297FBA4800E0A741 /* ContactUsViewModel.swift */,
@@ -2783,7 +2780,6 @@
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				A540A8D6294730C40085CC45 /* FacebookSignInService.swift in Sources */,
 				6A6C30E42964032C0070167A /* MutedMemberVC.swift in Sources */,
-				14FAEE06294DEE0B00C20B99 /* SettingViewModel.swift in Sources */,
 				A5DF81F7295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift in Sources */,
 				6A0D544A2974F3F10059530C /* ChallengeCardHeaderData.swift in Sources */,
 				6A6C30FE2964156E0070167A /* UnmutedUserModView.swift in Sources */,
