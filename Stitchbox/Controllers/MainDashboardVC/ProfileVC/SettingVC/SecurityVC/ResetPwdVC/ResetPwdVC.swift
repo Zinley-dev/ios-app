@@ -40,6 +40,12 @@ class ResetPwdVC: UIViewController, ControllerType {
         }
     }
     
+   
+    @IBOutlet weak var checkPassLengthLabel: UILabel!
+    @IBOutlet weak var checkPassNumberLabel: UILabel!
+    @IBOutlet weak var checkPassUpperLabel: UILabel!
+    @IBOutlet weak var checkPassLowerLabel: UILabel!
+    @IBOutlet weak var checkPassSpecialLabel: UILabel!
     
     let backButton: UIButton = UIButton(type: .custom)
     
