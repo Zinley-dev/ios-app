@@ -31,6 +31,9 @@ class ProfileViewController: UIViewController {
     
     var followerCount = 0
     var followingCount = 0
+    var fistBumpedCount = 0
+    var shouldAdd = true
+    var shouldAddAt = 0
 
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
@@ -62,8 +65,6 @@ class ProfileViewController: UIViewController {
                 self.currpage += 1
             }
             
-            
-           
           DispatchQueue.main.async {
             var snapshot = self.datasource.snapshot()
               let items = snapshot.itemIdentifiers(inSection: .posts)
@@ -80,8 +81,6 @@ class ProfileViewController: UIViewController {
                   
               }
               self.pullControl.endRefreshing()
-              
-              
             
           }
         })
@@ -105,6 +104,7 @@ class ProfileViewController: UIViewController {
                 }
             }
         })
+        
         viewModel.output.followingObservable.subscribe(onNext: { count in
             let indexPath = IndexPath(item: 0, section: 0);
             DispatchQueue.main.async {
@@ -214,13 +214,14 @@ class ProfileViewController: UIViewController {
                     cell.descriptionLbl.text = about
                 }
                 
-                
+               
+                fistBumpedCount = param.fistBumped
                 followerCount = param.followers
                 followingCount = param.following
                
                 cell.numberOfFollowers.text = "\(formatPoints(num: Double(param.followers)))"
                 cell.numberOfFollowing.text = "\(formatPoints(num: Double(param.following)))"
-                
+                cell.numberOfFistBumps.text = "\(formatPoints(num: Double(param.fistBumped)))"
                 
                 // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
@@ -273,6 +274,59 @@ class ProfileViewController: UIViewController {
                 }
                 if let card = _AppCoreData.userDataSource.value?.challengeCard {
                     cell.infoLbl.text = card.quote
+                }
+                
+                
+                
+                cell.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
+                
+                print(_AppCoreData.userDataSource.value?.challengeCard?.games.count)
+                
+                if _AppCoreData.userDataSource.value?.challengeCard?.games.isEmpty == true {
+                    cell.game1.isHidden = false
+                    cell.game2.isHidden = true
+                    cell.game3.isHidden = true
+                    cell.game4.isHidden = true
+                    shouldAddAt = 1
+                    
+                } else {
+                    
+                    if _AppCoreData.userDataSource.value?.challengeCard?.games.count == 1 {
+                        
+                        cell.game1.isHidden = false
+                        cell.game2.isHidden = false
+                        cell.game3.isHidden = true
+                        cell.game4.isHidden = true
+                        shouldAddAt = 2
+                        
+                    } else if _AppCoreData.userDataSource.value?.challengeCard?.games.count == 2 {
+                        
+                        cell.game1.isHidden = false
+                        cell.game2.isHidden = false
+                        cell.game3.isHidden = false
+                        cell.game4.isHidden = true
+                        shouldAddAt = 3
+                        
+                        
+                    } else if _AppCoreData.userDataSource.value?.challengeCard?.games.count == 3 {
+                        
+                        cell.game1.isHidden = false
+                        cell.game2.isHidden = false
+                        cell.game3.isHidden = false
+                        cell.game4.isHidden = false
+                        shouldAdd = true
+                        shouldAddAt = 4
+                        
+                        
+                    } else if _AppCoreData.userDataSource.value?.challengeCard?.games.count == 4 {
+                        
+                        shouldAdd = false
+                        shouldAddAt = 0
+                        
+                    }
+                    
+                    
+                    
                 }
                 
 
@@ -841,3 +895,18 @@ extension ProfileViewController: UINavigationBarDelegate, UINavigationController
         return .topAttached
     }
 }
+
+extension ProfileViewController {
+    
+    func getChallengeCard() {
+        
+        //APIManager().get
+        
+        
+    }
+    
+    
+}
+
+
+
