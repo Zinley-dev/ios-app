@@ -34,6 +34,8 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
     
     var didSelectIndex: IndexPath?
     var didSelect = false
+    var bID: Int?
+    var didCreateSave = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +60,11 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
         case .challengeCard(_):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChallengerCardProfileHeaderCell.reuseIdentifier, for: indexPath) as? ChallengerCardProfileHeaderCell {
+                
+                if bID != nil {
+                    let image = UIImage.init(named: "b\(bID!+1)")
+                    cell.badgeImgView.image = image
+                }
                 
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
@@ -178,6 +185,61 @@ extension EditChallengeCardVC {
         
     }
     
+    @objc func onClickSave(_ sender: AnyObject) {
+        
+        if let badgeID = bID {
+            
+            presentSwiftLoader()
+            APIManager().updateChallengeCard(params: ["badge": "b\(badgeID+1)"]) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard apiResponse.body?["message"] as? String == "success" else {
+                            return
+                    }
+                    
+                    DispatchQueue.main {
+                        SwiftLoader.hide()
+                        self.bID = nil
+                        self.didCreateSave = false
+                        self.navigationItem.rightBarButtonItem = nil
+                        
+                        if self.didSelectIndex != nil {
+                            
+                            if let cell = self.collectionView.cellForItem(at: self.didSelectIndex!) as? ImageViewCell {
+                                self.didSelect = false
+                                cell.borderColors = .clear
+                                cell.borderWidths = 0.0
+                                cell.cornerRadius = 0.0
+                                    
+                            }
+                            
+                        }
+                        
+                        
+                        
+                        showNote(text: "Updated successfully")
+                    }
+                    
+                case .failure(let error):
+                    DispatchQueue.main {
+                        print(error)
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                    }
+                
+                }
+            }
+            
+            
+        } else {
+            
+            self.showErrorAlert("Oops!", msg: "Please choose your badge")
+            
+        }
+        
+    }
+    
 }
 
 
@@ -281,9 +343,24 @@ extension EditChallengeCardVC {
             if let cell = collectionView.cellForItem(at: indexPath) as? ImageViewCell {
                 didSelect = true
                 cell.borderColors = .secondary
-                cell.borderWidths = 1.0
+                cell.borderWidths = 2.0
                 cell.cornerRadius = 5.0
                 print("Select Badges - \(indexPath.row)")
+                bID = indexPath.row
+                
+                
+                // reload sections
+                
+                var updatedSnapshot = datasource.snapshot()
+                updatedSnapshot.reloadSections([.challengeCard])
+                self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+                
+                
+                if didCreateSave == false {
+                    didCreateSave = true
+                    createSaveBtn()
+                }
+                    
             }
             
          
@@ -298,5 +375,41 @@ extension EditChallengeCardVC {
         
     }
     
+    
+    func createSaveBtn() {
+      
+        let createButton = UIButton(type: .custom)
+        createButton.addTarget(self, action: #selector(onClickSave(_:)), for: .touchUpInside)
+        createButton.semanticContentAttribute = .forceRightToLeft
+        createButton.setTitle("Save", for: .normal)
+        createButton.setTitleColor(.white, for: .normal)
+        createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
+        createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
+        createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
+        createButton.backgroundColor = .primary
+        createButton.cornerRadius = 15
+        let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
+        customView.addSubview(createButton)
+        createButton.center = customView.center
+        let createBarButton = UIBarButtonItem(customView: customView)
+
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+      
+        self.navigationItem.rightBarButtonItem = createBarButton
+         
+    }
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 }

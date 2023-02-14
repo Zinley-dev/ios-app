@@ -17,6 +17,7 @@ class ChallengerCardProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var userImgHeight: NSLayoutConstraint!
     @IBOutlet weak var userImgWidth: NSLayoutConstraint!
     @IBOutlet weak var userImgView: UIImageView!
+    @IBOutlet weak var badgeImgView: UIImageView!
     @IBOutlet weak var infoLbl: UILabel!
     @IBOutlet weak var EditChallenge: UIButton!
     
