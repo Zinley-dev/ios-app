@@ -17,6 +17,7 @@ import SendBirdUIKit
 import PixelSDK
 import UserNotifications
 import TikTokOpenSDK
+import OneSignal
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -42,7 +43,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         syncSendbirdAccount()
         attemptRegisterForNotifications(application: application)
         setupStyle()
+        setupOneSignal(launchOptions: launchOptions)
         return true
+    }
+  
+    func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
+      // OneSignal initialization
+      OneSignal.initWithLaunchOptions(launchOptions)
+      OneSignal.setAppId("209c3011-21c8-43ba-aff2-b2865e03aee5")
+      
+      // promptForPushNotifications will show the native iOS notification permission prompt.
+      // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 8)
+      OneSignal.promptForPushNotifications(userResponse: { accepted in
+        print("User accepted notifications: \(accepted)")
+      })
     }
 
     func setupPixelSDK() {
