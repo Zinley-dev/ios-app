@@ -122,6 +122,7 @@ class UserDataSource: Mappable {
     private(set) var apple: ThirdPartyCredential?
     private(set) var friendsIds: [String] = []
     private(set) var location: String = ""
+    private(set) var createdAt: String = ""
     private(set) var ageRange: AgeRange?
     private(set) var challengeCard: ChallengeCardData?
     required init?(map: Map) {
@@ -133,7 +134,7 @@ class UserDataSource: Mappable {
     }
     
     func mapping(map: Map) {
-        userID          <- map["ID"]
+        userID          <- map["_id"]
         userName        <- map["username"]
         name            <- map["name"]
         email           <- map["email"]
@@ -157,6 +158,7 @@ class UserDataSource: Mappable {
         friendsIds      <- map["FriendsIds"]
         gender          <- map["gender"]
         location        <- map["location"]
+        createdAt       <- map["createdAt"]
         ageRange        <- map["AgeRange"]
         discordUrl      <- map["discordLink"]
         challengeCard   <- map["challengeCard"]
