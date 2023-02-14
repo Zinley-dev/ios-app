@@ -205,7 +205,7 @@ class ProfileViewController: UIViewController {
                 }
                
                 if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
-                    cell.discordLbl.text = discord
+                    cell.discordLbl.text = "Added and verified"
                 } else {
                     cell.discordLbl.text = "None"
                 }
@@ -213,6 +213,8 @@ class ProfileViewController: UIViewController {
                 if let about = _AppCoreData.userDataSource.value?.about {
                     cell.descriptionLbl.text = about
                 }
+                
+                print("Hello \(_AppCoreData.userDataSource.value?.createdAt)")
                 
                
                 fistBumpedCount = param.fistBumped
