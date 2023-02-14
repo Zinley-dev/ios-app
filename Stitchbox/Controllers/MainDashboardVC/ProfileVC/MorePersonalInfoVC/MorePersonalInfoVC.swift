@@ -90,8 +90,8 @@ extension MorePersonalInfoVC {
     
     func setupDefaultInfo() {
         
-        if let birthday = _AppCoreData.userDataSource.value?.birthday, birthday != "" {
-            birthdayTxtField.text = birthday
+        if let birthday = _AppCoreData.userDataSource.value?.birthday {
+            birthdayTxtField.text = birthday.toDateString()
         }
     
         if let phone = _AppCoreData.userDataSource.value?.phone, phone != "" {
