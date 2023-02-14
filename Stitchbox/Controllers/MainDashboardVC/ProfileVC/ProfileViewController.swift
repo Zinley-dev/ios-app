@@ -267,67 +267,75 @@ class ProfileViewController: UIViewController {
                     cell.username.text = username
                     ChallengeView.username.text = username
                 }
+                
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
                     let url = URL(string: avatarUrl)
                     cell.userImgView.load(url: url!, str: avatarUrl)
                     ChallengeView.userImgView.load(url: url!, str: avatarUrl)
                 }
-                if let card = _AppCoreData.userDataSource.value?.challengeCard {
-                    cell.infoLbl.text = card.quote
-                }
                 
-                
-                
-                cell.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
-                
-                print(_AppCoreData.userDataSource.value?.challengeCard?.games.count)
-                
-                if _AppCoreData.userDataSource.value?.challengeCard?.games.isEmpty == true {
-                    cell.game1.isHidden = false
-                    cell.game2.isHidden = true
-                    cell.game3.isHidden = true
-                    cell.game4.isHidden = true
-                    shouldAddAt = 1
-                    
-                } else {
-                    
-                    if _AppCoreData.userDataSource.value?.challengeCard?.games.count == 1 {
-                        
-                        cell.game1.isHidden = false
-                        cell.game2.isHidden = false
-                        cell.game3.isHidden = true
-                        cell.game4.isHidden = true
-                        shouldAddAt = 2
-                        
-                    } else if _AppCoreData.userDataSource.value?.challengeCard?.games.count == 2 {
-                        
-                        cell.game1.isHidden = false
-                        cell.game2.isHidden = false
-                        cell.game3.isHidden = false
-                        cell.game4.isHidden = true
-                        shouldAddAt = 3
-                        
-                        
-                    } else if _AppCoreData.userDataSource.value?.challengeCard?.games.count == 3 {
-                        
-                        cell.game1.isHidden = false
-                        cell.game2.isHidden = false
-                        cell.game3.isHidden = false
-                        cell.game4.isHidden = false
-                        shouldAdd = true
-                        shouldAddAt = 4
-                        
-                        
-                    } else if _AppCoreData.userDataSource.value?.challengeCard?.games.count == 4 {
-                        
-                        shouldAdd = false
-                        shouldAddAt = 0
-                        
+                if let card = _AppCoreData.userDataSource.value?.challengeCard
+                {
+                    if card.quote != "" {
+                        cell.infoLbl.text = card.quote
+                    } else {
+                        cell.infoLbl.text = "Stitchbox's challenger"
                     }
                     
                     
+                    print("Hello - \(card.games.count) - \(card.badge)")
+                    
+                    if card.games.isEmpty == true {
+                        cell.game1.isHidden = false
+                        cell.game2.isHidden = true
+                        cell.game3.isHidden = true
+                        cell.game4.isHidden = true
+                        shouldAddAt = 1
+                        
+                    } else {
+                        
+                        if card.games.count == 1 {
+                            
+                            cell.game1.isHidden = false
+                            cell.game2.isHidden = false
+                            cell.game3.isHidden = true
+                            cell.game4.isHidden = true
+                            shouldAddAt = 2
+                            
+                        } else if card.games.count == 2 {
+                            
+                            cell.game1.isHidden = false
+                            cell.game2.isHidden = false
+                            cell.game3.isHidden = false
+                            cell.game4.isHidden = true
+                            shouldAddAt = 3
+                            
+                            
+                        } else if card.games.count == 3 {
+                            
+                            cell.game1.isHidden = false
+                            cell.game2.isHidden = false
+                            cell.game3.isHidden = false
+                            cell.game4.isHidden = false
+                            shouldAdd = true
+                            shouldAddAt = 4
+                            
+                            
+                        } else if card.games.count == 4 {
+                            
+                            shouldAdd = false
+                            shouldAddAt = 0
+                            
+                        }
+                        
+                        
+                        
+                    }
                     
                 }
+                
+                
+                cell.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
                 
 
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)

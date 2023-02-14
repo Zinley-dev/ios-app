@@ -101,6 +101,7 @@
 		6A1235A5295034BD004B612E /* InviteUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235A4295034BD004B612E /* InviteUserVC.swift */; };
 		6A1235AA295034FF004B612E /* GroupCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235A9295034FF004B612E /* GroupCallViewController.swift */; };
 		6A1235AC2950351C004B612E /* GroupNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235AB2950351C004B612E /* GroupNode.swift */; };
+		6A136362299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A136361299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift */; };
 		6A3F0A56297B6A9000366665 /* MainFollowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A55297B6A9000366665 /* MainFollowVC.swift */; };
 		6A3F0A59297B789400366665 /* EditSloganVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A58297B789400366665 /* EditSloganVC.swift */; };
 		6A3F0A5C297CB83F00366665 /* AddVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A5B297CB83F00366665 /* AddVC.swift */; };
@@ -425,6 +426,7 @@
 		6A1235A4295034BD004B612E /* InviteUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUserVC.swift; sourceTree = "<group>"; };
 		6A1235A9295034FF004B612E /* GroupCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCallViewController.swift; sourceTree = "<group>"; };
 		6A1235AB2950351C004B612E /* GroupNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupNode.swift; sourceTree = "<group>"; };
+		6A136361299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfSheetPresentationControllerHeightProtocol.swift; sourceTree = "<group>"; };
 		6A3F0A55297B6A9000366665 /* MainFollowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFollowVC.swift; sourceTree = "<group>"; };
 		6A3F0A58297B789400366665 /* EditSloganVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSloganVC.swift; sourceTree = "<group>"; };
 		6A3F0A5B297CB83F00366665 /* AddVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVC.swift; sourceTree = "<group>"; };
@@ -962,6 +964,7 @@
 		390FD77D29092BA70068B883 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				6A136361299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift */,
 				6A0D543D297242140059530C /* CellFromNib.swift */,
 				6A0D543C297242140059530C /* JokeProtocol.swift */,
 				6A0D543A297241D30059530C /* InstantiatesFromNib.swift */,
@@ -2888,6 +2891,7 @@
 				14FADBCF297C44E800E0A741 /* BlockAccountViewModel.swift in Sources */,
 				6AAD7A60294C699E003E3AB6 /* UIViewController+Utils.swift in Sources */,
 				6A0CF63D296AAC2C00155889 /* EmailResetVC.swift in Sources */,
+				6A136362299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift in Sources */,
 				6A78485E2984D1F6008B2263 /* NotificationVC.swift in Sources */,
 				6A66277C2965772200A4488B /* EndPointType.swift in Sources */,
 				6A9E4C782977AF4500B59176 /* ContactUsVC.swift in Sources */,

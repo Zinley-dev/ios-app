@@ -32,6 +32,8 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
         return ChallengeCardHeaderData(name: "Planet Pennies")
     }
     
+    var didSelectIndex: IndexPath?
+    var didSelect = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -242,4 +244,59 @@ extension EditChallengeCardVC {
     }
     
 
+}
+
+extension EditChallengeCardVC {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
+        let item = datasource.itemIdentifier(for: indexPath)
+       
+        switch item {
+            case .challengeCard(_):
+                print("header")
+                
+            case .badges(_):
+                
+                print("Badges - \(indexPath.row)")
+            
+            if didSelect == true {
+                
+                if let cell = collectionView.cellForItem(at: didSelectIndex!) as? ImageViewCell {
+                    
+                    cell.borderColors = .clear
+                    cell.borderWidths = 0.0
+                    cell.cornerRadius = 0.0
+                    print("Delect Badges - \(indexPath.row)")
+                    
+                    
+                }
+                
+            }
+            
+            didSelectIndex = indexPath
+            
+            
+            if let cell = collectionView.cellForItem(at: indexPath) as? ImageViewCell {
+                didSelect = true
+                cell.borderColors = .secondary
+                cell.borderWidths = 1.0
+                cell.cornerRadius = 5.0
+                print("Select Badges - \(indexPath.row)")
+            }
+            
+         
+             
+            case .none:
+                print("None")
+        }
+        
+        
+        //didSelectIndex
+        
+        
+    }
+    
+    
 }

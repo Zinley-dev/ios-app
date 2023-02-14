@@ -3482,6 +3482,7 @@
                                         <connections>
                                             <outlet property="EditChallenge" destination="oeS-Fq-6pY" id="iqY-93-Px5"/>
                                             <outlet property="badgeWidth" destination="ogi-eP-1Yd" id="lYU-XB-Bje"/>
+                                            <outlet property="fistBumpedLbl" destination="4JA-xj-sB0" id="qsN-r7-UqT"/>
                                             <outlet property="game1" destination="bwj-fo-U6b" id="GLC-NF-NJD"/>
                                             <outlet property="game2" destination="Mvu-Ks-gBd" id="c3Z-Sv-QnL"/>
                                             <outlet property="game3" destination="Dub-jL-kJZ" id="ZPH-UX-lmD"/>
