@@ -110,8 +110,8 @@ class UserDataSource: Mappable {
       set(newValue) { _referralCode = newValue}
       get { return _referralCode }
     }
-    private var _birthday: String = ""
-    var birthday: String {
+    private var _birthday: Date?
+    var birthday: Date? {
       set(newValue) { _birthday = newValue}
       get { return _birthday }
     }
@@ -122,7 +122,7 @@ class UserDataSource: Mappable {
     private(set) var apple: ThirdPartyCredential?
     private(set) var friendsIds: [String] = []
     private(set) var location: String = ""
-    private(set) var createdAt: String = ""
+    private(set) var createdAt: Date?
     private(set) var ageRange: AgeRange?
     private(set) var challengeCard: ChallengeCardData?
     required init?(map: Map) {
@@ -149,7 +149,7 @@ class UserDataSource: Mappable {
         about           <- map["about"]
         bio             <- map["bio"]
         referralCode    <- map["referralCode"]
-        birthday        <- map["Birthday"]
+        birthday        <- (map["birthday"], ISODateTransform())
         facebook        <- map["facebook"]
         google          <- map["google"]
         twitter         <- map["twitter"]
@@ -158,7 +158,7 @@ class UserDataSource: Mappable {
         friendsIds      <- map["FriendsIds"]
         gender          <- map["gender"]
         location        <- map["location"]
-        createdAt       <- map["createdAt"]
+        createdAt       <- (map["createdAt"], ISODateTransform())
         ageRange        <- map["AgeRange"]
         discordUrl      <- map["discordLink"]
         challengeCard   <- map["challengeCard"]

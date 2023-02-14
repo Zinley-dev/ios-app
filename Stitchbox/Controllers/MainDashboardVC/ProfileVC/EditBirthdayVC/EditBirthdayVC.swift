@@ -114,9 +114,8 @@ extension EditBirthdayVC {
     
     
     func setupDefaultInfo() {
-        
-        if let birthday = _AppCoreData.userDataSource.value?.birthday, birthday != "" {
-            birthdayTxtField.placeholder = birthday
+        if let birthday = _AppCoreData.userDataSource.value?.birthday {
+            birthdayTxtField.placeholder = birthday.toDateString()
         } else {
             birthdayTxtField.placeholder = "MM/DD/YYYY"
         }
