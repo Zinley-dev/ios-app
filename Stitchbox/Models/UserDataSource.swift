@@ -7,10 +7,28 @@
 
 import ObjectMapper
 
+class Game: Mappable {
+    private(set) var gameId: String = ""
+    private(set) var gameName: String = ""
+    private(set) var link: String = ""
+    private(set) var index: Int = 0
+    
+    required init?(map: ObjectMapper.Map) {
+        
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        gameId <- map["gameId"]
+        gameName <- map["gameName"]
+        link <- map["gameLink"]
+        index <- map["gameIndex"]
+    }
+}
+
 class ChallengeCardData: Mappable {
     private(set) var badge: String = ""
     private(set) var quote: String = ""
-    private(set) var games: [String] = []
+    private(set) var games: [Game] = []
     required init?(map: ObjectMapper.Map) {
         
     }

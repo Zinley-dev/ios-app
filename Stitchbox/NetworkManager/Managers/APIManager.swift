@@ -37,6 +37,7 @@ struct APIManager {
     let commentManager = Manager<CommentApi>()
     let likePostManager = Manager<LikePostApi>()
     let fistBumpManager = Manager<FistBumpAPI>()
+    let gamesManager = Manager<GameAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -485,6 +486,15 @@ extension APIManager {
   }
   func countComment(post postId: String, completion: @escaping APICompletion) {
     commentManager.request(.count(postId: postId)) { result in
+      completion(result)
+    }
+  }
+}
+
+extension APIManager {
+  func getGames(page: Int = 1, limit: Int = 20, completion: @escaping APICompletion) {
+    gamesManager.request(.getGames(page: page, limit: limit)) {
+      result in
       completion(result)
     }
   }

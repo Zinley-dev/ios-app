@@ -114,6 +114,16 @@ PODS:
     - NYTPhotoViewer/Core
   - NYTPhotoViewer/Core (1.1.0)
   - ObjectMapper (3.5.3)
+  - OneSignalXCFramework (3.12.3):
+    - OneSignalXCFramework/OneSignalCore (= 3.12.3)
+    - OneSignalXCFramework/OneSignalExtension (= 3.12.3)
+    - OneSignalXCFramework/OneSignalOutcomes (= 3.12.3)
+  - OneSignalXCFramework/OneSignalCore (3.12.3)
+  - OneSignalXCFramework/OneSignalExtension (3.12.3):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalOutcomes
+  - OneSignalXCFramework/OneSignalOutcomes (3.12.3):
+    - OneSignalXCFramework/OneSignalCore
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
     - PINCache/Core (= 3.0.3)
@@ -190,6 +200,7 @@ DEPENDENCIES:
   - lottie-ios (~> 4.0.1)
   - NYTPhotoViewer (~> 1.1.0)
   - ObjectMapper (~> 3.5)
+  - OneSignalXCFramework (< 4.0, >= 3.0.0)
   - PixelSDK
   - RSKImageCropper
   - RxCocoa (~> 6.5.0)
@@ -231,6 +242,7 @@ SPEC REPOS:
     - nanopb
     - NYTPhotoViewer
     - ObjectMapper
+    - OneSignalXCFramework
     - PINCache
     - PINOperation
     - PINRemoteImage
@@ -287,6 +299,7 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
   ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
+  OneSignalXCFramework: 75844c29607ca95e6176f6f21257b4382c7fdbfb
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: daa34d4aa1d8449089be7d405b9d974abc4724c6
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
@@ -310,6 +323,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: f296efcd1499a34a85f248d9532462fd759e7259
+PODFILE CHECKSUM: 18d7c6a93af7cb9c18abb9658bd2dd8c59dcc96a
 
 COCOAPODS: 1.11.3

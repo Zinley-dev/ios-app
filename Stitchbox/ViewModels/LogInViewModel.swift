@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import ObjectMapper
+import OneSignal
 
 class LoginControllerViewModel: ViewModelProtocol {
     
@@ -59,6 +60,8 @@ class LoginControllerViewModel: ViewModelProtocol {
                 case .success(let apiResponse):
                     // get and process data
                     let data = apiResponse.body?["data"] as! [String: Any]?
+                    print("data \(data)")
+                    
                     let account =  Mapper<Account>().map(JSONObject: data)
                     
                     print("account \(Mapper().toJSON(account!))")
@@ -72,8 +75,19 @@ class LoginControllerViewModel: ViewModelProtocol {
                     // write usr data
                     if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
                         _AppCoreData.userDataSource.accept(newUserData)
-                        print("newuserdata")
-                        print(newUserData.toJSON())
+                      print("NEW USER DATA")
+                      print(newUserData.toJSON())
+                      print(newUserData.challengeCard?.toJSON())
+                      if newUserData.userID != ""{
+                        let externalUserId = newUserData.userID!
+                        
+                        OneSignal.setExternalUserId(externalUserId, withSuccess: { results in
+                          print("External user id update complete with results: ", results!.description)
+                        }, withFailure: {error in
+                          print("Set external user id done with error: " + error.debugDescription)
+                        })
+                      }
+                        
                     }
                     
                     self.loginResultSubject.onNext(true)
