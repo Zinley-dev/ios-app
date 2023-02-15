@@ -214,8 +214,7 @@ class ProfileViewController: UIViewController {
                     cell.descriptionLbl.text = about
                 }
                 
-                print("Hello \(_AppCoreData.userDataSource.value?.createdAt)")
-                
+            
                
                 fistBumpedCount = param.fistBumped
                 followerCount = param.followers
@@ -280,10 +279,28 @@ class ProfileViewController: UIViewController {
                 {
                     if card.quote != "" {
                         cell.infoLbl.text = card.quote
+                        ChallengeView.infoLbl.text = card.quote
                     } else {
                         cell.infoLbl.text = "Stitchbox's challenger"
+                        ChallengeView.infoLbl.text = "Stitchbox's challenger"
                     }
                     
+                    print(_AppCoreData.userDataSource.value?.createdAt)
+                    
+                    if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
+                        print(createAt)
+                        let DateFormatter = DateFormatter()
+                        DateFormatter.dateStyle = .medium
+                        DateFormatter.timeStyle = .none
+                        cell.startTime.text = DateFormatter.string(from: createAt)
+                        ChallengeView.startTime.text = DateFormatter.string(from: createAt)
+                    } else {
+                        cell.startTime.text = "None"
+                        ChallengeView.startTime.text = "None"
+                    }
+                    
+                    cell.badgeImgView.image = UIImage.init(named: card.badge)
+                    ChallengeView.badgeImgView.image = UIImage.init(named: card.badge)
                     
                     print("Hello - \(card.games.count) - \(card.badge)")
                     
@@ -292,6 +309,14 @@ class ProfileViewController: UIViewController {
                         cell.game2.isHidden = true
                         cell.game3.isHidden = true
                         cell.game4.isHidden = true
+                        
+                        //
+                        
+                        ChallengeView.game1.isHidden = false
+                        ChallengeView.game2.isHidden = true
+                        ChallengeView.game3.isHidden = true
+                        ChallengeView.game4.isHidden = true
+                        
                         shouldAddAt = 1
                         
                     } else {
@@ -304,6 +329,13 @@ class ProfileViewController: UIViewController {
                             cell.game4.isHidden = true
                             shouldAddAt = 2
                             
+                            //
+                            
+                            ChallengeView.game1.isHidden = false
+                            ChallengeView.game2.isHidden = false
+                            ChallengeView.game3.isHidden = true
+                            ChallengeView.game4.isHidden = true
+                            
                         } else if card.games.count == 2 {
                             
                             cell.game1.isHidden = false
@@ -311,6 +343,12 @@ class ProfileViewController: UIViewController {
                             cell.game3.isHidden = false
                             cell.game4.isHidden = true
                             shouldAddAt = 3
+                            
+                            
+                            ChallengeView.game1.isHidden = false
+                            ChallengeView.game2.isHidden = false
+                            ChallengeView.game3.isHidden = false
+                            ChallengeView.game4.isHidden = true
                             
                             
                         } else if card.games.count == 3 {
@@ -321,6 +359,12 @@ class ProfileViewController: UIViewController {
                             cell.game4.isHidden = false
                             shouldAdd = true
                             shouldAddAt = 4
+                            
+                            
+                            ChallengeView.game1.isHidden = false
+                            ChallengeView.game2.isHidden = false
+                            ChallengeView.game3.isHidden = false
+                            ChallengeView.game4.isHidden = false
                             
                             
                         } else if card.games.count == 4 {
@@ -338,6 +382,7 @@ class ProfileViewController: UIViewController {
                 
                 
                 cell.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
+                ChallengeView.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
                 
 
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
@@ -568,23 +613,110 @@ extension ProfileViewController {
         // make sure to check if any game is added unless peform adding game for +
         print("game1Tapped")
         
+        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        {
+            
+            if card.games.isEmpty == true {
+                
+                //AddGameVC
+                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                    AGVC.hidesBottomBarWhenPushed = true
+                    hideMiddleBtn(vc: self)
+                    self.navigationController?.pushViewController(AGVC, animated: true)
+                    
+                }
+                
+            } else {
+                
+                if let game = card.games.first {
+                    
+                    
+                    
+                    
+                }
+                
+                
+            }
+            
+            
+        }
+        
     }
     
     @objc func game2Tapped(_ sender: UIButton) {
         
         print("game2Tapped")
         
+        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        {
+            
+            if card.games.count >= 2 {
+                
+                
+            } else {
+                
+                //AddGameVC
+                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                    AGVC.hidesBottomBarWhenPushed = true
+                    hideMiddleBtn(vc: self)
+                    self.navigationController?.pushViewController(AGVC, animated: true)
+                    
+                }
+                
+            }
+            
+            
+        }
+        
     }
     
     @objc func game3Tapped(_ sender: UIButton) {
         
-        print("game3Tapped")
+        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        {
+            
+            if card.games.count >= 3 {
+                
+                
+            } else {
+                
+                //AddGameVC
+                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                    AGVC.hidesBottomBarWhenPushed = true
+                    hideMiddleBtn(vc: self)
+                    self.navigationController?.pushViewController(AGVC, animated: true)
+                    
+                }
+                
+            }
+            
+            
+        }
         
     }
     
     @objc func game4Tapped(_ sender: UIButton) {
         
-        print("game4Tapped")
+        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        {
+            
+            if card.games.count >= 4 {
+                
+                
+            } else {
+                
+                //AddGameVC
+                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                    AGVC.hidesBottomBarWhenPushed = true
+                    hideMiddleBtn(vc: self)
+                    self.navigationController?.pushViewController(AGVC, animated: true)
+                    
+                }
+                
+            }
+            
+            
+        }
         
     }
     
