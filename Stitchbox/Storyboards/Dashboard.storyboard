@@ -8490,21 +8490,6 @@
             </objects>
             <point key="canvasLocation" x="4733.6000000000004" y="5266.9950738916259"/>
         </scene>
-        <!--Add GameVC-->
-        <scene sceneID="yz4-jD-r1N">
-            <objects>
-                <viewController storyboardIdentifier="AddGameVC" id="hsU-zK-UCf" customClass="AddGameVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Exu-l3-aye">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="15v-fe-ZlJ"/>
-                        <color key="backgroundColor" name="Background"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="CNG-9w-Lur" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5567" y="5267"/>
-        </scene>
         <!--Muted MemberVC-->
         <scene sceneID="WDI-aS-vr1">
             <objects>
