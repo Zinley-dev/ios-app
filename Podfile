@@ -49,6 +49,8 @@ target 'Stitchbox' do
   # label custom
   pod "ZSWTappableLabel", "~> 2.0"
   pod "ZSWTaggedString/Swift", "~> 4.0"
+
+  pod 'OneSignalXCFramework', '>= 3.0.0', '< 4.0'
   
   target 'StitchboxTests' do
     inherit! :search_paths
@@ -65,5 +67,9 @@ target 'Stitchbox' do
   end
 
 end
-
+target 'OneSignalNotificationServiceExtension' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+  pod 'OneSignalXCFramework', '>= 3.0.0', '< 4.0'
+end
 # caches

@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import ObjectMapper
+import OneSignal
 
 class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
     
@@ -63,11 +64,24 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
                 APIManager().phoneLogin(phone: countryCode + phone) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
-                    _ = apiResponse.body?["data"] as! [String: Any]?
+                    let data = apiResponse.body?["data"] as! [String: Any]?
                     // save datasource
                     let initMap = ["phone": "\(countryCode)\(phone)", "signinMethod": "phone"]
-                    let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
-                    _AppCoreData.userDataSource.accept(newUserData)
+                    //                    let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
+                    if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
+                      _AppCoreData.userDataSource.accept(newUserData)
+                      print(newUserData.challengeCard?.toJSONString(prettyPrint: true))
+                      if newUserData.userID != "" {
+                        
+                        let externalUserId = newUserData.userID!
+                        
+                        OneSignal.setExternalUserId(externalUserId, withSuccess: { results in
+                          print("External user id update complete with results: ", results!.description)
+                        }, withFailure: {error in
+                          print("Set external user id done with error: " + error.debugDescription)
+                        })
+                      }
+                    }
                     self.OTPSentSubject.onNext(true)
                 case .failure(let error):
                     print(error)

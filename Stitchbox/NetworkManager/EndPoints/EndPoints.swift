@@ -875,3 +875,42 @@ extension CommentApi: EndPointType {
   
   
 }
+
+
+public enum GameAPI {
+  case getGames(page: Int = 1, limit: Int = 10)
+}
+extension GameAPI: EndPointType {
+  var path: String {
+    switch self {
+      case .getGames:
+        return "?page=\(page)&limit=\(limit)"
+    }
+  }
+  
+  var module: String {
+    switch self {
+      case .getGames:
+        return "/games"
+    }
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getGames:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getGames:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+  
+}
