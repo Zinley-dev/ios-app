@@ -29,6 +29,7 @@ public enum AuthApi {
     case login (params: [String:String])
     case phonelogin (params: [String:String])
     case phoneverify (params: [String:String])
+    case emailverify (params: [String:String])
     case register (params: [String:String])
     case socialLogin (params: [String:String])
     case socialRegister (params: [String:String])
@@ -48,6 +49,8 @@ extension AuthApi: EndPointType {
           return "/phone-login"
         case .phoneverify:
           return "/phone-verify"
+        case .emailverify:
+          return "/email-verify"
         case .register:
           return "/register"
         case .socialLogin:
@@ -69,6 +72,8 @@ extension AuthApi: EndPointType {
             return .post
         case .phoneverify:
             return .post
+        case .emailverify:
+            return .post
         case .register:
             return .post
         case .socialLogin:
@@ -89,6 +94,8 @@ extension AuthApi: EndPointType {
         case .phonelogin(let params):
             return .requestParameters(parameters: params)
         case .phoneverify(let params):
+            return .requestParameters(parameters: params)
+        case .emailverify(let params):
             return .requestParameters(parameters: params)
         case .register(let params):
             return .requestParameters(parameters: params)
