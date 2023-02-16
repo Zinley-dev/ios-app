@@ -883,7 +883,7 @@ public enum GameAPI {
 extension GameAPI: EndPointType {
   var path: String {
     switch self {
-      case .getGames:
+      case .getGames(let page, let limit):
         return "?page=\(page)&limit=\(limit)"
     }
   }
