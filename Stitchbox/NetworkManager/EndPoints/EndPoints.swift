@@ -878,7 +878,7 @@ extension CommentApi: EndPointType {
 
 
 public enum GameAPI {
-  case getGames(page: Int = 1, limit: Int = 10)
+  case getGames(page: Int = 1, limit: Int = 20)
 }
 extension GameAPI: EndPointType {
   var path: String {
