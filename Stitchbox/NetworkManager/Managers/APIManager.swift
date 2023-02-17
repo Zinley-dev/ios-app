@@ -71,6 +71,13 @@ struct APIManager {
             completion(result)
         }
     }
+  
+  func emailVerify(email: String, OTP: String, completion: @escaping APICompletion) {
+    let params = ["email": email, "otp": OTP]
+    authManager.request(.emailverify(params: params)) { result in
+      completion(result)
+    }
+  }
     
     func register(params: [String: String], completion: @escaping APICompletion) {
         authManager.request(.register(params: params)) { result in
