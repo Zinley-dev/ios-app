@@ -815,18 +815,13 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
             case .posts(_):
                 
-                let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
-                var selectedPost = [PostModel]()
-                
-                for test in snap {
-                    switch test {
-                    case .posts(let p):
-                        selectedPost.append(p)
-                    default:
-                        break
-                   
-                    }
-                }
+            let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
+                            .compactMap { item -> PostModel? in
+                                if case .posts(let post) = item {
+                                    return post
+                                }
+                                return nil
+                            }
             
 
             if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {

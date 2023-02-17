@@ -322,46 +322,27 @@ extension EditChallengeCardVC {
             case .badges(_):
                 
                 print("Badges - \(indexPath.row)")
-            
-            if didSelect == true {
-                
-                if let cell = collectionView.cellForItem(at: didSelectIndex!) as? ImageViewCell {
-                    
-                    cell.borderColors = .clear
-                    cell.borderWidths = 0.0
-                    cell.cornerRadius = 0.0
-                    print("Delect Badges - \(indexPath.row)")
-                    
-                    
-                }
-                
-            }
-            
-            didSelectIndex = indexPath
-            
-            
-            if let cell = collectionView.cellForItem(at: indexPath) as? ImageViewCell {
-                didSelect = true
-                cell.borderColors = .secondary
-                cell.borderWidths = 2.0
-                cell.cornerRadius = 5.0
-                print("Select Badges - \(indexPath.row)")
-                bID = indexPath.row
-                
-                
-                // reload sections
-                
-                var updatedSnapshot = datasource.snapshot()
-                updatedSnapshot.reloadSections([.challengeCard])
-                self.datasource.apply(updatedSnapshot, animatingDifferences: true)
-                
-                
-                if didCreateSave == false {
-                    didCreateSave = true
-                    createSaveBtn()
-                }
-                    
-            }
+
+                        if didSelect, let cell = collectionView.cellForItem(at: didSelectIndex!) as? ImageViewCell {
+                            resetCellSelection(cell)
+                            print("Deselect Badges - \(didSelectIndex!.row)")
+                        }
+
+                        didSelectIndex = indexPath
+
+                        if let cell = collectionView.cellForItem(at: indexPath) as? ImageViewCell {
+                            selectCell(cell)
+                            print("Select Badges - \(indexPath.row)")
+                            bID = indexPath.row
+
+                            reloadBadgeCell(indexPath)
+
+                            if !didCreateSave {
+                                didCreateSave = true
+                                createSaveBtn()
+                            }
+                        }
+
             
          
              
@@ -375,6 +356,26 @@ extension EditChallengeCardVC {
         
     }
     
+    
+    func resetCellSelection(_ cell: ImageViewCell) {
+        cell.borderColors = .clear
+        cell.borderWidths = 0.0
+        cell.cornerRadius = 0.0
+    }
+
+    func selectCell(_ cell: ImageViewCell) {
+        didSelect = true
+        cell.borderColors = .secondary
+        cell.borderWidths = 2.0
+        cell.cornerRadius = 5.0
+    }
+
+    func reloadBadgeCell(_ indexPath: IndexPath) {
+        var updatedSnapshot = datasource.snapshot()
+        updatedSnapshot.reloadSections([.challengeCard])
+        self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+    }
+
     
     func createSaveBtn() {
       

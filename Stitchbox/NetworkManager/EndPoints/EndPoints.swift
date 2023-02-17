@@ -884,7 +884,8 @@ extension GameAPI: EndPointType {
   var path: String {
     switch self {
       case .getGames:
-        return "?page=\(page)&limit=\(limit)"
+        //return "?page=\(page)&limit=\(limit)"
+        return ""
     }
   }
   

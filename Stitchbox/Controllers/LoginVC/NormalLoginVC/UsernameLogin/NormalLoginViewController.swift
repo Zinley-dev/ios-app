@@ -38,6 +38,7 @@ class LoginController: UIViewController, ControllerType {
         viewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
                 DispatchQueue.main.async {
+                    
                     self.presentError(error: error)
                 }
             })
