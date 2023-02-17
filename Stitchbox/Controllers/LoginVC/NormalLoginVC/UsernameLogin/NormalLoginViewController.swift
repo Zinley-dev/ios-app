@@ -45,10 +45,21 @@ class LoginController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         viewModel.output.loginResultObservable
-            .subscribe(onNext: { isTrue in
-                if(isTrue){
-                    RedirectionHelper.redirectToDashboard()
-                }
+            .subscribe(onNext: { result in
+              switch result {
+                case .normal:
+                  RedirectionHelper.redirectToDashboard()
+                case .advance(let type, let value):
+                  Dispatch.main.async {
+                    let model = LoginByPhoneVerifyViewModel()
+                    model.output.type = type ?? ""
+                    model.output.phoneNumber = value ?? ""
+                    model.input.phoneObserver.onNext(value ?? "")
+                    model.input.countryCodeObserver.onNext("")
+                    SwiftLoader.hide()
+                    self.navigationController?.pushViewController(LoginByPhoneVerifyController.create(with: model), animated: true)
+                  }
+              }
             })
             .disposed(by: disposeBag)
         
@@ -66,7 +77,9 @@ class LoginController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
         
         signInButton.rx.tap.asObservable().subscribe { Void in
+          Dispatch.main.async {
             presentSwiftLoader()
+          }
         }.disposed(by: disposeBag)
     }
   
