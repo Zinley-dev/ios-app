@@ -52,8 +52,6 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
         
         sendOTPDidTapSubject.asObservable()
             .subscribe (onNext: { (phone, countryCode) in
-                
-                //                self.OTPSentSubject.onNext(true)
                 print(phone, countryCode)
                 if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{3,4}$"#)
                    || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
@@ -64,25 +62,14 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
                 APIManager().phoneLogin(phone: countryCode + phone) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
-                    let data = apiResponse.body?["data"] as! [String: Any]?
-                    // save datasource
-                    let initMap = ["phone": "\(countryCode)\(phone)", "signinMethod": "phone"]
-                    //                    let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
-                    if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
-                      _AppCoreData.userDataSource.accept(newUserData)
-                      print(newUserData.challengeCard?.toJSONString(prettyPrint: true))
-                      if newUserData.userID != "" {
-                        
-                        let externalUserId = newUserData.userID!
-                        
-                        OneSignal.setExternalUserId(externalUserId, withSuccess: { results in
-                          print("External user id update complete with results: ", results!.description)
-                        }, withFailure: {error in
-                          print("Set external user id done with error: " + error.debugDescription)
-                        })
-                      }
+                    print(apiResponse)
+                    if let data = apiResponse.body?["data"] {
+                        let newUserData = Mapper<UserDataSource>().map(JSON: ["phone": "\(countryCode)\(phone)", "signinMethod": "phone"])
+                        _AppCoreData.userDataSource.accept(newUserData)
+                        self.OTPSentSubject.onNext(true)
+                    } else {
+                        self.OTPSentSubject.onNext(false)
                     }
-                    self.OTPSentSubject.onNext(true)
                 case .failure(let error):
                     print(error)
                     self.errorsSubject.onNext(NSError(domain: "Error in send OTP", code: 300))
@@ -188,6 +175,23 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                         if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
                             _AppCoreData.userDataSource.accept(newUserData)
                         }
+                        
+                        // save datasource
+                        
+                        //                    if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
+                        //                      _AppCoreData.userDataSource.accept(newUserData)
+                        //                      print(newUserData.challengeCard?.toJSONString(prettyPrint: true))
+                        //                      if newUserData.userID != "" {
+                        //
+                        //                        let externalUserId = newUserData.userID!
+                        //
+                        //                        OneSignal.setExternalUserId(externalUserId, withSuccess: { results in
+                        //                          print("External user id update complete with results: ", results!.description)
+                        //                        }, withFailure: {error in
+                        //                          print("Set external user id done with error: " + error.debugDescription)
+                        //                        })
+                        //                      }
+                        //                    }
                         self.successSubject.onNext(.logInSuccess)
                         self.loadingSubject.onNext(false)
                         

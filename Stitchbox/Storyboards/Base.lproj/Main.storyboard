@@ -986,7 +986,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="FnM-TD-jg3">
-                                <rect key="frame" x="32" y="109.66666666666669" width="350" height="300"/>
+                                <rect key="frame" x="32" y="109.66666666666666" width="350" height="414.33333333333337"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="VMy-Qd-jOQ">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="64.333333333333329"/>
@@ -1079,10 +1079,45 @@
                                             </label>
                                         </subviews>
                                     </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="AWO-d9-vrg">
+                                        <rect key="frame" x="0.0" y="350" width="350" height="64.333333333333314"/>
+                                        <subviews>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="REFERRAL CODE" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="10c-wr-n8G">
+                                                <rect key="frame" x="0.0" y="0.0" width="350" height="34"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                                        <integer key="value" value="2"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" name="Tertiary"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="paddingLeft">
+                                                        <integer key="value" value="2"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                                        <integer key="value" value="15"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </textField>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Optional" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eyR-6T-ebe">
+                                                <rect key="frame" x="0.0" y="44" width="350" height="20.333333333333329"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vVK-GS-M7L" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="147" y="449.66666666666669" width="120" height="44"/>
+                                <rect key="frame" x="147" y="564" width="120" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="iJH-0Z-Imn"/>
                                     <constraint firstAttribute="width" constant="120" id="q3H-Ka-fjq"/>
@@ -1124,6 +1159,7 @@
                         <outlet property="checkPassUpperLabel" destination="mZ0-XL-rW7" id="98J-PR-3Nw"/>
                         <outlet property="checkUsernameLabel" destination="vPu-aS-dnK" id="BZQ-0j-Fnj"/>
                         <outlet property="passwordTextfield" destination="bEK-ZQ-k1k" id="tH6-Gs-DUU"/>
+                        <outlet property="refCodeTextfield" destination="10c-wr-n8G" id="13d-6c-lWR"/>
                         <outlet property="submitButton" destination="vVK-GS-M7L" id="ybl-NE-3gN"/>
                         <outlet property="usernameTextfield" destination="Yuf-BV-Aeb" id="jMS-ME-vga"/>
                     </connections>
@@ -1804,7 +1840,7 @@
     </scenes>
     <designables>
         <designable name="3uf-b9-C82">
-            <size key="intrinsicContentSize" width="110" height="34"/>
+            <size key="intrinsicContentSize" width="104" height="34"/>
         </designable>
         <designable name="Dlf-TU-NMz">
             <size key="intrinsicContentSize" width="39" height="29"/>
@@ -1816,7 +1852,7 @@
             <size key="intrinsicContentSize" width="39" height="29"/>
         </designable>
         <designable name="Nhf-Gd-k7X">
-            <size key="intrinsicContentSize" width="111.66666666666667" height="34"/>
+            <size key="intrinsicContentSize" width="105.66666666666667" height="34"/>
         </designable>
         <designable name="QHM-oC-nqz">
             <size key="intrinsicContentSize" width="557" height="14.333333333333334"/>
