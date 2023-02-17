@@ -6,35 +6,28 @@
 //
 
 import UIKit
+import RxSwift
 
 class FinalResetVC: UIViewController {
     
     
     @IBOutlet weak var nextButton: SButton!
 
+    private let disposeBag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+      
+        nextButton.rx.tap.asObservable().subscribe { _ in
+          DispatchQueue.main.async {
+            RedirectionHelper.redirectToDashboard()
+          }
+        }.disposed(by: disposeBag)
+      
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        
         self.view.endEditing(true)
-        
     }
 
 }

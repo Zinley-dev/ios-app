@@ -13,10 +13,11 @@ class CreateAccountViewModel: ViewModelProtocol {
     struct Input {
         let usernameSubject: BehaviorSubject<String>
         let passwordSubject: BehaviorSubject<String>
+        let refSubject: BehaviorSubject<String>
     }
     
     struct Action {
-        let submitDidTap: AnyObserver<(String, String)>
+        let submitDidTap: AnyObserver<(String, String, String)>
     }
     
     struct Output {
@@ -30,7 +31,7 @@ class CreateAccountViewModel: ViewModelProtocol {
     let output: Output
     
     // MARK: Subject Instantiation
-    private let submitDidTapSubject = PublishSubject<(String, String)>()
+    private let submitDidTapSubject = PublishSubject<(String, String, String)>()
     private let registerResultSubject = PublishSubject<Bool>()
     private let errorsSubject = PublishSubject<Error>()
     private let disposeBag = DisposeBag()
@@ -38,7 +39,8 @@ class CreateAccountViewModel: ViewModelProtocol {
     init() {
         input = Input(
             usernameSubject: BehaviorSubject<String>(value: ""),
-            passwordSubject: BehaviorSubject<String>(value: "")
+            passwordSubject: BehaviorSubject<String>(value: ""),
+            refSubject: BehaviorSubject<String>(value: "")
         )
         action = Action(submitDidTap: submitDidTapSubject.asObserver())
         output = Output(registerSuccessObservable: registerResultSubject.asObserver(), errorsObservable: errorsSubject.asObserver())
@@ -72,12 +74,12 @@ class CreateAccountViewModel: ViewModelProtocol {
     }
     
     func logic() {
-        submitDidTapSubject.subscribe(onNext: { (username, password) in
-            print("Register with uname: \(username) and pwd: \(password)")
+        submitDidTapSubject.subscribe(onNext: { (username, password, ref) in
+            print("Register with uname: \(username) and pwd: \(password) and ref: \(ref)")
             // get phone
             if let phone = _AppCoreData.userDataSource.value?.phone, phone != "" {
                 
-                let params = ["username": username, "password": password, "phone": phone]
+                let params = ["username": username, "password": password, "phone": phone, "referralCode": ref]
                 
                 APIManager().register(params: params) { result in
                     switch result {
@@ -108,41 +110,35 @@ class CreateAccountViewModel: ViewModelProtocol {
                 }
             }
             if let signinMethod = _AppCoreData.userDataSource.value?.signinMethod, signinMethod != "" {
-                let socialId = _AppCoreData.userDataSource.value?.socialId ?? ""
-                let params = ["username": username, "password": password, "provider": signinMethod, "socialId": socialId]
-                
-                APIManager().socialRegister(params: params) { result in
-                    switch result {
-                    case .success(let response):
-                        print(response)
-                        
-                        let data = response.body?["data"] as! [String: Any]?
-                        let account =  Mapper<Account>().map(JSONObject: data)
-                        
-                        print("account \(Mapper().toJSON(account!))")
-                        
-                        
-                        // Write/Set Data
-                        let sessionToken = SessionDataSource.init(JSONString: "{}")!
-                        sessionToken.accessToken = account?.accessToken
-                        sessionToken.refreshToken = account?.refreshToken
-                        _AppCoreData.userSession.accept(sessionToken)
-                        
-                        // write usr data
-                        if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
-                            _AppCoreData.userDataSource.accept(newUserData)
+                if let socialId = _AppCoreData.userDataSource.value?.socialId, socialId != "" {
+                    let params = ["username": username, "password": password, "provider": signinMethod, "socialId": socialId]
+                    print("VAO IF.....................")
+                    APIManager().socialRegister(params: params) { result in
+                        switch result {
+                            case .success(let response):
+                                let data = response.body?["data"] as! [String: Any]?
+                                let account =  Mapper<Account>().map(JSONObject: data)
+
+                                print("account \(Mapper().toJSON(account!))")
+
+                                // Write/Set Data
+                                let sessionToken = SessionDataSource.init(JSONString: "{}")!
+                                sessionToken.accessToken = account?.accessToken
+                                sessionToken.refreshToken = account?.refreshToken
+                                _AppCoreData.userSession.accept(sessionToken)
+
+                                // write usr data
+                                if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
+                                    _AppCoreData.userDataSource.accept(newUserData)
+                                }
+
+                                self.registerResultSubject.onNext(true)
+                            case .failure:
+                                self.errorsSubject.onNext(NSError(domain: "Wrong username or password", code: 400))
                         }
-                        
-                        self.registerResultSubject.onNext(true)
-                    case .failure:
-                        self.errorsSubject.onNext(NSError(domain: "Wrong username or password", code: 400))
                     }
                 }
-                
             }
-            
-            
-            
         }, onError: { err in
             print("Error \(err.localizedDescription)")
         }, onCompleted: {

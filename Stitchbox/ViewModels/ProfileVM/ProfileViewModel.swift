@@ -144,7 +144,7 @@ class ProfileViewModel: ViewModelProtocol {
         }
     }
     func unfollow(userId: String = "") {
-        APIManager().deleteFollows(params: ["FollowId": userId]) { result in
+        APIManager().unFollow(params: ["FollowId": userId]) { result in
             switch result {
             case .success(_):
                 showNote(text: "Unfollowed!")

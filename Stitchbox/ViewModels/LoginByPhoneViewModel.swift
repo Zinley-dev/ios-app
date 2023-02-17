@@ -11,13 +11,10 @@ import ObjectMapper
 import OneSignal
 
 class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
-  
   struct Input {}
-  
   struct Action {
     let sendOTPDidTap: AnyObserver<(String, String)>
   }
-  
   struct Output {
     let OTPSentObservable: Observable<Bool>
     let errorsObservable: Observable<Error>
@@ -37,23 +34,17 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
   private let errorsSubject = PublishSubject<Error>()
   private let disposeBag = DisposeBag()
   
-  
   init() {
     input = Input()
-    
     action = Action(sendOTPDidTap: sendOTPDidTapSubject.asObserver())
-    
     output = Output(OTPSentObservable: OTPSentSubject.asObservable(),
                     errorsObservable: errorsSubject.asObservable())
-    
     logic()
   }
+  
   func logic() {
-    
     sendOTPDidTapSubject.asObservable()
       .subscribe (onNext: { (phone, countryCode) in
-        
-        //                self.OTPSentSubject.onNext(true)
         print(phone, countryCode)
         if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{3,4}$"#)
            || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
@@ -64,19 +55,22 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
         APIManager().phoneLogin(phone: countryCode + phone) { result in
           switch result {
             case .success(let apiResponse):
-              let data = apiResponse.body?["data"] as! [String: Any]?
-              let initMap = ["phone": "\(countryCode)\(phone)", "signinMethod": "phone"]
-              self.OTPSentSubject.onNext(true)
+              // get and process data
+              print(apiResponse)
+              if let data = apiResponse.body?["data"], data != nil {
+                let newUserData = Mapper<UserDataSource>().map(JSON: ["phone": "\(countryCode)\(phone)", "signinMethod": "phone"])
+                _AppCoreData.userDataSource.accept(newUserData)
+                self.OTPSentSubject.onNext(true)
+              } else {
+                self.OTPSentSubject.onNext(false)
+              }
             case .failure(let error):
               print(error)
               self.errorsSubject.onNext(NSError(domain: "Error in send OTP", code: 300))
           }
         }
-        
-        
       }).disposed(by: disposeBag)
   }
-  
 }
 
 
@@ -90,17 +84,18 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
     let verifyOTPDidTap: AnyObserver<String>
     let sendOTPDidTap: AnyObserver<Void>
   }
-  
   struct Output {
     let loadingObservable: Observable<Bool>
     let successObservable: Observable<SuccessMessage>
     let errorsObservable: Observable<Error>
     var phoneNumber: String
     var type: String
+    var method: String
   }
   enum SuccessMessage{
     case sendCodeSuccess
     case logInSuccess
+    case changePassword
   }
   let input: Input
   let action: Action
@@ -119,16 +114,14 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
   init() {
     input = Input(phoneObserver: phoneSubject.asObserver(),
                   countryCodeObserver: countryCodeSubject.asObserver())
-    
     action = Action(verifyOTPDidTap: verifyOTPDidTapSubject.asObserver(),
                     sendOTPDidTap: sendOTPDidTapSubject.asObserver())
-    
     output = Output(loadingObservable: loadingSubject.asObservable(),
                     successObservable: successSubject.asObservable(),
                     errorsObservable: errorsSubject.asObservable(),
                     phoneNumber: "",
-                    type: "")
-    
+                    type: "",
+                    method: "")
     logic()
   }
   
@@ -164,7 +157,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
     }
     verifyOTPDidTapSubject
       .withLatestFrom(phoneSubject.asObservable())
-    {(phone: $1, code: $0)}
+      {(phone: $1, code: $0)}
       .withLatestFrom(countryCodeSubject.asObservable())
     {(phone: $0.phone, countryCode: $1, code: $0.code)}
       .subscribe (onNext: {(phone, countryCode, code) in
@@ -186,7 +179,11 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                   self.storeUserData(user: newUserData)
                   self.pushOneSignal(user: newUserData)
                 }
-                self.successSubject.onNext(.logInSuccess)
+                if self.output.method == "change-password" {
+                  self.successSubject.onNext(.changePassword)
+                } else {
+                  self.successSubject.onNext(.logInSuccess)
+                }
                 self.loadingSubject.onNext(false)
                 
               }
@@ -209,7 +206,8 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
               }
           }
           }
-        } else if (self.output.type == "phone") {
+        }
+        else if (self.output.type == "phone") {
           self.loadingSubject.onNext(true)
           APIManager().phoneVerify(phone: countryCode + phone, OTP: code) { result in switch result {
             case .success(let apiResponse):
@@ -226,8 +224,11 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                   self.pushOneSignal(user: newUserData)
                 }
                 
-                
-                self.successSubject.onNext(.logInSuccess)
+                if self.output.method == "change-password" {
+                  self.successSubject.onNext(.changePassword)
+                } else {
+                  self.successSubject.onNext(.logInSuccess)
+                }
                 self.loadingSubject.onNext(false)
                 
               }
@@ -300,8 +301,6 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
             }
           }
         }
-        
-        
       }).disposed(by: disposeBag)
     
     sendOTPDidTapSubject.asObservable()
