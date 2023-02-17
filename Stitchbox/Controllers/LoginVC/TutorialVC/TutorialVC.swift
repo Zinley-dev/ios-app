@@ -43,6 +43,7 @@ class TutorialVC: UIViewController {
             nextIndex()
         case 3:
             print("Show next item here")
+            RedirectionHelper.redirectToDashboard()
         default:
             break
         }

@@ -269,10 +269,10 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
         .subscribe(onNext: { (error: Error) in
                 DispatchQueue.main.async {
                   if (error._code == 900) {
-                      SwiftLoader.hide()
+                    SwiftLoader.hide()
                     self.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
                   } else {
-                    self.presentError(error: error)
+                    self.presentErrorAlert(message: error.localizedDescription)
                   }
                 }
             })
@@ -281,6 +281,13 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
         viewModel.output.successObservable
             .subscribe(onNext: { successMessage in
                 switch successMessage{
+                case .changePassword:
+                    DispatchQueue.main.async {
+                      SwiftLoader.hide()
+                      if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "NewPasswordVC") as? NewPasswordVC {
+                        self.navigationController?.pushViewController(vc, animated: true)
+                      }
+                    }
                 case .logInSuccess:
                     RedirectionHelper.redirectToDashboard()
                 case .sendCodeSuccess:

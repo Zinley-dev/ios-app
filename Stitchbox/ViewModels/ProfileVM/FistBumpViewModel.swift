@@ -209,7 +209,7 @@ class FistBumpViewModel: ViewModelProtocol {
     
     func unfollow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().deleteFollows(params: ["FollowId": userId]){
+        APIManager().unFollow(params: ["FollowId": userId]){
             result in switch result {
             case .success(_):
                 self.successSubject.onNext(.unfollow())

@@ -14,6 +14,7 @@ class LastStepViewController: UIViewController, ControllerType {
     
   @IBOutlet weak var usernameTextfield: UnderlineTextField!
   @IBOutlet weak var passwordTextfield: UnderlineTextField!
+  @IBOutlet weak var refCodeTextfield: UnderlineTextField!
   @IBOutlet weak var submitButton: SButton!
   
   @IBOutlet weak var checkUsernameLabel: UILabel!
@@ -45,6 +46,8 @@ class LastStepViewController: UIViewController, ControllerType {
     func bindUI(with: ViewModelType) {
       usernameTextfield.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.usernameSubject).disposed(by: disposeBag)
       passwordTextfield.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.passwordSubject).disposed(by: disposeBag)
+       refCodeTextfield.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.refSubject).disposed(by: disposeBag)
+        
       viewModel.isValidInput.bind(to: submitButton.rx.isEnabled).disposed(by: disposeBag)
       
       viewModel.isValidUsername.subscribe(onNext: { isValid in
@@ -72,6 +75,7 @@ class LastStepViewController: UIViewController, ControllerType {
         
         usernameTextfield.addUnderLine()
         passwordTextfield.addUnderLine()
+        refCodeTextfield.addUnderLine()
     
     }
     
@@ -96,9 +100,10 @@ class LastStepViewController: UIViewController, ControllerType {
     
     func bindAction(with viewModel: CreateAccountViewModel) {
       
-      let userInputs = Observable.combineLatest(
-        usernameTextfield.rx.text.orEmpty,
-        passwordTextfield.rx.text.orEmpty) { ($0, $1)
+        let userInputs = Observable.combineLatest(
+            usernameTextfield.rx.text.orEmpty,
+            passwordTextfield.rx.text.orEmpty,
+            refCodeTextfield.rx.text.orEmpty) { ($0, $1, $2)
         }
       submitButton.rx.tap.asObservable()
         .withLatestFrom(userInputs)
@@ -110,8 +115,15 @@ class LastStepViewController: UIViewController, ControllerType {
       }.disposed(by: disposeBag)
       
       viewModel.output.registerSuccessObservable
-        .subscribe(onNext: { successMessage in
-          RedirectionHelper.redirectToDashboard()
+        .subscribe(onNext: { [weak self] successMessage in
+            DispatchQueue.main.async {
+                if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TutorialVC") as? TutorialVC {
+                    vc.modalPresentationStyle = .fullScreen
+                    self?.present(vc, animated: true)
+                }
+
+            }
+            
         })
         .disposed(by: disposeBag)
       
