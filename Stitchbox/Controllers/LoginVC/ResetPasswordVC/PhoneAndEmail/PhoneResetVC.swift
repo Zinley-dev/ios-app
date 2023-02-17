@@ -104,9 +104,14 @@ class PhoneResetVC: UIViewController, CountryPickerViewDelegate, CountryPickerVi
           if(isTrue){
             DispatchQueue.main.async {
               if let navigationController = self.navigationController {
-                if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "PHONEVERIFY") as? LoginByPhoneVerifyController {
-                  navigationController.pushViewController(controller, animated: true)
-                }
+                let phoneFull = "\(self.cpv.selectedCountry.phoneCode)\(self.phoneTextfield.text!)"
+                let model = LoginByPhoneVerifyViewModel()
+                model.output.type = "phone"
+                model.output.method = "change-password"
+                model.output.phoneNumber = phoneFull
+                model.input.phoneObserver.onNext(phoneFull)
+                model.input.countryCodeObserver.onNext("")
+                navigationController.pushViewController(LoginByPhoneVerifyController.create(with: model), animated: true)
               }
             }
           }

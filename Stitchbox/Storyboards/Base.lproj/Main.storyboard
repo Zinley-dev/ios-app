@@ -1171,14 +1171,13 @@
         <!--New PasswordVC-->
         <scene sceneID="VYy-0S-feo">
             <objects>
-                <viewController id="anr-L2-Hpc" customClass="NewPasswordVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewPasswordVC" id="anr-L2-Hpc" customClass="NewPasswordVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7CK-LZ-Yb7">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="regBg" translatesAutoresizingMaskIntoConstraints="NO" id="pg5-0e-dQX">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="regBg" translatesAutoresizingMaskIntoConstraints="NO" id="pg5-0e-dQX">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="lTn-Yf-FSb">
                                 <rect key="frame" x="32" y="31.999999999999996" width="350" height="55.666666666666657"/>
@@ -1207,7 +1206,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="350" height="34"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="size">
@@ -1316,10 +1315,14 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="lTn-Yf-FSb" firstAttribute="leading" secondItem="IvM-Ia-JFj" secondAttribute="leading" constant="32" id="9yA-fU-JWT"/>
+                            <constraint firstAttribute="bottom" secondItem="pg5-0e-dQX" secondAttribute="bottom" id="AFb-Tf-AIO"/>
                             <constraint firstItem="Dlf-TU-NMz" firstAttribute="top" secondItem="7AR-gn-ZLp" secondAttribute="bottom" constant="40" id="ALf-Zc-d9Y"/>
                             <constraint firstItem="IvM-Ia-JFj" firstAttribute="trailing" secondItem="7AR-gn-ZLp" secondAttribute="trailing" constant="32" id="Bpl-Wv-ujj"/>
                             <constraint firstItem="7AR-gn-ZLp" firstAttribute="top" secondItem="lTn-Yf-FSb" secondAttribute="bottom" constant="32" id="CcA-9t-Wuw"/>
+                            <constraint firstItem="pg5-0e-dQX" firstAttribute="top" secondItem="7CK-LZ-Yb7" secondAttribute="top" id="EB5-6k-cKf"/>
+                            <constraint firstAttribute="trailing" secondItem="pg5-0e-dQX" secondAttribute="trailing" id="SVS-Qk-fon"/>
                             <constraint firstItem="IvM-Ia-JFj" firstAttribute="trailing" secondItem="lTn-Yf-FSb" secondAttribute="trailing" constant="32" id="Tbf-2j-cZq"/>
+                            <constraint firstItem="pg5-0e-dQX" firstAttribute="leading" secondItem="7CK-LZ-Yb7" secondAttribute="leading" id="cHN-f0-nUU"/>
                             <constraint firstItem="lTn-Yf-FSb" firstAttribute="top" secondItem="IvM-Ia-JFj" secondAttribute="top" constant="32" id="cdL-DA-Dvq"/>
                             <constraint firstItem="Dlf-TU-NMz" firstAttribute="centerX" secondItem="7CK-LZ-Yb7" secondAttribute="centerX" id="iu2-Bs-m4i"/>
                             <constraint firstItem="7AR-gn-ZLp" firstAttribute="leading" secondItem="IvM-Ia-JFj" secondAttribute="leading" constant="32" id="vvl-23-RLh"/>
@@ -1344,7 +1347,7 @@
         <!--Final ResetVC-->
         <scene sceneID="EwR-O2-MY4">
             <objects>
-                <viewController id="dCX-jS-TRC" customClass="FinalResetVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FinalResetVC" id="dCX-jS-TRC" customClass="FinalResetVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LOh-Mp-J20">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

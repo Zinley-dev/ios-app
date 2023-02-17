@@ -293,12 +293,19 @@ extension APIManager {
         }
         print("call insertAPI")
     }
-    func deleteFollows(params: [String: Any], completion: @escaping APICompletion) {
+    func unFollow(params: [String: Any], completion: @escaping APICompletion) {
         followManager.request(.deleteFollows(params: params)){
             result in
             completion(result)
         }
     }
+  
+  func deleteFollower(params: [String: Any], completion: @escaping APICompletion) {
+    followManager.request(.deleteFollower(params: params)){
+      result in
+      completion(result)
+    }
+  }
     
     func searchFollows(query: String, userid: String, page: Int, completion: @escaping APICompletion) {
         let params = ["query": query, "userid": userid]
@@ -366,6 +373,14 @@ extension APIManager {
             completion(result)
         }
     }
+  
+  func updatePassword(params: [String: Any], completion: @escaping APICompletion) {
+    print("header \(_AppCoreData.userSession.value!.accessToken)")
+    userManager.request(.updatepassword(params: params)){
+      result in
+      completion(result)
+    }
+  }
     
     func uploadcover(image: UIImage, completion: @escaping APICompletion) {
         userManager.upload(.uploadcover, image: image) {

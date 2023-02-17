@@ -373,6 +373,7 @@ public enum UserAPI {
     case updateEmail (params: [String: Any])
     case verifyEmail (params: [String: Any])
     case changepassword (params: [String: Any])
+    case updatepassword (params: [String: Any])
     case uploadavatar
     case uploadcover
     case usernameExist(params: [String: Any])
@@ -404,6 +405,8 @@ extension UserAPI: EndPointType {
           return "/email-update-verify"
         case .changepassword:
             return "/change-password"
+        case .updatepassword:
+            return "/update-password"
         case .uploadcover:
             return "/upload-cover"
         case .uploadavatar:
@@ -439,6 +442,8 @@ extension UserAPI: EndPointType {
             return .patch
         case .changepassword:
             return .post
+          case .updatepassword:
+            return .put
         case .uploadcover:
             return .post
         case .uploadavatar:
@@ -473,6 +478,8 @@ extension UserAPI: EndPointType {
         case .verifyPhone(let params):
             return .requestParameters(parameters: params)
         case .changepassword(params: let params):
+            return .requestParameters(parameters: params)
+          case .updatepassword(params: let params):
             return .requestParameters(parameters: params)
         case .uploadavatar:
             return .request
@@ -585,6 +592,7 @@ public enum FollowApi {
   case searchFollowing (params: [String:Any], page: Int, lim: Int = 10)
   case insertFollows (params: [String:Any])
   case deleteFollows (params: [String:Any])
+  case deleteFollower (params: [String:Any])
 }
 extension FollowApi: EndPointType {
   var module: String {
@@ -599,6 +607,8 @@ extension FollowApi: EndPointType {
         return "/"
       case .deleteFollows:
         return "/unfollow"
+      case .deleteFollower:
+        return "/cancel-follow"
       case .getFollowers(let userId, let page, let lim):
         return "/followers/\(userId)?page=\(page)&limit=\(lim)"
       case .searchFollower(let params, let page, let lim):
@@ -616,6 +626,8 @@ extension FollowApi: EndPointType {
         return .post
       case .deleteFollows:
         return .delete
+      case .deleteFollower:
+        return .delete
       case .getFollowers:
         return .get
         case .searchFollower:
@@ -632,6 +644,8 @@ extension FollowApi: EndPointType {
       case .insertFollows(let params):
         return .requestParameters(parameters: params)
       case .deleteFollows(let params):
+        return .requestParameters(parameters: params)
+      case .deleteFollower(let params):
         return .requestParameters(parameters: params)
       case .getFollowers:
         return .request

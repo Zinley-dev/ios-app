@@ -67,6 +67,7 @@ class ResetPasswordViewModel: ViewModelProtocol {
                   self.resetResultSubject.onNext(true)
                 case .failure(let error):
                   print(error)
+                  self.resetResultSubject.onNext(false)
                   self.errorsSubject.onNext(NSError(domain: "User not found", code: 300))
               }
             

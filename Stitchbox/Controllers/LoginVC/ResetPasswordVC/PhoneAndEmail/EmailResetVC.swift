@@ -56,9 +56,14 @@ class EmailResetVC: UIViewController, ControllerType {
           if(isTrue){
             DispatchQueue.main.async {
               if let navigationController = self.navigationController {
-                if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "PHONEVERIFY") as? LoginByPhoneVerifyController {
-                  navigationController.pushViewController(controller, animated: true)
-                }
+                
+                let model = LoginByPhoneVerifyViewModel()
+                model.output.type = "email"
+                model.output.method = "change-password"
+                model.output.phoneNumber = self.emailTxtField.text!
+                model.input.phoneObserver.onNext(self.emailTxtField.text ?? "")
+                model.input.countryCodeObserver.onNext("")
+                navigationController.pushViewController(LoginByPhoneVerifyController.create(with: model), animated: true)
               }
             }
           }
