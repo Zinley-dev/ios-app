@@ -27,6 +27,9 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
     private var datasource: Datasource!
     
     @IBOutlet weak var collectionView: UICollectionView!
+    var shouldAddAt = 0
+    var fistBumpedCount = 0
+    var shouldAdd = true
     
     var demoChallengeData: ChallengeCardHeaderData {
         return ChallengeCardHeaderData(name: "Planet Pennies")
@@ -60,12 +63,109 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
         case .challengeCard(_):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChallengerCardProfileHeaderCell.reuseIdentifier, for: indexPath) as? ChallengerCardProfileHeaderCell {
-                
-                if bID != nil {
-                    let image = UIImage.init(named: "b\(bID!+1)")
-                    cell.badgeImgView.image = image
+            
+                // display username
+                if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
+                    cell.username.text = username
                 }
                 
+                if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+                    let url = URL(string: avatarUrl)
+                    cell.userImgView.load(url: url!, str: avatarUrl)
+                }
+                
+                if let card = _AppCoreData.userDataSource.value?.challengeCard
+                {
+                    if card.quote != "" {
+                        cell.infoLbl.text = card.quote
+                    } else {
+                        cell.infoLbl.text = "Stitchbox's challenger"
+                    }
+                    
+                    print(_AppCoreData.userDataSource.value?.createdAt)
+                    
+                    if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
+                        print(createAt)
+                        let DateFormatter = DateFormatter()
+                        DateFormatter.dateStyle = .medium
+                        DateFormatter.timeStyle = .none
+                        cell.startTime.text = DateFormatter.string(from: createAt)
+                       
+                    } else {
+                        cell.startTime.text = "None"
+                      
+                    }
+                    
+                    if bID != nil {
+                        let image = UIImage.init(named: "b\(bID!+1)")
+                        cell.badgeImgView.image = image
+                    } else {
+                        cell.badgeImgView.image = UIImage.init(named: card.badge)
+                    }
+                    
+                
+                    
+                    print("Hello - \(card.games.count) - \(card.badge)")
+                    
+                    if card.games.isEmpty == true {
+                        cell.game1.isHidden = false
+                        cell.game2.isHidden = true
+                        cell.game3.isHidden = true
+                        cell.game4.isHidden = true
+                        
+                       
+                        
+                        shouldAddAt = 1
+                        
+                    } else {
+                        
+                        if card.games.count == 1 {
+                            
+                            cell.game1.isHidden = false
+                            cell.game2.isHidden = false
+                            cell.game3.isHidden = true
+                            cell.game4.isHidden = true
+                            shouldAddAt = 2
+                            
+                          
+                            
+                        } else if card.games.count == 2 {
+                            
+                            cell.game1.isHidden = false
+                            cell.game2.isHidden = false
+                            cell.game3.isHidden = false
+                            cell.game4.isHidden = true
+                            shouldAddAt = 3
+                            
+                          
+                            
+                            
+                        } else if card.games.count == 3 {
+                            
+                            cell.game1.isHidden = false
+                            cell.game2.isHidden = false
+                            cell.game3.isHidden = false
+                            cell.game4.isHidden = false
+                            shouldAdd = true
+                            shouldAddAt = 4
+                          
+            
+                        } else if card.games.count == 4 {
+                            
+                            shouldAdd = false
+                            shouldAddAt = 0
+                            
+                        }
+                        
+                
+                        
+                    }
+                    
+                }
+                
+                
+                cell.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
+               
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
                 cell.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)
@@ -154,34 +254,203 @@ extension EditChallengeCardVC {
     
     @objc func editCardTapped(_ sender: UIButton) {
         
-        if let ESVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditSloganVC") as? EditSloganVC {
-            self.navigationController?.pushViewController(ESVC, animated: true)
+        let alert = UIAlertController(title: "Hi, \(_AppCoreData.userDataSource.value?.userName ?? "user")!", message: "Challenge card update", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        alert.addAction(UIAlertAction(title: "Edit slogan", style: .default, handler: { action in
+
+            if let ESVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditSloganVC") as? EditSloganVC {
+                self.navigationController?.pushViewController(ESVC, animated: true)
+                
+            }
             
-        }
+        }))
+        
+        
+        alert.addAction(UIAlertAction(title: "View games", style: .default, handler: { action in
+
+            if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                self.navigationController?.pushViewController(AGVC, animated: true)
+            }
+            
+            
+        }))
+
+        self.present(alert, animated: true)
         
     }
     
     @objc func game1Tapped(_ sender: UIButton) {
         // make sure to check if any game is added unless peform adding game for +
-        print("game1Tapped")
+        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        {
+            
+            if card.games.isEmpty == true {
+                
+                //AddGameVC
+                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                    
+                    self.navigationController?.pushViewController(AGVC, animated: true)
+                    
+                }
+                
+            } else {
+                
+                if let game = card.games.first {
+                    
+                    if game.link != ""
+                    {
+                        guard let requestUrl = URL(string: game.link) else {
+                            return
+                        }
+
+                        if UIApplication.shared.canOpenURL(requestUrl) {
+                             UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                        } else {
+                            showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                        }
+                        
+                    } else {
+                        
+                        showErrorAlert("Oops!", msg: "Can't open this link")
+                        
+                    }
+                    
+                    
+                }
+                
+                
+            }
+            
+            
+        }
         
     }
     
     @objc func game2Tapped(_ sender: UIButton) {
         
-        print("game2Tapped")
+        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        {
+            
+            if card.games.count >= 2 {
+                
+                let game = card.games[1]
+                if game.link != ""
+                {
+                    guard let requestUrl = URL(string: game.link) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    } else {
+                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                    }
+                    
+                } else {
+                    
+                    showErrorAlert("Oops!", msg: "Can't open this link")
+                    
+                }
+                
+                
+            } else {
+                
+                //AddGameVC
+                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                    
+                    self.navigationController?.pushViewController(AGVC, animated: true)
+                    
+                }
+                
+            }
+            
+            
+        }
         
     }
     
     @objc func game3Tapped(_ sender: UIButton) {
         
-        print("game3Tapped")
+        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        {
+            
+            if card.games.count >= 3 {
+                
+                let game = card.games[2]
+                if game.link != ""
+                {
+                    guard let requestUrl = URL(string: game.link) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    } else {
+                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                    }
+                    
+                } else {
+                    
+                    showErrorAlert("Oops!", msg: "Can't open this link")
+                    
+                }
+                
+            } else {
+                
+                //AddGameVC
+                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                    
+                    self.navigationController?.pushViewController(AGVC, animated: true)
+                    
+                }
+                
+            }
+            
+            
+        }
         
     }
     
     @objc func game4Tapped(_ sender: UIButton) {
         
-        print("game4Tapped")
+        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        {
+            
+            if card.games.count >= 4 {
+                
+                let game = card.games[3]
+                if game.link != ""
+                {
+                    guard let requestUrl = URL(string: game.link) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    } else {
+                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                    }
+                    
+                } else {
+                    
+                    showErrorAlert("Oops!", msg: "Can't open this link")
+                    
+                }
+                
+            } else {
+                
+                //AddGameVC
+                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                
+                    self.navigationController?.pushViewController(AGVC, animated: true)
+                    
+                }
+                
+            }
+            
+            
+        }
         
     }
     

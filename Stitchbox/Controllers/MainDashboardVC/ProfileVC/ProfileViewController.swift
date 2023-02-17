@@ -603,6 +603,7 @@ extension ProfileViewController {
         
             ECCVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
+            ECCVC.fistBumpedCount = fistBumpedCount
             self.navigationController?.pushViewController(ECCVC, animated: true)
             
         }
@@ -630,7 +631,23 @@ extension ProfileViewController {
                 
                 if let game = card.games.first {
                     
-                    
+                    if game.link != ""
+                    {
+                        guard let requestUrl = URL(string: game.link) else {
+                            return
+                        }
+
+                        if UIApplication.shared.canOpenURL(requestUrl) {
+                             UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                        } else {
+                            showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                        }
+                        
+                    } else {
+                        
+                        showErrorAlert("Oops!", msg: "Can't open this link")
+                        
+                    }
                     
                     
                 }
@@ -652,6 +669,24 @@ extension ProfileViewController {
             
             if card.games.count >= 2 {
                 
+                let game = card.games[1]
+                if game.link != ""
+                {
+                    guard let requestUrl = URL(string: game.link) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    } else {
+                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                    }
+                    
+                } else {
+                    
+                    showErrorAlert("Oops!", msg: "Can't open this link")
+                    
+                }
                 
             } else {
                 
@@ -677,6 +712,24 @@ extension ProfileViewController {
             
             if card.games.count >= 3 {
                 
+                let game = card.games[2]
+                if game.link != ""
+                {
+                    guard let requestUrl = URL(string: game.link) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    } else {
+                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                    }
+                    
+                } else {
+                    
+                    showErrorAlert("Oops!", msg: "Can't open this link")
+                    
+                }
                 
             } else {
                 
@@ -702,6 +755,24 @@ extension ProfileViewController {
             
             if card.games.count >= 4 {
                 
+                let game = card.games[3]
+                if game.link != ""
+                {
+                    guard let requestUrl = URL(string: game.link) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    } else {
+                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                    }
+                    
+                } else {
+                    
+                    showErrorAlert("Oops!", msg: "Can't open this link")
+                    
+                }
                 
             } else {
                 

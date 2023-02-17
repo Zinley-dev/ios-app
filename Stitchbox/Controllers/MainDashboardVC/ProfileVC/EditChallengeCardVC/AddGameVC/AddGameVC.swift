@@ -40,7 +40,7 @@ extension AddGameVC {
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Add game", for: .normal)
+        backButton.setTitle("     Game List", for: .normal)
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
     
