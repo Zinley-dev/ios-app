@@ -78,6 +78,71 @@ class FollowerVC: UIViewController {
         })
     }
     
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let size = tableNode.view.visibleCells[0].frame.height
+        let iconSize: CGFloat = 25.0
+        
+        let removeAction = UIContextualAction(
+            style: .normal,
+            title: ""
+        ) { action, view, actionHandler in
+            
+            let userid = self.inSearchMode ? self.searchUserList[indexPath.row].userId : self.userList[indexPath.row].userId
+            self.removeFollower(userUID: userid ?? "")
+            self.userList.remove(at: indexPath.row)
+            self.tableNode.deleteRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
+            
+           
+            
+            actionHandler(true)
+        }
+        
+        let removeView = UIImageView(
+            frame: CGRect(
+                x: (size-iconSize)/2,
+                y: (size-iconSize)/2,
+                width: iconSize,
+                height: iconSize
+        ))
+        //removeView.layer.borderColor = UIColor.white.cgColor
+        removeView.layer.masksToBounds = true
+        //removeView.layer.borderWidth = 1
+        removeView.layer.cornerRadius = iconSize/2
+        removeView.backgroundColor =  SBUTheme.channelListTheme.alertBackgroundColor//UIColor(red: 2, green: 11, blue: 16)
+        removeView.image = xBtn
+        removeView.contentMode = .center
+        
+        removeAction.image = removeView.asImage()
+        removeAction.backgroundColor = UIColor(red: 2, green: 11, blue: 16)//SBUTheme.channelListTheme.alertBackgroundColor
+       
+        
+        return UISwipeActionsConfiguration(actions: [removeAction])
+        
+        
+        
+    }
+    
+    func removeFollower(userUID: String) {
+
+        if userUID != "" {
+            
+            APIManager().deleteFollower(params: ["FollowId": userUID]) { result in
+                switch result {
+                case .success(_):
+                    showNote(text: "Remove followed!")
+                    
+                case .failure(_):
+                    showNote(text: "Something happened!")
+                    
+                }
+            }
+            
+        }
+        
+    }
+    
 }
 
 extension FollowerVC {

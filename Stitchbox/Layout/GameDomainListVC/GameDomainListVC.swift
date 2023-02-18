@@ -1,21 +1,22 @@
 //
-//  StreamingListVC.swift
-//  Dual
+//  GameDomainListVC.swift
+//  Stitchbox
 //
-//  Created by Khoi Nguyen on 9/13/21.
+//  Created by Khoi Nguyen on 2/17/23.
 //
 
 import UIKit
 import Alamofire
 import AsyncDisplayKit
 
-class StreamingListVC: UIViewController {
-    
+class GameDomainListVC: UIViewController {
+
     var hasSetPointOrigin = false
     var pointOrigin: CGPoint?
     var tableNode: ASTableNode!
-   
-
+    
+    var selectedDomainList = [GameStatsDomainModel]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -132,9 +133,10 @@ class StreamingListVC: UIViewController {
     }
 
 
+
 }
 
-extension StreamingListVC: ASTableDelegate {
+extension GameDomainListVC: ASTableDelegate {
 
 
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
@@ -157,21 +159,21 @@ extension StreamingListVC: ASTableDelegate {
 }
 
 
-extension StreamingListVC: ASTableDataSource {
+extension GameDomainListVC: ASTableDataSource {
     
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
     
         
-        return streaming_domain.count
+        return selectedDomainList.count
         
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
-        let post = streaming_domain[indexPath.row]
+        let post = selectedDomainList[indexPath.row]
            
         return {
-            let node = streamingListNode(with: post)
+            let node = domainListNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -183,4 +185,3 @@ extension StreamingListVC: ASTableDataSource {
   
         
 }
-
