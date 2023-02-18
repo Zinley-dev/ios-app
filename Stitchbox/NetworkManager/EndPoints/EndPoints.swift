@@ -380,6 +380,7 @@ public enum UserAPI {
     case phoneExist(params: [String: Any])
     case emailExist(params: [String: Any])
     case addGameChallengeCard(params: [String: Any])
+    case updateGameChallengeCard(params: [String: Any])
     case deleteGameChallengeCard(params: [String: Any])
 }
 extension UserAPI: EndPointType {
@@ -419,6 +420,8 @@ extension UserAPI: EndPointType {
           return "/email-exists"
           case .addGameChallengeCard:
             return "/challenge-card"
+          case .updateChallengeCard:
+            return "/challenge-card"
           case .deleteGameChallengeCard:
             return "/challenge-card"
         }
@@ -456,6 +459,8 @@ extension UserAPI: EndPointType {
             return .post
           case .addGameChallengeCard:
             return .post
+          case .updateChallengeCard:
+            return .put
           case .deleteGameChallengeCard:
             return .delete
         }
@@ -492,6 +497,8 @@ extension UserAPI: EndPointType {
           case .emailExist(let params):
             return .requestParameters(parameters: params)
           case .addGameChallengeCard(let params):
+            return .requestParameters(parameters: params)
+          case .updateChallengeCard(let params):
             return .requestParameters(parameters: params)
           case .deleteGameChallengeCard(let params):
             return .requestParameters(parameters: params)
