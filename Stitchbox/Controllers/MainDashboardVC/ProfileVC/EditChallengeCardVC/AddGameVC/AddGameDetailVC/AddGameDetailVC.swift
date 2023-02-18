@@ -135,7 +135,11 @@ extension AddGameDetailVC {
                 print(error)
             }
         }
+        
+        
     }
+    
+
     
 }
 
