@@ -418,6 +418,16 @@ extension APIManager {
       completion(result)
     }
   }
+  func addGameForCard(params: [String: Any], completion: @escaping APICompletion) {
+    userManager.request(.addGameChallengeCard(params: params)) { result in
+      completion(result)
+    }
+  }
+  func deleteGameForCard(gameId: String, completion: @escaping APICompletion) {
+    userManager.request(.deleteGameChallengeCard(params: ["gameId": gameId])) { result in
+      completion(result)
+    }
+  }
 }
 
 
