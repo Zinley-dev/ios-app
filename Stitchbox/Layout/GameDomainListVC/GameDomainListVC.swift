@@ -16,6 +16,10 @@ class GameDomainListVC: UIViewController {
     var tableNode: ASTableNode!
     
     var selectedDomainList = [GameStatsDomainModel]()
+    var selectedgameName = ""
+    
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var gameNameLbl: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,13 +28,15 @@ class GameDomainListVC: UIViewController {
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
         
-        self.view.insertSubview(tableNode.view, at: 0)
+        self.contentView.insertSubview(tableNode.view, at: 0)
         self.applyStyle()
         
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
         
         self.view.backgroundColor = UIColor.musicBackgroundDark
+        
+        gameNameLbl.text = selectedgameName
     }
     
     func wireDelegates() {
@@ -45,7 +51,7 @@ class GameDomainListVC: UIViewController {
         
         super.viewWillLayoutSubviews()
         
-        self.tableNode.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - 50)
+        self.tableNode.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: self.contentView.frame.height - 50)
         
     }
     

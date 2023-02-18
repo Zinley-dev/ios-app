@@ -77,6 +77,7 @@ class AddGameDetailVC: UIViewController, UITextFieldDelegate {
             global_presetingRate = Double(0.55)
             global_cornerRadius = 40
             slideVC.selectedDomainList = self.selectedDomainList
+            slideVC.selectedgameName = self.selectedName
             
             self.present(slideVC, animated: true, completion: nil)
             
@@ -273,6 +274,7 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
             global_presetingRate = Double(0.55)
             global_cornerRadius = 40
             slideVC.selectedDomainList = self.selectedDomainList
+            slideVC.selectedgameName = self.selectedName
             
             self.present(slideVC, animated: true, completion: nil)
             
