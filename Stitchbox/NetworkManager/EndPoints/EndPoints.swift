@@ -420,7 +420,7 @@ extension UserAPI: EndPointType {
           return "/email-exists"
           case .addGameChallengeCard:
             return "/challenge-card"
-          case .updateChallengeCard:
+          case .updateGameChallengeCard:
             return "/challenge-card"
           case .deleteGameChallengeCard:
             return "/challenge-card"
@@ -459,7 +459,7 @@ extension UserAPI: EndPointType {
             return .post
           case .addGameChallengeCard:
             return .post
-          case .updateChallengeCard:
+          case .updateGameChallengeCard:
             return .put
           case .deleteGameChallengeCard:
             return .delete
@@ -498,7 +498,7 @@ extension UserAPI: EndPointType {
             return .requestParameters(parameters: params)
           case .addGameChallengeCard(let params):
             return .requestParameters(parameters: params)
-          case .updateChallengeCard(let params):
+          case .updateGameChallengeCard(let params):
             return .requestParameters(parameters: params)
           case .deleteGameChallengeCard(let params):
             return .requestParameters(parameters: params)
