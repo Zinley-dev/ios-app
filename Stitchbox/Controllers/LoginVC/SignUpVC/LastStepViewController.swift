@@ -44,13 +44,24 @@ class LastStepViewController: UIViewController, ControllerType {
     
     // MARK: - Functions
     func bindUI(with: ViewModelType) {
-      usernameTextfield.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.usernameSubject).disposed(by: disposeBag)
+      usernameTextfield.rx.text
+        .observe(on: MainScheduler.asyncInstance)
+        .throttle(.seconds(1), scheduler: MainScheduler.instance)
+        .subscribe(onNext: { item in
+          self.viewModel.input.usernameSubject.onNext(item ?? "")
+        })
+//        .map({$0 ?? ""})
+//        .bind(to: viewModel.input.usernameSubject)
+        .disposed(by: disposeBag)
       passwordTextfield.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.passwordSubject).disposed(by: disposeBag)
        refCodeTextfield.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.refSubject).disposed(by: disposeBag)
         
       viewModel.isValidInput.bind(to: submitButton.rx.isEnabled).disposed(by: disposeBag)
       
       viewModel.isValidUsername.subscribe(onNext: { isValid in
+        if !isValid {
+          self.checkUsernameLabel.text = "Check availability"
+        }
         self.checkUsernameLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
       })
       viewModel.isValidPassword.subscribe(onNext: { isValid in
@@ -132,6 +143,21 @@ class LastStepViewController: UIViewController, ControllerType {
           self.presentError(error: error)
         })
         .disposed(by: disposeBag)
+      
+      viewModel.output.usernameExistObservable
+        .subscribe { exist in
+          DispatchQueue.main.async {
+            if (exist) {
+              self.checkUsernameLabel.text = "Username is available"
+              self.checkUsernameLabel.textColor = UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1)
+            } else {
+              self.checkUsernameLabel.text = "Username is already in use"
+              self.checkUsernameLabel.textColor = UIColor.red
+              
+            }
+          }
+          
+        }.disposed(by: disposeBag)
     }
     
     
