@@ -82,7 +82,7 @@ class FollowerVC: UIViewController {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let size = tableNode.view.visibleCells[0].frame.height
-        let iconSize: CGFloat = 25.0
+        let iconSize: CGFloat = 35.0
         
         let removeAction = UIContextualAction(
             style: .normal,
@@ -90,12 +90,7 @@ class FollowerVC: UIViewController {
         ) { action, view, actionHandler in
             
             let userid = self.inSearchMode ? self.searchUserList[indexPath.row].userId : self.userList[indexPath.row].userId
-            self.removeFollower(userUID: userid ?? "")
-            self.userList.remove(at: indexPath.row)
-            self.tableNode.deleteRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
-            
-           
-            
+            self.removeFollower(userUID: userid ?? "", row: indexPath.row)
             actionHandler(true)
         }
         
@@ -110,12 +105,12 @@ class FollowerVC: UIViewController {
         removeView.layer.masksToBounds = true
         //removeView.layer.borderWidth = 1
         removeView.layer.cornerRadius = iconSize/2
-        removeView.backgroundColor =  SBUTheme.channelListTheme.alertBackgroundColor//UIColor(red: 2, green: 11, blue: 16)
+        removeView.backgroundColor =  .secondary
         removeView.image = xBtn
         removeView.contentMode = .center
         
         removeAction.image = removeView.asImage()
-        removeAction.backgroundColor = UIColor(red: 2, green: 11, blue: 16)//SBUTheme.channelListTheme.alertBackgroundColor
+        removeAction.backgroundColor = .background
        
         
         return UISwipeActionsConfiguration(actions: [removeAction])
@@ -124,17 +119,23 @@ class FollowerVC: UIViewController {
         
     }
     
-    func removeFollower(userUID: String) {
+    func removeFollower(userUID: String, row: Int) {
 
         if userUID != "" {
             
             APIManager().deleteFollower(params: ["FollowId": userUID]) { result in
                 switch result {
                 case .success(_):
-                    showNote(text: "Remove followed!")
-                    
+                    DispatchQueue.main.async {
+                        self.userList.remove(at: row)
+                        self.tableNode.deleteRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
+                        showNote(text: "Remove followed!")
+                    }
+                   
                 case .failure(_):
-                    showNote(text: "Something happened!")
+                    DispatchQueue.main.async {
+                        showNote(text: "Unable to remove follow!")
+                    }
                     
                 }
             }

@@ -32,8 +32,7 @@ class ProfileViewController: UIViewController {
     var followerCount = 0
     var followingCount = 0
     var fistBumpedCount = 0
-    var shouldAdd = true
-    var shouldAddAt = 0
+    
 
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
@@ -284,8 +283,8 @@ class ProfileViewController: UIViewController {
                         cell.infoLbl.text = "Stitchbox's challenger"
                         ChallengeView.infoLbl.text = "Stitchbox's challenger"
                     }
+                   
                     
-                    print(_AppCoreData.userDataSource.value?.createdAt)
                     
                     if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
                         print(createAt)
@@ -303,80 +302,138 @@ class ProfileViewController: UIViewController {
                     ChallengeView.badgeImgView.image = UIImage.init(named: card.badge)
                     
                     print("Hello - \(card.games.count) - \(card.badge)")
-                    
-                    if card.games.isEmpty == true {
-                        cell.game1.isHidden = false
-                        cell.game2.isHidden = true
-                        cell.game3.isHidden = true
-                        cell.game4.isHidden = true
-                        
-                        //
-                        
-                        ChallengeView.game1.isHidden = false
-                        ChallengeView.game2.isHidden = true
-                        ChallengeView.game3.isHidden = true
-                        ChallengeView.game4.isHidden = true
-                        
-                        shouldAddAt = 1
-                        
-                    } else {
-                        
-                        if card.games.count == 1 {
-                            
+               
+                        if card.games.isEmpty == true {
                             cell.game1.isHidden = false
-                            cell.game2.isHidden = false
+                            cell.game2.isHidden = true
                             cell.game3.isHidden = true
                             cell.game4.isHidden = true
-                            shouldAddAt = 2
                             
                             //
                             
                             ChallengeView.game1.isHidden = false
-                            ChallengeView.game2.isHidden = false
+                            ChallengeView.game2.isHidden = true
                             ChallengeView.game3.isHidden = true
                             ChallengeView.game4.isHidden = true
                             
-                        } else if card.games.count == 2 {
-                            
-                            cell.game1.isHidden = false
-                            cell.game2.isHidden = false
-                            cell.game3.isHidden = false
-                            cell.game4.isHidden = true
-                            shouldAddAt = 3
-                            
-                            
-                            ChallengeView.game1.isHidden = false
-                            ChallengeView.game2.isHidden = false
-                            ChallengeView.game3.isHidden = false
-                            ChallengeView.game4.isHidden = true
-                            
-                            
-                        } else if card.games.count == 3 {
-                            
-                            cell.game1.isHidden = false
-                            cell.game2.isHidden = false
-                            cell.game3.isHidden = false
-                            cell.game4.isHidden = false
-                            shouldAdd = true
-                            shouldAddAt = 4
-                            
-                            
-                            ChallengeView.game1.isHidden = false
-                            ChallengeView.game2.isHidden = false
-                            ChallengeView.game3.isHidden = false
-                            ChallengeView.game4.isHidden = false
-                            
-                            
-                        } else if card.games.count == 4 {
-                            
-                            shouldAdd = false
-                            shouldAddAt = 0
-                            
-                        }
                         
-                        
+                        } else {
+                            
+                            if card.games.count == 1 {
+                                
+                                cell.game1.isHidden = false
+                                cell.game2.isHidden = false
+                                cell.game3.isHidden = true
+                                cell.game4.isHidden = true
+                              
+                                //
+                                
+                                ChallengeView.game1.isHidden = false
+                                ChallengeView.game2.isHidden = false
+                                ChallengeView.game3.isHidden = true
+                                ChallengeView.game4.isHidden = true
+                                
+                                if let empty = URL(string: emptyimage) {
+                                    
+                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                  
+                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    cell.game2.setImage(UIImage(named: "game_add"), for: .normal)
+                                    
+                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    ChallengeView.game2.setImage(UIImage(named: "game_add"), for: .normal)
+                                }
+                               
+                                
+                                
+                            } else if card.games.count == 2 {
+                                
+                                cell.game1.isHidden = false
+                                cell.game2.isHidden = false
+                                cell.game3.isHidden = false
+                                cell.game4.isHidden = true
+                               
+                                
+                                
+                                ChallengeView.game1.isHidden = false
+                                ChallengeView.game2.isHidden = false
+                                ChallengeView.game3.isHidden = false
+                                ChallengeView.game4.isHidden = true
+                                
+                                if let empty = URL(string: emptyimage) {
+                                    
+                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                    let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                    
+                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    cell.game3.setImage(UIImage(named: "game_add"), for: .normal)
+                                    
+                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    ChallengeView.game3.setImage(UIImage(named: "game_add"), for: .normal)
+                                }
+                                
+                                
+                            } else if card.games.count == 3 {
+                                
+                                cell.game1.isHidden = false
+                                cell.game2.isHidden = false
+                                cell.game3.isHidden = false
+                                cell.game4.isHidden = false
+                                
+                                ChallengeView.game1.isHidden = false
+                                ChallengeView.game2.isHidden = false
+                                ChallengeView.game3.isHidden = false
+                                ChallengeView.game4.isHidden = false
+                                
+                                
+                                if let empty = URL(string: emptyimage) {
+                                    
+                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                    let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                    let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
+                                    
+                                    
+                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                    cell.game4.setImage(UIImage(named: "game_add"), for: .normal)
+                                    
+                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    ChallengeView.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                    ChallengeView.game4.setImage(UIImage(named: "game_add"), for: .normal)
+                                }
+                                
+                                
+                            } else if card.games.count == 4 {
+                                
+                               
+                                if let empty = URL(string: emptyimage) {
+                                    
+                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                    let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                    let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
+                                    let game4 = global_suppport_game_list.first(where: { $0._id == card.games[3].gameId })
+                                
+                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                    cell.game4.setImageWithCache(from: URL(string: game4?.cover ?? "") ?? empty)
+                                    
+                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    ChallengeView.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                    ChallengeView.game4.setImageWithCache(from: URL(string: game4?.cover ?? "") ?? empty)
+                                }
+                                
+                            }
+                            
+                            
                         
                     }
+                  
                     
                 }
                 
@@ -390,6 +447,12 @@ class ProfileViewController: UIViewController {
                 cell.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)
                 cell.game3.addTarget(self, action: #selector(game3Tapped), for: .touchUpInside)
                 cell.game4.addTarget(self, action: #selector(game4Tapped), for: .touchUpInside)
+                
+                
+                ChallengeView.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
+                ChallengeView.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)
+                ChallengeView.game3.addTarget(self, action: #selector(game3Tapped), for: .touchUpInside)
+                ChallengeView.game4.addTarget(self, action: #selector(game4Tapped), for: .touchUpInside)
                 
                 return cell
                 
@@ -623,6 +686,13 @@ extension ProfileViewController {
                 if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
                     AGVC.hidesBottomBarWhenPushed = true
                     hideMiddleBtn(vc: self)
+                    
+                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
+                    {
+                        AGVC.gameList = games
+                        
+                    }
+                    
                     self.navigationController?.pushViewController(AGVC, animated: true)
                     
                 }
@@ -694,6 +764,13 @@ extension ProfileViewController {
                 if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
                     AGVC.hidesBottomBarWhenPushed = true
                     hideMiddleBtn(vc: self)
+                    
+                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
+                    {
+                        AGVC.gameList = games
+                        
+                    }
+                    
                     self.navigationController?.pushViewController(AGVC, animated: true)
                     
                 }
@@ -737,6 +814,13 @@ extension ProfileViewController {
                 if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
                     AGVC.hidesBottomBarWhenPushed = true
                     hideMiddleBtn(vc: self)
+                    
+                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
+                    {
+                        AGVC.gameList = games
+                        
+                    }
+                    
                     self.navigationController?.pushViewController(AGVC, animated: true)
                     
                 }
@@ -780,6 +864,13 @@ extension ProfileViewController {
                 if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
                     AGVC.hidesBottomBarWhenPushed = true
                     hideMiddleBtn(vc: self)
+                    
+                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
+                    {
+                        AGVC.gameList = games
+                        
+                    }
+                    
                     self.navigationController?.pushViewController(AGVC, animated: true)
                     
                 }
@@ -1104,17 +1195,6 @@ extension ProfileViewController: UINavigationBarDelegate, UINavigationController
     }
 }
 
-extension ProfileViewController {
-    
-    func getChallengeCard() {
-        
-        //APIManager().get
-        
-        
-    }
-    
-    
-}
 
 
 

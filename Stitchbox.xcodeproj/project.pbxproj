@@ -172,7 +172,7 @@
 		6A784869298628CE008B2263 /* StreamingListVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A784867298628CE008B2263 /* StreamingListVC.xib */; };
 		6A78486C29862931008B2263 /* StreamingDomainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78486B29862931008B2263 /* StreamingDomainModel.swift */; };
 		6A78486F29862C32008B2263 /* streamingListNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78486E29862C32008B2263 /* streamingListNode.swift */; };
-		6A839B3829A0331E00BD0A9A /* PaymentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3729A0331E00BD0A9A /* PaymentCell.swift */; };
+		6A839B3829A0331E00BD0A9A /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3729A0331E00BD0A9A /* GameCell.swift */; };
 		6A839B3A29A0332600BD0A9A /* addNewPaymentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3929A0332500BD0A9A /* addNewPaymentCell.swift */; };
 		6A839B3D29A035DE00BD0A9A /* AddGameDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3C29A035DE00BD0A9A /* AddGameDetailVC.swift */; };
 		6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3F29A03C4A00BD0A9A /* GameList.swift */; };
@@ -535,7 +535,7 @@
 		6A784867298628CE008B2263 /* StreamingListVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamingListVC.xib; sourceTree = "<group>"; };
 		6A78486B29862931008B2263 /* StreamingDomainModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamingDomainModel.swift; sourceTree = "<group>"; };
 		6A78486E29862C32008B2263 /* streamingListNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = streamingListNode.swift; sourceTree = "<group>"; };
-		6A839B3729A0331E00BD0A9A /* PaymentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentCell.swift; sourceTree = "<group>"; };
+		6A839B3729A0331E00BD0A9A /* GameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
 		6A839B3929A0332500BD0A9A /* addNewPaymentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addNewPaymentCell.swift; sourceTree = "<group>"; };
 		6A839B3C29A035DE00BD0A9A /* AddGameDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGameDetailVC.swift; sourceTree = "<group>"; };
 		6A839B3F29A03C4A00BD0A9A /* GameList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameList.swift; sourceTree = "<group>"; };
@@ -1722,7 +1722,7 @@
 		6A839B3529A032F900BD0A9A /* GameCell */ = {
 			isa = PBXGroup;
 			children = (
-				6A839B3729A0331E00BD0A9A /* PaymentCell.swift */,
+				6A839B3729A0331E00BD0A9A /* GameCell.swift */,
 			);
 			path = GameCell;
 			sourceTree = "<group>";
@@ -3012,7 +3012,7 @@
 				6A3F0A76297FADB900366665 /* SelectedHashtagCollectionViewCell.swift in Sources */,
 				6A0D54462974E9300059530C /* ChallengerCardProfileHeaderCell.swift in Sources */,
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
-				6A839B3829A0331E00BD0A9A /* PaymentCell.swift in Sources */,
+				6A839B3829A0331E00BD0A9A /* GameCell.swift in Sources */,
 				6A839B3A29A0332600BD0A9A /* addNewPaymentCell.swift in Sources */,
 				6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */,
 				14FADBCD297B072100E0A741 /* ChangePasswordViewModel.swift in Sources */,

@@ -34,6 +34,52 @@ class ImageUtil {
     }
 }
 
+extension UIButton {
+    func setImageWithCache(from url: URL) {
+        let cacheKey = url.absoluteString
+        
+        imageStorage.async.object(forKey: cacheKey) { result in
+            if case .value(let image) = result {
+                
+               
+                DispatchQueue.main.async {
+                    let resize = image.resize(targetSize: CGSize(width: self.bounds.width, height: self.bounds.height))
+                    self.setImage(resize, for: .normal)
+                    self.imageView?.contentMode = .scaleAspectFill
+                    self.layer.cornerRadius = self.bounds.size.width / 2
+                    self.clipsToBounds = true
+                }
+               
+            } else {
+                
+                AF.request(url).responseImage { response in
+                                      
+                   switch response.result {
+                    case let .success(value):
+                       
+                      
+                       DispatchQueue.main.async {
+                           let resize = value.resize(targetSize: CGSize(width: self.bounds.width, height: self.bounds.height))
+                           self.setImage(resize, for: .normal)
+                           self.imageView?.contentMode = .scaleAspectFill
+                           self.layer.cornerRadius = self.bounds.size.width / 2
+                           self.clipsToBounds = true
+                       }
+                       
+                       try? imageStorage.setObject(value, forKey: cacheKey, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+                                          
+                           case let .failure(error):
+                               print(error)
+                        }
+                                      
+                  }
+                
+            }
+        }
+    }
+}
+
+
 extension UIImageView {
     convenience init(withUser user: SBDUser) {
         self.init()
@@ -66,7 +112,9 @@ extension UIImageView {
                                       
                    switch response.result {
                     case let .success(value):
-                       self.image = value
+                       DispatchQueue.main.async {
+                           self.image = value
+                       }
                        try? imageStorage.setObject(value, forKey: str, expiry: .date(Date().addingTimeInterval(2 * 3600)))
                                           
                            case let .failure(error):

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SendBirdUIKit
 
 class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -13,16 +14,21 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     var gameList = [Game]()
-    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupButtons()
         
+        
+        
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = true
+        
+        
         
     }
     
@@ -56,7 +62,6 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                if let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell") as? GameCell {
                    
                    cell.configureCell(game)
-                   
                    return cell
                    
                } else {
@@ -104,24 +109,26 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        /*
-        let card = paymentArr[indexPath.row]
-        
-        
-        chargedCardID = card.Id
-        cardBrand = card.Brand
-        cardLast4Digits = card.Last4
-        
-        
-        
-        chargedlast4Digit = card.Last4
-        chargedCardBrand = card.Brand
-        
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "setPayment")), object: nil)
-        
-        
-        self.dismiss(animated: true, completion: nil)
-        */
+
+        if let AGDVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameDetailVC") as? AddGameDetailVC {
+            
+            
+            if let gameList = _AppCoreData.userDataSource.value?.challengeCard?.games, !gameList.isEmpty {
+               
+                AGDVC.index = indexPath.row
+                
+            } else {
+               
+                AGDVC.index = 0
+                
+            }
+            
+            
+            AGDVC.mode = "Update"
+            AGDVC.selectedGame = gameList[indexPath.row]
+            self.navigationController?.pushViewController(AGDVC, animated: true)
+            
+        }
         
     }
     
@@ -130,28 +137,114 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         return 90.0
     }
     
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        if indexPath.row < 4 {
+            
+            if gameList.count == 0 {
+                return nil
+            } else if gameList.count == 1,indexPath.row == 1 {
+                return nil
+            } else if gameList.count == 2,indexPath.row == 2 {
+                return nil
+            } else if gameList.count == 3,indexPath.row == 3 {
+                return nil
+            } else {
+                
+                let size = tableView.visibleCells[0].frame.height
+                let iconSize: CGFloat = 35.0
+                
+                let removeAction = UIContextualAction(
+                    style: .normal,
+                    title: ""
+                ) { action, view, actionHandler in
+                    
+                    APIManager().deleteGameForCard(gameId: self.gameList[indexPath.row].gameId) { result in
+                        switch result {
+                        case .success(_):
+                            DispatchQueue.main.async {
+                                self.gameList.remove(at: indexPath.row)
+                                self.tableView.deleteRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
+                                showNote(text: "Game removed!")
+                            }
+                           
+                        case .failure(_):
+                            DispatchQueue.main.async {
+                                showNote(text: "Unable to remove game!")
+                            }
+                            
+                        }
+                    }
+                    
+                    actionHandler(true)
+                }
+                
+                let removeView = UIImageView(
+                    frame: CGRect(
+                        x: (size-iconSize)/2,
+                        y: (size-iconSize)/2,
+                        width: iconSize,
+                        height: iconSize
+                ))
+                //removeView.layer.borderColor = UIColor.white.cgColor
+                removeView.layer.masksToBounds = true
+                //removeView.layer.borderWidth = 1
+                removeView.layer.cornerRadius = iconSize/2
+                removeView.backgroundColor =  .secondary
+                removeView.image = xBtn
+                removeView.contentMode = .center
+                
+                removeAction.image = removeView.asImage()
+                removeAction.backgroundColor = .background
+               
+                
+                return UISwipeActionsConfiguration(actions: [removeAction])
+                
+            }
+            
+            
+            
+        } else {
+            return nil
+        }
+        
+        
+        
+        
+        
+    }
+    
 
     @objc func addGameBtnPressed() {
-        
-        //sendSmsNoti(Phone: "+16036179650", text: "You order is ready to pickup")
-        
+   
         if let AGDVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameDetailVC") as? AddGameDetailVC {
             
+            
+            if let gameList = _AppCoreData.userDataSource.value?.challengeCard?.games, !gameList.isEmpty {
+               
+                AGDVC.index = gameList.count - 1
+                
+            } else {
+               
+                AGDVC.index = 0
+                
+            }
+            
+            
+            AGDVC.mode = "Add"
             self.navigationController?.pushViewController(AGDVC, animated: true)
             
         }
         
-        //NotificationCenter.default.addObserver(self, selector: #selector(AddGameVC.refreshGameList), name: (NSNotification.Name(rawValue: "refreshGameList")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AddGameVC.refreshGameList), name: (NSNotification.Name(rawValue: "refreshGameList")), object: nil)
     
         
     }
     
     @objc func refreshGameList() {
         
-        //NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "refreshGameList")), object: nil)
-        
-        //loadPayment()
-        
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "refreshGameList")), object: nil)
         
     }
 

@@ -8506,10 +8506,10 @@
                                         <rect key="frame" x="0.0" y="50" width="375" height="84"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AVn-OL-z7V" id="XC8-bC-deB">
-                                            <rect key="frame" x="8" y="8" width="359" height="68"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="84"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Gsb-ST-Q8e">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Gsb-ST-Q8e">
                                                     <rect key="frame" x="8" y="17" width="50" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="50" id="YgC-Ot-Ehu"/>
@@ -8556,6 +8556,10 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="gameImage" destination="Gsb-ST-Q8e" id="ify-Rv-MEC"/>
+                                            <outlet property="gameLbl" destination="1gp-QC-LXC" id="55N-uL-K1H"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="addNewGameCell" rowHeight="62" id="aSz-Ql-MrQ" customClass="addNewGameCell" customModule="Stitchbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="134" width="375" height="62"/>

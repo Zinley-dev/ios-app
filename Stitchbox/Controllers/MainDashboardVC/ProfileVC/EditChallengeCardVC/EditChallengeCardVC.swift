@@ -27,10 +27,9 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
     private var datasource: Datasource!
     
     @IBOutlet weak var collectionView: UICollectionView!
-    var shouldAddAt = 0
+   
     var fistBumpedCount = 0
-    var shouldAdd = true
-    
+   
     var demoChallengeData: ChallengeCardHeaderData {
         return ChallengeCardHeaderData(name: "Planet Pennies")
     }
@@ -112,10 +111,7 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                         cell.game2.isHidden = true
                         cell.game3.isHidden = true
                         cell.game4.isHidden = true
-                        
-                       
-                        
-                        shouldAddAt = 1
+               
                         
                     } else {
                         
@@ -125,9 +121,16 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                             cell.game2.isHidden = false
                             cell.game3.isHidden = true
                             cell.game4.isHidden = true
-                            shouldAddAt = 2
                             
                           
+                            if let empty = URL(string: emptyimage) {
+                                
+                                let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                              
+                                cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                cell.game2.setImage(UIImage(named: "game_add"), for: .normal)
+                        
+                            }
                             
                         } else if card.games.count == 2 {
                             
@@ -135,9 +138,18 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                             cell.game2.isHidden = false
                             cell.game3.isHidden = false
                             cell.game4.isHidden = true
-                            shouldAddAt = 3
                             
-                          
+                            if let empty = URL(string: emptyimage) {
+                                
+                                let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                
+                                cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                cell.game3.setImage(UIImage(named: "game_add"), for: .normal)
+                                
+                            
+                            }
                             
                             
                         } else if card.games.count == 3 {
@@ -146,14 +158,39 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                             cell.game2.isHidden = false
                             cell.game3.isHidden = false
                             cell.game4.isHidden = false
-                            shouldAdd = true
-                            shouldAddAt = 4
-                          
+                           
+                            if let empty = URL(string: emptyimage) {
+                                
+                                let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
+                                
+                                
+                                cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                cell.game4.setImage(UIImage(named: "game_add"), for: .normal)
+                
+                            }
+                            
             
                         } else if card.games.count == 4 {
+                         
+                            if let empty = URL(string: emptyimage) {
+                                
+                                let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
+                                let game4 = global_suppport_game_list.first(where: { $0._id == card.games[3].gameId })
                             
-                            shouldAdd = false
-                            shouldAddAt = 0
+                                cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                cell.game4.setImageWithCache(from: URL(string: game4?.cover ?? "") ?? empty)
+                    
+                            }
+                            
+                            
                             
                         }
                         
@@ -172,6 +209,7 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                 cell.game3.addTarget(self, action: #selector(game3Tapped), for: .touchUpInside)
                 cell.game4.addTarget(self, action: #selector(game4Tapped), for: .touchUpInside)
                 
+               
                 return cell
                 
             } else {
@@ -270,6 +308,13 @@ extension EditChallengeCardVC {
         alert.addAction(UIAlertAction(title: "View games", style: .default, handler: { action in
 
             if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                
+                if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
+                {
+                    AGVC.gameList = games
+                    
+                }
+                
                 self.navigationController?.pushViewController(AGVC, animated: true)
             }
             
@@ -289,6 +334,12 @@ extension EditChallengeCardVC {
                 
                 //AddGameVC
                 if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                    
+                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
+                    {
+                        AGVC.gameList = games
+                        
+                    }
                     
                     self.navigationController?.pushViewController(AGVC, animated: true)
                     
@@ -359,6 +410,13 @@ extension EditChallengeCardVC {
                 //AddGameVC
                 if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
                     
+                    
+                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
+                    {
+                        AGVC.gameList = games
+                        
+                    }
+                    
                     self.navigationController?.pushViewController(AGVC, animated: true)
                     
                 }
@@ -400,6 +458,12 @@ extension EditChallengeCardVC {
                 
                 //AddGameVC
                 if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
+                    
+                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
+                    {
+                        AGVC.gameList = games
+                        
+                    }
                     
                     self.navigationController?.pushViewController(AGVC, animated: true)
                     
@@ -443,6 +507,12 @@ extension EditChallengeCardVC {
                 //AddGameVC
                 if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
                 
+                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
+                    {
+                        AGVC.gameList = games
+                        
+                    }
+                    
                     self.navigationController?.pushViewController(AGVC, animated: true)
                     
                 }

@@ -38,6 +38,10 @@ class AddGameDetailVC: UIViewController, UITextFieldDelegate {
     var suppport_game_list = [GameList]()
     var dayPicker = UIPickerView()
     
+    var mode = ""
+    var index = 0
+    var selectedGame: Game!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -48,6 +52,26 @@ class AddGameDetailVC: UIViewController, UITextFieldDelegate {
         
         gameLinkTxtField.delegate = self
         gameLinkTxtField.addTarget(self, action: #selector(AddGameDetailVC.textFieldDidChange(_:)), for: .editingChanged)
+        
+        if mode == "Update" && selectedGame != nil {
+            
+            
+            if let game = global_suppport_game_list.first(where: { $0._id == selectedGame.gameId }) {
+                
+                pickYourGameTxtField.placeholder = game.name
+                gameLinkTxtField.placeholder = selectedGame.link
+                gameSelectedLbl.text = game.name
+                //
+                
+                gameSelectedImage.load(url: URL(string: game.cover)!, str: game.cover)
+                viewDomainBtn.setTitleColor(.white, for: .normal)
+                contentViewHeight.constant = 300
+                gameDetailsView.isHidden = false
+                
+                selectedDomainList = game.domains.enumerated().map { GameStatsDomainModel(postKey: String($0.offset + 1), GameStatsDomainModel: ["id": String($0.offset + 1), "domain": $0.element]) }
+                    
+            }
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -220,23 +244,23 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
             return
         }
         
-        let selectedGame = suppport_game_list[row]
-        guard !selectedGame.name.isEmpty, selectedGame.name != "Other" else {
+        let rowSelectedGame = suppport_game_list[row]
+        guard !rowSelectedGame.name.isEmpty, rowSelectedGame.name != "Other" else {
             return
         }
         
-        print(selectedGame.domains)
+        print(rowSelectedGame.domains)
         
-        selectedDomainList = selectedGame.domains.enumerated().map { GameStatsDomainModel(postKey: String($0.offset + 1), GameStatsDomainModel: ["id": String($0.offset + 1), "domain": $0.element]) }
+        selectedDomainList = rowSelectedGame.domains.enumerated().map { GameStatsDomainModel(postKey: String($0.offset + 1), GameStatsDomainModel: ["id": String($0.offset + 1), "domain": $0.element]) }
         
-        pickYourGameTxtField.text = selectedGame.name
-        gameSelectedLbl.text = selectedGame.name
-        gameSelectedImage.load(url: URL(string: selectedGame.cover)!, str: selectedGame.cover)
+        pickYourGameTxtField.text = rowSelectedGame.name
+        gameSelectedLbl.text = rowSelectedGame.name
+        gameSelectedImage.load(url: URL(string: rowSelectedGame.cover)!, str: rowSelectedGame.cover)
         viewDomainBtn.setTitleColor(.white, for: .normal)
         contentViewHeight.constant = 300
         gameDetailsView.isHidden = false
-        selectedName = selectedGame.name
-        selectedID = selectedGame._id
+        selectedName = rowSelectedGame.name
+        selectedID = rowSelectedGame._id
         
         if let text = gameLinkTxtField.text, text != "" {
             
@@ -334,11 +358,99 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
             return
         }
         
-        if currentGame.domains.contains(text) {
-            print("Adding new game")
+        
+        if let url = URL(string: text) {
+            
+            if let domain = url.host {
+                
+                print(currentGame.domains, domain)
+                
+                if currentGame.domains.contains(domain) {
+                   
+                    if mode == "Add" {
+                        print("Adding new game")
+                        addNewGame(link: text)
+                        
+                    } else if mode == "Update" {
+                        print("Updating new game")
+                    } else {
+                        showErrorAlert("Oops", msg: "Unable to save now, please go back to the previous view and try again")
+                    }
+                       
+                } else {
+                    streamError()
+                }
+                
+            } else {
+                showErrorAlert("Oops", msg: "Please make sure all your input is correct or we can't verify your url")
+            }
         } else {
-            streamError()
+            showErrorAlert("Oops", msg: "Please make sure all your input is correct or we can't verify your url")
+            
         }
+        
+        
+    }
+    
+    func addNewGame(link: String) {
+        
+        let params = ["gameID": selectedID, "gameIndex": index, "gameLink": link, "gameName": selectedName] as [String : Any]
+        
+        presentSwiftLoader()
+        
+        APIManager().addGameForCard(params: params) { result in
+            switch result {
+            case .success(_):
+                
+                DispatchQueue.main {
+                    SwiftLoader.hide()
+                    showNote(text: "Game added successfully")
+                    NotificationCenter.default.post(name:  (NSNotification.Name(rawValue: "refreshGameList")), object: nil)
+                    self.navigationController?.popViewController(animated: true)
+                }
+              
+            case .failure(let error):
+            
+                DispatchQueue.main {
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: "Unable to add your game \(error.localizedDescription)")
+                }
+               
+            }
+        }
+        
+        
+        
+    }
+    
+    func updateGame(link: String) {
+        
+        let params = ["gameID": selectedID, "gameIndex": index, "gameLink": link, "gameName": selectedName] as [String : Any]
+        
+        presentSwiftLoader()
+        
+        APIManager().updateGameForCard(params: params) { result in
+            switch result {
+            case .success(_):
+                
+                DispatchQueue.main {
+                    SwiftLoader.hide()
+                    showNote(text: "Game updated successfully")
+                    NotificationCenter.default.post(name:  (NSNotification.Name(rawValue: "refreshGameList")), object: nil)
+                    self.navigationController?.popViewController(animated: true)
+                }
+              
+            case .failure(let error):
+            
+                DispatchQueue.main {
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: "Unable to update your game \(error.localizedDescription)")
+                }
+               
+            }
+        }
+        
+        
     }
 
 

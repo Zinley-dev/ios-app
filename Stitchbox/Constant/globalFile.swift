@@ -23,6 +23,7 @@ var global_percentComplete = 0.0
 var global_host = ""
 var global_fullLink = ""
 var selectedTabIndex = 0
+var global_suppport_game_list = [GameList]()
 
  let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
  let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
@@ -31,6 +32,8 @@ var selectedTabIndex = 0
  let data5 = StreamingDomainModel(postKey: "5", streamingDomainModel: ["company": "Bigo Live", "domain": ["bigo.tv"], "status": true])
  let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company": "Nonolive", "domain": ["nonolive.com"], "status": true])
  let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
+
+var emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-with-concrete-floor_53876-70804.jpg?w=1380"
 
 let xBtn = UIImage(named: "1024x")?.resize(targetSize: CGSize(width: 12, height: 12))
 

@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         attemptRegisterForNotifications(application: application)
         setupStyle()
         setupOneSignal(launchOptions: launchOptions)
+        getGameList()
         return true
     }
   
@@ -407,6 +408,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let navigationController = UINavigationController(rootViewController: channelVC)
         navigationController.modalPresentationStyle = .fullScreen
         vc.present(navigationController, animated: true, completion: nil)
+        
+    }
+    
+    func getGameList() {
+        
+        global_suppport_game_list.removeAll()
+        
+        APIManager().getGames { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard apiResponse.body?["message"] as? String == "success",
+                      let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                   
+                    return
+                }
+            
+                let list = data.compactMap { GameList(JSON: $0) }
+                global_suppport_game_list += list
+                
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
         
     }
     

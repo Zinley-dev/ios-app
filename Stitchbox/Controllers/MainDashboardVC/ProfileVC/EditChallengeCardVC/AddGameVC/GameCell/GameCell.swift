@@ -13,6 +13,8 @@ class GameCell: UITableViewCell {
     
     var info: Game!
     
+    @IBOutlet weak var gameLbl: UILabel!
+    @IBOutlet weak var gameImage: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,11 +35,14 @@ class GameCell: UITableViewCell {
     }
     
     func configureCell(_ Information: Game) {
-           
- 
-        
-        
-        
+        self.info = Information
+    
+        if let game = global_suppport_game_list.first(where: { $0._id == info.gameId }) {
+            print(game.name)
+            gameLbl.text = game.name
+            gameImage.load(url: URL(string: game.cover)!, str: game.cover)
+        }
+
     }
 
 }
