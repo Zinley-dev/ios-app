@@ -516,16 +516,27 @@ extension APIManager {
       completion(result)
     }
   }
-  func countLike(comment commentId: String, completion: @escaping APICompletion) {
-    commentManager.request(.countLike(commentId: commentId)) { result in
-      completion(result)
-    }
-  }
   func countComment(post postId: String, completion: @escaping APICompletion) {
     commentManager.request(.count(postId: postId)) { result in
       completion(result)
     }
   }
+    func getReply(for commentId: String, page: Int = 1, completion: @escaping APICompletion) {
+        commentManager.request(.getReply(parentId: commentId, page: page, limit: 10)) { result in
+            completion(result)
+        }
+    }
+    func pinComment(commentId: String, completion: @escaping APICompletion) {
+        commentManager.request(.pin(commentId: commentId)) { result in
+            completion(result)
+        }
+    }
+    func unpinComment(commentId: String, completion: @escaping APICompletion) {
+        commentManager.request(.unpin(commentId: commentId)) { result in
+            completion(result)
+        }
+    }
+    
 }
 
 extension APIManager {

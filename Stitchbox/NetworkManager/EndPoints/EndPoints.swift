@@ -821,7 +821,9 @@ public enum CommentApi {
   case like(commentId: String)
   case islike(commentId: String)
   case unlike(commentId: String)
-  case countLike(commentId: String)
+  case getReply(parentId: String, page: Int, limit: Int)
+  case pin(commentId: String)
+  case unpin(commentId: String)
 }
 extension CommentApi: EndPointType {
   var path: String {
@@ -842,8 +844,12 @@ extension CommentApi: EndPointType {
         return "/\(commentId)/like"
       case .unlike(let commentId):
         return "/\(commentId)/like"
-      case .countLike(let commentId):
-        return "/\(commentId)/likes"
+      case .getReply(let parentId, let page, let limit):
+        return "/\(parentId)/reply?page=\(page)&limit=\(limit)"
+      case .pin(let commentId):
+        return "/\(commentId)/pin"
+      case .unpin(let commentId):
+        return "/\(commentId)/unpin"
     }
   }
   
@@ -869,8 +875,12 @@ extension CommentApi: EndPointType {
         return .get
       case .unlike:
         return .delete
-      case .countLike:
+      case .getReply:
         return .get
+      case .pin:
+        return .post
+      case .unpin:
+        return .post
     }
   }
   
@@ -894,7 +904,13 @@ extension CommentApi: EndPointType {
         return .request
       case .countLike:
         return .request
-    }
+    case .getReply:
+        return .request
+    case .pin:
+        return .request
+    case .unpin:
+        return .request
+}
   }
   
   var headers: [String: String]? {
