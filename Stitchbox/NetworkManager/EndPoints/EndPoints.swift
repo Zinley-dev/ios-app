@@ -506,7 +506,7 @@ extension UserAPI: EndPointType {
     }
     
     var headers: [String: String]? {
-        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+        return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
     }
 }
 

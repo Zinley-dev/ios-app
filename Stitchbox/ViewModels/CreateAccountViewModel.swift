@@ -21,6 +21,7 @@ class CreateAccountViewModel: ViewModelProtocol {
     }
     
     struct Output {
+        let usernameExistObservable: Observable<Bool>
         let registerSuccessObservable: Observable<Bool>
         let errorsObservable: Observable<Error>
     }
@@ -33,6 +34,7 @@ class CreateAccountViewModel: ViewModelProtocol {
     // MARK: Subject Instantiation
     private let submitDidTapSubject = PublishSubject<(String, String, String)>()
     private let registerResultSubject = PublishSubject<Bool>()
+    private let usernameExistSubject = PublishSubject<Bool>()
     private let errorsSubject = PublishSubject<Error>()
     private let disposeBag = DisposeBag()
     
@@ -43,7 +45,7 @@ class CreateAccountViewModel: ViewModelProtocol {
             refSubject: BehaviorSubject<String>(value: "")
         )
         action = Action(submitDidTap: submitDidTapSubject.asObserver())
-        output = Output(registerSuccessObservable: registerResultSubject.asObserver(), errorsObservable: errorsSubject.asObserver())
+        output = Output(usernameExistObservable: usernameExistSubject.asObservable(), registerSuccessObservable: registerResultSubject.asObserver(), errorsObservable: errorsSubject.asObserver())
         logic()
     }
     
@@ -51,10 +53,11 @@ class CreateAccountViewModel: ViewModelProtocol {
         return Observable.combineLatest(isValidUsername, isValidPassword, isHasUppercase, isHasLowercase, isHasNumber, isHasSpecial).map({ $0 && $1 && $2 && $3 && $4 && $5})
     }
     
-    var isValidUsername:Observable<Bool> {
-        input.usernameSubject.map { $0.count > 4 }
+    var isValidUsername:Observable<Bool>
+    {
+       input.usernameSubject.map { $0.count > 4 }
     }
-    
+
     var isValidPassword:Observable<Bool> {
         input.passwordSubject.map { $0.count > 8 }
     }
@@ -74,6 +77,29 @@ class CreateAccountViewModel: ViewModelProtocol {
     }
     
     func logic() {
+      
+        input.usernameSubject.subscribe(onNext: { uname in
+          if uname.count > 4 {
+            APIManager().checkUsernameExist(username: uname) { result in
+              switch result {
+                case .success(let response):
+                  if let data = response.body?["data"] as? String, data != "" {
+                    self.usernameExistSubject.onNext(false)
+                  } else {
+                    self.usernameExistSubject.onNext(true)
+                  }
+                case .failure:
+                  self.usernameExistSubject.onNext(false)
+              }
+            }
+          }
+        }, onError: { err in
+          print("Error \(err.localizedDescription)")
+        }, onCompleted: {
+          print("Completed")
+        })
+        .disposed(by: disposeBag)
+        
         submitDidTapSubject.subscribe(onNext: { (username, password, ref) in
             print("Register with uname: \(username) and pwd: \(password) and ref: \(ref)")
             // get phone
