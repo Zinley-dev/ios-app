@@ -395,10 +395,11 @@ extension PostNode {
                     
                     let slideVC = CommentVC()
                       
+                    slideVC.post = self.post
                     slideVC.modalPresentationStyle = .custom
                     slideVC.transitioningDelegate = update1.self
-                    global_presetingRate = Double(0.55)
-                    global_cornerRadius = 45
+                    global_presetingRate = Double(0.65)
+                    global_cornerRadius = 35
                     update1.present(slideVC, animated: true, completion: nil)
                     
                 }
@@ -439,8 +440,7 @@ extension PostNode {
         
     }
     
-    
-    
+
     @objc func likeHandle() {
         
         
