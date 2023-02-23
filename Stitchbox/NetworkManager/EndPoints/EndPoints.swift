@@ -902,8 +902,6 @@ extension CommentApi: EndPointType {
         return .request
       case .unlike:
         return .request
-      case .countLike:
-        return .request
     case .getReply:
         return .request
     case .pin:
