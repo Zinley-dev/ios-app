@@ -36,6 +36,7 @@ class PostModel: Mappable {
   private(set) var muxAssetId: String = ""
   private(set) var videoUrl: String = ""
   private(set) var streamUrl: String = ""
+    private(set) var owner: OwnerModel?
   private(set) var setting: [String: Any] = ["": ""]
   private(set) var metadata: PostMetadata?
   private(set) var createdAt: Date?
@@ -51,6 +52,7 @@ class PostModel: Mappable {
       hashtags <- map["hashtags"]
     muxPlaybackId <- map ["mux.playbackid"]
     muxAssetId <- map ["mux.assetid"]
+      owner <- map ["owner"]
     streamUrl <- map ["video.streamurl"]
     setting["allowcomment"] <- map["settings.allowcomment"]
     setting["mode"] <- map["settings.mode"]
