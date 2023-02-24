@@ -24,7 +24,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     var mention_list = [String]()
     var total = 0
     var isTitle = false
-    var cmtPage = 0
+    var cmtPage = 1
     @IBOutlet weak var totalCmtCount: UILabel!
     @IBOutlet weak var bView: UIView!
     //var currentItem: HighlightsModel!
@@ -797,6 +797,7 @@ extension CommentVC {
         APIManager().getComment(postId: post.id, page: cmtPage) { result in
                 switch result {
                 case .success(let apiResponse):
+                    print(apiResponse)
                     guard apiResponse.body?["message"] as? String == "success",
                           let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         return
@@ -1025,10 +1026,14 @@ extension CommentVC {
             }
         }
 
-        var data = ["text": commentText, "parentId": root_id ?? "", "postId": post.id] as [String : Any]
+        var data = ["content": commentText, "postId": post.id] as [String : Any]
 
         if let replyToCID = reply_to_cid {
-            data.updateValue(replyToCID, forKey: "reply_to_cid")
+            data.updateValue(replyToCID, forKey: "replyTo")
+        }
+        
+        if let root = root_id {
+            data.updateValue(root, forKey: "parentId")
         }
 
         // Call the API to create a comment
@@ -1208,6 +1213,8 @@ extension CommentVC {
         APIManager().countComment(post: post.id) { result in
             switch result {
             case .success(let apiResponse):
+                
+                print(apiResponse)
              
                 guard apiResponse.body?["message"] as? String == "success",
                       let commentsCountFromQuery = apiResponse.body?["comments"] as? Int  else {

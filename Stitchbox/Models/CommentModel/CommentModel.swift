@@ -272,7 +272,7 @@ class CommentModel {
             self._comment_uid = comment_uid
         }
         
-        if let text = Comment_model["text"] as? String {
+        if let text = Comment_model["content"] as? String {
             self._text = text
         }
         
