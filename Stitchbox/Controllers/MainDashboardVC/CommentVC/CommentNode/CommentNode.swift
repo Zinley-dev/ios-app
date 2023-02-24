@@ -530,10 +530,7 @@ class CommentNode: ASCellNode {
         horizontalSubStack.spacing = 10
         horizontalSubStack.justifyContent = ASStackLayoutJustifyContent.start
         horizontalSubStack.children = [timeNode, replyBtnNode]
-        //replyBtnNode
-     
-        
-        
+  
         if self.post.has_reply == true {
             
             headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack, loadReplyBtnNode]
@@ -554,8 +551,7 @@ class CommentNode: ASCellNode {
         
         headerStack.children = [avatarNode, headerSubStack, infoNode]
         
-        //addActiveLabelToCmtNode()
-     
+        
         if self.post.isReply == true {
             
             return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 40, bottom: 16, right: 20), child: headerStack)
@@ -566,15 +562,15 @@ class CommentNode: ASCellNode {
             
         }
         
-       
-        
+    
     }
     
     func addReplyUIDBtn(label: ActiveLabel) {
         
         DispatchQueue.main.async {
+        
             
-            self.replyToNode.attributedText = NSAttributedString(string: "\(self.replyUsername): ", attributes: [NSAttributedString.Key.font: UIFont(name:"Roboto-Light",size: FontSize)!,NSAttributedString.Key.foregroundColor: UIColor.white])
+            self.replyToNode.attributedText = NSAttributedString(string: "\(self.replyUsername): ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.white])
             let size = self.replyToNode.attributedText?.size()
             
             let userButton = ASButtonNode()
