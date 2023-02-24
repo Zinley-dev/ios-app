@@ -35,7 +35,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     //var query: Query!
     var reply_to_uid: String!
     var reply_to_cid: String!
-    
+    var reply_to_username: String!
 
     //var CmtQuery: Query!
     var prev_id: String!
@@ -514,20 +514,19 @@ extension CommentVC {
                 
                 let report = UIAlertAction(title: "Report", style: .default) { (alert) in
                     
-                    /*
+               
                     
                     let slideVC =  reportView()
                     
                     
-                    slideVC.comment_id = self.CommentList[indexPath.row].Comment_id
+                    slideVC.comment_id = self.CommentList[indexPath.row].comment_id
                     slideVC.comment_report = true
                     slideVC.modalPresentationStyle = .custom
                     slideVC.transitioningDelegate = self
-                    
-                    
+                    global_presetingRate = Double(0.75)
+                    global_cornerRadius = 35
                     self.present(slideVC, animated: true, completion: nil)
-                    */
-                    
+                  
                 }
                 
                 let copy = UIAlertAction(title: "Copy", style: .default) { (alert) in
@@ -634,8 +633,6 @@ extension CommentVC {
                     
                 }
                 
-                
-               
                 self.present(sheet, animated: true, completion: nil)
                 
             }
@@ -798,8 +795,11 @@ extension CommentVC {
                 switch result {
                 case .success(let apiResponse):
                     print(apiResponse)
-                    guard apiResponse.body?["message"] as? String == "success",
-                          let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
                         return
                     }
                     if !data.isEmpty {
@@ -838,7 +838,7 @@ extension CommentVC {
         var actualPost = [[String: Any]]()
         
         for item in newPosts {
-            let inputItem = CommentModel(postKey: item["postId"] as! String, Comment_model: item)
+            let inputItem = CommentModel(postKey: item["_id"] as! String, Comment_model: item)
             if checkDuplicateLoading(post: inputItem) == false {
                 actualPost.append(item)
             }
@@ -858,7 +858,7 @@ extension CommentVC {
         }
         
         for i in actualPost {
-            let item = CommentModel(postKey: i["postId"] as! String, Comment_model: i)
+            let item = CommentModel(postKey: i["_id"] as! String, Comment_model: i)
             items.append(item)
         }
         
@@ -913,7 +913,7 @@ extension CommentVC {
             
             reply_to_uid =  CommentList[cIndex].comment_uid
             reply_to_cid =  CommentList[cIndex].comment_id
-            
+            reply_to_username = CommentList[cIndex].comment_username
             
             tableNode.scrollToRow(at: IndexPath(row: cIndex, section: 0), at: .top, animated: true)
             
@@ -951,7 +951,7 @@ extension CommentVC {
         }
         
         if item.lastCmtSnapshot == nil {
-            item.lastCmtSnapshot = 0
+            item.lastCmtSnapshot = 1
         }
         
         APIManager().getReply(for: commentId, page: item.lastCmtSnapshot) { result in
@@ -966,8 +966,8 @@ extension CommentVC {
                 
                 // Filter out any reply data that has already been loaded
                 let newReplyData = replyData.filter { reply in
-                    let postId = reply["postId"] as! String
-                    let newReplyModel = CommentModel(postKey: postId, Comment_model: reply)
+                    let cmtId = reply["_id"] as! String
+                    let newReplyModel = CommentModel(postKey: cmtId, Comment_model: reply)
                     return !self.checkDuplicateLoading(post: newReplyModel)
                 }
                 
@@ -980,7 +980,7 @@ extension CommentVC {
                 
                 // Map the new reply data to an array of CommentModel instances and insert them into the CommentList array
                 let newReplyModels = newReplyData.map { reply in
-                    let postId = reply["postId"] as! String
+                    let postId = reply["_id"] as! String
                     return CommentModel(postKey: postId, Comment_model: reply)
                 }
                 self.CommentList.insert(contentsOf: newReplyModels, at: indexPaths.start)
@@ -1035,6 +1035,10 @@ extension CommentVC {
         if let root = root_id {
             data.updateValue(root, forKey: "parentId")
         }
+        
+        if !mention_list.isEmpty {
+            data.updateValue(mention_list, forKey: "mention")
+        }
 
         // Call the API to create a comment
         APIManager().createComment(params: data) { [weak self] result in
@@ -1042,31 +1046,39 @@ extension CommentVC {
             
             switch result {
             case .success(let apiResponse):
-                guard apiResponse.body?["message"] as? String == "success" else {
+                guard apiResponse.body?["message"] as? String == "success", let returnData = apiResponse.body?["data"] as? [String: Any] else {
+                    return
+                }
+                
+                guard let id = returnData["InsertedID"] as? String else {
                     return
                 }
                 
                 var isReply: Bool?
-                
+            
                 if self.root_id != nil {
                     isReply = true
                 } else {
                     isReply = false
                 }
                 
-                let update = ["owner_uid": self.post.owner?.id ?? "", "comment_id": "id", "comment_uid": userUID, "comment_avatarUrl": userDataSource.avatarURL, "comment_username": userDataSource.userName ?? "", "isReply": isReply!, "has_reply": false, "createdAt": Date(), "updatedAt": Date(), "last_modified": Date(), "reply_to_username": "defaults", "is_pinned": false]
+                var update = ["ownerId": self.post.owner?.id ?? "", "isReply": isReply!, "hasReply": false, "createdAt": Date(), "updatedAt": Date(), "last_modified": Date(), "isPined": false]
+                
+                update["owner"] = ["_id": userUID, "avatar": userDataSource.avatarURL, "username": userDataSource.userName, "name": userDataSource.name]
                 
                 if self.reply_to_cid != nil {
                     
                     data.updateValue(self.reply_to_cid!, forKey: "reply_to_cid")
                     data.updateValue(self.reply_to_uid!, forKey: "reply_to")
+                    data.updateValue(self.reply_to_username!, forKey: "reply_to_username")
                     
                 }
                 
+              
                 data.merge(dict: update)
                 
                 // Insert the comment into the CommentList array and the corresponding row into tableNode
-                let item = CommentModel(postKey: "id", Comment_model: data)
+                let item = CommentModel(postKey: id, Comment_model: data)
                 let start: Int
                 
                 
@@ -1109,6 +1121,7 @@ extension CommentVC {
                 self.root_id = nil
                 self.reply_to_uid = nil
                 self.reply_to_cid = nil
+                self.reply_to_username = nil
                 self.index = nil
                 self.isSending = false
                 
@@ -1128,6 +1141,7 @@ extension CommentVC {
                 
             
             case .failure(let error):
+                print(error)
                 DispatchQueue.main.async {
                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
@@ -1179,6 +1193,7 @@ extension CommentVC {
             root_id = nil
             reply_to_uid = nil
             reply_to_cid = nil
+            reply_to_username = nil
             index = nil
             
             // remove all

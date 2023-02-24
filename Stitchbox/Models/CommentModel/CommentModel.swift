@@ -252,14 +252,42 @@ class CommentModel {
         
         self._comment_id = postKey
         
-        if let comment_avatarUrl = Comment_model["comment_avatarUrl"] as? String {
-            self._comment_avatarUrl = comment_avatarUrl
+        if let owner = Comment_model["owner"] as? [String: Any] {
+            
+            if let comment_avatarUrl = owner["avatar"] as? String {
+                self._comment_avatarUrl = comment_avatarUrl
+            }
+            
+            if let comment_username = owner["username"] as? String {
+                self._comment_username = comment_username
+            }
+            
+            if let comment_uid = owner["_id"] as? String {
+                self._comment_uid = comment_uid
+            }
+            
         }
         
-        if let comment_username = Comment_model["comment_username"] as? String {
-            self._comment_username = comment_username
+        if let replyTo = Comment_model["replyTo"] as? [String: Any] {
+            
+            if let reply_to_cid = replyTo["_id"] as? String {
+                self._reply_to_cid = reply_to_cid
+            }
+            
+           if let replyOwner = replyTo["owner"] as? [String: Any] {
+               
+               if let reply_to_username = replyOwner["username"] as? String {
+                   self._reply_to_username = reply_to_username
+               }
+               
+               if let reply_to = replyOwner["_id"] as? String {
+                   self._reply_to = reply_to
+               }
+ 
+           }
+
         }
-        
+    
         if let reply_to_username = Comment_model["reply_to_username"] as? String {
             self._reply_to_username = reply_to_username
         }
@@ -268,10 +296,6 @@ class CommentModel {
             self._reply_to_cid = reply_to_cid
         }
        
-        if let comment_uid = Comment_model["comment_uid"] as? String {
-            self._comment_uid = comment_uid
-        }
-        
         if let text = Comment_model["content"] as? String {
             self._text = text
         }
@@ -288,15 +312,15 @@ class CommentModel {
             self._isReply = isReply
         }
         
-        if let is_pinned = Comment_model["is_pinned"] as? Bool {
+        if let is_pinned = Comment_model["isPined"] as? Bool {
             self._is_pinned = is_pinned
         }
         
-        if let has_reply = Comment_model["has_reply"] as? Bool {
+        if let has_reply = Comment_model["hasReply"] as? Bool {
             self._has_reply = has_reply
         }
         
-        if let is_title = Comment_model["is_title"] as? Bool {
+        if let is_title = Comment_model["isTitle"] as? Bool {
             self._is_title = is_title
         }
         
@@ -305,17 +329,17 @@ class CommentModel {
             self._reply_to = reply_to
         }
         
-        if let owner_uid = Comment_model["owner_uid"] as? String {
+        if let owner_uid = Comment_model["ownerId"] as? String {
             self._owner_uid = owner_uid
         }
         
-        if let createdAt = Comment_model["createdAt"] as? Date {
-            self._createdAt = createdAt
+        if let createdAt = Comment_model["createdAt"] {
+            self._createdAt = transformFromJSON(createdAt)
         }
         
         
-        if let updatedAt = Comment_model["updatedAt"] as? Date {
-            self._updatedAt = updatedAt
+        if let updatedAt = Comment_model["updatedAt"] {
+            self._updatedAt = transformFromJSON(updatedAt)
         }
         
         

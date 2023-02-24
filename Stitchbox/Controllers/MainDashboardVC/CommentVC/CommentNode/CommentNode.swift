@@ -920,142 +920,42 @@ class CommentNode: ASCellNode {
     
     func loadInfo(uid: String ) {
         
- /*
-        if uid == Auth.auth().currentUser?.uid {
+        avatarNode.url = URL(string: post.comment_avatarUrl)
+        
+        
+        if self.post.comment_uid == self.post.owner_uid {
             
-            if global_avatar_url != "", global_username != "" {
+            if self.post.is_pinned == true {
                 
-                AvatarNode.url = URL(string: global_avatar_url)
+                UIFont.systemFont(ofSize: FontSize + 1, weight: .medium)
                 
-                let paragraphStyles = NSMutableParagraphStyle()
-                paragraphStyles.alignment = .left
-                
-               
-                
-                if self.post.Comment_uid == self.post.owner_uid {
-                    
-                    if self.post.is_pinned == true {
-                        
-                        userNameNode.attributedText = NSAttributedString(string: "\(global_username) - author (pinned)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                        
-                        
-                        
-                    } else {
-                        
-                        userNameNode.attributedText = NSAttributedString(string: "\(global_username) - author", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                        
-                    }
-                    
-                 
-                    
-                } else {
-                    
-                    if self.post.is_pinned == true {
-                        
-                        userNameNode.attributedText = NSAttributedString(string: "\(global_username) (pinned)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                        
-                    } else {
-                        
-                        userNameNode.attributedText = NSAttributedString(string: "\(global_username)", attributes: [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize + 1)!, NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                        
-                    }
-                    
-                  
-                }
-                
+                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "") - author (pinned)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
                 
             } else {
                 
-                progressInfo(uid: uid)
+                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "") - author", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
                 
             }
-            
             
             
         } else {
             
-            
-            progressInfo(uid: uid)
+            if self.post.is_pinned == true {
+                
+                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "") (pinned)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                
+            } else {
+                
+                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "")", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                
+            }
             
         }
-        */
-        
+    
         
     }
     
-    func progressInfo(uid: String) {
-        
-        /*
-        DataService.init().mainFireStoreRef.collection("Users").document(uid).getDocument { querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                print("Error fetching snapshots: \(error!)")
-                return
-            }
-            
-            if snapshot.exists {
-                
-                if let item = snapshot.data() {
-                    
-                    let paragraphStyles = NSMutableParagraphStyle()
-                    paragraphStyles.alignment = .left
-                
-                    if let username = item["username"] as? String {
-                        
-                        if self.post.Comment_uid == self.post.owner_uid {
-                            
-                            
-                            if self.post.is_pinned == true {
-                                
-                                self.userNameNode.attributedText = NSAttributedString(string: "\(username) - author (pinned)", attributes: [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize + 1)!, NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                                
-                            } else {
-                                
-                                self.userNameNode.attributedText = NSAttributedString(string: "\(username) - author", attributes: [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize + 1)!, NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                                
-                            }
-                            
-                            
-                        } else {
-                            
-                            if self.post.is_pinned == true {
-                                
-                                self.userNameNode.attributedText = NSAttributedString(string: "\(username) (pinned)", attributes: [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize + 1)!, NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                                
-                                
-                            } else {
-                                
-                                self.userNameNode.attributedText = NSAttributedString(string: "\(username)", attributes: [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize + 1)!, NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                                
-                                
-                            }
-                            
-                            
-                            
-                        }
-                        
-                        
-                        
-                        if let avatarUrl = snapshot.data()!["avatarUrl"] as? String {
-                            
-                            self.AvatarNode.url = URL(string: avatarUrl)
-                            
-                        }
-                        
-                        
-                    }
-                    
-                    
-                }
-                
-                
-                
-            }
-            ∫
-   
-        }
-        
-        */
-    }
+  
     
     @objc func repliedBtnPressed(sender: AnyObject!) {
   
@@ -1114,5 +1014,78 @@ class CommentNode: ASCellNode {
     }
     
  
+    
+}
+
+
+extension CommentNode {
+     
+    func likeComment() {
+        
+        APIManager().likeComment(comment: post.comment_id) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+                self.imageView.image = UIImage(named: "heart-fill")
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = .center
+                
+                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: self.selectedColor, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+                
+               
+                
+                self.count += 1
+                let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
+                self.textNode.attributedText = like
+             
+            case .failure(let error):
+                print("CmtCount: \(error)")
+            }
+        }
+        
+        
+    }
+    
+    
+    func unlikeComment() {
+        
+        APIManager().unlike(comment: post.comment_id) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+                DispatchQueue.main.async {
+                    self.imageView.image = UIImage(named: "Icon ionic-ios-heart-empty")
+                    
+                    let paragraphStyle = NSMutableParagraphStyle()
+                    paragraphStyle.alignment = .center
+                    
+                    let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+                    
+                    
+                    
+                    self.count -= 1
+                    let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
+                    self.textNode.attributedText = like
+                }
+                
+            case .failure(let error):
+                print("CmtCount: \(error)")
+            }
+        }
+        
+        
+    }
+    
+    func countLike() {
+        
+       
+        
+    }
+    
     
 }

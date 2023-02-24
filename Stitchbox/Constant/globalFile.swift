@@ -461,3 +461,12 @@ func turnOff2FAForPhone() {
     }
     
 }
+
+
+func transformFromJSON(_ value: Any?) -> Date? {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    
+    guard let strValue = value as? String else { return nil }
+    return formatter.date(from: strValue)
+}
