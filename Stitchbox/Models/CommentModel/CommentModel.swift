@@ -12,10 +12,13 @@ class CommentModel {
     
     var just_add: Bool!
     var lastCmtSnapshot: Int!
+    var hasLoadedReplied = false
     
+    fileprivate var _replyTotal: Int!
     fileprivate var _owner_uid: String!
     fileprivate var _comment_id: String!
     fileprivate var _comment_uid: String!
+    fileprivate var _comment_name: String!
     fileprivate var _comment_avatarUrl: String!
     fileprivate var _comment_username: String!
     fileprivate var _text: String!
@@ -34,6 +37,27 @@ class CommentModel {
     fileprivate var _reply_to_cid: String!
     fileprivate var _IsNoti: Bool!
     var _is_pinned: Bool!
+    
+    
+    var replyTotal: Int! {
+        get {
+            if _replyTotal == nil {
+                _replyTotal = 0
+            }
+            return _replyTotal
+        }
+        
+    }
+
+    var comment_name: String! {
+        get {
+            if _comment_name == nil {
+                _comment_name = ""
+            }
+            return _comment_name
+        }
+        
+    }
     
     var comment_avatarUrl: String! {
         get {
@@ -266,9 +290,14 @@ class CommentModel {
                 self._comment_uid = comment_uid
             }
             
+            if let comment_name = owner["name"] as? String {
+                self._comment_name = comment_name
+            }
         }
         
         if let replyTo = Comment_model["replyTo"] as? [String: Any] {
+            
+            self._isReply = true
             
             if let reply_to_cid = replyTo["_id"] as? String {
                 self._reply_to_cid = reply_to_cid
@@ -286,6 +315,18 @@ class CommentModel {
  
            }
 
+        } else {
+            
+            self._isReply = false
+        }
+        
+        if let isReply = Comment_model["isReply"] as? Bool {
+            self._isReply = isReply
+        }
+        
+        
+        if let replyTotal = Comment_model["replyTotal"] as? Int {
+            self._replyTotal = replyTotal
         }
     
         if let reply_to_username = Comment_model["reply_to_username"] as? String {
@@ -307,10 +348,7 @@ class CommentModel {
         if let root_id = Comment_model["parentId"] as? String {
             self._root_id = root_id
         }
-        
-        if let isReply = Comment_model["isReply"] as? Bool {
-            self._isReply = isReply
-        }
+    
         
         if let is_pinned = Comment_model["isPined"] as? Bool {
             self._is_pinned = is_pinned
@@ -324,27 +362,34 @@ class CommentModel {
             self._is_title = is_title
         }
         
-    
-        if let reply_to = Comment_model["reply_to"] as? String {
-            self._reply_to = reply_to
-        }
-        
         if let owner_uid = Comment_model["ownerId"] as? String {
             self._owner_uid = owner_uid
         }
         
-        if let createdAt = Comment_model["createdAt"] {
-            self._createdAt = transformFromJSON(createdAt)
+        if let createdAt = Comment_model["createdAt"] as? Date {
+            self._createdAt = createdAt
+        } else {
+            if let createdAtFail = Comment_model["createdAt"] {
+                self._createdAt = transformFromJSON(createdAtFail)
+            }
         }
         
         
-        if let updatedAt = Comment_model["updatedAt"] {
-            self._updatedAt = transformFromJSON(updatedAt)
+        if let updatedAt = Comment_model["updatedAt"] as? Date {
+            self._updatedAt = updatedAt
+        } else {
+            if let updatedAtFail = Comment_model["updatedAt"] {
+                self._updatedAt = transformFromJSON(updatedAtFail)
+            }
         }
         
         
         if let last_modified = Comment_model["last_modified"] as? Date {
             self._last_modified = last_modified
+        } else {
+            if let last_modifiedFail = Comment_model["last_modified"] {
+                self._last_modified = transformFromJSON(last_modifiedFail)
+            }
         }
         
 

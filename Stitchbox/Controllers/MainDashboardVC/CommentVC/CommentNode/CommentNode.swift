@@ -56,8 +56,6 @@ class CommentNode: ASCellNode {
         
         super.init()
         
-        print(post.text)
-        
         self.backgroundColor = UIColor(red: 43, green: 43, blue: 43)
         self.replyBtnNode.setTitle("Reply", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.lightGray, for: .normal)
         self.replyBtnNode.addTarget(self, action: #selector(CommentNode.replyBtnPressed), forControlEvents: .touchUpInside)
@@ -249,9 +247,9 @@ class CommentNode: ASCellNode {
         loadInfo(uid: self.post.comment_uid)
         
         
-        if self.post.has_reply == true, self.post.IsNoti == false {
+        if self.post.has_reply == true {
             
-            loadCmtCount(id: self.post.comment_id)
+            loadCmtCount()
             
         }
         
@@ -276,62 +274,21 @@ class CommentNode: ASCellNode {
     
     @objc func replyToBtnPressed() {
         
-        if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-            
-            if let vc = UIViewController.currentViewController() {
-            
-                
-                 
-            }
-            
-            
-        }
+     
         
     }
     
     @objc func usernameBtnPressed() {
         
         
-        if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-            
-            if let vc = UIViewController.currentViewController() {
-            
-                
-                 
-            }
-            
-            
-        }
+       
         
     }
     
     
     @objc func LikedBtnPressed(sender: AnyObject!) {
   
-        /*
-        let db = DataService.instance.mainFireStoreRef
-        
-        db.collection("Comments_Like").document(post.Comment_id + Auth.auth().currentUser!.uid).getDocument {  querySnapshot, error in
-            
-            guard let snapshot = querySnapshot else {
-               
-                print("Error fetching snapshots: \(error!)")
-                return
-            }
-            
-            if snapshot.exists {
-                
-                self.unlikePerform(id: snapshot.documentID)
-                
-            } else {
-                
-                self.updateLikeActivtyLog()
-                self.imageView.image = UIImage(named: "heart-fill")
-                self.likePerform()
-                
-            }
-            
-        } */
+ 
         
     }
     
@@ -345,169 +302,18 @@ class CommentNode: ASCellNode {
     
     func unlikePerform(id: String) {
         
-        /*
-        let db = DataService.instance.mainFireStoreRef.collection("Comments_Like")
-              
-        db.document(id).delete { (err) in
-            
-            if err != nil {
-                print(err!.localizedDescription)
-            }
-            
-            self.imageView.image = UIImage(named: "Icon ionic-ios-heart-empty")
-            
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = .center
-            
-            let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize)!, NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-            
-            
-            
-            self.count -= 1
-            let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-            self.textNode.attributedText = like
-            
-        }
-        */
-        
+  
         
     }
     
     func likePerform() {
-        /*
-        SwiftPublicIP.getPublicIP(url: PublicIPAPIURLs.ipv4.icanhazip.rawValue) {  (string, error) in
-            if let error = error {
-                
-                print(error.localizedDescription)
-                
-            } else if let string = string {
-                
-                DispatchQueue.main.async {
-                    
-                    let device = UIDevice().type.rawValue
-                    
-                    var data = [String:Any]()
-                    
-                    data = ["like_uid": Auth.auth().currentUser!.uid, "timeStamp": FieldValue.serverTimestamp(), "Device": device, "cmt_status": "valid", "Mux_playbackID": self.post.Mux_playbackID!, "Update_timestamp": FieldValue.serverTimestamp(), "cmt_id": self.post.Comment_id!, "query": string] as [String : Any]
-                    
-                    
-        
-                    let db = DataService.instance.mainFireStoreRef.collection("Comments_Like").document(self.post.Comment_id + Auth.auth().currentUser!.uid)
-                    
-                    db.setData(data) { errors in
-                        if errors != nil {
-                            
-                            print(errors!.localizedDescription)
-                            return
-                            
-                        }
-                        
-                        self.imageView.image = UIImage(named: "heart-fill")
-                        
-                        let paragraphStyle = NSMutableParagraphStyle()
-                        paragraphStyle.alignment = .center
-                        
-                        let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize)!, NSAttributedString.Key.foregroundColor: self.selectedColor, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                        
-                       
-                        
-                        self.count += 1
-                        let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-                        self.textNode.attributedText = like
-                    }
-                    
-            
-                    }
-                    
-                }
-                
-            }
-        */
+  
     }
  
     
     func checkLikeCmt(id: String) {
         
-        /*
-        let db = DataService.instance.mainFireStoreRef
-        
-        
-        db.collection("Comments_Like").whereField("cmt_id", isEqualTo: id).getDocuments {  querySnapshot, error in
-            
-            guard let snapshot = querySnapshot else {
-               
-                print("Error fetching snapshots: \(error!)")
-                return
-            }
-            
-            if snapshot.isEmpty != true {
-                
-                db.collection("Comments_Like").document(self.post.Comment_id + Auth.auth().currentUser!.uid).getDocument {  querySnapshot, error in
-                    
-                    guard let snapshots = querySnapshot else {
-                       
-                        print("Error fetching snapshots: \(error!)")
-                        return
-                    }
-                    
-                    if snapshots.exists {
-                        
-                        self.imageView.image = UIImage(named: "heart-fill")
-                        
-                        let paragraphStyle = NSMutableParagraphStyle()
-                        paragraphStyle.alignment = .center
-                        
-                        let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize)!, NSAttributedString.Key.foregroundColor: self.selectedColor, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                      
-                        
-                        self.count = snapshot.count
-                        let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(snapshot.count)))", attributes: LikeAttributes)
-                        self.textNode.attributedText = like
-                        
-                        
-                    } else {
-                        
-                        self.imageView.image = UIImage(named: "Icon ionic-ios-heart-empty")
-                        
-                        let paragraphStyle = NSMutableParagraphStyle()
-                        paragraphStyle.alignment = .center
-                        
-                        let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize)!, NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                        self.count = snapshot.count
-                        let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(snapshot.count)))", attributes: LikeAttributes)
-                        self.textNode.attributedText = like
-                        
-                    }
-                    
-                    
-                }
-                      
-               
-            } else {
-                
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.alignment = .center
-                
-                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name:"Roboto-Medium",size: FontSize)!, NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                let like = NSMutableAttributedString(string: "", attributes: LikeAttributes)
-                self.textNode.attributedText = like
-                self.count = snapshot.count
-                self.imageView.image = UIImage(named: "Icon ionic-ios-heart-empty")
-                
-                
-                UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
-                    self.view.layoutIfNeeded()
-                }, completion: { (completed) in
-                    
-                })
-                
-                
-            }
-            
-            
-        }
-        */
-        
+
     }
     
     
@@ -639,7 +445,7 @@ class CommentNode: ASCellNode {
                 
                 label.handleMentionTap {  mention in
                     print(mention)
-                    self.checkIfUserValidAndPresentVC(username: mention)
+                    //self.checkIfUserValidAndPresentVC(username: mention)
                 }
                 
                 label.handleHashtagTap { hashtag in
@@ -814,102 +620,34 @@ class CommentNode: ASCellNode {
     func moveToUserProfileVC(uid: String) {
         
         
-        if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-            
-            controller.modalPresentationStyle = .fullScreen
-            
-            if let vc = UIViewController.currentViewController() {
-                
-               
-                 
-            }
-            
-            
-        }
         
     }
     
     func presentViewController(id: String, items: [PostModel]) {
-        
-        /*
-        if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "UserHighlightFeedVC") as? UserHighlightFeedVC {
-            
-            controller.modalPresentationStyle = .fullScreen
-            
-            
-            controller.video_list = items
-            controller.userid = items[0].userUID
-            controller.startIndex = 0
-            
-            if let vc = UIViewController.currentViewController() {
-                 
-               
-                vc.present(controller, animated: true, completion: nil)
-                 
-            }
-            
-        }
-        */
-        
-        
+      
         
     }
     
-    func loadCmtCount(id: String) {
+    func loadCmtCount() {
         
-        /*
-        if self.post.has_reply == true, self.post.root_id != "nil" {
-      
-            if self.post.lastCmtSnapshot != nil{
+        if self.post.has_reply == true {
+            
+            if self.post.hasLoadedReplied {
                 
-                let db = DataService.instance.mainFireStoreRef
+                self.loadReplyBtnNode.setTitle("Show more", with: UIFont.systemFont(ofSize: FontSize, weight: .light), with: UIColor.lightGray, for: .normal)
+                self.loadReplyBtnNode.contentHorizontalAlignment = .left
                 
-                db.collection("Comments").whereField("isReply", isEqualTo: true).whereField("root_id", isEqualTo: self.post.root_id!).whereField("cmt_status", isEqualTo: "valid").order(by: "timeStamp", descending: false).start(afterDocument: self.post.lastCmtSnapshot).getDocuments {  querySnapshot, error in
-                    
-                    guard let snapshot = querySnapshot else {
-                       
-                        print("Error fetching snapshots: \(error!)")
-                        return
-                    }
-                    
-                    if snapshot.isEmpty != true {
-                        
-                        self.loadReplyBtnNode.setTitle("Show more (\(snapshot.count))", with: UIFont(name:"Roboto-Light",size: FontSize)!, with: UIColor.lightGray, for: .normal)
-                        self.loadReplyBtnNode.contentHorizontalAlignment = .left
-                        
-                        
-                    }
-                    
-                    
-                }
+            } else {
                 
+                self.loadReplyBtnNode.setTitle("Replied (\(self.post.replyTotal ?? 0))", with: UIFont.systemFont(ofSize: FontSize, weight: .light), with: UIColor.lightGray, for: .normal)
+                self.loadReplyBtnNode.contentHorizontalAlignment = .left
+                self.post.hasLoadedReplied = true
                 
             }
             
-            
-        } else {
-            
-            
-            DataService.init().mainFireStoreRef.collection("Comments").whereField("root_id", isEqualTo: id).whereField("cmt_status", isEqualTo: "valid").getDocuments {   querySnapshot, error in
-                    guard let snapshot = querySnapshot else {
-                        print("Error fetching snapshots: \(error!)")
-                        return
-                    }
-                
-                
-                if snapshot.isEmpty != true {
-                    
-                    self.loadReplyBtnNode.setTitle("Replied (\(snapshot.count))", with: UIFont(name:"Roboto-Light",size: FontSize)!, with: UIColor.lightGray, for: .normal)
-                    self.loadReplyBtnNode.contentHorizontalAlignment = .left
-                    
-                    
-                }
-                
-            }
             
             
         }
-         */
         
         
     }
@@ -958,58 +696,6 @@ class CommentNode: ASCellNode {
         reply?(self)
   
     }
-    
-    func checkIfUserValidAndPresentVC(username: String) {
-       /*
-        DataService.instance.mainFireStoreRef.collection("Users").whereField("username", isEqualTo: username).whereField("is_suspend", isEqualTo: false).getDocuments { (snap, err) in
-   
-            if err != nil {
-                
-                print(err!.localizedDescription)
-               
-                return
-            }
-        
-            if snap?.isEmpty != true {
-                
-                for item in snap!.documents {
-                    
-                    if let userId = item.data()["userUID"] as? String {
-                        
-                        
-                        if !global_block_list.contains(userId) {
-                            
-                           
-                            
-                            if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-                                
-                                if let vc = UIViewController.currentViewController() {
-                
-                                    controller.uid = userId
-                                    controller.modalPresentationStyle = .fullScreen
-                                    
-                                  
-                                    vc.present(controller, animated: true, completion: nil)
-                                     
-                                }
-                                
-                                
-                            }
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        */
-        
-    }
-    
- 
     
 }
 
@@ -1077,11 +763,6 @@ extension CommentNode {
         
     }
     
-    func countLike() {
-        
-       
-        
-    }
-    
+  
     
 }
