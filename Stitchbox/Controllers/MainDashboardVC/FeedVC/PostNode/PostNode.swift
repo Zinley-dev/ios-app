@@ -398,7 +398,7 @@ extension PostNode {
                     slideVC.post = self.post
                     slideVC.modalPresentationStyle = .custom
                     slideVC.transitioningDelegate = update1.self
-                    global_presetingRate = Double(0.65)
+                    global_presetingRate = Double(0.75)
                     global_cornerRadius = 35
                     update1.present(slideVC, animated: true, completion: nil)
                     

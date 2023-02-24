@@ -24,15 +24,15 @@ class CommentNode: ASCellNode {
     weak var post: CommentModel!
     var count = 0
     var userNameNode: ASTextNode!
-    var CmtNode: ASTextNode!
+    var cmtNode: ASTextNode!
     var replyToNode: ASTextNode!
     var timeNode: ASTextNode!
     var imageView: ASImageNode!
-    var AvatarNode: ASNetworkImageNode!
+    var avatarNode: ASNetworkImageNode!
     var textNode: ASTextNode!
     var loadReplyBtnNode: ASButtonNode!
     var replyBtnNode: ASButtonNode!
-    var InfoNode: ASDisplayNode!
+    var infoNode: ASDisplayNode!
     let selectedColor = UIColor(red: 248/255, green: 189/255, blue: 91/255, alpha: 1.0)
     var replyBtn : ((ASCellNode) -> Void)?
     var reply : ((ASCellNode) -> Void)?
@@ -44,10 +44,10 @@ class CommentNode: ASCellNode {
         
         self.post = post
         self.userNameNode = ASTextNode()
-        self.CmtNode = ASTextNode()
-        self.AvatarNode = ASNetworkImageNode()
+        self.cmtNode = ASTextNode()
+        self.avatarNode = ASNetworkImageNode()
         self.loadReplyBtnNode = ASButtonNode()
-        self.InfoNode = ASDisplayNode()
+        self.infoNode = ASDisplayNode()
         self.imageView = ASImageNode()
         self.textNode = ASTextNode()
         self.timeNode = ASTextNode()
@@ -56,21 +56,21 @@ class CommentNode: ASCellNode {
         
         super.init()
         
+        print(post.text)
         
         self.backgroundColor = UIColor(red: 43, green: 43, blue: 43)
-        self.replyBtnNode.setTitle("Reply", with: UIFont(name:"Roboto-Medium",size: FontSize)!, with: UIColor.lightGray, for: .normal)
+        self.replyBtnNode.setTitle("Reply", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.lightGray, for: .normal)
         self.replyBtnNode.addTarget(self, action: #selector(CommentNode.replyBtnPressed), forControlEvents: .touchUpInside)
         self.selectionStyle = .none
-        AvatarNode.contentMode = .scaleAspectFill
-        AvatarNode.cornerRadius = OrganizerImageSize/2
-        AvatarNode.clipsToBounds = true
-        CmtNode.truncationMode = .byTruncatingTail
+        avatarNode.contentMode = .scaleAspectFill
+        avatarNode.cornerRadius = OrganizerImageSize/2
+        avatarNode.clipsToBounds = true
+        cmtNode.truncationMode = .byTruncatingTail
        
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
         
-        AvatarNode.shouldRenderProgressImages = true
-        
+        avatarNode.shouldRenderProgressImages = true
         
         
         let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -80,15 +80,13 @@ class CommentNode: ASCellNode {
         
         if self.post.reply_to != "" {
            
-            if let username = self.post.reply_to_username as? String {
+            if let username = self.post.reply_to_username {
                                 
                let username = "\(username)"
                 self.replyUsername = username
                
                 if self.post.createdAt != nil {
                     
-                    var date: Date?
-            
                     let user = NSMutableAttributedString()
               
                     let username = NSAttributedString(string: "\(username): ", attributes: textAttributes)
@@ -120,7 +118,7 @@ class CommentNode: ASCellNode {
                     
                     
                     self.timeNode.attributedText = time
-                    self.CmtNode.attributedText = user
+                    self.cmtNode.attributedText = user
                     
                     
                 } else {
@@ -139,7 +137,7 @@ class CommentNode: ASCellNode {
                     
                     
                     self.timeNode.attributedText = time
-                    self.CmtNode.attributedText = user
+                    self.cmtNode.attributedText = user
                    
                     
                 }
@@ -154,10 +152,7 @@ class CommentNode: ASCellNode {
             
             if self.post.createdAt != nil {
                 
-                
-                var date: Date?
-                           
-                
+            
                 let user = NSMutableAttributedString()
                 
                 let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
@@ -188,10 +183,11 @@ class CommentNode: ASCellNode {
                 user.append(text)
                 
                 
+                DispatchQueue.main.async { [self] in
+                    timeNode.attributedText = time
+                    cmtNode.attributedText = user
+                }
                 
-                timeNode.attributedText = time
-                CmtNode.attributedText = user
-               
                 
             } else {
                 
@@ -204,27 +200,29 @@ class CommentNode: ASCellNode {
                 
                 user.append(text)
                 
-                
-                timeNode.attributedText = time
-                CmtNode.attributedText = user
+                DispatchQueue.main.async { [self] in
+                    timeNode.attributedText = time
+                    cmtNode.attributedText = user
+                }
                
-                
             }
             
         }
         
-        
-        InfoNode.backgroundColor = UIColor.clear
+        DispatchQueue.main.async {
+            self.view.backgroundColor = .background
+        }
+       
+        infoNode.backgroundColor = UIColor.clear
         
         loadReplyBtnNode.backgroundColor = UIColor.clear
-        CmtNode.backgroundColor = UIColor.clear
+        cmtNode.backgroundColor = UIColor.clear
         replyToNode.backgroundColor = UIColor.clear
         userNameNode.backgroundColor = UIColor.clear
         
         imageView.contentMode = .scaleAspectFit
         imageView.frame = CGRect(x: 5.2, y: 2, width: 20, height: 20)
     
-        
     
         textNode.isLayerBacked = true
     
@@ -240,9 +238,9 @@ class CommentNode: ASCellNode {
         button.backgroundColor = UIColor.clear
         
         
-        InfoNode.addSubnode(imageView)
-        InfoNode.addSubnode(textNode)
-        InfoNode.addSubnode(button)
+        infoNode.addSubnode(imageView)
+        infoNode.addSubnode(textNode)
+        infoNode.addSubnode(button)
    
         button.addTarget(self, action: #selector(CommentNode.LikedBtnPressed), forControlEvents: .touchUpInside)
         loadReplyBtnNode.addTarget(self, action: #selector(CommentNode.repliedBtnPressed), forControlEvents: .touchUpInside)
@@ -270,7 +268,7 @@ class CommentNode: ASCellNode {
         
         //userNameNode
         userNameNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
-        AvatarNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
+        avatarNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
         
          
         
@@ -521,8 +519,8 @@ class CommentNode: ASCellNode {
         let headerSubStack = ASStackLayoutSpec.vertical()
         
         
-        AvatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
-        InfoNode.style.preferredSize = CGSize(width: 30.0, height: 60.0)
+        avatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
+        infoNode.style.preferredSize = CGSize(width: 30.0, height: 60.0)
         
         headerSubStack.style.flexShrink = 16.0
         headerSubStack.style.flexGrow = 16.0
@@ -536,14 +534,14 @@ class CommentNode: ASCellNode {
      
         
         
-        if self.post.has_reply == true, self.post.IsNoti == false {
+        if self.post.has_reply == true {
             
-            headerSubStack.children = [userNameNode, CmtNode, horizontalSubStack, loadReplyBtnNode]
+            headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack, loadReplyBtnNode]
             
             
         } else {
             
-            headerSubStack.children = [userNameNode, CmtNode, horizontalSubStack]
+            headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack]
             
         }
       
@@ -554,7 +552,7 @@ class CommentNode: ASCellNode {
         headerStack.spacing = 10
         headerStack.justifyContent = ASStackLayoutJustifyContent.start
         
-        headerStack.children = [AvatarNode, headerSubStack, InfoNode]
+        headerStack.children = [avatarNode, headerSubStack, infoNode]
         
         //addActiveLabelToCmtNode()
      
@@ -582,7 +580,7 @@ class CommentNode: ASCellNode {
             let userButton = ASButtonNode()
             userButton.backgroundColor = UIColor.clear
             userButton.frame = CGRect(x: 0, y: 0, width: size!.width, height: size!.height)
-            self.CmtNode.view.addSubnode(userButton)
+            self.cmtNode.view.addSubnode(userButton)
             
             userButton.addTarget(self, action: #selector(CommentNode.replyToBtnPressed), forControlEvents: .touchUpInside)
             
@@ -610,28 +608,28 @@ class CommentNode: ASCellNode {
         
         DispatchQueue.main.async {
             
-            self.CmtNode.view.isUserInteractionEnabled = true
+            self.cmtNode.view.isUserInteractionEnabled = true
             
             
             let label =  ActiveLabel()
             
             //
-            self.CmtNode.view.addSubview(label)
+            self.cmtNode.view.addSubview(label)
             
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.topAnchor.constraint(equalTo: self.CmtNode.view.topAnchor, constant: 0).isActive = true
-            label.leadingAnchor.constraint(equalTo: self.CmtNode.view.leadingAnchor, constant: 0).isActive = true
-            label.trailingAnchor.constraint(equalTo: self.CmtNode.view.trailingAnchor, constant: 0).isActive = true
-            label.bottomAnchor.constraint(equalTo: self.CmtNode.view.bottomAnchor, constant: 0).isActive = true
+            label.topAnchor.constraint(equalTo: self.cmtNode.view.topAnchor, constant: 0).isActive = true
+            label.leadingAnchor.constraint(equalTo: self.cmtNode.view.leadingAnchor, constant: 0).isActive = true
+            label.trailingAnchor.constraint(equalTo: self.cmtNode.view.trailingAnchor, constant: 0).isActive = true
+            label.bottomAnchor.constraint(equalTo: self.cmtNode.view.bottomAnchor, constant: 0).isActive = true
             
                     
             label.customize { label in
                 
                
-                label.numberOfLines = Int(self.CmtNode.lineCount)
+                label.numberOfLines = Int(self.cmtNode.lineCount)
                 label.enabledTypes = [.mention, .hashtag, .url]
                 
-                label.attributedText = self.CmtNode.attributedText
+                label.attributedText = self.cmtNode.attributedText
                 //label.attributedText = textAttributes
             
                 label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)

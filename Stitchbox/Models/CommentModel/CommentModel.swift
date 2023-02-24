@@ -11,10 +11,13 @@ import Foundation
 class CommentModel {
     
     var just_add: Bool!
+    var lastCmtSnapshot: Int!
     
     fileprivate var _owner_uid: String!
     fileprivate var _comment_id: String!
     fileprivate var _comment_uid: String!
+    fileprivate var _comment_avatarUrl: String!
+    fileprivate var _comment_username: String!
     fileprivate var _text: String!
     fileprivate var _isReply: Bool!
     fileprivate var _post_id: String!
@@ -32,6 +35,25 @@ class CommentModel {
     fileprivate var _IsNoti: Bool!
     var _is_pinned: Bool!
     
+    var comment_avatarUrl: String! {
+        get {
+            if _comment_avatarUrl == nil {
+                _comment_avatarUrl = ""
+            }
+            return _comment_avatarUrl
+        }
+        
+    }
+    
+    var comment_username: String! {
+        get {
+            if _comment_username == nil {
+                _comment_username = ""
+            }
+            return _comment_username
+        }
+        
+    }
     
     var createdAt: Date! {
         get {
@@ -230,6 +252,17 @@ class CommentModel {
         
         self._comment_id = postKey
         
+        if let comment_avatarUrl = Comment_model["comment_avatarUrl"] as? String {
+            self._comment_avatarUrl = comment_avatarUrl
+        }
+        
+        if let comment_username = Comment_model["comment_username"] as? String {
+            self._comment_username = comment_username
+        }
+        
+        if let reply_to_username = Comment_model["reply_to_username"] as? String {
+            self._reply_to_username = reply_to_username
+        }
         
         if let reply_to_cid = Comment_model["reply_to_cid"] as? String {
             self._reply_to_cid = reply_to_cid
@@ -243,11 +276,11 @@ class CommentModel {
             self._text = text
         }
         
-        if let post_id = Comment_model["post_id"] as? String {
+        if let post_id = Comment_model["postId"] as? String {
             self._post_id = post_id
         }
         
-        if let root_id = Comment_model["root_id"] as? String {
+        if let root_id = Comment_model["parentId"] as? String {
             self._root_id = root_id
         }
         
@@ -267,21 +300,27 @@ class CommentModel {
             self._is_title = is_title
         }
         
-        if let IsNoti = Comment_model["IsNoti"] as? Bool {
-            self._IsNoti = IsNoti
-        }
-        
-        if let number_of_reply = Comment_model["number_of_reply"] as? Int {
-            self._number_of_reply = number_of_reply
-        }
-        
-        
+    
         if let reply_to = Comment_model["reply_to"] as? String {
             self._reply_to = reply_to
         }
         
         if let owner_uid = Comment_model["owner_uid"] as? String {
             self._owner_uid = owner_uid
+        }
+        
+        if let createdAt = Comment_model["createdAt"] as? Date {
+            self._createdAt = createdAt
+        }
+        
+        
+        if let updatedAt = Comment_model["updatedAt"] as? Date {
+            self._updatedAt = updatedAt
+        }
+        
+        
+        if let last_modified = Comment_model["last_modified"] as? Date {
+            self._last_modified = last_modified
         }
         
 

@@ -33,7 +33,7 @@
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XTn-4C-h0H">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
-                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="Background"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="3F6-xZ-FrI"/>
                     </constraints>

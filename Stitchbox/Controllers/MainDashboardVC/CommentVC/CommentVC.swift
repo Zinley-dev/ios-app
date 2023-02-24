@@ -207,6 +207,19 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         
     }
+    
+    @IBAction func sendCommentBtnPressed(_ sender: Any) {
+        
+        if let text = self.cmtTxtView.text, text != "", isSending == false {
+            
+            isSending = true
+            
+            self.sendCommentBtn()
+            
+        }
+        
+        
+    }
 
 }
 
@@ -392,16 +405,20 @@ extension CommentVC {
     
     func setupTableNode() {
         
+       
         self.tableNode = ASTableNode(style: .plain)
+        tView.addSubview(tableNode.view)
         self.applyStyle()
         self.tableNode.leadingScreensForBatching = 20
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
+        self.tableNode.view.backgroundColor = self.view.backgroundColor
         
     }
     
     func setupPlaceholder() {
         
+        cmtTxtView.delegate = self
         placeholderLabel = UILabel()
         placeholderLabel.text = "Add comment..."
         placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
@@ -549,7 +566,7 @@ extension CommentVC {
                 }
                 
                 
-                if uid == self.post.userUID {
+                if uid == self.post.owner?.id {
                     
                     if CommentList[indexPath.row].is_title == false {
                         
@@ -669,26 +686,26 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        let post = self.CommentList[indexPath.row]
+        let comment = self.CommentList[indexPath.row]
         
-        return makeCommentNodeBlock(with: post, indexPath: indexPath)
+        return makeCommentNodeBlock(with: comment, indexPath: indexPath)
     }
 
-    private func makeCommentNodeBlock(with post: CommentModel, indexPath: IndexPath) -> ASCellNodeBlock {
+    private func makeCommentNodeBlock(with comment: CommentModel, indexPath: IndexPath) -> ASCellNodeBlock {
         let nodeBlock: ASCellNodeBlock = {
-            let node = CommentNode(with: post)
+            let node = CommentNode(with: comment)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
             node.replyBtn = { (node) in
             
-                self.handleReply(for: post, indexPath: indexPath)
+                self.handleReply(for: comment, indexPath: indexPath)
             }
             
             
             node.reply = { (nodes) in
                 
-                self.handleReplyBtn(for: post, commentNode: node, indexPath: indexPath)
+                self.handleReplyBtn(for: comment, commentNode: node, indexPath: indexPath)
             }
             
 
@@ -699,47 +716,47 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
     }
 
 
-    private func handleReplyBtn(for post: CommentModel, commentNode: CommentNode?, indexPath: IndexPath) {
+    private func handleReplyBtn(for comment: CommentModel, commentNode: CommentNode?, indexPath: IndexPath) {
         guard commentNode != nil else {
             return
         }
 
         // Update previous comment id
-        if self.prev_id != post.comment_id {
-            self.prev_id = post.comment_id
+        if self.prev_id != comment.comment_id {
+            self.prev_id = comment.comment_id
         }
 
-        let isRootComment = post.root_id == "nil"
-        let hasReply = post.has_reply
+        let isRootComment = comment.root_id == "nil"
+        let hasReply = comment.has_reply
 
         // Prepare data for the new comment
         var newDict: [String: Any] = [
-            "Comment_uid": post.comment_uid!,
-            "createdAt": post.createdAt!,
-            "text": post.text!,
+            "Comment_uid": comment.comment_uid!,
+            "createdAt": comment.createdAt!,
+            "text": comment.text!,
             "isReply": !isRootComment,
-            "post_id": post.post_id!,
-            "root_id": isRootComment ? post.comment_id! : post.root_id!,
+            "post_id": comment.post_id!,
+            "root_id": isRootComment ? comment.comment_id! : comment.root_id!,
             "has_reply": false,
-            "reply_to": post.reply_to!,
-            "is_title": post.is_title ?? false,
-            "owner_uid": post.owner_uid!
+            "reply_to": comment.reply_to!,
+            "is_title": comment.is_title ?? false,
+            "owner_uid": comment.owner_uid!
         ]
 
-        if let updatedAt = post.updatedAt {
+        if let updatedAt = comment.updatedAt {
             newDict["updatedAt"] = updatedAt
         } else {
             newDict["updatedAt"] = Date()
         }
 
-        if let lastModified = post.last_modified {
+        if let lastModified = comment.last_modified {
             newDict["last_modified"] = lastModified
         } else {
             newDict["last_modified"] = Date()
         }
 
         // Update comment list with the new comment
-        let newComment = CommentModel(postKey: post.comment_id, Comment_model: newDict)
+        let newComment = CommentModel(postKey: comment.comment_id, Comment_model: newDict)
         self.CommentList[indexPath.row] = newComment
 
         // Update the corresponding row in the table view
@@ -749,13 +766,13 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
         self.tableNode.performBatchUpdates({
             if hasReply! {
                 // Update existing reply
-                let newIndex = self.findIndexForRootCmt(post: post)
+                let newIndex = self.findIndexForRootCmt(post: comment)
                 let newPost = self.CommentList[newIndex]
 
                 self.loadReplied(item: newPost, indexex: indexPath.row, root_index: newIndex)
             } else {
                 // Create new reply
-                self.loadReplied(item: post, indexex: indexPath.row, root_index: indexPath.row)
+                self.loadReplied(item: comment, indexex: indexPath.row, root_index: indexPath.row)
             }
 
             self.tableNode.reloadRows(at: indexPaths, with: animation)
@@ -763,11 +780,11 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
     }
 
 
-    private func handleReply(for post: CommentModel, indexPath: IndexPath) {
+    private func handleReply(for comment: CommentModel, indexPath: IndexPath) {
         // Handle reply submitted
         // ...
         
-        self.ReplyBtn(item: post)
+        self.ReplyBtn(item: comment)
     }
 
     
@@ -776,7 +793,7 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
 extension CommentVC {
     
     func retrieveNextPageWithCompletion( block: @escaping ([[String: Any]]) -> Void) {
-        
+        print(post.id, cmtPage)
         APIManager().getComment(postId: post.id, page: cmtPage) { result in
                 switch result {
                 case .success(let apiResponse):
@@ -861,16 +878,24 @@ extension CommentVC {
     
     func ReplyBtn(item: CommentModel){
         
-        
         let cIndex = findCommentIndex(item: item)
-        
         
         if cIndex != -1 {
             
             cmtTxtView.becomeFirstResponder()
             
-            if let uid = CommentList[cIndex].comment_uid {
-                //getuserName(uid: uid)
+            if CommentList[cIndex].comment_uid != "" {
+                
+                let paragraphStyles = NSMutableParagraphStyle()
+                paragraphStyles.alignment = .left
+            
+                if let username = CommentList[cIndex].comment_username {
+                    
+                
+                    self.placeholderLabel.text = "Reply to @\(username)"
+                    
+                    
+                }
                 
             } else{
                 placeholderLabel.text = "Reply to @Undefined"
@@ -919,131 +944,191 @@ extension CommentVC {
 extension CommentVC {
     
     func loadReplied(item: CommentModel, indexex: Int, root_index: Int) {
-        
-        if let item_id = item.comment_id {
-            
-            /*
-            let db = DataService.instance.mainFireStoreRef
-            
-         
-            if item.lastCmtSnapshot == nil {
-                
-              
-                CmtQuery = db.collection("Comments").whereField("isReply", isEqualTo: true).whereField("is_title", isEqualTo: false).whereField("cmt_status", isEqualTo: "valid").whereField("root_id", isEqualTo: item_id).order(by: "timeStamp", descending: false).limit(to: 5)
-                
-                
-            } else {
-                
-                CmtQuery = db.collection("Comments").whereField("isReply", isEqualTo: true).whereField("is_title", isEqualTo: false).whereField("cmt_status", isEqualTo: "valid").whereField("root_id", isEqualTo: item_id).order(by: "timeStamp", descending: false).limit(to: 5).start(afterDocument: item.lastCmtSnapshot)
-            }
-       
-            CmtQuery.getDocuments {  querySnapshot, error in
-                guard let snapshot = querySnapshot else {
-                    print("Error fetching snapshots: \(error!)")
-                    return
-                }
-                
-                guard snapshot.count > 0 else {
-                    return
-                }
-                
-                
-                var actualPost = [QueryDocumentSnapshot]()
-                
-                for item in snapshot.documents {
-                    
-                    let check = CommentModel(postKey: item.documentID, Comment_model: item.data())
-                    
-                    
-                    if self.checkduplicateLoading(post: check) == false {
-                                        
-                        actualPost.append(item)
-                        
-                    }
-                    
-                    
-                }
-                
-                if actualPost.isEmpty != true {
-                    
-                    
-                    let section = 0
-                    var indexPaths: [IndexPath] = []
-
-                    var last = 0
-                    var start = indexex + 1
-                    
-                    
-                    
-                    for row in start...actualPost.count + start - 1 {
-                        
-                        let path = IndexPath(row: row, section: section)
-                        indexPaths.append(path)
-                        
-                        last = row
-                        
-                    }
-                    
-                    
-                    
-                    for item in actualPost {
-                        
-                        var updatedItem = item.data()
-                        
-                        if item == actualPost.last {
-                            
-                            
-                            updatedItem.updateValue(true, forKey: "has_reply")
-                            
-                        }
-                        
-                        
-                        let items = CommentModel(postKey: item.documentID, Comment_model: updatedItem)
-         
-                        self.CommentList.insert(items, at: start)
-                        
-                        
-                        if item == snapshot.documents.last {
-                            
-                            self.CommentList[start].lastCmtSnapshot = actualPost.last
-                            
-                        }
-                        
-                        start += 1
-                        
-                    }
-                    
-                    self.tableNode.insertRows(at: indexPaths,with: .none)
-                    
-                    self.CommentList[root_index].lastCmtSnapshot = actualPost.last
-                    
-                    
-                    var updatePath: [IndexPath] = []
-                    
-                    for row in indexex + 1 ... self.CommentList.count - 1 {
-                        let path = IndexPath(row: row, section: 0)
-                        updatePath.append(path)
-                    }
-                    
-                    
-                    self.tableNode.reloadRows(at: updatePath, with: .automatic)
-                    
-                    
-                    self.tableNode.scrollToRow(at: IndexPath(row: last, section: 0), at: .bottom, animated: true)
-                    
-                        
-                    
-                }
-            
-                
-            }
-            
-             */
+        guard let commentId = item.comment_id else {
+            // If the comment ID is nil, return early
+            return
         }
         
+        if item.lastCmtSnapshot == nil {
+            item.lastCmtSnapshot = 0
+        }
         
+        APIManager().getReply(for: commentId, page: item.lastCmtSnapshot) { result in
+            switch result {
+            case .success(let apiResponse):
+                guard apiResponse.body?["message"] as? String == "success",
+                      let replyData = apiResponse.body?["data"] as? [[String:Any]],
+                      !replyData.isEmpty else {
+                    // If the API response is not successful or the reply data is empty, return early
+                    return
+                }
+                
+                // Filter out any reply data that has already been loaded
+                let newReplyData = replyData.filter { reply in
+                    let postId = reply["postId"] as! String
+                    let newReplyModel = CommentModel(postKey: postId, Comment_model: reply)
+                    return !self.checkDuplicateLoading(post: newReplyModel)
+                }
+                
+                guard !newReplyData.isEmpty else {
+                    // If there is no new reply data to load, return early
+                    return
+                }
+                
+                let indexPaths = (start: indexex + 1, end: indexex + newReplyData.count)
+                
+                // Map the new reply data to an array of CommentModel instances and insert them into the CommentList array
+                let newReplyModels = newReplyData.map { reply in
+                    let postId = reply["postId"] as! String
+                    return CommentModel(postKey: postId, Comment_model: reply)
+                }
+                self.CommentList.insert(contentsOf: newReplyModels, at: indexPaths.start)
+                
+                // Update the lastCmtSnapshot property of the first and last CommentModel instances in the CommentList array
+                self.CommentList[root_index].lastCmtSnapshot += 1
+                
+                // Update the table view with the new rows and reload existing rows
+                let insertIndexPaths = (indexPaths.start...indexPaths.end).map { IndexPath(row: $0, section: 0) }
+                let reloadIndexPaths = ((indexex + 1)...self.CommentList.count - 1).map { IndexPath(row: $0, section: 0) }
+                self.tableNode.performBatchUpdates({
+                    self.tableNode.insertRows(at: insertIndexPaths, with: .none)
+                    self.tableNode.reloadRows(at: reloadIndexPaths, with: .automatic)
+                }, completion: nil)
+                
+                // Scroll the table view to the last row of the new rows
+                let lastIndexPath = IndexPath(row: indexPaths.end, section: 0)
+                self.tableNode.scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
+                
+            case .failure(let error):
+                print("CmtCount: \(error)")
+            }
+        }
     }
+
     
+    func sendCommentBtn() {
+        // Check condition here
+
+        guard let commentText = cmtTxtView.text, !commentText.isEmpty else {
+            return
+        }
+        
+        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
+            print("Can't get userUID")
+            return
+        }
+
+        // Append values to mention_list array
+        uid_dict.values.forEach {
+            if !mention_list.contains($0) {
+                mention_list.append($0)
+            }
+        }
+
+        var data = ["text": commentText, "parentId": root_id ?? "", "postId": post.id] as [String : Any]
+
+        if let replyToCID = reply_to_cid {
+            data.updateValue(replyToCID, forKey: "reply_to_cid")
+        }
+
+        // Call the API to create a comment
+        APIManager().createComment(params: data) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                guard apiResponse.body?["message"] as? String == "success" else {
+                    return
+                }
+                
+                var isReply: Bool?
+                
+                if self.root_id != nil {
+                    isReply = true
+                } else {
+                    isReply = false
+                }
+                
+                let update = ["owner_uid": self.post.owner?.id ?? "", "comment_id": "id", "comment_uid": userUID, "comment_avatarUrl": userDataSource.avatarURL, "comment_username": userDataSource.userName ?? "", "isReply": isReply!, "has_reply": false, "createdAt": Date(), "updatedAt": Date(), "last_modified": Date(), "reply_to_username": "defaults", "is_pinned": false]
+                
+                if self.reply_to_cid != nil {
+                    
+                    data.updateValue(self.reply_to_cid!, forKey: "reply_to_cid")
+                    data.updateValue(self.reply_to_uid!, forKey: "reply_to")
+                    
+                }
+                
+                data.merge(dict: update)
+                
+                // Insert the comment into the CommentList array and the corresponding row into tableNode
+                let item = CommentModel(postKey: "id", Comment_model: data)
+                let start: Int
+                
+                
+                
+                if let index = self.index {
+                    start = index + 1
+                    self.CommentList.insert(item, at: start)
+                    
+                    DispatchQueue.main.async {
+                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
+                        self.tableNode.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
+                    }
+                   
+                } else {
+                    if self.CommentList.isEmpty || !self.CommentList[0].is_title {
+                        start = 0
+                    } else {
+                        start = 1
+                    }
+                    
+                    self.CommentList.insert(item, at: start)
+                    
+                    DispatchQueue.main.async {
+                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
+                        self.tableNode.scrollToRow(at: IndexPath(row: start, section: 0), at: .top, animated: true)
+                    }
+                    
+                }
+                
+                // Reload rows in tableNode
+                let updatePath = (start ..< self.CommentList.count).map { IndexPath(row: $0, section: 0) }
+                DispatchQueue.main.async {
+                    self.tableNode.reloadRows(at: updatePath, with: .automatic)
+                }
+                
+
+                // Update UI elements
+                self.calculateToTalCmt()
+
+                self.root_id = nil
+                self.reply_to_uid = nil
+                self.reply_to_cid = nil
+                self.index = nil
+                self.isSending = false
+                
+                // Clear arrays and UI elements
+                self.uid_dict.removeAll()
+                self.mention_list.removeAll()
+                self.hashtag_arr.removeAll()
+                self.mention_arr.removeAll()
+                
+                DispatchQueue.main.async {
+                    showNote(text: "Comment sent!")
+                    self.searchResultContainerView.isHidden = true
+                    self.cmtTxtView.text = ""
+                    self.placeholderLabel.isHidden = !self.cmtTxtView.text.isEmpty
+                    self.cmtTxtView.resignFirstResponder()
+                }
+                
+            
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                }
+            }
+        }
+    }
     
 }
 
@@ -1179,63 +1264,69 @@ extension CommentVC {
     
     func pinCmt(items: CommentModel, indexPath: Int) {
         
-        /*
-        let db = DataService.instance.mainFireStoreRef.collection("Comments")
-        
-        if items.Comment_id != "nil" {
-            
-            db.document(items.Comment_id).updateData(["is_pinned": true, "update_timestamp": FieldValue.serverTimestamp()]) { (err) in
-                if err != nil {
+        APIManager().pinComment(commentId: items.comment_id) { result in
+            switch result {
+            case .success(let apiResponse):
+                guard apiResponse.body?["message"] as? String == "success" else {
                     
-                    self.showErrorAlert("Ops!", msg: err!.localizedDescription)
-                    
-                } else {
-                    
+                    DispatchQueue.main.async {
+                        self.showErrorAlert("Ops !", msg: "Unable to pin this comment right now, please try again.")
+                    }
+                    return
+                }
+                
+                
+                DispatchQueue.main.async {
                     
                     self.CommentList[indexPath]._is_pinned = true
                     self.tableNode.reloadRows(at: [IndexPath(row: indexPath, section: 0)], with: .automatic)
-                    
-                    
+                
+                }
+                
+               
+            case .failure(let error):
+                print(error)
+                
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Ops !", msg: "Unable to pin this comment right now, please try again.")
                 }
             }
-            
-        } else {
-            
-            self.showErrorAlert("Ops !", msg: "Unable to pin this comment right now, please try again.")
-            
-            
-        } */
+        }
+        
     }
     
     
     func unPinCmt(items: CommentModel, indexPath: Int) {
         
-        /*
-        let db = DataService.instance.mainFireStoreRef.collection("Comments")
-        
-        if items.Comment_id != "nil" {
-            
-            db.document(items.Comment_id).updateData(["is_pinned": false, "update_timestamp": FieldValue.serverTimestamp()]) { (err) in
-                if err != nil {
+        APIManager().unpinComment(commentId: items.comment_id) { result in
+            switch result {
+            case .success(let apiResponse):
+                guard apiResponse.body?["message"] as? String == "success" else {
                     
-                    self.showErrorAlert("Ops!", msg: err!.localizedDescription)
-                    
-                } else {
+                    DispatchQueue.main.async {
+                        self.showErrorAlert("Ops !", msg: "Unable to unpin this comment right now, please try again.")
+                    }
+                    return
+                }
+                
+                
+                DispatchQueue.main.async {
                     
                     self.CommentList[indexPath]._is_pinned = false
                     self.tableNode.reloadRows(at: [IndexPath(row: indexPath, section: 0)], with: .automatic)
-                    
+                
+                }
+                
+               
+            case .failure(let error):
+                print(error)
+                
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Ops !", msg: "Unable to unpin this comment right now, please try again.")
                 }
             }
-            
-        } else {
-            
-            self.showErrorAlert("Ops !", msg: "Unable to unpin this comment right now, please try again.")
-            
-            
         }
-        */
-        
+    
     }
     
     
@@ -1295,5 +1386,7 @@ extension CommentVC {
         CommentList.removeSubrange(start..<start+indexPaths.count)
         tableNode.deleteRows(at: indexPaths, with: .automatic)
     }
+    
+
     
 }
