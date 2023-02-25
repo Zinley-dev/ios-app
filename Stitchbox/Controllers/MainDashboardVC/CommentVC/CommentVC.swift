@@ -340,7 +340,7 @@ extension CommentVC {
     func loadCommentTitle() {
         
         loadPinnedPost()
-        
+    
     }
     
     func loadPinnedPost() {

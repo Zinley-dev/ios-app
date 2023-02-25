@@ -268,20 +268,47 @@ class CommentNode: ASCellNode {
         //userNameNode
         userNameNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
         avatarNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
-        
-         
-        
+          
     }
     
     @objc func replyToBtnPressed() {
         
-     
-        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: UPVC)
+                
+                UPVC.userId = post.reply_to
+                UPVC.nickname = post.reply_to_username
+                UPVC.onPresent = true
+                nav.modalPresentationStyle = .fullScreen
+                nav.navigationItem.titleView?.tintColor = .white
+                nav.navigationBar.tintColor = .background
+                vc.present(nav, animated: true, completion: nil)
+       
+            }
+        }
     }
     
     @objc func usernameBtnPressed() {
         
-        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: UPVC)
+                
+                UPVC.userId = post.comment_uid
+                UPVC.nickname = post.comment_username
+                UPVC.onPresent = true
+                nav.modalPresentationStyle = .fullScreen
+                nav.navigationItem.titleView?.tintColor = .white
+                nav.navigationBar.tintColor = .background
+                vc.present(nav, animated: true, completion: nil)
+                
+            }
+        }
        
         
     }
