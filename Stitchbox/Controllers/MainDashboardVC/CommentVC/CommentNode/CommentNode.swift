@@ -254,7 +254,7 @@ class CommentNode: ASCellNode {
         }
         
         
-        checkLikeCmt(id: self.post.comment_id)
+        checkLikeCmt()
         
         
         //
@@ -311,8 +311,27 @@ class CommentNode: ASCellNode {
     }
  
     
-    func checkLikeCmt(id: String) {
+    func checkLikeCmt() {
         
+        APIManager().islike(comment: post.comment_id) { result in
+            
+            switch result {
+            case .success(let apiResponse):
+    
+                print(apiResponse)
+                
+                guard apiResponse.body?["message"] as? String == "success",
+                      let checkIsLike = apiResponse.body?["islike"] as? Bool  else {
+                        return
+                }
+                
+                
+                
+            case .failure(let error):
+                print(error)
+            }
+        
+        }
 
     }
     
