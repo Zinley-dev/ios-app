@@ -577,7 +577,7 @@ extension PostAPI: EndPointType {
             case .getMyPost:
               return .get
           case .lastSetting:
-              .get
+              return .get
         }
     }
     
@@ -590,7 +590,7 @@ extension PostAPI: EndPointType {
             case .getMyPost:
                 return .request
           case .lastSetting:
-              .request
+              return .request
         }
     }
     
