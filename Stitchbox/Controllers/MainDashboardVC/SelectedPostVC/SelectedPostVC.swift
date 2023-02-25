@@ -39,7 +39,6 @@ class SelectedPostVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupButtons()
-        navigationController?.hidesBarsOnSwipe = true
         setupCollectionNode()
         loadPosts()
         
@@ -49,8 +48,8 @@ class SelectedPostVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickCopyLink), name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
-       
         
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -130,12 +129,7 @@ extension SelectedPostVC {
         if !isfirstLoad {
             
             guard let cell = node as? PostNode else { return }
-          
-            if cell.indexPath?.row == 0 ||  cell.indexPath?.row == 1 {
-                self.navigationController?.setNavigationBarHidden(false, animated: true)
-            }
-            
-            
+        
             willIndex = cell.indexPath?.row
             
         }
