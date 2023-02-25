@@ -548,6 +548,7 @@ public enum PostAPI {
     case create(params: [String: Any])
     case update(params: [String: Any])
     case getMyPost(page: Int)
+    case lastSetting
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -562,6 +563,8 @@ extension PostAPI: EndPointType {
                 return "/\(params["id"] ?? "")"
             case .getMyPost(let page):
                 return "/me?page=\(page)&limit=10"
+          case .lastSetting:
+            return "/last-setting"
         }
     }
     
@@ -573,6 +576,8 @@ extension PostAPI: EndPointType {
                 return .post
             case .getMyPost:
               return .get
+          case .lastSetting:
+              .get
         }
     }
     
@@ -584,6 +589,8 @@ extension PostAPI: EndPointType {
                 return .requestParameters(parameters: params)
             case .getMyPost:
                 return .request
+          case .lastSetting:
+              .request
         }
     }
     

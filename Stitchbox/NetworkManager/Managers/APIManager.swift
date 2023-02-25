@@ -453,6 +453,11 @@ extension APIManager {
         completion(result)
       }
     }
+    func getLastSettingPost(completion: @escaping APICompletion) {
+      postManager.request(.lastSetting) { result in
+        completion(result)
+      }
+    }
 }
 
 
