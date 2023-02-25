@@ -831,6 +831,7 @@ public enum CommentApi {
   case unlike(commentId: String)
   case getReply(parentId: String, page: Int, limit: Int)
   case getPin(postId: String)
+  case getTitle(postId: String)
   case pin(commentId: String)
   case unpin(commentId: String)
 }
@@ -859,6 +860,8 @@ extension CommentApi: EndPointType {
         return "/\(parentId)/reply?page=\(page)&limit=\(limit)"
         case .getPin(let postId):
         return "/\(postId)/pined"
+      case .getTitle(let postId):
+        return "/\(postId)/title"
       case .pin(let commentId):
         return "/\(commentId)/pin"
       case .unpin(let commentId):
@@ -894,6 +897,8 @@ extension CommentApi: EndPointType {
         return .get
         case .getPin:
             return .get
+      case .getTitle:
+        return .get
       case .pin:
         return .post
       case .unpin:
@@ -925,6 +930,8 @@ extension CommentApi: EndPointType {
         return .request
         case .getPin:
             return .request
+      case .getTitle:
+        return .request
     case .pin:
         return .request
     case .unpin:
