@@ -70,6 +70,7 @@ class PostVC: UIViewController {
         setupScrollView()
         setupTextView()
         setupGesture()
+        loadPreviousSetting()
         
     }
     
@@ -243,6 +244,22 @@ class PostVC: UIViewController {
 }
 
 extension PostVC {
+    
+    func loadPreviousSetting() {
+        
+        APIManager().getLastSettingPost { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+            
+
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+    }
     
     
     func uploadImage() {
