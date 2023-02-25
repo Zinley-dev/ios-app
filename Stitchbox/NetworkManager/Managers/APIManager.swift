@@ -453,6 +453,11 @@ extension APIManager {
         completion(result)
       }
     }
+    func getLastSettingPost(completion: @escaping APICompletion) {
+      postManager.request(.lastSetting) { result in
+        completion(result)
+      }
+    }
 }
 
 
@@ -511,6 +516,11 @@ extension APIManager {
       completion(result)
     }
   }
+    func countLike(comment commentId: String, completion: @escaping APICompletion) {
+        commentManager.request(.countLike(commentId: commentId)) { result in
+            completion(result)
+        }
+    }
   func unlike(comment commentId: String, completion: @escaping APICompletion) {
     commentManager.request(.unlike(commentId: commentId)) { result in
       completion(result)
@@ -523,6 +533,11 @@ extension APIManager {
   }
     func getReply(for commentId: String, page: Int = 1, completion: @escaping APICompletion) {
         commentManager.request(.getReply(parentId: commentId, page: page, limit: 10)) { result in
+            completion(result)
+        }
+    }
+    func getPinComment(postId: String, completion: @escaping APICompletion) {
+        commentManager.request(.getPin(postId: postId)) { result in
             completion(result)
         }
     }

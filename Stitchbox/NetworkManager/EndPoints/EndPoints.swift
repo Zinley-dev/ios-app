@@ -548,6 +548,7 @@ public enum PostAPI {
     case create(params: [String: Any])
     case update(params: [String: Any])
     case getMyPost(page: Int)
+    case lastSetting
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -562,6 +563,8 @@ extension PostAPI: EndPointType {
                 return "/\(params["id"] ?? "")"
             case .getMyPost(let page):
                 return "/me?page=\(page)&limit=10"
+          case .lastSetting:
+            return "/last-setting"
         }
     }
     
@@ -573,6 +576,8 @@ extension PostAPI: EndPointType {
                 return .post
             case .getMyPost:
               return .get
+          case .lastSetting:
+              .get
         }
     }
     
@@ -584,6 +589,8 @@ extension PostAPI: EndPointType {
                 return .requestParameters(parameters: params)
             case .getMyPost:
                 return .request
+          case .lastSetting:
+              .request
         }
     }
     
@@ -820,8 +827,10 @@ public enum CommentApi {
   case delete(commentId: String)
   case like(commentId: String)
   case islike(commentId: String)
+  case countLike(commentId: String)
   case unlike(commentId: String)
   case getReply(parentId: String, page: Int, limit: Int)
+  case getPin(postId: String)
   case pin(commentId: String)
   case unpin(commentId: String)
 }
@@ -840,12 +849,16 @@ extension CommentApi: EndPointType {
         return "/\(commentId)"
       case .like(let commentId):
         return "/\(commentId)/like"
-      case .islike(let commentId):
+      case .countLike(let commentId):
         return "/\(commentId)/like"
+      case .islike(let commentId):
+        return "/\(commentId)/is-like"
       case .unlike(let commentId):
         return "/\(commentId)/like"
       case .getReply(let parentId, let page, let limit):
         return "/\(parentId)/reply?page=\(page)&limit=\(limit)"
+        case .getPin(let postId):
+        return "/\(postId)/pined"
       case .pin(let commentId):
         return "/\(commentId)/pin"
       case .unpin(let commentId):
@@ -871,12 +884,16 @@ extension CommentApi: EndPointType {
         return .delete
       case .like:
         return .post
+        case .countLike:
+            return .get
       case .islike:
         return .get
       case .unlike:
         return .delete
       case .getReply:
         return .get
+        case .getPin:
+            return .get
       case .pin:
         return .post
       case .unpin:
@@ -898,12 +915,16 @@ extension CommentApi: EndPointType {
         return .request
       case .like:
         return .request
+        case .countLike:
+            return .request
       case .islike:
         return .request
       case .unlike:
         return .request
     case .getReply:
         return .request
+        case .getPin:
+            return .request
     case .pin:
         return .request
     case .unpin:
