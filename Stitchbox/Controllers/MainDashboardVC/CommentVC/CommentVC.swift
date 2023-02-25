@@ -339,8 +339,31 @@ extension CommentVC {
     
     func loadCommentTitle() {
         
-        loadPinnedPost()
-    
+        APIManager().getTitleComment(postId: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+              
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    self.loadPinnedPost()
+                    return
+                }
+                
+                if !data.isEmpty {
+                    for each in data {
+                        let item = CommentModel(postKey: each["_id"] as! String, Comment_model: each)
+                        self.CommentList.insert(item, at: 0)
+                    }
+                    self.loadPinnedPost()
+                } else {
+                    
+                    self.loadPinnedPost()
+                }
+            case .failure(let error):
+                print(error)
+                self.loadPinnedPost()
+          }
+      }
+        
     }
     
     func loadPinnedPost() {
@@ -348,7 +371,7 @@ extension CommentVC {
         APIManager().getPinComment(postId: post.id) { result in
             switch result {
             case .success(let apiResponse):
-              
+                
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     self.wireDelegates()
                     return
@@ -386,7 +409,7 @@ extension CommentVC {
         DispatchQueue.main.async {
             self.tableNode.reloadData()
         }
-        delay(1.25) {
+        delay(0.5) {
             
             UIView.animate(withDuration: 0.5) {
                 
