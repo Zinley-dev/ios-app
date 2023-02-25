@@ -536,6 +536,11 @@ extension APIManager {
             completion(result)
         }
     }
+  func getTitleComment(postId: String, completion: @escaping APICompletion) {
+    commentManager.request(.getTitle(postId: postId)) { result in
+      completion(result)
+    }
+  }
     func getPinComment(postId: String, completion: @escaping APICompletion) {
         commentManager.request(.getPin(postId: postId)) { result in
             completion(result)
