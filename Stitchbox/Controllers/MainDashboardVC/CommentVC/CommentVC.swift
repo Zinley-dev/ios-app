@@ -221,6 +221,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
     }
 
+
 }
 
 extension CommentVC {
@@ -344,7 +345,30 @@ extension CommentVC {
     
     func loadPinnedPost() {
         
-        wireDelegates()
+        APIManager().getPinComment(postId: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+              
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    self.wireDelegates()
+                    return
+                }
+                
+                if !data.isEmpty {
+                    for each in data {
+                        let item = CommentModel(postKey: each["_id"] as! String, Comment_model: each)
+                        self.CommentList.append(item)
+                    }
+                    self.wireDelegates()
+                } else {
+                    
+                    self.wireDelegates()
+                }
+            case .failure(let error):
+                print(error)
+                self.wireDelegates()
+          }
+      }
         
     }
     
@@ -359,14 +383,17 @@ extension CommentVC {
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
         
-        self.tableNode.reloadData()
-        
-        delay(1) {
+        DispatchQueue.main.async {
+            self.tableNode.reloadData()
+        }
+        delay(1.25) {
             
             UIView.animate(withDuration: 0.5) {
                 
-                self.loadingView.alpha = 0
-                
+                DispatchQueue.main.async {
+                    self.loadingView.alpha = 0
+                }
+            
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {

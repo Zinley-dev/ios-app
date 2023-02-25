@@ -446,7 +446,7 @@ extension PostNode {
         
         let imgView = UIImageView()
         imgView.image = UIImage(named: "likePopUp")
-        imgView.frame.size = CGSize(width: 70, height: 70)
+        imgView.frame.size = CGSize(width: 120, height: 120)
        
         if let vc = UIViewController.currentViewController() {
              
@@ -485,8 +485,6 @@ extension PostNode {
         
         if isLike == false {
             performLike()
-        } else {
-            performUnLike()
         }
         
     }
@@ -506,7 +504,11 @@ extension PostNode {
                 self.isLike = checkIsLike
                 if self.isLike {
                     DispatchQueue.main.async {
-                        self.buttonsView.likeBtn.setImage(UIImage(named: "liked"), for: .normal)
+                        self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
                     }
                 }
                 
@@ -561,7 +563,7 @@ extension PostNode {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "liked"), for: .normal)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {
@@ -575,7 +577,7 @@ extension PostNode {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty"), for: .normal)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {

@@ -36,6 +36,7 @@ class CommentNode: ASCellNode {
     let selectedColor = UIColor(red: 248/255, green: 189/255, blue: 91/255, alpha: 1.0)
     var replyBtn : ((ASCellNode) -> Void)?
     var reply : ((ASCellNode) -> Void)?
+    var isLiked = false
    
     
     var like : ((ASCellNode) -> Void)?
@@ -219,7 +220,7 @@ class CommentNode: ASCellNode {
         userNameNode.backgroundColor = UIColor.clear
         
         imageView.contentMode = .scaleAspectFit
-        imageView.frame = CGRect(x: 5.2, y: 2, width: 20, height: 20)
+        imageView.frame = CGRect(x: 5.2, y: 2, width: 25, height: 25)
     
     
         textNode.isLayerBacked = true
@@ -255,7 +256,7 @@ class CommentNode: ASCellNode {
         
         
         checkLikeCmt()
-        
+        cmtCount()
         
         //
         
@@ -288,28 +289,13 @@ class CommentNode: ASCellNode {
     
     @objc func LikedBtnPressed(sender: AnyObject!) {
   
- 
-        
+        if isLiked {
+            unlikeComment()
+        } else {
+            likeComment()
+        }
+
     }
-    
-    func updateLikeActivtyLog() {
-        
-   
-        
-        
-        
-    }
-    
-    func unlikePerform(id: String) {
-        
-  
-        
-    }
-    
-    func likePerform() {
-  
-    }
- 
     
     func checkLikeCmt() {
         
@@ -317,17 +303,36 @@ class CommentNode: ASCellNode {
             
             switch result {
             case .success(let apiResponse):
-    
-                print(apiResponse)
-                
                 guard apiResponse.body?["message"] as? String == "success",
-                      let checkIsLike = apiResponse.body?["islike"] as? Bool  else {
+                      let checkIsLike = apiResponse.body?["liked"] as? Bool  else {
                         return
                 }
                 
+                self.isLiked = checkIsLike
+                
+                if checkIsLike {
+                    
+                    DispatchQueue.main.async {
+                        self.imageView.image = UIImage(named: "liked")
+                    }
+                    
+                    
+                    
+                   
+            
+                } else {
+                    
+                    DispatchQueue.main.async {
+                        self.imageView.image = UIImage(named: "likeEmpty")
+                    }
+            
+                }
                 
                 
             case .failure(let error):
+                DispatchQueue.main.async {
+                    self.imageView.image = UIImage(named: "likeEmpty")
+                }
                 print(error)
             }
         
@@ -335,6 +340,44 @@ class CommentNode: ASCellNode {
 
     }
     
+    
+    func cmtCount() {
+        
+        APIManager().countLike(comment: post.comment_id) { result in
+            
+            switch result {
+            case .success(let apiResponse):
+    
+                print(apiResponse)
+                
+                guard apiResponse.body?["message"] as? String == "success",
+                      let likeCount = apiResponse.body?["liked"] as? Int  else {
+                        return
+                }
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = .center
+                
+                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+              
+                
+                self.count = likeCount
+                let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(likeCount)))", attributes: LikeAttributes)
+                
+                
+                DispatchQueue.main.async {
+                    self.textNode.attributedText = like
+                }
+               
+                
+            case .failure(let error):
+                print(error)
+            }
+        
+        }
+        
+        
+    }
     
 
     
@@ -723,26 +766,49 @@ extension CommentNode {
      
     func likeComment() {
         
+        DispatchQueue.main.async {
+            self.imageView.image = UIImage(named: "liked")
+        }
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        
+        let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+        
+       
+        
+        self.count += 1
+        let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
+        DispatchQueue.main.async {
+            self.textNode.attributedText = like
+        }
+        
         APIManager().likeComment(comment: post.comment_id) { result in
             switch result {
             case .success(let apiResponse):
-                
+            
                 print(apiResponse)
+                self.isLiked = true
                 
-                self.imageView.image = UIImage(named: "heart-fill")
+
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.imageView.image = UIImage(named: "likeEmpty")
+                }
                 
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
                 
-                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: self.selectedColor, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
                 
                
                 
-                self.count += 1
+                self.count -= 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-                self.textNode.attributedText = like
-             
-            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.textNode.attributedText = like
+                }
+                
                 print("CmtCount: \(error)")
             }
         }
@@ -753,28 +819,48 @@ extension CommentNode {
     
     func unlikeComment() {
         
+        DispatchQueue.main.async {
+            self.imageView.image = UIImage(named: "likeEmpty")
+        }
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        
+        let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+        
+        self.count -= 1
+        let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
+        
+        DispatchQueue.main.async {
+            self.textNode.attributedText = like
+        }
+        
         APIManager().unlike(comment: post.comment_id) { result in
             switch result {
             case .success(let apiResponse):
                 
                 print(apiResponse)
                 
+                self.isLiked = false
+                
+            case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "Icon ionic-ios-heart-empty")
-                    
-                    let paragraphStyle = NSMutableParagraphStyle()
-                    paragraphStyle.alignment = .center
-                    
-                    let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                    
-                    
-                    
-                    self.count -= 1
-                    let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
+                    self.imageView.image = UIImage(named: "liked")
+                }
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = .center
+                
+                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+                
+               
+                
+                self.count += 1
+                let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
+                DispatchQueue.main.async {
                     self.textNode.attributedText = like
                 }
                 
-            case .failure(let error):
                 print("CmtCount: \(error)")
             }
         }
