@@ -442,8 +442,8 @@ extension APIManager {
       completion(result)
     }
   }
-  func getUserFeed(completion: @escaping APICompletion) {
-    postManager.request(.getUserFeed) { result in
+  func getUserFeed(limit: Int = 5, completion: @escaping APICompletion) {
+    postManager.request(.getUserFeed(limit: limit)) { result in
       completion(result)
     }
   }

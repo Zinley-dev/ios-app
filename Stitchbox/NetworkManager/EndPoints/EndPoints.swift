@@ -546,7 +546,7 @@ extension ContactAPI: EndPointType {
 
 public enum PostAPI {
     case getRecommend
-    case getUserFeed
+    case getUserFeed(limit: Int)
     case getHighTrending
     case create(params: [String: Any])
     case update(params: [String: Any])
@@ -570,8 +570,8 @@ extension PostAPI: EndPointType {
             return "/last-setting"
           case .getRecommend:
             return "/"
-          case .getUserFeed:
-            return "/feed"
+          case .getUserFeed(let limit):
+            return "/feed?limit=\(limit)"
           case .getHighTrending:
             return "/high-trending"
         }
