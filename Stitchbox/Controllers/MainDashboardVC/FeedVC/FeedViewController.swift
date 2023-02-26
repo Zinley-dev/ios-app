@@ -19,21 +19,19 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     var post_list = [PostModel]()
     
-    var willIndex: Int!
-    var endIndex: Int!
-    var currentIndex: Int!
+    var willIndex: Int?
+    var currentIndex: Int = 0
+    var endIndex: Int = 0
     
-    var pageRecommend = 1
-    var pageUserFeed = 1
-    var pageHighTrending = 1
-    
+    var isfirstLoad = true
+    var didScroll = false
 
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var selected_item: PostModel!
     var collectionNode: ASCollectionNode!
     var editeddPost: PostModel?
-   
+    var refresh_request = false
     var startIndex: Int!
    
     
@@ -64,6 +62,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
             collectionNode.view.addSubview(pullControl)
         }
         
+        self.navigationController?.hidesBarsOnSwipe = true
+        
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         
     }
@@ -80,8 +80,70 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
        // self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
   
-        pullControl.endRefreshing()
+        clearAllData()
    
+    }
+    
+    @objc func clearAllData() {
+        
+        refresh_request = true
+        posts.removeAll()
+        endIndex = 0
+        willIndex = nil
+        currentIndex = 0
+        isfirstLoad = true
+        didScroll = false
+        updateData()
+               
+    }
+    
+    
+    func updateData() {
+        isfirstLoad = false
+        self.retrieveNextPageWithCompletion { (newPosts) in
+                
+            if newPosts.count > 0 {
+                        
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+                                 
+            } else {
+              
+                
+                self.refresh_request = false
+                self.posts.removeAll()
+                self.collectionNode.reloadData()
+                
+                if self.posts.isEmpty == true {
+                    
+                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                    
+                 
+                } else {
+                    
+                    self.collectionNode.view.restore()
+                    
+                }
+                
+            }
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+            self.delayItem.perform(after: 0.75) {
+                
+                
+                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                
+             
+                    
+            }
+              
+          
+        }
+        
+        
     }
      
 
@@ -218,57 +280,80 @@ extension FeedViewController {
 extension FeedViewController {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
-        
         guard let cell = node as? PostNode else { return }
-    
         willIndex = cell.indexPath?.row
-    
-      
+        if isfirstLoad {
+            isfirstLoad = false
+            currentIndex = willIndex ?? 0
+            if !posts[currentIndex].muxPlaybackId.isEmpty {
+                playVideoIfNeed(playIndex: currentIndex)
+            }
+        }
+     
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, didEndDisplayingItemWith node: ASCellNode) {
+        // 1. Safely unwrap the indexPath of the cell node.
+        guard let postNode = node as? PostNode, let indexPath = postNode.indexPath else { return }
         
-        
-        guard let cell = node as? PostNode else { return }
-        
-        endIndex = cell.indexPath?.row
-     
-        if posts[endIndex].muxPlaybackId != "" {
-            pausePreviousVideoIfNeed(pauseIndex: endIndex)
-        }
-        
-        if willIndex > endIndex {
-            
-            if posts[endIndex + 1].muxPlaybackId != "" {
-                currentIndex = endIndex + 1
-                playPreviousVideoIfNeed(playIndex: endIndex + 1)
-            }
-             
-        } else if willIndex < endIndex {
-            
-            if endIndex - willIndex <= 2 {
-                
-                if posts[endIndex - 1].muxPlaybackId != "" {
-                    currentIndex = endIndex - 1
-                    playPreviousVideoIfNeed(playIndex: endIndex - 1)
+        let post = posts[indexPath.row]
+        // 2. If the muxPlaybackId property is empty, return immediately.
+        guard !post.muxPlaybackId.isEmpty else {
+            // 3. If the next item is a video, play it.
+            if let willIndex = willIndex, willIndex > indexPath.row {
+                let nextPost = posts[willIndex]
+                if !nextPost.muxPlaybackId.isEmpty {
+                    currentIndex = willIndex
+                    playVideoIfNeed(playIndex: currentIndex)
                 }
-                
-            }
-            
-        
-        } else {
-            
-            if posts.count > willIndex - 1 {
-                if posts[willIndex - 1].muxPlaybackId != "" {
-                    currentIndex = willIndex - 1
-                    playPreviousVideoIfNeed(playIndex: currentIndex)
+            // 4. If the previous item is a video, play it.
+            } else if let willIndex = willIndex, willIndex < indexPath.row {
+                let previousPost = posts[willIndex]
+                if !previousPost.muxPlaybackId.isEmpty {
+                    currentIndex = willIndex
+                    playVideoIfNeed(playIndex: currentIndex)
                 }
             }
-            
-            
+            return
         }
         
+        // 5. Pause the video that was previously playing.
+        pauseVideoIfNeed(pauseIndex: indexPath.row)
         
+        var shouldPlayNextVideo = false
+        var shouldPlayPreviousVideo = false
+        
+        // 6. Check if there is a willIndex value, and if it does not match the current index path.
+        if let willIndex = willIndex, willIndex != indexPath.row {
+            // 7. If the willIndex is greater than the current index path, check if the next post contains a video.
+            if willIndex > indexPath.row && willIndex < posts.count {
+                let nextPost = posts[willIndex]
+                shouldPlayNextVideo = !nextPost.muxPlaybackId.isEmpty
+            // 8. If the willIndex is less than the current index path, check if the previous post contains a video.
+            } else if willIndex < indexPath.row && willIndex >= 0 {
+                let previousPost = posts[willIndex]
+                shouldPlayPreviousVideo = !previousPost.muxPlaybackId.isEmpty
+            }
+        // 9. If there is no willIndex value, check if the next or previous post contains a video based on the first visible index path.
+        } else if let firstVisibleIndexPath = collectionNode.indexPathsForVisibleItems.first {
+            if indexPath.row < firstVisibleIndexPath.row {
+                let previousPost = posts[firstVisibleIndexPath.row]
+                shouldPlayPreviousVideo = !previousPost.muxPlaybackId.isEmpty
+            } else if indexPath.row > firstVisibleIndexPath.row {
+                let nextPost = posts[firstVisibleIndexPath.row]
+                shouldPlayNextVideo = !nextPost.muxPlaybackId.isEmpty
+            }
+        }
+        
+        // 10. If shouldPlayNextVideo is true, play the next video and set the currentIndex variable to the index path of the next post.
+        if shouldPlayNextVideo {
+            currentIndex = indexPath.row + 1
+            playVideoIfNeed(playIndex: currentIndex)
+        // 11. If shouldPlayPreviousVideo is true, play the previous video and set the currentIndex variable to the index path of the previous post.
+        } else if shouldPlayPreviousVideo {
+            currentIndex = indexPath.row - 1
+            playVideoIfNeed(playIndex: currentIndex)
+        }
     }
     
     
@@ -305,7 +390,7 @@ extension FeedViewController: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: 1000);
+        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height);
         
         return ASSizeRangeMake(min, max);
     }
@@ -355,6 +440,37 @@ extension FeedViewController: ASCollectionDataSource {
         }
     }
     
+    func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
+        
+        if self.posts.count >= 150 {
+            
+            context.completeBatchFetching(true)
+            clearAllData()
+            
+            
+        } else {
+            
+            if refresh_request == false {
+                self.retrieveNextPageWithCompletion { (newPosts) in
+                    
+                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    
+
+                    context.completeBatchFetching(true)
+                    
+                    
+                }
+            } else {
+                context.completeBatchFetching(true)
+            }
+            
+            
+            
+        }
+    }
+    
+
+    
 }
 
 
@@ -376,12 +492,10 @@ extension FeedViewController {
         self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
-        self.collectionNode.leadingScreensForBatching = 2
+        self.collectionNode.leadingScreensForBatching = 3.0
         
         self.applyStyle()
         self.wireDelegates()
-        
-        
         
     }
     
@@ -409,10 +523,76 @@ extension FeedViewController {
 extension FeedViewController {
     
 
-    func getUserFeed() {
+    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        
+        APIManager().getUserFeed { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                    return
+                }
+                if !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
+            }
+        }
+    }
         
     }
     
-   
+    
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+        // Check if there are new posts to insert
+        guard !newPosts.isEmpty else { return }
+        
+        // Check if a refresh request has been made
+        if refresh_request {
+            refresh_request = false
+            
+            // Delete existing rows if there are any
+            if !posts.isEmpty {
+                let deleteIndexPaths = (0..<posts.count).map { IndexPath(row: $0, section: 0) }
+                posts.removeAll()
+                collectionNode.deleteItems(at: deleteIndexPaths)
+            }
+        }
+        
+        // Calculate the range of new rows
+        let startIndex = posts.count
+        let endIndex = startIndex + newPosts.count
+        
+        // Create an array of PostModel objects
+        let newItems = newPosts.compactMap { PostModel(JSON: $0) }
+        
+        // Append the new items to the existing array
+        posts.append(contentsOf: newItems)
+        
+        // Create an array of index paths for the new rows
+        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+        
+        // Insert the new rows
+        collectionNode.insertItems(at: insertIndexPaths)
+    }
+
     
 }

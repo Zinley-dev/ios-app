@@ -132,13 +132,37 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             } else {
                 self.headerView.timeLbl.text = ""
             }
+            
+            
+            if let url = URL(string: post.streamUrl), !post.streamUrl.isEmpty {
+                if let domain = url.host {
+                    if check_Url(host: domain) {
+                        self.buttonsView.hostLbl.text = "  \(domain)  "
+                    } else {
+                        self.buttonsView.hostLbl.isHidden = true
+                        self.buttonsView.streamView.isHidden = true
+                    }
+                } else {
+                    self.buttonsView.hostLbl.isHidden = true
+                    self.buttonsView.streamView.isHidden = true
+                }
+            } else {
+                self.buttonsView.hostLbl.isHidden = true
+                self.buttonsView.streamView.isHidden = true
+            }
+
+            
+            
+            
+            
+            /*
+             streamlinkBtn
+             */
          
-            
-            print(post.hashtags)
-            
             self.checkIfLike()
             self.totalLikeCount()
             self.totalCmtCount()
+            
             
         }
        
@@ -242,7 +266,14 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         if post.metadata?.width == post.metadata?.height {
             mediaSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width)
         } else {
-            mediaSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width * (post.metadata?.height ?? constrainedSize.max.width) / (post.metadata?.width ?? constrainedSize.max.width) )
+            
+            var newHeight = constrainedSize.max.width * (post.metadata?.height ?? constrainedSize.max.width) / (post.metadata?.width ?? constrainedSize.max.width)
+            
+            if newHeight > constrainedSize.max.height * 0.75 {
+                newHeight = constrainedSize.max.height * 0.75
+            }
+            
+            mediaSize = CGSize(width: constrainedSize.max.width, height: newHeight)
         }
         
         if post.muxPlaybackId != "" {
@@ -293,6 +324,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         if post.muxPlaybackId != "" {
             
             let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true"
+
             return URL(string: urlString)
             
         } else {
@@ -347,7 +379,7 @@ extension PostNode {
 extension PostNode {
     
     @objc func shareTapped() {
-    
+        
         
         guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
             print("Sendbird: Can't get userUID")
@@ -356,17 +388,17 @@ extension PostNode {
         
         let loadUsername = userDataSource.userName
         
-        let items: [Any] = ["Hi I am \(loadUsername) from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(post.id)")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(post.id)")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
-                       
+            
             
         }
         
         
         if let vc = UIViewController.currentViewController() {
-             
+            
             if vc is SelectedPostVC {
                 
                 if let update1 = vc as? SelectedPostVC {
@@ -376,25 +408,25 @@ extension PostNode {
                 }
                 
             }
-                 
+            
             
         }
         
-      
+        
     }
     
     
     @objc func cmtTapped() {
-     
+        
         
         if let vc = UIViewController.currentViewController() {
-             
+            
             if vc is SelectedPostVC {
                 
                 if let update1 = vc as? SelectedPostVC {
                     
                     let slideVC = CommentVC()
-                      
+                    
                     slideVC.post = self.post
                     slideVC.modalPresentationStyle = .custom
                     slideVC.transitioningDelegate = update1.self
@@ -405,7 +437,7 @@ extension PostNode {
                 }
                 
             }
-                   
+            
         }
         
     }
@@ -417,7 +449,7 @@ extension PostNode {
         } else {
             performUnLike()
         }
-  
+        
     }
     
     @objc func settingTapped() {
@@ -433,13 +465,10 @@ extension PostNode {
     }
     
     @objc func streamingLinkTapped() {
-        
-        print("streamingLinkTapped")
-        print(post.streamUrl)
-        
-        
+        guard let url = URL(string: post.streamUrl), !post.streamUrl.isEmpty else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
-    
+
 
     @objc func likeHandle() {
         

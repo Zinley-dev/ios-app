@@ -13,9 +13,11 @@
                 <outlet property="commentBtn" destination="kjz-hI-8md" id="733-zh-dOc"/>
                 <outlet property="commentCountLbl" destination="mQc-Na-3vA" id="AlT-VB-8xB"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="B5C-me-TfX"/>
+                <outlet property="hostLbl" destination="p1f-k7-At0" id="dfm-ZM-Fr6"/>
                 <outlet property="likeBtn" destination="Pia-sk-SRh" id="bvq-oS-CCE"/>
                 <outlet property="likeCountLbl" destination="C4T-Vd-GBf" id="kun-JG-LgO"/>
                 <outlet property="shareBtn" destination="kZz-pD-B7k" id="bjw-pU-xsG"/>
+                <outlet property="streamView" destination="HAX-A2-4zS" id="Ea5-lq-A43"/>
                 <outlet property="streamlinkBtn" destination="fop-6z-KOf" id="CeW-iS-xz6"/>
             </connections>
         </placeholder>
@@ -37,7 +39,7 @@
                                         <constraint firstAttribute="width" constant="50" id="vpN-wK-oOK"/>
                                     </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" image="likeEmpty"/>
+                                    <buttonConfiguration key="configuration" style="plain"/>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C4T-Vd-GBf">
                                     <rect key="frame" x="50" y="16" width="9.5" height="18"/>
@@ -115,6 +117,21 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  stitchbox.gg  " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p1f-k7-At0">
+                    <rect key="frame" x="680" y="52" width="84" height="20"/>
+                    <color key="backgroundColor" red="0.20435325386597936" green="0.20435325386597936" blue="0.20435325386597936" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="7O4-pB-Wl5"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="10"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -123,6 +140,8 @@
                 <constraint firstItem="HAX-A2-4zS" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Sd4-Hc-FWS"/>
                 <constraint firstAttribute="trailing" secondItem="HAX-A2-4zS" secondAttribute="trailing" id="TKF-Q0-A86"/>
                 <constraint firstItem="B1q-ab-Jis" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="VGf-LG-CHU"/>
+                <constraint firstItem="HAX-A2-4zS" firstAttribute="leading" secondItem="p1f-k7-At0" secondAttribute="trailing" constant="-20" id="XA9-C0-pit"/>
+                <constraint firstAttribute="bottom" secondItem="p1f-k7-At0" secondAttribute="bottom" constant="8" id="eYA-uK-pLi"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <userDefinedRuntimeAttributes>
@@ -135,7 +154,6 @@
     </objects>
     <resources>
         <image name="cmt" width="30" height="30.5"/>
-        <image name="likeEmpty" width="30" height="30.5"/>
         <image name="share" width="30.5" height="30.5"/>
         <image name="streamLinkBtn" width="16.5" height="17"/>
     </resources>

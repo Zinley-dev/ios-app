@@ -11,6 +11,7 @@ import SendBirdUIKit
 import SendBirdCalls
 import SwiftEntryKit
 import UserNotifications
+import CoreMedia
 
 
 var general_room: Room!
@@ -273,7 +274,7 @@ extension UITextView {
 
 
 
-func pausePreviousVideoIfNeed(pauseIndex: Int) {
+func pauseVideoIfNeed(pauseIndex: Int) {
   
     if let vc = UIViewController.currentViewController() {
          
@@ -285,10 +286,25 @@ func pausePreviousVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.videoNode.isPlaying() {
                         
-                        //cell.videoNode.player?.seek(to: CMTime.zero)
+                        cell.videoNode.player?.seek(to: CMTime.zero)
                         cell.videoNode.pause()
-                        //cell.videoNode.player?.seek(to: CMTime.zero)
+                        
+                    }
                     
+                }
+                
+            }
+            
+        } else if vc is FeedViewController {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+                    
+                    if cell.videoNode.isPlaying() {
+                        
+                        cell.videoNode.player?.seek(to: CMTime.zero)
+                        cell.videoNode.pause()
                     }
                     
                 }
@@ -302,7 +318,7 @@ func pausePreviousVideoIfNeed(pauseIndex: Int) {
 }
 
 
-func playPreviousVideoIfNeed(playIndex: Int) {
+func playVideoIfNeed(playIndex: Int) {
   
     if let vc = UIViewController.currentViewController() {
          
@@ -317,6 +333,29 @@ func playPreviousVideoIfNeed(playIndex: Int) {
                         cell.videoNode.muted = true
                         cell.videoNode.play()
                       
+                    }
+                    
+                }
+                
+            }
+            
+        } else if vc is FeedViewController {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
+                    
+                    for index in 0..<update1.posts.count {
+                            if index != playIndex {
+                                pauseVideoIfNeed(pauseIndex: index)
+                            }
+                        }
+                    
+                    if !cell.videoNode.isPlaying() {
+                        
+                        cell.videoNode.muted = true
+                        cell.videoNode.play()
+                    
                     }
                     
                 }
@@ -469,4 +508,10 @@ func transformFromJSON(_ value: Any?) -> Date? {
     
     guard let strValue = value as? String else { return nil }
     return formatter.date(from: strValue)
+}
+
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
 }
