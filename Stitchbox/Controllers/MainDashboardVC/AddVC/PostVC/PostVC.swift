@@ -66,7 +66,6 @@ class PostVC: UIViewController {
         wireDelegate()
         setupButtons()
         setupDefaultView()
-        setDefaultMode()
         setupScrollView()
         setupTextView()
         setupGesture()
@@ -251,10 +250,135 @@ extension PostVC {
             switch result {
             case .success(let apiResponse):
                 
-                print(apiResponse)
-            
+                guard let data = apiResponse.body?["data"] as? [[String: Any]]  else {
+                    print("Couldn't cast data")
+                    return
+                }
+                
+                if let settings = data.first?["settings"] as? [String: Any] {
+                    
+                    if let allowcomment = settings["allowcomment"] as? Bool {
+                        
+                        if allowcomment == true {
+                                  
+                            self.isAllowComment =  true
+                            DispatchQueue.main.async {
+                                self.allowCmtSwitch.setOn(true, animated: true)
+                            }
+                            print("Allow comment: \(String(describing: self.isAllowComment))")
+                            
+                            
+                        } else {
+                            
+                            self.isAllowComment = false
+                            DispatchQueue.main.async {
+                                self.allowCmtSwitch.setOn(false, animated: true)
+                            }
+                            
+                            print("Allow comment: \(String(describing: self.isAllowComment))")
+                            
+                        }
+                        
+                    }
+                    
+                    if let mode = settings["mode"] as? Int {
+                        
+                        if mode == 0 {
+                            
+                            self.mode = mode
+                            
+                            DispatchQueue.main.async {
+                                
+                                self.globalBtn.setImage(UIImage(named: "selectedPublic"), for: .normal)
+                                self.followingBtn.setImage(UIImage(named: "following"), for: .normal)
+                                self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+                                        
+                                self.publicLbl.textColor = .secondary
+                                self.followLbl.textColor = .lightGray
+                                self.onlyMeLbl.textColor = .lightGray
+                                
+                            }
+   
+                        } else if mode == 1 {
+                            
+                            self.mode = mode
+                            
+                            DispatchQueue.main.async {
+                                
+                                self.globalBtn.setImage(UIImage(named: "public"), for: .normal)
+                                self.followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
+                                self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+                                        
+                                self.publicLbl.textColor = .lightGray
+                                self.followLbl.textColor = .secondary
+                                self.onlyMeLbl.textColor = .lightGray
+                                
+                            }
+                            
+                            
+                        } else if mode == 2 {
+                            
+                            self.mode = mode
+                            
+                            DispatchQueue.main.async {
+                                
+                                self.globalBtn.setImage(UIImage(named: "public"), for: .normal)
+                                self.followingBtn.setImage(UIImage(named: "following"), for: .normal)
+                                self.privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+                                        
+                                        
+                                self.publicLbl.textColor = .lightGray
+                                self.followLbl.textColor = .lightGray
+                                self.onlyMeLbl.textColor = .secondary
+                                
+                            }
+                            
+                            
+                        } else {
+                            DispatchQueue.main.async {
+                                self.setDefaultMode()
+                            }
+                        }
+                        
+                    } else {
+                        DispatchQueue.main.async {
+                            self.setDefaultMode()
+                        }
+                    }
+                    
+                }
+                
+                if let video = data.first?["video"] as? [String: Any] {
+                    
+                    if let streamUrl = video["streamurl"] as? String, streamUrl != "" {
+                        
+                        if let url = URL(string: streamUrl) {
+                            
+                            if let domain = url.host {
+                                
+                                if check_Url(host: domain) == true {
+                                    
+                                    global_host = domain
+                                    global_fullLink = streamUrl
+                                    DispatchQueue.main.async {
+                                        self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
+                                    }
+        
+                                }
+                                
+                            }
+                        }
+                        
+                        
+                    }
+
+                }
+
 
             case .failure(let error):
+                DispatchQueue.main.async {
+                    self.setDefaultMode()
+                }
                 print(error)
             }
         }
@@ -481,13 +605,13 @@ extension PostVC {
         
         if hashtagList.isEmpty == true {
             
-            update_hashtaglist = ["#\(loadUsername)"]
+            update_hashtaglist = ["#\(loadUsername ?? "")"]
             
         } else {
             
             update_hashtaglist = hashtagList
-            if !update_hashtaglist.contains("#\(loadUsername)") {
-                update_hashtaglist.insert("#\(loadUsername)", at: 0)
+            if !update_hashtaglist.contains("#\(loadUsername ?? "")") {
+                update_hashtaglist.insert("#\(loadUsername ?? "")", at: 0)
             }
             
         }
@@ -532,14 +656,17 @@ extension PostVC {
         
         if hashtagList.isEmpty == true {
             
-            update_hashtaglist = ["#\(loadUsername)"]
+            update_hashtaglist = ["#\(loadUsername ?? "")"]
             
         } else {
             
             update_hashtaglist = hashtagList
-            if !update_hashtaglist.contains("#\(loadUsername)") {
-                update_hashtaglist.insert("#\(loadUsername)", at: 0)
+            if let username = loadUsername {
+                if !update_hashtaglist.contains("#\(username)") {
+                    update_hashtaglist.insert("#\(username)", at: 0)
+                }
             }
+            
             
         }
         
