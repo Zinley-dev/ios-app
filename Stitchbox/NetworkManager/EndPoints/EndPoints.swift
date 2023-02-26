@@ -545,6 +545,9 @@ extension ContactAPI: EndPointType {
 }
 
 public enum PostAPI {
+    case getRecommend
+    case getUserFeed
+    case getHighTrending
     case create(params: [String: Any])
     case update(params: [String: Any])
     case getMyPost(page: Int)
@@ -565,6 +568,12 @@ extension PostAPI: EndPointType {
                 return "/me?page=\(page)&limit=10"
           case .lastSetting:
             return "/last-setting"
+          case .getRecommend:
+            return "/"
+          case .getUserFeed:
+            return "/feed"
+          case .getHighTrending:
+            return "/high-trending"
         }
     }
     
@@ -578,6 +587,12 @@ extension PostAPI: EndPointType {
               return .get
           case .lastSetting:
               return .get
+          case .getRecommend:
+            return .get
+          case .getUserFeed:
+            return .get
+          case .getHighTrending:
+            return .get
         }
     }
     
@@ -591,6 +606,12 @@ extension PostAPI: EndPointType {
                 return .request
           case .lastSetting:
               return .request
+          case .getRecommend:
+            return .request
+          case .getUserFeed:
+            return .request
+          case .getHighTrending:
+            return .request
         }
     }
     
