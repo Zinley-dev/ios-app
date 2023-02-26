@@ -364,7 +364,7 @@ extension PostVC {
                                         self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
                                     }
         
-                                }
+                                }  
                                 
                             }
                         }

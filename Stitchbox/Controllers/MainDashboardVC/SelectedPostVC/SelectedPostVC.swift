@@ -637,7 +637,7 @@ extension SelectedPostVC {
 
         @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
             print("Save finished!")
-        }
+    }
     
     
 }
