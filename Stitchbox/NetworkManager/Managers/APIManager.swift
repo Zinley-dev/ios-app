@@ -437,7 +437,21 @@ extension APIManager {
 
 
 extension APIManager {
-    
+  func getRecommend(completion: @escaping APICompletion) {
+    postManager.request(.getRecommend) { result in
+      completion(result)
+    }
+  }
+  func getUserFeed(limit: Int = 5, completion: @escaping APICompletion) {
+    postManager.request(.getUserFeed(limit: limit)) { result in
+      completion(result)
+    }
+  }
+  func getHighTrending(completion: @escaping APICompletion) {
+    postManager.request(.getHighTrending) { result in
+      completion(result)
+    }
+  }
     func createPost(params: [String: Any], completion: @escaping APICompletion) {
         postManager.request(.create(params: params)) { result in
             completion(result)
