@@ -52,7 +52,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htG-J3-w8j">
-                                <rect key="frame" x="0.0" y="91" width="375" height="638"/>
+                                <rect key="frame" x="0.0" y="91" width="375" height="636.33333333333337"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QjB-Ff-npc" customClass="ProgressBar" customModule="Stitchbox" customModuleProvider="target">
@@ -74,21 +74,33 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="JRS-LC-MbQ">
+                                <rect key="frame" x="0.0" y="727.33333333333337" width="375" height="2.6666666666666288"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="progressTintColor" name="Secondary"/>
+                                <color key="trackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="JRS-LC-MbQ" secondAttribute="bottom" id="4jN-qC-z5a"/>
                             <constraint firstItem="htG-J3-w8j" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="9JM-0r-hrq"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="htG-J3-w8j" secondAttribute="bottom" id="Emb-0Z-XNJ"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="32" id="FAH-dq-see"/>
+                            <constraint firstItem="JRS-LC-MbQ" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="N5c-Aw-MWB"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="32" id="Wbn-Yc-2Lj"/>
+                            <constraint firstAttribute="trailing" secondItem="JRS-LC-MbQ" secondAttribute="trailing" id="Xcu-YI-7ij"/>
                             <constraint firstItem="htG-J3-w8j" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="jh0-OE-AqN"/>
+                            <constraint firstItem="JRS-LC-MbQ" firstAttribute="top" secondItem="htG-J3-w8j" secondAttribute="bottom" id="mZu-DS-1Id"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="htG-J3-w8j" secondAttribute="trailing" id="t8Z-HB-O6a"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="lDt-lA-xKs"/>
                     <connections>
+                        <outlet property="bottomConstraint" destination="4jN-qC-z5a" id="wEB-AL-GkM"/>
                         <outlet property="contentView" destination="htG-J3-w8j" id="HXh-FB-sVL"/>
+                        <outlet property="playTimeBar" destination="JRS-LC-MbQ" id="fOM-rx-LHm"/>
                         <outlet property="progressBar" destination="QjB-Ff-npc" id="AWD-Qc-Mjw"/>
                     </connections>
                 </viewController>
@@ -5972,27 +5984,38 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p5q-wi-MaU">
-                                <rect key="frame" x="0.0" y="47" width="375" height="765"/>
+                                <rect key="frame" x="0.0" y="47" width="375" height="729.33333333333337"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="VU6-B8-sww">
+                                <rect key="frame" x="0.0" y="776.33333333333337" width="375" height="2.6666666666666288"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="progressTintColor" name="Secondary"/>
+                                <color key="trackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="c8J-Xm-nT3"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstItem="VU6-B8-sww" firstAttribute="top" secondItem="p5q-wi-MaU" secondAttribute="bottom" id="8Pm-zL-HLq"/>
+                            <constraint firstItem="VU6-B8-sww" firstAttribute="leading" secondItem="87l-QF-AP9" secondAttribute="leading" id="EcX-uZ-Y8a"/>
                             <constraint firstItem="p5q-wi-MaU" firstAttribute="top" secondItem="c8J-Xm-nT3" secondAttribute="top" id="JkN-QC-kOf"/>
+                            <constraint firstAttribute="trailing" secondItem="VU6-B8-sww" secondAttribute="trailing" id="ZIT-g5-eyl"/>
                             <constraint firstItem="c8J-Xm-nT3" firstAttribute="trailing" secondItem="p5q-wi-MaU" secondAttribute="trailing" id="eYE-5l-P8d"/>
-                            <constraint firstAttribute="bottom" secondItem="p5q-wi-MaU" secondAttribute="bottom" id="evH-HV-t7P"/>
                             <constraint firstItem="p5q-wi-MaU" firstAttribute="leading" secondItem="c8J-Xm-nT3" secondAttribute="leading" id="fTg-DD-fTV"/>
+                            <constraint firstItem="c8J-Xm-nT3" firstAttribute="bottom" secondItem="VU6-B8-sww" secondAttribute="bottom" id="yra-ZK-7b5"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="contentView" destination="p5q-wi-MaU" id="J75-Uk-7RC"/>
+                        <outlet property="playTimeBar" destination="VU6-B8-sww" id="0xo-oC-MSi"/>
                         <outlet property="topConstraint" destination="JkN-QC-kOf" id="b9p-oP-0e9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GV1-tl-3iF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5676" y="2325"/>
+            <point key="canvasLocation" x="5676" y="2324.6305418719212"/>
         </scene>
         <!--StatsVC-->
         <scene sceneID="waV-jb-ULH">

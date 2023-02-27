@@ -45,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupStyle()
         setupOneSignal(launchOptions: launchOptions)
         getGameList()
+        activeSpeaker()
         return true
     }
   

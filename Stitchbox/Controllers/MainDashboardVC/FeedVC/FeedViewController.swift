@@ -14,7 +14,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
 
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
-    
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     let homeButton: UIButton = UIButton(type: .custom)
     var lastContentOffset: CGPoint = CGPoint.zero
     var post_list = [PostModel]()
@@ -39,6 +39,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
     lazy var delayItem3 = workItem()
+    
+    @IBOutlet weak var playTimeBar: UIProgressView!
     
     private var pullControl = UIRefreshControl()
     
@@ -68,6 +70,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
+        
+    
         
     }
     
@@ -189,6 +193,8 @@ extension FeedViewController {
         
         if currentIndex != 0, currentIndex != nil {
             
+            navigationController?.setNavigationBarHidden(false, animated: true)
+            
             if collectionNode.numberOfItems(inSection: 0) != 0 {
                 
                 if currentIndex == 1 {
@@ -269,7 +275,7 @@ extension FeedViewController {
 extension FeedViewController {
     
     @objc func onClickHome(_ sender: AnyObject) {
-        print("onClickHome")
+        shouldScrollToTop()
     }
     
     @objc func onClickNoti(_ sender: AnyObject) {
@@ -407,10 +413,7 @@ extension FeedViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y <= 0 {
             // User has scrolled to the very top
-            if currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
-            }
-            
+    
             currentIndex = 0
             playVideoIfNeed(playIndex: currentIndex!)
             
@@ -418,6 +421,58 @@ extension FeedViewController {
         }
     }
 
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
+          navigationController?.setNavigationBarHidden(true, animated: true)
+            changeTabBar(hidden: true, animated: true)
+            self.tabBarController?.tabBar.isTranslucent = true
+            hideMiddleBtn(vc: self)
+            bottomConstraint.constant = 20
+           
+
+       } else {
+          navigationController?.setNavigationBarHidden(false, animated: true)
+           changeTabBar(hidden: false, animated: false)
+           self.tabBarController?.tabBar.isTranslucent = false
+           showMiddleBtn(vc: self)
+           bottomConstraint.constant = 0
+       }
+    }
+    
+    func changeTabBar(hidden:Bool, animated: Bool) {
+        guard let tabBar = self.tabBarController?.tabBar else {
+            return
+        }
+        if tabBar.isHidden == hidden{
+            return
+        }
+        
+        let frame = tabBar.frame
+        let frameMinY = frame.minY  //lower end of tabBar
+        let offset = hidden ? frame.size.height : -frame.size.height
+        let viewHeight = self.view.frame.height
+        
+        //hidden but moved back up after moving app to background
+        if frameMinY < viewHeight && tabBar.isHidden {
+            tabBar.alpha = 0
+            tabBar.isHidden = false
+
+            UIView.animate(withDuration: 0.5) {
+                tabBar.alpha = 1
+            }
+            
+            return
+        }
+
+        let duration:TimeInterval = (animated ? 0.5 : 0.0)
+        tabBar.isHidden = false
+
+        UIView.animate(withDuration: duration, animations: {
+            tabBar.frame = frame.offsetBy(dx: 0, dy: offset)
+        }, completion: { (true) in
+            tabBar.isHidden = hidden
+        })
+    }
     
 
 }
@@ -548,7 +603,7 @@ extension FeedViewController {
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.collectionNode.leadingScreensForBatching = 3.0
-        
+        self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         // Set the data source and delegate
         self.collectionNode.dataSource = self
         self.collectionNode.delegate = self
@@ -657,9 +712,6 @@ extension FeedViewController {
         
         // Append the new items to the existing array
         posts.append(contentsOf: newItems)
-        
-        // Calculate the number of items inserted
-        let numInsertedItems = posts.count - startIndex
         
         // Create an array of index paths for the new rows
         let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }

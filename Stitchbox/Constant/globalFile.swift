@@ -12,6 +12,7 @@ import SendBirdCalls
 import SwiftEntryKit
 import UserNotifications
 import CoreMedia
+import AVFAudio
 
 
 var general_room: Room!
@@ -42,8 +43,28 @@ var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
 var back_frame = CGRect(x: -10, y: 0, width: 35, height: 25)
 var discord_domain = ["discordapp.com", "discord.com", "discord.co", "discord.gg", "watchanimeattheoffice.com", "dis.gd", "discord.media", "discordapp.net", "discordstatus.com" ]
 
+let muteImage = UIImage.init(named: "3xmute")?.resize(targetSize: CGSize(width: 26, height: 26))
+let unmuteImage = UIImage.init(named: "3xunmute")?.resize(targetSize: CGSize(width: 26, height: 26))
+let speedImage = UIImage.init(named: "Speed_4x")?.resize(targetSize: CGSize(width: 25, height: 25))
+
 typealias DownloadComplete = () -> ()
 
+func activeSpeaker() {
+    
+    do {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+                print("AVAudioSession Category Playback OK")
+                do {
+                    try AVAudioSession.sharedInstance().setActive(true)
+                    print("AVAudioSession is Active")
+                } catch {
+                    print(error.localizedDescription)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+    
+}
 
 func showNote(text: String) {
     
@@ -286,6 +307,11 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.videoNode.isPlaying() {
                         
+                        
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                        
                         cell.videoNode.player?.seek(to: CMTime.zero)
                         cell.videoNode.pause()
                         
@@ -304,6 +330,11 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     if cell.videoNode.isPlaying() {
                         
                         cell.videoNode.player?.seek(to: CMTime.zero)
+                        
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                        
                         cell.videoNode.pause()
                     }
                     
@@ -330,6 +361,17 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
+                        for index in 0..<update1.posts.count {
+                                if index != playIndex {
+                                    pauseVideoIfNeed(pauseIndex: index)
+                                }
+                        }
+                        
+                        
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                       
                         cell.videoNode.muted = true
                         cell.videoNode.play()
                       
@@ -346,6 +388,17 @@ func playVideoIfNeed(playIndex: Int) {
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
                     
                     if !cell.videoNode.isPlaying() {
+                        
+                        for index in 0..<update1.posts.count {
+                            if index != playIndex {
+                                pauseVideoIfNeed(pauseIndex: index)
+                            }
+                        }
+                        
+                      
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
                         
                         cell.videoNode.muted = true
                         cell.videoNode.play()

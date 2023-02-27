@@ -27,13 +27,14 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var headerNode: ASDisplayNode
     var buttonsNode: ASDisplayNode
     var hashtagsNode: ASDisplayNode
+    var sidebuttonListView: ASDisplayNode!
     
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
     var hashtagView: HashtagView!
-    
-    //var copyImageNode: ASNetworkImageNode
-    
+    var sideButtonView: SideButton!
+    var gradientNode: GradienView
+  
     var likeCount = 0
     var isLike = false
     
@@ -47,9 +48,13 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         self.buttonsNode = ASDisplayNode()
         self.hashtagsNode = ASDisplayNode()
         self.videoNode = ASVideoNode()
+        self.sidebuttonListView = ASDisplayNode()
+        self.gradientNode = GradienView()
         super.init()
         
-    
+        self.gradientNode.isLayerBacked = true
+        self.gradientNode.isOpaque = false
+        
         DispatchQueue.main.async {
             
             self.headerView = PostHeader()
@@ -85,7 +90,29 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             self.hashtagView.leadingAnchor.constraint(equalTo: self.hashtagsNode.view.leadingAnchor, constant: 0).isActive = true
             self.hashtagView.trailingAnchor.constraint(equalTo: self.hashtagsNode.view.trailingAnchor, constant: 0).isActive = true
               
-            
+            if post.muxPlaybackId != "" {
+                
+                self.sideButtonView = SideButton()
+                self.sidebuttonListView.view.addSubview(self.sideButtonView)
+                self.sideButtonView.playSpeedBtn.setTitle("", for: .normal)
+                self.sideButtonView.soundBtn.setTitle("", for: .normal)
+                self.sideButtonView.playSpeedBtn.setImage(speedImage, for: .normal)
+                self.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                self.sideButtonView.playSpeedBtn.isHidden = true
+                
+                self.sideButtonView.translatesAutoresizingMaskIntoConstraints = false
+                self.sideButtonView.topAnchor.constraint(equalTo: self.sidebuttonListView.view.topAnchor, constant: 0).isActive = true
+                self.sideButtonView.bottomAnchor.constraint(equalTo: self.sidebuttonListView.view.bottomAnchor, constant: 0).isActive = true
+                self.sideButtonView.leadingAnchor.constraint(equalTo: self.sidebuttonListView.view.leadingAnchor, constant: 0).isActive = true
+                self.sideButtonView.trailingAnchor.constraint(equalTo: self.sidebuttonListView.view.trailingAnchor, constant: 0).isActive = true
+                
+               
+                let soundTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.soundProcess))
+                soundTap.numberOfTapsRequired = 1
+                self.sideButtonView.soundBtn.addGestureRecognizer(soundTap)
+
+            }
+        
             
             let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.shareTapped))
             shareTap.numberOfTapsRequired = 1
@@ -93,9 +120,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             
             let likeTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.likeTapped))
-            shareTap.numberOfTapsRequired = 1
+            likeTap.numberOfTapsRequired = 1
             self.buttonsView.likeBtn.addGestureRecognizer(likeTap)
-            
             
             let commentTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.cmtTapped))
             commentTap.numberOfTapsRequired = 1
@@ -122,6 +148,10 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             doubleTap.delaysTouchesBegan = true
             
+            
+            //-------------------------------------//
+            
+    
             
             //-------------------------------------//
             
@@ -278,8 +308,17 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
         if post.muxPlaybackId != "" {
             
+            sidebuttonListView.style.preferredSize = CGSize(width: 100, height: 60)
             videoNode.style.preferredSize = mediaSize
-            children.append(videoNode)
+            gradientNode.style.preferredSize = mediaSize
+            
+            let sidebuttonListInset = UIEdgeInsets(top: CGFloat.infinity, left: CGFloat.infinity, bottom: 0, right: 0)
+            let sidebuttonListInsetSpec = ASInsetLayoutSpec(insets: sidebuttonListInset, child: sidebuttonListView)
+            
+            let firsOverlay = ASOverlayLayoutSpec(child: videoNode, overlay: gradientNode)
+            let secondOverlay = ASOverlayLayoutSpec(child: firsOverlay, overlay: sidebuttonListInsetSpec)
+            
+            children.append(secondOverlay)
             
         } else {
             
@@ -335,6 +374,38 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
        
     }
     
+    func setVideoProgress(rate: Float) {
+        
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            
+            if vc is FeedViewController {
+                
+                if let update1 = vc as? FeedViewController {
+                    
+                    update1.playTimeBar.setProgress(rate, animated: true)
+                    
+                }
+                
+            } else if vc is SelectedPostVC {
+                
+                if let update2 = vc as? SelectedPostVC {
+                    
+                    update2.playTimeBar.setProgress(rate, animated: true)
+                    
+                }
+                
+                
+            }
+                 
+            
+        }
+        
+        
+        
+    }
+    
 
 }
 
@@ -343,16 +414,112 @@ extension PostNode {
     
     func didTap(_ videoNode: ASVideoNode) {
         
+        soundProcess()
+      
+    }
+    
+    @objc func soundProcess() {
+        
         if videoNode.isPlaying() {
             
             if videoNode.muted == true {
                 videoNode.muted = false
+                
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.sideButtonView.soundBtn.transform = self.sideButtonView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
+                    self.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                    }, completion: { _ in
+                      // Step 2
+                      UIView.animate(withDuration: 0.1, animations: {
+                          self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+                      })
+                    })
+        
             } else {
                 videoNode.muted = true
+                
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.sideButtonView.soundBtn.transform = self.sideButtonView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
+                    self.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                    }, completion: { _ in
+                      // Step 2
+                      UIView.animate(withDuration: 0.1, animations: {
+                          self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+                      })
+                    })
             }
             
         }
-      
+        
+    }
+    
+    
+    func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
+        
+        //currentTimeStamp = timeInterval
+        
+        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.asset.duration.seconds)!))
+    
+        /*
+        if (videoNode.currentItem?.asset.duration.seconds)! <= 15 {
+            
+            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.8 {
+                
+                if shouldCountView {
+                    shouldCountView = false
+                    endVideo()
+                }
+               
+            }
+            
+        } else if (videoNode.currentItem?.asset.duration.seconds)! > 15, (videoNode.currentItem?.asset.duration.seconds)! <= 30 {
+            
+            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.7 {
+                if shouldCountView {
+                    shouldCountView = false
+                    endVideo()
+                }
+            }
+            
+        } else if (videoNode.currentItem?.asset.duration.seconds)! > 30, (videoNode.currentItem?.asset.duration.seconds)! <= 60 {
+            
+            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.6 {
+                if shouldCountView {
+                    shouldCountView = false
+                    endVideo()
+                }
+            }
+            
+        } else if (videoNode.currentItem?.asset.duration.seconds)! > 60 , (videoNode.currentItem?.asset.duration.seconds)! <= 90 {
+            
+            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.5 {
+                if shouldCountView {
+                    shouldCountView = false
+                    endVideo()
+                }
+            }
+            
+        } else if (videoNode.currentItem?.asset.duration.seconds)! > 90, (videoNode.currentItem?.asset.duration.seconds)! <= 120 {
+            
+            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.4 {
+                if shouldCountView {
+                    shouldCountView = false
+                    endVideo()
+                }
+            }
+            
+        } else if (videoNode.currentItem?.asset.duration.seconds)! > 120 {
+            
+            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.5 {
+                if shouldCountView {
+                    shouldCountView = false
+                    endVideo()
+                }
+            }
+            
+        }
+        */
+        
     }
     
     
@@ -407,6 +574,14 @@ extension PostNode {
                     
                 }
                 
+            } else if vc is FeedViewController {
+                
+                if let update1 = vc as? FeedViewController {
+                    
+                    update1.present(ac, animated: true, completion: nil)
+                    
+                }
+                
             }
             
             
@@ -424,6 +599,21 @@ extension PostNode {
             if vc is SelectedPostVC {
                 
                 if let update1 = vc as? SelectedPostVC {
+                    
+                    let slideVC = CommentVC()
+                    
+                    slideVC.post = self.post
+                    slideVC.modalPresentationStyle = .custom
+                    slideVC.transitioningDelegate = update1.self
+                    global_presetingRate = Double(0.75)
+                    global_cornerRadius = 35
+                    update1.present(slideVC, animated: true, completion: nil)
+                    
+                }
+                
+            } else if vc is FeedViewController {
+                
+                if let update1 = vc as? FeedViewController {
                     
                     let slideVC = CommentVC()
                     
@@ -488,7 +678,19 @@ extension PostNode {
                     
                 }
                 
+            } else if vc is FeedViewController {
+                
+                if let update2 = vc as? FeedViewController {
+                    
+                    imgView.center = update2.view.center
+                    update2.view.addSubview(imgView)
+                    
+                }
+                
             }
+                        
+                        
+                        
                    
         }
         

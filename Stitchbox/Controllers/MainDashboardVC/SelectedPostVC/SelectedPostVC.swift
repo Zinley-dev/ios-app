@@ -16,13 +16,13 @@ class SelectedPostVC: UIViewController {
 
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var playTimeBar: UIProgressView!
     var selectedPost = [PostModel]()
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var selected_item: PostModel!
     var collectionNode: ASCollectionNode!
     var editeddPost: PostModel?
-   
     var startIndex: Int!
     var currentIndex: Int!
     var endIndex: Int!
@@ -212,15 +212,20 @@ extension SelectedPostVC {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y <= 0 {
             // User has scrolled to the very top
-            if currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
-            }
-            
             currentIndex = 0
             playVideoIfNeed(playIndex: currentIndex!)
             
             
         }
+    }
+    
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
+          navigationController?.setNavigationBarHidden(true, animated: true)
+
+       } else {
+          navigationController?.setNavigationBarHidden(false, animated: true)
+       }
     }
 
 
@@ -293,7 +298,7 @@ extension SelectedPostVC: ASCollectionDataSource {
             
             node.settingBtn = { (node) in
             
-                self.settingVideo(item: post)
+                self.settingPost(item: post)
                   
             }
             
@@ -667,7 +672,7 @@ extension SelectedPostVC {
 
 extension SelectedPostVC {
     
-    func settingVideo(item: PostModel) {
+    func settingPost(item: PostModel) {
         
         let postSettingVC = PostSettingVC()
         postSettingVC.modalPresentationStyle = .custom
