@@ -345,12 +345,6 @@ func playVideoIfNeed(playIndex: Int) {
                 
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
                     
-                    for index in 0..<update1.posts.count {
-                            if index != playIndex {
-                                pauseVideoIfNeed(pauseIndex: index)
-                            }
-                        }
-                    
                     if !cell.videoNode.isPlaying() {
                         
                         cell.videoNode.muted = true

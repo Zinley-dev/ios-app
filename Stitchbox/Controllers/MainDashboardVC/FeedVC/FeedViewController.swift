@@ -16,12 +16,12 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var contentView: UIView!
     
     let homeButton: UIButton = UIButton(type: .custom)
-    
+    var lastContentOffset: CGPoint = CGPoint.zero
     var post_list = [PostModel]()
     
     var willIndex: Int?
-    var currentIndex: Int = 0
-    var endIndex: Int = 0
+    var currentIndex: Int?
+    var endIndex: Int?
     
     var isfirstLoad = true
     var didScroll = false
@@ -38,6 +38,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
+    lazy var delayItem3 = workItem()
     
     private var pullControl = UIRefreshControl()
     
@@ -47,6 +48,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         // Do any additional setup after loading the view
         setupButtons()
         setupCollectionNode()
+        navigationControllerDelegate()
         
         pullControl.tintColor = UIColor.systemOrange
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
@@ -62,9 +64,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
             collectionNode.view.addSubview(pullControl)
         }
         
-        self.navigationController?.hidesBarsOnSwipe = true
+        //self.navigationController?.hidesBarsOnSwipe = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         
     }
     
@@ -72,6 +75,13 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewWillAppear(animated)
         
         showMiddleBtn(vc: self)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         
     }
     
@@ -87,7 +97,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @objc func clearAllData() {
         
         refresh_request = true
-        posts.removeAll()
         endIndex = 0
         willIndex = nil
         currentIndex = 0
@@ -99,7 +108,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     
     func updateData() {
-        isfirstLoad = false
         self.retrieveNextPageWithCompletion { (newPosts) in
                 
             if newPosts.count > 0 {
@@ -172,6 +180,44 @@ extension FeedViewController {
             }
 
         }
+        
+    }
+    
+    
+    @objc func shouldScrollToTop() {
+        
+        
+        if currentIndex != 0, currentIndex != nil {
+            
+            if collectionNode.numberOfItems(inSection: 0) != 0 {
+                
+                if currentIndex == 1 {
+                    collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                } else {
+                    
+                    collectionNode.scrollToItem(at: IndexPath(row: 1, section: 0), at: .centeredVertically, animated: false)
+                    collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                
+                
+                }
+                
+            
+                
+            }
+            
+            
+        } else {
+            
+            delayItem3.perform(after: 0.25) {
+                self.clearAllData()
+            }
+
+            
+        }
+            
+            
+            
+        
         
     }
     
@@ -281,18 +327,18 @@ extension FeedViewController {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
         guard let cell = node as? PostNode else { return }
+    
         willIndex = cell.indexPath?.row
+        
         if isfirstLoad {
             isfirstLoad = false
-            currentIndex = willIndex ?? 0
-            if !posts[currentIndex].muxPlaybackId.isEmpty {
-                playVideoIfNeed(playIndex: currentIndex)
-            }
+            currentIndex = 0
+            playVideoIfNeed(playIndex: currentIndex!)
         }
-     
     }
-    
+
     func collectionNode(_ collectionNode: ASCollectionNode, didEndDisplayingItemWith node: ASCellNode) {
+        
         // 1. Safely unwrap the indexPath of the cell node.
         guard let postNode = node as? PostNode, let indexPath = postNode.indexPath else { return }
         
@@ -304,14 +350,14 @@ extension FeedViewController {
                 let nextPost = posts[willIndex]
                 if !nextPost.muxPlaybackId.isEmpty {
                     currentIndex = willIndex
-                    playVideoIfNeed(playIndex: currentIndex)
+                    playVideoIfNeed(playIndex: currentIndex!)
                 }
             // 4. If the previous item is a video, play it.
             } else if let willIndex = willIndex, willIndex < indexPath.row {
                 let previousPost = posts[willIndex]
                 if !previousPost.muxPlaybackId.isEmpty {
                     currentIndex = willIndex
-                    playVideoIfNeed(playIndex: currentIndex)
+                    playVideoIfNeed(playIndex: currentIndex!)
                 }
             }
             return
@@ -348,15 +394,32 @@ extension FeedViewController {
         // 10. If shouldPlayNextVideo is true, play the next video and set the currentIndex variable to the index path of the next post.
         if shouldPlayNextVideo {
             currentIndex = indexPath.row + 1
-            playVideoIfNeed(playIndex: currentIndex)
+            playVideoIfNeed(playIndex: currentIndex!)
         // 11. If shouldPlayPreviousVideo is true, play the previous video and set the currentIndex variable to the index path of the previous post.
         } else if shouldPlayPreviousVideo {
             currentIndex = indexPath.row - 1
-            playVideoIfNeed(playIndex: currentIndex)
+            playVideoIfNeed(playIndex: currentIndex!)
         }
+        
     }
     
+   
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y <= 0 {
+            // User has scrolled to the very top
+            if currentIndex != nil {
+                pauseVideoIfNeed(pauseIndex: currentIndex!)
+            }
+            
+            currentIndex = 0
+            playVideoIfNeed(playIndex: currentIndex!)
+            
+            
+        }
+    }
+
     
+
 }
 
 extension FeedViewController {
@@ -477,27 +540,34 @@ extension FeedViewController: ASCollectionDataSource {
 extension FeedViewController {
     
     func setupCollectionNode() {
-        
         let flowLayout = UICollectionViewFlowLayout()
-        self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        
         flowLayout.minimumInteritemSpacing = 10.0
         flowLayout.minimumLineSpacing = 10.0
+        flowLayout.estimatedItemSize = .zero
         
+        self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
+        self.collectionNode.leadingScreensForBatching = 3.0
         
+        // Set the data source and delegate
+        self.collectionNode.dataSource = self
+        self.collectionNode.delegate = self
+        
+        // Add the collection node's view as a subview and set constraints
         self.contentView.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
         self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
         self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
-        self.collectionNode.leadingScreensForBatching = 3.0
         
         self.applyStyle()
         self.wireDelegates()
         
+        // Reload the data on the collection node
+        self.collectionNode.reloadData()
     }
+
     
     
     func applyStyle() {
@@ -570,8 +640,9 @@ extension FeedViewController {
             refresh_request = false
             
             // Delete existing rows if there are any
-            if !posts.isEmpty {
-                let deleteIndexPaths = (0..<posts.count).map { IndexPath(row: $0, section: 0) }
+            let numExistingItems = posts.count
+            if numExistingItems > 0 {
+                let deleteIndexPaths = (0..<numExistingItems).map { IndexPath(row: $0, section: 0) }
                 posts.removeAll()
                 collectionNode.deleteItems(at: deleteIndexPaths)
             }
@@ -587,6 +658,9 @@ extension FeedViewController {
         // Append the new items to the existing array
         posts.append(contentsOf: newItems)
         
+        // Calculate the number of items inserted
+        let numInsertedItems = posts.count - startIndex
+        
         // Create an array of index paths for the new rows
         let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
         
@@ -594,5 +668,17 @@ extension FeedViewController {
         collectionNode.insertItems(at: insertIndexPaths)
     }
 
+
     
+}
+
+extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDelegate {
+    
+    func navigationControllerDelegate() {
+        self.navigationController?.navigationBar.delegate = self
+    }
+    
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
 }

@@ -208,6 +208,20 @@ extension SelectedPostVC {
             
     }
 
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y <= 0 {
+            // User has scrolled to the very top
+            if currentIndex != nil {
+                pauseVideoIfNeed(pauseIndex: currentIndex!)
+            }
+            
+            currentIndex = 0
+            playVideoIfNeed(playIndex: currentIndex!)
+            
+            
+        }
+    }
 
 
     
