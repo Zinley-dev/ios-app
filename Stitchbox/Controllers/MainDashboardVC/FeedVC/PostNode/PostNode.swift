@@ -303,7 +303,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             children.append(contentInsetSpec)
         }
         
-        hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 25)
+        hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
         
         let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
         let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
