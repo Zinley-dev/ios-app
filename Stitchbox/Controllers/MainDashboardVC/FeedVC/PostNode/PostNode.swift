@@ -112,7 +112,17 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 self.sideButtonView.soundBtn.addGestureRecognizer(soundTap)
 
             }
-        
+            
+            let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.userTapped))
+            avatarTap.numberOfTapsRequired = 1
+            self.headerView.avatarImage.isUserInteractionEnabled = true
+            self.headerView.avatarImage.addGestureRecognizer(avatarTap)
+            
+            let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.userTapped))
+            usernameTap.numberOfTapsRequired = 1
+            self.headerView.usernameLbl.isUserInteractionEnabled = true
+            self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
+            
             
             let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.shareTapped))
             shareTap.numberOfTapsRequired = 1
@@ -133,10 +143,6 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.settingBtn.addGestureRecognizer(settingTap)
             
             
-            let profileTap = UITapGestureRecognizer(target: self, action: #selector(PostNode.profileTapped))
-            self.headerView.avatarImage.isUserInteractionEnabled = true
-            self.headerView.avatarImage.addGestureRecognizer(profileTap)
-            
             let streamLinkTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.streamingLinkTapped))
             streamLinkTap.numberOfTapsRequired = 1
             self.buttonsView.streamlinkBtn.addGestureRecognizer(streamLinkTap)
@@ -148,6 +154,12 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             doubleTap.delaysTouchesBegan = true
             
+            
+            let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(PostNode.settingTapped))
+            longPress.minimumPressDuration = 0.5
+            self.view.addGestureRecognizer(longPress)
+            
+            longPress.delaysTouchesBegan = true
             
             //-------------------------------------//
             
@@ -301,6 +313,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             if newHeight > constrainedSize.max.height * 0.65 {
                 newHeight = constrainedSize.max.height * 0.65
+            } else if newHeight <= constrainedSize.max.height * 0.45 {
+                newHeight = constrainedSize.max.height * 0.45
             }
             
             mediaSize = CGSize(width: constrainedSize.max.width, height: newHeight)
@@ -431,7 +445,7 @@ extension PostNode {
                     }, completion: { _ in
                       // Step 2
                       UIView.animate(withDuration: 0.1, animations: {
-                          self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+                          self.sideButtonView.soundBtn.transform = CGAffineTransform.identity
                       })
                     })
         
@@ -444,7 +458,7 @@ extension PostNode {
                     }, completion: { _ in
                       // Step 2
                       UIView.animate(withDuration: 0.1, animations: {
-                          self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+                          self.sideButtonView.soundBtn.transform = CGAffineTransform.identity
                       })
                     })
             }
@@ -545,6 +559,29 @@ extension PostNode {
 
 extension PostNode {
     
+    
+    @objc func userTapped() {
+        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: UPVC)
+                
+                UPVC.userId = post.owner?.id
+                UPVC.nickname = post.owner?.username
+                UPVC.onPresent = true
+                nav.modalPresentationStyle = .fullScreen
+                nav.navigationItem.titleView?.tintColor = .white
+                nav.navigationBar.tintColor = .background
+                vc.present(nav, animated: true, completion: nil)
+       
+            }
+        }
+        
+        
+    }
+    
     @objc func shareTapped() {
         
         
@@ -641,6 +678,7 @@ extension PostNode {
         }
         
     }
+    
     
     @objc func settingTapped() {
         

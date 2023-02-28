@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,17 +25,17 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l1S-6a-NKz">
-                    <rect key="frame" x="170.5" y="56" width="53" height="20.5"/>
+                    <rect key="frame" x="170.5" y="64" width="53" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vZG-p0-F2d">
-                    <rect key="frame" x="8" y="129" width="378" height="484"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <rect key="frame" x="8" y="137" width="378" height="476"/>
+                    <color key="backgroundColor" name="Background"/>
                 </tableView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Why are you reporting this account ?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s0n-ZD-gf7">
-                    <rect key="frame" x="54" y="92.5" width="286" height="20.5"/>
+                    <rect key="frame" x="54" y="100.5" width="286" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -65,7 +66,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="Background"/>
                     <constraints>
                         <constraint firstItem="wfI-og-ds6" firstAttribute="centerX" secondItem="6m8-za-wuM" secondAttribute="centerX" id="88F-Am-qgS"/>
                         <constraint firstItem="2wO-zw-o44" firstAttribute="leading" secondItem="6m8-za-wuM" secondAttribute="leading" constant="32" id="Jhv-F4-8Th"/>
@@ -78,24 +79,35 @@
                     </constraints>
                 </view>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fh7-By-y2I">
-                    <rect key="frame" x="0.0" y="129" width="394" height="492"/>
+                    <rect key="frame" x="0.0" y="137" width="394" height="484"/>
                     <subviews>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Please provide us more detail about your report!" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="snx-wh-kbo">
-                            <rect key="frame" x="8" y="0.0" width="378" height="100"/>
+                            <rect key="frame" x="8" y="0.0" width="378" height="150"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="100" id="W9P-AO-RnK"/>
+                                <constraint firstAttribute="height" constant="150" id="W9P-AO-RnK"/>
                             </constraints>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                    <color key="value" name="Tertiary"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="10"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidths">
+                                    <real key="value" value="1"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
                         </textView>
                         <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="59" translatesAutoresizingMaskIntoConstraints="NO" id="VC2-I4-sHU">
-                            <rect key="frame" x="47.5" y="120" width="299" height="35"/>
+                            <rect key="frame" x="47.5" y="170" width="299" height="35"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gqm-2Q-tJK">
                                     <rect key="frame" x="0.0" y="0.0" width="120" height="35"/>
-                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="backgroundColor" name="Background"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="120" id="FlE-oF-7Kx"/>
                                         <constraint firstAttribute="height" constant="35" id="xmE-fu-TfF"/>
@@ -120,6 +132,7 @@
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOe-9C-Qqt">
                                     <rect key="frame" x="179" y="0.0" width="120" height="35"/>
+                                    <color key="backgroundColor" name="Primary"/>
                                     <state key="normal" title="Submit">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </state>
@@ -145,7 +158,7 @@
                             </constraints>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="Background"/>
                     <constraints>
                         <constraint firstItem="snx-wh-kbo" firstAttribute="leading" secondItem="fh7-By-y2I" secondAttribute="leading" constant="8" id="10T-ey-Awf"/>
                         <constraint firstItem="VC2-I4-sHU" firstAttribute="centerX" secondItem="fh7-By-y2I" secondAttribute="centerX" id="Imd-w0-NUC"/>
@@ -156,9 +169,9 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" name="Background"/>
             <constraints>
-                <constraint firstItem="l1S-6a-NKz" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="8" id="2wH-ua-gEg"/>
+                <constraint firstItem="l1S-6a-NKz" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="16" id="2wH-ua-gEg"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="6m8-za-wuM" secondAttribute="trailing" id="86I-J7-n8e"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="vZG-p0-F2d" secondAttribute="trailing" constant="8" id="FF2-kc-pPF"/>
                 <constraint firstItem="6m8-za-wuM" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="H4w-mC-vxX"/>
@@ -181,5 +194,14 @@
     </objects>
     <resources>
         <image name="rpcompleted" width="96" height="96"/>
+        <namedColor name="Background">
+            <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Primary">
+            <color red="0.20784313725490197" green="0.17647058823529413" blue="0.4392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Tertiary">
+            <color red="0.9137254901960784" green="0.90196078431372551" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

@@ -313,6 +313,21 @@ extension SelectedPostVC: ASCollectionDataSource {
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let selectedHashtag = posts[collectionView.tag].hashtags[indexPath.row]
+        
+        if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+            
+            PLWHVC.searchHashtag = selectedHashtag
+            self.navigationController?.pushViewController(PLWHVC, animated: true)
+            
+        }
+        
+        
+        
+    }
+    
 }
 
 extension SelectedPostVC {
@@ -680,7 +695,6 @@ extension SelectedPostVC {
         
         global_presetingRate = Double(0.35)
         global_cornerRadius = 45
-        postSettingVC.selectedPost = item
         editeddPost = item
         self.present(postSettingVC, animated: true, completion: nil)
         

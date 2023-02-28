@@ -71,6 +71,15 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         
+        
+        //
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+    
     
         
     }
@@ -502,6 +511,23 @@ extension FeedViewController {
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let selectedHashtag = posts[collectionView.tag].hashtags[indexPath.row]
+        
+        if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+            
+            PLWHVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            PLWHVC.searchHashtag = selectedHashtag
+            self.navigationController?.pushViewController(PLWHVC, animated: true)
+            
+        }
+        
+        
+        
+    }
+    
 }
 
 extension FeedViewController: ASCollectionDelegate {
@@ -543,7 +569,7 @@ extension FeedViewController: ASCollectionDataSource {
             
             node.settingBtn = { (node) in
             
-                //self.settingVideo(item: post)
+                self.settingPost(item: post)
                   
             }
             
@@ -733,4 +759,108 @@ extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDel
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
+}
+
+extension FeedViewController {
+    
+    func settingPost(item: PostModel) {
+        
+        let newsFeedSettingVC = NewsFeedSettingVC()
+        newsFeedSettingVC.modalPresentationStyle = .custom
+        newsFeedSettingVC.transitioningDelegate = self
+        
+        global_presetingRate = Double(0.35)
+        global_cornerRadius = 45
+        newsFeedSettingVC.isOwner = false
+        editeddPost = item
+        self.present(newsFeedSettingVC, animated: true, completion: nil)
+        
+    }
+    
+    @objc func copyPost() {
+    
+        if let id = self.editeddPost?.id {
+           
+            let link = "https://dualteam.page.link/dual?p=\(id)"
+            
+            UIPasteboard.general.string = link
+            showNote(text: "Post link is copied")
+            
+        } else {
+            showNote(text: "Post link is unable to be copied")
+        }
+        
+    }
+    
+    @objc func copyProfile() {
+        
+        if let id = self.editeddPost?.owner?.id {
+            
+            let link = "https://dualteam.page.link/dual?up=\(id)"
+            
+            UIPasteboard.general.string = link
+            showNote(text: "User profile link is copied")
+            
+        } else {
+            showNote(text: "User profile link is unable to be copied")
+        }
+        
+    }
+    
+    @objc func removePost() {
+        
+        if let deletingPost = editeddPost {
+           
+            if let indexPath = posts.firstIndex(of: deletingPost) {
+                
+                posts.removeObject(deletingPost)
+                collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+               
+            }
+            
+        }
+        
+       
+    }
+    
+    @objc func reportPost() {
+        
+        let slideVC =  reportView()
+        
+        
+        slideVC.video_report = true
+        slideVC.highlight_id = editeddPost?.id ?? ""
+        slideVC.modalPresentationStyle = .custom
+        slideVC.transitioningDelegate = self
+        global_presetingRate = Double(0.75)
+        global_cornerRadius = 35
+        
+        delay(0.1) {
+            self.present(slideVC, animated: true, completion: nil)
+        }
+        
+    }
+    
+    @objc func sharePost() {
+        
+        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
+            print("Sendbird: Can't get userUID")
+            return
+        }
+        
+        let loadUsername = userDataSource.userName
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(editeddPost?.id ?? "")")!]
+        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
+            
+            
+        }
+        
+        delay(0.1) {
+            self.present(ac, animated: true, completion: nil)
+        }
+      
+    }
+    
 }

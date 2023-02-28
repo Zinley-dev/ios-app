@@ -52,7 +52,7 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             
         } else if video_report == true {
             
-            report_title.text = "Why are you reporting this video?"
+            report_title.text = "Why are you reporting this post?"
             
         } else if comment_report == true {
             
@@ -161,6 +161,7 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             reason = challenge_report_list[indexPath.row]
         }
                 
+        tableView.isHidden = true
         descriptionView.isHidden = false
         
         

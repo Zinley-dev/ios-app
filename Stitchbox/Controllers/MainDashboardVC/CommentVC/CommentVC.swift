@@ -30,7 +30,8 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     //var currentItem: HighlightsModel!
     var hasSetPointOrigin = false
     var pointOrigin: CGPoint?
-    
+    var editedComment: CommentModel?
+    var editedIndexpath: IndexPath?
     //var lastDocumentSnapshot: DocumentSnapshot!
     //var query: Query!
     var reply_to_uid: String!
@@ -148,6 +149,19 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         loadCommentTitle()
         commentBtn.setTitle("", for: .normal)
         
+        
+        //
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentVC.pinRequest), name: (NSNotification.Name(rawValue: "pin_cmt")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentVC.unpinRequest), name: (NSNotification.Name(rawValue: "unpin_cmt")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentVC.reportRequest), name: (NSNotification.Name(rawValue: "report_cmt")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentVC.copyRequest), name: (NSNotification.Name(rawValue: "copy_cmt")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentVC.deleteRequest), name: (NSNotification.Name(rawValue: "delete_cmt")), object: nil)
+        
+        
+        
+        //
+        
         Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(CommentVC.calculateToTalCmt), userInfo: nil, repeats: true)
     }
     
@@ -183,6 +197,12 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
 
+        
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "pin_cmt")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "unpin_cmt")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_cmt")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_cmt")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "delete_cmt")), object: nil)
         
     }
     
@@ -550,141 +570,40 @@ extension CommentVC {
             let touchPoint = gestureRecognizer.location(in: self.tableNode.view)
             if let indexPath = self.tableNode.indexPathForRow(at: touchPoint) {
                 
-                
                 guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
                     print("Can't get userUID")
                     return
                 }
                 
                 let uid = userUID
-                tableNode.scrollToRow(at: IndexPath(row: indexPath.row, section: 0), at: .top, animated: true)
-                
-                let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                let selectedCmt = CommentList[indexPath.row]
                 
                 
-                let report = UIAlertAction(title: "Report", style: .default) { (alert) in
-                    
-               
-                    
-                    let slideVC =  reportView()
-                    
-                    
-                    slideVC.comment_id = self.CommentList[indexPath.row].comment_id
-                    slideVC.comment_report = true
-                    slideVC.modalPresentationStyle = .custom
-                    slideVC.transitioningDelegate = self
-                    global_presetingRate = Double(0.75)
-                    global_cornerRadius = 35
-                    self.present(slideVC, animated: true, completion: nil)
-                  
-                }
+                let commentSettings = CommentSettings()
+                commentSettings.modalPresentationStyle = .custom
+                commentSettings.transitioningDelegate = self
                 
-                let copy = UIAlertAction(title: "Copy", style: .default) { (alert) in
-                    
-                    UIPasteboard.general.string = self.CommentList[indexPath.row].text
-                    showNote(text: "Copied")
-                    
-                    
-                }
-                
-                let pin = UIAlertAction(title: "Pin", style: .default) {  [self] (alert) in
-                    
-                    let item = CommentList[indexPath.row]
-                    pinCmt(items: item, indexPath: indexPath.row)
-                    
-                    
-                }
-                
-                let unPin = UIAlertAction(title: "Unpin", style: .default) { [self] (alert) in
-                    
-                   
-                    let item = CommentList[indexPath.row]
-                    unPinCmt(items: item, indexPath: indexPath.row)
-                    
-                }
-                
-                let delete = UIAlertAction(title: "Delete", style: .destructive) { [self] (alert) in
-                    
-                    let item = CommentList[indexPath.row]
-                    removeComment(items: item, indexPath: indexPath.row)
-                    
-                }
-                
-                let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in
-                    
-                }
-                
+                global_presetingRate = Double(0.35)
+                global_cornerRadius = 45
                 
                 if uid == self.post.owner?.id {
-                    
-                    if CommentList[indexPath.row].is_title == false {
-                        
-                        if CommentList[indexPath.row].isReply == false {
-                            
-                            if CommentList[indexPath.row].is_pinned == true {
-                                
-                                sheet.addAction(unPin)
-                                
-                            } else {
-                                
-                                sheet.addAction(pin)
-                                
-                            }
-                            
-                        }
-                        
-                    }
-                    
-                    
-                    
-                    if uid == CommentList[indexPath.row].comment_uid {
-                              
-                        if CommentList[indexPath.row].is_title == true {
-                            
-                            sheet.addAction(copy)
-                            sheet.addAction(cancel)
-                            
-                        } else {
-                            
-                            sheet.addAction(copy)
-                            sheet.addAction(delete)
-                            sheet.addAction(cancel)
-                            
-                        }
-                     
-                        
-                    } else {
-                        
-                        
-                        sheet.addAction(copy)
-                        sheet.addAction(report)
-                        sheet.addAction(delete)
-                        sheet.addAction(cancel)
-                        
-                    }
-                    
-                    
+                    commentSettings.isPostOwner = true
+    
                 } else {
-                    
-                    if uid == CommentList[indexPath.row].comment_uid {
-                        
-                        sheet.addAction(copy)
-                        sheet.addAction(delete)
-                        sheet.addAction(cancel)
-                        
-                    } else {
-                        
-                        sheet.addAction(copy)
-                        sheet.addAction(report)
-                        sheet.addAction(cancel)
-                        
-                        
-                    }
-                    
+                    commentSettings.isPostOwner = false
                 }
                 
-                self.present(sheet, animated: true, completion: nil)
+                if uid == selectedCmt.owner_uid {
+                    commentSettings.isCommentOwner = true
+                } else {
+                    commentSettings.isCommentOwner = false
+                }
+               
+                editedComment = selectedCmt
+                editedIndexpath = indexPath
                 
+                self.present(commentSettings, animated: true, completion: nil)
+            
             }
         }
     }
@@ -1546,5 +1465,66 @@ extension CommentVC {
     }
     
 
+    
+}
+
+extension CommentVC {
+    
+    @objc func pinRequest() {
+        
+        if let cmt = editedComment, let index = editedIndexpath?.row {
+            pinCmt(items: cmt, indexPath: index)
+        }
+    
+    }
+    
+    @objc func unpinRequest() {
+        
+        if let cmt = editedComment, let index = editedIndexpath?.row {
+            unPinCmt(items: cmt, indexPath: index)
+        }
+       
+    }
+    
+    @objc func copyRequest() {
+        
+        if let index = editedIndexpath?.row {
+            UIPasteboard.general.string = self.CommentList[index].text
+            showNote(text: "Copied successfully")
+        }
+        
+        
+        
+    }
+    
+    @objc func deleteRequest() {
+        
+        if let cmt = editedComment, let index = editedIndexpath?.row {
+            removeComment(items: cmt, indexPath: index)
+        }
+       
+    }
+    
+    @objc func reportRequest() {
+        
+        if let index = editedIndexpath?.row {
+            
+            let slideVC =  reportView()
+            
+            
+            slideVC.comment_id = self.CommentList[index].comment_id
+            slideVC.comment_report = true
+            slideVC.modalPresentationStyle = .custom
+            slideVC.transitioningDelegate = self
+            global_presetingRate = Double(0.75)
+            global_cornerRadius = 35
+            
+            delay(0.1) {
+                self.present(slideVC, animated: true, completion: nil)
+            }
+            
+        }
+    
+    }
     
 }
