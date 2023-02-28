@@ -11,6 +11,8 @@ import SendBirdUIKit
 import SendBirdCalls
 import SwiftEntryKit
 import UserNotifications
+import CoreMedia
+import AVFAudio
 
 
 var general_room: Room!
@@ -23,6 +25,7 @@ var global_percentComplete = 0.0
 var global_host = ""
 var global_fullLink = ""
 var selectedTabIndex = 0
+var global_suppport_game_list = [GameList]()
 
  let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
  let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
@@ -32,14 +35,36 @@ var selectedTabIndex = 0
  let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company": "Nonolive", "domain": ["nonolive.com"], "status": true])
  let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
 
- 
+var emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-with-concrete-floor_53876-70804.jpg?w=1380"
+
+let xBtn = UIImage(named: "1024x")?.resize(targetSize: CGSize(width: 12, height: 12))
 
 var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
 var back_frame = CGRect(x: -10, y: 0, width: 35, height: 25)
 var discord_domain = ["discordapp.com", "discord.com", "discord.co", "discord.gg", "watchanimeattheoffice.com", "dis.gd", "discord.media", "discordapp.net", "discordstatus.com" ]
 
+let muteImage = UIImage.init(named: "3xmute")?.resize(targetSize: CGSize(width: 26, height: 26))
+let unmuteImage = UIImage.init(named: "3xunmute")?.resize(targetSize: CGSize(width: 26, height: 26))
+let speedImage = UIImage.init(named: "Speed_4x")?.resize(targetSize: CGSize(width: 25, height: 25))
+
 typealias DownloadComplete = () -> ()
 
+func activeSpeaker() {
+    
+    do {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+                print("AVAudioSession Category Playback OK")
+                do {
+                    try AVAudioSession.sharedInstance().setActive(true)
+                    print("AVAudioSession is Active")
+                } catch {
+                    print(error.localizedDescription)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+    
+}
 
 func showNote(text: String) {
     
@@ -270,7 +295,7 @@ extension UITextView {
 
 
 
-func pausePreviousVideoIfNeed(pauseIndex: Int) {
+func pauseVideoIfNeed(pauseIndex: Int) {
   
     if let vc = UIViewController.currentViewController() {
          
@@ -282,10 +307,35 @@ func pausePreviousVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.videoNode.isPlaying() {
                         
-                        //cell.videoNode.player?.seek(to: CMTime.zero)
+                        
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                        
+                        cell.videoNode.player?.seek(to: CMTime.zero)
                         cell.videoNode.pause()
-                        //cell.videoNode.player?.seek(to: CMTime.zero)
+                        
+                    }
                     
+                }
+                
+            }
+            
+        } else if vc is FeedViewController {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+                    
+                    if cell.videoNode.isPlaying() {
+                        
+                        cell.videoNode.player?.seek(to: CMTime.zero)
+                        
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                        
+                        cell.videoNode.pause()
                     }
                     
                 }
@@ -299,7 +349,7 @@ func pausePreviousVideoIfNeed(pauseIndex: Int) {
 }
 
 
-func playPreviousVideoIfNeed(playIndex: Int) {
+func playVideoIfNeed(playIndex: Int) {
   
     if let vc = UIViewController.currentViewController() {
          
@@ -311,9 +361,48 @@ func playPreviousVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
+                        for index in 0..<update1.posts.count {
+                                if index != playIndex {
+                                    pauseVideoIfNeed(pauseIndex: index)
+                                }
+                        }
+                        
+                        
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                       
                         cell.videoNode.muted = true
                         cell.videoNode.play()
                       
+                    }
+                    
+                }
+                
+            }
+            
+        } else if vc is FeedViewController {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
+                    
+                    if !cell.videoNode.isPlaying() {
+                        
+                        for index in 0..<update1.posts.count {
+                            if index != playIndex {
+                                pauseVideoIfNeed(pauseIndex: index)
+                            }
+                        }
+                        
+                      
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                        
+                        cell.videoNode.muted = true
+                        cell.videoNode.play()
+                    
                     }
                     
                 }
@@ -457,4 +546,19 @@ func turnOff2FAForPhone() {
         
     }
     
+}
+
+
+func transformFromJSON(_ value: Any?) -> Date? {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    
+    guard let strValue = value as? String else { return nil }
+    return formatter.date(from: strValue)
+}
+
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
 }

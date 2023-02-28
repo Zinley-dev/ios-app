@@ -811,15 +811,21 @@ extension String{
 }
 
 func verifyUrl(urlString: String?) -> Bool {
-    guard let urlString = urlString else {return false}
-    guard let url = NSURL(string: urlString) else {return false}
-    if !UIApplication.shared.canOpenURL(url as URL) {return false}
-
-    //
-    let regEx = "((https|http)://)((\\w|-)+)(([.]|[/])((\\w|-)+))+"
-    let predicate = NSPredicate(format:"SELF MATCHES %@", argumentArray:[regEx])
-    return predicate.evaluate(with: urlString)
+    guard let urlString = urlString,
+          let url = URL(string: urlString),
+          UIApplication.shared.canOpenURL(url) else {
+        return false
+    }
+    
+    guard let components = URLComponents(string: urlString),
+          let _ = components.scheme,
+          let _ = components.host else {
+        return false
+    }
+    
+    return true
 }
+
 
 extension UIViewController {
     func showInputDialog(title:String? = nil,

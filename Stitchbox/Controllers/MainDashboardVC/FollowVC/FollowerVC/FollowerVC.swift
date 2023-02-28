@@ -78,6 +78,72 @@ class FollowerVC: UIViewController {
         })
     }
     
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let size = tableNode.view.visibleCells[0].frame.height
+        let iconSize: CGFloat = 35.0
+        
+        let removeAction = UIContextualAction(
+            style: .normal,
+            title: ""
+        ) { action, view, actionHandler in
+            
+            let userid = self.inSearchMode ? self.searchUserList[indexPath.row].userId : self.userList[indexPath.row].userId
+            self.removeFollower(userUID: userid ?? "", row: indexPath.row)
+            actionHandler(true)
+        }
+        
+        let removeView = UIImageView(
+            frame: CGRect(
+                x: (size-iconSize)/2,
+                y: (size-iconSize)/2,
+                width: iconSize,
+                height: iconSize
+        ))
+        //removeView.layer.borderColor = UIColor.white.cgColor
+        removeView.layer.masksToBounds = true
+        //removeView.layer.borderWidth = 1
+        removeView.layer.cornerRadius = iconSize/2
+        removeView.backgroundColor =  .secondary
+        removeView.image = xBtn
+        removeView.contentMode = .center
+        
+        removeAction.image = removeView.asImage()
+        removeAction.backgroundColor = .background
+       
+        
+        return UISwipeActionsConfiguration(actions: [removeAction])
+        
+        
+        
+    }
+    
+    func removeFollower(userUID: String, row: Int) {
+
+        if userUID != "" {
+            
+            APIManager().deleteFollower(params: ["FollowId": userUID]) { result in
+                switch result {
+                case .success(_):
+                    DispatchQueue.main.async {
+                        self.userList.remove(at: row)
+                        self.tableNode.deleteRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
+                        showNote(text: "Remove followed!")
+                    }
+                   
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        showNote(text: "Unable to remove follow!")
+                    }
+                    
+                }
+            }
+            
+        }
+        
+    }
+    
 }
 
 extension FollowerVC {

@@ -1,5 +1,5 @@
 //
-//  steamingListVC.swift
+//  StreamingListVC.swift
 //  Dual
 //
 //  Created by Khoi Nguyen on 9/13/21.

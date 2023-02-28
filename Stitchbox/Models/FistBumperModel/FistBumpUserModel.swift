@@ -1,15 +1,10 @@
 //
-//  File.swift
+//  FistBumpUserModel.swift
 //  Stitchbox
 //
 //  Created by Khanh Duy Nguyen on 2/1/23.
 //
-//
-//  BlockUserModel.swift
-//  Stitchbox
-//
-//  Created by Khoi Nguyen on 1/17/23.
-//
+
 
 import ObjectMapper
 

@@ -111,11 +111,17 @@ import SendBirdCalls
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         
-        if let index = viewController.tabBarController?.selectedIndex {
+        if let tabBarIndex = viewController.tabBarController?.selectedIndex {
             
-            if index != 2 {
+            if tabBarIndex != 2 {
                 
-                selectedTabIndex = index
+                selectedTabIndex = tabBarIndex
+                
+            }
+            
+            if tabBarIndex == 0 {
+                
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
                 
             }
             

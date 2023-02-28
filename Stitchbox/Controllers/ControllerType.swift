@@ -32,49 +32,23 @@ extension ControllerType {
     func presentError(error: Error) {
     
         // For Dismissing the Popup
-        self.dismiss(animated: true) {
-            
-            let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            
-        }
+        SwiftLoader.hide()
+        let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
         
     }
     
     func presentMessage(message: String) {
         
-        // For Dismissing the Popup
-        self.dismiss(animated: true) {
-            
-            // Dismiss current Viewcontroller and back to ViewController B
-            self.navigationController?.popViewController(animated: true)
-            let alert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            
-        }
+        // Dismiss current Viewcontroller and back to ViewController B
+        SwiftLoader.hide()
+        self.navigationController?.popViewController(animated: true)
+        let alert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
-    /*
-    func presentLoading() {
-      self.dismiss(animated: true) {
-        let popupVC = LoadingViewController()
-        popupVC.providesPresentationContextTransitionStyle = true
-        popupVC.definesPresentationContext = true
-        popupVC.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
-        popupVC.modalPresentationStyle = .overCurrentContext
-        self.present(popupVC, animated: false, completion: nil)
-      }
-    }
-  
-    func dismissLoading() {
-        DispatchQueue.main.async {
-            self.dismiss(animated: false, completion: nil)
-        }
-    }
-     */
-      
 }
 
 

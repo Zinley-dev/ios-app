@@ -15,9 +15,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChallengeCard" customModule="Stitchbox" customModuleProvider="target">
             <connections>
+                <outlet property="badgeImgView" destination="Yi1-Z4-9wG" id="MC1-uv-FxZ"/>
                 <outlet property="badgeWidth" destination="DQz-nE-Sfg" id="iia-9M-aDR"/>
                 <outlet property="challengeCount" destination="wtj-Ty-ac2" id="yrC-nj-raC"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="epq-aj-rq0"/>
+                <outlet property="fistBumpedLbl" destination="wtj-Ty-ac2" id="l3F-dN-WKc"/>
                 <outlet property="game1" destination="sbq-5j-YZb" id="MjT-R7-Qz5"/>
                 <outlet property="game2" destination="kaH-l2-oeq" id="mUD-h8-qGU"/>
                 <outlet property="game3" destination="McQ-gM-jrO" id="6xW-3m-sF8"/>
@@ -47,7 +49,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gs6-Im-Nde">
                             <rect key="frame" x="255" y="10" width="131" height="154"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Yi1-Z4-9wG">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Yi1-Z4-9wG">
                                     <rect key="frame" x="0.0" y="0.0" width="131" height="154"/>
                                     <color key="backgroundColor" red="0.25880911950000002" green="0.25883483889999997" blue="0.25097912550000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <userDefinedRuntimeAttributes>

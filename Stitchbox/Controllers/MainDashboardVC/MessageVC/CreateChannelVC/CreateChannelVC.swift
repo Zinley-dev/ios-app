@@ -323,7 +323,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
 
                 var newUserList = [SBUUser]()
                 for user in data {
-                    let preloadUser =  Mapper<SendBirdUser>().map(JSONObject: user)
+                    let preloadUser =  Mapper<SearchUser>().map(JSONObject: user)
                     let user = SBUUser(userId: preloadUser?.userID ?? "", nickname: preloadUser?.username ?? "", profileUrl: preloadUser?.avatar ?? "")
                     if !self.searchUserList.contains(where: { $0.userId == user.userId }) {
                         newUserList.append(user)
@@ -352,7 +352,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
 
                 var newUserList = [SBUUser]()
                 for user in data {
-                    let preloadUser =  Mapper<SendBirdUser>().map(JSONObject: user)
+                    let preloadUser =  Mapper<SearchUser>().map(JSONObject: user)
                     let user = SBUUser(userId: preloadUser?.userID ?? "", nickname: preloadUser?.username ?? "", profileUrl: preloadUser?.avatar ?? "")
                     if !self.userList.contains(where: { $0.userId == user.userId }) {
                         newUserList.append(user)

@@ -40,6 +40,12 @@ class ResetPwdVC: UIViewController, ControllerType {
         }
     }
     
+   
+    @IBOutlet weak var checkPassLengthLabel: UILabel!
+    @IBOutlet weak var checkPassNumberLabel: UILabel!
+    @IBOutlet weak var checkPassUpperLabel: UILabel!
+    @IBOutlet weak var checkPassLowerLabel: UILabel!
+    @IBOutlet weak var checkPassSpecialLabel: UILabel!
     
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -102,6 +108,12 @@ class ResetPwdVC: UIViewController, ControllerType {
         newPwdTextField.addUnderLine()
         currentPwdTextField.addUnderLine()
         
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        self.view.endEditing(true)
     }
 }
 

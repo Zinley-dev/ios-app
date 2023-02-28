@@ -296,7 +296,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 
                 let newUserList = data.compactMap { user -> SBUUser? in
                     do {
-                        let preloadUser =  Mapper<SendBirdUser>().map(JSONObject: user)
+                        let preloadUser =  Mapper<SearchUser>().map(JSONObject: user)
                         let user = SBUUser(userId: preloadUser?.userID ?? "", nickname: preloadUser?.username ?? "", profileUrl: preloadUser?.avatar ?? "")
                         
                         if needChecked {
@@ -316,6 +316,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                     } catch {
                         print("Can't catch user")
                     }
+                    
                     return nil
                 }
 
@@ -339,7 +340,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 }
                 
                 let newUserList = data.compactMap { user -> SBUUser? in
-                        let preloadUser = Mapper<SendBirdUser>().map(JSONObject: user)
+                        let preloadUser = Mapper<SearchUser>().map(JSONObject: user)
                         let user = SBUUser(userId: preloadUser?.userID ?? "", nickname: preloadUser?.username ?? "", profileUrl: preloadUser?.avatar ?? "")
                         if !self.joinedUserIds.contains(user.userId), !self.bannedList.contains(user.userId) {
                             return user

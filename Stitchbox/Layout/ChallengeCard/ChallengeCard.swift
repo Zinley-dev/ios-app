@@ -17,9 +17,13 @@ class ChallengeCard: UIView {
     @IBOutlet weak var userImgHeight: NSLayoutConstraint!
     @IBOutlet weak var userImgWidth: NSLayoutConstraint!
     @IBOutlet weak var userImgView: UIImageView!
+    @IBOutlet weak var badgeImgView: UIImageView!
+
     @IBOutlet var contentView: UIView!
     @IBOutlet weak var infoLbl: UILabel!
+    @IBOutlet weak var fistBumpedLbl: UILabel!
     
+
     @IBOutlet weak var game4: UIButton!
     @IBOutlet weak var game3: UIButton!
     @IBOutlet weak var game2: UIButton!

@@ -35,6 +35,7 @@ class UserProfileVC: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
+    var onPresent = false
 
     var demoProfileData: ProfileHeaderData {
         return ProfileHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
@@ -571,9 +572,16 @@ extension UserProfileVC {
     
     
     @objc func onClickBack(_ sender: AnyObject) {
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
+        
+        if onPresent {
+            self.dismiss(animated: true)
+        } else {
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }
         }
+        
+       
     }
     
     

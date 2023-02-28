@@ -32,17 +32,17 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XTn-4C-h0H">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="30"/>
-                    <color key="backgroundColor" red="0.16862887139999999" green="0.1686248779" blue="0.16862756009999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
+                    <color key="backgroundColor" name="Background"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="3F6-xZ-FrI"/>
+                        <constraint firstAttribute="height" constant="40" id="3F6-xZ-FrI"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fQO-6b-zKr">
-                    <rect key="frame" x="0.0" y="30" width="414" height="555"/>
+                    <rect key="frame" x="0.0" y="40" width="414" height="545"/>
                     <color key="backgroundColor" name="Background"/>
                 </view>
                 <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bfM-je-VR1">

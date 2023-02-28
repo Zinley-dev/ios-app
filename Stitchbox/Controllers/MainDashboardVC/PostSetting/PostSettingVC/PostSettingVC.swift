@@ -28,10 +28,7 @@ class PostSettingVC: UIViewController{
     
     @IBOutlet weak var deleteBtn: UIButton!
     
-    var selectedPost: PostModel?
-    var isOperator: Bool?
-    var isMute: Bool?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

@@ -7,7 +7,7 @@
 import ObjectMapper
 
 
-struct SendBirdUser : Mappable {
+struct SearchUser : Mappable {
 
     // MARK: - Properties
     private(set) var userID: String = ""
