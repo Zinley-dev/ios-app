@@ -38,6 +38,7 @@ struct APIManager {
     let likePostManager = Manager<LikePostApi>()
     let fistBumpManager = Manager<FistBumpAPI>()
     let gamesManager = Manager<GameAPI>()
+    let searchFeedManager = Manager<SearchFeedAPI>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -577,6 +578,14 @@ extension APIManager {
   func getGames(page: Int = 1, limit: Int = 20, completion: @escaping APICompletion) {
     gamesManager.request(.getGames(page: page, limit: limit)) {
       result in
+      completion(result)
+    }
+  }
+}
+
+extension APIManager {
+  func search(query: String, page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+    searchFeedManager.request(.search(query: query, page: page, limit: limit)) { result in
       completion(result)
     }
   }

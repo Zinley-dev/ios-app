@@ -1005,3 +1005,37 @@ extension GameAPI: EndPointType {
   }
   
 }
+
+public enum SearchFeedAPI {
+  case search(query: String, page: Int = 1, limit: Int = 10)
+}
+extension SearchFeedAPI: EndPointType {
+  var module: String {
+    return "/search"
+  }
+  
+  var path: String {
+    switch self {
+      case .search(let query, let page, let limit):
+        return "?query=\(query)&page=\(page)&limit=\(limit)"
+    }
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .search:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .search:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+}
