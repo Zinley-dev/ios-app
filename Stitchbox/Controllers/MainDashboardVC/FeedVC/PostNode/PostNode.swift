@@ -124,6 +124,12 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
             
             
+            let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.userTapped))
+            username2Tap.numberOfTapsRequired = 1
+            self.headerView.timeLbl.isUserInteractionEnabled = true
+            self.headerView.timeLbl.addGestureRecognizer(username2Tap)
+            
+
             let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.shareTapped))
             shareTap.numberOfTapsRequired = 1
             self.buttonsView.shareBtn.addGestureRecognizer(shareTap)
