@@ -1007,7 +1007,12 @@ extension GameAPI: EndPointType {
 }
 
 public enum SearchFeedAPI {
-  case search(query: String, page: Int = 1, limit: Int = 10)
+  case searchUser(query: String, page: Int = 1, limit: Int = 10)
+  case searchHashtag(query: String, page: Int = 1, limit: Int = 10)
+  case searchPost(query: String, page: Int = 1, limit: Int = 10)
+  case getAutoComplete(query: String)
+  case getRecent
+  case postRecent(params: [String: Any])
 }
 extension SearchFeedAPI: EndPointType {
   var module: String {
@@ -1016,22 +1021,52 @@ extension SearchFeedAPI: EndPointType {
   
   var path: String {
     switch self {
-      case .search(let query, let page, let limit):
-        return "?query=\(query)&page=\(page)&limit=\(limit)"
+      case .searchUser(let query, let page, let limit):
+        return "/users?query=\(query)&page=\(page)&limit=\(limit)"
+      case .searchHashtag(query: let query, page: let page, limit: let limit):
+        return "/hashtags?query=\(query)&page=\(page)&limit=\(limit)"
+      case .searchPost(query: let query, page: let page, limit: let limit):
+        return "/posts?query=\(query)&page=\(page)&limit=\(limit)"
+      case .getAutoComplete(query: let query):
+        return "/autocomplete?query=\(query)"
+      case .getRecent:
+        return "/result"
+      case .postRecent:
+        return "/result"
     }
   }
   
   var httpMethod: HTTPMethod {
     switch self {
-      case .search:
+      case .searchUser:
         return .get
+      case .searchHashtag:
+        return .get
+      case .searchPost:
+        return .get
+      case .getAutoComplete:
+        return .get
+      case .getRecent:
+        return .get
+      case .postRecent:
+        return .post
     }
   }
   
   var task: HTTPTask {
     switch self {
-      case .search:
+      case .searchUser:
         return .request
+      case .searchHashtag:
+        return .request
+      case .searchPost:
+        return .request
+      case .getAutoComplete:
+        return .request
+      case .getRecent:
+        return .request
+      case .postRecent(let params):
+        return .requestParameters(parameters: params)
     }
   }
   
