@@ -584,8 +584,33 @@ extension APIManager {
 }
 
 extension APIManager {
-  func search(query: String, page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
-    searchFeedManager.request(.search(query: query, page: page, limit: limit)) { result in
+  func searchUser(query: String, page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+    searchFeedManager.request(.searchUser(query: query, page: page, limit: limit)) { result in
+      completion(result)
+    }
+  }
+  func searchPost(query: String, page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+    searchFeedManager.request(.searchPost(query: query, page: page, limit: limit)) { result in
+      completion(result)
+    }
+  }
+  func searchHashtag(query: String, page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+    searchFeedManager.request(.searchHashtag(query: query, page: page, limit: limit)) { result in
+      completion(result)
+    }
+  }
+  func getAutoComplete(query: String, completion: @escaping APICompletion) {
+    searchFeedManager.request(.getAutoComplete(query: query)) { result in
+      completion(result)
+    }
+  }
+  func getRecent(completion: @escaping APICompletion) {
+    searchFeedManager.request(.getRecent) { result in
+      completion(result)
+    }
+  }
+  func addRecent(query: String, completion: @escaping APICompletion) {
+    searchFeedManager.request(.postRecent(params: ["query": query])) { result in
       completion(result)
     }
   }
