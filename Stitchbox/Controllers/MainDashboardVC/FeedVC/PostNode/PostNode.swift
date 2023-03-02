@@ -350,7 +350,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         }
         
        
-        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
+        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 75)
         let buttonsInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         let buttonsInsetSpec = ASInsetLayoutSpec(insets: buttonsInset, child: buttonsNode)
         

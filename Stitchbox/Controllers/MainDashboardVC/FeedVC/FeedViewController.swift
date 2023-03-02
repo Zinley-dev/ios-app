@@ -622,13 +622,13 @@ extension FeedViewController {
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumInteritemSpacing = 10.0
-        flowLayout.minimumLineSpacing = 10.0
-        flowLayout.estimatedItemSize = .zero
+        //flowLayout.minimumInteritemSpacing = 5.0
+        //flowLayout.minimumLineSpacing = 5.0
+        //flowLayout.estimatedItemSize = .zero
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
-        self.collectionNode.leadingScreensForBatching = 3.0
+        self.collectionNode.leadingScreensForBatching = 2.0
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         // Set the data source and delegate
         self.collectionNode.dataSource = self

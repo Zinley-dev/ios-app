@@ -27,21 +27,16 @@ class SearchViewController: UIViewController {
     }
     
     
-    searchBar.tintColor = .white
-    searchBar.barTintColor = .white
+      searchBar.tintColor = .white
+      searchBar.barTintColor = .white
     
       navigationItem.titleView = searchBar
   }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        self.view.endEditing(true)
+        
     }
-    */
-
 }
