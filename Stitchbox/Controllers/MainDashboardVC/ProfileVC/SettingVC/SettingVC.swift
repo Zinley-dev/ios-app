@@ -319,7 +319,9 @@ extension SettingVC {
     }
     
     func processDefaultData() {
-        
+        print("===========++> \(self.settings.AutoPlaySound)")
+        print("===========++> \(self.settings.AllowStreamingLink)")
+        print("===========++> \(self.settings.PrivateAccount)")
         if self.settings != nil {
             if self.settings.AutoPlaySound == true {
                 self.SoundSwitch.setOn(true, animated: true)
