@@ -759,7 +759,7 @@ public enum FistBumpAPI {
     case isFistBumpee(userID: String)
     case addFistBump(userID: String)
     case deleteFistBump(userID: String)
-    case getStat(userID: String)
+    case getInsight(userID: String)
 }
 extension FistBumpAPI: EndPointType {
     var module: String {
@@ -785,8 +785,8 @@ extension FistBumpAPI: EndPointType {
             return "/\(userID)"
         case .deleteFistBump(userID: let userID):
             return "/\(userID)"
-        case .getStat(userID: let userID):
-            return "/\(userID)/stat"
+        case .getInsight(userID: let userID):
+            return "/\(userID)/insight"
         }
     }
     
@@ -808,7 +808,7 @@ extension FistBumpAPI: EndPointType {
             return .post
         case .deleteFistBump:
             return .delete
-        case .getStat:
+        case .getInsight:
             return .get
         }
     }
@@ -831,7 +831,7 @@ extension FistBumpAPI: EndPointType {
             return .request
         case .deleteFistBump(userID: _):
             return .request
-          case .getStat:
+          case .getInsight:
             return .request
         }
     }

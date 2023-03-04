@@ -2833,7 +2833,7 @@
                                 <rect key="frame" x="32" y="79" width="311" height="300"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ojh-dR-ZBs">
-                                        <rect key="frame" x="0.0" y="17.666666666666686" width="311" height="265"/>
+                                        <rect key="frame" x="0.0" y="17.666666666666686" width="311" height="264.99999999999994"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ghi-l7-6IY">
                                                 <rect key="frame" x="0.0" y="0.0" width="311" height="85"/>
@@ -8200,7 +8200,16 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="avgLbl" destination="oex-gu-pkO" id="BIL-eN-f8t"/>
                         <outlet property="fistBumpListBtn" destination="pgc-G0-8Xd" id="C3D-VS-W0Z"/>
+                        <outlet property="fromLbl" destination="hxB-90-rfQ" id="RaF-yL-TkE"/>
+                        <outlet property="percent3DayLbl" destination="VXs-ns-dF6" id="elC-tk-tXY"/>
+                        <outlet property="percentAvgLbl" destination="wSm-G4-4q5" id="vHe-Zx-e7X"/>
+                        <outlet property="percentDay" destination="Rx4-tQ-qEL" id="5kB-hj-5yH"/>
+                        <outlet property="percentWeekLbl" destination="RLW-YN-0zK" id="m7r-lU-W8L"/>
+                        <outlet property="total3DayLbl" destination="SZw-RZ-eSQ" id="W1r-7W-bg6"/>
+                        <outlet property="totalDayLbl" destination="PXB-65-pvT" id="UEe-bs-aQC"/>
+                        <outlet property="totalWeekLbl" destination="yXL-mb-alc" id="o7d-7e-uAH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="abA-TM-ET0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -8219,7 +8228,7 @@
                                 <rect key="frame" x="32" y="79" width="311" height="100"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="CAd-OQ-Cxl">
-                                        <rect key="frame" x="0.0" y="7.6666666666666714" width="311" height="85"/>
+                                        <rect key="frame" x="0.0" y="7.6666666666666714" width="311" height="84.999999999999986"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iH8-GM-LPW">
                                                 <rect key="frame" x="0.0" y="0.0" width="311" height="85"/>
