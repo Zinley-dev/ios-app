@@ -416,7 +416,7 @@ extension UIView {
         let border = CALayer()
         border.backgroundColor = color.cgColor
         border.frame = CGRect(x: 0, y: self.frame.size.height - height,
-                              width: width, height: height)
+                              width: width , height: height)
         
         
         return border

@@ -21,12 +21,12 @@ class HashtagVC: UIViewController {
     
     var isVerified = false
     
-    var searchHashtagList = [HashtagsModelFromAlgolia]()
+    var searchHashtagList = [HashtagsModel]()
     
     struct SearchRecord {
         let keyWord: String
         let timeStamp: Double
-        let items: [HashtagsModelFromAlgolia]
+        let items: [HashtagsModel]
     }
     
     let EXPIRE_TIME = 20.0 //s
@@ -311,7 +311,7 @@ extension HashtagVC: ASTableDataSource {
         
         self.hashtagTxtField.text = newhashtagsText
         
-        self.searchHashtagList = [HashtagsModelFromAlgolia]()
+        self.searchHashtagList = [HashtagsModel]()
         self.tableNode.reloadData(completion: nil)
     }
     

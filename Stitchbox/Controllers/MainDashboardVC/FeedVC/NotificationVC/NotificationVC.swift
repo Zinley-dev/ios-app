@@ -20,8 +20,6 @@ class NotificationVC: UIViewController {
     }
     
 
-
-
 }
 
 extension NotificationVC {
