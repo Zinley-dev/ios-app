@@ -20,11 +20,11 @@ class NotificationModel: Mappable {
     }
     
     func mapping(map: Map) {
-        Posts <- map["posts"]
-        Comment <- map["comment"]
-        Mention <- map["mention"]
-        Follow <- map["follow"]
-        Message <- map["message"]
+        Posts <- map["Posts"]
+        Comment <- map["Comment"]
+        Mention <- map["Mention"]
+        Follow <- map["Follow"]
+        Message <- map["Message"]
     }
 }
 class SettingModel: Mappable {
@@ -41,11 +41,11 @@ class SettingModel: Mappable {
     }
 
     func mapping(map: Map) {
-        AutoPlaySound <- map["autoPlaySound"]
-        PrivateAccount <- map["privateAccount"]
-        AllowStreamingLink <- map["allowStreamingLink"]
-        Notifications <- map["notifications"]
-        EnablePhoneTwoFactor <- map["enablePhoneTwoFactor"]
-        EnableEmailTwoFactor <- map["enableEmailTwoFactor"]
+        AutoPlaySound <- map["AutoPlaySound"]
+        PrivateAccount <- map["PrivateAccount"]
+        AllowStreamingLink <- map["AllowStreamingLink"]
+        Notifications <- map["Notifications"]
+        EnablePhoneTwoFactor <- map["EnablePhoneTwoFactor"]
+        EnableEmailTwoFactor <- map["EnableEmailTwoFactor"]
     }
 }

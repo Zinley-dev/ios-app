@@ -69,6 +69,7 @@
 		395477BD294D6BCA008EED97 /* LoginByPhoneVerifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477BC294D6BCA008EED97 /* LoginByPhoneVerifyController.swift */; };
 		395477BF294D714F008EED97 /* CreateAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477BE294D714F008EED97 /* CreateAccountViewModel.swift */; };
 		3962E496299FE50700047977 /* NewPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962E495299FE50700047977 /* NewPasswordViewModel.swift */; };
+		396B6AB829B2CA4700ED1DAD /* InsightModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396B6AB729B2CA4700ED1DAD /* InsightModel.swift */; };
 		39E8046C299A9A10002F13A5 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E8046B299A9A10002F13A5 /* NotificationService.swift */; };
 		39E80470299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 39E80469299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		579D046ABA2BF9108B6D1B46 /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 284839D90B9CDE22C0FAE530 /* Pods_OneSignalNotificationServiceExtension.framework */; };
@@ -453,6 +454,7 @@
 		395477BC294D6BCA008EED97 /* LoginByPhoneVerifyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginByPhoneVerifyController.swift; sourceTree = "<group>"; };
 		395477BE294D714F008EED97 /* CreateAccountViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewModel.swift; sourceTree = "<group>"; };
 		3962E495299FE50700047977 /* NewPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewModel.swift; sourceTree = "<group>"; };
+		396B6AB729B2CA4700ED1DAD /* InsightModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightModel.swift; sourceTree = "<group>"; };
 		39E80469299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E8046B299A9A10002F13A5 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		39E8046D299A9A10002F13A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -823,6 +825,7 @@
 			isa = PBXGroup;
 			children = (
 				14621E31298B374B0023694D /* FistBumpUserModel.swift */,
+				396B6AB729B2CA4700ED1DAD /* InsightModel.swift */,
 			);
 			path = FistBumperModel;
 			sourceTree = "<group>";
@@ -3189,6 +3192,7 @@
 				6A6C30E62964033A0070167A /* BannedMemberVC.swift in Sources */,
 				6AAD7A1B294C65DD003E3AB6 /* UIViewController+QuickStart.swift in Sources */,
 				6AEA3413298F0FB8005A4C5D /* StartNavVC.swift in Sources */,
+				396B6AB829B2CA4700ED1DAD /* InsightModel.swift in Sources */,
 				6A662784296578E000A4488B /* uploadImageGroupModel.swift in Sources */,
 				6A0CF641296AB18100155889 /* FinalResetVC.swift in Sources */,
 				6A9E4C802977B34500B59176 /* UserActivityModel.swift in Sources */,

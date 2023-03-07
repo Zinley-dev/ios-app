@@ -201,8 +201,8 @@ struct APIManager {
                 completion(result)
         }
     }
-    func getStat(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
-        fistBumpManager.request(.getStat(userID: userID)) {
+    func getInsightOverview(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        fistBumpManager.request(.getInsight(userID: userID)) {
             result in
             completion(result)
         }
