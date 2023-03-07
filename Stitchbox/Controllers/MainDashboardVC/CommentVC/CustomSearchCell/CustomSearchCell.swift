@@ -73,24 +73,6 @@ class CustomSearchCell: UITableViewCell {
             
         }
         
-        else if type == "highlight" {
-            
-            hashtagLbl.isHidden = true
-            ImageView?.isHidden = true
-            postCount.isHidden = false
-            
-//            loadHashTagCount(hashtag: "#\(text)")
-            
-        }
-        
-        else if type == "keyword" {
-            
-            hashtagLbl.isHidden = true
-            ImageView?.isHidden = true
-            postCount.isHidden = true
-                        
-        }
-        
     }
     
     
@@ -98,32 +80,7 @@ class CustomSearchCell: UITableViewCell {
         
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
-        
-        /*
-        DataService.instance.mainFireStoreRef.collection("Highlights").whereField("h_status", isEqualTo: "Ready").whereField("hashtag_list", arrayContains: hashtag).getDocuments { querySnapshot, error in
-                     
-            guard querySnapshot != nil else {
-                print("Error fetching snapshots: \(error!)")
-                return
-            }
-            
-            if querySnapshot?.isEmpty == true {
-                
-                
-                self.postCount.text = "0 post"
-                
-            } else {
-                
-                if let cnt = querySnapshot?.count {
-                 
-                    self.postCount.text = "\(formatPoints(num: Double(cnt))) posts"
-                    
-                }
-                
-            }
-                
-            
-        } */
+        self.postCount.text = "0 post"
         
     }
     

@@ -73,7 +73,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     
     lazy var autocompleteVC: AutocompeteViewController = {
         let vc = AutocompeteViewController()
-        searchResultContainerView.backgroundColor = UIColor.black
+        searchResultContainerView.backgroundColor = UIColor.background
         
         
         self.searchResultContainerView.addSubview(vc.view)
@@ -305,48 +305,49 @@ extension CommentVC {
     }
     
     
-    func checkCurrenText(text: String) {
+    
+func checkCurrenText(text: String) {
+    
+    if hashtag_arr != text.findMHashtagText() {
+        hashtag_arr = text.findMHashtagText()
+        if !hashtag_arr.isEmpty {
+            let hashtagToSearch = hashtag_arr[hashtag_arr.count - 1]
+            print("User is looking for hashtag: \(hashtagToSearch)")
+            let hashtagToSearchTrimmed = String(hashtagToSearch.dropFirst(1))
+           
+            if !hashtagToSearchTrimmed.isEmpty {
+                self.searchResultContainerView.isHidden = false
+                self.autocompleteVC.search(text: hashtagToSearchTrimmed, with: AutocompeteViewController.Mode.hashtag)
+                isInAutocomplete = true
+            }
+        }
         
-        if hashtag_arr != text.findMHashtagText() {
-            hashtag_arr = text.findMHashtagText()
-            if !hashtag_arr.isEmpty {
-                let hashtagToSearch = hashtag_arr[hashtag_arr.count - 1]
-                print("User is looking for hashtag: \(hashtagToSearch)")
-                let hashtagToSearchTrimmed = String(hashtagToSearch.dropFirst(1))
-               
-                if !hashtagToSearchTrimmed.isEmpty {
-                    self.searchResultContainerView.isHidden = false
-                    self.autocompleteVC.search(text: hashtagToSearchTrimmed, with: AutocompeteViewController.Mode.hashtag)
-                    isInAutocomplete = true
-                }
-            }
-            
-        } else if mention_arr != text.findMentiontagText() {
-            mention_arr = text.findMentiontagText()
-            if !mention_arr.isEmpty {
-                let userToSearch = mention_arr[mention_arr.count - 1]
-                print("User is looking for user: \(userToSearch)")
-                let userToSearchTrimmed = String(userToSearch.dropFirst(1))
+    } else if mention_arr != text.findMentiontagText() {
+        mention_arr = text.findMentiontagText()
+        if !mention_arr.isEmpty {
+            let userToSearch = mention_arr[mention_arr.count - 1]
+            print("User is looking for user: \(userToSearch)")
+            let userToSearchTrimmed = String(userToSearch.dropFirst(1))
 
-                if !userToSearchTrimmed.isEmpty {
-                    self.searchResultContainerView.isHidden = false
-                    self.autocompleteVC.search(text: userToSearchTrimmed, with: AutocompeteViewController.Mode.user)
-                    isInAutocomplete = true
+            if !userToSearchTrimmed.isEmpty {
+                self.searchResultContainerView.isHidden = false
+                self.autocompleteVC.search(text: userToSearchTrimmed, with: AutocompeteViewController.Mode.user)
+                isInAutocomplete = true
 
-                }
-                
             }
-        } else {
-             
-            print("Just normal text")
-            self.searchResultContainerView.isHidden = true
             
         }
-        self.updatePrevCmtTxt()
-        
-        print("Done")
+    } else {
+         
+        print("Just normal text")
+        self.searchResultContainerView.isHidden = true
         
     }
+    self.updatePrevCmtTxt()
+    
+    print("Done")
+    
+}
     
     func updatePrevCmtTxt() {
         self.previousTxtLen = self.cmtTxtView.text.count
@@ -465,7 +466,7 @@ extension CommentVC {
         NSLayoutConstraint.activate([
             searchResultContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             searchResultContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            searchResultContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
+            searchResultContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             searchResultContainerView.bottomAnchor.constraint(equalTo: cmtTxtView.topAnchor, constant: -22),
         ])
         searchResultContainerView.backgroundColor = UIColor.gray.withAlphaComponent(0.9)

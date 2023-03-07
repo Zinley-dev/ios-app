@@ -6,8 +6,19 @@
 //
 
 import UIKit
+import AsyncDisplayKit
 
 class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelegate {
+    
+    
+    struct SearchRecord {
+        let keyWord: String
+        let timeStamp: Double
+        let items: [UserSearchModel]
+    }
+    
+    let EXPIRE_TIME = 20.0 //s
+    var searchHist = [SearchRecord]()
     
     enum SearchMode {
         case users
@@ -15,6 +26,8 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         case hashTags
     }
 
+    var searchTableNode: ASTableNode!
+    var searchType = ""
     var initialType = ""
     var currentSearchText = ""
     let backButton: UIButton = UIButton(type: .custom)
@@ -99,7 +112,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         setupButtons()
         setupSearchController()
         setupLayers()
-        
+        setupTableNode()
         tapGesture = UITapGestureRecognizer(target: self, action:#selector(self.closeKeyboard(_:)))
         //do not cancel touch gesture
         tapGesture.cancelsTouchesInView = false
@@ -130,6 +143,8 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             
         }
         
+        searchType = initialType
+        
     }
     
 
@@ -141,6 +156,8 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         postBtn.setTitleColor(UIColor.lightGray, for: .normal)
         hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
+        searchType = "user"
+        
     }
     
     @IBAction func postBtnPressed(_ sender: Any) {
@@ -150,6 +167,8 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         userBtn.setTitleColor(UIColor.lightGray, for: .normal)
         hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
+        searchType = "post"
+        
     }
     
     @IBAction func hashtagBtnPressed(_ sender: Any) {
@@ -158,6 +177,8 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         hashtagBtn.setTitleColor(UIColor.white, for: .normal)
         postBtn.setTitleColor(UIColor.lightGray, for: .normal)
         userBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        
+        searchType = "hashtag"
         
     }
     
@@ -201,23 +222,24 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         } else {
             switch self.selectedSearchMode {
             case SearchMode.users:
-                //print("search users...")
+               
+                PostSearchVC.keyword = ""
                 UserSearchVC.view.isHidden = false
-                self.UserSearchVC.searchUsers(searchText: searchText)
+                UserSearchVC.searchUsers(for: searchText)
                 
             case SearchMode.posts:
-                //print("search video.. ")
                 
-                // introduce autocomplete vc to show keywords
                 PostSearchVC.view.isHidden = false
-                //self.PostSearchVC.searchKeywords(searchText: searchText)
-               
+                PostSearchVC.keyword = searchText
+                PostSearchVC.page = 1
+                PostSearchVC.searchRequest()
                 
                 
             case SearchMode.hashTags:
-                //print("search hashtag...")
+               
+                self.PostSearchVC.keyword = ""
                 HashtagSearchVC.view.isHidden = false
-                self.HashtagSearchVC.searchHashtags(searchText: searchText)
+                HashtagSearchVC.searchHashtags(searchText: searchText)
             }
         }
         
@@ -231,12 +253,13 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             UserSearchVC.tableNode.reloadData(completion: nil)
         case SearchMode.posts:
             PostSearchVC.view.isHidden = true
-            //PostSearchVC.searchKeywordList.removeAll()
-            //PostSearchVC.tableNode.reloadData(completion: nil)
+            PostSearchVC.post_list.removeAll()
+            PostSearchVC.collectionNode.reloadData()
+            PostSearchVC.keyword = ""
         case SearchMode.hashTags:
             HashtagSearchVC.view.isHidden = true
-            //HashtagSearchVC.searchHashtagList.removeAll()
-            //HashtagSearchVC.tableNode.reloadData(completion: nil)
+            HashtagSearchVC.searchHashtagList.removeAll()
+            HashtagSearchVC.tableNode.reloadData(completion: nil)
         }
     }
 }
@@ -290,9 +313,42 @@ extension MainSearchVC {
         if currentSearchText != "" {
             
             self.searchController!.searchBar.text = currentSearchText
-            
+            searchText = currentSearchText
         }
     
+    }
+    
+    func setupTableNode() {
+        
+        self.searchTableNode = ASTableNode(style: .plain)
+        searchView.addSubview(searchTableNode.view)
+        
+        self.searchTableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
+        self.searchTableNode.automaticallyAdjustsContentOffset = true
+        self.searchTableNode.view.backgroundColor = self.view.backgroundColor
+        
+        self.searchTableNode.view.translatesAutoresizingMaskIntoConstraints = false
+        self.searchTableNode.view.topAnchor.constraint(equalTo: self.searchView.topAnchor, constant: 0).isActive = true
+        self.searchTableNode.view.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor, constant: 0).isActive = true
+        self.searchTableNode.view.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor, constant: 0).isActive = true
+        self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: -235).isActive = true
+        
+        self.searchTableNode.delegate = self
+        self.searchTableNode.dataSource = self
+        
+        self.applyStyle()
+        
+    }
+    
+    
+    func applyStyle() {
+        
+        self.searchTableNode.view.separatorStyle = .none
+        self.searchTableNode.view.separatorColor = UIColor.lightGray
+        self.searchTableNode.view.isPagingEnabled = false
+        self.searchTableNode.view.backgroundColor = UIColor.clear
+        self.searchTableNode.view.showsVerticalScrollIndicator = false
+        
     }
 
     
@@ -321,6 +377,58 @@ extension MainSearchVC {
     
 }
 
+
+extension MainSearchVC: ASTableDataSource, ASTableDelegate {
+    
+    func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
+        return false
+    }
+    
+    func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
+        
+        let width = UIScreen.main.bounds.size.width;
+        
+        let min = CGSize(width: width, height: 40);
+        let max = CGSize(width: width, height: 1000);
+        return ASSizeRangeMake(min, max);
+        
+    }
+    
+    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
+        
+        return searchList.count
+        
+    }
+    
+    func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
+        let item = searchList[indexPath.row]
+        return {
+            let node = UserSearchNode(with: item)
+            node.neverShowPlaceholders = true
+            node.debugName = "Node \(indexPath.row)"
+            return node
+        }
+    }
+
+    
+    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+        
+        let item = searchList[indexPath.row]
+        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            UPVC.userId = item.userId
+            UPVC.nickname = item.user_nickname
+        
+            self.navigationController?.pushViewController(UPVC, animated: true)
+            
+        }
+        
+        
+    }
+    
+    
+}
+
 extension MainSearchVC {
     
     @objc func onClickBack(_ sender: AnyObject) {
@@ -340,11 +448,9 @@ extension MainSearchVC {
 
 extension MainSearchVC {
     
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         contentView.isHidden = false
         searchView.isHidden = true
-        
     }
 
     
@@ -367,17 +473,50 @@ extension MainSearchVC {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        print("default searching user with: \(searchBar.text)")
-        
+        self.searchText = searchBar.text ?? ""
+        self.sendSearchRequestToTargetVC()
+     
+        contentView.isHidden = false
+        searchView.isHidden = true
+
     }
 
     func search(for searchText: String) {
+        
+        //check local result first
+        if checkLocalRecords(searchText: searchText){
+            return
+        }
         
         APIManager().getAutoComplete(query: searchText) { result in
             switch result {
             case .success(let apiResponse):
                 
                 print(apiResponse)
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    return
+                }
+                
+                if !data.isEmpty {
+                    
+                    var newSearchList = [UserSearchModel]()
+                    
+                    for item in data {
+                        newSearchList.append(UserSearchModel(type: "user", RecentModel: item))
+                    }
+                    
+                    let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
+                    self.searchHist.append(newSearchRecord)
+                    
+                    if self.searchList != newSearchList {
+                        self.searchList = newSearchList
+                        DispatchQueue.main.async {
+                            self.searchTableNode.reloadData()
+                        }
+                    }
+                    
+                }
                 
             case .failure(let error):
                 
@@ -386,6 +525,31 @@ extension MainSearchVC {
             }
         }
         
+    }
+    
+    func checkLocalRecords(searchText: String) -> Bool {
+       
+        for (i, record) in searchHist.enumerated() {
+            if record.keyWord == searchText {
+                print("time: \(Date().timeIntervalSince1970 - record.timeStamp)")
+                if Date().timeIntervalSince1970 - record.timeStamp <= EXPIRE_TIME {
+                    let retrievedSearchList = record.items
+                    
+                    if self.searchList != retrievedSearchList {
+                        self.searchList = retrievedSearchList
+                        DispatchQueue.main.async {
+                            self.searchTableNode.reloadData(completion: nil)
+                        }
+                    }
+                    return true
+                } else {
+
+                    searchHist.remove(at: i)
+                }
+            }
+        }
+
+        return false
     }
     
 }

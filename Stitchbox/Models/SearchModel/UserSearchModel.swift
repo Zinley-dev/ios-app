@@ -15,22 +15,7 @@ class UserSearchModel {
     fileprivate var _user_name: String!
     fileprivate var _user_nickname: String!
     fileprivate var _avatarUrl: String!
-    fileprivate var _coverUrl: String!
-    fileprivate var _game_name: String!
-    fileprivate var _game_shortName: String!
-    fileprivate var _gameList: [String]!
-    fileprivate var _text: String!
-
     
-    var text: String! {
-        get {
-            if _text == nil {
-                _text = ""
-            }
-            return _text
-        }
-        
-    }
 
     var type: String! {
         get {
@@ -81,47 +66,7 @@ class UserSearchModel {
         }
         
     }
-    
-    var coverUrl: String! {
-        get {
-            if _coverUrl == nil {
-                _coverUrl = ""
-            }
-            return _coverUrl
-        }
-        
-    }
-    
-    var game_name: String! {
-        get {
-            if _game_name == nil {
-                _game_name = ""
-            }
-            return _game_name
-        }
-        
-    }
-    
-    var game_shortName: String! {
-        get {
-            if _game_shortName == nil {
-                _game_shortName = ""
-            }
-            return _game_shortName
-        }
-        
-    }
-    
-    var gameList: [String]! {
-        get {
-            if _gameList == nil {
-                _gameList = []
-            }
-            return _gameList
-        }
-        
-    }
-    
+
     
     init(type: String, RecentModel: Dictionary<String, Any>) {
         
@@ -131,36 +76,16 @@ class UserSearchModel {
             self._userId = userId
         }
         
-        if let user_name = RecentModel["user_name"] as? String {
+        if let user_name = RecentModel["name"] as? String {
             self._user_name = user_name
         }
         
-        if let user_nickname = RecentModel["user_nickname"] as? String {
+        if let user_nickname = RecentModel["username"] as? String {
             self._user_nickname = user_nickname
         }
         
-        if let avatarUrl = RecentModel["avatarUrl"] as? String {
+        if let avatarUrl = RecentModel["avatar"] as? String {
             self._avatarUrl = avatarUrl
-        }
-        
-        if let coverUrl = RecentModel["coverUrl"] as? String {
-            self._coverUrl = coverUrl
-        }
-        
-        if let game_name = RecentModel["game_name"] as? String {
-            self._game_name = game_name
-        }
-        
-        if let game_shortName = RecentModel["game_shortName"] as? String {
-            self._game_shortName = game_shortName
-        }
-        
-        if let gameList = RecentModel["gameList"] as? [String] {
-            self._gameList = gameList
-        }
-        
-        if let text = RecentModel["text"] as? String {
-            self._text = text
         }
 
     }
@@ -168,3 +93,9 @@ class UserSearchModel {
 
 }
 
+
+extension UserSearchModel: Equatable {
+    static func == (lhs: UserSearchModel, rhs: UserSearchModel) -> Bool {
+        return lhs.userId == rhs.userId
+    }
+}

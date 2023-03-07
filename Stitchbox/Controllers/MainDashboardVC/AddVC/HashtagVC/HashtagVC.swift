@@ -10,7 +10,7 @@ import AsyncDisplayKit
 
 class HashtagVC: UIViewController {
 
-    
+
     @IBOutlet weak var hashtagTxtField: UITextField!
     @IBOutlet weak var contentView: UIView!
     
@@ -20,7 +20,7 @@ class HashtagVC: UIViewController {
     var tableNode: ASTableNode!
     
     var isVerified = false
-    
+    var previousSearchText = ""
     var searchHashtagList = [HashtagsModel]()
     
     struct SearchRecord {
@@ -32,6 +32,7 @@ class HashtagVC: UIViewController {
     let EXPIRE_TIME = 20.0 //s
     var searchHist = [SearchRecord]()
     var text: String?
+    lazy var delayItem = workItem()
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -195,7 +196,6 @@ extension HashtagVC {
     }
     
     @objc func onClickAdd(_ sender: AnyObject) {
-        print("Added")
         
         var updateText = ""
         if let text = self.hashtagTxtField.text {
@@ -239,21 +239,36 @@ extension HashtagVC {
 
 extension HashtagVC: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        if let text = textField.text, !text.isEmpty {
-            
-            if text.findMHashtagText().isEmpty != true {
-                
-                createAddAddBtn()
-                
-            } else {
-                
-                createDisableAddBtn()
-                
-            }
-        } else {
+        guard let text = textField.text, !text.isEmpty else {
             createDisableAddBtn()
+            return
+        }
+        
+        if text == previousSearchText {
+            return
+        }
+        
+        previousSearchText = text
+        
+        if text.last != " " && text.last != "#" {
+            let searchText = String(getCurrentSearchHashTag(text: text).dropFirst(1))
+            
+            delayItem.perform(after: 0.35) {
+                self.searchHashTags(searchText: searchText)
+            }
+           
+        } else {
+            searchHashtagList = []
+            tableNode.reloadData(completion: nil)
+        }
+        
+        if text.findMHashtagText().isEmpty {
+            createDisableAddBtn()
+        } else {
+            createAddAddBtn()
         }
     }
+
 }
 
 
@@ -373,34 +388,43 @@ extension HashtagVC {
         if checkLocalRecords(searchText: searchText){
             return
         }
-        /*
-
-        algoliaHighlightsIndex.search(query: AlgoliaSearchClient.Query(searchText)) { result in
+        
+        APIManager().searchHashtag(query: searchText) { result in
             switch result {
-            case .failure(let error):
-                print("Error: \(error)")
-            case .success(let response):
-                //print("Response: \(response)")
-                do {
-                    let newSearchHashtagList:[HashtagsModelFromAlgolia] = try response.extractHits()
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    return
+                }
+                
+                if !data.isEmpty {
                     
-                    //store search result locally
-                    let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchHashtagList)
+                    var newSearchList = [HashtagsModel]()
+                    
+                    for item in data {
+                        newSearchList.append(HashtagsModel(type: "hashtag", hashtagModel: item))
+                    }
+                    
+                    let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
                     self.searchHist.append(newSearchRecord)
                     
-                    if self.searchHashtagList != newSearchHashtagList {
-                        self.searchHashtagList = newSearchHashtagList
+                    if self.searchHashtagList != newSearchList {
+                        self.searchHashtagList = newSearchList
                         DispatchQueue.main.async {
-                            self.tableNode.reloadData(completion: nil)
-                            print("***RUI***: Got result from Algolia")
+                            self.tableNode.reloadData()
                         }
                     }
-            
-                } catch let error {
-                    print("Contact parsing error: \(error)")
+                    
                 }
+                
+            case .failure(let error):
+                
+                print(error)
+               
             }
-        }*/
+        }
         
     }
     

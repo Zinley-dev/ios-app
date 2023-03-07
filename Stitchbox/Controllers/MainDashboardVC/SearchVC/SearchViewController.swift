@@ -10,6 +10,15 @@ import AsyncDisplayKit
 import FLAnimatedImage
 
 class SearchViewController: UIViewController, UINavigationControllerDelegate, UISearchBarDelegate {
+    
+    struct SearchRecord {
+        let keyWord: String
+        let timeStamp: Double
+        let items: [UserSearchModel]
+    }
+    
+    let EXPIRE_TIME = 20.0 //s
+    var searchHist = [SearchRecord]()
 
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var contentview: UIView!
@@ -31,11 +40,7 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
         setupSearchController()
         setupTableNode()
         loadRecentSearch()
-        
-        
-        recentTableNode.isHidden = false
-        searchTableNode.isHidden = true
-       
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -236,7 +241,7 @@ extension SearchViewController {
         self.searchTableNode.view.topAnchor.constraint(equalTo: self.searchView.topAnchor, constant: 0).isActive = true
         self.searchTableNode.view.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor, constant: 0).isActive = true
         self.searchTableNode.view.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor, constant: 0).isActive = true
-        self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 0).isActive = true
+        self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: -235).isActive = true
         
         self.recentTableNode.delegate = self
         self.searchTableNode.delegate = self
@@ -287,11 +292,12 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
         
         if tableNode == recentTableNode {
             return recentList.count
+        } else if tableNode == searchTableNode {
+            return searchList.count
         } else {
             return 0
         }
         
-
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
@@ -303,6 +309,16 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
                 node.debugName = "Node \(indexPath.row)"
                 return node
             }
+        } else if tableNode == searchTableNode {
+            
+            let item = searchList[indexPath.row]
+            return {
+                let node = UserSearchNode(with: item)
+                node.neverShowPlaceholders = true
+                node.debugName = "Node \(indexPath.row)"
+                return node
+            }
+            
         } else {
             return { ASCellNode() }
         }
@@ -345,8 +361,16 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
             
         } else if tableNode == searchTableNode {
             
+            let item = searchList[indexPath.row]
             
-            
+            if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+                UPVC.userId = item.userId
+                UPVC.nickname = item.user_nickname
+                UPVC.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
+                self.navigationController?.pushViewController(UPVC, animated: true)
+                
+            }
             
         }
         
@@ -360,12 +384,10 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
 
 extension SearchViewController {
     
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         contentview.isHidden = false
         searchView.isHidden = true
-        
-        
     }
 
     
@@ -402,11 +424,39 @@ extension SearchViewController {
 
     func search(for searchText: String) {
         
+        //check local result first
+        if checkLocalRecords(searchText: searchText){
+            return
+        }
+        
         APIManager().getAutoComplete(query: searchText) { result in
             switch result {
             case .success(let apiResponse):
                 
-                print(apiResponse)
+
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    return
+                }
+                
+                if !data.isEmpty {
+                    
+                    var newSearchList = [UserSearchModel]()
+                    
+                    for item in data {
+                        newSearchList.append(UserSearchModel(type: "user", RecentModel: item))
+                    }
+                    
+                    let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
+                    self.searchHist.append(newSearchRecord)
+                    
+                    if self.searchList != newSearchList {
+                        self.searchList = newSearchList
+                        DispatchQueue.main.async {
+                            self.searchTableNode.reloadData()
+                        }
+                    }
+                    
+                }
                 
             case .failure(let error):
                 
@@ -415,6 +465,31 @@ extension SearchViewController {
             }
         }
         
+    }
+    
+    func checkLocalRecords(searchText: String) -> Bool {
+       
+        for (i, record) in searchHist.enumerated() {
+            if record.keyWord == searchText {
+                print("time: \(Date().timeIntervalSince1970 - record.timeStamp)")
+                if Date().timeIntervalSince1970 - record.timeStamp <= EXPIRE_TIME {
+                    let retrievedSearchList = record.items
+                    
+                    if self.searchList != retrievedSearchList {
+                        self.searchList = retrievedSearchList
+                        DispatchQueue.main.async {
+                            self.searchTableNode.reloadData(completion: nil)
+                        }
+                    }
+                    return true
+                } else {
+
+                    searchHist.remove(at: i)
+                }
+            }
+        }
+
+        return false
     }
     
  
