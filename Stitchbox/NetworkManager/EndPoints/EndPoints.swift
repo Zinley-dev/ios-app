@@ -551,6 +551,7 @@ public enum PostAPI {
     case create(params: [String: Any])
     case update(params: [String: Any])
     case getMyPost(page: Int)
+    case getHashtagPost(tag: String, page: Int)
     case lastSetting
 }
 extension PostAPI: EndPointType {
@@ -566,6 +567,8 @@ extension PostAPI: EndPointType {
                 return "/\(params["id"] ?? "")"
             case .getMyPost(let page):
                 return "/me?page=\(page)&limit=10"
+            case .getHashtagPost(let tag, let page):
+                return "/hashtag/\(tag)?page=\(page)&limit=10"
           case .lastSetting:
             return "/last-setting"
           case .getRecommend:
@@ -585,6 +588,8 @@ extension PostAPI: EndPointType {
                 return .post
             case .getMyPost:
               return .get
+            case .getHashtagPost:
+                return .get
           case .lastSetting:
               return .get
           case .getRecommend:
@@ -603,6 +608,8 @@ extension PostAPI: EndPointType {
             case .update(let params):
                 return .requestParameters(parameters: params)
             case .getMyPost:
+                return .request
+            case .getHashtagPost:
                 return .request
           case .lastSetting:
               return .request
@@ -1012,6 +1019,7 @@ public enum SearchFeedAPI {
   case searchPost(query: String, page: Int = 1, limit: Int = 10)
   case getAutoComplete(query: String)
   case getRecent
+    case deleteRecent(id: String)
   case postRecent(params: [String: Any])
 }
 extension SearchFeedAPI: EndPointType {
@@ -1031,6 +1039,8 @@ extension SearchFeedAPI: EndPointType {
         return "/autocomplete?query=\(query)"
       case .getRecent:
         return "/result"
+        case .deleteRecent(let id):
+            return "/result/\(id)"
       case .postRecent:
         return "/result"
     }
@@ -1048,6 +1058,8 @@ extension SearchFeedAPI: EndPointType {
         return .get
       case .getRecent:
         return .get
+        case .deleteRecent:
+            return .delete
       case .postRecent:
         return .post
     }
@@ -1065,6 +1077,8 @@ extension SearchFeedAPI: EndPointType {
         return .request
       case .getRecent:
         return .request
+        case .deleteRecent:
+            return .request
       case .postRecent(let params):
         return .requestParameters(parameters: params)
     }
