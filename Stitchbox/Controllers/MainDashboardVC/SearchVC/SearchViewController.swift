@@ -33,6 +33,8 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     lazy var delayItem = workItem()
     var firstLoad = true
     
+    let backButton: UIButton = UIButton(type: .custom)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
   
@@ -45,9 +47,6 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        showMiddleBtn(vc: self)
-        
         
         if firstLoad {
             
@@ -87,15 +86,85 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
 
 extension SearchViewController {
     
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        if tableView == recentTableNode.view {
+            
+            let item = recentList[indexPath.row]
+            
+            if item.type != "game" {
+                
+                let size = recentTableNode.view.visibleCells[0].frame.height
+                let iconSize: CGFloat = 35.0
+                
+                let removeAction = UIContextualAction(
+                    style: .normal,
+                    title: ""
+                ) { action, view, actionHandler in
+                    
+                    //let userid = self.inSearchMode ? self.searchUserList[indexPath.row].userId : self.userList[indexPath.row].userId
+                    //self.removeFollower(userUID: userid ?? "", row: indexPath.row)
+                    actionHandler(true)
+                }
+                
+                let removeView = UIImageView(
+                    frame: CGRect(
+                        x: (size-iconSize)/2,
+                        y: (size-iconSize)/2,
+                        width: iconSize,
+                        height: iconSize
+                ))
+                //removeView.layer.borderColor = UIColor.white.cgColor
+                removeView.layer.masksToBounds = true
+                //removeView.layer.borderWidth = 1
+                removeView.layer.cornerRadius = iconSize/2
+                removeView.backgroundColor =  .secondary
+                removeView.image = xBtn
+                removeView.contentMode = .center
+                
+                removeAction.image = removeView.asImage()
+                removeAction.backgroundColor = .background
+               
+                
+                return UISwipeActionsConfiguration(actions: [removeAction])
+                
+                
+            } else {
+                return nil
+            }
+            
+            
+        } else {
+            return nil
+        }
+
+    }
+    
+    func removeRecent() {
+        
+        
+        
+    }
+    
+}
+
+extension SearchViewController {
+    
     func loadRecentSearch() {
         
         APIManager().getRecent { result in
             switch result {
             case .success(let apiResponse):
                 
+                
+                print(apiResponse)
+                
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     return
                 }
+                
+                
+                
                 
                 if !data.isEmpty {
                     
@@ -208,9 +277,31 @@ extension SearchViewController {
     func setupButtons() {
         //self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationItem.title = "Search"
-        
+        setupBackButton()
     }
     
+    func setupBackButton() {
+        
+        // Do any additional setup after loading the view.
+        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        backButton.frame = back_frame
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        backButton.setTitle("", for: .normal)
+        backButton.sizeToFit()
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+    
+        self.navigationItem.leftBarButtonItem = backButtonBarButton
+       
+    }
+    
+   
+    @objc func onClickBack(_ sender: AnyObject) {
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
+        }
+    }
+
     
     func setupTableNode() {
         
@@ -338,13 +429,14 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
                     MSVC.initialType = "post"
                     MSVC.hidesBottomBarWhenPushed = true
                     hideMiddleBtn(vc: self)
-                    MSVC.currentSearchText = item.game_name
+                    MSVC.currentSearchText = "\(item.game_name ?? "")/\(item.game_shortName ?? "")"
                     self.navigationController?.pushViewController(MSVC, animated: true)
                     
                 }
                 
             } else if item.type == "user" {
                 
+                saveRecent(userId: item.userId)
                 
                 if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
                     //self.hidesBottomBarWhenPushed = true
@@ -362,7 +454,7 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
         } else if tableNode == searchTableNode {
             
             let item = searchList[indexPath.row]
-            
+            saveRecent(userId: item.userId)
             if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
                 UPVC.userId = item.userId
                 UPVC.nickname = item.user_nickname
@@ -410,15 +502,22 @@ extension SearchViewController {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        if let MSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainSearchVC") as? MainSearchVC {
+        if let text = searchBar.text, text != "" {
+        
             
-            MSVC.initialType = "user"
-            MSVC.hidesBottomBarWhenPushed = true
-            MSVC.currentSearchText = searchBar.text ?? ""
-            hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(MSVC, animated: true)
+            if let MSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainSearchVC") as? MainSearchVC {
+                
+                MSVC.initialType = "user"
+                MSVC.hidesBottomBarWhenPushed = true
+                MSVC.currentSearchText = text
+                hideMiddleBtn(vc: self)
+                self.navigationController?.pushViewController(MSVC, animated: true)
+                
+            }
             
         }
+        
+        
         
     }
 
@@ -493,4 +592,25 @@ extension SearchViewController {
     }
     
  
+}
+
+extension SearchViewController {
+    
+    func saveRecent(userId: String) {
+        
+        APIManager().addRecent(query: userId) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+            case .failure(let error):
+                
+                print(error)
+               
+            }
+        }
+        
+    }
+    
 }

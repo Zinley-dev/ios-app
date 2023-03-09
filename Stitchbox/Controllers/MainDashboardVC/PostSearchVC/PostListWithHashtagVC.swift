@@ -17,9 +17,8 @@ class PostListWithHashtagVC: UIViewController {
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
-    @IBOutlet weak var hashtagViewsLbl: UILabel!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var label: UILabel!
+    
     
     
     //====================================
@@ -35,10 +34,9 @@ class PostListWithHashtagVC: UIViewController {
         
         if let hashtag = searchHashtag {
             
-            
-            label.text = hashtag
-            
+            navigationItem.title = hashtag
             //todo: customized search to search only in hashtag_list
+            
         }
         
         setupButtons()

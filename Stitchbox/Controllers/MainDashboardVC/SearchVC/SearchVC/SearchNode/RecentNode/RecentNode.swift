@@ -62,10 +62,17 @@ class RecentNode: ASCellNode {
                 self.imageNode.url = URL(string: item.coverUrl ?? "https://st3.depositphotos.com/1767687/16607/v/450/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg")
                 
             }
-        } else if item.type == "Follower" {
+        } else if item.type == "user" {
             
             DispatchQueue.main.async {
+                let paragraphStyles = NSMutableParagraphStyle()
+                paragraphStyles.alignment = .left
+                self.upperNameNode.attributedText = NSAttributedString(string: item.user_nickname ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
                 
+                self.belowNameNode.attributedText = NSAttributedString(string: item.user_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+
+                
+                self.imageNode.url = URL(string: item.avatarUrl ?? "https://st3.depositphotos.com/1767687/16607/v/450/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg")
             }
             
 

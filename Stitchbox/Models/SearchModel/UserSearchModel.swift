@@ -70,6 +70,8 @@ class UserSearchModel {
     
     init(type: String, RecentModel: Dictionary<String, Any>) {
         
+        print(RecentModel)
+        
         self._type = type
         
         if let userId = RecentModel["userId"] as? String {

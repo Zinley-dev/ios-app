@@ -53,11 +53,11 @@ class HashtagsModel: Codable {
             self._objectID = objectID
         }
         
-        if let keyword = hashtagModel["keyword"] as? String {
+        if let keyword = hashtagModel["name"] as? String {
             self._keyword = keyword
         }
         
-        if let count = hashtagModel["count"] as? Int {
+        if let count = hashtagModel["postCount"] as? Int {
             self._count = count
         }
         

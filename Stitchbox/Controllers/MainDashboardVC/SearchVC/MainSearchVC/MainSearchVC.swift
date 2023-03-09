@@ -414,7 +414,7 @@ extension MainSearchVC: ASTableDataSource, ASTableDelegate {
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
         let item = searchList[indexPath.row]
-        
+        saveRecent(userId: item.userId)
         if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
             UPVC.userId = item.userId
             UPVC.nickname = item.user_nickname
@@ -554,3 +554,24 @@ extension MainSearchVC {
     
 }
 
+
+extension MainSearchVC {
+    
+    func saveRecent(userId: String) {
+        
+        APIManager().addRecent(query: userId) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+            case .failure(let error):
+                
+                print(error)
+               
+            }
+        }
+        
+    }
+    
+}

@@ -264,18 +264,23 @@ extension FeedViewController {
     
     func setupNotiButton() {
         
-        let notiButton: UIButton = UIButton(type: .custom)
-        // Do any additional setup after loading the view.
-        notiButton.setImage(UIImage.init(named: "homeNoti")?.resize(targetSize: CGSize(width: 35, height: 35)), for: [])
-        notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
-        notiButton.frame = back_frame
-        notiButton.setTitleColor(UIColor.white, for: .normal)
-        notiButton.setTitle("", for: .normal)
-        notiButton.sizeToFit()
-        let notiButtonBarButton = UIBarButtonItem(customView: notiButton)
-    
-        self.navigationItem.rightBarButtonItem = notiButtonBarButton
-       
+         let notiButton = UIButton(type: .custom)
+         notiButton.setImage(UIImage.init(named: "homeNoti"), for: [])
+         notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
+         notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+         let notiBarButton = UIBarButtonItem(customView: notiButton)
+
+         let searchButton = UIButton(type: .custom)
+         searchButton.setImage(UIImage(named: "search"), for: [])
+         searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
+         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+         let searchBarButton = UIBarButtonItem(customView: searchButton)
+        
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+        
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        
     }
     
 }
@@ -292,6 +297,16 @@ extension FeedViewController {
             NVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(NVC, animated: true)
+            
+        }
+    }
+    
+    @objc func onClickSearch(_ sender: AnyObject) {
+        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+            
+            SVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(SVC, animated: true)
             
         }
     }

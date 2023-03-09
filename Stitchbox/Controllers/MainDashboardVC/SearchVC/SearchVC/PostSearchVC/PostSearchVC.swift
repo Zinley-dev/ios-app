@@ -493,6 +493,7 @@ extension PostSearchVC {
         if keyword != "" {
             
             print("Post search: \(keyword)")
+            posts.removeAll()
 
                 APIManager().searchPost(query: keyword, page: page) { result in
                     switch result {
@@ -645,6 +646,7 @@ extension PostSearchVC {
         global_presetingRate = Double(0.35)
         global_cornerRadius = 45
         newsFeedSettingVC.isOwner = false
+        newsFeedSettingVC.isSearch = true
         editeddPost = item
         self.present(newsFeedSettingVC, animated: true, completion: nil)
         
