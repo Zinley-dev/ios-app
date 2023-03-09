@@ -194,19 +194,21 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             PostSearchVC.view.isHidden = true
             hashTagBorder.removeFromSuperlayer()
             HashtagSearchVC.view.isHidden = true
+            pauseVideoIfNeed(pauseIndex: PostSearchVC.currentIndex ?? 0)
         case SearchMode.posts:
             postBtn.layer.addSublayer(postBorder)
             userBorder.removeFromSuperlayer()
             UserSearchVC.view.isHidden = true
             hashTagBorder.removeFromSuperlayer()
             HashtagSearchVC.view.isHidden = true
-            
+            playVideoIfNeed(playIndex: PostSearchVC.currentIndex ?? 0)
         case SearchMode.hashTags:
             hashtagBtn.layer.addSublayer(hashTagBorder)
             userBorder.removeFromSuperlayer()
             UserSearchVC.view.isHidden = true
             postBorder.removeFromSuperlayer()
             PostSearchVC.view.isHidden = true
+            pauseVideoIfNeed(pauseIndex: PostSearchVC.currentIndex ?? 0)
         }
         sendSearchRequestToTargetVC()
     }

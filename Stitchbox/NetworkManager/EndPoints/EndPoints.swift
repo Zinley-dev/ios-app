@@ -1019,7 +1019,7 @@ public enum SearchFeedAPI {
   case searchPost(query: String, page: Int = 1, limit: Int = 10)
   case getAutoComplete(query: String)
   case getRecent
-    case deleteRecent(id: String)
+  case deleteRecent(id: String)
   case postRecent(params: [String: Any])
 }
 extension SearchFeedAPI: EndPointType {

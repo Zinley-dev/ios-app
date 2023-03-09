@@ -81,10 +81,8 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                         cell.infoLbl.text = "Stitchbox's challenger"
                     }
                     
-                    print(_AppCoreData.userDataSource.value?.createdAt)
-                    
                     if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
-                        print(createAt)
+                      
                         let DateFormatter = DateFormatter()
                         DateFormatter.dateStyle = .medium
                         DateFormatter.timeStyle = .none
@@ -103,9 +101,6 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                     }
                     
                 
-                    
-                    print("Hello - \(card.games.count) - \(card.badge)")
-                    
                     if card.games.isEmpty == true {
                         cell.game1.isHidden = false
                         cell.game2.isHidden = true
@@ -660,18 +655,16 @@ extension EditChallengeCardVC {
                 
             case .badges(_):
                 
-                print("Badges - \(indexPath.row)")
-
+            
                         if didSelect, let cell = collectionView.cellForItem(at: didSelectIndex!) as? ImageViewCell {
                             resetCellSelection(cell)
-                            print("Deselect Badges - \(didSelectIndex!.row)")
+                           
                         }
 
                         didSelectIndex = indexPath
 
                         if let cell = collectionView.cellForItem(at: indexPath) as? ImageViewCell {
                             selectCell(cell)
-                            print("Select Badges - \(indexPath.row)")
                             bID = indexPath.row
 
                             reloadBadgeCell(indexPath)

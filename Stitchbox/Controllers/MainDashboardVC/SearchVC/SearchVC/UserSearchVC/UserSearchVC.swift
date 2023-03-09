@@ -20,7 +20,7 @@ class UserSearchVC: UIViewController {
     
     let EXPIRE_TIME = 20.0 //s
     var searchHist = [SearchRecord]()
-
+    var prev_keyword = ""
     var tableNode: ASTableNode!
     var searchUserList = [UserSearchModel]()
     @IBOutlet weak var contentview: UIView!
@@ -121,48 +121,53 @@ extension UserSearchVC: ASTableDataSource {
     }
     
     func searchUsers(for searchText: String) {
-    
-        //check local result first
-        if checkLocalRecords(searchText: searchText){
-            return
-        }
         
-        print(searchText)
-        
-        APIManager().searchUser(query: searchText) { result in
-            switch result {
-            case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+        if prev_keyword == "" || prev_keyword != searchText {
+            
+                prev_keyword = searchText
+            
+                //check local result first
+                if checkLocalRecords(searchText: searchText){
                     return
                 }
                 
-                if !data.isEmpty {
-                    
-                    var newSearchList = [UserSearchModel]()
-                    
-                    for item in data {
-                        newSearchList.append(UserSearchModel(UserSearchModel: item))
-                    }
-                    
-                    let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
-                    self.searchHist.append(newSearchRecord)
-                    
-                    if self.searchUserList != newSearchList {
-                        self.searchUserList = newSearchList
-                        DispatchQueue.main.async {
-                            self.tableNode.reloadData()
+                APIManager().searchUser(query: searchText) { result in
+                    switch result {
+                    case .success(let apiResponse):
+                        
+                        guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                            return
                         }
+                        
+                        if !data.isEmpty {
+                            
+                            var newSearchList = [UserSearchModel]()
+                            
+                            for item in data {
+                                newSearchList.append(UserSearchModel(UserSearchModel: item))
+                            }
+                            
+                            let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
+                            self.searchHist.append(newSearchRecord)
+                            
+                            if self.searchUserList != newSearchList {
+                                self.searchUserList = newSearchList
+                                DispatchQueue.main.async {
+                                    self.tableNode.reloadData()
+                                }
+                            }
+                            
+                        }
+                        
+                    case .failure(let error):
+                        
+                        print(error)
+                       
                     }
-                    
                 }
-                
-            case .failure(let error):
-                
-                print(error)
-               
-            }
+            
         }
+    
        
     }
     

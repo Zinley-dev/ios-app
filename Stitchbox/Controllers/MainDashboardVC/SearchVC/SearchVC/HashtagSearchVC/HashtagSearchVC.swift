@@ -24,6 +24,7 @@ class HashtagSearchVC: UIViewController {
     
     var tableNode: ASTableNode!
     var searchHashtagList = [HashtagsModel]()
+    var prev_keyword = ""
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -85,47 +86,53 @@ extension HashtagSearchVC {
     
     func searchHashtags(searchText: String) {
         
-        //check local result first
-        if checkLocalRecords(searchText: searchText){
-            return
+        if prev_keyword == "" || prev_keyword != searchText {
+            
+            prev_keyword = searchText
+            
+            //check local result first
+            if checkLocalRecords(searchText: searchText){
+                return
+            }
+            
+            APIManager().searchHashtag(query: searchText) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        return
+                    }
+                    
+                    if !data.isEmpty {
+                        
+                        var newSearchList = [HashtagsModel]()
+                        
+                        for item in data {
+                            newSearchList.append(HashtagsModel(type: "hashtag", hashtagModel: item))
+                        }
+                        
+                        let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
+                        self.searchHist.append(newSearchRecord)
+                        
+                        if self.searchHashtagList != newSearchList {
+                            self.searchHashtagList = newSearchList
+                            DispatchQueue.main.async {
+                                self.tableNode.reloadData()
+                            }
+                        }
+                        
+                    }
+                    
+                case .failure(let error):
+                    
+                    print(error)
+                   
+                }
+            }
+            
+            
         }
         
-        APIManager().searchHashtag(query: searchText) { result in
-            switch result {
-            case .success(let apiResponse):
-                
-                print(apiResponse)
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    return
-                }
-                
-                if !data.isEmpty {
-                    
-                    var newSearchList = [HashtagsModel]()
-                    
-                    for item in data {
-                        newSearchList.append(HashtagsModel(type: "hashtag", hashtagModel: item))
-                    }
-                    
-                    let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
-                    self.searchHist.append(newSearchRecord)
-                    
-                    if self.searchHashtagList != newSearchList {
-                        self.searchHashtagList = newSearchList
-                        DispatchQueue.main.async {
-                            self.tableNode.reloadData()
-                        }
-                    }
-                    
-                }
-                
-            case .failure(let error):
-                
-                print(error)
-               
-            }
-        }
         
     }
     

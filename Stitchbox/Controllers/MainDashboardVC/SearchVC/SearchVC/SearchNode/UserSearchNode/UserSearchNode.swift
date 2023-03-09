@@ -19,9 +19,11 @@ class UserSearchNode: ASCellNode {
     weak var user: UserSearchModel!
 
     var userNameNode: ASTextNode!
+    var gameNode: ASDisplayNode!
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
     
+    var gameListView: GameListView!
     
     init(with user: UserSearchModel) {
         
@@ -29,7 +31,7 @@ class UserSearchNode: ASCellNode {
         self.userNameNode = ASTextNode()
         self.imageNode = ASNetworkImageNode()
         self.nameNode = ASTextNode()
-        
+        self.gameNode = ASDisplayNode()
         super.init()
         
         self.backgroundColor = UIColor.clear
@@ -46,6 +48,22 @@ class UserSearchNode: ASCellNode {
         nameNode.backgroundColor = UIColor.clear
         
         automaticallyManagesSubnodes = true
+        
+        
+        DispatchQueue.main.async {
+            
+            self.gameListView = GameListView()
+            self.gameNode.view.addSubview(self.gameListView)
+            
+            self.gameListView.translatesAutoresizingMaskIntoConstraints = false
+            self.gameListView.topAnchor.constraint(equalTo: self.gameNode.view.topAnchor, constant: 0).isActive = true
+            self.gameListView.bottomAnchor.constraint(equalTo: self.gameNode.view.bottomAnchor, constant: 0).isActive = true
+            self.gameListView.leadingAnchor.constraint(equalTo: self.gameNode.view.leadingAnchor, constant: 0).isActive = true
+            self.gameListView.trailingAnchor.constraint(equalTo: self.gameNode.view.trailingAnchor, constant: 0).isActive = true
+            
+            self.loadGameIfNeed()
+            
+        }
          
         
         DispatchQueue.main.async {
@@ -54,7 +72,18 @@ class UserSearchNode: ASCellNode {
             paragraphStyles.alignment = .left
             self.userNameNode.attributedText = NSAttributedString(string: user.user_nickname ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
             
-            self.nameNode.attributedText = NSAttributedString(string: user.user_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            if user.user_name == "" {
+                
+                self.nameNode.attributedText = NSAttributedString(string: "None", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                
+            } else {
+                
+                self.nameNode.attributedText = NSAttributedString(string: user.user_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                
+                
+            }
+            
+            
 
             
             self.imageNode.url = URL(string: user.avatarUrl ?? "https://st3.depositphotos.com/1767687/16607/v/450/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg")
@@ -63,6 +92,31 @@ class UserSearchNode: ASCellNode {
         
     }
     
+    func loadGameIfNeed() {
+        guard let game = user.gameList else {
+            gameListView.game1.isHidden = true
+            gameListView.game2.isHidden = true
+            gameListView.game3.isHidden = true
+            gameListView.game4.isHidden = true
+            return
+        }
+        
+        let empty = URL(string: emptyimage)!
+        let gameViews = [gameListView.game1, gameListView.game2, gameListView.game3, gameListView.game4]
+        
+        for i in 0..<game.count {
+            guard i < gameViews.count else { break }
+            gameViews[i]!.isHidden = false
+            
+            if let gameInfo = global_suppport_game_list.first(where: { $0._id == game[i]["gameId"] as! String }) {
+                gameViews[i]!.load(url: URL(string: gameInfo.cover) ?? empty, str: gameInfo.cover)
+            }
+        }
+        
+        for i in game.count..<gameViews.count {
+            gameViews[i]!.isHidden = true
+        }
+    }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
@@ -71,7 +125,7 @@ class UserSearchNode: ASCellNode {
         
         
         imageNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
-        
+        gameNode.style.preferredSize = CGSize(width: 150, height: 50)
         
         headerSubStack.style.flexShrink = 16.0
         headerSubStack.style.flexGrow = 16.0
@@ -86,7 +140,7 @@ class UserSearchNode: ASCellNode {
         headerStack.spacing = 10
         headerStack.justifyContent = ASStackLayoutJustifyContent.start
         headerStack.alignItems = .center
-        headerStack.children = [imageNode, headerSubStack]
+        headerStack.children = [imageNode, headerSubStack, gameNode]
         
         return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16), child: headerStack)
             

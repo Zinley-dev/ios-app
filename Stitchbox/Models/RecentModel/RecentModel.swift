@@ -18,10 +18,9 @@ class RecentModel {
     fileprivate var _coverUrl: String!
     fileprivate var _game_name: String!
     fileprivate var _game_shortName: String!
-    fileprivate var _gameList: [String]!
     fileprivate var _text: String!
     fileprivate var _objectId: String!
-    
+    fileprivate var _gameList: [[String: Any]]!
     
     var objectId: String! {
         get {
@@ -123,10 +122,10 @@ class RecentModel {
         
     }
     
-    var gameList: [String]! {
+    var gameList: [[String: Any]]! {
         get {
             if _gameList == nil {
-                _gameList = []
+                _gameList = nil
             }
             return _gameList
         }
@@ -162,6 +161,14 @@ class RecentModel {
                 self._avatarUrl = avatarUrl
             }
             
+            if let challengeCard = user["challengeCard"] as? [String:Any] {
+                
+                if let gameList = challengeCard["games"] as? [[String: Any]] {
+                    self._gameList = gameList
+                }
+                
+            }
+            
         }
 
         
@@ -175,10 +182,6 @@ class RecentModel {
         
         if let game_shortName = RecentModel["game_shortName"] as? String {
             self._game_shortName = game_shortName
-        }
-        
-        if let gameList = RecentModel["gameList"] as? [String] {
-            self._gameList = gameList
         }
         
         if let text = RecentModel["query"] as? String {

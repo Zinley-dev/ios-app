@@ -1,14 +1,13 @@
 //
-//  SearchModel.swift
+//  NotificationModel.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 3/6/23.
+//  Created by Khoi Nguyen on 3/9/23.
 //
 
 import Foundation
 
-
-class UserSearchModel {
+class UserNotificationModel {
  
     fileprivate var _userId: String!
     fileprivate var _user_name: String!
@@ -68,25 +67,25 @@ class UserSearchModel {
     }
 
     
-    init(UserSearchModel: Dictionary<String, Any>) {
+    init(UserNotificationModel: Dictionary<String, Any>) {
         
-        if let userId = UserSearchModel["_id"] as? String {
+        if let userId = UserNotificationModel["_id"] as? String {
             self._userId = userId
         }
         
-        if let user_name = UserSearchModel["name"] as? String {
+        if let user_name = UserNotificationModel["name"] as? String {
             self._user_name = user_name
         }
         
-        if let user_nickname = UserSearchModel["username"] as? String {
+        if let user_nickname = UserNotificationModel["username"] as? String {
             self._user_nickname = user_nickname
         }
         
-        if let avatarUrl = UserSearchModel["avatar"] as? String {
+        if let avatarUrl = UserNotificationModel["avatar"] as? String {
             self._avatarUrl = avatarUrl
         }
         
-        if let challengeCard = UserSearchModel["challengeCard"] as? [String:Any] {
+        if let challengeCard = UserNotificationModel["challengeCard"] as? [String:Any] {
             
             if let gameList = challengeCard["games"] as? [[String: Any]] {
                 self._gameList = gameList
@@ -100,9 +99,10 @@ class UserSearchModel {
 
 }
 
-
-extension UserSearchModel: Equatable {
-    static func == (lhs: UserSearchModel, rhs: UserSearchModel) -> Bool {
+extension UserNotificationModel: Equatable {
+    static func == (lhs: UserNotificationModel, rhs: UserNotificationModel) -> Bool {
         return lhs.userId == rhs.userId
     }
 }
+
+

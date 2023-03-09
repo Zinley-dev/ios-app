@@ -468,12 +468,8 @@ extension PostSearchVC {
         if prev_keyword == "" || prev_keyword != keyword {
              
             prev_keyword = keyword
-           
-        } else {
-            
             clearAllData()
-
-            
+           
         }
         
         
