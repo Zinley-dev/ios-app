@@ -223,7 +223,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             switch self.selectedSearchMode {
             case SearchMode.users:
                
-                PostSearchVC.keyword = ""
+               
                 UserSearchVC.view.isHidden = false
                 UserSearchVC.searchUsers(for: searchText)
                 
@@ -237,7 +237,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
                 
             case SearchMode.hashTags:
                
-                self.PostSearchVC.keyword = ""
+                
                 HashtagSearchVC.view.isHidden = false
                 HashtagSearchVC.searchHashtags(searchText: searchText)
             }
@@ -255,7 +255,6 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             PostSearchVC.view.isHidden = true
             PostSearchVC.post_list.removeAll()
             PostSearchVC.collectionNode.reloadData()
-            PostSearchVC.keyword = ""
         case SearchMode.hashTags:
             HashtagSearchVC.view.isHidden = true
             HashtagSearchVC.searchHashtagList.removeAll()
@@ -414,7 +413,7 @@ extension MainSearchVC: ASTableDataSource, ASTableDelegate {
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
         let item = searchList[indexPath.row]
-        saveRecent(userId: item.userId)
+        saveRecentUser(userId: item.userId)
         if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
             UPVC.userId = item.userId
             UPVC.nickname = item.user_nickname
@@ -473,11 +472,19 @@ extension MainSearchVC {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        self.searchText = searchBar.text ?? ""
-        self.sendSearchRequestToTargetVC()
-     
-        contentView.isHidden = false
-        searchView.isHidden = true
+        
+        if let text = searchBar.text {
+            
+            saveRecentText(text: text)
+            self.searchText = text
+            self.sendSearchRequestToTargetVC()
+            
+            contentView.isHidden = false
+            searchView.isHidden = true
+            
+        }
+        
+        
 
     }
 
@@ -503,7 +510,7 @@ extension MainSearchVC {
                     var newSearchList = [UserSearchModel]()
                     
                     for item in data {
-                        newSearchList.append(UserSearchModel(type: "user", RecentModel: item))
+                        newSearchList.append(UserSearchModel(UserSearchModel: item))
                     }
                     
                     let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
@@ -557,9 +564,27 @@ extension MainSearchVC {
 
 extension MainSearchVC {
     
-    func saveRecent(userId: String) {
+    func saveRecentUser(userId: String) {
         
-        APIManager().addRecent(query: userId) { result in
+        APIManager().addRecent(query: userId, type: "user") { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+            case .failure(let error):
+                
+                print(error)
+               
+            }
+        }
+        
+    }
+    
+    
+    func saveRecentText(text: String) {
+        
+        APIManager().addRecent(query: text, type: "text") { result in
             switch result {
             case .success(let apiResponse):
                 

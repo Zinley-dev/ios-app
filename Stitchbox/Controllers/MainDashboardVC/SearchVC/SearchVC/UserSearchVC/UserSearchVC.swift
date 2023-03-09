@@ -90,7 +90,7 @@ extension UserSearchVC: ASTableDelegate {
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
         let item = searchUserList[indexPath.row]
-        saveRecent(userId: item.userId)
+        saveRecentUser(userId: item.userId)
         if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
             UPVC.userId = item.userId
             UPVC.nickname = item.user_nickname
@@ -142,7 +142,7 @@ extension UserSearchVC: ASTableDataSource {
                     var newSearchList = [UserSearchModel]()
                     
                     for item in data {
-                        newSearchList.append(UserSearchModel(type: "user", RecentModel: item))
+                        newSearchList.append(UserSearchModel(UserSearchModel: item))
                     }
                     
                     let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
@@ -196,9 +196,27 @@ extension UserSearchVC: ASTableDataSource {
 
 extension UserSearchVC {
     
-    func saveRecent(userId: String) {
+    func saveRecentUser(userId: String) {
         
-        APIManager().addRecent(query: userId) { result in
+        APIManager().addRecent(query: userId, type: "user") { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+            case .failure(let error):
+                
+                print(error)
+               
+            }
+        }
+        
+    }
+    
+    
+    func saveRecentText(text: String) {
+        
+        APIManager().addRecent(query: text, type: "text") { result in
             switch result {
             case .success(let apiResponse):
                 

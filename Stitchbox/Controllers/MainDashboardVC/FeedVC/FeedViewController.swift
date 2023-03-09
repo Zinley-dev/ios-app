@@ -16,9 +16,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     let homeButton: UIButton = UIButton(type: .custom)
-    
-    var post_list = [PostModel]()
-    
+
     var willIndex: Int?
     var currentIndex: Int?
     var endIndex: Int?

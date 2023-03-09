@@ -342,6 +342,48 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                 
             }
             
+        } else if vc is PostListWithHashtagVC {
+            
+            if let update1 = vc as? PostListWithHashtagVC {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+                    
+                    if cell.videoNode.isPlaying() {
+                        
+                        cell.videoNode.player?.seek(to: CMTime.zero)
+                        
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                        
+                        cell.videoNode.pause()
+                    }
+                    
+                }
+                
+            }
+            
+        } else if vc is MainSearchVC {
+            
+            if let update1 = vc as? MainSearchVC {
+                
+                if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+                    
+                    if cell.videoNode.isPlaying() {
+                        
+                        cell.videoNode.player?.seek(to: CMTime.zero)
+                        
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                        
+                        cell.videoNode.pause()
+                    }
+                    
+                }
+                
+            }
+            
         }
              
         
@@ -390,6 +432,62 @@ func playVideoIfNeed(playIndex: Int) {
                     if !cell.videoNode.isPlaying() {
                         
                         for index in 0..<update1.posts.count {
+                            if index != playIndex {
+                                pauseVideoIfNeed(pauseIndex: index)
+                            }
+                        }
+                        
+                      
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                        
+                        cell.videoNode.muted = true
+                        cell.videoNode.play()
+                    
+                    }
+                    
+                }
+                
+            }
+            
+        } else if vc is PostListWithHashtagVC {
+            
+            if let update1 = vc as? PostListWithHashtagVC {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
+                    
+                    if !cell.videoNode.isPlaying() {
+                        
+                        for index in 0..<update1.posts.count {
+                            if index != playIndex {
+                                pauseVideoIfNeed(pauseIndex: index)
+                            }
+                        }
+                        
+                      
+                        if cell.sideButtonView != nil {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                        
+                        cell.videoNode.muted = true
+                        cell.videoNode.play()
+                    
+                    }
+                    
+                }
+                
+            }
+            
+        } else if vc is MainSearchVC {
+            
+            if let update1 = vc as? MainSearchVC {
+                
+                if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
+                    
+                    if !cell.videoNode.isPlaying() {
+                        
+                        for index in 0..<update1.PostSearchVC.posts.count {
                             if index != playIndex {
                                 pauseVideoIfNeed(pauseIndex: index)
                             }

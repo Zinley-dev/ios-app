@@ -102,8 +102,8 @@ extension SearchViewController {
                     title: ""
                 ) { action, view, actionHandler in
                     
-                    //let userid = self.inSearchMode ? self.searchUserList[indexPath.row].userId : self.userList[indexPath.row].userId
-                    //self.removeFollower(userUID: userid ?? "", row: indexPath.row)
+                    let objectId = self.recentList[indexPath.row].objectId
+                    self.removeRecent(objectId: objectId ?? "" , row: indexPath.row)
                     actionHandler(true)
                 }
                 
@@ -163,14 +163,12 @@ extension SearchViewController {
                     return
                 }
                 
-                
-                
-                
+
                 if !data.isEmpty {
                     
                     for item in data {
                         
-                        let item = RecentModel(type: "user", RecentModel: item)
+                        let item = RecentModel(RecentModel: item)
                         self.recentList.append(item)
                         
                     }
@@ -197,9 +195,9 @@ extension SearchViewController {
                 
                 if item.name != "Other" {
                     
-                    let newCustom = ["coverUrl": item.cover, "game_name": item.name, "game_shortName": item.shortName]
+                    let newCustom = ["coverUrl": item.cover, "game_name": item.name, "game_shortName": item.shortName, "type": "game"]
                     
-                    let item = RecentModel(type: "game", RecentModel: newCustom)
+                    let item = RecentModel(RecentModel: newCustom)
                     self.recentList.append(item)
                     
                 }
@@ -429,14 +427,14 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
                     MSVC.initialType = "post"
                     MSVC.hidesBottomBarWhenPushed = true
                     hideMiddleBtn(vc: self)
-                    MSVC.currentSearchText = "\(item.game_name ?? "")/\(item.game_shortName ?? "")"
+                    MSVC.currentSearchText = item.game_name
                     self.navigationController?.pushViewController(MSVC, animated: true)
                     
                 }
                 
             } else if item.type == "user" {
                 
-                saveRecent(userId: item.userId)
+                saveRecentUser(userId: item.userId)
                 
                 if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
                     //self.hidesBottomBarWhenPushed = true
@@ -448,13 +446,25 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
                     
                 }
                 
+            } else if item.type == "text" {
+                
+                if let MSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainSearchVC") as? MainSearchVC {
+                    
+                    MSVC.initialType = "post"
+                    MSVC.hidesBottomBarWhenPushed = true
+                    hideMiddleBtn(vc: self)
+                    MSVC.currentSearchText = item.text
+                    self.navigationController?.pushViewController(MSVC, animated: true)
+                    
+                }
+                
             }
             
             
         } else if tableNode == searchTableNode {
             
             let item = searchList[indexPath.row]
-            saveRecent(userId: item.userId)
+            saveRecentUser(userId: item.userId)
             if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
                 UPVC.userId = item.userId
                 UPVC.nickname = item.user_nickname
@@ -503,7 +513,8 @@ extension SearchViewController {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         if let text = searchBar.text, text != "" {
-        
+            
+            saveRecentText(text: text)
             
             if let MSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainSearchVC") as? MainSearchVC {
                 
@@ -542,7 +553,7 @@ extension SearchViewController {
                     var newSearchList = [UserSearchModel]()
                     
                     for item in data {
-                        newSearchList.append(UserSearchModel(type: "user", RecentModel: item))
+                        newSearchList.append(UserSearchModel(UserSearchModel: item))
                     }
                     
                     let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
@@ -596,9 +607,9 @@ extension SearchViewController {
 
 extension SearchViewController {
     
-    func saveRecent(userId: String) {
+    func saveRecentUser(userId: String) {
         
-        APIManager().addRecent(query: userId) { result in
+        APIManager().addRecent(query: userId, type: "user") { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -609,6 +620,49 @@ extension SearchViewController {
                 print(error)
                
             }
+        }
+        
+    }
+    
+    
+    func saveRecentText(text: String) {
+        
+        APIManager().addRecent(query: text, type: "text") { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+            case .failure(let error):
+                
+                print(error)
+               
+            }
+        }
+        
+    }
+    
+    func removeRecent(objectId: String, row: Int) {
+
+        if objectId != "" {
+        
+            APIManager().deleteRecent(id: objectId) { result in
+                switch result {
+                case .success(_):
+                    DispatchQueue.main.async {
+                        self.recentList.remove(at: row)
+                        self.recentTableNode.deleteRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
+                        showNote(text: "Search removed!")
+                    }
+                   
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        showNote(text: "Unable to remove recent!")
+                    }
+                    
+                }
+            }
+
         }
         
     }

@@ -15,6 +15,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     @IBOutlet weak var contentview: UIView!
     var page = 1
     var keyword = ""
+    var prev_keyword = ""
     var post_list = [PostModel]()
     
     var willIndex: Int?
@@ -102,6 +103,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     
     
     func updateData() {
+        
         self.retrieveNextPageWithCompletion { (newPosts) in
                 
             if newPosts.count > 0 {
@@ -111,21 +113,9 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
                                  
             } else {
               
-                
                 self.refresh_request = false
                 self.posts.removeAll()
                 self.collectionNode.reloadData()
-                
-                if self.posts.isEmpty == true {
-                    
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
-                    
-                 
-                } else {
-                    
-                    self.collectionNode.view.restore()
-                    
-                }
                 
             }
             
@@ -474,68 +464,19 @@ extension PostSearchVC {
     
     func searchRequest() {
         
-        self.searchPost { (newPosts) in
-            
-            if newPosts.count > 0 {
-                
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                
-            }
-            
-            
-        }
         
-    }
-    
-    func searchPost(block: @escaping ([[String: Any]]) -> Void) {
-        
-        if keyword != "" {
-            
-            print("Post search: \(keyword)")
-            posts.removeAll()
-
-                APIManager().searchPost(query: keyword, page: page) { result in
-                    switch result {
-                    case .success(let apiResponse):
-                        print(apiResponse)
-                        guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                            return
-                        }
-                        if !data.isEmpty {
-                            print("Successfully retrieved \(data.count) posts.")
-                            let items = data
-                            self.page += 1
-                            DispatchQueue.main.async {
-                                block(items)
-                            }
-                        } else {
-                            
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                        }
-                    case .failure(let error):
-                        print(error)
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                    }
-                }
-            }
-            
+        if prev_keyword == "" || prev_keyword != keyword {
+             
+            prev_keyword = keyword
+           
         } else {
             
-            let item = [[String: Any]]()
-            DispatchQueue.main.async {
-                block(item)
-            }
+            clearAllData()
+
+            
         }
+        
+        
         
     }
     

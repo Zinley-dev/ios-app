@@ -20,7 +20,18 @@ class RecentModel {
     fileprivate var _game_shortName: String!
     fileprivate var _gameList: [String]!
     fileprivate var _text: String!
-
+    fileprivate var _objectId: String!
+    
+    
+    var objectId: String! {
+        get {
+            if _objectId == nil {
+                _objectId = ""
+            }
+            return _objectId
+        }
+        
+    }
     
     var text: String! {
         get {
@@ -123,25 +134,36 @@ class RecentModel {
     }
     
     
-    init(type: String, RecentModel: Dictionary<String, Any>) {
+    init(RecentModel: Dictionary<String, Any>) {
         
-        self._type = type
-        
-        if let userId = RecentModel["userId"] as? String {
-            self._userId = userId
+        if let objectId = RecentModel["_id"] as? String {
+            self._objectId = objectId
         }
         
-        if let user_name = RecentModel["user_name"] as? String {
-            self._user_name = user_name
+        if let type = RecentModel["type"] as? String {
+            self._type = type
         }
         
-        if let user_nickname = RecentModel["user_nickname"] as? String {
-            self._user_nickname = user_nickname
+        if let user = RecentModel["user"] as? [String: Any] {
+            
+            if let userId = user["_id"] as? String {
+                self._userId = userId
+            }
+            
+            if let user_name = user["name"] as? String {
+                self._user_name = user_name
+            }
+            
+            if let user_nickname = user["username"] as? String {
+                self._user_nickname = user_nickname
+            }
+            
+            if let avatarUrl = user["avatar"] as? String {
+                self._avatarUrl = avatarUrl
+            }
+            
         }
-        
-        if let avatarUrl = RecentModel["avatarUrl"] as? String {
-            self._avatarUrl = avatarUrl
-        }
+
         
         if let coverUrl = RecentModel["coverUrl"] as? String {
             self._coverUrl = coverUrl
@@ -159,7 +181,7 @@ class RecentModel {
             self._gameList = gameList
         }
         
-        if let text = RecentModel["text"] as? String {
+        if let text = RecentModel["query"] as? String {
             self._text = text
         }
 

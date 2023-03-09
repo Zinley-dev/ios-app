@@ -69,7 +69,7 @@ class AutocompeteViewController: UIViewController, UITableViewDelegate {
                         var newSearchList = [UserSearchModel]()
                         
                         for item in data {
-                            newSearchList.append(UserSearchModel(type: "user", RecentModel: item))
+                            newSearchList.append(UserSearchModel(UserSearchModel: item))
                         }
 
                         if self.searchUserList != newSearchList {

@@ -36,11 +36,8 @@ class RecentNode: ASCellNode {
         self.backgroundColor = UIColor.clear
         
         self.selectionStyle = .none
-        imageNode.cornerRadius = OrganizerImageSize/2
-        imageNode.clipsToBounds = true
         upperNameNode.isLayerBacked = true
-        imageNode.shouldRenderProgressImages = true
-        imageNode.isLayerBacked = true
+        
 
    
         upperNameNode.backgroundColor = UIColor.clear
@@ -50,6 +47,12 @@ class RecentNode: ASCellNode {
          
         
         if item.type == "game" {
+            
+            imageNode.cornerRadius = OrganizerImageSize/2
+            imageNode.clipsToBounds = true
+            imageNode.shouldRenderProgressImages = true
+            imageNode.isLayerBacked = true
+            
             DispatchQueue.main.async {
                 
                 let paragraphStyles = NSMutableParagraphStyle()
@@ -64,6 +67,11 @@ class RecentNode: ASCellNode {
             }
         } else if item.type == "user" {
             
+            imageNode.cornerRadius = OrganizerImageSize/2
+            imageNode.clipsToBounds = true
+            imageNode.shouldRenderProgressImages = true
+            imageNode.isLayerBacked = true
+            
             DispatchQueue.main.async {
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
@@ -76,6 +84,17 @@ class RecentNode: ASCellNode {
             }
             
 
+        } else if item.type == "text" {
+            
+            DispatchQueue.main.async {
+                let paragraphStyles = NSMutableParagraphStyle()
+                paragraphStyles.alignment = .left
+                self.upperNameNode.attributedText = NSAttributedString(string: item.text ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+
+                self.imageNode.image = UIImage.init(named: "search")
+                self.imageNode.contentMode = .scaleAspectFit
+            }
+            
         }
 
         
@@ -95,9 +114,14 @@ class RecentNode: ASCellNode {
         headerSubStack.style.flexGrow = 16.0
         headerSubStack.spacing = 7.0
         
-        headerSubStack.children = [upperNameNode, belowNameNode]
-      
-  
+        if item.type == "text" {
+            headerSubStack.children = [upperNameNode]
+            imageNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize - 10)
+        } else {
+            headerSubStack.children = [upperNameNode, belowNameNode]
+            imageNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
+        }
+        
         let headerStack = ASStackLayoutSpec.horizontal()
       
         
