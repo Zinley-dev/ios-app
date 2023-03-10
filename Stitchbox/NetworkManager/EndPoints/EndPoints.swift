@@ -1088,3 +1088,43 @@ extension SearchFeedAPI: EndPointType {
     return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
   }
 }
+
+
+
+public enum NotificationAPI {
+    case getNotifications(page: Int = 1, limit: Int = 20)
+}
+extension NotificationAPI: EndPointType {
+    var path: String {
+        switch self {
+            case .getNotifications(let page, let limit):
+                return "?page=\(page)&limit=\(limit)"
+        }
+    }
+    
+    var module: String {
+        switch self {
+            case .getNotifications:
+                return "/notification"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+            case .getNotifications:
+                return .get
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+            case .getNotifications:
+                return .request
+        }
+    }
+    
+    var headers: [String : String]? {
+        return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
+    }
+    
+}

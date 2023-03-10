@@ -100,7 +100,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         if let request = buildRequest(from: route) {
-          print("ABC \(request.url)")
+          print("Request URL --> \(request.url)")
             task = session.dataTask(with: request, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
@@ -175,9 +175,13 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         guard let endpointUrl = URL(string: APIBuilder.baseURL + route.module + route.path) else {
             return nil
         }
+        
         var request = URLRequest(url: endpointUrl,
                                  cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                  timeoutInterval: 30.0)
+        let userAgent = UAString()
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+
         request.httpMethod = route.httpMethod.rawValue
         switch route.task {
         case .request:
