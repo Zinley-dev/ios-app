@@ -43,9 +43,10 @@ extension UIButton {
                 
                
                 DispatchQueue.main.async {
-                    let resize = image.resize(targetSize: CGSize(width: self.bounds.width, height: self.bounds.height))
+                    let resize = image.resize(targetSize: CGSize(width: self.bounds.width - 12, height: self.bounds.height - 12))
                     self.setImage(resize, for: .normal)
-                    self.imageView?.contentMode = .scaleAspectFill
+                    self.imageView?.backgroundColor = .lightGray
+                    self.imageView?.contentMode = .scaleAspectFit
                     self.layer.cornerRadius = self.bounds.size.width / 2
                     self.clipsToBounds = true
                 }
@@ -59,9 +60,10 @@ extension UIButton {
                        
                       
                        DispatchQueue.main.async {
-                           let resize = value.resize(targetSize: CGSize(width: self.bounds.width, height: self.bounds.height))
+                           let resize = value.resize(targetSize: CGSize(width: self.bounds.width - 12, height: self.bounds.height - 12))
                            self.setImage(resize, for: .normal)
-                           self.imageView?.contentMode = .scaleAspectFill
+                           self.imageView?.backgroundColor = .lightGray
+                           self.imageView?.contentMode = .scaleAspectFit
                            self.layer.cornerRadius = self.bounds.size.width / 2
                            self.clipsToBounds = true
                        }
