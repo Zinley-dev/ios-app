@@ -14,8 +14,10 @@ protocol BaseURL {
 
 enum APIBuilder {
     struct APIBuilderConstants {
-        static let ApiScheme = "https"
-        static let ApiHost = "api.stitchbox.dev/v1"
+        static let ApiScheme = "http"
+        static let ApiHost = "192.168.100.32:9090/v1"
+//        static let ApiScheme = "https"
+//        static let ApiHost = "api.stitchbox.dev/v1"
     }
 }
 
@@ -1091,40 +1093,41 @@ extension SearchFeedAPI: EndPointType {
 
 
 
-public enum NotificationAPI {
-    case getNotifications(page: Int = 1, limit: Int = 20)
+public enum NotiApi {
+    case getNotis(page: Int = 1, limit: Int = 20)
 }
-extension NotificationAPI: EndPointType {
+extension NotiApi: EndPointType {
     var path: String {
         switch self {
-            case .getNotifications(let page, let limit):
+            case .getNotis(let page, let limit):
                 return "?page=\(page)&limit=\(limit)"
         }
     }
     
     var module: String {
         switch self {
-            case .getNotifications:
+            case .getNotis:
                 return "/notification"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-            case .getNotifications:
+            case .getNotis:
                 return .get
         }
     }
     
     var task: HTTPTask {
         switch self {
-            case .getNotifications:
+            case .getNotis:
                 return .request
         }
     }
     
     var headers: [String : String]? {
-        return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? ""]
+        return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+                "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
     }
     
 }

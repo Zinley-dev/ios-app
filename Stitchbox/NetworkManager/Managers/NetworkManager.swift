@@ -181,7 +181,6 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                                  timeoutInterval: 30.0)
         let userAgent = UAString()
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-
         request.httpMethod = route.httpMethod.rawValue
         switch route.task {
         case .request:
