@@ -14,10 +14,8 @@ protocol BaseURL {
 
 enum APIBuilder {
     struct APIBuilderConstants {
-        static let ApiScheme = "http"
-        static let ApiHost = "192.168.100.32:9090/v1"
-//        static let ApiScheme = "https"
-//        static let ApiHost = "api.stitchbox.dev/v1"
+        static let ApiScheme = "https"
+        static let ApiHost = "api.stitchbox.dev/v1"
     }
 }
 
