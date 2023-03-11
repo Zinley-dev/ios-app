@@ -73,24 +73,11 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         else {
             setupFollowingView()
         }
+        
         setupSearchController()
         
     }
      
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.tabBarController?.tabBar.isHidden = true
-        self.tabBarController?.tabBar.frame = .zero
-        
-        
-        if self.tabBarController is DashboardTabBarController {
-            let tbctrl = self.tabBarController as! DashboardTabBarController
-            tbctrl.button.isHidden = true
-        }
-        
-    }
     
     @IBAction func followerBtn(_ sender: Any) {
         

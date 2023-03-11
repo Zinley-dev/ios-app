@@ -1194,60 +1194,6 @@ extension ProfileViewController: UINavigationBarDelegate, UINavigationController
     }
 }
 
-extension ProfileViewController {
-        
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-          navigationController?.setNavigationBarHidden(true, animated: true)
-            changeTabBar(hidden: true, animated: true)
-            self.tabBarController?.tabBar.isTranslucent = true
-            hideMiddleBtn(vc: self)
-           
-
-       } else {
-          navigationController?.setNavigationBarHidden(false, animated: true)
-           changeTabBar(hidden: false, animated: false)
-           self.tabBarController?.tabBar.isTranslucent = false
-           showMiddleBtn(vc: self)
-       }
-    }
-    
-    func changeTabBar(hidden:Bool, animated: Bool) {
-        guard let tabBar = self.tabBarController?.tabBar else {
-            return
-        }
-        if tabBar.isHidden == hidden{
-            return
-        }
-        
-        let frame = tabBar.frame
-        let frameMinY = frame.minY  //lower end of tabBar
-        let offset = hidden ? frame.size.height : -frame.size.height
-        let viewHeight = self.view.frame.height
-        
-        //hidden but moved back up after moving app to background
-        if frameMinY < viewHeight && tabBar.isHidden {
-            tabBar.alpha = 0
-            tabBar.isHidden = false
-
-            UIView.animate(withDuration: 0.5) {
-                tabBar.alpha = 1
-            }
-            
-            return
-        }
-
-        let duration:TimeInterval = (animated ? 0.5 : 0.0)
-        tabBar.isHidden = false
-
-        UIView.animate(withDuration: duration, animations: {
-            tabBar.frame = frame.offsetBy(dx: 0, dy: offset)
-        }, completion: { (true) in
-            tabBar.isHidden = hidden
-        })
-    }
-    
-}
 
 
 
