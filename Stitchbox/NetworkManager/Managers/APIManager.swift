@@ -39,7 +39,7 @@ struct APIManager {
     let fistBumpManager = Manager<FistBumpAPI>()
     let gamesManager = Manager<GameAPI>()
     let searchFeedManager = Manager<SearchFeedAPI>()
-    let notificationManager = Manager<NotificationAPI>()
+    let notiManager = Manager<NotiApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -629,13 +629,9 @@ extension APIManager {
 }
 
 extension APIManager {
-    
-    func getUserNotifications(page: Int, limit: Int = 10, completion: @escaping APICompletion) {
-
-        notificationManager.request(.getNotifications(page: page, limit: limit)) { result in
+    func getNotifications(page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+        notiManager.request(.getNotis(page: page, limit: limit)) { result in
             completion(result)
-          }
-        
+        }
     }
-    
 }
