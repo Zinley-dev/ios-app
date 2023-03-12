@@ -37,6 +37,16 @@ class NotificationVC: UIViewController {
         setupButtons()
         
         contentView.addSubview(tableNode.view)
+        
+        self.tableNode.view.translatesAutoresizingMaskIntoConstraints = false
+        self.tableNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
+        self.tableNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
+        self.tableNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
+        self.tableNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
+        
+        
+        
+        
         self.applyStyle()
         self.tableNode.leadingScreensForBatching = 5
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
@@ -87,13 +97,6 @@ class NotificationVC: UIViewController {
         
     }
     
-    override func viewWillLayoutSubviews() {
-        
-        super.viewWillLayoutSubviews()
-        self.tableNode.frame = contentView.bounds
-       
-    }
-
 }
 
 extension NotificationVC {
@@ -226,11 +229,42 @@ extension NotificationVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        let item = [[String: Any]]()
-        DispatchQueue.main.async {
-            block(item)
+            APIManager().getUserNotifications(page: page) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    print(apiResponse)
+                    
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                        return
+                    }
+                    if !data.isEmpty {
+                        self.page += 1
+                        print("Successfully retrieved \(data.count) notifications.")
+                        let items = data
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                }
+            }
         }
-        
+
     }
     
     
