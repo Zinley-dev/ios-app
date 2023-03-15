@@ -42,5 +42,5 @@ func appNameAndVersion() -> String {
 }
 
 func UAString() -> String {
-    return "\(appNameAndVersion()) \(deviceName()) \(deviceVersion()) \(CFNetworkVersion()) \(DarwinVersion())"
+    return "\(appNameAndVersion()) (_;\(deviceName());\(deviceVersion())) \(CFNetworkVersion()) \(DarwinVersion())"
 }
