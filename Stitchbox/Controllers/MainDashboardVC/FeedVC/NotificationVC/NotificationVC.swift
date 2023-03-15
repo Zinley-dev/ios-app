@@ -15,11 +15,14 @@ class NotificationVC: UIViewController {
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var loadingView: UIView!
+    private var pullControl = UIRefreshControl()
     
     var page = 1
-    
+    var refresh_request = false
     var tableNode: ASTableNode!
     var UserNotificationList = [UserNotificationModel]()
+    
+    lazy var delayItem = workItem()
     
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,14 +47,26 @@ class NotificationVC: UIViewController {
         self.tableNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.tableNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
-        
-        
+    
         
         self.applyStyle()
         self.tableNode.leadingScreensForBatching = 5
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
         
+        
+        pullControl.tintColor = UIColor.systemOrange
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+        
+        if UIDevice.current.hasNotch {
+            pullControl.bounds = CGRect(x: pullControl.bounds.origin.x, y: -50, width: pullControl.bounds.size.width, height: pullControl.bounds.size.height)
+        }
+        
+        if #available(iOS 10.0, *) {
+            tableNode.view.refreshControl = pullControl
+        } else {
+            tableNode.view.addSubview(pullControl)
+        }
     }
     
     
@@ -96,6 +111,69 @@ class NotificationVC: UIViewController {
         }
         
     }
+    
+}
+
+extension NotificationVC {
+    
+    @objc private func refreshListData(_ sender: Any) {
+       // self.pullControl.endRefreshing() // You can stop after API Call
+        // Call API
+  
+        clearAllData()
+   
+    }
+    
+    @objc func clearAllData() {
+        
+        refresh_request = true
+        page = 1
+        updateData()
+               
+    }
+    
+    
+    func updateData() {
+        self.retrieveNextPageWithCompletion { (newNotis) in
+                
+            if newNotis.count > 0 {
+                        
+                self.insertNewRowsInTableNode(newNotis: newNotis)
+                
+            } else {
+              
+                self.refresh_request = false
+                self.UserNotificationList.removeAll()
+                self.tableNode.reloadData()
+                
+                if self.UserNotificationList.isEmpty == true {
+                    
+                    self.tableNode.view.setEmptyMessage("No active notification")
+                    
+                } else {
+                    
+                    self.tableNode.view.restore()
+                    
+                }
+                
+            }
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+            self.delayItem.perform(after: 0.75) {
+                
+                self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+                    
+            }
+              
+          
+        }
+        
+        
+    }
+    
     
 }
 
@@ -159,7 +237,6 @@ extension NotificationVC {
         
         //
      
-        
     }
     
     func wireDelegates() {
@@ -178,14 +255,47 @@ extension NotificationVC {
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
           
-        
         let notification = UserNotificationList[indexPath.row]
-   
         
+        if let template = notification.template {
             
- 
+            switch template {
+                
+                case "NEW_COMMENT":
+                    print("NEW_COMMENT -> open comment")
+                case "REPLY_COMMENT":
+                    print("REPLY_COMMENT -> open reply comment, root comment and the comment the user reply to")
+                case "NEW_FISTBUMP_1":
+                    print("NEW_FISTBUMP_1 -> open user")
+                case "NEW_FISTBUMP_2":
+                    print("NEW_FISTBUMP_2 -> open user list")
+                case "NEW_FOLLOW_1":
+                    print("NEW_FOLLOW_1 -> open user")
+                case "NEW_FOLLOW_2":
+                    print("NEW_FOLLOW_2 -> open user list")
+                case "NEW_TAG":
+                    print("NEW_TAG -> open comment")
+                case "NEW_POST":
+                    print("NEW_POST -> open post")
+                default:
+                    print("None")
+                
+            }
+               
+        }
+               
+    }
+    
+}
+
+extension NotificationVC {
+    
+    func openPost(id: String) {
+        
+        
         
     }
+    
     
 }
 
@@ -211,13 +321,22 @@ extension NotificationVC: ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        self.retrieveNextPageWithCompletion { (newUsers) in
+        if refresh_request == false {
             
-            self.insertNewRowsInTableNode(newNotis: newUsers)
+            self.retrieveNextPageWithCompletion { (newNotis) in
+                
+                self.insertNewRowsInTableNode(newNotis: newNotis)
+                
+                context.completeBatchFetching(true)
+                
+            }
+            
+        } else {
             
             context.completeBatchFetching(true)
             
         }
+    
         
     }
        
@@ -240,6 +359,7 @@ extension NotificationVC {
                         }
                         return
                     }
+                    
                     if !data.isEmpty {
                         self.page += 1
                         print("Successfully retrieved \(data.count) notifications.")
@@ -254,6 +374,7 @@ extension NotificationVC {
                             block(item)
                         }
                     }
+                    
                 case .failure(let error):
                     print(error)
                     let item = [[String: Any]]()
@@ -269,6 +390,18 @@ extension NotificationVC {
         // Check if there are new posts to insert
         guard !newNotis.isEmpty else { return }
         
+        // Check if a refresh request has been made
+        if refresh_request {
+            refresh_request = false
+            
+            // Delete existing rows if there are any
+            let numExistingItems = UserNotificationList.count
+            if numExistingItems > 0 {
+                let deleteIndexPaths = (0..<numExistingItems).map { IndexPath(row: $0, section: 0) }
+                UserNotificationList.removeAll()
+                tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+            }
+        }
 
         // Calculate the range of new rows
         let startIndex = UserNotificationList.count
@@ -288,14 +421,12 @@ extension NotificationVC {
        
     }
     
-    
 }
 
 
 extension NotificationVC: ASTableDataSource {
     
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-        
         
         if self.UserNotificationList.count == 0 {
             
@@ -306,7 +437,6 @@ extension NotificationVC: ASTableDataSource {
         }
         
         return self.UserNotificationList.count
-        
         
     }
     
@@ -325,6 +455,4 @@ extension NotificationVC: ASTableDataSource {
         
     }
     
-
-        
 }

@@ -9,8 +9,8 @@ import Foundation
 
 class UserNotificationModel {
 
-    fileprivate var _user_name: String!
-    fileprivate var _user_nickname: String!
+    fileprivate var _name: String!
+    fileprivate var _username: String!
     fileprivate var _avatarUrl: String!
     fileprivate var _notiId: String!
     fileprivate var _isRead: Bool!
@@ -21,15 +21,28 @@ class UserNotificationModel {
     fileprivate var _createdAt: Date!
     fileprivate var _updatedAt: Date!
     fileprivate var _sender: String!
+    fileprivate var _template: String!
     fileprivate var _fistbumpCount: Int!
    
-
+    
+   
     var fistbumpCount: Int! {
         get {
             if _fistbumpCount == nil {
                 _fistbumpCount = 0
             }
             return _fistbumpCount
+        }
+        
+    }
+    
+    
+    var template: String! {
+        get {
+            if _template == nil {
+                _template = ""
+            }
+            return _template
         }
         
     }
@@ -108,22 +121,22 @@ class UserNotificationModel {
         
     }
     
-    var user_name: String! {
+    var name: String! {
         get {
-            if _user_name == nil {
-                _user_name = ""
+            if _name == nil {
+                _name = ""
             }
-            return _user_name
+            return _name
         }
         
     }
     
-    var user_nickname: String! {
+    var username: String! {
         get {
-            if _user_nickname == nil {
-                _user_nickname = ""
+            if _username == nil {
+                _username = ""
             }
-            return _user_nickname
+            return _username
         }
         
     }
@@ -161,7 +174,6 @@ class UserNotificationModel {
     
     init(UserNotificationModel: Dictionary<String, Any>) {
         
-        
         if let notiId = UserNotificationModel["_id"] as? String {
             self._notiId = notiId
         }
@@ -198,28 +210,32 @@ class UserNotificationModel {
                 
             }
             
+            if let template = notification["template"] as? String {
+                self._template = template
+            }
+            
+            
+            if let sender = notification["sender"] as? [String: Any] {
+                
+                if let userId = sender["_id"] as? String {
+                    self._userId = userId
+                }
+                
+                if let avatarUrl = sender["avatar"] as? String {
+                    self._avatarUrl = avatarUrl
+                }
+                
+                if let name = sender["name"] as? String {
+                    self._name = name
+                }
+                
+                if let username = sender["username"] as? String {
+                    self._username = username
+                }
+                
+            }
+            
         }
-        
-        if let sender = UserNotificationModel["sender"] as? [String: Any] {
-            
-            if let userId = sender["_id"] as? String {
-                self._userId = userId
-            }
-            
-            if let userId = sender["avatar"] as? String {
-                self._userId = userId
-            }
-            
-            if let userId = sender["name"] as? String {
-                self._userId = userId
-            }
-            
-            if let userId = sender["username"] as? String {
-                self._userId = userId
-            }
-            
-        }
-        
         
         if let createdAt = UserNotificationModel["createdAt"] as? Date {
             self._createdAt = createdAt
