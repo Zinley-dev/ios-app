@@ -154,7 +154,7 @@ extension NotificationVC {
         self.tableNode.view.separatorStyle = .none
         self.tableNode.view.separatorColor = UIColor.lightGray
         self.tableNode.view.isPagingEnabled = false
-        self.tableNode.view.backgroundColor = UIColor.clear
+        self.tableNode.view.backgroundColor = .background
         self.tableNode.view.showsVerticalScrollIndicator = false
         
         //
@@ -229,11 +229,9 @@ extension NotificationVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getUserNotifications(page: page) { result in
+            APIManager().getNotifications(page: page) { result in
                 switch result {
                 case .success(let apiResponse):
-                    
-                    print(apiResponse)
                     
                     guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         let item = [[String: Any]]()
@@ -264,10 +262,9 @@ extension NotificationVC {
                 }
             }
         }
-
+        
     }
-    
-    
+     
     func insertNewRowsInTableNode(newNotis: [[String: Any]]) {
         // Check if there are new posts to insert
         guard !newNotis.isEmpty else { return }

@@ -38,7 +38,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K8o-ju-QEg">
                                 <rect key="frame" x="0.0" y="47" width="375" height="731"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" name="Background"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xif-uZ-qjO">
                                 <rect key="frame" x="0.0" y="47" width="375" height="731"/>
@@ -1144,7 +1144,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i2W-XD-ati" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-372" y="3089"/>
+            <point key="canvasLocation" x="-476" y="3089"/>
         </scene>
         <!--Invite UserVC-->
         <scene sceneID="uuj-gB-0lp">

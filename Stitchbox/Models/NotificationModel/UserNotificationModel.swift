@@ -8,20 +8,39 @@
 import Foundation
 
 class UserNotificationModel {
- 
-    fileprivate var _userId: String!
+
     fileprivate var _user_name: String!
     fileprivate var _user_nickname: String!
     fileprivate var _avatarUrl: String!
-    fileprivate var _gameList: [[String: Any]]!
-    
-    
-    var gameList: [[String: Any]]! {
+    fileprivate var _notiId: String!
+    fileprivate var _isRead: Bool!
+    fileprivate var _content: String!
+    fileprivate var _postId: String!
+    fileprivate var _commentId: String!
+    fileprivate var _userId: String!
+    fileprivate var _createdAt: Date!
+    fileprivate var _updatedAt: Date!
+    fileprivate var _sender: String!
+    fileprivate var _fistbumpCount: Int!
+   
+
+    var fistbumpCount: Int! {
         get {
-            if _gameList == nil {
-                _gameList = nil
+            if _fistbumpCount == nil {
+                _fistbumpCount = 0
             }
-            return _gameList
+            return _fistbumpCount
+        }
+        
+    }
+    
+    
+    var sender: String! {
+        get {
+            if _sender == nil {
+                _sender = ""
+            }
+            return _sender
         }
         
     }
@@ -32,6 +51,59 @@ class UserNotificationModel {
                 _userId = ""
             }
             return _userId
+        }
+        
+    }
+    
+    
+    var postId: String! {
+        get {
+            if _postId == nil {
+                _postId = ""
+            }
+            return _postId
+        }
+        
+    }
+    
+    
+    var commentId: String! {
+        get {
+            if _commentId == nil {
+                _commentId = ""
+            }
+            return _commentId
+        }
+        
+    }
+    
+    var content: String! {
+        get {
+            if _content == nil {
+                _content = ""
+            }
+            return _content
+        }
+        
+    }
+    
+
+    var isRead: Bool! {
+        get {
+            if _isRead == nil {
+                _isRead = true
+            }
+            return _isRead
+        }
+        
+    }
+    
+    var notiId: String! {
+        get {
+            if _notiId == nil {
+                _notiId = ""
+            }
+            return _notiId
         }
         
     }
@@ -66,42 +138,116 @@ class UserNotificationModel {
         
     }
 
+    var createdAt: Date! {
+        get {
+            if _createdAt == nil {
+                _createdAt = Date()
+            }
+            
+            return _createdAt
+        }
+    }
+    
+    
+    var updatedAt: Date! {
+        get {
+            if _updatedAt == nil {
+                _updatedAt =  Date()
+            }
+            
+            return _updatedAt
+        }
+    }
     
     init(UserNotificationModel: Dictionary<String, Any>) {
         
-        if let userId = UserNotificationModel["_id"] as? String {
-            self._userId = userId
+        
+        if let notiId = UserNotificationModel["_id"] as? String {
+            self._notiId = notiId
         }
         
-        if let user_name = UserNotificationModel["name"] as? String {
-            self._user_name = user_name
+        
+        if let isRead = UserNotificationModel["isRead"] as? Bool {
+            self._isRead = isRead
         }
         
-        if let user_nickname = UserNotificationModel["username"] as? String {
-            self._user_nickname = user_nickname
-        }
         
-        if let avatarUrl = UserNotificationModel["avatar"] as? String {
-            self._avatarUrl = avatarUrl
-        }
-        
-        if let challengeCard = UserNotificationModel["challengeCard"] as? [String:Any] {
+        if let notification = UserNotificationModel["notification"] as? [String: Any] {
             
-            if let gameList = challengeCard["games"] as? [[String: Any]] {
-                self._gameList = gameList
+            if let content = notification["content"] as? String {
+                self._content = content
+            }
+            
+            if let content = notification["metadata"] as? [String: Any] {
+               
+                if let postId = content["postId"] as? String {
+                    self._postId = postId
+                }
+                
+                if let sender = content["sender"] as? String {
+                    self._sender = sender
+                }
+                
+                if let commentId = content["commentId"] as? String {
+                    self._commentId = commentId
+                }
+                
+                if let fistbumpCount = content["fistbumpCount"] as? Int {
+                    self._fistbumpCount = fistbumpCount
+                }
+                
             }
             
         }
-  
+        
+        if let sender = UserNotificationModel["sender"] as? [String: Any] {
+            
+            if let userId = sender["_id"] as? String {
+                self._userId = userId
+            }
+            
+            if let userId = sender["avatar"] as? String {
+                self._userId = userId
+            }
+            
+            if let userId = sender["name"] as? String {
+                self._userId = userId
+            }
+            
+            if let userId = sender["username"] as? String {
+                self._userId = userId
+            }
+            
+        }
+        
+        
+        if let createdAt = UserNotificationModel["createdAt"] as? Date {
+            self._createdAt = createdAt
+        } else {
+            if let createdAtFail = UserNotificationModel["createdAt"] {
+                self._createdAt = transformFromJSON(createdAtFail)
+            }
+        }
+        
+        
+        if let updatedAt = UserNotificationModel["updatedAt"] as? Date {
+            self._updatedAt = updatedAt
+        } else {
+            if let updatedAtFail = UserNotificationModel["updatedAt"] {
+                self._updatedAt = transformFromJSON(updatedAtFail)
+            }
+        }
+
         
     }
     
 
 }
 
+
 extension UserNotificationModel: Equatable {
     static func == (lhs: UserNotificationModel, rhs: UserNotificationModel) -> Bool {
-        return lhs.userId == rhs.userId
+        return lhs.notiId == rhs.notiId
     }
 }
 
