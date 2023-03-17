@@ -1,30 +1,22 @@
 //
-//  PostListWithHashtagVC.swift
+//  PostSearchVC.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 2/27/23.
+//  Created by Khoi Nguyen on 3/6/23.
 //
 
 import UIKit
-import FLAnimatedImage
 import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
 
-class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
+class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
 
-    
-    var searchHashtag: String?
-    
-    let backButton: UIButton = UIButton(type: .custom)
-    
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
-    @IBOutlet weak var contentView: UIView!
-    
-    
-    
-    //====================================
+    @IBOutlet weak var contentview: UIView!
+    var page = 1
+    var keyword = ""
+    var prev_keyword = ""
+    var post_list = [PostModel]()
     
     var willIndex: Int?
     var currentIndex: Int?
@@ -35,95 +27,59 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
 
     var posts = [PostModel]()
     var selectedIndexPath = 0
-    var page = 1
     var selected_item: PostModel!
     var collectionNode: ASCollectionNode!
     var editeddPost: PostModel?
     var refresh_request = false
     var startIndex: Int!
-   
     
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
     lazy var delayItem3 = workItem()
-    
-    
     private var pullControl = UIRefreshControl()
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        setupCollectionNode()
         
-        if let hashtag = searchHashtag {
-            
-            navigationItem.title = hashtag
-            //todo: customized search to search only in hashtag_list
-            setupCollectionNode()
-            pullControl.tintColor = UIColor.systemOrange
-            pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
-            
-            if UIDevice.current.hasNotch {
-                pullControl.bounds = CGRect(x: pullControl.bounds.origin.x, y: -50, width: pullControl.bounds.size.width, height: pullControl.bounds.size.height)
-            }
-            
-            if #available(iOS 10.0, *) {
-                collectionNode.view.refreshControl = pullControl
-            } else {
-                collectionNode.view.addSubview(pullControl)
-            }
-            
+        pullControl.tintColor = UIColor.systemOrange
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+        
+        
+        if UIDevice.current.hasNotch {
+            pullControl.bounds = CGRect(x: pullControl.bounds.origin.x, y: -50, width: pullControl.bounds.size.width, height: pullControl.bounds.size.height)
         }
         
-        setupButtons()
+        if #available(iOS 10.0, *) {
+            collectionNode.view.refreshControl = pullControl
+        } else {
+            collectionNode.view.addSubview(pullControl)
+        }
+        
         
         
     }
     
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
-        
-        
-        delay(1.25) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-        }
-        
+    override func viewDidAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(PostSearchVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_search")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PostSearchVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_search")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PostSearchVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_search")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PostSearchVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_search")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PostSearchVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_search")), object: nil)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile_search")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post_search")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_post_search")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post_search")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post_search")), object: nil)
+        
+    }
     
     @objc private func refreshListData(_ sender: Any) {
        // self.pullControl.endRefreshing() // You can stop after API Call
@@ -132,7 +88,6 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         clearAllData()
    
     }
-    
     
     @objc func clearAllData() {
         
@@ -143,12 +98,12 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         isfirstLoad = true
         didScroll = false
         updateData()
-        page = 1
                
     }
     
     
     func updateData() {
+        
         self.retrieveNextPageWithCompletion { (newPosts) in
                 
             if newPosts.count > 0 {
@@ -158,21 +113,9 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
                                  
             } else {
               
-                
                 self.refresh_request = false
                 self.posts.removeAll()
                 self.collectionNode.reloadData()
-                
-                if self.posts.isEmpty == true {
-                    
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
-                    
-                 
-                } else {
-                    
-                    self.collectionNode.view.restore()
-                    
-                }
                 
             }
             
@@ -195,46 +138,11 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         
     }
 
-   
 
 }
 
 
-extension PostListWithHashtagVC {
-    
-    func setupButtons() {
-        
-        setupBackButton()
-    
-    }
-    
-    
-    func setupBackButton() {
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = back_frame
-        backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.sizeToFit()
-        let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
-        self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
-    }
-    
-   
-    @objc func onClickBack(_ sender: AnyObject) {
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
-        }
-    }
-
-    
-}
-
-
-extension PostListWithHashtagVC {
+extension PostSearchVC {
     
     func showErrorAlert(_ title: String, msg: String) {
                                                                                                                                            
@@ -273,7 +181,7 @@ extension PostListWithHashtagVC {
 }
 
 
-extension PostListWithHashtagVC {
+extension PostSearchVC {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
         guard let cell = node as? PostNode else { return }
@@ -364,21 +272,12 @@ extension PostListWithHashtagVC {
             
         }
     }
-
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-          navigationController?.setNavigationBarHidden(true, animated: true)
-            
-       } else {
-          navigationController?.setNavigationBarHidden(false, animated: true)
-          
-       }
-    }
+    
     
 }
 
 
-extension PostListWithHashtagVC {
+extension PostSearchVC {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
@@ -422,7 +321,7 @@ extension PostListWithHashtagVC {
     
 }
 
-extension PostListWithHashtagVC: ASCollectionDelegate {
+extension PostSearchVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
@@ -438,7 +337,7 @@ extension PostListWithHashtagVC: ASCollectionDelegate {
 }
 
 
-extension PostListWithHashtagVC: ASCollectionDataSource {
+extension PostSearchVC: ASCollectionDataSource {
     
     func numberOfSections(in collectionNode: ASCollectionNode) -> Int {
         
@@ -512,7 +411,7 @@ extension PostListWithHashtagVC: ASCollectionDataSource {
 
 
 
-extension PostListWithHashtagVC {
+extension PostSearchVC {
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
@@ -529,12 +428,12 @@ extension PostListWithHashtagVC {
         self.collectionNode.delegate = self
         
         // Add the collection node's view as a subview and set constraints
-        self.contentView.addSubview(collectionNode.view)
+        self.contentview.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
-        self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
-        self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
-        self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
+        self.collectionNode.view.topAnchor.constraint(equalTo: self.contentview.topAnchor, constant: 0).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentview.leadingAnchor, constant: 0).isActive = true
+        self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentview.trailingAnchor, constant: 0).isActive = true
+        self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentview.bottomAnchor, constant: 0).isActive = true
         
         self.applyStyle()
         self.wireDelegates()
@@ -563,24 +462,36 @@ extension PostListWithHashtagVC {
         
     }
     
+    func searchRequest() {
+        
+        
+        if prev_keyword == "" || prev_keyword != keyword {
+             
+            prev_keyword = keyword
+            clearAllData()
+           
+        }
+        
+        
+        
+    }
+    
 }
 
 
 
-extension PostListWithHashtagVC {
+extension PostSearchVC {
     
-
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        
-        if let hashtag = searchHashtag, hashtag != "" {
+        if keyword != "" {
             
-                let finalTag = hashtag.dropFirst()
-            
-            APIManager().getHashtagPost(tag: String(finalTag), page: page) { result in
+            print("Post search: \(keyword)")
+
+                APIManager().searchPost(query: keyword, page: page) { result in
                     switch result {
                     case .success(let apiResponse):
-                        
+                        print(apiResponse)
                         guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                             let item = [[String: Any]]()
                             DispatchQueue.main.async {
@@ -590,8 +501,8 @@ extension PostListWithHashtagVC {
                         }
                         if !data.isEmpty {
                             print("Successfully retrieved \(data.count) posts.")
-                            self.page += 1
                             let items = data
+                            self.page += 1
                             DispatchQueue.main.async {
                                 block(items)
                             }
@@ -611,17 +522,18 @@ extension PostListWithHashtagVC {
                 }
             }
             
-            
         } else {
             
             let item = [[String: Any]]()
             DispatchQueue.main.async {
                 block(item)
             }
-            
         }
+            
         
+  
     }
+    
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
         // Check if there are new posts to insert
@@ -657,12 +569,10 @@ extension PostListWithHashtagVC {
         collectionNode.insertItems(at: insertIndexPaths)
     }
 
-
-    
 }
 
 
-extension PostListWithHashtagVC {
+extension PostSearchVC {
     
     func settingPost(item: PostModel) {
         
@@ -673,6 +583,7 @@ extension PostListWithHashtagVC {
         global_presetingRate = Double(0.35)
         global_cornerRadius = 45
         newsFeedSettingVC.isOwner = false
+        newsFeedSettingVC.isSearch = true
         editeddPost = item
         self.present(newsFeedSettingVC, animated: true, completion: nil)
         
@@ -727,7 +638,6 @@ extension PostListWithHashtagVC {
     @objc func reportPost() {
         
         let slideVC =  reportView()
-        
         
         slideVC.video_report = true
         slideVC.highlight_id = editeddPost?.id ?? ""

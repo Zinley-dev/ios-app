@@ -6,10 +6,29 @@
 //
 
 import UIKit
+import FLAnimatedImage
+import AsyncDisplayKit
 
 class NotificationVC: UIViewController {
 
     let backButton: UIButton = UIButton(type: .custom)
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var loadingView: UIView!
+    
+    var page = 1
+    
+    var tableNode: ASTableNode!
+    var UserNotificationList = [UserNotificationModel]()
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+        self.tableNode = ASTableNode(style: .plain)
+        self.wireDelegates()
+  
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,11 +36,67 @@ class NotificationVC: UIViewController {
         // Do any additional setup after loading the view.
         setupButtons()
         
+        contentView.addSubview(tableNode.view)
+        
+        self.tableNode.view.translatesAutoresizingMaskIntoConstraints = false
+        self.tableNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
+        self.tableNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
+        self.tableNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
+        self.tableNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
+        
+        
+        
+        
+        self.applyStyle()
+        self.tableNode.leadingScreensForBatching = 5
+        self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
+        self.tableNode.automaticallyAdjustsContentOffset = true
+        
     }
     
-
-
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        do {
+            
+            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+            let gifData = try NSData(contentsOfFile: path) as Data
+            let image = FLAnimatedImage(animatedGIFData: gifData)
+            
+            
+            self.loadingImage.animatedImage = image
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        loadingView.backgroundColor = self.view.backgroundColor
+        
+        
+        delay(1.0) {
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                self.loadingView.alpha = 0
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
+                    
+                    self.loadingView.isHidden = true
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    
 }
 
 extension NotificationVC {
@@ -48,12 +123,211 @@ extension NotificationVC {
        
     }
     
-   
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default)
+        
+        
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+        
+    }
+
+    
+}
+
+extension NotificationVC {
+    
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
         }
     }
-
     
+}
+
+extension NotificationVC {
+    
+    func applyStyle() {
+        
+        self.tableNode.view.separatorStyle = .none
+        self.tableNode.view.separatorColor = UIColor.lightGray
+        self.tableNode.view.isPagingEnabled = false
+        self.tableNode.view.backgroundColor = UIColor.clear
+        self.tableNode.view.showsVerticalScrollIndicator = false
+        
+        //
+     
+        
+    }
+    
+    func wireDelegates() {
+        
+        self.tableNode.delegate = self
+        self.tableNode.dataSource = self
+        
+        //
+    }
+    
+    
+}
+
+extension NotificationVC {
+    
+    
+    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+          
+        
+        let notification = UserNotificationList[indexPath.row]
+   
+        
+            
+ 
+        
+    }
+    
+}
+
+
+extension NotificationVC: ASTableDelegate {
+
+    func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
+        
+        let width = UIScreen.main.bounds.size.width;
+        
+        let min = CGSize(width: width, height: 30);
+        let max = CGSize(width: width, height: 1000);
+        return ASSizeRangeMake(min, max);
+           
+    }
+    
+    
+    func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
+        
+        return true
+        
+    }
+    
+    func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
+        
+        self.retrieveNextPageWithCompletion { (newUsers) in
+            
+            self.insertNewRowsInTableNode(newNotis: newUsers)
+            
+            context.completeBatchFetching(true)
+            
+        }
+        
+    }
+       
+    
+}
+
+
+extension NotificationVC {
+    
+    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        
+            APIManager().getUserNotifications(page: page) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    print(apiResponse)
+                    
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                        return
+                    }
+                    if !data.isEmpty {
+                        self.page += 1
+                        print("Successfully retrieved \(data.count) notifications.")
+                        let items = data
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                }
+            }
+        }
+
+    }
+    
+    
+    func insertNewRowsInTableNode(newNotis: [[String: Any]]) {
+        // Check if there are new posts to insert
+        guard !newNotis.isEmpty else { return }
+        
+
+        // Calculate the range of new rows
+        let startIndex = UserNotificationList.count
+        let endIndex = startIndex + newNotis.count
+        
+        // Create an array of PostModel objects
+        let newItems = newNotis.compactMap { UserNotificationModel(UserNotificationModel: $0) }
+        
+        // Append the new items to the existing array
+        UserNotificationList.append(contentsOf: newItems)
+        
+        // Create an array of index paths for the new rows
+        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+        
+        // Insert the new rows
+        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
+       
+    }
+    
+    
+}
+
+
+extension NotificationVC: ASTableDataSource {
+    
+    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
+        
+        
+        if self.UserNotificationList.count == 0 {
+            
+            tableNode.view.setEmptyMessage("No active notification")
+            
+        } else {
+            tableNode.view.restore()
+        }
+        
+        return self.UserNotificationList.count
+        
+        
+    }
+    
+    func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
+        
+        let notification = self.UserNotificationList[indexPath.row]
+       
+        return {
+            
+            let node = NotificationNode(with: notification)
+            node.neverShowPlaceholders = true
+            node.debugName = "Node \(indexPath.row)"
+            
+            return node
+        }
+        
+    }
+    
+
+        
 }

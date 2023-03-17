@@ -9,22 +9,22 @@ import UIKit
 
 class AutocompeteViewController: UIViewController, UITableViewDelegate {
     
+    lazy var delayItem = workItem()
+    
     enum Mode {
-        case user, hashtag, highlight, keyword
+        case user, hashtag
     }
     
     var userSearchcompletionHandler: ((String, String) -> Void)?
     var hashtagSearchcompletionHandler: ((String) -> Void)?
-    var highlightSearchcompletionHandler: ((String) -> Void)?
-    var keywordSearchcompletionHandler: ((String) -> Void)?
+   
 
     
     var searchMode = Mode.user
     
-    var searchUserList = [SearchUser]()
-    //var searchHashtagList = [HashtagsModelFromAlgolia]()
-    //var searchHighlightList = [HighlightsModel]()
-    //var searchKeywordList = [KeywordModelFromAlgolia]()
+    var searchUserList = [UserSearchModel]()
+    var searchHashtagList = [HashtagsModel]()
+   
     
     let tableView: UITableView = {
         let uitableView = UITableView()
@@ -52,36 +52,89 @@ class AutocompeteViewController: UIViewController, UITableViewDelegate {
     
     func searchUsers(searchText: String) {
         print("searching: \(searchText)")
-        /*
-        AlgoliaSearch.instance.searchUsers(searchText: searchText) { userSearchResult in
-            print("finish search")
-            print(userSearchResult.count)
-            if userSearchResult != self.searchUserList {
-                self.searchUserList = userSearchResult
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    print("***RUI***: Got result and reload table")
+        
+        delayItem.perform(after: 0.35) {
+            
+            
+            APIManager().searchUser(query: searchText) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        return
+                    }
+                    
+                    if !data.isEmpty {
+                        
+                        var newSearchList = [UserSearchModel]()
+                        
+                        for item in data {
+                            newSearchList.append(UserSearchModel(UserSearchModel: item))
+                        }
+
+                        if self.searchUserList != newSearchList {
+                            self.searchUserList = newSearchList
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
+                            }
+                        }
+                        
+                    }
+                    
+                case .failure(let error):
+                    
+                    print(error)
+                   
                 }
-                
             }
             
-        } */
+        }
         
+
     }
     
     
     func searchHashtags(searchText: String) {
+        
+        delayItem.perform(after: 0.35) {
+            
+             APIManager().searchHashtag(query: searchText) { result in
+                 switch result {
+                 case .success(let apiResponse):
+
+                     guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                         return
+                     }
+                     
+                     if !data.isEmpty {
+                         
+                         var newSearchList = [HashtagsModel]()
+                         
+                         for item in data {
+                             newSearchList.append(HashtagsModel(type: "hashtag", hashtagModel: item))
+                         }
+                         
+                         if self.searchHashtagList != newSearchList {
+                             self.searchHashtagList = newSearchList
+                             DispatchQueue.main.async {
+                                 self.tableView.reloadData()
+                             }
+                         }
+                         
+                     }
+                     
+                 case .failure(let error):
+                     
+                     print(error)
+                    
+                 }
+             }
+            
+        }
        
         
     }
     
-    func searchHighlights(searchText: String) {
-       
-    }
-    
-    func searchKeywords(searchText: String) {
-       
-    }
     
     func search(text: String, with mode: Mode) {
         switch mode {
@@ -91,25 +144,17 @@ class AutocompeteViewController: UIViewController, UITableViewDelegate {
         case .hashtag:
             searchHashtags(searchText: text)
             self.searchMode = .hashtag
-        case .highlight:
-            searchHighlights(searchText: text)
-            self.searchMode = .highlight
-        case .keyword:
-            searchKeywords(searchText: text)
-            self.searchMode = .keyword
         }
     }
     
     
     func clearTable() {
-        self.searchUserList = [SearchUser]()
-        //self.searchHashtagList = [HashtagsModelFromAlgolia]()
-        //self.searchHighlightList = [HighlightsModel]()
+        self.searchUserList = [UserSearchModel]()
+        self.searchHashtagList = [HashtagsModel]()
         DispatchQueue.main.async {
             self.tableView.reloadData()
             print("Got result from Search")
         }
-        //        self.tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -126,10 +171,6 @@ extension AutocompeteViewController: UITableViewDataSource {
             return self.searchUserList.count
         case .hashtag:
             return self.searchUserList.count
-        case .highlight:
-            return self.searchUserList.count
-        case .keyword:
-            return self.searchUserList.count
         }
     }
     
@@ -142,15 +183,11 @@ extension AutocompeteViewController: UITableViewDataSource {
             
             switch self.searchMode {
             case .user:
-                cell.configureCell(type: "user", text: self.searchUserList[indexPath.row].username, url: self.searchUserList[indexPath.row].avatar)
+                cell.configureCell(type: "user", text: self.searchUserList[indexPath.row].user_nickname, url: self.searchUserList[indexPath.row].avatarUrl)
                 
             case .hashtag:
-                cell.configureCell(type: "user", text: self.searchUserList[indexPath.row].username, url: self.searchUserList[indexPath.row].avatar)
-                
-            case .highlight:
-                cell.configureCell(type: "user", text: self.searchUserList[indexPath.row].username, url: self.searchUserList[indexPath.row].avatar)
-            case .keyword:
-                cell.configureCell(type: "user", text: self.searchUserList[indexPath.row].username, url: self.searchUserList[indexPath.row].avatar)
+                cell.configureCell(type: "hashtag", text: String(self.searchHashtagList[indexPath.row].keyword.dropFirst()), url: "")
+        
             }
             
             return cell
@@ -166,13 +203,9 @@ extension AutocompeteViewController: UITableViewDataSource {
         print("autocompletevc: did select row")
         switch self.searchMode {
         case .user:
-            (userSearchcompletionHandler)?((self.searchUserList[indexPath.row].username), (self.searchUserList[indexPath.row].userID))
+            (userSearchcompletionHandler)?((self.searchUserList[indexPath.row].user_nickname), (self.searchUserList[indexPath.row].userId))
         case .hashtag:
-            (userSearchcompletionHandler)?((self.searchUserList[indexPath.row].username), (self.searchUserList[indexPath.row].userID))
-        case .highlight: //todo: what to display/search?
-            (userSearchcompletionHandler)?((self.searchUserList[indexPath.row].username), (self.searchUserList[indexPath.row].userID))
-        case .keyword:
-            (userSearchcompletionHandler)?((self.searchUserList[indexPath.row].username), (self.searchUserList[indexPath.row].userID))
+            (hashtagSearchcompletionHandler)?(self.searchHashtagList[indexPath.row].keyword)
         }
     }
 }

@@ -28,6 +28,7 @@ class NewsFeedSettingVC: UIViewController {
     @IBOutlet weak var removeBtn: UIButton!
     
     var isOwner = false
+    var isSearch = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,14 +55,24 @@ class NewsFeedSettingVC: UIViewController {
     
     @IBAction func copyProfileBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
+        if isSearch {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_search")), object: nil)
+        } else {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
+        }
+        
         self.dismiss(animated: true)
         
     }
     
     @IBAction func copyPostBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
+        if isSearch {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_search")), object: nil)
+        } else {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
+        }
+        
         self.dismiss(animated: true)
         
     }
@@ -74,14 +85,28 @@ class NewsFeedSettingVC: UIViewController {
     
     @IBAction func reportBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post")), object: nil)
+        if isSearch {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_search")), object: nil)
+            
+        } else {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post")), object: nil)
+        }
+        
+       
         self.dismiss(animated: true)
         
     }
     
     @IBAction func removeBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
+        if isSearch {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_search")), object: nil)
+            
+        } else {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
+        }
+        
+       
         self.dismiss(animated: true)
         
     }
@@ -89,7 +114,14 @@ class NewsFeedSettingVC: UIViewController {
     
     @IBAction func sendBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        if isSearch {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_search")), object: nil)
+            
+        } else {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        }
+        
+       
         self.dismiss(animated: true)
         
     }

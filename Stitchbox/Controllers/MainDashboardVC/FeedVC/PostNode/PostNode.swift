@@ -350,7 +350,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         }
         
        
-        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
+        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 75)
         let buttonsInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         let buttonsInsetSpec = ASInsetLayoutSpec(insets: buttonsInset, child: buttonsNode)
         
@@ -383,7 +383,6 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         if post.muxPlaybackId != "" {
             
             let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true"
-
             return URL(string: urlString)
             
         } else {

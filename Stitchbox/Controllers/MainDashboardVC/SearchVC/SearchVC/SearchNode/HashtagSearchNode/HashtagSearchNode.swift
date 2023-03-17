@@ -1,30 +1,30 @@
 //
-//  HashTagSearchNode.swift
+//  HashtagSearchNode.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 1/23/23.
+//  Created by Khoi Nguyen on 3/6/23.
 //
+
 
 import UIKit
 import AsyncDisplayKit
 import Alamofire
 
 
-
 fileprivate let OrganizerImageSize: CGFloat = 40
 fileprivate let HorizontalBuffer: CGFloat = 10
 fileprivate let FontSize: CGFloat = 12
 
-
 class HashTagSearchNode: ASCellNode {
     
-    weak var hashtag: HashtagsModelFromAlgolia!
+    weak var hashtag: HashtagsModel!
 
     var hashtagTextNode: ASTextNode!
     var hashtagSymbolImg: ASTextNode!
     var coutNode: ASTextNode!
-
-    init(with hashtag: HashtagsModelFromAlgolia) {
+   
+    
+    init(with hashtag: HashtagsModel) {
         
         self.hashtag = hashtag
         self.hashtagTextNode = ASTextNode()
@@ -47,13 +47,13 @@ class HashTagSearchNode: ASCellNode {
         
         if !hashtag.keyword.isEmpty {
             
-            hashtagSymbolImg.attributedText = NSAttributedString(string: "#", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 5), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            hashtagSymbolImg.attributedText = NSAttributedString(string: "#", attributes: [NSAttributedString.Key.font:  UIFont.systemFont(ofSize: FontSize + 5), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
             
 
-            hashtagTextNode.attributedText = NSAttributedString(string: String(self.hashtag.keyword.dropFirst(1)), attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            hashtagTextNode.attributedText = NSAttributedString(string: String(self.hashtag.keyword.dropFirst(1)), attributes: [NSAttributedString.Key.font:  UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
             
            
-            //loadHashTagCount(hashtag: self.hashtag.keyword)
+            self.coutNode.attributedText = NSAttributedString(string: "\(formatPoints(num: Double(hashtag.count))) posts", attributes: [NSAttributedString.Key.font:  UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
             
         }
         
@@ -62,7 +62,7 @@ class HashTagSearchNode: ASCellNode {
         
     }
     
-  
+    
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
         

@@ -39,6 +39,7 @@ struct APIManager {
     let fistBumpManager = Manager<FistBumpAPI>()
     let gamesManager = Manager<GameAPI>()
     let searchFeedManager = Manager<SearchFeedAPI>()
+    let notiManager = Manager<NotiApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -480,6 +481,12 @@ extension APIManager {
         completion(result)
       }
     }
+    func getHashtagPost(tag: String, page: Int, completion: @escaping APICompletion) {
+        postManager.request(.getHashtagPost(tag: tag, page: page)) { result in
+            completion(result)
+        }
+    }
+    
 }
 
 
@@ -616,9 +623,22 @@ extension APIManager {
       completion(result)
     }
   }
-  func addRecent(query: String, completion: @escaping APICompletion) {
-    searchFeedManager.request(.postRecent(params: ["query": query])) { result in
+    func addRecent(query: String, type: String, completion: @escaping APICompletion) {
+        searchFeedManager.request(.postRecent(params: ["query": query, "type": type])) { result in
       completion(result)
     }
   }
+    func deleteRecent(id: String, completion: @escaping APICompletion) {
+        searchFeedManager.request(.deleteRecent(id: id)) { result in
+            completion(result)
+        }
+    }
+}
+
+extension APIManager {
+    func getNotifications(page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+        notiManager.request(.getNotis(page: page, limit: limit)) { result in
+            completion(result)
+        }
+    }
 }
