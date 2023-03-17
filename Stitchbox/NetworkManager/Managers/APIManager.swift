@@ -329,6 +329,13 @@ extension APIManager {
             completion(result)
         }
     }
+  
+  func getUserInfo(userId: String, completion: @escaping APICompletion) {
+    userManager.request(.getUserInfo(userId: userId)){
+      result in
+      completion(result)
+    }
+  }
     
     func updateme(params: [String: Any], completion: @escaping APICompletion) {
         userManager.request(.updateme(params: params)){
@@ -634,4 +641,9 @@ extension APIManager {
             completion(result)
         }
     }
+  func readNotification(noti: String, completion: @escaping APICompletion) {
+    notiManager.request(.read(notiId: noti)) { result in
+      completion(result)
+    }
+  }
 }

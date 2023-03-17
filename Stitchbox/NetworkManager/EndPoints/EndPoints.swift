@@ -366,6 +366,7 @@ extension AccountAPI: EndPointType {
 
 public enum UserAPI {
     case getme
+    case getUserInfo(userId: String)
     case updateme (params: [String: Any])
     case updateChallengeCard (params: [String: Any])
     case updatePhone (params: [String: Any])
@@ -392,6 +393,8 @@ extension UserAPI: EndPointType {
         switch self {
         case .getme:
             return "/me"
+        case .getUserInfo(let userId):
+            return "/\(userId)"
         case .updateme:
             return "/me"
           case .updateChallengeCard:
@@ -431,6 +434,8 @@ extension UserAPI: EndPointType {
         switch self {
         case .getme:
             return .get
+          case .getUserInfo:
+            return .get
         case .updateme:
             return .patch
           case .updateChallengeCard:
@@ -469,6 +474,8 @@ extension UserAPI: EndPointType {
     var task: HTTPTask {
         switch self {
         case .getme:
+            return .request
+          case .getUserInfo:
             return .request
         case .updateme(let params):
             return .requestParameters(parameters: params)
@@ -1093,12 +1100,15 @@ extension SearchFeedAPI: EndPointType {
 
 public enum NotiApi {
     case getNotis(page: Int = 1, limit: Int = 20)
+    case read(notiId: String)
 }
 extension NotiApi: EndPointType {
     var path: String {
         switch self {
             case .getNotis(let page, let limit):
                 return "?page=\(page)&limit=\(limit)"
+            case .read(let notiId):
+              return "/\(notiId)"
         }
     }
     
@@ -1106,6 +1116,8 @@ extension NotiApi: EndPointType {
         switch self {
             case .getNotis:
                 return "/notification"
+            case .read:
+              return "/notification"
         }
     }
     
@@ -1113,6 +1125,8 @@ extension NotiApi: EndPointType {
         switch self {
             case .getNotis:
                 return .get
+          case .read:
+            return .get
         }
     }
     
@@ -1120,6 +1134,8 @@ extension NotiApi: EndPointType {
         switch self {
             case .getNotis:
                 return .request
+          case .read:
+            return .request
         }
     }
     
