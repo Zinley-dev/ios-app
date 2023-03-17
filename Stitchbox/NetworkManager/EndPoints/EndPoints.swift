@@ -366,6 +366,7 @@ extension AccountAPI: EndPointType {
 
 public enum UserAPI {
     case getme
+    case getUserInfo(userId: String)
     case updateme (params: [String: Any])
     case updateChallengeCard (params: [String: Any])
     case updatePhone (params: [String: Any])
@@ -392,6 +393,8 @@ extension UserAPI: EndPointType {
         switch self {
         case .getme:
             return "/me"
+        case .getUserInfo(let userId):
+            return "/\(userId)"
         case .updateme:
             return "/me"
           case .updateChallengeCard:
@@ -431,6 +434,8 @@ extension UserAPI: EndPointType {
         switch self {
         case .getme:
             return .get
+          case .getUserInfo:
+            return .get
         case .updateme:
             return .patch
           case .updateChallengeCard:
@@ -469,6 +474,8 @@ extension UserAPI: EndPointType {
     var task: HTTPTask {
         switch self {
         case .getme:
+            return .request
+          case .getUserInfo:
             return .request
         case .updateme(let params):
             return .requestParameters(parameters: params)

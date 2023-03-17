@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class UserProfileVC: UIViewController {
 
@@ -38,15 +39,16 @@ class UserProfileVC: UIViewController {
     var onPresent = false
 
     var demoProfileData: ProfileHeaderData {
-        return ProfileHeaderData(name: "Planet Pennies", accountType: "News/Entertainment Company", postCount: 482)
+        return ProfileHeaderData(name: "", accountType: "", postCount: 0)
     }
     
     var demoChallengeData: ChallengeCardHeaderData {
-        return ChallengeCardHeaderData(name: "Planet Pennies")
+        return ChallengeCardHeaderData(name: "")
     }
     
     var userId: String?
     var nickname: String?
+    var userData: UserDataSource?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,6 +75,11 @@ class UserProfileVC: UIViewController {
         self.setupChallengeView()
         self.setupButtons()
     }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    loadUserData()
+  }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -80,12 +87,105 @@ class UserProfileVC: UIViewController {
         ChallengeView.frame = challengeCardView.bounds
     }
     
+  private func loadUserData() {
+    APIManager().getUserInfo(userId: self.userId!) { result in
+      switch result {
+        case .success(let response):
+          guard let data = response.body else {
+            return
+          }
+          
+          self.userData = Mapper<UserDataSource>().map(JSONObject: data)
+          
+          let indexPath = IndexPath(item: 0, section: 0);
+          let index2Path = IndexPath(item: 0, section: 1);
+          DispatchQueue.main.async {
+            if let cell = self.datasource.itemIdentifier(for: indexPath) {
+              if case .header(var param) = cell {
+                param.name = self.userData?.userName ?? ""
+                param.discord = self.userData?.discordUrl ?? "None"
+                param.cover = self.userData?.cover ?? ""
+                param.avatar = self.userData?.avatarURL ?? ""
+                param.about = self.userData?.about ?? ""
+                param.followers = 10
+                param.following = 20
+                param.fistBumped = 30
+                
+                
+                var snapshot = self.datasource.snapshot()
+                // replace item
+                snapshot.insertItems([.header(param)], beforeItem: cell)
+                snapshot.deleteItems([cell])
+                // update datasource
+                self.datasource.apply(snapshot)
+                
+              }
+            }
+            
+            if let cell2 = self.datasource.itemIdentifier(for: index2Path) {
+              if case .challengeCard(var param) = cell2 {
+                param.name = self.userData?.userName ?? ""
+                param.avatar = self.userData?.avatarURL ?? ""
+                param.quotes = self.userData?.challengeCard?.quote
+                
+                
+                var snapshot = self.datasource.snapshot()
+                // replace item
+                snapshot.insertItems([.challengeCard(param)], beforeItem: cell2)
+                snapshot.deleteItems([cell2])
+                // update datasource
+                self.datasource.apply(snapshot)
+                
+              }
+            }
+          }
+
+        case .failure(let error):
+          print(error)
+      }
+    }
+  }
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell {
+      
         switch item {
-        case .header(_):
+        case .header(let param):
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileHeaderCell.reuseIdentifier, for: indexPath) as? UserProfileHeaderCell {
+              
+                cell.usernameLbl.text = param.name
+                cell.descriptionLbl.text = param.about ?? ""
                 
+                
+                if let avatarUrl = param.avatar, avatarUrl != "" {
+                  if let url = URL(string: avatarUrl) {
+                    cell.avatarImage.load(url: url, str: avatarUrl)
+                    selectAvatarImage.load(url: url, str: avatarUrl)
+                  }
+                    
+                }
+              
+                if let coverUrl = param.cover, coverUrl != "" {
+                  if let url = URL(string: coverUrl) {
+                    cell.coverImage.load(url: url, str: coverUrl)
+                    selectCoverImage.load(url: url, str: coverUrl)
+                  }
+                }
+              
+              if let discord = param.discord, discord != "" {
+                cell.discordBtn.setTitle("Added and verified", for: .normal)
+              } else {
+                cell.discordBtn.setTitle("None", for: .normal)
+              }
+              
+              if let about = _AppCoreData.userDataSource.value?.about {
+                cell.descriptionLbl.text = about
+              }
+              
+              cell.numberOfFollowers.text = "\(formatPoints(num: Double(param.followers)))"
+              cell.numberOfFollowing.text = "\(formatPoints(num: Double(param.following)))"
+              cell.FistBumpedBtn.setTitle("\(formatPoints(num: Double(param.fistBumped)))", for: .normal)
+                
+              
                 // add buttons target
                 cell.discordBtn.addTarget(self, action: #selector(discordTapped), for: .touchUpInside)
                 cell.FistBumpedBtn.addTarget(self, action: #selector(fistBumpedTapped), for: .touchUpInside)
@@ -122,10 +222,38 @@ class UserProfileVC: UIViewController {
                 
             }
             
-        case .challengeCard(_):
+        case .challengeCard(let param):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserChallengerCardProfileHeaderCell.reuseIdentifier, for: indexPath) as? UserChallengerCardProfileHeaderCell {
-                
+            
+              
+              // display username
+              if let username = param.name, username != "" {
+                cell.username.text = username
+                ChallengeView.username.text = username
+              }
+              
+              if let avatarUrl = param.avatar, avatarUrl != "" {
+                let url = URL(string: avatarUrl)
+                cell.userImgView.load(url: url!, str: avatarUrl)
+                ChallengeView.userImgView.load(url: url!, str: avatarUrl)
+              }
+              
+              
+              
+              
+              
+              if let quotes = param.quotes, quotes != "" {
+                cell.infoLbl.text = quotes
+              }
+              
+              
+              cell.startTime.text = param.createdDate
+              cell.infoLbl.text = "xxxx"
+              
+              
+              
+              
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
                 cell.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)
                 cell.game3.addTarget(self, action: #selector(game3Tapped), for: .touchUpInside)
