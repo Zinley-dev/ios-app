@@ -257,6 +257,13 @@ extension NotificationVC {
           
         let notification = UserNotificationList[indexPath.row]
         
+        if notification._isRead == false {
+            UserNotificationList[indexPath.row]._isRead = true
+            tableNode.reloadRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
+            setRead(notiId: notification.notiId)
+        }
+        
+        
         if let template = notification.template {
             
             switch template {
@@ -296,7 +303,24 @@ extension NotificationVC {
         
     }
     
+    func setRead(notiId: String) {
+        
+        APIManager().readNotification(noti: notiId) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    print(apiResponse)
+                   
+                    
+                case .failure(let error):
+                    print(error)
+                    
+            }
+        }
+        
+    }
     
+
 }
 
 

@@ -13,7 +13,6 @@ class UserNotificationModel {
     fileprivate var _username: String!
     fileprivate var _avatarUrl: String!
     fileprivate var _notiId: String!
-    fileprivate var _isRead: Bool!
     fileprivate var _content: String!
     fileprivate var _postId: String!
     fileprivate var _commentId: String!
@@ -24,7 +23,7 @@ class UserNotificationModel {
     fileprivate var _template: String!
     fileprivate var _fistbumpCount: Int!
    
-    
+    var _isRead = true
    
     var fistbumpCount: Int! {
         get {
@@ -96,17 +95,6 @@ class UserNotificationModel {
                 _content = ""
             }
             return _content
-        }
-        
-    }
-    
-
-    var isRead: Bool! {
-        get {
-            if _isRead == nil {
-                _isRead = true
-            }
-            return _isRead
         }
         
     }

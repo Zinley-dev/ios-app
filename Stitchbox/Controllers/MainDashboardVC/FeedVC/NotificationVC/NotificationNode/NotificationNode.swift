@@ -31,7 +31,7 @@ class NotificationNode: ASCellNode {
         
         super.init()
         
-        if self.notification.isRead == false {
+        if self.notification._isRead == false {
             
             self.backgroundColor = UIColor.textLightMode
             
