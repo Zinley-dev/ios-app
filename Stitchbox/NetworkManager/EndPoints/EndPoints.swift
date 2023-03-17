@@ -1100,12 +1100,15 @@ extension SearchFeedAPI: EndPointType {
 
 public enum NotiApi {
     case getNotis(page: Int = 1, limit: Int = 20)
+    case read(notiId: String)
 }
 extension NotiApi: EndPointType {
     var path: String {
         switch self {
             case .getNotis(let page, let limit):
                 return "?page=\(page)&limit=\(limit)"
+            case .read(let notiId):
+              return "/\(notiId)"
         }
     }
     
@@ -1113,6 +1116,8 @@ extension NotiApi: EndPointType {
         switch self {
             case .getNotis:
                 return "/notification"
+            case .read:
+              return "/notification"
         }
     }
     
@@ -1120,6 +1125,8 @@ extension NotiApi: EndPointType {
         switch self {
             case .getNotis:
                 return .get
+          case .read:
+            return .get
         }
     }
     
@@ -1127,6 +1134,8 @@ extension NotiApi: EndPointType {
         switch self {
             case .getNotis:
                 return .request
+          case .read:
+            return .request
         }
     }
     
