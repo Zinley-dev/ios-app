@@ -1,13 +1,13 @@
-<mxfile host="app.diagrams.net" modified="2023-03-17T23:47:09.291Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" etag="i7rre2mjvJwJSq3POBte" version="21.0.7" type="github">
+<mxfile host="app.diagrams.net" modified="2023-03-17T23:52:42.904Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" etag="Iz4wQqRNDuVVYxbPXe3G" version="21.0.7" type="github">
   <diagram name="Trang-1" id="oQ7Q2U69AbRuAxu6SCVH">
-    <mxGraphModel dx="2448" dy="2026" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2802" dy="2300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="2QQNMFbDvAQSub1k52Ly-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2QQNMFbDvAQSub1k52Ly-1" target="2QQNMFbDvAQSub1k52Ly-3">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="2QQNMFbDvAQSub1k52Ly-7" value="1. User clicked for tutorial requestl" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2QQNMFbDvAQSub1k52Ly-6">
+        <mxCell id="2QQNMFbDvAQSub1k52Ly-7" value="1. User clicked for tutorial request" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2QQNMFbDvAQSub1k52Ly-6">
           <mxGeometry x="0.0757" relative="1" as="geometry">
             <mxPoint x="-1" y="20" as="offset" />
           </mxGeometry>
@@ -50,7 +50,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="2QQNMFbDvAQSub1k52Ly-22" value="5.1. Check if any user history is stored on db with 30 mins threshold" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="2QQNMFbDvAQSub1k52Ly-3" target="2QQNMFbDvAQSub1k52Ly-4">
-          <mxGeometry x="0.4706" y="90" relative="1" as="geometry">
+          <mxGeometry x="0.4706" y="140" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
@@ -89,7 +89,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="2QQNMFbDvAQSub1k52Ly-5" value="Riot" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="2QQNMFbDvAQSub1k52Ly-5" value="Riot API" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="630" y="290" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="2QQNMFbDvAQSub1k52Ly-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2QQNMFbDvAQSub1k52Ly-33">
