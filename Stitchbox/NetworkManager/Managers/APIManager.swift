@@ -641,4 +641,9 @@ extension APIManager {
             completion(result)
         }
     }
+  func readNotification(noti: String, completion: @escaping APICompletion) {
+    notiManager.request(.read(notiId: noti)) { result in
+      completion(result)
+    }
+  }
 }
