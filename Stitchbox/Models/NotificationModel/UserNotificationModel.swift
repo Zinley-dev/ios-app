@@ -162,17 +162,19 @@ class UserNotificationModel {
     
     init(UserNotificationModel: Dictionary<String, Any>) {
         
-        if let notiId = UserNotificationModel["_id"] as? String {
-            self._notiId = notiId
-        }
+        print(UserNotificationModel)
         
-        
+
         if let isRead = UserNotificationModel["isRead"] as? Bool {
             self._isRead = isRead
         }
         
         
         if let notification = UserNotificationModel["notification"] as? [String: Any] {
+            
+            if let notiId = notification["_id"] as? String {
+                self._notiId = notiId
+            }
             
             if let content = notification["content"] as? String {
                 self._content = content

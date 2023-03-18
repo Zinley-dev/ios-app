@@ -2001,6 +2001,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A78485C2984D1E3008B2263 /* NotificationVC */,
 				6A467E5529AD8CEB00214108 /* PostSearchVC */,
 				6AEA340B298F0B70005A4C5D /* CommentVC */,
 				6AEA3405298DE181005A4C5D /* PostSetting */,
@@ -2539,7 +2540,6 @@
 		6AEA74F2296802BD005C802B /* FeedVC */ = {
 			isa = PBXGroup;
 			children = (
-				6A78485C2984D1E3008B2263 /* NotificationVC */,
 				6A7848592984D1AA008B2263 /* PostNode */,
 				390FD78529093EA00068B883 /* FeedViewController.swift */,
 			);

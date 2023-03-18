@@ -305,6 +305,8 @@ extension NotificationVC {
     
     func setRead(notiId: String) {
         
+        print(notiId)
+        
         APIManager().readNotification(noti: notiId) { result in
                 switch result {
                 case .success(let apiResponse):
