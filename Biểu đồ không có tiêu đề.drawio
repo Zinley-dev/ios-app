@@ -1,0 +1,80 @@
+<mxfile host="app.diagrams.net" modified="2023-03-17T23:42:33.277Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" etag="NHT7OHtybS9SEP-7TbFa" version="21.0.7" type="github">
+  <diagram name="Trang-1" id="qNXEC_Phx8oYoCgSz1mo">
+    <mxGraphModel dx="2448" dy="857" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n3JyjblW056gqOgEvCOG-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="n3JyjblW056gqOgEvCOG-6" target="n3JyjblW056gqOgEvCOG-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="n3JyjblW056gqOgEvCOG-6" target="n3JyjblW056gqOgEvCOG-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="n3JyjblW056gqOgEvCOG-6" target="n3JyjblW056gqOgEvCOG-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-18" value="Request to search &lt;br&gt;user using region, username" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="n3JyjblW056gqOgEvCOG-15">
+          <mxGeometry x="-0.034" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="n3JyjblW056gqOgEvCOG-6" target="n3JyjblW056gqOgEvCOG-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-32" value="After user selected, request to store riot id to user&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="n3JyjblW056gqOgEvCOG-31">
+          <mxGeometry x="0.0034" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-6" value="Mobile&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="690" width="134" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="n3JyjblW056gqOgEvCOG-10" target="n3JyjblW056gqOgEvCOG-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-20" value="Using RIOT API to search user&lt;br&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="n3JyjblW056gqOgEvCOG-19">
+          <mxGeometry x="-0.0649" y="4" relative="1" as="geometry">
+            <mxPoint x="-47" y="-166" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="n3JyjblW056gqOgEvCOG-10" target="n3JyjblW056gqOgEvCOG-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-26" value="Return search result from riot to frontend&lt;br&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="n3JyjblW056gqOgEvCOG-25">
+          <mxGeometry x="0.5714" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="n3JyjblW056gqOgEvCOG-10" target="n3JyjblW056gqOgEvCOG-16">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-29" value="Add Riot id to user information as a field" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="n3JyjblW056gqOgEvCOG-28">
+          <mxGeometry x="0.7533" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-10" value="Backend&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="410" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="n3JyjblW056gqOgEvCOG-13">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-24" value="Return search result to backend&lt;br&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="n3JyjblW056gqOgEvCOG-23">
+          <mxGeometry x="-0.3663" y="3" relative="1" as="geometry">
+            <mxPoint y="17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-13" value="Riot API&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n3JyjblW056gqOgEvCOG-16" value="DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="-30" y="40" width="60" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
