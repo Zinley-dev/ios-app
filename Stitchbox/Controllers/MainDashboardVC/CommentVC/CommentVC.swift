@@ -1524,3 +1524,51 @@ extension CommentVC {
     }
     
 }
+
+extension CommentVC {
+    
+    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+        
+        let cIndex = indexPath.row
+        
+        if cIndex != -1 {
+            
+            cmtTxtView.becomeFirstResponder()
+            
+            if CommentList[cIndex].comment_uid != "" {
+                
+                let paragraphStyles = NSMutableParagraphStyle()
+                paragraphStyles.alignment = .left
+            
+                if let username = CommentList[cIndex].comment_username {
+                    
+                
+                    self.placeholderLabel.text = "Reply to @\(username)"
+                    
+                    
+                }
+                
+            } else{
+                placeholderLabel.text = "Reply to @Undefined"
+            }
+            
+            if CommentList[cIndex].isReply == false {
+                root_id = CommentList[cIndex].comment_id
+                index = cIndex
+            } else {
+                root_id = CommentList[cIndex].root_id
+                index = cIndex
+            }
+            
+            
+            reply_to_uid =  CommentList[cIndex].comment_uid
+            reply_to_cid =  CommentList[cIndex].comment_id
+            reply_to_username = CommentList[cIndex].comment_username
+            
+            tableNode.scrollToRow(at: IndexPath(row: cIndex, section: 0), at: .top, animated: true)
+            
+        }
+ 
+    }
+    
+}

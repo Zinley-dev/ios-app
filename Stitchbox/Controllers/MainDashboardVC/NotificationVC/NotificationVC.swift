@@ -206,7 +206,6 @@ extension NotificationVC {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default)
         
-        
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
         
@@ -235,16 +234,13 @@ extension NotificationVC {
         self.tableNode.view.backgroundColor = .background
         self.tableNode.view.showsVerticalScrollIndicator = false
         
-        //
-     
     }
     
     func wireDelegates() {
         
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
-        
-        //
+    
     }
     
     
@@ -269,19 +265,29 @@ extension NotificationVC {
             switch template {
                 
                 case "NEW_COMMENT":
-                    print("NEW_COMMENT -> open comment")
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template)
                 case "REPLY_COMMENT":
-                    print("REPLY_COMMENT -> open reply comment, root comment and the comment the user reply to")
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template)
                 case "NEW_FISTBUMP_1":
-                    print("NEW_FISTBUMP_1 -> open user")
+                    if let userId = notification.userId, let username = notification.username {
+                        openUser(userId: userId, username: username)
+                    } else {
+                        showErrorAlert("Oops!", msg: "Can't open this notification content")
+                    }
                 case "NEW_FISTBUMP_2":
-                    print("NEW_FISTBUMP_2 -> open user list")
+                    openFistBumpList()
                 case "NEW_FOLLOW_1":
-                    print("NEW_FOLLOW_1 -> open user")
+                   
+                    if let userId = notification.userId, let username = notification.username {
+                        openUser(userId: userId, username: username)
+                    } else {
+                        showErrorAlert("Oops!", msg: "Can't open this notification content")
+                    }
+                
                 case "NEW_FOLLOW_2":
-                    print("NEW_FOLLOW_2 -> open user list")
+                    openFollow()
                 case "NEW_TAG":
-                    print("NEW_TAG -> open comment")
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template)
                 case "NEW_POST":
                     print("NEW_POST -> open post")
                 default:
@@ -297,8 +303,74 @@ extension NotificationVC {
 
 extension NotificationVC {
     
+    
+    func openFistBumpList() {
+        
+        if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
+        
+            self.navigationController?.pushViewController(MFBVC, animated: true)
+            
+        }
+        
+        
+    }
+    
     func openPost(id: String) {
         
+        
+        
+    }
+    
+    func openComment(commentId: String, rootComment: String, replyToComment: String, type: String) {
+        
+        let slideVC = CommentNotificationVC()
+        
+        slideVC.commentId = commentId
+        slideVC.reply_to_cid = replyToComment
+        slideVC.root_id = rootComment
+        slideVC.type = type
+        
+        global_presetingRate = Double(0.75)
+        global_cornerRadius = 35
+        
+        slideVC.modalPresentationStyle = .custom
+        slideVC.transitioningDelegate = self
+        
+        self.present(slideVC, animated: true, completion: nil)
+        
+        
+    }
+    
+    func openUser(userId: String, username: String) {
+        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+           
+            UPVC.userId = userId
+            UPVC.nickname = username
+            self.navigationController?.pushViewController(UPVC, animated: true)
+            
+        }
+        
+        
+    }
+    
+    func openFollow() {
+        
+        if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            MFVC.showFollowerFirst = true
+            //MFVC.followerCount = followerCount
+            //MFVC.followingCount = followingCount
+           
+            self.navigationController?.pushViewController(MFVC, animated: true)
+            
+        }
+        
+        
+    }
+    
+    
+    
+    func openUserList() {
         
         
     }

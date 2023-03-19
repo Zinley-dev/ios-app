@@ -9,6 +9,7 @@ import Foundation
 
 struct ProfileHeaderData: Hashable {
     var name: String
+    var username: String
     var accountType: String
     var postCount: Int = 0
     var followers: Int = 0

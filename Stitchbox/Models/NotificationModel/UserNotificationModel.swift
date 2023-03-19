@@ -22,8 +22,32 @@ class UserNotificationModel {
     fileprivate var _sender: String!
     fileprivate var _template: String!
     fileprivate var _fistbumpCount: Int!
+    fileprivate var _post: PostModel!
+    fileprivate var _rootComment: String!
+    fileprivate var _replyToComment: String!
+
    
     var _isRead = true
+    
+    var rootComment: String! {
+        get {
+            if _rootComment == nil {
+                _rootComment = ""
+            }
+            return _rootComment
+        }
+        
+    }
+    
+    var replyToComment: String! {
+        get {
+            if _replyToComment == nil {
+                _replyToComment = ""
+            }
+            return _replyToComment
+        }
+        
+    }
    
     var fistbumpCount: Int! {
         get {
@@ -198,10 +222,25 @@ class UserNotificationModel {
                     self._fistbumpCount = fistbumpCount
                 }
                 
+                if let replyToComment = content["replyToComment"] as? String {
+                    self._replyToComment = replyToComment
+                }
+                
+                if let rootComment = content["rootComment"] as? String {
+                    self._rootComment = rootComment
+                }
+                
+                
             }
             
             if let template = notification["template"] as? String {
                 self._template = template
+                
+                if template == "NEW_POST" {
+                    
+                    
+                    
+                }
             }
             
             
@@ -244,6 +283,13 @@ class UserNotificationModel {
             }
         }
 
+        
+    }
+    
+    func getPost() {
+        
+        
+        
         
     }
     

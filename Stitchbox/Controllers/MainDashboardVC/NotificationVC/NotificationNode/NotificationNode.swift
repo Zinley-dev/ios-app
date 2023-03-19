@@ -37,7 +37,7 @@ class NotificationNode: ASCellNode {
             
         } else {
             
-            self.backgroundColor = UIColor.clear
+            self.backgroundColor = UIColor.background
             
         }
         

@@ -20,6 +20,7 @@ class FollowerVC: UIViewController {
     private let disposeBag = DisposeBag()
     
     @IBOutlet weak var contentView: UIView!
+    var requestedUserId: String?
     var inSearchMode = false
     var tableNode: ASTableNode!
     var searchUserList = [FollowerModel]()

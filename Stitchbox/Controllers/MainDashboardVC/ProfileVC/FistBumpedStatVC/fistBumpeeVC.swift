@@ -204,7 +204,7 @@ extension fistBumpeeVC: ASTableDataSource {
         
         if self.FistBumpList.count == 0 {
             
-            tableNode.view.setEmptyMessage("No FistBumped user!")
+            tableNode.view.setEmptyMessage("No fist-bumped user!")
             
         } else {
             tableNode.view.restore()

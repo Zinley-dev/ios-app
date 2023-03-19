@@ -50,7 +50,7 @@ class ProfileViewController: UIViewController {
     
 
     var profileData: ProfileHeaderData {
-        return ProfileHeaderData(name: "Defaults", accountType: "Defaults/Public")
+        return ProfileHeaderData(name: "Defaults", username: "", accountType: "Defaults/Public")
     }
     
     var challengeData: ChallengeCardHeaderData {
@@ -58,6 +58,7 @@ class ProfileViewController: UIViewController {
     }
     
     func bindingUI() {
+    
       
         viewModel.output.myPostObservable.subscribe(onNext: { posts in
             if posts.count == 10 {
@@ -191,6 +192,7 @@ class ProfileViewController: UIViewController {
                 if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
                     cell.usernameLbl.text = username
                 }
+                
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
                     let url = URL(string: avatarUrl)
                     cell.avatarImage.load(url: url!, str: avatarUrl)

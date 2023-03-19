@@ -39,7 +39,7 @@ class UserProfileVC: UIViewController {
     var onPresent = false
 
     var demoProfileData: ProfileHeaderData {
-        return ProfileHeaderData(name: "", accountType: "", postCount: 0)
+        return ProfileHeaderData(name: "", username: "", accountType: "", postCount: 0)
     }
     
     var demoChallengeData: ChallengeCardHeaderData {
@@ -58,7 +58,7 @@ class UserProfileVC: UIViewController {
        
         
         pullControl.tintColor = UIColor.secondary
-        //pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if #available(iOS 10.0, *) {
             collectionView.refreshControl = pullControl
@@ -74,13 +74,15 @@ class UserProfileVC: UIViewController {
        
         self.setupChallengeView()
         self.setupButtons()
+        loadUserData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
     }
   
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    loadUserData()
-  }
-    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -88,6 +90,7 @@ class UserProfileVC: UIViewController {
     }
     
   private func loadUserData() {
+      
     APIManager().getUserInfo(userId: self.userId!) { result in
       switch result {
         case .success(let response):
@@ -99,10 +102,11 @@ class UserProfileVC: UIViewController {
           
           let indexPath = IndexPath(item: 0, section: 0);
           let index2Path = IndexPath(item: 0, section: 1);
+          
           DispatchQueue.main.async {
             if let cell = self.datasource.itemIdentifier(for: indexPath) {
               if case .header(var param) = cell {
-                param.name = self.userData?.userName ?? ""
+                param.username = self.userData?.userName ?? ""
                 param.discord = self.userData?.discordUrl ?? "None"
                 param.cover = self.userData?.cover ?? ""
                 param.avatar = self.userData?.avatarURL ?? ""
@@ -151,8 +155,8 @@ class UserProfileVC: UIViewController {
         switch item {
         case .header(let param):
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileHeaderCell.reuseIdentifier, for: indexPath) as? UserProfileHeaderCell {
-              
-                cell.usernameLbl.text = param.name
+                
+                cell.usernameLbl.text = param.username
                 cell.descriptionLbl.text = param.about ?? ""
                 
                 
@@ -171,19 +175,16 @@ class UserProfileVC: UIViewController {
                   }
                 }
               
-              if let discord = param.discord, discord != "" {
-                cell.discordBtn.setTitle("Added and verified", for: .normal)
-              } else {
-                cell.discordBtn.setTitle("None", for: .normal)
-              }
+                  if let discord = param.discord, discord != "" {
+                    cell.discordBtn.setTitle("Added and verified", for: .normal)
+                  } else {
+                    cell.discordBtn.setTitle("None", for: .normal)
+                  }
               
-              if let about = _AppCoreData.userDataSource.value?.about {
-                cell.descriptionLbl.text = about
-              }
-              
-              cell.numberOfFollowers.text = "\(formatPoints(num: Double(param.followers)))"
-              cell.numberOfFollowing.text = "\(formatPoints(num: Double(param.following)))"
-              cell.FistBumpedBtn.setTitle("\(formatPoints(num: Double(param.fistBumped)))", for: .normal)
+            
+                cell.numberOfFollowers.text = "\(formatPoints(num: Double(param.followers)))"
+                cell.numberOfFollowing.text = "\(formatPoints(num: Double(param.following)))"
+                cell.FistBumpedBtn.setTitle("\(formatPoints(num: Double(param.fistBumped)))", for: .normal)
                 
               
                 // add buttons target
@@ -238,9 +239,6 @@ class UserProfileVC: UIViewController {
                 cell.userImgView.load(url: url!, str: avatarUrl)
                 ChallengeView.userImgView.load(url: url!, str: avatarUrl)
               }
-              
-              
-              
               
               
               if let quotes = param.quotes, quotes != "" {
@@ -450,6 +448,7 @@ extension UserProfileVC {
     
 }
 
+
 extension UserProfileVC {
     
     func createHeaderSection() -> NSCollectionLayoutSection {
@@ -612,6 +611,7 @@ extension UserProfileVC {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
+
         if challengeCardView.isHidden == false {
             
             let touch = touches.first
@@ -665,6 +665,8 @@ extension UserProfileVC {
     }
     
     
+    
+    
 }
 
 
@@ -712,5 +714,36 @@ extension UserProfileVC {
        
     }
     
+    
+}
+
+extension UserProfileVC {
+    
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
+          navigationController?.setNavigationBarHidden(true, animated: true)
+       } else {
+          navigationController?.setNavigationBarHidden(false, animated: true)
+       }
+    }
+    
+    
+}
+
+extension UserProfileVC {
+    
+    @objc private func refreshListData(_ sender: Any) {
+       // self.pullControl.endRefreshing() // You can stop after API Call
+        // Call API
+  
+        clearAllData()
+   
+    }
+    
+    @objc func clearAllData() {
+        
+        
+               
+    }
     
 }
