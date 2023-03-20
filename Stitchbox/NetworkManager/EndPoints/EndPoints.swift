@@ -552,6 +552,7 @@ extension ContactAPI: EndPointType {
 }
 
 public enum PostAPI {
+    case getPost(pid: String)
     case getRecommend
     case getUserFeed(limit: Int)
     case getHighTrending
@@ -580,6 +581,8 @@ extension PostAPI: EndPointType {
             return "/last-setting"
           case .getRecommend:
             return "/"
+          case .getPost(let pid):
+            return "/\(pid)"
           case .getUserFeed(let limit):
             return "/feed?limit=\(limit)"
           case .getHighTrending:
@@ -605,6 +608,8 @@ extension PostAPI: EndPointType {
             return .get
           case .getHighTrending:
             return .get
+          case .getPost:
+            return .get
         }
     }
     
@@ -625,6 +630,8 @@ extension PostAPI: EndPointType {
           case .getUserFeed:
             return .request
           case .getHighTrending:
+            return .request
+          case .getPost:
             return .request
         }
     }
@@ -856,6 +863,7 @@ extension FistBumpAPI: EndPointType {
 }
 public enum CommentApi {
   case getComment(postId: String, page: Int, limit: Int)
+  case getCommentDetail(cid: String)
   case count(postId: String)
   case create(params: [String: Any])
   case update(params: [String: Any])
@@ -901,6 +909,8 @@ extension CommentApi: EndPointType {
         return "/\(commentId)/pin"
       case .unpin(let commentId):
         return "/\(commentId)/unpin"
+      case getCommentDetail(let cid):
+        return "/\(cid)/detail"
     }
   }
   
@@ -938,6 +948,8 @@ extension CommentApi: EndPointType {
         return .post
       case .unpin:
         return .post
+      case .getCommentDetail:
+        return .get
     }
   }
   
@@ -970,6 +982,8 @@ extension CommentApi: EndPointType {
     case .pin:
         return .request
     case .unpin:
+        return .request
+      case .getCommentDetail:
         return .request
 }
   }

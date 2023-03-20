@@ -258,6 +258,8 @@ extension APIManager {
             completion(result)
         }
     }
+  
+  
     func getFollows(userId: String? = nil, page: Int, completion: @escaping APICompletion) {
       if let id = userId {
         followManager.request(.getFollows(userId: id, page: page)){
@@ -288,6 +290,8 @@ extension APIManager {
           completion(.failure(.invalidResponse))
       }
     }
+  
+  
     func insertFollows(params: [String: Any], completion: @escaping APICompletion) {
         followManager.request(.insertFollows(params: params)){
             result in
@@ -446,6 +450,11 @@ extension APIManager {
 
 
 extension APIManager {
+  func getPostDetail(postId: String, completion: @escaping APICompletion) {
+    postManager.request(.getPost(pid: postId)) { result in
+      completion(result)
+    }
+  }
   func getRecommend(completion: @escaping APICompletion) {
     postManager.request(.getRecommend) { result in
       completion(result)
@@ -515,6 +524,11 @@ extension APIManager {
 }
 
 extension APIManager {
+  func getCommentDetail(commentId: String, completion: @escaping APICompletion) {
+    commentManager.request(.getCommentDetail(cid: commentId)) { result in
+      completion(result)
+    }
+  }
   func getComment(postId: String, page: Int = 1, completion: @escaping APICompletion) {
     commentManager.request(.getComment(postId: postId, page: page, limit: 5)) { result in
       completion(result)
