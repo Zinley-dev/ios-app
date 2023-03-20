@@ -1159,3 +1159,86 @@ extension NotiApi: EndPointType {
     }
     
 }
+
+
+public enum LoginActivityApi {
+    case getAll(page: Int = 1, limit: Int = 20)
+}
+extension LoginActivityApi: EndPointType {
+    var path: String {
+        switch self {
+            case .getAll(let page, let limit):
+                return "?page=\(page)&limit=\(limit)"
+        }
+    }
+    
+    var module: String {
+        switch self {
+            case .getAll:
+                return "/login-activity"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+            case .getAll:
+                return .get
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+            case .getAll:
+                return .request
+        }
+    }
+    
+    var headers: [String : String]? {
+        return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+                "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
+    }
+    
+}
+
+
+public enum AccountActivityApi {
+    case getAll(page: Int = 1, limit: Int = 20)
+}
+extension AccountActivityApi: EndPointType {
+    var path: String {
+        switch self {
+            case .getAll(let page, let limit):
+                return "?page=\(page)&limit=\(limit)"
+        }
+    }
+    
+    var module: String {
+        switch self {
+            case .getAll:
+                return "/activity"
+        }
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+            case .getAll:
+                return .get
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+            case .getAll:
+                return .request
+        }
+    }
+    
+    var headers: [String : String]? {
+        return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+                "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
+    }
+    
+}
+
+
+

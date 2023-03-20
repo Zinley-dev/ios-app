@@ -40,6 +40,8 @@ struct APIManager {
     let gamesManager = Manager<GameAPI>()
     let searchFeedManager = Manager<SearchFeedAPI>()
     let notiManager = Manager<NotiApi>()
+    let loginActManager = Manager<LoginActivityApi>()
+    let accountActManager = Manager<AccountActivityApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -660,4 +662,17 @@ extension APIManager {
       completion(result)
     }
   }
+}
+
+extension APIManager {
+    func getLoginActivity(page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+        loginActManager.request(.getAll(page: page, limit: limit)) { result in
+            completion(result)
+        }
+    }
+    func getAccountActivity(page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
+        accountActManager.request(.getAll(page: page, limit: limit)) { result in
+            completion(result)
+        }
+    }
 }
