@@ -909,7 +909,7 @@ extension CommentApi: EndPointType {
         return "/\(commentId)/pin"
       case .unpin(let commentId):
         return "/\(commentId)/unpin"
-      case getCommentDetail(let cid):
+      case .getCommentDetail(let cid):
         return "/\(cid)/detail"
     }
   }
