@@ -33,6 +33,7 @@ class SelectedPostVC: UIViewController {
     lazy var delayItem2 = workItem()
     
     var isfirstLoad = true
+    var onPresent = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -491,7 +492,11 @@ extension SelectedPostVC {
             
             //copyLink
             
-            navigationController.popViewController(animated: true)
+            if onPresent {
+                self.dismiss(animated: true)
+            } else {
+                navigationController.popViewController(animated: true)
+            }
         }
     }
     

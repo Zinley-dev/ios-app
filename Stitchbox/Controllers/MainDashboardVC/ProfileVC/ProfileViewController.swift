@@ -83,6 +83,7 @@ class ProfileViewController: UIViewController {
               self.pullControl.endRefreshing()
             
           }
+            
         })
       
       

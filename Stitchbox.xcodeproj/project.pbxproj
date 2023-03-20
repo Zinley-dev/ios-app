@@ -1813,8 +1813,8 @@
 		6A78485C2984D1E3008B2263 /* NotificationVC */ = {
 			isa = PBXGroup;
 			children = (
-				6A80F1AD29BA87510047595A /* NotificationNode */,
 				6A78485D2984D1F6008B2263 /* NotificationVC.swift */,
+				6A80F1AD29BA87510047595A /* NotificationNode */,
 			);
 			path = NotificationVC;
 			sourceTree = "<group>";
@@ -2571,11 +2571,11 @@
 		6AEA74F329680312005C802B /* ProfileVC */ = {
 			isa = PBXGroup;
 			children = (
+				A5346487294B09B300FB6A94 /* ProfileViewController.swift */,
 				6AF6C4962997052200DD8D37 /* VerifyCodeVC */,
 				6AF6C4972997053200DD8D37 /* EditEmailVC */,
 				6AF6C4952997050F00DD8D37 /* EditPhoneVC */,
 				6A0B8B6A2996DC1200E724B7 /* EditBirthdayVC */,
-				A5346487294B09B300FB6A94 /* ProfileViewController.swift */,
 				6AF9733D297A321C00C76814 /* EditChallengeCardVC */,
 				6AF9733C297A320C00C76814 /* FistBumpedStatVC */,
 				6AF973392978FD9500C76814 /* EditBioVC */,

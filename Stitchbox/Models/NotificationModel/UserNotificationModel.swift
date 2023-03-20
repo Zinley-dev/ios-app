@@ -29,6 +29,16 @@ class UserNotificationModel {
    
     var _isRead = true
     
+    var post: PostModel! {
+        get {
+            if _post == nil {
+                _post = nil
+            }
+            return _post
+        }
+        
+    }
+    
     var rootComment: String! {
         get {
             if _rootComment == nil {
@@ -186,9 +196,6 @@ class UserNotificationModel {
     
     init(UserNotificationModel: Dictionary<String, Any>) {
         
-        print(UserNotificationModel)
-        
-
         if let isRead = UserNotificationModel["isRead"] as? Bool {
             self._isRead = isRead
         }
@@ -236,11 +243,31 @@ class UserNotificationModel {
             if let template = notification["template"] as? String {
                 self._template = template
                 
-                if template == "NEW_POST" {
+                if template == "NEW_POST" || template == "NEW_COMMENT" || template == "REPLY_COMMENT" || template == "NEW_TAG" {
                     
-                    
-                    
+                    if let getPostId = self._postId, getPostId != "" {
+                        
+                        APIManager().getPostDetail(postId: getPostId) { result in
+                            switch result {
+                                
+                              case .success(let response):
+                                guard let data = response.body else {
+                                  return
+                                }
+                                
+                                let getPost = PostModel(JSON: data)
+                                self._post = getPost
+                                
+
+                              case .failure(let error):
+                                print(error)
+                            }
+                          }
+                        
+                    }
+                     
                 }
+                
             }
             
             

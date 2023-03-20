@@ -265,9 +265,9 @@ extension NotificationVC {
             switch template {
                 
                 case "NEW_COMMENT":
-                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template)
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: notification.post)
                 case "REPLY_COMMENT":
-                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template)
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: notification.post)
                 case "NEW_FISTBUMP_1":
                     if let userId = notification.userId, let username = notification.username {
                         openUser(userId: userId, username: username)
@@ -287,9 +287,9 @@ extension NotificationVC {
                 case "NEW_FOLLOW_2":
                     openFollow()
                 case "NEW_TAG":
-                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template)
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: notification.post)
                 case "NEW_POST":
-                    print("NEW_POST -> open post")
+                    openPost(post: notification.post)
                 default:
                     print("None")
                 
@@ -315,13 +315,18 @@ extension NotificationVC {
         
     }
     
-    func openPost(id: String) {
+    func openPost(post: PostModel) {
         
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+            SPVC.selectedPost = [post]
+            SPVC.startIndex = 0
+            self.navigationController?.pushViewController(SPVC, animated: true)
+        }
         
         
     }
     
-    func openComment(commentId: String, rootComment: String, replyToComment: String, type: String) {
+    func openComment(commentId: String, rootComment: String, replyToComment: String, type: String, post: PostModel) {
         
         let slideVC = CommentNotificationVC()
         
@@ -329,6 +334,7 @@ extension NotificationVC {
         slideVC.reply_to_cid = replyToComment
         slideVC.root_id = rootComment
         slideVC.type = type
+        slideVC.post = post
         
         global_presetingRate = Double(0.75)
         global_cornerRadius = 35

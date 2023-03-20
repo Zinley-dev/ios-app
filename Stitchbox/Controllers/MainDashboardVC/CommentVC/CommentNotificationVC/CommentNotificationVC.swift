@@ -41,7 +41,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     var CommentList = [CommentModel]()
     var tableNode: ASTableNode!
     var reply_to_username: String!
-    
+    var LoadPath: [IndexPath] = []
     //
     var selectedNotification: UserNotificationModel!
     
@@ -57,11 +57,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
     var placeholderLabel : UILabel!
-    
-    //
-    var LoadPath: [IndexPath] = []
-    
-    
     //
     
     var hashtag_arr = [String]()
@@ -203,7 +198,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
             if root_id == reply_to_cid {
                 
-                loadRootCmt(comment_id: root_id) {
+                loadRootCmt(rootComment: root_id) {
                     
                     self.loadComment(comment_id: self.commentId)
                     
@@ -211,7 +206,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
             } else {
                 
-                loadRootCmt(comment_id: root_id) {
+                loadRootCmt(rootComment: root_id) {
       
                     self.loadReplyToComment(replyToCmt: self.reply_to_cid) {
                         self.loadComment(comment_id: self.commentId)
@@ -292,155 +287,132 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
     }
     
-    func loadRootCmt(comment_id: String, completed: @escaping DownloadComplete) {
+    func loadRootCmt(rootComment: String, completed: @escaping DownloadComplete) {
         
-        /*
-        let db = DataService.instance.mainFireStoreRef
-        
-        db.collection("Comments").document(comment_id).getDocument { (snapshot, err) in
-            
-            if err != nil {
+      APIManager().getCommentDetail(commentId: rootComment) { result in
+            switch result {
+            case .success(let apiResponse):
+              
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    completed()
+                    return
+                }
                 
-                self.showErrorAlert("Oops!", msg: err!.localizedDescription)
-                return
-            }
-            
-            if ((snapshot?.exists) != false) {
-        
-                if let cmt_status = snapshot!.data()!["cmt_status"] as? String {
-                    
-                    if cmt_status == "valid" {
-                        
-                        var newDict = snapshot!.data()
-                        newDict?.updateValue(true, forKey: "IsNoti")
-                      
-                        
-                        let cmt = CommentModel(postKey: snapshot!.documentID, Comment_model: newDict!)
-                        self.CommentList.append(cmt)
-                        completed()
-                        
-                    } else {
-                        
-                        self.tableNode.view.setEmptyMessage("Comment was removed!")
-                        
+                if !data.isEmpty {
+                    for each in data {
+                        let item = CommentModel(postKey: each["_id"] as! String, Comment_model: each)
+                        self.CommentList.append(item)
                     }
-                    
+                    completed()
+                } else {
+                    completed()
                     
                 }
-                      
-            }
-        }
-        
-        */
+            case .failure(let error):
+                print(error)
+                completed()
+          }
+      }
         
     }
     
     func loadComment(comment_id: String) {
         
-        /*
-        let db = DataService.instance.mainFireStoreRef
-        
-        db.collection("Comments").document(comment_id).getDocument { (snapshot, err) in
-            
-            if err != nil {
+      APIManager().getCommentDetail(commentId: comment_id) { result in
+            switch result {
+            case .success(let apiResponse):
+              
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    return
+                }
                 
-                
-                completed()
-                return
-            }
-            
-        
-            if ((snapshot?.exists) != false) {
-                
-                if let cmt_status = snapshot!.data()!["cmt_status"] as? String {
+                if !data.isEmpty {
+                    for each in data {
+                        let item = CommentModel(postKey: each["_id"] as! String, Comment_model: each)
+                        self.CommentList.append(item)
+                    }
                     
-                    if cmt_status == "valid" {
+                    if !self.CommentList.isEmpty {
                         
+                        let section = 0
                         
-                        var newDict = snapshot!.data()
-                        newDict?.updateValue(true, forKey: "IsNoti")
-                      
-                        let cmt = CommentModel(postKey: snapshot!.documentID, Comment_model: newDict!)
-                        self.CommentList.append(cmt)
+                        for row in 0...self.CommentList.count-1 {
+                            let path = IndexPath(row: row, section: section)
+                            self.LoadPath.append(path)
+                        }
                         
+                       
+                        self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
                         
                     }
                     
-                    completed()
-                    
                 } else {
                     
-                    completed()
+                    if !self.CommentList.isEmpty {
+                        
+                        let section = 0
+                        
+                        for row in 0...self.CommentList.count-1 {
+                            let path = IndexPath(row: row, section: section)
+                            self.LoadPath.append(path)
+                        }
+                        
+                       
+                        self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                        
+                    }
                     
                 }
-                             
+            case .failure(let error):
+                print(error)
                 
-            } else {
-                completed()
-            }
-        }
-        */
-        
+                if !self.CommentList.isEmpty {
+                    
+                    let section = 0
+                    
+                    for row in 0...self.CommentList.count-1 {
+                        let path = IndexPath(row: row, section: section)
+                        self.LoadPath.append(path)
+                    }
+                    
+                   
+                    self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                    
+                }
+                
+               
+                
+          }
+      }
         
     }
     
     func loadReplyToComment(replyToCmt: String, completed: @escaping DownloadComplete) {
-        /*
-        let db = DataService.instance.mainFireStoreRef
         
-        db.collection("Comments").document(CId).getDocument { (snapshot, err) in
-            
-            if err != nil {
-                
-                self.showErrorAlert("Oops!", msg: err!.localizedDescription)
-                return
-            }
-            
-            if ((snapshot?.exists) != false) {
+        APIManager().getCommentDetail(commentId: replyToCmt) { result in
+            switch result {
+            case .success(let apiResponse):
               
-                var updateCmt: CommentModel!
-               
-                if let cmt_status = snapshot!.data()!["cmt_status"] as? String {
-                    
-                    if cmt_status == "valid" {
-                        
-                        var newDict = snapshot!.data()
-                        newDict?.updateValue(true, forKey: "IsNoti")
-                       
-                        let cmt = CommentModel(postKey: snapshot!.documentID, Comment_model: newDict!)
-                        updateCmt = cmt
-                        self.CommentList.append(cmt)
-                        
-                        //
-                        
-                        self.checkifAnyReplyToMyReply2()
-                        
-                        
-                        //
-                        
-                        if updateCmt.isReply != false {
-                            
-                            self.root_id = updateCmt.root_id
-                            self.index = self.findIndexForRootCmt(post: updateCmt)
-                            
-                        }
-                        
-                        
-                        self.reply_to_uid =  updateCmt.Comment_uid
-                        self.reply_to_cid =  updateCmt.Comment_id
-                       
-                        
-                    } else {
-                        
-                        self.tableNode.view.setEmptyMessage("Comment was removed!")
-                        
-                    }
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    completed()
+                    return
                 }
                 
-                
-                          
-            }
-        }*/
+                if !data.isEmpty {
+                    for each in data {
+                        let item = CommentModel(postKey: each["_id"] as! String, Comment_model: each)
+                        self.CommentList.append(item)
+                    }
+                    completed()
+                } else {
+                    completed()
+                    
+                }
+            case .failure(let error):
+                print(error)
+                completed()
+          }
+      }
         
     }
     
@@ -885,9 +857,33 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             }
         }
     }
+    
     @IBAction func vỉewPostBtnPressed(_ sender: Any) {
         
-       print("View post")
+        if let viewPost = self.post {
+            
+            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                
+                let nav = UINavigationController(rootViewController: SPVC)
+                
+                nav.modalPresentationStyle = .fullScreen
+                nav.navigationItem.titleView?.tintColor = .white
+                nav.navigationBar.tintColor = .background
+                
+                SPVC.selectedPost = [viewPost]
+                SPVC.startIndex = 0
+                SPVC.onPresent = true
+                
+                self.present(nav, animated: true, completion: nil)
+                
+            }
+            
+            
+        } else {
+            
+            self.showErrorAlert("Oops!", msg: "This post is temporarily unavailable.")
+            
+        }
         
     }
     
@@ -1027,7 +1023,6 @@ extension CommentNotificationVC: ASTableDataSource {
             
         }
         
-
         if comment.root_id != "", comment.has_reply == true {
             
             let newIndex = self.findIndexForRootCmt(post: comment)
