@@ -403,6 +403,19 @@ extension FeedViewController {
             playVideoIfNeed(playIndex: currentIndex!)
             isVideoPlaying = true
         }
+        
+        
+        // If the video is stuck, reset the buffer by seeking to the current playback time.
+        if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
+            if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                    cell.videoNode.player?.seek(to: currentTime)
+                } else {
+                    cell.videoNode.player?.seek(to: CMTime.zero)
+                }
+            }
+        }
+
 
         // If there's no current playing video and no visible video, pause the last playing video, if any.
         if !isVideoPlaying && currentIndex != nil {
@@ -410,10 +423,6 @@ extension FeedViewController {
             currentIndex = nil
         }
     }
-
-
-
-
 
 
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
