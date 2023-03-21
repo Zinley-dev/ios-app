@@ -24,13 +24,15 @@ extension AppleSignInService: ASAuthorizationControllerDelegate, ASAuthorization
             let userLastName = appleIDCredential.fullName?.familyName
             let userEmail = appleIDCredential.email
             
-            print(userIdentifier)
-            print(userEmail)
+            let data = AuthResult(idToken: userIdentifier, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(userFirstName ?? "") \(userLastName ?? "")", email: userEmail, phone: nil)
+            self.vm.completeSignIn(with: data)
+
         }
     }
     
+    
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        
+        print(error.localizedDescription)
     }
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
@@ -44,8 +46,8 @@ extension AppleSignInService: LoginCoordinatorProtocol {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
-        
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+                        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request, ASAuthorizationPasswordProvider().createRequest()])
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()

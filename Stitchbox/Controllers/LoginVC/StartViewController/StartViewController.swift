@@ -13,8 +13,15 @@ import Lottie
 import ZSWTappableLabel
 import ZSWTaggedString
 import SafariServices
+import AuthenticationServices
 
-class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate {
+class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
   typealias ViewModelType = StartViewModel
 
   // MARK: - Properties
@@ -217,6 +224,39 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
       }
      
   }
+    
+    @IBAction func didTapAppleLogin(_ sender: UIButton) {
+        
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+            
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+        
+    }
+    
+    @available(iOS 13.0, *)
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        if error._code != 1001 {
+            self.showErrorAlert("Oops!", msg: error.localizedDescription)
+        }
+       
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            let userIdentifier = appleIDCredential.user
+            let userFirstName = appleIDCredential.fullName?.givenName
+            let userLastName = appleIDCredential.fullName?.familyName
+            let userEmail = appleIDCredential.email
+            
+            let data = AuthResult(idToken: userIdentifier, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(userFirstName ?? "") \(userLastName ?? "")", email: userEmail, phone: nil)
+            self.vm.completeSignIn(with: data)
+        }
+    }
   
   
   @objc func playVideoDidReachEnd() {
@@ -244,6 +284,18 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
     }
   
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
 }
 
 

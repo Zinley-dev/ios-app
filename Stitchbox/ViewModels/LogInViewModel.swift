@@ -55,32 +55,29 @@ class LoginControllerViewModel: ViewModelProtocol {
         signInDidTapSubject
             .subscribe (onNext: { (username, password) in
                 // check username or password in the right format
+                /*
                 if (isNotValidInput(Input: username, RegEx: "\\w{3,18}") ||
                     isNotValidInput(Input: password, RegEx: "\\w{6,18}")) {
                     self.errorsSubject.onNext(NSError(domain: "Username or Password in wrong format", code: 400))
                     return;
                 }
+                */
                 // call api toward login api of backend
                 APIManager().normalLogin(username: username, password: password) { result in switch result {
                 case .success(let apiResponse):
                     // get and process data
-                    print(apiResponse)
+                    
                     if let method = apiResponse.body?["method"] as? String, method == "2fa" {
                       let deviceType = apiResponse.body?["deviceType"] as? String
                       let emailOrPhone = apiResponse.body?["value"] as? String
                       self.loginResultSubject.onNext(LoginLevel.advance(type: deviceType, value: emailOrPhone))
                       
                       
-                      
-                      
                     } else {
                       let data = apiResponse.body?["data"] as! [String: Any]?
-                      print("data \(data)")
-                      
+                     
                       let account =  Mapper<Account>().map(JSONObject: data)
-                      
-                      print("account \(Mapper().toJSON(account!))")
-                      
+            
                       // Write/Set Data
                       let sessionToken = SessionDataSource.init(JSONString: "{}")!
                       sessionToken.accessToken = account?.accessToken
@@ -90,9 +87,7 @@ class LoginControllerViewModel: ViewModelProtocol {
                       // write usr data
                       if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
                         _AppCoreData.userDataSource.accept(newUserData)
-                        print("NEW USER DATA")
-                        print(newUserData.toJSON())
-                        print(newUserData.challengeCard?.toJSON())
+                       
                         if newUserData.userID != ""{
                           let externalUserId = newUserData.userID!
                           

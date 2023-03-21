@@ -328,6 +328,8 @@ extension NotificationVC {
     
     func openComment(commentId: String, rootComment: String, replyToComment: String, type: String, post: PostModel) {
         
+        print(commentId, rootComment, replyToComment, type)
+        
         let slideVC = CommentNotificationVC()
         
         slideVC.commentId = commentId

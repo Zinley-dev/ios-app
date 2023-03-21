@@ -58,7 +58,9 @@ class ResetPasswordViewModel: ViewModelProtocol {
           let phoneNumber = "\(countryCode)\(phone)"
           print("PHONE NUMBER \(phoneNumber)")
           if let phoneResetVc = self.vc as? PhoneResetVC {
-              presentSwiftLoader()
+              Dispatch.main.async {
+                  presentSwiftLoader()
+              }
           }
           APIManager().forgotPasswordByPhone(params: ["phone": phoneNumber]) { result in
               switch result {
@@ -72,7 +74,9 @@ class ResetPasswordViewModel: ViewModelProtocol {
               }
             
               if let phoneResetVc = self.vc as? PhoneResetVC {
-                  SwiftLoader.hide()
+                  Dispatch.main.async {
+                      SwiftLoader.hide()
+                  }
               }
           }
       }).disposed(by: disposeBag)
@@ -81,7 +85,9 @@ class ResetPasswordViewModel: ViewModelProtocol {
       .subscribe(onNext: { email in
         print("EMAIL \(email)")
         if let emailResetVc = self.vc as? EmailResetVC {
-            presentSwiftLoader()
+            Dispatch.main.async {
+                presentSwiftLoader()
+            }
         }
         
         APIManager().forgotPasswordByEmail(params: ["email": email]) { result in
@@ -96,7 +102,9 @@ class ResetPasswordViewModel: ViewModelProtocol {
         }
         
         if let emailResetVc = self.vc as? EmailResetVC {
-            SwiftLoader.hide()
+            Dispatch.main.async {
+                SwiftLoader.hide()
+            }
         }
       })
   }

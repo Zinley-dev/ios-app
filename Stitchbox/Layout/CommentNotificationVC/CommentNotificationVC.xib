@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommentNotificationVC" customModule="Dual" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommentNotificationVC" customModule="Stitchbox" customModuleProvider="target">
             <connections>
                 <outlet property="avatarBottomConstraint" destination="9jT-KW-pEl" id="2WK-iQ-vEX"/>
                 <outlet property="avatarView" destination="83H-u7-cgA" id="1U1-uT-smv"/>
@@ -46,11 +47,11 @@
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pS5-Ly-Vhd">
                     <rect key="frame" x="0.0" y="40" width="414" height="545"/>
-                    <color key="backgroundColor" red="0.16862887139999999" green="0.1686248779" blue="0.16862756009999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <color key="backgroundColor" name="Background"/>
                 </view>
                 <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ibi-1l-CRx">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="635"/>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="Background"/>
                 </view>
                 <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XhS-Kc-9f5">
                     <rect key="frame" x="0.0" y="560" width="414" height="75"/>
@@ -111,7 +112,7 @@
                             </constraints>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" name="Background"/>
                     <constraints>
                         <constraint firstItem="FrG-sU-cxq" firstAttribute="centerX" secondItem="rES-uX-LTZ" secondAttribute="centerX" id="FAG-Ch-aCq"/>
                         <constraint firstItem="FrG-sU-cxq" firstAttribute="centerY" secondItem="rES-uX-LTZ" secondAttribute="centerY" id="K7e-ho-cSW"/>
@@ -119,7 +120,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" red="0.1254913211" green="0.12548813219999999" blue="0.12549027800000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color key="backgroundColor" name="Background"/>
             <constraints>
                 <constraint firstItem="ibi-1l-CRx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="65C-Rl-pdO"/>
                 <constraint firstItem="ibi-1l-CRx" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="8Uc-pg-ird"/>
@@ -146,5 +147,8 @@
     </objects>
     <resources>
         <image name="send2" width="33.333332061767578" height="33.333332061767578"/>
+        <namedColor name="Background">
+            <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

@@ -293,16 +293,16 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             switch result {
             case .success(let apiResponse):
               
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                guard let data = apiResponse.body else {
                     completed()
                     return
                 }
                 
                 if !data.isEmpty {
-                    for each in data {
-                        let item = CommentModel(postKey: each["_id"] as! String, Comment_model: each)
-                        self.CommentList.append(item)
-                    }
+                    
+                    let item = CommentModel(postKey: data["_id"] as! String, Comment_model: data)
+                    self.CommentList.append(item)
+                    
                     completed()
                 } else {
                     completed()
@@ -321,16 +321,26 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
       APIManager().getCommentDetail(commentId: comment_id) { result in
             switch result {
             case .success(let apiResponse):
-              
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+               
+                guard let data = apiResponse.body else {
                     return
                 }
                 
+                print(data)
+                
                 if !data.isEmpty {
-                    for each in data {
-                        let item = CommentModel(postKey: each["_id"] as! String, Comment_model: each)
-                        self.CommentList.append(item)
+                    
+                    let item = CommentModel(postKey: data["_id"] as! String, Comment_model: data)
+                    
+                    if item.isReply == false {
+                        self.root_id = item.comment_id
+                        self.index = 0
                     }
+                        
+                    self.reply_to_uid = item.comment_uid
+                    self.reply_to_cid = item.comment_id
+                    
+                    self.CommentList.append(item)
                     
                     if !self.CommentList.isEmpty {
                         
@@ -341,9 +351,13 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                             self.LoadPath.append(path)
                         }
                         
+
+                        DispatchQueue.main.async {
+                            
+                            self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                            
+                        }
                        
-                        self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
-                        
                     }
                     
                 } else {
@@ -358,7 +372,11 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         }
                         
                        
-                        self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                        DispatchQueue.main.async {
+                            
+                            self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                            
+                        }
                         
                     }
                     
@@ -376,7 +394,11 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     }
                     
                    
-                    self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                    DispatchQueue.main.async {
+                        
+                        self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                        
+                    }
                     
                 }
                 
@@ -393,16 +415,14 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             switch result {
             case .success(let apiResponse):
               
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                guard let data = apiResponse.body else {
                     completed()
                     return
                 }
                 
                 if !data.isEmpty {
-                    for each in data {
-                        let item = CommentModel(postKey: each["_id"] as! String, Comment_model: each)
-                        self.CommentList.append(item)
-                    }
+                    let item = CommentModel(postKey: data["_id"] as! String, Comment_model: data)
+                    self.CommentList.append(item)
                     completed()
                 } else {
                     completed()
@@ -473,7 +493,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         self.tableNode.view.separatorStyle = .none
         self.tableNode.view.separatorColor = UIColor.lightGray
         self.tableNode.view.isPagingEnabled = false
-        self.tableNode.view.backgroundColor = UIColor.clear
+        self.tableNode.view.backgroundColor = UIColor.background
         self.tableNode.view.showsVerticalScrollIndicator = false
         
         

@@ -53,15 +53,20 @@ class StartViewModel: ViewModelProtocol {
     
     /// Triggered when authentication succeeded from related provider.
     open func completeSignIn(with authResult: AuthResult) {
-        print(authResult)
+        
         // call api --> check auth
         var params = ["socialId": authResult.idToken!]
         if selectedSignInMethod == .google {
             params["provider"] = "google"
-        }
-        if selectedSignInMethod == .facebook {
+        } else if selectedSignInMethod == .facebook {
             params["provider"] = "facebook"
+        } else {
+            params["provider"] = "apple"
         }
+        
+        
+        presentSwiftLoader()
+        
         APIManager().socialLogin(params: params) { result in
             switch result {
             case .success(let response):
@@ -81,8 +86,20 @@ class StartViewModel: ViewModelProtocol {
                 if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
                     _AppCoreData.userDataSource.accept(newUserData)
                 }
+                
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                }
+                
+                
                 self.loginResultSubject.onNext(true)
             case .failure(let error):
+                
+                
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                }
+                
                 print("**** ERROR ****")
                 print(error)
                 

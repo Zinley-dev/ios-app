@@ -10,8 +10,7 @@ import RxSwift
 
 class LastStepViewController: UIViewController, ControllerType {
     typealias ViewModelType = CreateAccountViewModel
-  
-    
+
   @IBOutlet weak var usernameTextfield: UnderlineTextField!
   @IBOutlet weak var passwordTextfield: UnderlineTextField!
   @IBOutlet weak var refCodeTextfield: UnderlineTextField!
@@ -110,12 +109,13 @@ class LastStepViewController: UIViewController, ControllerType {
     }
     
     func bindAction(with viewModel: CreateAccountViewModel) {
-      
+        
         let userInputs = Observable.combineLatest(
             usernameTextfield.rx.text.orEmpty,
             passwordTextfield.rx.text.orEmpty,
             refCodeTextfield.rx.text.orEmpty) { ($0, $1, $2)
         }
+        
       submitButton.rx.tap.asObservable()
         .withLatestFrom(userInputs)
         .subscribe(viewModel.action.submitDidTap)
