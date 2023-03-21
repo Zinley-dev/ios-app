@@ -248,7 +248,7 @@ class UserActivityModel {
         }
     }*/
     
-    init(postKey: String, UserActivityModel: Dictionary<String, Any>) {
+    init(UserActivityModel: Dictionary<String, Any>) {
         
 
         if let category = UserActivityModel["category"] as? String {

@@ -19,7 +19,7 @@ fileprivate let FontSize: CGFloat = 12
 class LoginActivityNode: ASCellNode {
     
     var activity: UserLoginActivityModel
-    var userNameNode: ASTextNode!
+    var descriptionNode: ASTextNode!
     var timeNode: ASTextNode!
     var AvatarNode: ASNetworkImageNode!
    
@@ -28,11 +28,78 @@ class LoginActivityNode: ASCellNode {
     
     init(with activity: UserLoginActivityModel) {
         self.activity = activity
-        self.userNameNode = ASTextNode()
+        self.descriptionNode = ASTextNode()
         self.AvatarNode = ASNetworkImageNode()
         self.timeNode = ASTextNode()
         
         super.init()
+        
+        self.backgroundColor = UIColor.clear
+        
+        self.selectionStyle = .none
+        AvatarNode.cornerRadius = OrganizerImageSize/2
+        AvatarNode.clipsToBounds = true
+        AvatarNode.contentMode = .scaleAspectFill
+        descriptionNode.isLayerBacked = true
+        
+        AvatarNode.shouldRenderProgressImages = true
+        AvatarNode.isLayerBacked = true
+        
+        //
+        paragraphStyles.alignment = .left
+
+   
+        descriptionNode.backgroundColor = UIColor.clear
+        timeNode.backgroundColor = UIColor.clear
+        
+        automaticallyManagesSubnodes = true
+        
+        let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles]
+        let timeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.paragraphStyle: paragraphStyles]
+        
+        let time = NSAttributedString(string: "\(timeAgoSinceDate(activity.createdAt, numericDates: true))", attributes: timeAttributes)
+        
+        timeNode.attributedText = time
+        
+      
+        if activity.action == "Create" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "Your account is created", attributes: textAttributes)
+            
+        } else if activity.action == "Update" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "Your account has been updated", attributes: textAttributes)
+                         
+        } else if activity.action == "Login" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "Your account has been logged in", attributes: textAttributes)
+            
+        } else if activity.action == "Logout" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "Your account has been logged out", attributes: textAttributes)
+            
+            
+        } else if activity.action == "Change Password" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You have changed your password", attributes: textAttributes)
+            
+            
+        } else if activity.action == "Update my profile" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You have updated your profile", attributes: textAttributes)
+            
+            
+        } else {
+            
+            print(activity.action, activity.content)
+            
+        }
+        
+        
+        if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+            let url = URL(string: avatarUrl)
+            AvatarNode.url = url
+        }
     
         
     }
@@ -49,7 +116,7 @@ class LoginActivityNode: ASCellNode {
         headerSubStack.style.flexGrow = 16.0
         headerSubStack.spacing = 8.0
         
-        headerSubStack.children = [userNameNode, timeNode]
+        headerSubStack.children = [descriptionNode, timeNode]
       
   
         let headerStack = ASStackLayoutSpec.horizontal()

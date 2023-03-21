@@ -103,6 +103,8 @@
 		6A136365299C6A6D00E70507 /* AddGameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A136364299C6A6D00E70507 /* AddGameVC.swift */; };
 		6A286B5A29C90D4B00C72718 /* UserLoginActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B5929C90D4A00C72718 /* UserLoginActivityModel.swift */; };
 		6A286B5D29C90E1800C72718 /* LoginActivityNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B5C29C90E1800C72718 /* LoginActivityNode.swift */; };
+		6A286B6029C97F0100C72718 /* LogInfomationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B5F29C97F0100C72718 /* LogInfomationVC.swift */; };
+		6A286B6329C980F000C72718 /* customizedMap.json in Resources */ = {isa = PBXBuildFile; fileRef = 6A286B6229C980F000C72718 /* customizedMap.json */; };
 		6A307CC129ADB18500A89529 /* CommentSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A307CBF29ADB18400A89529 /* CommentSettings.swift */; };
 		6A307CC229ADB18500A89529 /* CommentSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A307CC029ADB18400A89529 /* CommentSettings.xib */; };
 		6A307CC529B1A52B00A89529 /* RecentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A307CC429B1A52B00A89529 /* RecentModel.swift */; };
@@ -499,6 +501,8 @@
 		6A136364299C6A6D00E70507 /* AddGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGameVC.swift; sourceTree = "<group>"; };
 		6A286B5929C90D4A00C72718 /* UserLoginActivityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoginActivityModel.swift; sourceTree = "<group>"; };
 		6A286B5C29C90E1800C72718 /* LoginActivityNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginActivityNode.swift; sourceTree = "<group>"; };
+		6A286B5F29C97F0100C72718 /* LogInfomationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInfomationVC.swift; sourceTree = "<group>"; };
+		6A286B6229C980F000C72718 /* customizedMap.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = customizedMap.json; sourceTree = "<group>"; };
 		6A307CBF29ADB18400A89529 /* CommentSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentSettings.swift; sourceTree = "<group>"; };
 		6A307CC029ADB18400A89529 /* CommentSettings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentSettings.xib; sourceTree = "<group>"; };
 		6A307CC429B1A52B00A89529 /* RecentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentModel.swift; sourceTree = "<group>"; };
@@ -954,6 +958,7 @@
 		390FD7362909264D0068B883 /* Stitchbox */ = {
 			isa = PBXGroup;
 			children = (
+				6A286B6129C980E700C72718 /* CustomizedMap */,
 				6A0CF644296E2E2B00155889 /* Layout */,
 				6A70D5082969F5BE008D80E6 /* CountryPickerView-master */,
 				6AEC690229517E9E000393D8 /* Swiftloader */,
@@ -1390,6 +1395,22 @@
 				6A286B5C29C90E1800C72718 /* LoginActivityNode.swift */,
 			);
 			path = LoginActivityNode;
+			sourceTree = "<group>";
+		};
+		6A286B5E29C97EDA00C72718 /* LogInfomationVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A286B5F29C97F0100C72718 /* LogInfomationVC.swift */,
+			);
+			path = LogInfomationVC;
+			sourceTree = "<group>";
+		};
+		6A286B6129C980E700C72718 /* CustomizedMap */ = {
+			isa = PBXGroup;
+			children = (
+				6A286B6229C980F000C72718 /* customizedMap.json */,
+			);
+			path = CustomizedMap;
 			sourceTree = "<group>";
 		};
 		6A307CBE29ADADB400A89529 /* CommentSettings */ = {
@@ -2351,6 +2372,7 @@
 		6ABA61212977D879003BFB5B /* LoginActivityVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A286B5E29C97EDA00C72718 /* LogInfomationVC */,
 				6A286B5B29C90E0500C72718 /* LoginActivityNode */,
 				6ABA61222977D938003BFB5B /* LoginActivityVC.swift */,
 			);
@@ -2842,6 +2864,7 @@
 				390FD7322909264D0068B883 /* Resources */,
 				39E80471299A9A10002F13A5 /* Embed Foundation Extensions */,
 				5FD797A39FADA1292278C0B4 /* [CP] Embed Pods Frameworks */,
+				EED924923C5E3ED34AB1CDB9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2884,6 +2907,7 @@
 				390FD7512909264F0068B883 /* Frameworks */,
 				390FD7522909264F0068B883 /* Resources */,
 				AF8AF98B7B4B35FDD438EDE3 /* [CP] Embed Pods Frameworks */,
+				074D14534E98BE4B4C90EE36 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3021,6 +3045,7 @@
 				6AC6D9F729A5C78C00B18139 /* logo3344556.png in Resources */,
 				6AC6D9F329A5C78C00B18139 /* load.gif in Resources */,
 				6AC6DA0F29A8AAEB00B18139 /* reportView.xib in Resources */,
+				6A286B6329C980F000C72718 /* customizedMap.json in Resources */,
 				6AC6D9F529A5C78C00B18139 /* fox2.gif in Resources */,
 				6AAD7A26294C65F6003E3AB6 /* ConnectionRestored.mp3 in Resources */,
 				6AAD7A25294C65F6003E3AB6 /* ConnectionLost.mp3 in Resources */,
@@ -3080,6 +3105,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		074D14534E98BE4B4C90EE36 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5FD797A39FADA1292278C0B4 /* [CP] Embed Pods Frameworks */ = {
@@ -3158,6 +3200,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EED924923C5E3ED34AB1CDB9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F974B4BA528A7D522A0985B9 /* [CP] Check Pods Manifest.lock */ = {
@@ -3289,6 +3348,7 @@
 				6A307CC129ADB18500A89529 /* CommentSettings.swift in Sources */,
 				6AAD7A02294C4D1C003E3AB6 /* MainMessageVC.swift in Sources */,
 				144022E5295966CA009B7A58 /* EditProfileViewModel.swift in Sources */,
+				6A286B6029C97F0100C72718 /* LogInfomationVC.swift in Sources */,
 				6A839B4629A0476E00BD0A9A /* GameDomainListVC.swift in Sources */,
 				6AAD7A49294C664D003E3AB6 /* NSUserActivity+QuickStart.swift in Sources */,
 				6A58EA50294EB280005FA3CD /* String+SendBird.swift in Sources */,

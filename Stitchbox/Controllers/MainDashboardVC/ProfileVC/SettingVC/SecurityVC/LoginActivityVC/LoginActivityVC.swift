@@ -252,6 +252,14 @@ extension LoginActivityVC {
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
           
+        let item = userLoginActivityList[indexPath.row]
+        
+        if let LIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "LogInfomationVC") as? LogInfomationVC {
+        
+            LIVC.item = item
+            self.navigationController?.pushViewController(LIVC, animated: true)
+            
+        }
         
                
     }
@@ -307,11 +315,9 @@ extension LoginActivityVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getAccountActivity(page: page) { result in
+            APIManager().getLoginActivity(page: page) { result in
                 switch result {
                 case .success(let apiResponse):
-                    
-                    
                     
                     guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         let item = [[String: Any]]()
@@ -320,9 +326,7 @@ extension LoginActivityVC {
                         }
                         return
                     }
-                    
-                    print(data)
-                    
+          
                     if !data.isEmpty {
                         self.page += 1
                         print("Successfully retrieved \(data.count) activities.")
@@ -346,7 +350,6 @@ extension LoginActivityVC {
                 }
             }
         }
-        
         
     }
      
@@ -372,7 +375,7 @@ extension LoginActivityVC {
         let endIndex = startIndex + newActivities.count
         
         // Create an array of PostModel objects
-        let newItems = newActivities.compactMap { UserLoginActivityModel(UserNotificationModel: $0) }
+        let newItems = newActivities.compactMap { UserLoginActivityModel(userLoginActivity: $0) }
         
         // Append the new items to the existing array
         userLoginActivityList.append(contentsOf: newItems)
