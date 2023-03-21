@@ -393,6 +393,7 @@ func pauseVideoIfNeed(pauseIndex: Int) {
 
 func playVideoIfNeed(playIndex: Int) {
   
+
     if let vc = UIViewController.currentViewController() {
          
         if vc is SelectedPostVC {
@@ -402,12 +403,6 @@ func playVideoIfNeed(playIndex: Int) {
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
                     
                     if !cell.videoNode.isPlaying() {
-                        
-                        for index in 0..<update1.posts.count {
-                                if index != playIndex {
-                                    pauseVideoIfNeed(pauseIndex: index)
-                                }
-                        }
                         
                         
                         if cell.sideButtonView != nil {
@@ -431,13 +426,6 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
-                        for index in 0..<update1.posts.count {
-                            if index != playIndex {
-                                pauseVideoIfNeed(pauseIndex: index)
-                            }
-                        }
-                        
-                      
                         if cell.sideButtonView != nil {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
@@ -459,13 +447,7 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
-                        for index in 0..<update1.posts.count {
-                            if index != playIndex {
-                                pauseVideoIfNeed(pauseIndex: index)
-                            }
-                        }
-                        
-                      
+            
                         if cell.sideButtonView != nil {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
@@ -487,13 +469,6 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
-                        for index in 0..<update1.PostSearchVC.posts.count {
-                            if index != playIndex {
-                                pauseVideoIfNeed(pauseIndex: index)
-                            }
-                        }
-                        
-                      
                         if cell.sideButtonView != nil {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }

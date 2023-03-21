@@ -317,8 +317,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             var newHeight = constrainedSize.max.width * (post.metadata?.height ?? constrainedSize.max.width) / (post.metadata?.width ?? constrainedSize.max.width)
             
-            if newHeight > constrainedSize.max.height * 0.65 {
-                newHeight = constrainedSize.max.height * 0.65
+            if newHeight > constrainedSize.max.height * 0.75 {
+                newHeight = constrainedSize.max.height * 0.75
             } else if newHeight <= constrainedSize.max.height * 0.45 {
                 newHeight = constrainedSize.max.height * 0.45
             }

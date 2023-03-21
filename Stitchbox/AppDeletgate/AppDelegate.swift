@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupOneSignal(launchOptions: launchOptions)
         getGameList()
         activeSpeaker()
-        listenVolumeButton()
+        //listenVolumeButton()
         
         GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")

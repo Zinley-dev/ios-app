@@ -32,8 +32,85 @@ class AccountActivityNode: ASCellNode {
         self.timeNode = ASTextNode()
         
         super.init()
-
         
+        self.backgroundColor = UIColor.clear
+        
+        self.selectionStyle = .none
+        AvatarNode.cornerRadius = OrganizerImageSize/2
+        AvatarNode.clipsToBounds = true
+        AvatarNode.contentMode = .scaleAspectFill
+        descriptionNode.isLayerBacked = true
+        
+        AvatarNode.shouldRenderProgressImages = true
+        AvatarNode.isLayerBacked = true
+        
+        //
+        paragraphStyles.alignment = .left
+
+   
+        descriptionNode.backgroundColor = UIColor.clear
+        timeNode.backgroundColor = UIColor.clear
+        
+        automaticallyManagesSubnodes = true
+        
+        let date = self.activity.createdAt
+    
+        
+        let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles]
+        let timeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.paragraphStyle: paragraphStyles]
+        
+        let time = NSAttributedString(string: "\(timeAgoSinceDate(date!, numericDates: true))", attributes: timeAttributes)
+    
+        timeNode.attributedText = time
+
+        if activity.content == "follows an account" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You have followed a new user", attributes: textAttributes)
+            
+        } else if activity.content == "unfollows a user" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You have followed a new user", attributes: textAttributes)
+            
+        } else if activity.content == "removes a follower" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You have removed a follower", attributes: textAttributes)
+            
+        } else if activity.content == "fistbump a user" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You have fistbumped a new user", attributes: textAttributes)
+            
+        } else if activity.content == "un-fistbump a user" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You have un-fistbumped a user", attributes: textAttributes)
+            
+        } else if activity.content == "block-account" {
+            
+            if activity.action == "CREATE" {
+                
+                descriptionNode.attributedText = NSAttributedString(string: "You have blocked a user", attributes: textAttributes)
+                
+            } else if activity.action == "DELETE" {
+                
+                descriptionNode.attributedText = NSAttributedString(string: "You have unblocked a user", attributes: textAttributes)
+                
+            }
+            
+            
+        } else if activity.content == "Like a post" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You have liked a new post", attributes: textAttributes)
+            
+        } else if activity.content == "Delete a like post" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You have unliked a post", attributes: textAttributes)
+            
+        }
+        
+        
+        if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+            let url = URL(string: avatarUrl)
+            AvatarNode.url = url
+        }
 
     }
     

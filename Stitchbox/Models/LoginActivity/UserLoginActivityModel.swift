@@ -130,7 +130,7 @@ class UserLoginActivityModel {
             self._userId = userId
         }
        
-        if let createdAt = userLoginActivity["created_at"] as? Date {
+        if let createdAt = userLoginActivity["createdAt"] as? Date {
             self._createdAt = createdAt
         } else {
             if let createdAtFail = userLoginActivity["created_at"] {

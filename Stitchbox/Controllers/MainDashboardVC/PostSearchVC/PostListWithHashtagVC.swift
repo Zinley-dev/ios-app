@@ -22,7 +22,8 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var contentView: UIView!
     
-    
+    var isVideoPlaying = false
+    var newPlayingIndex: Int?
     
     //====================================
     
@@ -275,105 +276,72 @@ extension PostListWithHashtagVC {
 
 extension PostListWithHashtagVC {
     
-    func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
-        guard let cell = node as? PostNode else { return }
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        // Check if this is the first visible cell and it contains a video.
     
-        willIndex = cell.indexPath?.row
-        
         if isfirstLoad {
             isfirstLoad = false
-            currentIndex = 0
-            playVideoIfNeed(playIndex: currentIndex!)
+            let post = posts[0]
+            if !post.muxPlaybackId.isEmpty {
+                currentIndex = 0
+                newPlayingIndex = 0
+                playVideoIfNeed(playIndex: currentIndex!)
+                isVideoPlaying = true
+            }
+            
         }
     }
 
-    func collectionNode(_ collectionNode: ASCollectionNode, didEndDisplayingItemWith node: ASCellNode) {
-        
-        // 1. Safely unwrap the indexPath of the cell node.
-        guard let postNode = node as? PostNode, let indexPath = postNode.indexPath else { return }
-        
-        let post = posts[indexPath.row]
-        // 2. If the muxPlaybackId property is empty, return immediately.
-        guard !post.muxPlaybackId.isEmpty else {
-            // 3. If the next item is a video, play it.
-            if let willIndex = willIndex, willIndex > indexPath.row {
-                let nextPost = posts[willIndex]
-                if !nextPost.muxPlaybackId.isEmpty {
-                    currentIndex = willIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
-                }
-            // 4. If the previous item is a video, play it.
-            } else if let willIndex = willIndex, willIndex < indexPath.row {
-                let previousPost = posts[willIndex]
-                if !previousPost.muxPlaybackId.isEmpty {
-                    currentIndex = willIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
-                }
-            }
-            return
-        }
-        
-        // 5. Pause the video that was previously playing.
-        pauseVideoIfNeed(pauseIndex: indexPath.row)
-        
-        var shouldPlayNextVideo = false
-        var shouldPlayPreviousVideo = false
-        
-        // 6. Check if there is a willIndex value, and if it does not match the current index path.
-        if let willIndex = willIndex, willIndex != indexPath.row {
-            // 7. If the willIndex is greater than the current index path, check if the next post contains a video.
-            if willIndex > indexPath.row && willIndex < posts.count {
-                let nextPost = posts[willIndex]
-                shouldPlayNextVideo = !nextPost.muxPlaybackId.isEmpty
-            // 8. If the willIndex is less than the current index path, check if the previous post contains a video.
-            } else if willIndex < indexPath.row && willIndex >= 0 {
-                let previousPost = posts[willIndex]
-                shouldPlayPreviousVideo = !previousPost.muxPlaybackId.isEmpty
-            }
-        // 9. If there is no willIndex value, check if the next or previous post contains a video based on the first visible index path.
-        } else if let firstVisibleIndexPath = collectionNode.indexPathsForVisibleItems.first {
-            if indexPath.row < firstVisibleIndexPath.row {
-                let previousPost = posts[firstVisibleIndexPath.row]
-                shouldPlayPreviousVideo = !previousPost.muxPlaybackId.isEmpty
-            } else if indexPath.row > firstVisibleIndexPath.row {
-                let nextPost = posts[firstVisibleIndexPath.row]
-                shouldPlayNextVideo = !nextPost.muxPlaybackId.isEmpty
-            }
-        }
-        
-        // 10. If shouldPlayNextVideo is true, play the next video and set the currentIndex variable to the index path of the next post.
-        if shouldPlayNextVideo {
-            currentIndex = indexPath.row + 1
-            playVideoIfNeed(playIndex: currentIndex!)
-        // 11. If shouldPlayPreviousVideo is true, play the previous video and set the currentIndex variable to the index path of the previous post.
-        } else if shouldPlayPreviousVideo {
-            currentIndex = indexPath.row - 1
-            playVideoIfNeed(playIndex: currentIndex!)
-        }
-        
-    }
-    
-   
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y <= 0 {
-            // User has scrolled to the very top
-    
-            currentIndex = 0
+        // Get the visible rect of the collection view.
+        let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+
+        // Calculate the visible cells.
+        let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
+
+        // Find the index of the visible video that is closest to the center of the screen.
+        var minDistanceFromCenter = CGFloat.infinity
+        for cell in visibleCells {
+            let post = posts[cell.indexPath!.row]
+            if !post.muxPlaybackId.isEmpty {
+                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+                if distanceFromCenter < minDistanceFromCenter {
+                    newPlayingIndex = cell.indexPath!.row
+                    minDistanceFromCenter = distanceFromCenter
+                }
+            }
+        }
+
+        // Start playing the new video if it's different from the current playing video.
+        if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+            // Pause the current video, if any.
+            if let currentIndex = currentIndex {
+                pauseVideoIfNeed(pauseIndex: currentIndex)
+            }
+            // Play the new video.
+            currentIndex = newPlayingIndex
             playVideoIfNeed(playIndex: currentIndex!)
-            
-            
+            isVideoPlaying = true
+        }
+
+        // If there's no current playing video and no visible video, pause the last playing video, if any.
+        if !isVideoPlaying && currentIndex != nil {
+            pauseVideoIfNeed(pauseIndex: currentIndex!)
+            currentIndex = nil
         }
     }
-
+    
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
        if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
           navigationController?.setNavigationBarHidden(true, animated: true)
-            
+
        } else {
           navigationController?.setNavigationBarHidden(false, animated: true)
-          
        }
     }
+
     
 }
 

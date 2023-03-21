@@ -119,7 +119,7 @@ extension AccountActivityVC {
         
         
         self.applyStyle()
-        self.tableNode.leadingScreensForBatching = 5
+        self.tableNode.leadingScreensForBatching = 2
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
         
@@ -249,19 +249,6 @@ extension AccountActivityVC {
     
 }
 
-extension AccountActivityVC {
-    
-    
-    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-          
-        
-        
-               
-    }
-    
-}
-
-
 extension AccountActivityVC: ASTableDelegate {
 
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
@@ -269,7 +256,7 @@ extension AccountActivityVC: ASTableDelegate {
         let width = UIScreen.main.bounds.size.width;
         
         let min = CGSize(width: width, height: 30);
-        let max = CGSize(width: width, height: 1000);
+        let max = CGSize(width: width, height: 120);
         return ASSizeRangeMake(min, max);
            
     }
@@ -310,7 +297,7 @@ extension AccountActivityVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
 
-            APIManager().getAccountActivity { result in
+         APIManager().getAccountActivity(page: page) { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -370,7 +357,7 @@ extension AccountActivityVC {
         let endIndex = startIndex + newActivities.count
         
         // Create an array of PostModel objects
-        let newItems = newActivities.compactMap { UserActivityModel(UserActivityModel: $0) }
+        let newItems = newActivities.compactMap { UserActivityModel(userActivityModel: $0) }
         
         // Append the new items to the existing array
         UserActivityList.append(contentsOf: newItems)

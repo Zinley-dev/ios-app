@@ -9,7 +9,7 @@ import UIKit
 import Alamofire
 import AsyncDisplayKit
 import RxSwift
-
+import FLAnimatedImage
 
 class BlockedListVC: UIViewController, ControllerType {
     typealias ViewModelType = BlockAccountsViewModel
@@ -19,6 +19,8 @@ class BlockedListVC: UIViewController, ControllerType {
     let group = DispatchGroup()
     
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
     var BlockList = [BlockUserModel]()
     var tableNode: ASTableNode!
     
@@ -42,6 +44,48 @@ class BlockedListVC: UIViewController, ControllerType {
         // Do any additional setup after loading the view.
         setupButtons()
         setupTableNode()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        do {
+            
+            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+            let gifData = try NSData(contentsOfFile: path) as Data
+            let image = FLAnimatedImage(animatedGIFData: gifData)
+            
+            
+            self.loadingImage.animatedImage = image
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        loadingView.backgroundColor = self.view.backgroundColor
+        
+        
+        delay(1.0) {
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                self.loadingView.alpha = 0
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
+                    
+                    self.loadingView.isHidden = true
+                    
+                }
+                
+            }
+            
+        }
         
     }
     
