@@ -30,6 +30,7 @@ class CreateAccountViewModel: ViewModelProtocol {
     let input: Input
     let action: Action
     let output: Output
+    var prevText = ""
     
     // MARK: Subject Instantiation
     private let submitDidTapSubject = PublishSubject<(String, String, String)>()
@@ -55,7 +56,7 @@ class CreateAccountViewModel: ViewModelProtocol {
     
     var isValidUsername:Observable<Bool>
     {
-       input.usernameSubject.map { $0.count > 4 }
+       input.usernameSubject.map { $0.count >= 3 }
     }
 
     var isValidPassword:Observable<Bool> {
@@ -77,21 +78,24 @@ class CreateAccountViewModel: ViewModelProtocol {
     }
     
     func logic() {
+    
       
         input.usernameSubject.subscribe(onNext: { uname in
-          if uname.count > 4 {
-            APIManager().checkUsernameExist(username: uname) { result in
-              switch result {
-                case .success(let response):
-                  if let data = response.body?["data"] as? String, data != "" {
-                    self.usernameExistSubject.onNext(false)
-                  } else {
-                    self.usernameExistSubject.onNext(true)
+            if uname.count >= 3 {
+
+                APIManager().checkUsernameExist(username: uname) { result in
+                  switch result {
+                    case .success(let response):
+                      if let data = response.body?["data"] as? String, data != "" {
+                        self.usernameExistSubject.onNext(false)
+                      } else {
+                        self.usernameExistSubject.onNext(true)
+                      }
+                    case .failure:
+                      self.usernameExistSubject.onNext(false)
                   }
-                case .failure:
-                  self.usernameExistSubject.onNext(false)
-              }
             }
+            
           }
         }, onError: { err in
           print("Error \(err.localizedDescription)")
@@ -115,8 +119,6 @@ class CreateAccountViewModel: ViewModelProtocol {
                         let data = response.body?["data"] as! [String: Any]?
                         let account = Account(JSON: data ?? [:])
                         
-                        print("account \(Mapper().toJSON(account!))")
-                        
                         // Write/Set Data
                         let sessionToken = SessionDataSource.init(JSONString: "{}")!
                         sessionToken.accessToken = account?.accessToken
@@ -131,7 +133,11 @@ class CreateAccountViewModel: ViewModelProtocol {
                         self.registerResultSubject.onNext(true)
                         
                     case .failure:
-                        self.errorsSubject.onNext(NSError(domain: "Wrong username or password", code: 400))
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                        }
+                        
+                        self.errorsSubject.onNext(NSError(domain: "Can't register your account with provided information", code: 400))
                     }
                 }
             }
@@ -160,7 +166,11 @@ class CreateAccountViewModel: ViewModelProtocol {
 
                                 self.registerResultSubject.onNext(true)
                             case .failure:
-                                self.errorsSubject.onNext(NSError(domain: "Wrong username or password", code: 400))
+                                Dispatch.main.async {
+                                    SwiftLoader.hide()
+                                }
+                            
+                                self.errorsSubject.onNext(NSError(domain: "Can't register your account with provided information", code: 400))
                         }
                     }
                 }

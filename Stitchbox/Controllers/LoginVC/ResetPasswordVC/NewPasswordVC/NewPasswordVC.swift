@@ -101,8 +101,9 @@ class NewPasswordVC: UIViewController, ControllerType {
   override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews()
     
-    enteredPasswordTextfield.addUnderLine()
-    passwordTextfield.addUnderLine()
+      self.enteredPasswordTextfield.addUnderLine()
+      self.passwordTextfield.addUnderLine()
+    
     
   }
   

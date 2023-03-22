@@ -1,13 +1,13 @@
 //
-//  NotificationModel.swift
+//  UserLoginActivity.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 3/9/23.
+//  Created by Khoi Nguyen on 3/20/23.
 //
 
 import Foundation
 
-class UserNotificationModel {
+class UserLoginActivityModel {
 
     fileprivate var _name: String!
     fileprivate var _username: String!
@@ -324,10 +324,9 @@ class UserNotificationModel {
 }
 
 
-extension UserNotificationModel: Equatable {
-    static func == (lhs: UserNotificationModel, rhs: UserNotificationModel) -> Bool {
+extension UserLoginActivityModel: Equatable {
+    static func == (lhs: UserLoginActivityModel, rhs: UserLoginActivityModel) -> Bool {
         return lhs.notiId == rhs.notiId
     }
 }
-
 

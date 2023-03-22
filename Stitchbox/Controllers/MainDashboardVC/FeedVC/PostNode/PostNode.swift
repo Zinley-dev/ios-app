@@ -668,6 +668,38 @@ extension PostNode {
                     
                 }
                 
+            } else if vc is PostListWithHashtagVC {
+                
+                if let update1 = vc as? PostListWithHashtagVC {
+                    
+                    let slideVC = CommentVC()
+                    
+                    slideVC.post = self.post
+                    slideVC.modalPresentationStyle = .custom
+                    slideVC.transitioningDelegate = update1.self
+                    global_presetingRate = Double(0.75)
+                    global_cornerRadius = 35
+                    update1.present(slideVC, animated: true, completion: nil)
+                    
+                }
+                
+                
+            } else if vc is PostSearchVC {
+                
+                if let update1 = vc as? PostSearchVC {
+                    
+                    let slideVC = CommentVC()
+                    
+                    slideVC.post = self.post
+                    slideVC.modalPresentationStyle = .custom
+                    slideVC.transitioningDelegate = update1.self
+                    global_presetingRate = Double(0.75)
+                    global_cornerRadius = 35
+                    update1.present(slideVC, animated: true, completion: nil)
+                    
+                }
+                
+                
             }
             
         }

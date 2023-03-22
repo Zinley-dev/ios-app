@@ -53,13 +53,13 @@ class NormalLoginVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupBackButton()
-        setupUsernameBtn()
+        setupPhoneBtn()
 
         
         // default load for 2 child views
         
-        LoginController.view.isHidden = false
-        LoginByPhoneSendCodeController.view.isHidden = true
+        LoginController.view.isHidden = true
+        LoginByPhoneSendCodeController.view.isHidden = false
         
         
     }

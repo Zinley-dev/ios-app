@@ -95,7 +95,6 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
             
             
             self.cmtTxtView.text = String(finalText)
-//            self.updatePrevCmtTxt()
             
             self.searchResultContainerView.isHidden = true
             vc.clearTable()
@@ -253,7 +252,7 @@ extension CommentVC {
         
         if let text = textView.text, text != "" {
             let curTxtLen = text.count
-            print("pre: \(previousTxt), current: \(String(describing: textView.text))")
+         
             if curTxtLen < previousTxtLen && !isInAutocomplete {
                 handleDeletion()
             } else {
@@ -312,7 +311,6 @@ func checkCurrenText(text: String) {
         hashtag_arr = text.findMHashtagText()
         if !hashtag_arr.isEmpty {
             let hashtagToSearch = hashtag_arr[hashtag_arr.count - 1]
-            print("User is looking for hashtag: \(hashtagToSearch)")
             let hashtagToSearchTrimmed = String(hashtagToSearch.dropFirst(1))
            
             if !hashtagToSearchTrimmed.isEmpty {
@@ -326,9 +324,8 @@ func checkCurrenText(text: String) {
         mention_arr = text.findMentiontagText()
         if !mention_arr.isEmpty {
             let userToSearch = mention_arr[mention_arr.count - 1]
-            print("User is looking for user: \(userToSearch)")
             let userToSearchTrimmed = String(userToSearch.dropFirst(1))
-
+            
             if !userToSearchTrimmed.isEmpty {
                 self.searchResultContainerView.isHidden = false
                 self.autocompleteVC.search(text: userToSearchTrimmed, with: AutocompeteViewController.Mode.user)
@@ -338,8 +335,7 @@ func checkCurrenText(text: String) {
             
         }
     } else {
-         
-        print("Just normal text")
+
         self.searchResultContainerView.isHidden = true
         
     }
@@ -1512,7 +1508,6 @@ extension CommentVC {
             
             let slideVC =  reportView()
             
-            
             slideVC.comment_id = self.CommentList[index].comment_id
             slideVC.comment_report = true
             slideVC.modalPresentationStyle = .custom
@@ -1526,6 +1521,54 @@ extension CommentVC {
             
         }
     
+    }
+    
+}
+
+extension CommentVC {
+    
+    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+        
+        let cIndex = indexPath.row
+        
+        if cIndex != -1 {
+            
+            cmtTxtView.becomeFirstResponder()
+            
+            if CommentList[cIndex].comment_uid != "" {
+                
+                let paragraphStyles = NSMutableParagraphStyle()
+                paragraphStyles.alignment = .left
+            
+                if let username = CommentList[cIndex].comment_username {
+                    
+                
+                    self.placeholderLabel.text = "Reply to @\(username)"
+                    
+                    
+                }
+                
+            } else{
+                placeholderLabel.text = "Reply to @Undefined"
+            }
+            
+            if CommentList[cIndex].isReply == false {
+                root_id = CommentList[cIndex].comment_id
+                index = cIndex
+            } else {
+                root_id = CommentList[cIndex].root_id
+                index = cIndex
+            }
+            
+            
+            reply_to_uid =  CommentList[cIndex].comment_uid
+            reply_to_cid =  CommentList[cIndex].comment_id
+            reply_to_username = CommentList[cIndex].comment_username
+            
+            tableNode.scrollToRow(at: IndexPath(row: cIndex, section: 0), at: .top, animated: true)
+            
+        }
+ 
     }
     
 }

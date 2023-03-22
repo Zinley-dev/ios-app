@@ -50,7 +50,7 @@ class ProfileViewController: UIViewController {
     
 
     var profileData: ProfileHeaderData {
-        return ProfileHeaderData(name: "Defaults", accountType: "Defaults/Public")
+        return ProfileHeaderData(name: "Defaults", username: "", accountType: "Defaults/Public")
     }
     
     var challengeData: ChallengeCardHeaderData {
@@ -58,6 +58,7 @@ class ProfileViewController: UIViewController {
     }
     
     func bindingUI() {
+    
       
         viewModel.output.myPostObservable.subscribe(onNext: { posts in
             if posts.count == 10 {
@@ -82,6 +83,7 @@ class ProfileViewController: UIViewController {
               self.pullControl.endRefreshing()
             
           }
+            
         })
       
       
@@ -191,6 +193,7 @@ class ProfileViewController: UIViewController {
                 if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
                     cell.usernameLbl.text = username
                 }
+                
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
                     let url = URL(string: avatarUrl)
                     cell.avatarImage.load(url: url!, str: avatarUrl)
@@ -976,25 +979,23 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
             case .posts(_):
                 
-            let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
-                            .compactMap { item -> PostModel? in
-                                if case .posts(let post) = item {
-                                    return post
+                let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
+                                .compactMap { item -> PostModel? in
+                                    if case .posts(let post) = item {
+                                        return post
+                                    }
+                                    return nil
                                 }
-                                return nil
-                            }
-            
+                
 
-            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
-                SPVC.selectedPost = selectedPost
-                SPVC.startIndex = indexPath.row
-                SPVC.hidesBottomBarWhenPushed = true
-                hideMiddleBtn(vc: self)
-                self.navigationController?.pushViewController(SPVC, animated: true)
-            }
-          
-
-             
+                if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                    SPVC.selectedPost = selectedPost
+                    SPVC.startIndex = indexPath.row
+                    SPVC.hidesBottomBarWhenPushed = true
+                    hideMiddleBtn(vc: self)
+                    self.navigationController?.pushViewController(SPVC, animated: true)
+                }
+        
             case .none:
                 print("None")
         }
