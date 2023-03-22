@@ -32,7 +32,7 @@ class NewPasswordVC: UIViewController, ControllerType {
     
     // Do any additional setup after loading the view.
     setupBackButton()
-    
+    nextButton.isEnabled = false
     bindUI(with: viewModel)
     bindAction(with: viewModel)
   }

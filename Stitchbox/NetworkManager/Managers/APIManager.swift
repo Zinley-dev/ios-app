@@ -307,6 +307,18 @@ extension APIManager {
             completion(result)
         }
     }
+    func isFollower(uid: String, completion: @escaping APICompletion) {
+        followManager.request(.isFollower(userId: uid)){
+            result in
+            completion(result)
+        }
+    }
+    func isFollowing(uid: String, completion: @escaping APICompletion) {
+        followManager.request(.isFollowing(userId: uid)){
+            result in
+            completion(result)
+        }
+    }
   
   func deleteFollower(params: [String: Any], completion: @escaping APICompletion) {
     followManager.request(.deleteFollower(params: params)){

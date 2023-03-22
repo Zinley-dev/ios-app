@@ -649,6 +649,8 @@ public enum FollowApi {
   case insertFollows (params: [String:Any])
   case deleteFollows (params: [String:Any])
   case deleteFollower (params: [String:Any])
+    case isFollower (userId: String)
+    case isFollowing (userId: String)
 }
 extension FollowApi: EndPointType {
   var module: String {
@@ -671,6 +673,10 @@ extension FollowApi: EndPointType {
         return "/followers/search/\(params["userid"] ?? "")?search=\(params["query"] ?? "")&page=\(page)&limit=\(lim)"
       case .searchFollowing(let params, let page, let lim):
         return "/search/\(params["userid"] ?? "")?search=\(params["query"] ?? "")&page=\(page)&limit=\(lim)"
+        case .isFollower(let userId):
+            return "/isfollowed/\(userId)"
+        case .isFollowing(let userId):
+            return "/isfollowing/\(userId)"
     }
   }
   
@@ -689,6 +695,10 @@ extension FollowApi: EndPointType {
         case .searchFollower:
             return .get
         case .searchFollowing:
+            return .get
+        case .isFollower:
+            return .get
+        case .isFollowing:
             return .get
     }
   }
@@ -709,6 +719,10 @@ extension FollowApi: EndPointType {
           return .request
       case .searchFollowing:
           return .request
+        case .isFollower:
+            return .request
+        case .isFollowing:
+            return .request
     }
   }
   
