@@ -31,6 +31,7 @@ class CreateAccountViewModel: ViewModelProtocol {
     let action: Action
     let output: Output
     var prevText = ""
+    var usernameExist = true
     
     // MARK: Subject Instantiation
     private let submitDidTapSubject = PublishSubject<(String, String, String)>()
@@ -51,7 +52,8 @@ class CreateAccountViewModel: ViewModelProtocol {
     }
     
     var isValidInput:Observable<Bool> {
-        return Observable.combineLatest(isValidUsername, isValidPassword, isHasUppercase, isHasLowercase, isHasNumber, isHasSpecial).map({ $0 && $1 && $2 && $3 && $4 && $5})
+        
+        return Observable.combineLatest(isValidUsername, isValidPassword, isHasUppercase, isHasLowercase, isHasNumber, isHasSpecial).map({ $0 && $1 && $2 && $3 && $4 && $5 && self.usernameExist})
     }
     
     var isValidUsername:Observable<Bool>
@@ -79,6 +81,9 @@ class CreateAccountViewModel: ViewModelProtocol {
     
     func logic() {
     
+        self.usernameExistSubject.subscribe { isExist in
+            self.usernameExist = isExist
+        }
       
         input.usernameSubject.subscribe(onNext: { uname in
             if uname.count >= 3 {

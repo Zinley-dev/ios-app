@@ -142,6 +142,11 @@ import SwiftUI
             setupView()
         }
     }
+    override var isEnabled: Bool {
+        didSet {
+            setupView()
+        }
+    }
 
 }
 

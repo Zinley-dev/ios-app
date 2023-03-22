@@ -1189,7 +1189,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="7AR-gn-ZLp">
-                                <rect key="frame" x="32" y="119.66666666666669" width="350" height="271.99999999999994"/>
+                                <rect key="frame" x="32" y="119.66666666666669" width="350" height="272"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1Ng-Dp-nWM">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="162.33333333333334"/>
@@ -1835,7 +1835,7 @@
     </scenes>
     <designables>
         <designable name="3uf-b9-C82">
-            <size key="intrinsicContentSize" width="104" height="34"/>
+            <size key="intrinsicContentSize" width="110" height="34"/>
         </designable>
         <designable name="Dlf-TU-NMz">
             <size key="intrinsicContentSize" width="39" height="29"/>
@@ -1847,7 +1847,7 @@
             <size key="intrinsicContentSize" width="39" height="29"/>
         </designable>
         <designable name="Nhf-Gd-k7X">
-            <size key="intrinsicContentSize" width="105.66666666666667" height="34"/>
+            <size key="intrinsicContentSize" width="111.66666666666667" height="34"/>
         </designable>
         <designable name="QHM-oC-nqz">
             <size key="intrinsicContentSize" width="557" height="14.333333333333334"/>

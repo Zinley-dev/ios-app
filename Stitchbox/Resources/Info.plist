@@ -8,7 +8,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>twitterkit-4ob6dNOQJPIjz9DQtCiLcD8VY</string>
-				<string>fb721023725428903</string>
+				<string>fb663026798636026</string>
 				<string>aw3hzih2me6rk0vg</string>
 			</array>
 		</dict>
@@ -25,11 +25,11 @@
 		</dict>
 	</array>
 	<key>FacebookAppID</key>
-	<string>721023725428903</string>
+	<string>663026798636026</string>
 	<key>FacebookClientToken</key>
-	<string>c949fa51019005225192111f5d200635</string>
+	<string>c37b4e32bd004df0e13f240d1779f3d8</string>
 	<key>FacebookDisplayName</key>
-	<string>Dual</string>
+	<string>Stitchbox</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>tiktokopensdk</string>
