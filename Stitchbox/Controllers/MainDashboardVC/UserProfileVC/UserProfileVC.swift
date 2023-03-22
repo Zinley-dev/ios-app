@@ -98,6 +98,8 @@ class UserProfileVC: UIViewController {
             return
           }
           
+          print(data)
+          
           self.userData = Mapper<UserDataSource>().map(JSONObject: data)
           
           let indexPath = IndexPath(item: 0, section: 0);
@@ -111,7 +113,7 @@ class UserProfileVC: UIViewController {
                 param.cover = self.userData?.cover ?? ""
                 param.avatar = self.userData?.avatarURL ?? ""
                 param.about = self.userData?.about ?? ""
-                param.followers = 10
+                param.followers = 0
                 param.following = 20
                 param.fistBumped = 30
                 
@@ -710,7 +712,6 @@ extension UserProfileVC {
                 navigationController.popViewController(animated: true)
             }
         }
-        
        
     }
     

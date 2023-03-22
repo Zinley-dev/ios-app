@@ -573,7 +573,7 @@ extension PostNode {
                 
                 let nav = UINavigationController(rootViewController: UPVC)
                 
-                UPVC.userId = post.owner?.id
+                UPVC.userId = post.owner?.id ?? "1234"
                 UPVC.nickname = post.owner?.username
                 UPVC.onPresent = true
                 nav.modalPresentationStyle = .fullScreen

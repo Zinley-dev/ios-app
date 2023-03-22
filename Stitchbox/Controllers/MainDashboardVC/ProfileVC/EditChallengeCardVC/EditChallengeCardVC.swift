@@ -195,8 +195,17 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                     
                 }
                 
+                let fullString = NSMutableAttributedString(string: "")
+                let image1Attachment = NSTextAttachment()
+                image1Attachment.image = UIImage(named: "fistBumpedStats")
+                image1Attachment.bounds = CGRect(x: 0, y: -2, width: 30, height: 12)
+                let image1String = NSAttributedString(attachment: image1Attachment)
+                fullString.append(image1String)
                 
-                cell.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
+                
+                fullString.append(NSAttributedString(string: "  \(formatPoints(num: Double(fistBumpedCount)))"))
+                cell.fistBumpedLbl.attributedText = fullString
+               
                
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)

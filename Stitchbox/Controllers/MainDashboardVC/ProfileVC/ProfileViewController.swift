@@ -59,7 +59,6 @@ class ProfileViewController: UIViewController {
     
     func bindingUI() {
     
-      
         viewModel.output.myPostObservable.subscribe(onNext: { posts in
             if posts.count == 10 {
                 self.currpage += 1
@@ -303,8 +302,7 @@ class ProfileViewController: UIViewController {
                     cell.badgeImgView.image = UIImage.init(named: card.badge)
                     ChallengeView.badgeImgView.image = UIImage.init(named: card.badge)
                     
-                    print("Hello - \(card.games.count) - \(card.badge)")
-               
+    
                         if card.games.isEmpty == true {
                             cell.game1.isHidden = false
                             cell.game2.isHidden = true
@@ -440,9 +438,17 @@ class ProfileViewController: UIViewController {
                 }
                 
                 
-                cell.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
-                ChallengeView.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
+                let fullString = NSMutableAttributedString(string: "")
+                let image1Attachment = NSTextAttachment()
+                image1Attachment.image = UIImage(named: "fistBumpedStats")
+                image1Attachment.bounds = CGRect(x: 0, y: -2, width: 30, height: 12)
+                let image1String = NSAttributedString(attachment: image1Attachment)
+                fullString.append(image1String)
                 
+                
+                fullString.append(NSAttributedString(string: "  \(formatPoints(num: Double(fistBumpedCount)))"))
+                cell.fistBumpedLbl.attributedText = fullString
+                ChallengeView.fistBumpedLbl.attributedText = fullString
 
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
@@ -540,10 +546,7 @@ extension ProfileViewController {
     
     
     @objc func fistBumpedlistTapped(_ sender: UIButton) {
-        
-        print("fistBumpedlistTapped")
-    
-        //MainFistBumpVC
+     
         if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
             MFBVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
@@ -554,8 +557,6 @@ extension ProfileViewController {
     }
     
     @objc func followersTapped(_ sender: UIButton) {
-        
-        print("followersTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
             MFVC.hidesBottomBarWhenPushed = true
@@ -571,8 +572,6 @@ extension ProfileViewController {
     
     
     @objc func followingTapped(_ sender: UIButton) {
-        
-        print("followingTapped")
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
             MFVC.hidesBottomBarWhenPushed = true
@@ -645,14 +644,12 @@ extension ProfileViewController {
     
     @objc func avatarTapped(sender: AnyObject!) {
   
-        print("avatarTapped")
         showFullScreenAvatar()
   
     }
     
     @objc func coverImageTapped(sender: AnyObject!) {
   
-        print("coverImageTapped")
         showFullScreenCover()
   
     }
@@ -677,8 +674,7 @@ extension ProfileViewController {
     
     @objc func game1Tapped(_ sender: UIButton) {
         // make sure to check if any game is added unless peform adding game for +
-        print("game1Tapped")
-        
+
         if let card = _AppCoreData.userDataSource.value?.challengeCard
         {
             
@@ -733,8 +729,6 @@ extension ProfileViewController {
     }
     
     @objc func game2Tapped(_ sender: UIButton) {
-        
-        print("game2Tapped")
         
         if let card = _AppCoreData.userDataSource.value?.challengeCard
         {
