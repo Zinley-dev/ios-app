@@ -320,6 +320,7 @@ extension EditPhofileVC: EditControllerDelegate {
                                 return
                         }
                         
+                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
 
                     case .failure(let error):
                         print(error)
@@ -353,7 +354,7 @@ extension EditPhofileVC: EditControllerDelegate {
                                 return
                         }
                         
-                        print(url)
+                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
 
 
                     case .failure(let error):

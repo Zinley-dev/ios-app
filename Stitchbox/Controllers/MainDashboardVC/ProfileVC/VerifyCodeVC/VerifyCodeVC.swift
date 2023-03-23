@@ -334,6 +334,7 @@ extension VerifyCodeVC {
                         self.label6.text = ""
                         
                         self.HidenTxtView.text = ""
+                        reloadGlobalUserInformation()
                     }
                     
                     
@@ -369,6 +370,7 @@ extension VerifyCodeVC {
                     self.label6.text = ""
                     
                     self.HidenTxtView.text = ""
+                    
                 }
                
             }
@@ -410,6 +412,8 @@ extension VerifyCodeVC {
                     
                     return
                 }
+                
+                reloadGlobalUserInformation()
                 
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
@@ -461,9 +465,7 @@ extension VerifyCodeVC {
         APIManager().verify2fa(otp: code, method: typeMethod) { result in
             switch result {
             case .success(let apiResponse):
-            
-                print(apiResponse)
-                
+           
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     self.navigationController?.popBack(2)

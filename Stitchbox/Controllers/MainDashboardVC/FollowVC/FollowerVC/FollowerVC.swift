@@ -9,24 +9,24 @@ import UIKit
 import Alamofire
 import AsyncDisplayKit
 import SendBirdUIKit
-import RxSwift
 
 class FollowerVC: UIViewController {
     
-    typealias ViewModelType = ProfileViewModel
+    //typealias ViewModelType = ProfileViewModel
     // MARK: - Properties
     private var currPage = 1
-    private var viewModel: ViewModelType! = ViewModelType()
-    private let disposeBag = DisposeBag()
+    //private var viewModel: ViewModelType! = ViewModelType()
+    //private let disposeBag = DisposeBag()
     
     @IBOutlet weak var contentView: UIView!
     var requestedUserId: String?
     var inSearchMode = false
     var tableNode: ASTableNode!
-    var searchUserList = [FollowerModel]()
-    var userList = [FollowerModel]()
-    var followingList = [FollowerModel]()
-    var asContext: ASBatchContext!
+    var searchUserList = [FollowModel]()
+    var userList = [FollowModel]()
+  
+
+    var userId = ""
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -39,45 +39,11 @@ class FollowerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //must happen before setting up tablenode otherwise data is not enough to render
-        bindingUI()
         setupTableNode()
         // Do any additional setup after loading the view.
         
     }
-    
-    func bindingUI() {
-        viewModel.output.followerListObservable.subscribe(onNext: { list in
-            guard self.asContext != nil else  {
-                return
-            }
-            
-            guard list.count > 0 else {
-                self.asContext.completeBatchFetching(true)
-                return
-            }
-            
-            let lastItemAt = self.userList.count
-            let section = 0
-            self.currPage += 1
-            self.userList.append(contentsOf: list)
-            
-            var paths: [IndexPath] = []
-            for row in lastItemAt...self.userList.count - 1 {
-                let path = IndexPath(row: row, section: section)
-                paths.append(path)
-            }
-            DispatchQueue.main.async {
-                self.tableNode.insertRows(at: paths, with: .none)
-                self.asContext.completeBatchFetching(true)
-            }
-            
-        })
-        viewModel.output.allFollowingListObservable.subscribe(onNext: {
-            list in
-            print("All Following: ",list)
-            self.followingList = list
-        })
-    }
+
     
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -204,10 +170,14 @@ extension FollowerVC: ASTableDelegate {
     }
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        print("getFollowers......")
-        asContext = context
-//        self.viewModel.getAllFollowing() //get all following
-        self.viewModel.getFollowers(page: currPage)
+      
+        self.retrieveNextPageWithCompletion { (newFollowers) in
+            
+            self.insertNewRowsInTableNode(newFollowers: newFollowers)
+            
+            context.completeBatchFetching(true)
+            
+        }
         
     }
     
@@ -251,30 +221,17 @@ extension FollowerVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         //let array = inSearchMode ? searchChannelList : channels
         let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
+    
+        user.loadFromMode = "follower"
+        user.loadFromUserId = self.userId
         
         return {
             var node: FollowNode!
-            // if user in the following list, this should be a following node.
-            let isFollowing = !self.followingList.contains{$0.userId == user.userId}
-            print("-------------")
-            print(self.followingList)
-            print(user)
-            print("-------------")
-            if isFollowing {
-                
-            }
-            user.action = isFollowing ? "Follower" : "Following"
             node = FollowNode(with: user)
-            node.followAction = {
-                item in
-                if isFollowing {self.follow(item: item) }
-                else { self.unfollow(item: item)}
-            }
-            
-            
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            
+        
+
             return node
         }
         
@@ -286,19 +243,90 @@ extension FollowerVC: ASTableDataSource {
 extension FollowerVC {
     
     func follow(item: FollowNode) {
+        /*
         self.viewModel.insertfollow(userId: item.user.userId ?? "")
         item.followAction = unfollow
         item.followBtnNode.backgroundColor = UIColor.primary
         item.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.white, for: .normal)
+        */
         
     }
     func unfollow(item: FollowNode) {
+        /*
         self.viewModel.unfollow(userId: item.user.userId ?? "")
         item.followAction = follow
         item.followBtnNode.backgroundColor = UIColor.white
         item.followBtnNode.setTitle("+ Follow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.primary, for: .normal)
+         */
     }
     
+    
+}
+
+extension FollowerVC {
+    
+    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        
+        APIManager().getFollowers(userId: userId, page: currPage) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                        return
+                    }
+                    
+                    if !data.isEmpty {
+                        self.currPage += 1
+                        print("Successfully retrieved \(data.count) followers.")
+                        let items = data
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                }
+            }
+        }
+        
+    }
+     
+    func insertNewRowsInTableNode(newFollowers: [[String: Any]]) {
+        // Check if there are new posts to insert
+        guard !newFollowers.isEmpty else { return }
+        
+
+        // Calculate the range of new rows
+        let startIndex = userList.count
+        let endIndex = startIndex + newFollowers.count
+        
+        // Create an array of PostModel objects
+        let newItems = newFollowers.compactMap { FollowModel(JSON: $0) }
+        
+        // Append the new items to the existing array
+        userList.append(contentsOf: newItems)
+        
+        // Create an array of index paths for the new rows
+        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+        
+        // Insert the new rows
+        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
+       
+    }
     
 }
 

@@ -22,9 +22,9 @@ class ProfileViewModel: ViewModelProtocol {
         let followersObservable: Observable<Int>
         let followingObservable: Observable<Int>
         let fistbumpObservable: Observable<Int>
-        let followerListObservable: Observable<[FollowerModel]>
-        let followingListObservable: Observable<[FollowerModel]>
-        let allFollowingListObservable: Observable<[FollowerModel]>
+        let followerListObservable: Observable<[FollowModel]>
+        let followingListObservable: Observable<[FollowModel]>
+        let allFollowingListObservable: Observable<[FollowModel]>
         let myPostObservable: Observable<[PostModel]>
     }
     
@@ -37,9 +37,9 @@ class ProfileViewModel: ViewModelProtocol {
     private let followersSubject = PublishSubject<Int>()
     private let followingSubject = PublishSubject<Int>()
     private let fistbumpSubject = PublishSubject<Int>()
-    private let followerListSubject = PublishSubject<[FollowerModel]>()
-    private let followingListSubject = PublishSubject<[FollowerModel]>()
-    private let allFollowingListSubject = PublishSubject<[FollowerModel]>()
+    private let followerListSubject = PublishSubject<[FollowModel]>()
+    private let followingListSubject = PublishSubject<[FollowModel]>()
+    private let allFollowingListSubject = PublishSubject<[FollowModel]>()
     private let myPostSubject = PublishSubject<[PostModel]>()
   
     init() {
@@ -90,7 +90,7 @@ class ProfileViewModel: ViewModelProtocol {
                     return
                 }
                 let list = data.map { item in
-                    return FollowerModel(JSON: item)!
+                    return FollowModel(JSON: item)!
                 }
                 print("Following List: ", list)
                 self.followingSubject.onNext(data.count)
@@ -110,7 +110,7 @@ class ProfileViewModel: ViewModelProtocol {
                     return
                 }
                 let list = data.map { item in
-                    return FollowerModel(JSON: item)!
+                    return FollowModel(JSON: item)!
                 }
                 print("Follower List: ", list)
                 self.followersSubject.onNext(data.count)

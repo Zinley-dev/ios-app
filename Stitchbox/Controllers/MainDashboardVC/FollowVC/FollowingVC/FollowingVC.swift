@@ -14,19 +14,13 @@ import RxSwift
 class FollowingVC: UIViewController {
 
     @IBOutlet weak var contentView: UIView!
-    
-    
-    
-    typealias ViewModelType = ProfileViewModel
-    // MARK: - Properties
     private var currPage = 1
-    private var viewModel: ViewModelType! = ViewModelType()
-    private let disposeBag = DisposeBag()
+ 
     var inSearchMode = false
     var tableNode: ASTableNode!
-    var searchUserList = [FollowerModel]()
-    var userList = [FollowerModel]()
-    var asContext: ASBatchContext!
+    var searchUserList = [FollowModel]()
+    var userList = [FollowModel]()
+    var userId = ""
 
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,36 +35,7 @@ class FollowingVC: UIViewController {
         super.viewDidLoad()
         setupTableNode()
         // Do any additional setup after loading the view.
-        bindingUI()
  
-    }
-    func bindingUI() {
-        viewModel.output.followingListObservable.subscribe(onNext: { list in
-            guard self.asContext != nil else  {
-                return
-            }
-
-            guard list.count > 0 else {
-                self.asContext.completeBatchFetching(true)
-                return
-            }
-
-            let lastItemAt = self.userList.count
-            let section = 0
-            self.currPage += 1
-            self.userList.append(contentsOf: list)
-            
-            var paths: [IndexPath] = []
-            for row in lastItemAt...self.userList.count - 1 {
-                let path = IndexPath(row: row, section: section)
-                paths.append(path)
-            }
-            DispatchQueue.main.async {
-                self.tableNode.insertRows(at: paths, with: .none)
-                self.asContext.completeBatchFetching(true)
-            }
-            
-        })
     }
 
 }
@@ -133,9 +98,13 @@ extension FollowingVC: ASTableDelegate {
         
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
             
-        print("getFollowing......")
-        asContext = context
-        self.viewModel.getFollowing(page: currPage)
+        self.retrieveNextPageWithCompletion { (newFollowings) in
+            
+            self.insertNewRowsInTableNode(newFollowings: newFollowings)
+            
+            context.completeBatchFetching(true)
+            
+        }
             
     }
     
@@ -166,7 +135,7 @@ extension FollowingVC: ASTableDataSource {
         
         if array.count == 0 {
             
-            tableNode.view.setEmptyMessage("No follower")
+            tableNode.view.setEmptyMessage("No following")
             
         } else {
             tableNode.view.restore()
@@ -181,17 +150,24 @@ extension FollowingVC: ASTableDataSource {
             
         let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
         
+        if let myId = _AppCoreData.userDataSource.value?.userID {
+    
+            if myId == self.userId {
+                user.action = "following"
+                user.needCheck = false
+            }
+        }
+        
+        user.loadFromMode = "following"
+        user.loadFromUserId = self.userId
+        
         return {
             var node: FollowNode!
-            user.action = "Following"
             node = FollowNode(with: user)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            node.followAction = { item in
-                print("Pressed Id= \(item.user.userId) Name= \(item.user.username)")
-                self.viewModel.unfollow(userId: item.user.userId ?? "")
-                
-            }
+        
+
             return node
         }
             
@@ -213,4 +189,71 @@ extension FollowingVC {
         
         
     }
+}
+
+extension FollowingVC {
+    
+    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        
+        APIManager().getFollows(userId: userId, page: currPage) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                        return
+                    }
+                    
+                    if !data.isEmpty {
+                        self.currPage += 1
+                        print("Successfully retrieved \(data.count) followings.")
+                        let items = data
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                }
+            }
+        }
+        
+    }
+     
+    func insertNewRowsInTableNode(newFollowings: [[String: Any]]) {
+        // Check if there are new posts to insert
+        guard !newFollowings.isEmpty else { return }
+        
+
+        // Calculate the range of new rows
+        let startIndex = userList.count
+        let endIndex = startIndex + newFollowings.count
+        
+        // Create an array of PostModel objects
+        let newItems = newFollowings.compactMap { FollowModel(JSON: $0) }
+        
+        // Append the new items to the existing array
+        userList.append(contentsOf: newItems)
+        
+        // Create an array of index paths for the new rows
+        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+        
+        // Insert the new rows
+        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
+       
+    }
+    
 }

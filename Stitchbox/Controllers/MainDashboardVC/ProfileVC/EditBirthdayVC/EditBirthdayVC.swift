@@ -80,6 +80,7 @@ class EditBirthdayVC: UIViewController, UITextFieldDelegate {
                 
                         self.birthdayTxtField.placeholder = birthday
                         self.birthdayTxtField.text = ""
+                        reloadGlobalUserInformation()
                         
                     }
                     

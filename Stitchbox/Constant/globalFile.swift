@@ -13,7 +13,7 @@ import SwiftEntryKit
 import UserNotifications
 import CoreMedia
 import AVFAudio
-
+import ObjectMapper
 
 var general_room: Room!
 var gereral_group_chanel_url: String!
@@ -26,6 +26,7 @@ var global_host = ""
 var global_fullLink = ""
 var selectedTabIndex = 0
 var global_suppport_game_list = [GameList]()
+var needRecount = false
 
  let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
  let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
@@ -634,4 +635,34 @@ extension Collection {
     subscript(safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
     }
+}
+
+
+func reloadGlobalUserInformation() {
+
+    APIManager().getme { result in
+        switch result {
+        case .success(let response):
+            
+            if let data = response.body {
+                
+                if !data.isEmpty {
+                    
+                    if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                        _AppCoreData.reset()
+                        _AppCoreData.userDataSource.accept(newUserData)
+                       
+                    } 
+                  
+                }
+                
+            }
+            
+            
+        case .failure(let error):
+            print("Error loading profile: ", error)
+          
+        }
+    }
+    
 }

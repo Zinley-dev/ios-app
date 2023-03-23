@@ -141,7 +141,7 @@ class TwoFactorAuthVC: UIViewController {
                     self.isEmail = false
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
-                        self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please try again")
+                        self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please make sure you have your email ready and try again.")
                     }
                   
                     print(error)
@@ -204,7 +204,6 @@ extension TwoFactorAuthVC {
 }
 
 extension TwoFactorAuthVC {
-    
     
     func processDefaultData() {
         

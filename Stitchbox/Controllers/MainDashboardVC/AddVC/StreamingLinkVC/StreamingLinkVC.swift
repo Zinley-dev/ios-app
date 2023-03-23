@@ -14,7 +14,7 @@ class StreamingLinkVC: UIViewController {
     
     @IBOutlet weak var streamingLinkTxt: UITextField! {
         didSet {
-            let redPlaceholderText = NSAttributedString(string: "Your streaming link. Ex: youtube, facebook, twitch ... etc",
+            let redPlaceholderText = NSAttributedString(string: "Ex: youtube, facebook, twitch ... etc",
                                                         attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             
             streamingLinkTxt.attributedPlaceholder = redPlaceholderText

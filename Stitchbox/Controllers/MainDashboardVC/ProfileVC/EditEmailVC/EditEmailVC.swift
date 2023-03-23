@@ -47,12 +47,9 @@ class EditEmailVC: UIViewController {
         let lowercaseEmail = email.lowercased().stringByRemovingWhitespaces
         presentSwiftLoader()
    
-        
         APIManager().updateEmail(email: lowercaseEmail) { result in
             switch result {
             case .success(let apiResponse):
-                
-                print(apiResponse)
                 
                 guard apiResponse.body?["message"] as? String == "OTP sent" else {
                     
