@@ -49,7 +49,7 @@ extension TwitterSignInService: LoginCoordinatorProtocol {
             url = ""
           }
           
-          let data = AuthResult(idToken: twitterId, providerID: nil, rawNonce: nil, accessToken: nil, name: name, email: nil, phone: nil)
+          let data = AuthResult(idToken: twitterId, providerID: nil, rawNonce: nil, accessToken: nil, name: name, email: nil, phone: nil, avatar: "")
           self.vm.completeSignIn(with: data)
           
         }) { error in
