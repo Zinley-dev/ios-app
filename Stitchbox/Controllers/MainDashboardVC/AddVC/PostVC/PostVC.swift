@@ -599,7 +599,7 @@ extension PostVC {
         
         var contentPost = [String: Any]()
         
-        contentPost = ["content": selectedDescTxtView, "images": [imageUrl], "tags": [userUID]]
+        
         
         var update_hashtaglist = [String]()
         
@@ -615,8 +615,8 @@ extension PostVC {
             }
             
         }
-        
-        contentPost["setting"] = ["mode": mode as Any, "allowcomment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
+        contentPost = ["content": selectedDescTxtView, "images": [imageUrl], "tags": [userUID], "hashtags": update_hashtaglist, "streamLink": global_fullLink]
+        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "length": length!, "isHashtaged": true, "originWidth": origin_width!, "originHeight": origin_height!, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
 
         APIManager().createPost(params: contentPost) { result in
             switch result {
@@ -643,14 +643,14 @@ extension PostVC {
         }
         
         
-        let videoData =  ["raw_url": videoUrl]
+        let videoData =  ["rawUrl": videoUrl]
         
         
         let loadUsername = userDataSource.userName
         
         var contentPost = [String: Any]()
         
-        contentPost = ["content": selectedDescTxtView, "video": videoData, "tags": [userUID]]
+        
         
         var update_hashtaglist = [String]()
         
@@ -670,7 +670,8 @@ extension PostVC {
             
         }
         
-        contentPost["setting"] = ["mode": mode as Any, "allowcomment": isAllowComment, "stream_link": global_fullLink, "length": length!, "is_hashtaged": true, "origin_width": origin_width!, "origin_height": origin_height!, "isTitleCmt": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "hashtag_list": update_hashtaglist]
+        contentPost = ["content": selectedDescTxtView, "video": videoData, "tags": [userUID], "streamLink": global_fullLink, "hashtags": update_hashtaglist]
+        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "length": length!, "isHashtaged": true, "originWidth": origin_width!, "originHeight": origin_height!, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
 
         APIManager().createPost(params: contentPost) { result in
             switch result {

@@ -27,10 +27,15 @@ extension FacebookSignInService: LoginCoordinatorProtocol {
                 print("Cancelled")
             } else {
                 print("Logged In")
+                
+                
+                print(Profile.current?.imageURL)
+                
                 let userId = Profile.current?.userID
                 let email = Profile.current?.email ?? ""
+                let avatar = Profile.current?.imageURL?.absoluteString ?? ""
                 let name = "\(Profile.current?.firstName ?? "") \(Profile.current?.lastName ?? "")"
-                let data = AuthResult(idToken: userId, providerID: nil, rawNonce: nil, accessToken: nil, name: name, email: email, phone: nil)
+                let data = AuthResult(idToken: userId, providerID: nil, rawNonce: nil, accessToken: nil, name: name, email: email, phone: nil, avatar: avatar)
                 self.vm.completeSignIn(with: data)
             }
         }

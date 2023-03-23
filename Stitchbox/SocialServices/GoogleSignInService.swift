@@ -38,7 +38,7 @@ extension GoogleSignInService: LoginCoordinatorProtocol {
                 if let imgurl = profiledata.imageURL(withDimension: 100) {
                     let absoluteurl : String = imgurl.absoluteString
                     
-                    let data = AuthResult(idToken: userId, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(familyName) \(givenName)", email: email, phone: nil)
+                    let data = AuthResult(idToken: userId, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(familyName) \(givenName)", email: email, phone: nil, avatar: absoluteurl)
                     self.vm.completeSignIn(with: data)
                 }
             }

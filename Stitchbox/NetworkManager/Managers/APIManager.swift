@@ -388,6 +388,7 @@ extension APIManager {
       }
     }
     func verifyUpdateEmail(params: [String: Any], completion: @escaping APICompletion) {
+        print(params)
       userManager.request(.verifyEmail(params: params)){
         result in
         completion(result)

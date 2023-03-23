@@ -24,8 +24,7 @@ extension AppleSignInService: ASAuthorizationControllerDelegate, ASAuthorization
             let userLastName = appleIDCredential.fullName?.familyName
             let userEmail = appleIDCredential.email
             
-            
-            let data = AuthResult(idToken: userIdentifier, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(userFirstName ?? "") \(userLastName ?? "")", email: userEmail, phone: nil)
+            let data = AuthResult(idToken: userIdentifier, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(userFirstName ?? "") \(userLastName ?? "")", email: userEmail, phone: nil, avatar: "")
             self.vm.completeSignIn(with: data)
 
         }

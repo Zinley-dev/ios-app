@@ -309,7 +309,8 @@ extension VerifyCodeVC {
         
         presentSwiftLoader()
         
-        APIManager().verifyUpdatePhone(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "email": email, "otp": code]) { result in
+        APIManager().verifyUpdateEmail(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "email": email, "otp": code]) { result in
+            print("==> \(result)")
             switch result {
             case .success(let apiResponse):
             
