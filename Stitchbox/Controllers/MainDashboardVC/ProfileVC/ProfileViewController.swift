@@ -521,6 +521,7 @@ extension ProfileViewController {
     
         var snapshot = self.datasource.snapshot()
         snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        currpage = 1
         
         self.getMyPost { (newPosts) in
             
