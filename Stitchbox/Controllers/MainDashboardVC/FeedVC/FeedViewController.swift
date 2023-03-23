@@ -172,7 +172,6 @@ extension FeedViewController {
     
     @objc func updateProgressBar() {
         
-        
         if (global_percentComplete == 0.00) || (global_percentComplete == 100.0) {
             
             DispatchQueue.main.async {
@@ -713,6 +712,7 @@ extension FeedViewController {
                 if !data.isEmpty {
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data
+                  
                     DispatchQueue.main.async {
                         block(items)
                     }

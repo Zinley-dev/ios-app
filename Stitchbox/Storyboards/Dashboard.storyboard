@@ -6795,6 +6795,7 @@
                                             <outlet property="coverImage" destination="Vtj-E3-kqg" id="KuH-3l-gOW"/>
                                             <outlet property="descriptionLbl" destination="BOE-Zn-vCa" id="nqU-w2-uYS"/>
                                             <outlet property="discordBtn" destination="jz9-4A-YuD" id="zpW-Sy-gRi"/>
+                                            <outlet property="discordLbl" destination="FAw-H6-d9R" id="kdI-aJ-dfz"/>
                                             <outlet property="discordView" destination="jz9-4A-YuD" id="gVE-Fu-XTr"/>
                                             <outlet property="fistBumpedView" destination="qVn-la-1OG" id="W6a-7P-rj6"/>
                                             <outlet property="followerStack" destination="V3C-uc-Swn" id="HNF-2C-dbb"/>
@@ -6802,6 +6803,7 @@
                                             <outlet property="followingStack" destination="EuU-rP-SCl" id="ARz-0W-6Sa"/>
                                             <outlet property="messageBtn" destination="bT1-J2-bUP" id="wB8-bK-KGR"/>
                                             <outlet property="moreBtn" destination="M1h-cv-pYx" id="mds-Hv-63q"/>
+                                            <outlet property="numberOfFistBumps" destination="kHt-13-M2n" id="O9G-Z9-gaS"/>
                                             <outlet property="numberOfFollowers" destination="Cg1-Xn-gPZ" id="Bnh-kk-qDu"/>
                                             <outlet property="numberOfFollowing" destination="2Tw-ju-VJw" id="kRd-xa-KdY"/>
                                             <outlet property="usernameLbl" destination="opg-Te-ulR" id="db3-x8-gPQ"/>
@@ -6853,7 +6855,7 @@
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2a9-vj-oBc">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2a9-vj-oBc">
                                                             <rect key="frame" x="16" y="42" width="85" height="85"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
@@ -7066,7 +7068,9 @@
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="412" height="246"/>
                                         <connections>
+                                            <outlet property="badgeImgView" destination="NKW-ap-mok" id="0gw-Lt-QYd"/>
                                             <outlet property="badgeWidth" destination="J6r-YY-Hsa" id="hoL-7N-KNM"/>
+                                            <outlet property="fistBumpedLbl" destination="F2O-2z-OMT" id="CQE-Qp-xLQ"/>
                                             <outlet property="game1" destination="Pd7-2L-Vsq" id="Emq-4P-ewV"/>
                                             <outlet property="game2" destination="R2n-B4-eXE" id="eNH-iT-FQb"/>
                                             <outlet property="game3" destination="uFe-Xc-V4Q" id="iXw-5Y-2wU"/>
@@ -7094,7 +7098,7 @@
                                 </cells>
                             </collectionView>
                             <view hidden="YES" alpha="0.89999997615814209" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DRU-BB-Hhd">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xiJ-QA-RpX">
@@ -7110,7 +7114,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mE2-tR-Xej">
-                                <rect key="frame" x="16" y="306" width="343" height="200"/>
+                                <rect key="frame" x="0.0" y="306" width="375" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="vwC-Hx-rDI"/>
                                 </constraints>
@@ -7137,15 +7141,15 @@
                             <constraint firstItem="uat-3R-ldY" firstAttribute="centerX" secondItem="2uS-hU-8EQ" secondAttribute="centerX" id="8Bz-fX-vHQ"/>
                             <constraint firstItem="xiJ-QA-RpX" firstAttribute="centerX" secondItem="2uS-hU-8EQ" secondAttribute="centerX" id="A45-zD-eMW"/>
                             <constraint firstItem="ThJ-0F-4Nr" firstAttribute="top" secondItem="2uS-hU-8EQ" secondAttribute="top" id="Dyg-ko-by7"/>
-                            <constraint firstItem="mE2-tR-Xej" firstAttribute="leading" secondItem="PRm-gE-N59" secondAttribute="leading" constant="16" id="I9F-fR-vfY"/>
-                            <constraint firstItem="PRm-gE-N59" firstAttribute="trailing" secondItem="mE2-tR-Xej" secondAttribute="trailing" constant="16" id="Jwn-96-Dan"/>
+                            <constraint firstItem="mE2-tR-Xej" firstAttribute="leading" secondItem="PRm-gE-N59" secondAttribute="leading" id="I9F-fR-vfY"/>
+                            <constraint firstItem="PRm-gE-N59" firstAttribute="trailing" secondItem="mE2-tR-Xej" secondAttribute="trailing" id="Jwn-96-Dan"/>
                             <constraint firstItem="PRm-gE-N59" firstAttribute="trailing" secondItem="xiJ-QA-RpX" secondAttribute="trailing" constant="20" id="KsW-ve-27C"/>
                             <constraint firstItem="ThJ-0F-4Nr" firstAttribute="leading" secondItem="2uS-hU-8EQ" secondAttribute="leading" id="NGK-7j-QUi"/>
                             <constraint firstItem="xiJ-QA-RpX" firstAttribute="centerY" secondItem="2uS-hU-8EQ" secondAttribute="centerY" id="QZ5-kg-TeR"/>
                             <constraint firstItem="DRU-BB-Hhd" firstAttribute="top" secondItem="2uS-hU-8EQ" secondAttribute="top" id="XHc-Sy-mit"/>
                             <constraint firstItem="DRU-BB-Hhd" firstAttribute="leading" secondItem="PRm-gE-N59" secondAttribute="leading" id="bRS-gQ-YK1"/>
                             <constraint firstItem="mE2-tR-Xej" firstAttribute="centerX" secondItem="2uS-hU-8EQ" secondAttribute="centerX" id="cbX-SW-JCN"/>
-                            <constraint firstItem="PRm-gE-N59" firstAttribute="bottom" secondItem="DRU-BB-Hhd" secondAttribute="bottom" id="dTu-1g-sYi"/>
+                            <constraint firstAttribute="bottom" secondItem="DRU-BB-Hhd" secondAttribute="bottom" id="dTu-1g-sYi"/>
                             <constraint firstItem="xiJ-QA-RpX" firstAttribute="leading" secondItem="PRm-gE-N59" secondAttribute="leading" constant="20" id="hQG-gM-Mbs"/>
                             <constraint firstAttribute="trailing" secondItem="ThJ-0F-4Nr" secondAttribute="trailing" id="vm2-hq-zLa"/>
                             <constraint firstItem="DRU-BB-Hhd" firstAttribute="trailing" secondItem="PRm-gE-N59" secondAttribute="trailing" id="wCA-zw-Fb4"/>

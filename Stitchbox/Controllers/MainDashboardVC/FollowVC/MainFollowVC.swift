@@ -23,6 +23,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     var showFollowerFirst = false
     var type = ""
     var ownerID = ""
+    var username: String?
     
     var followerCount = 0
     var followingCount = 0
@@ -128,7 +129,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         loadingView.backgroundColor = self.view.backgroundColor
         
         
-        delay(1.75) {
+        delay(1.5) {
             
             UIView.animate(withDuration: 0.5) {
                 
@@ -253,18 +254,29 @@ extension MainFollowVC {
     }
     
     func setupTitle() {
+    
         
         guard let userDataSource = _AppCoreData.userDataSource.value else {
             print("Can't get userDataSource")
             return
         }
-
-        let loadUsername = userDataSource.userName
-        if loadUsername != "" {
-            self.navigationItem.title = loadUsername
+        
+        if self.userId == userDataSource.userID {
+            
+            let loadUsername = userDataSource.userName
+            if loadUsername != "" {
+                self.navigationItem.title = loadUsername
+            } else {
+                self.navigationItem.title = "Follow"
+            }
+            
         } else {
-            self.navigationItem.title = "Follow"
+            
+            self.navigationItem.title = self.username ?? "Follow"
+            
         }
+
+        
        
        
        

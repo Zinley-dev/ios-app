@@ -10,19 +10,20 @@ import UIKit
 class UserProfileHeaderCell: UICollectionViewCell {
     
     @IBOutlet weak var descriptionLbl: UILabel!
+    @IBOutlet weak var moreBtn: UIButton!
     @IBOutlet weak var fistBumpedView: UIView!
     @IBOutlet weak var discordView: UIView!
+    @IBOutlet weak var messageBtn: UIButton!
     @IBOutlet weak var FistBumpedBtn: UIButton!
+    @IBOutlet weak var followersBtn: UIButton!
     @IBOutlet weak var discordBtn: UIButton!
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet weak var numberOfFollowing: UILabel!
     @IBOutlet weak var numberOfFollowers: UILabel!
+    @IBOutlet weak var numberOfFistBumps: UILabel!
     @IBOutlet weak var avatarImage: UIImageView!
     @IBOutlet weak var coverImage: UIImageView!
-    
-    @IBOutlet weak var followersBtn: UIButton!
-    @IBOutlet weak var messageBtn: UIButton!
-    @IBOutlet weak var moreBtn: UIButton!
+    @IBOutlet weak var discordLbl: UILabel!
     
     let kCONTENT_XIB_NAME = "ProfileView"
     

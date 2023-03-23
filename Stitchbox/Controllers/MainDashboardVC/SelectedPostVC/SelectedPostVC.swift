@@ -33,7 +33,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     
     var isfirstLoad = true
     var onPresent = false
-    
+    var selectedIndex = 0
     var isVideoPlaying = false
     var newPlayingIndex: Int?
     
@@ -156,9 +156,11 @@ extension SelectedPostVC {
             
             foundVisibleVideo = true
             playTimeBar.isHidden = false
+            selectedIndex = newPlayingIndex!
             
         } else {
             playTimeBar.isHidden = true
+            selectedIndex = newPlayingIndex!
         }
         
         if foundVisibleVideo {
@@ -177,6 +179,7 @@ extension SelectedPostVC {
             
         } else {
             
+           
             if let currentIndex = currentIndex {
                         pauseVideoIfNeed(pauseIndex: currentIndex)
                     }
@@ -507,7 +510,7 @@ extension SelectedPostVC {
         print("Edit requested")
         if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC {
             
-            pauseVideoIfNeed(pauseIndex: currentIndex)
+            //pauseVideoIfNeed(pauseIndex: selectedIndex)
             EPVC.selectedPost = editeddPost
             self.navigationController?.pushViewController(EPVC, animated: true)
             
@@ -552,7 +555,7 @@ extension SelectedPostVC {
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StatsVC") as? StatsVC {
             
             
-            pauseVideoIfNeed(pauseIndex: currentIndex)
+            //pauseVideoIfNeed(pauseIndex: selectedIndex)
             self.navigationController?.pushViewController(SVC, animated: true)
             
         }

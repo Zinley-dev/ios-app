@@ -346,7 +346,15 @@ extension PostVC {
                         }
                     }
                     
+                } else {
+                    
+                    DispatchQueue.main.async {
+                        self.setDefaultMode()
+                    }
+                    
                 }
+                
+                
                 
                 if let video = data.first?["video"] as? [String: Any] {
                     
