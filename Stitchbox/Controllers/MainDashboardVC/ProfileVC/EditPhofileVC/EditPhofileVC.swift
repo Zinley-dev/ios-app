@@ -17,7 +17,6 @@ class EditPhofileVC: UIViewController {
     @IBOutlet weak var changeCoverPhotoBtn: UIButton!
     @IBOutlet weak var changeProfilePhotoBtn: UIButton!
     
-    
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var discordTxtField: UITextField!
     @IBOutlet weak var usernameTxtField: UITextField!

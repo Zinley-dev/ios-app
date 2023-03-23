@@ -67,7 +67,7 @@ class EditSloganVC: UIViewController, UITextFieldDelegate {
                         self.sloganTextField.placeholder = text
                         self.saveBtn.backgroundColor = .disableButtonBackground
                         self.saveBtn.titleLabel?.textColor = .lightGray
-                        reloadGlobalUserInformation()
+                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
                         showNote(text: "Updated successfully")
                     }
                     

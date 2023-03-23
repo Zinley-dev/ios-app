@@ -559,7 +559,7 @@ extension EditChallengeCardVC {
                             
                         }
                         
-                        
+                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
                         
                         showNote(text: "Updated successfully")
                     }
