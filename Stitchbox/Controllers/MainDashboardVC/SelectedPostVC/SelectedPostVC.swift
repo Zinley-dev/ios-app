@@ -12,7 +12,7 @@ import Alamofire
 
 
 
-class SelectedPostVC: UIViewController {
+class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
 
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
@@ -25,8 +25,7 @@ class SelectedPostVC: UIViewController {
     var editeddPost: PostModel?
     var startIndex: Int!
     var currentIndex: Int!
-    var endIndex: Int!
-    var willIndex: Int!
+    
     
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
@@ -128,22 +127,7 @@ extension SelectedPostVC {
 
 extension SelectedPostVC {
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        // Check if this is the first visible cell and it contains a video.
     
-        if isfirstLoad {
-            isfirstLoad = false
-            let post = posts[0]
-            if !post.muxPlaybackId.isEmpty {
-                currentIndex = 0
-                newPlayingIndex = 0
-                playVideoIfNeed(playIndex: currentIndex!)
-                isVideoPlaying = true
-            }
-            
-        }
-    }
-
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Get the visible rect of the collection view.
         let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -153,30 +137,54 @@ extension SelectedPostVC {
 
         // Find the index of the visible video that is closest to the center of the screen.
         var minDistanceFromCenter = CGFloat.infinity
+        
+        var foundVisibleVideo = false
+        
         for cell in visibleCells {
-            let post = posts[cell.indexPath!.row]
-            if !post.muxPlaybackId.isEmpty {
-                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
-                if distanceFromCenter < minDistanceFromCenter {
-                    newPlayingIndex = cell.indexPath!.row
-                    minDistanceFromCenter = distanceFromCenter
-                }
+        
+            let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+            let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+            let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+            if distanceFromCenter < minDistanceFromCenter {
+                newPlayingIndex = cell.indexPath!.row
+                minDistanceFromCenter = distanceFromCenter
             }
+        }
+        
+        
+        if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+            
+            foundVisibleVideo = true
+            playTimeBar.isHidden = false
+            
+        } else {
+            playTimeBar.isHidden = true
+        }
+        
+        if foundVisibleVideo {
+            
+            // Start playing the new video if it's different from the current playing video.
+            if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+                // Pause the current video, if any.
+                if let currentIndex = currentIndex {
+                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                }
+                // Play the new video.
+                currentIndex = newPlayingIndex
+                playVideoIfNeed(playIndex: currentIndex!)
+                isVideoPlaying = true
+            }
+            
+        } else {
+            
+            if let currentIndex = currentIndex {
+                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                    }
+                    // Reset the current playing index.
+            currentIndex = nil
+            
         }
 
-        // Start playing the new video if it's different from the current playing video.
-        if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-            // Pause the current video, if any.
-            if let currentIndex = currentIndex {
-                pauseVideoIfNeed(pauseIndex: currentIndex)
-            }
-            // Play the new video.
-            currentIndex = newPlayingIndex
-            playVideoIfNeed(playIndex: currentIndex!)
-            isVideoPlaying = true
-        }
         
         // If the video is stuck, reset the buffer by seeking to the current playback time.
         if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
@@ -188,6 +196,7 @@ extension SelectedPostVC {
                 }
             }
         }
+
 
         // If there's no current playing video and no visible video, pause the last playing video, if any.
         if !isVideoPlaying && currentIndex != nil {
@@ -210,6 +219,7 @@ extension SelectedPostVC {
 }
 
 extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
@@ -232,6 +242,10 @@ extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
        
         return posts[collectionView.tag].hashtags.count
         
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+            return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
     }
     
 }
@@ -280,8 +294,9 @@ extension SelectedPostVC: ASCollectionDataSource {
             }
             
             delay(0.3) {
-                if node.headerView != nil {
+                if node.hashtagView != nil {
                     node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
+                    node.hashtagView.collectionView.reloadData()
                 }
             }
             
@@ -356,14 +371,18 @@ extension SelectedPostVC {
             
             self.delayItem.perform(after: 0.25) {
                 // 5. Set the `isfirstLoad`, `currentIndex`, and `willIndex` variables based on the `startIndex`.
-                self.isfirstLoad = false
-                self.currentIndex = self.startIndex
-                playVideoIfNeed(playIndex: self.startIndex)
-                self.willIndex = self.startIndex
                 
-                if self.startIndex > 0 {
-                    self.endIndex = self.startIndex - 1
+                if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
+                    
+                    self.currentIndex = self.startIndex
+                    self.newPlayingIndex = self.startIndex
+                    playVideoIfNeed(playIndex: self.startIndex)
+                    self.isVideoPlaying = true
+                    
+                } else {
+                    self.isVideoPlaying = false
                 }
+                
             }
         }
     }

@@ -49,10 +49,10 @@ class PostModel: Mappable {
     id <- map["_id"]
     content <- map["content"]
     image <- map["images"]
-      hashtags <- map["hashtags"]
+    hashtags <- map["hashtags"]
     muxPlaybackId <- map ["mux.playbackId"]
     muxAssetId <- map ["mux.assetId"]
-      owner <- map ["owner"]
+    owner <- map ["owner"]
     streamUrl <- map ["video.streamurl"]
     setting["allowcomment"] <- map["settings.allowcomment"]
     setting["mode"] <- map["settings.mode"]
@@ -60,13 +60,15 @@ class PostModel: Mappable {
     setting["mediaType"] <- map["settings.mediaType"]
     setting["isTitleGet"] <- map["settings.isTitleGet"]
     metadata <- map["metadata"]
-      createdAt <- (map["createdat"], ISODateTransform())
+    createdAt <- (map["createdAt"], ISODateTransform())
     
     if image[0] != "" {
       imageUrl = URL(string: image[0])!
     } else {
       imageUrl = URL(string: "https://image.mux.com/\(muxPlaybackId)/thumbnail.png?width=400&height=200&fit_mode=smartcrop&time=0.025")!
     }
+      
+      //hashtags.append("SB-Tactics")
   }
 }
 extension PostModel: Hashable {

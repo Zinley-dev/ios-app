@@ -27,6 +27,7 @@ var global_fullLink = ""
 var selectedTabIndex = 0
 var global_suppport_game_list = [GameList]()
 var needRecount = false
+var needReloadPost = false
 
  let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
  let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
@@ -298,6 +299,7 @@ extension UITextView {
 
 func pauseVideoIfNeed(pauseIndex: Int) {
   
+    print("test - pauseVideoIfNeed \(pauseIndex)")
     if let vc = UIViewController.currentViewController() {
          
         if vc is SelectedPostVC {
@@ -306,17 +308,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                 
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
                     
-                    if cell.videoNode.isPlaying() {
-                        
-                        
-                        if cell.sideButtonView != nil {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        }
-                        
-                        cell.videoNode.player?.seek(to: CMTime.zero)
-                        cell.videoNode.pause()
-                        
+                    if cell.sideButtonView != nil {
+                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                     }
+                    
+                    cell.videoNode.player?.seek(to: CMTime.zero)
+                    cell.videoNode.pause()
                     
                 }
                 
@@ -328,16 +325,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                 
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
                     
-                    if cell.videoNode.isPlaying() {
-                        
-                        cell.videoNode.player?.seek(to: CMTime.zero)
-                        
-                        if cell.sideButtonView != nil {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        }
-                        
-                        cell.videoNode.pause()
+                    if cell.sideButtonView != nil {
+                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                     }
+                    
+                    cell.videoNode.player?.seek(to: CMTime.zero)
+                    cell.videoNode.pause()
                     
                 }
                 
@@ -349,16 +342,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                 
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
                     
-                    if cell.videoNode.isPlaying() {
-                        
-                        cell.videoNode.player?.seek(to: CMTime.zero)
-                        
-                        if cell.sideButtonView != nil {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        }
-                        
-                        cell.videoNode.pause()
+                    if cell.sideButtonView != nil {
+                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                     }
+                    
+                    cell.videoNode.player?.seek(to: CMTime.zero)
+                    cell.videoNode.pause()
                     
                 }
                 
@@ -370,16 +359,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                 
                 if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
                     
-                    if cell.videoNode.isPlaying() {
-                        
-                        cell.videoNode.player?.seek(to: CMTime.zero)
-                        
-                        if cell.sideButtonView != nil {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        }
-                        
-                        cell.videoNode.pause()
+                    if cell.sideButtonView != nil {
+                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                     }
+                    
+                    cell.videoNode.player?.seek(to: CMTime.zero)
+                    cell.videoNode.pause()
                     
                 }
                 
@@ -394,7 +379,6 @@ func pauseVideoIfNeed(pauseIndex: Int) {
 
 func playVideoIfNeed(playIndex: Int) {
   
-
     if let vc = UIViewController.currentViewController() {
          
         if vc is SelectedPostVC {

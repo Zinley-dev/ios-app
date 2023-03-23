@@ -400,8 +400,9 @@ extension PostVC {
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
-                            showNote(text: "Your post is being uploaded")
-                            self.dismiss(animated: true)
+                            showNote(text: "Thank you, your video is being uploaded!")
+                            self.dismiss(animated: true, completion: nil)
+                            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
                         }
                         
                         self.uploadImageToDB(image: checkImage)
@@ -433,7 +434,7 @@ extension PostVC {
                             
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
-                    //showNote(text: "Thank you, your video is being uploaded!")
+                    showNote(text: "Thank you, your video is being uploaded!")
                     self.dismiss(animated: true, completion: nil)
                     NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
                    
@@ -623,7 +624,7 @@ extension PostVC {
             case .success(let apiResponse):
                 
                 print("Posted successfully \(apiResponse)")
-            
+                needReloadPost = true
 
             case .failure(let error):
                 print(error)
@@ -678,7 +679,7 @@ extension PostVC {
             case .success(let apiResponse):
                 
                 print("Posted successfully \(apiResponse)")
-            
+                needReloadPost = true
 
             case .failure(let error):
                 print(error)

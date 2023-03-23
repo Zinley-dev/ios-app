@@ -13,6 +13,8 @@ import Alamofire
 class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
 
     @IBOutlet weak var contentview: UIView!
+    @IBOutlet weak var playTimeBar: UIProgressView!
+    
     var page = 1
     var keyword = ""
     var prev_keyword = ""
@@ -203,6 +205,7 @@ extension PostSearchVC {
         }
     }
 
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Get the visible rect of the collection view.
         let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -212,30 +215,54 @@ extension PostSearchVC {
 
         // Find the index of the visible video that is closest to the center of the screen.
         var minDistanceFromCenter = CGFloat.infinity
+        
+        var foundVisibleVideo = false
+        
         for cell in visibleCells {
-            let post = posts[cell.indexPath!.row]
-            if !post.muxPlaybackId.isEmpty {
-                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
-                if distanceFromCenter < minDistanceFromCenter {
-                    newPlayingIndex = cell.indexPath!.row
-                    minDistanceFromCenter = distanceFromCenter
-                }
+        
+            let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+            let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+            let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+            if distanceFromCenter < minDistanceFromCenter {
+                newPlayingIndex = cell.indexPath!.row
+                minDistanceFromCenter = distanceFromCenter
             }
+        }
+        
+        
+        if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+            
+            foundVisibleVideo = true
+            playTimeBar.isHidden = false
+            
+        } else {
+            playTimeBar.isHidden = true
+        }
+        
+        if foundVisibleVideo {
+            
+            // Start playing the new video if it's different from the current playing video.
+            if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+                // Pause the current video, if any.
+                if let currentIndex = currentIndex {
+                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                }
+                // Play the new video.
+                currentIndex = newPlayingIndex
+                playVideoIfNeed(playIndex: currentIndex!)
+                isVideoPlaying = true
+            }
+            
+        } else {
+            
+            if let currentIndex = currentIndex {
+                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                    }
+                    // Reset the current playing index.
+            currentIndex = nil
+            
         }
 
-        // Start playing the new video if it's different from the current playing video.
-        if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-            // Pause the current video, if any.
-            if let currentIndex = currentIndex {
-                pauseVideoIfNeed(pauseIndex: currentIndex)
-            }
-            // Play the new video.
-            currentIndex = newPlayingIndex
-            playVideoIfNeed(playIndex: currentIndex!)
-            isVideoPlaying = true
-        }
         
         // If the video is stuck, reset the buffer by seeking to the current playback time.
         if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
@@ -247,6 +274,7 @@ extension PostSearchVC {
                 }
             }
         }
+
 
         // If there's no current playing video and no visible video, pause the last playing video, if any.
         if !isVideoPlaying && currentIndex != nil {
@@ -301,6 +329,10 @@ extension PostSearchVC {
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+            return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
+    }
+    
 }
 
 extension PostSearchVC: ASCollectionDelegate {
@@ -348,7 +380,7 @@ extension PostSearchVC: ASCollectionDataSource {
             }
             
             delay(0.3) {
-                if node.headerView != nil {
+                if node.hashtagView != nil {
                     node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
                 }
             }

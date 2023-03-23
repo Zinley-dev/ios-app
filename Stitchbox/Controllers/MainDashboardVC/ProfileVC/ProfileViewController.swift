@@ -29,6 +29,7 @@ class ProfileViewController: UIViewController {
     var followerCount = 0
     var followingCount = 0
     var fistBumpedCount = 0
+    var hasLoaded = false
     
 
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -95,6 +96,7 @@ class ProfileViewController: UIViewController {
     }
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+        
         // Check if there are new posts to insert
         guard !newPosts.isEmpty else { return }
         let newItems = newPosts.compactMap { PostModel(JSON: $0) }
@@ -142,6 +144,11 @@ class ProfileViewController: UIViewController {
             self.insertNewRowsInCollectionNode(newPosts: newPosts)
             
         }
+        
+        delay(2) {
+            self.hasLoaded = true
+        }
+       
     }
     
     
@@ -158,10 +165,17 @@ class ProfileViewController: UIViewController {
         
         // check if need to refresh somethings
         
-        if needRecount {
+        if needRecount, hasLoaded {
             
             needRecount = false
             refreshFollow()
+            
+        }
+        
+        if needReloadPost, hasLoaded {
+            
+            needReloadPost = false
+            refreshPost()
             
         }
 
@@ -562,6 +576,21 @@ extension ProfileViewController {
             self.reloadGetFollowing {
                 self.applyHeaderChange()
             }
+        }
+        
+       
+    }
+    
+    func refreshPost() {
+    
+        var snapshot = self.datasource.snapshot()
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        currpage = 1
+        
+        self.getMyPost { (newPosts) in
+            
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
         }
         
        

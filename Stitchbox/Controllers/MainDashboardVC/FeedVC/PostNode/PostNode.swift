@@ -169,8 +169,16 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             //-------------------------------------//
             
-    
             
+            self.headerView.usernameLbl.text = post.owner?.username ?? ""
+            
+            if let url = post.owner?.avatar, url != "" {
+                
+                self.headerView.avatarImage.load(url: URL(string: url)!, str: url)
+                
+            }
+            
+        
             //-------------------------------------//
             
             if let time = post.createdAt {
@@ -199,19 +207,11 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 self.buttonsView.streamView.isHidden = true
             }
 
-            
-            
-            
-            
-            /*
-             streamlinkBtn
-             */
-         
             self.checkIfLike()
             self.totalLikeCount()
             self.totalCmtCount()
             
-            
+           
         }
        
         
@@ -302,14 +302,21 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
             children.append(contentInsetSpec)
         }
+
         
-        hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
+        if !post.hashtags.isEmpty {
+            
+            hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
+            
+            let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+            let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
+            
+            
+            children.append(hashtagsInsetSpec)
+            
+        }
         
-        let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
-        let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
         
-        
-        children.append(hashtagsInsetSpec)
         
         if post.metadata?.width == post.metadata?.height {
             mediaSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width)
@@ -548,7 +555,6 @@ extension PostNode {
 extension PostNode {
     
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
-    
     
         hashtagView.collectionView.delegate = dataSourceDelegate
         hashtagView.collectionView.dataSource = dataSourceDelegate
