@@ -4021,14 +4021,14 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8QW-uv-PH8">
-                                <rect key="frame" x="123.66666666666669" y="300.66666666666669" width="128" height="128"/>
+                                <rect key="frame" x="87.666666666666686" y="264.66666666666669" width="200" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="4GJ-3D-GlM"/>
-                                    <constraint firstAttribute="width" constant="128" id="r7v-Ig-K79"/>
+                                    <constraint firstAttribute="height" constant="200" id="4GJ-3D-GlM"/>
+                                    <constraint firstAttribute="width" constant="200" id="r7v-Ig-K79"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="64"/>
+                                        <real key="value" value="100"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
@@ -7190,14 +7190,14 @@
                                 </constraints>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uat-3R-ldY">
-                                <rect key="frame" x="123.66666666666669" y="342" width="128" height="128"/>
+                                <rect key="frame" x="87.666666666666686" y="306" width="200" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="LfK-nB-SQ6"/>
-                                    <constraint firstAttribute="width" constant="128" id="URE-dJ-4oD"/>
+                                    <constraint firstAttribute="height" constant="200" id="LfK-nB-SQ6"/>
+                                    <constraint firstAttribute="width" constant="200" id="URE-dJ-4oD"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="64"/>
+                                        <real key="value" value="100"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
