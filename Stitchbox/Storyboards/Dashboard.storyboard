@@ -6797,6 +6797,7 @@
                                             <outlet property="discordBtn" destination="jz9-4A-YuD" id="zpW-Sy-gRi"/>
                                             <outlet property="discordLbl" destination="FAw-H6-d9R" id="kdI-aJ-dfz"/>
                                             <outlet property="discordView" destination="jz9-4A-YuD" id="gVE-Fu-XTr"/>
+                                            <outlet property="fistBumpImage" destination="LOP-B5-Z4t" id="NWa-KO-0sq"/>
                                             <outlet property="fistBumpedView" destination="qVn-la-1OG" id="W6a-7P-rj6"/>
                                             <outlet property="followerStack" destination="V3C-uc-Swn" id="HNF-2C-dbb"/>
                                             <outlet property="followersBtn" destination="flI-9B-31X" id="aul-fJ-AkV"/>

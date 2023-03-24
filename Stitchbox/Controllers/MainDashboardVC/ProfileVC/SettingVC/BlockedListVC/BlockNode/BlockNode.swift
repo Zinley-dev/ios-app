@@ -55,8 +55,8 @@ class BlockNode: ASCellNode {
         
         userNameNode.backgroundColor = UIColor.clear
         NameNode.backgroundColor = UIColor.clear
-        UnBlockBtnNode.backgroundColor = UIColor.tertiary
-        FollowBtnNode.backgroundColor = UIColor.tertiary
+        UnBlockBtnNode.backgroundColor = UIColor.white
+        FollowBtnNode.backgroundColor = UIColor.white
         UnfollowBtnNode.backgroundColor = UIColor.primary
         
         

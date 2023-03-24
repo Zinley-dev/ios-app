@@ -59,6 +59,9 @@ class UserProfileVC: UIViewController {
     var userData: UserDataSource?
     var currpage = 1
     
+    let fistBumpedImg = UIImage(named: "fistBumpedStats")
+    let fistBumpImg = UIImage(named: "FistBumped")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -92,6 +95,7 @@ class UserProfileVC: UIViewController {
             self.countFollowings()
             self.countFollowers()
             self.checkIfFollow()
+            self.checkIfFistBump()
             
             self.setupChallengeView()
             
@@ -190,6 +194,18 @@ class UserProfileVC: UIViewController {
                     cell.followingStack.isUserInteractionEnabled = true
                     cell.followingStack.addGestureRecognizer(numberOfFollowingTap)
                     
+                    if self.isFollow {
+                        cell.followersBtn.setTitle("Following", for: .normal)
+                    } else {
+                        cell.followersBtn.setTitle("Follow", for: .normal)
+                    }
+                    
+                    if self.isFistBump {
+                        cell.fistBumpImage.image = fistBumpedImg
+                    } else {
+                        cell.fistBumpImage.image = fistBumpImg
+                    }
+                    
                 }
                 
                 
@@ -240,7 +256,6 @@ class UserProfileVC: UIViewController {
                     
                     
                     if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
-                        print(createAt)
                         let DateFormatter = DateFormatter()
                         DateFormatter.dateStyle = .medium
                         DateFormatter.timeStyle = .none
@@ -471,27 +486,109 @@ class UserProfileVC: UIViewController {
 // selector for header
 extension UserProfileVC {
     
+    
+    
     @objc func followAction(_ sender: UIButton) {
         
-        print("followAction")
-        
-        print("Init message or open message if have")
+        if isFollow {
+            
+            unfollowUser()
+            
+        } else {
+            
+            followUser()
+        }
         
     }
+    
+    func followUser() {
+        
+        self.isFollow = true
+        followerCount += 1
+        self.applyHeaderChange()
+        
+        APIManager().insertFollows(params: ["FollowId": userId ?? ""]) { result in
+            switch result {
+            case .success(_):
+              
+                
+                self.isFollow = true
+                needRecount = true
+               
+              
+            case .failure(_):
+                
+                DispatchQueue.main.async {
+                    self.isFollow = false
+                    self.followerCount += 1
+                    showNote(text: "Something happened!")
+                }
+                
+            }
+            
+        }
+           
+    }
+    
+    
+    func unfollowUser() {
+        
+        self.isFollow = false
+        followerCount -= 1
+        self.applyHeaderChange()
+    
+            APIManager().unFollow(params: ["FollowId": userId ?? ""]) { result in
+                switch result {
+                case .success(_):
+                    
+                    self.isFollow = false
+                    needRecount = true
+                    
+                    
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        self.isFollow = true
+                        self.followerCount -= 1
+                        showNote(text: "Something happened!")
+                    }
+                    
+                    
+                }
+            }
+            
+    }
+        
+        
+
     
     
     @objc func messageTapped(_ sender: UIButton) {
         
-        print("messageTapped")
+        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty else { return }
+
+        let channelParams = SBDGroupChannelParams()
+        channelParams.isDistinct = true
+        channelParams.addUserIds([self.userId ?? "", userUID])
         
-        print("Init message or open message if have")
+
+        SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
+            guard error == nil, let channelUrl = groupChannel?.channelUrl else {
+                self.showErrorAlert("Oops!", msg: error?.localizedDescription ?? "Failed to create message")
+                return
+            }
+
+            checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
+
+            let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.navigationController?.pushViewController(channelVC, animated: true)
+
+        }
         
     }
     
     
     @objc func moreTapped(_ sender: UIButton) {
-        
-        print("moreTapped")
         
         let userSettingVC = UserSettingVC()
         userSettingVC.modalPresentationStyle = .custom
@@ -537,13 +634,41 @@ extension UserProfileVC {
     
     @objc func discordTapped(_ sender: UIButton) {
         
-        print("discordTapped - open link discord if have unless ask let user input their discord link")
+        if let discord = userData?.discordUrl, discord != "" {
+           
+            if discord != ""
+            {
+                guard let requestUrl = URL(string: discord) else {
+                    return
+                }
+
+                if UIApplication.shared.canOpenURL(requestUrl) {
+                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                } else {
+                    showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(discord)")
+                }
+                
+            } else {
+                
+                showErrorAlert("Oops!", msg: "Can't open this link")
+                
+            }
+            
+        }
         
     }
     
     @objc func fistBumpedTapped(_ sender: UIButton) {
         
-        print("fistBumpedTapped - Animation for fistbumped")
+        if isFistBump {
+            
+            unfistBump()
+            
+        } else {
+            
+            giveFistBump()
+            
+        }
         
     }
     
@@ -560,6 +685,93 @@ extension UserProfileVC {
         showFullScreenCover()
   
     }
+    
+    func giveFistBump() {
+        
+        fistBumpedAnimation()
+        
+        self.isFistBump = true
+        fistBumpedCount += 1
+        self.applyUIChange()
+        
+        APIManager().addFistBump(userID: self.userId!) { result in
+            switch result {
+            case .success(_):
+                
+                self.isFistBump = true
+               
+            case .failure(_):
+                DispatchQueue.main.async {
+                    self.isFistBump = false
+                    self.fistBumpedCount -= 1
+                    self.applyUIChange()
+                    showNote(text: "Something happened!")
+                }
+                
+                
+            }
+        }
+        
+        
+    }
+    
+    func unfistBump() {
+        
+        self.isFistBump = false
+        fistBumpedCount -= 1
+        self.applyUIChange()
+        
+        APIManager().deleteFistBump(userID: self.userId!) { result in
+            switch result {
+            case .success(_):
+                
+                self.isFistBump = false
+               
+            case .failure(_):
+                DispatchQueue.main.async {
+                    self.isFistBump = true
+                    self.fistBumpedCount += 1
+                    self.applyUIChange()
+                    showNote(text: "Something happened!")
+                }
+                
+                
+            }
+        }
+        
+    }
+    
+    func fistBumpedAnimation() {
+        
+        let imgView = UIImageView()
+        imgView.image = UIImage(named: "fistBumpedStats")
+        imgView.frame.size = CGSize(width: 170, height: 120)
+       
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
+        
+        
+        imgView.transform = CGAffineTransform.identity
+        
+        UIView.animate(withDuration: 1.0) {
+            
+            imgView.alpha = 0
+            
+        }
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            
+            if imgView.alpha == 0 {
+                
+                imgView.removeFromSuperview()
+                
+            }
+            
+        }
+        
+    }
+
     
 }
 
@@ -1051,6 +1263,9 @@ extension UserProfileVC {
             self.insertNewRowsInCollectionNode(newPosts: newPosts)
             
         }
+        
+        checkIfFollow()
+        checkIfFistBump()
     
         reloadUserInformation {
             self.reloadGetFollowers {
@@ -1082,9 +1297,13 @@ extension UserProfileVC {
               }
               
               self.userData = Mapper<UserDataSource>().map(JSONObject: data)
-              self.applyFrontChange()
+              self.applyUIChange()
             
             case .failure(let error):
+              
+              Dispatch.main.async {
+                  self.NoticeBlockAndDismiss()
+              }
               print(error)
           }
         }
@@ -1106,7 +1325,7 @@ extension UserProfileVC {
                     self.followerCount = 0
                 }
                 
-                self.applyHeaderChange()
+                self.applyUIChange()
                 
             case .failure(let error):
                 print("Error loading follower: ", error)
@@ -1133,7 +1352,7 @@ extension UserProfileVC {
                     self.followingCount = 0
                 }
                 
-                self.applyHeaderChange()
+                self.applyUIChange()
                
             case .failure(let error):
                 print("Error loading following: ", error)
@@ -1164,7 +1383,7 @@ extension UserProfileVC {
                     self.fistBumpedCount = 0
                 }
                 
-                self.applyHeaderChange()
+                self.applyUIChange()
                 
             case .failure(let error):
                 print("Error loading fistbumpers: ", error)
@@ -1177,7 +1396,7 @@ extension UserProfileVC {
     
     func getUserPost(block: @escaping ([[String: Any]]) -> Void) {
 
-            APIManager().getMyPost(page: currpage) { result in
+        APIManager().getUserPost(userId: self.userId ?? "", page: currpage) { result in
                 switch result {
                 case .success(let apiResponse):
                      
@@ -1224,6 +1443,7 @@ extension UserProfileVC {
                     }
                     
                     self.isFollow = isFollowing
+                    self.applyHeaderChange()
                    
                 case .failure(let error):
                     print(error)
@@ -1235,6 +1455,22 @@ extension UserProfileVC {
     
     func checkIfFistBump() {
         
+        APIManager().isFistBumpee(userID: userId ?? "") { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let isFistBump = apiResponse.body?["data"] as? Bool else {
+                        return
+                    }
+                    
+                    self.isFistBump = isFistBump
+                    self.applyHeaderChange()
+                    
+                case .failure(let error):
+                    print(error)
+                   
+            }
+        }
         
     }
     
@@ -1250,22 +1486,13 @@ extension UserProfileVC {
         
     }
     
-    func applyFrontChange() {
-        
-        Dispatch.main.async {
-            var updatedSnapshot = self.datasource.snapshot()
-            updatedSnapshot.reloadSections([.header, .challengeCard])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
-        }
-        
-   
-    }
+
     
     func applyHeaderChange() {
         
         Dispatch.main.async {
             var updatedSnapshot = self.datasource.snapshot()
-            updatedSnapshot.reloadSections([.header, .challengeCard])
+            updatedSnapshot.reloadSections([.header])
             self.datasource.apply(updatedSnapshot, animatingDifferences: true)
         }
         
@@ -1472,10 +1699,13 @@ extension UserProfileVC {
     
     func initBlock(uid: String) {
         
+        presentSwiftLoader()
+        
         SBDMain.blockUserId(uid) { blockedUser, error in
             
             if error != nil {
                 
+                SwiftLoader.hide()
                 self.showErrorAlert("Oops!", msg: "User can't be blocked now due to internal error from our SB chat system, please try again")
                 
             } else {
@@ -1485,11 +1715,15 @@ extension UserProfileVC {
                     case .success(_):
                        
                         Dispatch.main.async {
+                            SwiftLoader.hide()
                             self.NoticeBlockAndDismiss()
                         }
                         
                       case .failure(let error):
-                        print(error)
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                            self.showErrorAlert("Oops!", msg: "\(error.localizedDescription)")
+                        }
                     }
                 }
              
@@ -1508,7 +1742,18 @@ extension UserProfileVC {
         let ok = UIAlertAction(title: "Got it", style: .default) { (alert) in
             
             
-            self.dismiss(animated: true, completion: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_user")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "block_user")), object: nil)
+            
+            
+            if self.onPresent {
+                self.dismiss(animated: true)
+            } else {
+                if let navigationController = self.navigationController {
+                    navigationController.popViewController(animated: true)
+                }
+            }
             
         }
         

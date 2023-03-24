@@ -185,14 +185,18 @@ extension FollowerVC: ASTableDelegate {
         
         let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
         
-        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-            //self.hidesBottomBarWhenPushed = true
-            UPVC.userId = user.userId
-            UPVC.nickname = user.username
-            self.navigationController?.pushViewController(UPVC, animated: true)
+        if user.userId != _AppCoreData.userDataSource.value?.userID {
+            
+            if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+                //self.hidesBottomBarWhenPushed = true
+                UPVC.userId = user.userId
+                UPVC.nickname = user.username
+                self.navigationController?.pushViewController(UPVC, animated: true)
+                
+            }
             
         }
-        
+
         
     }
     

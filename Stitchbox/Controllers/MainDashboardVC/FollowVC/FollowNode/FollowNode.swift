@@ -26,6 +26,7 @@ class FollowNode: ASCellNode {
     var followBtnNode: ASButtonNode!
     var selectedColor = UIColor(red: 53, green: 46, blue: 113, alpha: 0.4)
     var isFollowingUser = false
+    var denyBtn = false
     
     init(with user: FollowModel) {
         
@@ -59,6 +60,17 @@ class FollowNode: ASCellNode {
         //
         automaticallyManagesSubnodes = true
         
+        if let user = user.userId {
+            
+            if user == _AppCoreData.userDataSource.value?.userID {
+                
+                denyBtn = true
+                
+            }
+            
+        }
+        
+        
   
         if user.needCheck == false, user.action == "following" {
             
@@ -74,8 +86,28 @@ class FollowNode: ASCellNode {
        
         } else {
             
-            checkIfFollow()
-            
+            if let user = user.userId {
+                
+                if user == _AppCoreData.userDataSource.value?.userID {
+                    
+                    DispatchQueue.main.async {
+                        self.isFollowingUser = false
+                        self.followBtnNode.backgroundColor = .white
+                        self.followBtnNode.layer.borderWidth = 1.0
+                        self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
+                        self.followBtnNode.layer.cornerRadius = 10.0
+                        self.followBtnNode.clipsToBounds = true
+                        self.followBtnNode.setTitle("You", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                    }
+                    
+                } else {
+                    
+                    checkIfFollow()
+                    
+                }
+                
+            }
+           
         }
         
 
@@ -163,14 +195,20 @@ class FollowNode: ASCellNode {
     
     @objc func followBtnPressed() {
         
-        if isFollowingUser {
+        if !denyBtn {
             
-            unfollowUser()
+            if isFollowingUser {
+                
+                unfollowUser()
+                
+            } else {
+                
+                followUser()
+            }
             
-        } else {
-            
-            followUser()
         }
+        
+        
         
     }
     
