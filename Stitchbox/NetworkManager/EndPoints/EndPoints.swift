@@ -562,6 +562,7 @@ public enum PostAPI {
     case update(params: [String: Any])
     case getMyPost(page: Int)
     case getHashtagPost(tag: String, page: Int)
+    case getUserPost(user: String, page: Int)
     case lastSetting
 }
 extension PostAPI: EndPointType {
@@ -589,6 +590,8 @@ extension PostAPI: EndPointType {
             return "/feed?limit=\(limit)"
           case .getHighTrending:
             return "/high-trending"
+            case .getUserPost(let user, let page):
+                return "/author/\(user)?page=\(page)&limit=10"
         }
     }
     
@@ -612,6 +615,8 @@ extension PostAPI: EndPointType {
             return .get
           case .getPost:
             return .get
+            case .getUserPost:
+                return .get
         }
     }
     
@@ -635,6 +640,8 @@ extension PostAPI: EndPointType {
             return .request
           case .getPost:
             return .request
+            case .getUserPost:
+                return .request
         }
     }
     
