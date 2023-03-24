@@ -180,13 +180,13 @@ struct APIManager {
                 completion(result)
         }
     }
-    func getIsFistBumper(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+    func isFistBumper(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
         fistBumpManager.request(.isFistBumper(userID: userID)) {
             result in
                 completion(result)
         }
     }
-    func getIsFistBumpee(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+    func isFistBumpee(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
         fistBumpManager.request(.isFistBumpee(userID: userID)) {
             result in
                 completion(result)
@@ -403,7 +403,6 @@ extension APIManager {
     }
   
   func updatePassword(params: [String: Any], completion: @escaping APICompletion) {
-    print("header \(_AppCoreData.userSession.value!.accessToken)")
     userManager.request(.updatepassword(params: params)){
       result in
       completion(result)
@@ -507,6 +506,11 @@ extension APIManager {
     }
     func getHashtagPost(tag: String, page: Int, completion: @escaping APICompletion) {
         postManager.request(.getHashtagPost(tag: tag, page: page)) { result in
+            completion(result)
+        }
+    }
+    func getUserPost(userId: String, page: Int, completion: @escaping APICompletion) {
+        postManager.request(.getUserPost(user: userId, page: page)) { result in
             completion(result)
         }
     }
