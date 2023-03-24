@@ -7,6 +7,7 @@
 
 import UIKit
 import ObjectMapper
+import SendBirdSDK
 
 class UserProfileVC: UIViewController {
 
@@ -41,6 +42,9 @@ class UserProfileVC: UIViewController {
     var followerCount = 0
     var followingCount = 0
     var fistBumpedCount = 0
+    
+    var isFollow = false
+    var isFistBump = false
 
     var demoProfileData: ProfileHeaderData {
         return ProfileHeaderData(name: "", username: "", accountType: "", postCount: 0)
@@ -96,6 +100,10 @@ class UserProfileVC: UIViewController {
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 
             }
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.report), name: (NSNotification.Name(rawValue: "report_user")), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.block), name: (NSNotification.Name(rawValue: "block_user")), object: nil)
             
             
         }
@@ -159,6 +167,9 @@ class UserProfileVC: UIViewController {
                     
                     cell.discordBtn.addTarget(self, action: #selector(discordTapped), for: .touchUpInside)
                     cell.FistBumpedBtn.addTarget(self, action: #selector(fistBumpedTapped), for: .touchUpInside)
+                    cell.moreBtn.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
+                    cell.followersBtn.addTarget(self, action: #selector(followAction), for: .touchUpInside)
+                    cell.messageBtn.addTarget(self, action: #selector(messageTapped), for: .touchUpInside)
                    
                     
                     // add target using gesture recognizer for image
@@ -460,6 +471,14 @@ class UserProfileVC: UIViewController {
 // selector for header
 extension UserProfileVC {
     
+    @objc func followAction(_ sender: UIButton) {
+        
+        print("followAction")
+        
+        print("Init message or open message if have")
+        
+    }
+    
     
     @objc func messageTapped(_ sender: UIButton) {
         
@@ -474,8 +493,15 @@ extension UserProfileVC {
         
         print("moreTapped")
         
-        print("Show more settings")
+        let userSettingVC = UserSettingVC()
+        userSettingVC.modalPresentationStyle = .custom
+        userSettingVC.transitioningDelegate = self
         
+        global_presetingRate = Double(0.30)
+        global_cornerRadius = 45
+        
+        self.present(userSettingVC, animated: true, completion: nil)
+
     }
     
     @objc func followersTapped(_ sender: UIButton) {
@@ -973,6 +999,11 @@ extension UserProfileVC {
     
     @objc func onClickBack(_ sender: AnyObject) {
         
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_user")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "block_user")), object: nil)
+        
+        
         if onPresent {
             self.dismiss(animated: true)
         } else {
@@ -1184,6 +1215,26 @@ extension UserProfileVC {
     
     func checkIfFollow() {
         
+        APIManager().isFollowing(uid: userId ?? "") { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let isFollowing = apiResponse.body?["data"] as? Bool else {
+                        return
+                    }
+                    
+                    self.isFollow = isFollowing
+                   
+                case .failure(let error):
+                    print(error)
+                   
+            }
+        }
+        
+    }
+    
+    func checkIfFistBump() {
+        
         
     }
     
@@ -1359,5 +1410,114 @@ extension UserProfileVC {
         present(alert, animated: true, completion: nil)
         
     }
+    
+}
+
+
+extension UserProfileVC {
+    
+    
+    @objc func copyProfile() {
+
+        if let id = self.userId {
+            
+            let link = "https://dualteam.page.link/dual?up=\(id)"
+            
+            UIPasteboard.general.string = link
+            showNote(text: "User profile link is copied")
+            
+        } else {
+            showNote(text: "User profile link is unable to be copied")
+        }
+        
+    }
+    
+    @objc func report() {
+        
+        let slideVC =  reportView()
+        
+        slideVC.user_report = true
+        slideVC.user_id = self.userId!
+        slideVC.modalPresentationStyle = .custom
+        slideVC.transitioningDelegate = self
+        global_presetingRate = Double(0.75)
+        global_cornerRadius = 35
+        
+        delay(0.1) {
+            self.present(slideVC, animated: true, completion: nil)
+        }
+        
+    }
+    
+    @objc func block() {
+        
+        let alert = UIAlertController(title: "Are you sure to block \(userData?.userName ?? "")!", message: "Blocking someone means you can't see each other's content or messages, except in a group chat. It's important to only block someone if you feel it's necessary for your safety or well-being, and to report any concerning behavior to the Stitchbox moderators or authorities.", preferredStyle: UIAlertController.Style.actionSheet)
+
+        // add the actions (buttons)
+        alert.addAction(UIAlertAction(title: "Block", style: UIAlertAction.Style.destructive, handler: { action in
+            
+            self.initBlock(uid: self.userId ?? "")
+    
+        }))
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+
+        // show the alert
+        delay(0.1) {
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    
+    func initBlock(uid: String) {
+        
+        SBDMain.blockUserId(uid) { blockedUser, error in
+            
+            if error != nil {
+                
+                self.showErrorAlert("Oops!", msg: "User can't be blocked now due to internal error from our SB chat system, please try again")
+                
+            } else {
+                
+                APIManager().insertBlocks(params: ["blockId": uid]) { result in
+                    switch result {
+                    case .success(_):
+                       
+                        Dispatch.main.async {
+                            self.NoticeBlockAndDismiss()
+                        }
+                        
+                      case .failure(let error):
+                        print(error)
+                    }
+                }
+             
+            }
+            
+        }
+        
+    }
+    
+    
+    func NoticeBlockAndDismiss() {
+        
+        let sheet = UIAlertController(title: "Oops!", message: "This user isn't available now.", preferredStyle: .alert)
+        
+        
+        let ok = UIAlertAction(title: "Got it", style: .default) { (alert) in
+            
+            
+            self.dismiss(animated: true, completion: nil)
+            
+        }
+        
+        sheet.addAction(ok)
+
+        
+        self.present(sheet, animated: true, completion: nil)
+        
+    }
+    
     
 }

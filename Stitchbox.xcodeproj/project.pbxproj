@@ -105,6 +105,8 @@
 		6A286B5D29C90E1800C72718 /* LoginActivityNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B5C29C90E1800C72718 /* LoginActivityNode.swift */; };
 		6A286B6029C97F0100C72718 /* LogInfomationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B5F29C97F0100C72718 /* LogInfomationVC.swift */; };
 		6A286B6329C980F000C72718 /* customizedMap.json in Resources */ = {isa = PBXBuildFile; fileRef = 6A286B6229C980F000C72718 /* customizedMap.json */; };
+		6A286B6729CD5EB200C72718 /* UserSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B6529CD5EB200C72718 /* UserSettingVC.swift */; };
+		6A286B6829CD5EB200C72718 /* UserSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A286B6629CD5EB200C72718 /* UserSettingVC.xib */; };
 		6A307CC129ADB18500A89529 /* CommentSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A307CBF29ADB18400A89529 /* CommentSettings.swift */; };
 		6A307CC229ADB18500A89529 /* CommentSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A307CC029ADB18400A89529 /* CommentSettings.xib */; };
 		6A307CC529B1A52B00A89529 /* RecentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A307CC429B1A52B00A89529 /* RecentModel.swift */; };
@@ -503,6 +505,8 @@
 		6A286B5C29C90E1800C72718 /* LoginActivityNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginActivityNode.swift; sourceTree = "<group>"; };
 		6A286B5F29C97F0100C72718 /* LogInfomationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInfomationVC.swift; sourceTree = "<group>"; };
 		6A286B6229C980F000C72718 /* customizedMap.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = customizedMap.json; sourceTree = "<group>"; };
+		6A286B6529CD5EB200C72718 /* UserSettingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettingVC.swift; sourceTree = "<group>"; };
+		6A286B6629CD5EB200C72718 /* UserSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserSettingVC.xib; sourceTree = "<group>"; };
 		6A307CBF29ADB18400A89529 /* CommentSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentSettings.swift; sourceTree = "<group>"; };
 		6A307CC029ADB18400A89529 /* CommentSettings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentSettings.xib; sourceTree = "<group>"; };
 		6A307CC429B1A52B00A89529 /* RecentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentModel.swift; sourceTree = "<group>"; };
@@ -1413,6 +1417,15 @@
 			path = CustomizedMap;
 			sourceTree = "<group>";
 		};
+		6A286B6429CD5E9000C72718 /* UserSettingVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A286B6529CD5EB200C72718 /* UserSettingVC.swift */,
+				6A286B6629CD5EB200C72718 /* UserSettingVC.xib */,
+			);
+			path = UserSettingVC;
+			sourceTree = "<group>";
+		};
 		6A307CBE29ADADB400A89529 /* CommentSettings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1631,6 +1644,7 @@
 		6A3F0A8A2982330B00366665 /* UserProfileVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A286B6429CD5E9000C72718 /* UserSettingVC */,
 				6A3F0A8D2982452000366665 /* UserProfileCell */,
 				6A3F0A8B2982331F00366665 /* UserProfileVC.swift */,
 			);
@@ -3035,6 +3049,7 @@
 				141BB197293BA946004F4ED7 /* loading-animation.json in Resources */,
 				6A307CC229ADB18500A89529 /* CommentSettings.xib in Resources */,
 				6A0D541C296E4E840059530C /* ChallengeCard.xib in Resources */,
+				6A286B6829CD5EB200C72718 /* UserSettingVC.xib in Resources */,
 				6AEA33FE298DCAC0005A4C5D /* HashtagCell.xib in Resources */,
 				6AC6DA0C29A8AAEB00B18139 /* reportCell.xib in Resources */,
 				6A6C3109296426F80070167A /* EditChannelDataModView.xib in Resources */,
@@ -3380,6 +3395,7 @@
 				395477B629425274008EED97 /* LoginCoordinatorProtocol.swift in Sources */,
 				6A6C30E82964035A0070167A /* OperatorMemberVC.swift in Sources */,
 				6A66277429655D2400A4488B /* Session+TypeAlias.swift in Sources */,
+				6A286B6729CD5EB200C72718 /* UserSettingVC.swift in Sources */,
 				6AC6DA1329AD317600B18139 /* SideButton.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
 				6A3F0A56297B6A9000366665 /* MainFollowVC.swift in Sources */,

@@ -52,6 +52,13 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickCopyLink), name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
         
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        
        
     }
     
@@ -129,83 +136,88 @@ extension SelectedPostVC {
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Get the visible rect of the collection view.
-        let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+        
+        if !posts.isEmpty {
+            
+            // Get the visible rect of the collection view.
+            let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
 
-        // Calculate the visible cells.
-        let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
+            // Calculate the visible cells.
+            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
 
-        // Find the index of the visible video that is closest to the center of the screen.
-        var minDistanceFromCenter = CGFloat.infinity
-        
-        var foundVisibleVideo = false
-        
-        for cell in visibleCells {
-        
-            let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-            let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-            let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
-            if distanceFromCenter < minDistanceFromCenter {
-                newPlayingIndex = cell.indexPath!.row
-                minDistanceFromCenter = distanceFromCenter
-            }
-        }
-        
-        
-        if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+            // Find the index of the visible video that is closest to the center of the screen.
+            var minDistanceFromCenter = CGFloat.infinity
             
-            foundVisibleVideo = true
-            playTimeBar.isHidden = false
-            selectedIndex = newPlayingIndex!
+            var foundVisibleVideo = false
             
-        } else {
-            playTimeBar.isHidden = true
-            selectedIndex = newPlayingIndex!
-        }
-        
-        if foundVisibleVideo {
+            for cell in visibleCells {
             
-            // Start playing the new video if it's different from the current playing video.
-            if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-                // Pause the current video, if any.
-                if let currentIndex = currentIndex {
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+                if distanceFromCenter < minDistanceFromCenter {
+                    newPlayingIndex = cell.indexPath!.row
+                    minDistanceFromCenter = distanceFromCenter
                 }
-                // Play the new video.
-                currentIndex = newPlayingIndex
-                playVideoIfNeed(playIndex: currentIndex!)
-                isVideoPlaying = true
             }
             
-        } else {
+
+            if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+                
+                foundVisibleVideo = true
+                playTimeBar.isHidden = false
+                
+            } else {
+                playTimeBar.isHidden = true
+            }
             
-           
-            if let currentIndex = currentIndex {
+            
+            if foundVisibleVideo {
+                
+                // Start playing the new video if it's different from the current playing video.
+                if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+                    // Pause the current video, if any.
+                    if let currentIndex = currentIndex {
                         pauseVideoIfNeed(pauseIndex: currentIndex)
                     }
-                    // Reset the current playing index.
-            currentIndex = nil
-            
-        }
+                    // Play the new video.
+                    currentIndex = newPlayingIndex
+                    playVideoIfNeed(playIndex: currentIndex!)
+                    isVideoPlaying = true
+                }
+                
+            } else {
+                
+                if let currentIndex = currentIndex {
+                            pauseVideoIfNeed(pauseIndex: currentIndex)
+                        }
+                        // Reset the current playing index.
+                currentIndex = nil
+                
+            }
 
-        
-        // If the video is stuck, reset the buffer by seeking to the current playback time.
-        if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
-            if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                    cell.videoNode.player?.seek(to: currentTime)
-                } else {
-                    cell.videoNode.player?.seek(to: CMTime.zero)
+            
+            // If the video is stuck, reset the buffer by seeking to the current playback time.
+            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
+                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                        cell.videoNode.player?.seek(to: currentTime)
+                    } else {
+                        cell.videoNode.player?.seek(to: CMTime.zero)
+                    }
                 }
             }
-        }
 
 
-        // If there's no current playing video and no visible video, pause the last playing video, if any.
-        if !isVideoPlaying && currentIndex != nil {
-            pauseVideoIfNeed(pauseIndex: currentIndex!)
-            currentIndex = nil
+            // If there's no current playing video and no visible video, pause the last playing video, if any.
+            if !isVideoPlaying && currentIndex != nil {
+                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                currentIndex = nil
+            }
+            
         }
+        
+    
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
@@ -288,7 +300,7 @@ extension SelectedPostVC: ASCollectionDataSource {
             let node = PostNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            
+            node.isSelectedPost = true
             
             node.settingBtn = { (node) in
             
@@ -488,7 +500,13 @@ extension SelectedPostVC {
             NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "download")), object: nil)
             NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
             
-            //copyLink
+            
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_post")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+            
             
             if onPresent {
                 self.dismiss(animated: true)
@@ -692,15 +710,123 @@ extension SelectedPostVC {
     
     func settingPost(item: PostModel) {
         
-        let postSettingVC = PostSettingVC()
-        postSettingVC.modalPresentationStyle = .custom
-        postSettingVC.transitioningDelegate = self
+        if item.owner?.id == _AppCoreData.userDataSource.value?.userID {
+            
+            let postSettingVC = PostSettingVC()
+            postSettingVC.modalPresentationStyle = .custom
+            postSettingVC.transitioningDelegate = self
+            
+            global_presetingRate = Double(0.35)
+            global_cornerRadius = 45
+            editeddPost = item
+            self.present(postSettingVC, animated: true, completion: nil)
+            
+        } else {
+            
+            let newsFeedSettingVC = NewsFeedSettingVC()
+            newsFeedSettingVC.modalPresentationStyle = .custom
+            newsFeedSettingVC.transitioningDelegate = self
+            
+            global_presetingRate = Double(0.35)
+            global_cornerRadius = 45
+            newsFeedSettingVC.isOwner = false
+            editeddPost = item
+            self.present(newsFeedSettingVC, animated: true, completion: nil)
+            
+            
+        }
         
-        global_presetingRate = Double(0.35)
-        global_cornerRadius = 45
-        editeddPost = item
-        self.present(postSettingVC, animated: true, completion: nil)
+    }
+    
+}
+
+
+extension SelectedPostVC {
+    
+    
+    @objc func copyPost() {
+    
+        if let id = self.editeddPost?.id {
+           
+            let link = "https://dualteam.page.link/dual?p=\(id)"
+            
+            UIPasteboard.general.string = link
+            showNote(text: "Post link is copied")
+            
+        } else {
+            showNote(text: "Post link is unable to be copied")
+        }
         
+    }
+    
+    @objc func copyProfile() {
+        
+        if let id = self.editeddPost?.owner?.id {
+            
+            let link = "https://dualteam.page.link/dual?up=\(id)"
+            
+            UIPasteboard.general.string = link
+            showNote(text: "User profile link is copied")
+            
+        } else {
+            showNote(text: "User profile link is unable to be copied")
+        }
+        
+    }
+    
+    @objc func removePost() {
+        
+        if let deletingPost = editeddPost {
+           
+            if let indexPath = posts.firstIndex(of: deletingPost) {
+                
+                posts.removeObject(deletingPost)
+                collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+               
+            }
+            
+        }
+        
+       
+    }
+    
+    @objc func reportPost() {
+        
+        let slideVC = reportView()
+        
+        slideVC.video_report = true
+        slideVC.highlight_id = editeddPost?.id ?? ""
+        slideVC.modalPresentationStyle = .custom
+        slideVC.transitioningDelegate = self
+        global_presetingRate = Double(0.75)
+        global_cornerRadius = 35
+        
+        delay(0.1) {
+            self.present(slideVC, animated: true, completion: nil)
+        }
+        
+    }
+    
+    @objc func sharePost() {
+        
+        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
+            print("Sendbird: Can't get userUID")
+            return
+        }
+        
+        let loadUsername = userDataSource.userName
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(editeddPost?.id ?? "")")!]
+        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
+            
+            
+        }
+        
+        delay(0.1) {
+            self.present(ac, animated: true, completion: nil)
+        }
+      
     }
     
 }

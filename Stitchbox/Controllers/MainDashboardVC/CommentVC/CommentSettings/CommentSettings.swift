@@ -26,23 +26,49 @@ class CommentSettings: UIViewController{
 
     var isPostOwner = false
     var isCommentOwner = false
+    var isNotification = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         emptyLbl()
         
-        if !isPostOwner {
+        if isNotification {
+            
             unpinStack.isHidden = true
             pinStack.isHidden = true
             
-            if !isCommentOwner {
-                deleteStack.isHidden = true
+            
+            if !isPostOwner {
+                
+                if !isCommentOwner {
+                    deleteStack.isHidden = true
+                }
+                
+            } else {
+                
+                reportStack.isHidden = true
+                
             }
             
+            
         } else {
-            reportStack.isHidden = true
+            
+            if !isPostOwner {
+                unpinStack.isHidden = true
+                pinStack.isHidden = true
+                
+                if !isCommentOwner {
+                    deleteStack.isHidden = true
+                }
+                
+            } else {
+                reportStack.isHidden = true
+            }
+            
         }
+        
+        
 
     }
     
@@ -63,6 +89,7 @@ class CommentSettings: UIViewController{
     
     @IBAction func unpinPressed(_ sender: Any) {
         
+        
         NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "unpin_cmt")), object: nil)
         self.dismiss(animated: true)
         
@@ -70,21 +97,38 @@ class CommentSettings: UIViewController{
     
     @IBAction func reportBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_cmt")), object: nil)
+        if isNotification {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "notification_report_cmt")), object: nil)
+        } else {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_cmt")), object: nil)
+        }
+       
         self.dismiss(animated: true)
         
     }
     
     @IBAction func copyBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_cmt")), object: nil)
+        if isNotification {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "notification_copy_cmt")), object: nil)
+        } else {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_cmt")), object: nil)
+        }
+        
+    
         self.dismiss(animated: true)
         
     }
     
     @IBAction func deleteBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "delete_cmt")), object: nil)
+        if isNotification {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "notification_delete_cmt")), object: nil)
+        } else {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "delete_cmt")), object: nil)
+        }
+        
+
         self.dismiss(animated: true)
         
     }

@@ -37,7 +37,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
   
     var likeCount = 0
     var isLike = false
-    
+    var isSelectedPost = false
     var settingBtn : ((ASCellNode) -> Void)?
     
     init(with post: PostModel) {
@@ -67,6 +67,15 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
             self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
             
+            if self.isSelectedPost == false {
+                
+                if post.owner?.id == _AppCoreData.userDataSource.value?.userID {
+                    
+                    self.headerView.settingBtn.isHidden = true
+                    
+                }
+                
+            }
             
             self.buttonsView = ButtonsHeader()
             self.buttonsNode.view.addSubview(self.buttonsView)
@@ -423,6 +432,24 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 }
                 
                 
+            } else if vc is MainSearchVC {
+                
+                if let update2 = vc as? MainSearchVC {
+                    
+                    update2.PostSearchVC.playTimeBar.setProgress(rate, animated: true)
+                    
+                }
+                
+                
+            } else if vc is PostListWithHashtagVC {
+                
+                if let update2 = vc as? PostListWithHashtagVC {
+                    
+                    update2.playTimeBar.setProgress(rate, animated: true)
+                    
+                }
+                
+                
             }
                  
             
@@ -573,23 +600,49 @@ extension PostNode {
     
     @objc func userTapped() {
         
-        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+        if let userId = post.owner?.id, let username = post.owner?.username, userId != "", username != "" {
             
-            if let vc = UIViewController.currentViewController() {
+            if userId != _AppCoreData.userDataSource.value?.userID  {
                 
-                let nav = UINavigationController(rootViewController: UPVC)
+                if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+                    
+                    if let vc = UIViewController.currentViewController() {
+                        
+                        let nav = UINavigationController(rootViewController: UPVC)
+                        
+                        UPVC.userId = userId
+                        UPVC.nickname = username
+                        UPVC.onPresent = true
+                        nav.modalPresentationStyle = .fullScreen
+                        nav.navigationItem.titleView?.tintColor = .white
+                        nav.navigationBar.tintColor = .background
+                        vc.present(nav, animated: true, completion: nil)
+               
+                    }
+                }
                 
-                UPVC.userId = post.owner?.id ?? "1234"
-                UPVC.nickname = post.owner?.username
-                UPVC.onPresent = true
-                nav.modalPresentationStyle = .fullScreen
-                nav.navigationItem.titleView?.tintColor = .white
-                nav.navigationBar.tintColor = .background
-                vc.present(nav, animated: true, completion: nil)
-       
+            } else {
+                
+                if let vc = UIViewController.currentViewController() {
+                    
+                    if vc is FeedViewController {
+                        
+                        if let update1 = vc as? FeedViewController {
+                            
+                            update1.switchToProfileVC()
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+                
             }
+            
+            
         }
-        
+ 
         
     }
     
@@ -625,6 +678,22 @@ extension PostNode {
             } else if vc is FeedViewController {
                 
                 if let update1 = vc as? FeedViewController {
+                    
+                    update1.present(ac, animated: true, completion: nil)
+                    
+                }
+                
+            } else if vc is MainSearchVC {
+                
+                if let update1 = vc as? MainSearchVC {
+                    
+                    update1.PostSearchVC.present(ac, animated: true, completion: nil)
+                    
+                }
+                
+            } else if vc is PostListWithHashtagVC {
+                
+                if let update1 = vc as? PostListWithHashtagVC {
                     
                     update1.present(ac, animated: true, completion: nil)
                     
@@ -690,9 +759,9 @@ extension PostNode {
                 }
                 
                 
-            } else if vc is PostSearchVC {
+            } else if vc is MainSearchVC {
                 
-                if let update1 = vc as? PostSearchVC {
+                if let update1 = vc as? MainSearchVC {
                     
                     let slideVC = CommentVC()
                     
@@ -701,7 +770,7 @@ extension PostNode {
                     slideVC.transitioningDelegate = update1.self
                     global_presetingRate = Double(0.75)
                     global_cornerRadius = 35
-                    update1.present(slideVC, animated: true, completion: nil)
+                    update1.PostSearchVC.present(slideVC, animated: true, completion: nil)
                     
                 }
                 
@@ -762,6 +831,24 @@ extension PostNode {
             } else if vc is FeedViewController {
                 
                 if let update2 = vc as? FeedViewController {
+                    
+                    imgView.center = update2.view.center
+                    update2.view.addSubview(imgView)
+                    
+                }
+                
+            } else if vc is MainSearchVC {
+                
+                if let update2 = vc as? MainSearchVC {
+                    
+                    imgView.center = update2.view.center
+                    update2.PostSearchVC.view.addSubview(imgView)
+                    
+                }
+                
+            } else if vc is PostListWithHashtagVC {
+                
+                if let update2 = vc as? PostListWithHashtagVC {
                     
                     imgView.center = update2.view.center
                     update2.view.addSubview(imgView)

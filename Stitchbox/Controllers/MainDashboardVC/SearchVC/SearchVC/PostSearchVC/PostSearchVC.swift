@@ -207,80 +207,88 @@ extension PostSearchVC {
 
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Get the visible rect of the collection view.
-        let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+        
+        if !posts.isEmpty {
+            
+            // Get the visible rect of the collection view.
+            let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
 
-        // Calculate the visible cells.
-        let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
+            // Calculate the visible cells.
+            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
 
-        // Find the index of the visible video that is closest to the center of the screen.
-        var minDistanceFromCenter = CGFloat.infinity
-        
-        var foundVisibleVideo = false
-        
-        for cell in visibleCells {
-        
-            let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-            let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-            let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
-            if distanceFromCenter < minDistanceFromCenter {
-                newPlayingIndex = cell.indexPath!.row
-                minDistanceFromCenter = distanceFromCenter
-            }
-        }
-        
-        
-        if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+            // Find the index of the visible video that is closest to the center of the screen.
+            var minDistanceFromCenter = CGFloat.infinity
             
-            foundVisibleVideo = true
-            playTimeBar.isHidden = false
+            var foundVisibleVideo = false
             
-        } else {
-            playTimeBar.isHidden = true
-        }
-        
-        if foundVisibleVideo {
+            for cell in visibleCells {
             
-            // Start playing the new video if it's different from the current playing video.
-            if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-                // Pause the current video, if any.
-                if let currentIndex = currentIndex {
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+                if distanceFromCenter < minDistanceFromCenter {
+                    newPlayingIndex = cell.indexPath!.row
+                    minDistanceFromCenter = distanceFromCenter
                 }
-                // Play the new video.
-                currentIndex = newPlayingIndex
-                playVideoIfNeed(playIndex: currentIndex!)
-                isVideoPlaying = true
             }
             
-        } else {
+
+            if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+                
+                foundVisibleVideo = true
+                playTimeBar.isHidden = false
+                
+            } else {
+                playTimeBar.isHidden = true
+            }
             
-            if let currentIndex = currentIndex {
+            
+            if foundVisibleVideo {
+                
+                // Start playing the new video if it's different from the current playing video.
+                if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+                    // Pause the current video, if any.
+                    if let currentIndex = currentIndex {
                         pauseVideoIfNeed(pauseIndex: currentIndex)
                     }
-                    // Reset the current playing index.
-            currentIndex = nil
-            
-        }
+                    // Play the new video.
+                    currentIndex = newPlayingIndex
+                    playVideoIfNeed(playIndex: currentIndex!)
+                    isVideoPlaying = true
+                }
+                
+            } else {
+                
+                if let currentIndex = currentIndex {
+                            pauseVideoIfNeed(pauseIndex: currentIndex)
+                        }
+                        // Reset the current playing index.
+                currentIndex = nil
+                
+            }
 
-        
-        // If the video is stuck, reset the buffer by seeking to the current playback time.
-        if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
-            if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                    cell.videoNode.player?.seek(to: currentTime)
-                } else {
-                    cell.videoNode.player?.seek(to: CMTime.zero)
+            
+            // If the video is stuck, reset the buffer by seeking to the current playback time.
+            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
+                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                        cell.videoNode.player?.seek(to: currentTime)
+                    } else {
+                        cell.videoNode.player?.seek(to: CMTime.zero)
+                    }
                 }
             }
-        }
 
 
-        // If there's no current playing video and no visible video, pause the last playing video, if any.
-        if !isVideoPlaying && currentIndex != nil {
-            pauseVideoIfNeed(pauseIndex: currentIndex!)
-            currentIndex = nil
+            // If there's no current playing video and no visible video, pause the last playing video, if any.
+            if !isVideoPlaying && currentIndex != nil {
+                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                currentIndex = nil
+            }
+            
         }
+        
+    
     }
     
     
