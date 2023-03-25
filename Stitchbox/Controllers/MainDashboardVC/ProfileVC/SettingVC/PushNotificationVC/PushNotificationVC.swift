@@ -144,7 +144,7 @@ class PushNotificationVC: UIViewController {
             
         } else {
             
-            params = ["notifications": ["comment": false]]
+            params = ["notifications": ["comment": true]]
             isCommentNoti = true
         }
         
