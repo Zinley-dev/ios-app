@@ -150,7 +150,8 @@ class UserProfileVC: UIViewController {
                     
                     if data.discordUrl != "" {
                         
-                        cell.discordLbl.text = "Added and verified"
+                        cell.discordLbl.isHidden = true
+                        cell.discordChecked.isHidden = false
                         
                     } else {
                         

@@ -3388,22 +3388,29 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="392" height="30"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="79E-ZC-OjP">
-                                                                    <rect key="frame" x="8" y="1" width="376" height="28"/>
+                                                                    <rect key="frame" x="8" y="1" width="86" height="28"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="discord" translatesAutoresizingMaskIntoConstraints="NO" id="sQd-lC-FqK">
                                                                             <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="height" constant="28" id="0KZ-05-Wrn"/>
+                                                                                <constraint firstAttribute="height" constant="28" id="Euf-po-5QD"/>
                                                                                 <constraint firstAttribute="width" constant="28" id="W9d-qh-u2G"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EnR-kQ-RdM">
-                                                                            <rect key="frame" x="36" y="0.0" width="340" height="28"/>
+                                                                            <rect key="frame" x="36" y="0.0" width="50" height="28"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
+                                                                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark_2" translatesAutoresizingMaskIntoConstraints="NO" id="fU0-sp-xg8">
+                                                                            <rect key="frame" x="86" y="0.0" width="17" height="28"/>
+                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="17" id="631-5X-NLb"/>
+                                                                            </constraints>
+                                                                        </imageView>
                                                                     </subviews>
                                                                 </stackView>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZZK-Q2-imX">
@@ -3417,7 +3424,6 @@
                                                                 <constraint firstItem="ZZK-Q2-imX" firstAttribute="leading" secondItem="WCY-z9-k1W" secondAttribute="leading" id="FMg-WB-KI4"/>
                                                                 <constraint firstItem="79E-ZC-OjP" firstAttribute="leading" secondItem="WCY-z9-k1W" secondAttribute="leading" constant="8" id="GZC-rg-T5t"/>
                                                                 <constraint firstItem="79E-ZC-OjP" firstAttribute="centerY" secondItem="WCY-z9-k1W" secondAttribute="centerY" id="Lbb-TP-b3O"/>
-                                                                <constraint firstAttribute="trailing" secondItem="79E-ZC-OjP" secondAttribute="trailing" constant="8" id="N4N-xY-vwU"/>
                                                                 <constraint firstAttribute="trailing" secondItem="ZZK-Q2-imX" secondAttribute="trailing" id="dgN-hE-fj7"/>
                                                                 <constraint firstAttribute="bottom" secondItem="ZZK-Q2-imX" secondAttribute="bottom" id="hxf-WF-hou"/>
                                                                 <constraint firstAttribute="height" constant="30" id="iPz-LI-fFA"/>
@@ -3616,6 +3622,7 @@
                                             <outlet property="coverImage" destination="qsm-2v-h3J" id="F9t-M5-g7d"/>
                                             <outlet property="descriptionLbl" destination="THi-3n-7ng" id="7Kb-0i-dLc"/>
                                             <outlet property="discordBtn" destination="ZZK-Q2-imX" id="ac3-zB-3oE"/>
+                                            <outlet property="discordChecked" destination="fU0-sp-xg8" id="nCg-Al-22l"/>
                                             <outlet property="discordLbl" destination="EnR-kQ-RdM" id="O4x-lo-yxX"/>
                                             <outlet property="discordView" destination="ZZK-Q2-imX" id="1d8-6x-wMX"/>
                                             <outlet property="editBtn" destination="4WR-jf-Ptn" id="R0b-dd-29y"/>
@@ -3922,7 +3929,7 @@
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="zen-G6-9rB">
                                         <rect key="frame" x="0.0" y="757" width="75" height="60"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="hS0-EV-Um1">
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="hS0-EV-Um1">
                                             <rect key="frame" x="0.0" y="0.0" width="75" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
@@ -6581,6 +6588,13 @@
                                                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
+                                                                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark_2" translatesAutoresizingMaskIntoConstraints="NO" id="H5f-eu-cws">
+                                                                            <rect key="frame" x="376" y="0.0" width="17" height="28"/>
+                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="17" id="8rC-Zf-v8V"/>
+                                                                            </constraints>
+                                                                        </imageView>
                                                                     </subviews>
                                                                 </stackView>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jz9-4A-YuD">
@@ -6591,7 +6605,6 @@
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="mf1-yd-PGT" secondAttribute="trailing" constant="8" id="4cF-kn-P1b"/>
                                                                 <constraint firstItem="mf1-yd-PGT" firstAttribute="leading" secondItem="2v8-sX-pSg" secondAttribute="leading" constant="8" id="LUX-ex-JD7"/>
                                                                 <constraint firstItem="jz9-4A-YuD" firstAttribute="top" secondItem="2v8-sX-pSg" secondAttribute="top" id="SY1-Zg-0cj"/>
                                                                 <constraint firstAttribute="trailing" secondItem="jz9-4A-YuD" secondAttribute="trailing" id="YW5-HZ-WZQ"/>
@@ -6795,6 +6808,7 @@
                                             <outlet property="coverImage" destination="Vtj-E3-kqg" id="KuH-3l-gOW"/>
                                             <outlet property="descriptionLbl" destination="BOE-Zn-vCa" id="nqU-w2-uYS"/>
                                             <outlet property="discordBtn" destination="jz9-4A-YuD" id="zpW-Sy-gRi"/>
+                                            <outlet property="discordChecked" destination="H5f-eu-cws" id="FfH-iq-AQF"/>
                                             <outlet property="discordLbl" destination="FAw-H6-d9R" id="kdI-aJ-dfz"/>
                                             <outlet property="discordView" destination="jz9-4A-YuD" id="gVE-Fu-XTr"/>
                                             <outlet property="fistBumpImage" destination="LOP-B5-Z4t" id="NWa-KO-0sq"/>
@@ -9790,6 +9804,7 @@
         <image name="challenge_card" width="340" height="200"/>
         <image name="chat" width="29" height="28"/>
         <image name="chat.filled" width="28" height="26"/>
+        <image name="checkmark_2" width="18" height="18"/>
         <image name="contactUs" width="25" height="25"/>
         <image name="darkBg" width="390" height="844"/>
         <image name="defaultuser" width="278" height="278"/>

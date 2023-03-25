@@ -220,7 +220,8 @@ class ProfileViewController: UIViewController {
                 }
                
                 if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
-                    cell.discordLbl.text = "Added and verified"
+                    cell.discordLbl.isHidden = true
+                    cell.discordChecked.isHidden = false
                 } else {
                     cell.discordLbl.text = "None"
                 }
