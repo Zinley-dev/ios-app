@@ -29,6 +29,7 @@ class NewsFeedSettingVC: UIViewController {
     
     var isOwner = false
     var isSearch = false
+    var isHashtag = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +58,8 @@ class NewsFeedSettingVC: UIViewController {
         
         if isSearch {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_search")), object: nil)
+        } else if isHashtag {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_hashtag")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
         }
@@ -69,6 +72,8 @@ class NewsFeedSettingVC: UIViewController {
         
         if isSearch {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_search")), object: nil)
+        } else if isHashtag {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_hashtag")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
         }
@@ -87,7 +92,8 @@ class NewsFeedSettingVC: UIViewController {
         
         if isSearch {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_search")), object: nil)
-            
+        } else if isHashtag {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_hashtag")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post")), object: nil)
         }
@@ -102,6 +108,8 @@ class NewsFeedSettingVC: UIViewController {
         if isSearch {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_search")), object: nil)
             
+        } else if isHashtag {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_hashtag")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
         }
@@ -117,6 +125,8 @@ class NewsFeedSettingVC: UIViewController {
         if isSearch {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_search")), object: nil)
             
+        } else if isHashtag {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_hashtag")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         }

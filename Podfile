@@ -52,6 +52,8 @@ target 'Stitchbox' do
   pod 'ActiveLabel'
 
   pod 'OneSignalXCFramework', '>= 3.0.0', '< 4.0'
+  pod 'GoogleMaps'
+  pod 'GooglePlaces'
   
   target 'StitchboxTests' do
     inherit! :search_paths

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FLAnimatedImage
 
 class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, UISearchBarDelegate {
     
@@ -22,9 +23,14 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     var showFollowerFirst = false
     var type = ""
     var ownerID = ""
+    var username: String?
     
     var followerCount = 0
     var followingCount = 0
+    var userId: String?
+    
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
     
     // to override search task
     lazy var delayItem = workItem()
@@ -34,10 +40,12 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         
         
         if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "FollowerVC") as? FollowerVC {
-                    
-            self.addVCAsChildVC(childViewController: controller)
             
+            controller.userId = self.userId ?? ""
+            self.addVCAsChildVC(childViewController: controller)
+
             return controller
+            
         } else {
             return UIViewController() as! FollowerVC
         }
@@ -50,7 +58,9 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         
         if let controller = UIStoryboard(name: "Dashboard", bundle: Bundle.main).instantiateViewController(withIdentifier: "FollowingVC") as? FollowingVC {
             
+            controller.userId = self.userId ?? ""
             self.addVCAsChildVC(childViewController: controller)
+            
             
             return controller
             
@@ -66,6 +76,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
 
         // Do any additional setup after loading the view.
         setupButtons()
+        
         if showFollowerFirst
         {
             setupFollowersView()
@@ -75,6 +86,127 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         }
         
         setupSearchController()
+        
+        if let user = self.userId {
+            
+            countFollowers(userId: user) {
+                Dispatch.main.async {
+           
+                    self.followerBtn.setTitle("\(formatPoints(num: Double(self.followerCount))) Followers", for: .normal)
+                }
+            }
+            
+            countFollowings(userId: user) {
+                Dispatch.main.async {
+                    self.followingBtn.setTitle("\(formatPoints(num: Double(self.followingCount))) Followings", for: .normal)
+                }
+            }
+            
+            
+        } 
+            
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        do {
+            
+            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+            let gifData = try NSData(contentsOfFile: path) as Data
+            let image = FLAnimatedImage(animatedGIFData: gifData)
+            
+            
+            self.loadingImage.animatedImage = image
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        loadingView.backgroundColor = self.view.backgroundColor
+        
+        
+        delay(1.0) {
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                self.loadingView.alpha = 0
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
+                    
+                    self.loadingView.isHidden = true
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    func countFollowers(userId: String, completed: @escaping DownloadComplete) {
+        
+        
+        APIManager().getFollowers(userId: userId, page: 1) { result in
+            switch result {
+            case .success(let response):
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                        completed()
+                        return
+                }
+            
+                    if let followersGet = data["total"] as? Int {
+                        self.followerCount = followersGet
+                    } else {
+                        self.followerCount = 0
+                    }
+                    
+                    completed()
+                
+            case .failure(let error):
+                print("Error loading follower: ", error)
+                completed()
+               
+            }
+        }
+        
+    }
+    
+    
+    func countFollowings(userId: String, completed: @escaping DownloadComplete) {
+        
+        APIManager().getFollows(userId: userId, page: 1) { result in
+            switch result {
+            case .success(let response):
+             
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                        completed()
+                        return
+                }
+            
+                    if let followingsGet = data["total"] as? Int {
+                        self.followingCount = followingsGet
+                    } else {
+                        self.followingCount = 0
+                    }
+                    
+                    completed()
+                
+            case .failure(let error):
+                print("Error loading follower: ", error)
+                completed()
+               
+            }
+        }
         
     }
      
@@ -120,18 +252,29 @@ extension MainFollowVC {
     }
     
     func setupTitle() {
+    
         
         guard let userDataSource = _AppCoreData.userDataSource.value else {
             print("Can't get userDataSource")
             return
         }
-
-        let loadUsername = userDataSource.userName
-        if loadUsername != "" {
-            self.navigationItem.title = loadUsername
+        
+        if self.userId == userDataSource.userID {
+            
+            let loadUsername = userDataSource.userName
+            if loadUsername != "" {
+                self.navigationItem.title = loadUsername
+            } else {
+                self.navigationItem.title = "Follow"
+            }
+            
         } else {
-            self.navigationItem.title = "Follow"
+            
+            self.navigationItem.title = self.username ?? "Follow"
+            
         }
+
+        
        
        
        
@@ -168,9 +311,6 @@ extension MainFollowVC {
         FollowerVC.view.isHidden = false
         FollowingVC.view.isHidden = true
         
-        followerBtn.setTitle("\(followerCount) Followers", for: .normal)
-        followingBtn.setTitle("\(followingCount) Followings", for: .normal)
-        
         self.searchController?.searchBar.text = ""
         
     }
@@ -188,10 +328,7 @@ extension MainFollowVC {
         FollowerVC.view.isHidden = true
         FollowingVC.view.isHidden = false
         
-        
-        followerBtn.setTitle("\(followerCount) Followers", for: .normal)
-        followingBtn.setTitle("\(followingCount) Followings", for: .normal)
-        
+    
         self.searchController?.searchBar.text = ""
         
     }
@@ -368,7 +505,7 @@ extension MainFollowVC {
                     }
                     
                     let list = data.map { item in
-                        return FollowerModel(JSON: item)!
+                        return FollowModel(JSON: item)!
                     }
                     
                     DispatchQueue.main.async {
@@ -403,7 +540,7 @@ extension MainFollowVC {
                     }
                     
                     let list = data.map { item in
-                        return FollowerModel(JSON: item)!
+                        return FollowModel(JSON: item)!
                     }
                     
                     DispatchQueue.main.async {

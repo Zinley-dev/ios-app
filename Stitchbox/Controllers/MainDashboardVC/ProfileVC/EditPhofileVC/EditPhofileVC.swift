@@ -17,7 +17,6 @@ class EditPhofileVC: UIViewController {
     @IBOutlet weak var changeCoverPhotoBtn: UIButton!
     @IBOutlet weak var changeProfilePhotoBtn: UIButton!
     
-    
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var discordTxtField: UITextField!
     @IBOutlet weak var usernameTxtField: UITextField!
@@ -320,6 +319,7 @@ extension EditPhofileVC: EditControllerDelegate {
                                 return
                         }
                         
+                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
 
                     case .failure(let error):
                         print(error)
@@ -353,7 +353,7 @@ extension EditPhofileVC: EditControllerDelegate {
                                 return
                         }
                         
-                        print(url)
+                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
 
 
                     case .failure(let error):

@@ -7,6 +7,7 @@
 
 import UIKit
 import ObjectMapper
+import SendBirdSDK
 
 class UserProfileVC: UIViewController {
 
@@ -37,6 +38,13 @@ class UserProfileVC: UIViewController {
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
     var onPresent = false
+    
+    var followerCount = 0
+    var followingCount = 0
+    var fistBumpedCount = 0
+    
+    var isFollow = false
+    var isFistBump = false
 
     var demoProfileData: ProfileHeaderData {
         return ProfileHeaderData(name: "", username: "", accountType: "", postCount: 0)
@@ -49,169 +57,157 @@ class UserProfileVC: UIViewController {
     var userId: String?
     var nickname: String?
     var userData: UserDataSource?
+    var currpage = 1
+    
+    let fistBumpedImg = UIImage(named: "fistBumpedStats")
+    let fistBumpImg = UIImage(named: "FistBumped")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-  
-        collectionView.delegate = self
-       
-        
-        pullControl.tintColor = UIColor.secondary
-        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
-        
-        if #available(iOS 10.0, *) {
-            collectionView.refreshControl = pullControl
-        } else {
-            collectionView.addSubview(pullControl)
-        }
-        
-        collectionView.setCollectionViewLayout(createLayout(), animated: true)
-        collectionView.register(ProfilePostsHeaderView.nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfilePostsHeaderView.reuseIdentifier)
-        collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
-        
-        configureDatasource()
-       
-        self.setupChallengeView()
         self.setupButtons()
-        loadUserData()
+  
+        if userId != nil {
+            
+            collectionView.delegate = self
+           
+            
+            pullControl.tintColor = UIColor.secondary
+            pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+            
+            if #available(iOS 10.0, *) {
+                collectionView.refreshControl = pullControl
+            } else {
+                collectionView.addSubview(pullControl)
+            }
+            
+            collectionView.setCollectionViewLayout(createLayout(), animated: true)
+            collectionView.register(ProfilePostsHeaderView.nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfilePostsHeaderView.reuseIdentifier)
+            collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
+            
+            configureDatasource()
+           
+            
+            self.setupChallengeView()
+        
+            self.loadUserData()
+            self.countFistBumped()
+            self.countFollowings()
+            self.countFollowers()
+            self.checkIfFollow()
+            self.checkIfFistBump()
+            
+            self.setupChallengeView()
+            
+            self.getUserPost { (newPosts) in
+                
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+            }
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.report), name: (NSNotification.Name(rawValue: "report_user")), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.block), name: (NSNotification.Name(rawValue: "block_user")), object: nil)
+            
+            
+        }
+
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
-    }
-  
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
         ChallengeView.frame = challengeCardView.bounds
+        
     }
-    
-  private func loadUserData() {
-      
-    APIManager().getUserInfo(userId: self.userId!) { result in
-      switch result {
-        case .success(let response):
-          guard let data = response.body else {
-            return
-          }
-          
-          self.userData = Mapper<UserDataSource>().map(JSONObject: data)
-          
-          let indexPath = IndexPath(item: 0, section: 0);
-          let index2Path = IndexPath(item: 0, section: 1);
-          
-          DispatchQueue.main.async {
-            if let cell = self.datasource.itemIdentifier(for: indexPath) {
-              if case .header(var param) = cell {
-                param.username = self.userData?.userName ?? ""
-                param.discord = self.userData?.discordUrl ?? "None"
-                param.cover = self.userData?.cover ?? ""
-                param.avatar = self.userData?.avatarURL ?? ""
-                param.about = self.userData?.about ?? ""
-                param.followers = 10
-                param.following = 20
-                param.fistBumped = 30
-                
-                
-                var snapshot = self.datasource.snapshot()
-                // replace item
-                snapshot.insertItems([.header(param)], beforeItem: cell)
-                snapshot.deleteItems([cell])
-                // update datasource
-                self.datasource.apply(snapshot)
-                
-              }
-            }
-            
-            if let cell2 = self.datasource.itemIdentifier(for: index2Path) {
-              if case .challengeCard(var param) = cell2 {
-                param.name = self.userData?.userName ?? ""
-                param.avatar = self.userData?.avatarURL ?? ""
-                param.quotes = self.userData?.challengeCard?.quote
-                
-                
-                var snapshot = self.datasource.snapshot()
-                // replace item
-                snapshot.insertItems([.challengeCard(param)], beforeItem: cell2)
-                snapshot.deleteItems([cell2])
-                // update datasource
-                self.datasource.apply(snapshot)
-                
-              }
-            }
-          }
-
-        case .failure(let error):
-          print(error)
-      }
-    }
-  }
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell {
-      
         switch item {
-        case .header(let param):
+        case .header(_):
+                
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileHeaderCell.reuseIdentifier, for: indexPath) as? UserProfileHeaderCell {
                 
-                cell.usernameLbl.text = param.username
-                cell.descriptionLbl.text = param.about ?? ""
-                
-                
-                if let avatarUrl = param.avatar, avatarUrl != "" {
-                  if let url = URL(string: avatarUrl) {
-                    cell.avatarImage.load(url: url, str: avatarUrl)
-                    selectAvatarImage.load(url: url, str: avatarUrl)
-                  }
+                if let data = userData {
+                    
+                    // display username
+                    if let username = data.userName, username != "" {
+                        cell.usernameLbl.text = username
+                    }
+                    
+                    if data.avatarURL != "" {
+                        
+                        let url = URL(string: data.avatarURL)
+                        cell.avatarImage.load(url: url!, str: data.avatarURL)
+                        selectAvatarImage.load(url: url!, str: data.avatarURL)
+                        
+                    }
+                    
+                    if data.cover != "" {
+                        let url = URL(string: data.cover)
+                        cell.coverImage.load(url: url!, str: data.cover)
+                        selectCoverImage.load(url: url!, str: data.cover)
+                    }
+                    
+                    if data.discordUrl != "" {
+                        
+                        cell.discordLbl.isHidden = true
+                        cell.discordChecked.isHidden = false
+                        
+                    } else {
+                        
+                        cell.discordLbl.text = "None"
+                        
+                    }
+                    
+                    if data.about != "" {
+                        cell.descriptionLbl.text = data.about
+                    }
+                    
+
+                    cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
+                    cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
+                    cell.numberOfFistBumps.text = "\(formatPoints(num: Double(fistBumpedCount)))"
+                    
+                    // add buttons target
+                    
+                    cell.discordBtn.addTarget(self, action: #selector(discordTapped), for: .touchUpInside)
+                    cell.FistBumpedBtn.addTarget(self, action: #selector(fistBumpedTapped), for: .touchUpInside)
+                    cell.moreBtn.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
+                    cell.followersBtn.addTarget(self, action: #selector(followAction), for: .touchUpInside)
+                    cell.messageBtn.addTarget(self, action: #selector(messageTapped), for: .touchUpInside)
+                   
+                    
+                    // add target using gesture recognizer for image
+                    let avatarTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.avatarTapped))
+                    cell.avatarImage.isUserInteractionEnabled = true
+                    cell.avatarImage.addGestureRecognizer(avatarTap)
+                    
+                    let coverImageTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.coverImageTapped))
+                    cell.coverImage.isUserInteractionEnabled = true
+                    cell.coverImage.addGestureRecognizer(coverImageTap)
+                    
+                    let numberOfFollowersTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followersTapped))
+                    cell.followerStack.isUserInteractionEnabled = true
+                    cell.followerStack.addGestureRecognizer(numberOfFollowersTap)
+                    
+                    
+                    let numberOfFollowingTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followingTapped))
+                    cell.followingStack.isUserInteractionEnabled = true
+                    cell.followingStack.addGestureRecognizer(numberOfFollowingTap)
+                    
+                    if self.isFollow {
+                        cell.followersBtn.setTitle("Following", for: .normal)
+                    } else {
+                        cell.followersBtn.setTitle("Follow", for: .normal)
+                    }
+                    
+                    if self.isFistBump {
+                        cell.fistBumpImage.image = fistBumpedImg
+                    } else {
+                        cell.fistBumpImage.image = fistBumpImg
+                    }
                     
                 }
-              
-                if let coverUrl = param.cover, coverUrl != "" {
-                  if let url = URL(string: coverUrl) {
-                    cell.coverImage.load(url: url, str: coverUrl)
-                    selectCoverImage.load(url: url, str: coverUrl)
-                  }
-                }
-              
-                  if let discord = param.discord, discord != "" {
-                    cell.discordBtn.setTitle("Added and verified", for: .normal)
-                  } else {
-                    cell.discordBtn.setTitle("None", for: .normal)
-                  }
-              
-            
-                cell.numberOfFollowers.text = "\(formatPoints(num: Double(param.followers)))"
-                cell.numberOfFollowing.text = "\(formatPoints(num: Double(param.following)))"
-                cell.FistBumpedBtn.setTitle("\(formatPoints(num: Double(param.fistBumped)))", for: .normal)
-                
-              
-                // add buttons target
-                cell.discordBtn.addTarget(self, action: #selector(discordTapped), for: .touchUpInside)
-                cell.FistBumpedBtn.addTarget(self, action: #selector(fistBumpedTapped), for: .touchUpInside)
-                cell.followersBtn.addTarget(self, action: #selector(followersTapped), for: .touchUpInside)
-                cell.messageBtn.addTarget(self, action: #selector(messageTapped), for: .touchUpInside)
-                cell.moreBtn.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
-               
-                
-                // add target using gesture recognizer for image
-                let avatarTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.avatarTapped))
-                cell.avatarImage.isUserInteractionEnabled = true
-                cell.avatarImage.addGestureRecognizer(avatarTap)
-                
-                let coverImageTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.coverImageTapped))
-                cell.coverImage.isUserInteractionEnabled = true
-                cell.coverImage.addGestureRecognizer(coverImageTap)
-                
-                let numberOfFollowersTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followersTapped))
-                cell.followerStack.isUserInteractionEnabled = true
-                cell.followerStack.addGestureRecognizer(numberOfFollowersTap)
-                
-                
-                let numberOfFollowingTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followingTapped))
-                cell.followingStack.isUserInteractionEnabled = true
-                cell.followingStack.addGestureRecognizer(numberOfFollowingTap)
                 
                 
                 return cell
@@ -223,64 +219,231 @@ class UserProfileVC: UIViewController {
                 
             }
             
-        case .challengeCard(let param):
+        case .challengeCard(_):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserChallengerCardProfileHeaderCell.reuseIdentifier, for: indexPath) as? UserChallengerCardProfileHeaderCell {
-            
-              
-              // display username
-              if let username = param.name, username != "" {
-                cell.username.text = username
-                ChallengeView.username.text = username
-              }
-              
-              if let avatarUrl = param.avatar, avatarUrl != "" {
-                let url = URL(string: avatarUrl)
-                cell.userImgView.load(url: url!, str: avatarUrl)
-                ChallengeView.userImgView.load(url: url!, str: avatarUrl)
-              }
-              
-              
-              if let quotes = param.quotes, quotes != "" {
-                cell.infoLbl.text = quotes
-              }
-              
-              
-              cell.startTime.text = param.createdDate
-              cell.infoLbl.text = "xxxx"
-              
-              
-              
-              
+                
+                if let data = userData {
+                    
+                    // display username
+                    if data.userName != "" {
+                        cell.username.text = data.userName
+                        ChallengeView.username.text = data.userName
+                    } else {
+                        print("userData is null")
+                    }
+                    
+                    if data.avatarURL != "" {
+                        
+                        let url = URL(string: data.avatarURL)
+                        cell.userImgView.load(url: url!, str: data.avatarURL)
+                        ChallengeView.userImgView.load(url: url!, str: data.avatarURL)
+                        
+                    }
+                    
+                }
+                
+                
+                if let card = userData?.challengeCard
+                {
+                    if card.quote != "" {
+                        cell.infoLbl.text = card.quote
+                        ChallengeView.infoLbl.text = card.quote
+                    } else {
+                        cell.infoLbl.text = "Stitchbox's challenger"
+                        ChallengeView.infoLbl.text = "Stitchbox's challenger"
+                    }
+                   
+                    
+                    
+                    if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
+                        let DateFormatter = DateFormatter()
+                        DateFormatter.dateStyle = .medium
+                        DateFormatter.timeStyle = .none
+                        cell.startTime.text = DateFormatter.string(from: createAt)
+                        ChallengeView.startTime.text = DateFormatter.string(from: createAt)
+                    } else {
+                        cell.startTime.text = "None"
+                        ChallengeView.startTime.text = "None"
+                    }
+                    
+                    cell.badgeImgView.image = UIImage.init(named: card.badge)
+                    ChallengeView.badgeImgView.image = UIImage.init(named: card.badge)
+                    
+    
+                        if card.games.isEmpty == true {
+                            cell.game1.isHidden = true
+                            cell.game2.isHidden = true
+                            cell.game3.isHidden = true
+                            cell.game4.isHidden = true
+                            
+                            //
+                            
+                            ChallengeView.game1.isHidden = true
+                            ChallengeView.game2.isHidden = true
+                            ChallengeView.game3.isHidden = true
+                            ChallengeView.game4.isHidden = true
+                            
+                        
+                        } else {
+                            
+                            if card.games.count == 1 {
+                                
+                                cell.game1.isHidden = false
+                                cell.game2.isHidden = false
+                                cell.game3.isHidden = true
+                                cell.game4.isHidden = true
+                              
+                                //
+                                
+                                ChallengeView.game1.isHidden = false
+                                ChallengeView.game2.isHidden = false
+                                ChallengeView.game3.isHidden = true
+                                ChallengeView.game4.isHidden = true
+                                
+                                if let empty = URL(string: emptyimage) {
+                                    
+                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                  
+                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    cell.game2.isHidden = true
+                                    
+                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    ChallengeView.game2.isHidden = true
+                                }
+                               
+                                
+                                
+                            } else if card.games.count == 2 {
+                                
+                                cell.game1.isHidden = false
+                                cell.game2.isHidden = false
+                                cell.game3.isHidden = false
+                                cell.game4.isHidden = true
+                               
+                                
+                                
+                                ChallengeView.game1.isHidden = false
+                                ChallengeView.game2.isHidden = false
+                                ChallengeView.game3.isHidden = false
+                                ChallengeView.game4.isHidden = true
+                                
+                                if let empty = URL(string: emptyimage) {
+                                    
+                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                    let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                    
+                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    cell.game3.isHidden = true
+                                    
+                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    ChallengeView.isHidden = true
+                                }
+                                
+                                
+                            } else if card.games.count == 3 {
+                                
+                                cell.game1.isHidden = false
+                                cell.game2.isHidden = false
+                                cell.game3.isHidden = false
+                                cell.game4.isHidden = false
+                                
+                                ChallengeView.game1.isHidden = false
+                                ChallengeView.game2.isHidden = false
+                                ChallengeView.game3.isHidden = false
+                                ChallengeView.game4.isHidden = false
+                                
+                                
+                                if let empty = URL(string: emptyimage) {
+                                    
+                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                    let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                    let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
+                                    
+                                    
+                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                    cell.game4.isHidden = true
+                                    
+                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    ChallengeView.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                    ChallengeView.game4.isHidden = true
+                                }
+                                
+                                
+                            } else if card.games.count == 4 {
+                                
+                               
+                                if let empty = URL(string: emptyimage) {
+                                    
+                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                    let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                    let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
+                                    let game4 = global_suppport_game_list.first(where: { $0._id == card.games[3].gameId })
+                                
+                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                    cell.game4.setImageWithCache(from: URL(string: game4?.cover ?? "") ?? empty)
+                                    
+                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                    ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                    ChallengeView.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                    ChallengeView.game4.setImageWithCache(from: URL(string: game4?.cover ?? "") ?? empty)
+                                }
+                                
+                            }
+                        
+                    }
+                  
+                    
+                }
+                
+                
+                let fullString = NSMutableAttributedString(string: "")
+                let image1Attachment = NSTextAttachment()
+                image1Attachment.image = UIImage(named: "fistBumpedStats")
+                image1Attachment.bounds = CGRect(x: 0, y: -2, width: 30, height: 12)
+                let image1String = NSAttributedString(attachment: image1Attachment)
+                fullString.append(image1String)
+                
+                
+                fullString.append(NSAttributedString(string: "  \(formatPoints(num: Double(fistBumpedCount)))"))
+                cell.fistBumpedLbl.attributedText = fullString
+                ChallengeView.fistBumpedLbl.attributedText = fullString
+
+                
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
                 cell.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)
                 cell.game3.addTarget(self, action: #selector(game3Tapped), for: .touchUpInside)
                 cell.game4.addTarget(self, action: #selector(game4Tapped), for: .touchUpInside)
                 
+                
+                ChallengeView.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
+                ChallengeView.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)
+                ChallengeView.game3.addTarget(self, action: #selector(game3Tapped), for: .touchUpInside)
+                ChallengeView.game4.addTarget(self, action: #selector(game4Tapped), for: .touchUpInside)
+                
                 return cell
                 
             } else {
                 
             
-                return ChallengerCardProfileHeaderCell()
+                return UserChallengerCardProfileHeaderCell()
                 
             }
             
         case .posts(let data):
-            
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
-                
                 cell.configureWithUrl(with: data)
                 return cell
-                
             } else {
-                
-            
                 return ImageViewCell()
-                
             }
-
-            
         }
     }
     
@@ -324,38 +487,130 @@ class UserProfileVC: UIViewController {
 // selector for header
 extension UserProfileVC {
     
-    @objc func settingTapped(_ sender: UIButton) {
+    
+    
+    @objc func followAction(_ sender: UIButton) {
         
-        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SettingVC") as? SettingVC {
-            self.navigationController?.pushViewController(SVC, animated: true)
+        if isFollow {
             
+            unfollowUser()
+            
+        } else {
+            
+            followUser()
         }
         
     }
     
+    func followUser() {
+        
+        self.isFollow = true
+        followerCount += 1
+        self.applyHeaderChange()
+        
+        APIManager().insertFollows(params: ["FollowId": userId ?? ""]) { result in
+            switch result {
+            case .success(_):
+              
+                
+                self.isFollow = true
+                needRecount = true
+               
+              
+            case .failure(_):
+                
+                DispatchQueue.main.async {
+                    self.isFollow = false
+                    self.followerCount += 1
+                    showNote(text: "Something happened!")
+                }
+                
+            }
+            
+        }
+           
+    }
+    
+    
+    func unfollowUser() {
+        
+        self.isFollow = false
+        followerCount -= 1
+        self.applyHeaderChange()
+    
+            APIManager().unFollow(params: ["FollowId": userId ?? ""]) { result in
+                switch result {
+                case .success(_):
+                    
+                    self.isFollow = false
+                    needRecount = true
+                    
+                    
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        self.isFollow = true
+                        self.followerCount -= 1
+                        showNote(text: "Something happened!")
+                    }
+                    
+                    
+                }
+            }
+            
+    }
+        
+        
+
+    
     
     @objc func messageTapped(_ sender: UIButton) {
         
-        print("messageTapped")
+        guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty else { return }
+
+        let channelParams = SBDGroupChannelParams()
+        channelParams.isDistinct = true
+        channelParams.addUserIds([self.userId ?? "", userUID])
         
-        print("Init message or open message if have")
+
+        SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
+            guard error == nil, let channelUrl = groupChannel?.channelUrl else {
+                self.showErrorAlert("Oops!", msg: error?.localizedDescription ?? "Failed to create message")
+                return
+            }
+
+            checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
+
+            let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.navigationController?.pushViewController(channelVC, animated: true)
+
+        }
         
     }
     
     
     @objc func moreTapped(_ sender: UIButton) {
         
-        print("moreTapped")
+        let userSettingVC = UserSettingVC()
+        userSettingVC.modalPresentationStyle = .custom
+        userSettingVC.transitioningDelegate = self
         
-        print("Show more settings")
+        global_presetingRate = Double(0.30)
+        global_cornerRadius = 45
         
+        self.present(userSettingVC, animated: true, completion: nil)
+
     }
     
     @objc func followersTapped(_ sender: UIButton) {
         
-        print("followersTapped")
-        
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+
+            MFVC.showFollowerFirst = true
+            MFVC.followerCount = followerCount
+            MFVC.followingCount = followingCount
+            MFVC.userId = self.userId ?? ""
+            MFVC.username = self.userData?.userName ?? ""
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -364,33 +619,57 @@ extension UserProfileVC {
     
     @objc func followingTapped(_ sender: UIButton) {
         //MainFollowVC
-       print("followingTapped")
-        
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+           
+            MFVC.showFollowerFirst = false
+            MFVC.followerCount = followerCount
+            MFVC.followingCount = followingCount
+            MFVC.userId = self.userId ?? ""
+            MFVC.username = self.userData?.userName ?? ""
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
         
     }
     
-    @objc func editProfileTapped(_ sender: UIButton) {
-        
-        if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
-            self.navigationController?.pushViewController(EPVC, animated: true)
-            
-        }
-    
-    }
     
     @objc func discordTapped(_ sender: UIButton) {
         
-        print("discordTapped - open link discord if have unless ask let user input their discord link")
+        if let discord = userData?.discordUrl, discord != "" {
+           
+            if discord != ""
+            {
+                guard let requestUrl = URL(string: discord) else {
+                    return
+                }
+
+                if UIApplication.shared.canOpenURL(requestUrl) {
+                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                } else {
+                    showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(discord)")
+                }
+                
+            } else {
+                
+                showErrorAlert("Oops!", msg: "Can't open this link")
+                
+            }
+            
+        }
         
     }
     
     @objc func fistBumpedTapped(_ sender: UIButton) {
         
-        print("fistBumpedTapped - Animation for fistbumped")
+        if isFistBump {
+            
+            unfistBump()
+            
+        } else {
+            
+            giveFistBump()
+            
+        }
         
     }
     
@@ -408,6 +687,93 @@ extension UserProfileVC {
   
     }
     
+    func giveFistBump() {
+        
+        fistBumpedAnimation()
+        
+        self.isFistBump = true
+        fistBumpedCount += 1
+        self.applyUIChange()
+        
+        APIManager().addFistBump(userID: self.userId!) { result in
+            switch result {
+            case .success(_):
+                
+                self.isFistBump = true
+               
+            case .failure(_):
+                DispatchQueue.main.async {
+                    self.isFistBump = false
+                    self.fistBumpedCount -= 1
+                    self.applyUIChange()
+                    showNote(text: "Something happened!")
+                }
+                
+                
+            }
+        }
+        
+        
+    }
+    
+    func unfistBump() {
+        
+        self.isFistBump = false
+        fistBumpedCount -= 1
+        self.applyUIChange()
+        
+        APIManager().deleteFistBump(userID: self.userId!) { result in
+            switch result {
+            case .success(_):
+                
+                self.isFistBump = false
+               
+            case .failure(_):
+                DispatchQueue.main.async {
+                    self.isFistBump = true
+                    self.fistBumpedCount += 1
+                    self.applyUIChange()
+                    showNote(text: "Something happened!")
+                }
+                
+                
+            }
+        }
+        
+    }
+    
+    func fistBumpedAnimation() {
+        
+        let imgView = UIImageView()
+        imgView.image = UIImage(named: "fistBumpedStats")
+        imgView.frame.size = CGSize(width: 170, height: 120)
+       
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
+        
+        
+        imgView.transform = CGAffineTransform.identity
+        
+        UIView.animate(withDuration: 1.0) {
+            
+            imgView.alpha = 0
+            
+        }
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            
+            if imgView.alpha == 0 {
+                
+                imgView.removeFromSuperview()
+                
+            }
+            
+        }
+        
+    }
+
+    
 }
 
 // selector for challengeCard
@@ -424,25 +790,141 @@ extension UserProfileVC {
     
     @objc func game1Tapped(_ sender: UIButton) {
         // make sure to check if any game is added unless peform adding game for +
-        print("game1Tapped")
+
+        if let card = userData?.challengeCard
+        {
+            
+            if card.games.isEmpty == true {
+               
+            } else {
+                
+                if let game = card.games.first {
+                    
+                    if game.link != ""
+                    {
+                        guard let requestUrl = URL(string: game.link) else {
+                            return
+                        }
+
+                        if UIApplication.shared.canOpenURL(requestUrl) {
+                             UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                        } else {
+                            showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                        }
+                        
+                    } else {
+                        
+                        showErrorAlert("Oops!", msg: "Can't open this link")
+                        
+                    }
+                    
+                    
+                }
+                
+                
+            }
+            
+            
+        }
         
     }
     
     @objc func game2Tapped(_ sender: UIButton) {
         
-        print("game2Tapped")
+        if let card = userData?.challengeCard
+        {
+            
+            if card.games.count >= 2 {
+                
+                let game = card.games[1]
+                if game.link != ""
+                {
+                    guard let requestUrl = URL(string: game.link) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    } else {
+                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                    }
+                    
+                } else {
+                    
+                    showErrorAlert("Oops!", msg: "Can't open this link")
+                    
+                }
+                
+            }
+            
+            
+        }
         
     }
     
     @objc func game3Tapped(_ sender: UIButton) {
         
-        print("game3Tapped")
+        if let card = userData?.challengeCard
+        {
+            
+            if card.games.count >= 3 {
+                
+                let game = card.games[2]
+                if game.link != ""
+                {
+                    guard let requestUrl = URL(string: game.link) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    } else {
+                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                    }
+                    
+                } else {
+                    
+                    showErrorAlert("Oops!", msg: "Can't open this link")
+                    
+                }
+                
+            }
+            
+            
+        }
         
     }
     
     @objc func game4Tapped(_ sender: UIButton) {
         
-        print("game4Tapped")
+        if let card = userData?.challengeCard
+        {
+            
+            if card.games.count >= 4 {
+                
+                let game = card.games[3]
+                if game.link != ""
+                {
+                    guard let requestUrl = URL(string: game.link) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    } else {
+                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
+                    }
+                    
+                } else {
+                    
+                    showErrorAlert("Oops!", msg: "Can't open this link")
+                    
+                }
+                
+            }
+            
+            
+        }
         
     }
     
@@ -543,12 +1025,39 @@ extension UserProfileVC: UICollectionViewDelegate {
             case .posts(_):
                 
                 print("posts")
+                let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
+                                .compactMap { item -> PostModel? in
+                                    if case .posts(let post) = item {
+                                        return post
+                                    }
+                                    return nil
+                                }
+                
+
+                if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                    SPVC.selectedPost = selectedPost
+                    SPVC.startIndex = indexPath.row
+                    SPVC.hidesBottomBarWhenPushed = true
+                    self.navigationController?.pushViewController(SPVC, animated: true)
+                }
 
             case .none:
                 print("None")
         }
         
         
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    
+        // Infinite scrolling logic
+        let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
+        if indexPath.row == snap.count - 5 {
+            self.getUserPost { (newPosts) in
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            }
+        }
     }
 
 }
@@ -575,7 +1084,7 @@ extension UserProfileVC {
     
     func showFullScreenAvatar() {
         
-        if selectAvatarImage.isHidden {
+        if selectAvatarImage.isHidden, selectAvatarImage != nil {
         
             self.backgroundView.isHidden = false
             self.selectAvatarImage.alpha = 1.0
@@ -593,7 +1102,7 @@ extension UserProfileVC {
     
     func showFullScreenCover() {
         
-        if selectCoverImage.isHidden {
+        if selectCoverImage.isHidden, selectCoverImage.image != nil {
         
             self.backgroundView.isHidden = false
             self.selectCoverImage.alpha = 1.0
@@ -703,6 +1212,11 @@ extension UserProfileVC {
     
     @objc func onClickBack(_ sender: AnyObject) {
         
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_user")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "block_user")), object: nil)
+        
+        
         if onPresent {
             self.dismiss(animated: true)
         } else {
@@ -710,7 +1224,6 @@ extension UserProfileVC {
                 navigationController.popViewController(animated: true)
             }
         }
-        
        
     }
     
@@ -742,8 +1255,515 @@ extension UserProfileVC {
     
     @objc func clearAllData() {
         
+        var snapshot = self.datasource.snapshot()
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        currpage = 1
+        
+        self.getUserPost { (newPosts) in
+            
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
+        }
+        
+        checkIfFollow()
+        checkIfFistBump()
+    
+        reloadUserInformation {
+            self.reloadGetFollowers {
+                self.reloadUserInformation {
+                    self.reloadGetFistBumperCount {
+                        self.applyAllChange()
+                        Dispatch.main.async {
+                            self.pullControl.endRefreshing()
+                        }
+                    }
+                }
+            }
+        }
         
                
     }
+    
+}
+
+extension UserProfileVC {
+    
+    func loadUserData() {
+          
+        APIManager().getUserInfo(userId: self.userId!) { result in
+          switch result {
+            case .success(let response):
+              guard let data = response.body else {
+                return
+              }
+              
+              self.userData = Mapper<UserDataSource>().map(JSONObject: data)
+              self.applyUIChange()
+            
+            case .failure(let error):
+              
+              Dispatch.main.async {
+                  self.NoticeBlockAndDismiss()
+              }
+              print(error)
+          }
+        }
+      }
+    
+    func countFollowers() {
+        
+        APIManager().getFollowers(userId: userId, page: 1) { result in
+            switch result {
+            case .success(let response):
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    return
+                }
+            
+                if let followersGet = data["total"] as? Int {
+                    self.followerCount = followersGet
+                } else {
+                    self.followerCount = 0
+                }
+                
+                self.applyUIChange()
+                
+            case .failure(let error):
+                print("Error loading follower: ", error)
+            }
+        }
+        
+    }
+    
+    func countFollowings() {
+        
+        APIManager().getFollows(userId: userId, page:1) { result in
+            switch result {
+            case .success(let response):
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    self.followingCount = 0
+                    return
+                }
+            
+                if let followingsGet = data["total"] as? Int {
+                    self.followingCount = followingsGet
+                } else {
+                    self.followingCount = 0
+                }
+                
+                self.applyUIChange()
+               
+            case .failure(let error):
+                print("Error loading following: ", error)
+        
+            }
+        }
+        
+    }
+    
+    
+    func countFistBumped() {
+        
+        APIManager().getFistBumperCount(userID: userId ?? ""){
+            result in
+            switch result {
+            case .success(let response):
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    self.fistBumpedCount = 0
+       
+                    return
+                }
+            
+                if let fistBumpedGet = data["total"] as? Int {
+                    self.fistBumpedCount = fistBumpedGet
+                } else {
+                    self.fistBumpedCount = 0
+                }
+                
+                self.applyUIChange()
+                
+            case .failure(let error):
+                print("Error loading fistbumpers: ", error)
+                self.fistBumpedCount = 0
+            }
+        }
+        
+        
+    }
+    
+    func getUserPost(block: @escaping ([[String: Any]]) -> Void) {
+
+        APIManager().getUserPost(userId: self.userId ?? "", page: currpage) { result in
+                switch result {
+                case .success(let apiResponse):
+                     
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                        return
+                    }
+                    if !data.isEmpty {
+                        print("Successfully retrieved \(data.count) posts.")
+                        self.currpage += 1
+                        let items = data
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                }
+            }
+        }
+
+    }
+    
+    func checkIfFollow() {
+        
+        APIManager().isFollowing(uid: userId ?? "") { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let isFollowing = apiResponse.body?["data"] as? Bool else {
+                        return
+                    }
+                    
+                    self.isFollow = isFollowing
+                    self.applyHeaderChange()
+                   
+                case .failure(let error):
+                    print(error)
+                   
+            }
+        }
+        
+    }
+    
+    func checkIfFistBump() {
+        
+        APIManager().isFistBumpee(userID: userId ?? "") { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let isFistBump = apiResponse.body?["data"] as? Bool else {
+                        return
+                    }
+                    
+                    self.isFistBump = isFistBump
+                    self.applyHeaderChange()
+                    
+                case .failure(let error):
+                    print(error)
+                   
+            }
+        }
+        
+    }
+    
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+        
+        // Check if there are new posts to insert
+        guard !newPosts.isEmpty else { return }
+        let newItems = newPosts.compactMap { PostModel(JSON: $0) }
+        var snapshot = self.datasource.snapshot()
+       
+        snapshot.appendItems(newItems.map({Item.posts($0)}), toSection: .posts)
+        self.datasource.apply(snapshot, animatingDifferences: true)
+        
+    }
+    
+
+    
+    func applyHeaderChange() {
+        
+        Dispatch.main.async {
+            var updatedSnapshot = self.datasource.snapshot()
+            updatedSnapshot.reloadSections([.header])
+            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+        }
+        
+   
+    }
+    
+    func applyAllChange() {
+        Dispatch.main.async {
+            var updatedSnapshot = self.datasource.snapshot()
+            updatedSnapshot.reloadSections([.header, .challengeCard, .posts])
+            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+        }
+    
+    }
+    
+    func applyUIChange() {
+        
+        Dispatch.main.async {
+            var updatedSnapshot = self.datasource.snapshot()
+            updatedSnapshot.reloadSections([.header, .challengeCard])
+            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+        }
+        
+    }
+    
+}
+
+extension UserProfileVC {
+    
+    func reloadUserInformation(completed: @escaping DownloadComplete) {
+
+        APIManager().getUserInfo(userId: self.userId!) { result in
+          switch result {
+            case .success(let response):
+              guard let data = response.body else {
+                completed()
+                return
+              }
+              
+              self.userData = Mapper<UserDataSource>().map(JSONObject: data)
+              completed()
+            
+            case .failure(let error):
+              print(error)
+              completed()
+          }
+        }
+        
+    }
+    
+    
+    func reloadGetFollowing(completed: @escaping DownloadComplete) {
+      
+        APIManager().getFollows(userId: userId, page:1) { result in
+            switch result {
+            case .success(let response):
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    self.followingCount = 0
+                    completed()
+                    return
+                }
+            
+                if let followingsGet = data["total"] as? Int {
+                    self.followingCount = followingsGet
+                } else {
+                    self.followingCount = 0
+                }
+                
+                completed()
+               
+            case .failure(let error):
+                print("Error loading following: ", error)
+                completed()
+        
+            }
+        }
+    }
+    func reloadGetFollowers(completed: @escaping DownloadComplete) {
+      
+        APIManager().getFollowers(userId: userId, page: 1) { result in
+            switch result {
+            case .success(let response):
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    completed()
+                    return
+                }
+            
+                if let followersGet = data["total"] as? Int {
+                    self.followerCount = followersGet
+                } else {
+                    self.followerCount = 0
+                }
+                
+                completed()
+                
+            case .failure(let error):
+                print("Error loading follower: ", error)
+                completed()
+            }
+        }
+    }
+    func reloadGetFistBumperCount(completed: @escaping DownloadComplete) {
+       
+        APIManager().getFistBumperCount(userID: userId ?? ""){
+            result in
+            switch result {
+            case .success(let response):
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    self.fistBumpedCount = 0
+                    completed()
+                    return
+                }
+            
+                if let fistBumpedGet = data["total"] as? Int {
+                    self.fistBumpedCount = fistBumpedGet
+                } else {
+                    self.fistBumpedCount = 0
+                }
+                
+                completed()
+                
+            case .failure(let error):
+                print("Error loading fistbumpers: ", error)
+                self.fistBumpedCount = 0
+                completed()
+            }
+        }
+    }
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
+}
+
+
+extension UserProfileVC {
+    
+    
+    @objc func copyProfile() {
+
+        if let id = self.userId {
+            
+            let link = "https://dualteam.page.link/dual?up=\(id)"
+            
+            UIPasteboard.general.string = link
+            showNote(text: "User profile link is copied")
+            
+        } else {
+            showNote(text: "User profile link is unable to be copied")
+        }
+        
+    }
+    
+    @objc func report() {
+        
+        let slideVC =  reportView()
+        
+        slideVC.user_report = true
+        slideVC.user_id = self.userId!
+        slideVC.modalPresentationStyle = .custom
+        slideVC.transitioningDelegate = self
+        global_presetingRate = Double(0.75)
+        global_cornerRadius = 35
+        
+        delay(0.1) {
+            self.present(slideVC, animated: true, completion: nil)
+        }
+        
+    }
+    
+    @objc func block() {
+        
+        let alert = UIAlertController(title: "Are you sure to block \(userData?.userName ?? "")!", message: "Blocking someone means you can't see each other's content or messages, except in a group chat. It's important to only block someone if you feel it's necessary for your safety or well-being, and to report any concerning behavior to the Stitchbox moderators or authorities.", preferredStyle: UIAlertController.Style.actionSheet)
+
+        // add the actions (buttons)
+        alert.addAction(UIAlertAction(title: "Block", style: UIAlertAction.Style.destructive, handler: { action in
+            
+            self.initBlock(uid: self.userId ?? "")
+    
+        }))
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+
+        // show the alert
+        delay(0.1) {
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    
+    func initBlock(uid: String) {
+        
+        presentSwiftLoader()
+        
+        SBDMain.blockUserId(uid) { blockedUser, error in
+            
+            if error != nil {
+                
+                SwiftLoader.hide()
+                self.showErrorAlert("Oops!", msg: "User can't be blocked now due to internal error from our SB chat system, please try again")
+                
+            } else {
+                
+                APIManager().insertBlocks(params: ["blockId": uid]) { result in
+                    switch result {
+                    case .success(_):
+                       
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                            self.NoticeBlockAndDismiss()
+                        }
+                        
+                      case .failure(let error):
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                            self.showErrorAlert("Oops!", msg: "\(error.localizedDescription)")
+                        }
+                    }
+                }
+             
+            }
+            
+        }
+        
+    }
+    
+    
+    func NoticeBlockAndDismiss() {
+        
+        let sheet = UIAlertController(title: "Oops!", message: "This user isn't available now.", preferredStyle: .alert)
+        
+        
+        let ok = UIAlertAction(title: "Got it", style: .default) { (alert) in
+            
+            
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_user")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "block_user")), object: nil)
+            
+            
+            if self.onPresent {
+                self.dismiss(animated: true)
+            } else {
+                if let navigationController = self.navigationController {
+                    navigationController.popViewController(animated: true)
+                }
+            }
+            
+        }
+        
+        sheet.addAction(ok)
+
+        
+        self.present(sheet, animated: true, completion: nil)
+        
+    }
+    
     
 }

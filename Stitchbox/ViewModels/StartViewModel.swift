@@ -64,7 +64,6 @@ class StartViewModel: ViewModelProtocol {
             params["provider"] = "apple"
         }
         
-        
         presentSwiftLoader()
         
         APIManager().socialLogin(params: params) { result in

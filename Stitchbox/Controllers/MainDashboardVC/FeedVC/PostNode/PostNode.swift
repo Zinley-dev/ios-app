@@ -37,7 +37,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
   
     var likeCount = 0
     var isLike = false
-    
+    var isSelectedPost = false
     var settingBtn : ((ASCellNode) -> Void)?
     
     init(with post: PostModel) {
@@ -67,6 +67,15 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
             self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
             
+            if self.isSelectedPost == false {
+                
+                if post.owner?.id == _AppCoreData.userDataSource.value?.userID {
+                    
+                    self.headerView.settingBtn.isHidden = true
+                    
+                }
+                
+            }
             
             self.buttonsView = ButtonsHeader()
             self.buttonsNode.view.addSubview(self.buttonsView)
@@ -169,8 +178,16 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             //-------------------------------------//
             
-    
             
+            self.headerView.usernameLbl.text = post.owner?.username ?? ""
+            
+            if let url = post.owner?.avatar, url != "" {
+                
+                self.headerView.avatarImage.load(url: URL(string: url)!, str: url)
+                
+            }
+            
+        
             //-------------------------------------//
             
             if let time = post.createdAt {
@@ -199,19 +216,11 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 self.buttonsView.streamView.isHidden = true
             }
 
-            
-            
-            
-            
-            /*
-             streamlinkBtn
-             */
-         
             self.checkIfLike()
             self.totalLikeCount()
             self.totalCmtCount()
             
-            
+           
         }
        
         
@@ -302,14 +311,21 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
             children.append(contentInsetSpec)
         }
+
         
-        hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
+        if !post.hashtags.isEmpty {
+            
+            hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
+            
+            let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+            let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
+            
+            
+            children.append(hashtagsInsetSpec)
+            
+        }
         
-        let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
-        let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
         
-        
-        children.append(hashtagsInsetSpec)
         
         if post.metadata?.width == post.metadata?.height {
             mediaSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width)
@@ -317,8 +333,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             
             var newHeight = constrainedSize.max.width * (post.metadata?.height ?? constrainedSize.max.width) / (post.metadata?.width ?? constrainedSize.max.width)
             
-            if newHeight > constrainedSize.max.height * 0.65 {
-                newHeight = constrainedSize.max.height * 0.65
+            if newHeight > constrainedSize.max.height * 0.75 {
+                newHeight = constrainedSize.max.height * 0.75
             } else if newHeight <= constrainedSize.max.height * 0.45 {
                 newHeight = constrainedSize.max.height * 0.45
             }
@@ -403,7 +419,9 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 
                 if let update1 = vc as? FeedViewController {
                     
-                    update1.playTimeBar.setProgress(rate, animated: true)
+                    if update1.playTimeBar != nil {
+                        update1.playTimeBar.setProgress(rate, animated: true)
+                    }
                     
                 }
                 
@@ -411,7 +429,32 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 
                 if let update2 = vc as? SelectedPostVC {
                     
-                    update2.playTimeBar.setProgress(rate, animated: true)
+                    if update2.playTimeBar != nil {
+                        update2.playTimeBar.setProgress(rate, animated: true)
+                    }
+                    
+                }
+                
+                
+            } else if vc is MainSearchVC {
+                
+                if let update2 = vc as? MainSearchVC {
+                    
+                    if update2.PostSearchVC.playTimeBar != nil {
+                        update2.PostSearchVC.playTimeBar.setProgress(rate, animated: true)
+                    }
+                   
+                }
+                
+                
+            } else if vc is PostListWithHashtagVC {
+                
+                if let update2 = vc as? PostListWithHashtagVC {
+                    
+                    if update2.playTimeBar != nil {
+                        update2.playTimeBar.setProgress(rate, animated: true)
+                    }
+                    
                     
                 }
                 
@@ -549,7 +592,6 @@ extension PostNode {
     
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
     
-    
         hashtagView.collectionView.delegate = dataSourceDelegate
         hashtagView.collectionView.dataSource = dataSourceDelegate
         hashtagView.collectionView.tag = row
@@ -567,23 +609,49 @@ extension PostNode {
     
     @objc func userTapped() {
         
-        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+        if let userId = post.owner?.id, let username = post.owner?.username, userId != "", username != "" {
             
-            if let vc = UIViewController.currentViewController() {
+            if userId != _AppCoreData.userDataSource.value?.userID  {
                 
-                let nav = UINavigationController(rootViewController: UPVC)
+                if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+                    
+                    if let vc = UIViewController.currentViewController() {
+                        
+                        let nav = UINavigationController(rootViewController: UPVC)
+                        
+                        UPVC.userId = userId
+                        UPVC.nickname = username
+                        UPVC.onPresent = true
+                        nav.modalPresentationStyle = .fullScreen
+                        nav.navigationItem.titleView?.tintColor = .white
+                        nav.navigationBar.tintColor = .background
+                        vc.present(nav, animated: true, completion: nil)
+               
+                    }
+                }
                 
-                UPVC.userId = post.owner?.id
-                UPVC.nickname = post.owner?.username
-                UPVC.onPresent = true
-                nav.modalPresentationStyle = .fullScreen
-                nav.navigationItem.titleView?.tintColor = .white
-                nav.navigationBar.tintColor = .background
-                vc.present(nav, animated: true, completion: nil)
-       
+            } else {
+                
+                if let vc = UIViewController.currentViewController() {
+                    
+                    if vc is FeedViewController {
+                        
+                        if let update1 = vc as? FeedViewController {
+                            
+                            update1.switchToProfileVC()
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+                
             }
+            
+            
         }
-        
+ 
         
     }
     
@@ -619,6 +687,22 @@ extension PostNode {
             } else if vc is FeedViewController {
                 
                 if let update1 = vc as? FeedViewController {
+                    
+                    update1.present(ac, animated: true, completion: nil)
+                    
+                }
+                
+            } else if vc is MainSearchVC {
+                
+                if let update1 = vc as? MainSearchVC {
+                    
+                    update1.PostSearchVC.present(ac, animated: true, completion: nil)
+                    
+                }
+                
+            } else if vc is PostListWithHashtagVC {
+                
+                if let update1 = vc as? PostListWithHashtagVC {
                     
                     update1.present(ac, animated: true, completion: nil)
                     
@@ -684,9 +768,9 @@ extension PostNode {
                 }
                 
                 
-            } else if vc is PostSearchVC {
+            } else if vc is MainSearchVC {
                 
-                if let update1 = vc as? PostSearchVC {
+                if let update1 = vc as? MainSearchVC {
                     
                     let slideVC = CommentVC()
                     
@@ -695,7 +779,7 @@ extension PostNode {
                     slideVC.transitioningDelegate = update1.self
                     global_presetingRate = Double(0.75)
                     global_cornerRadius = 35
-                    update1.present(slideVC, animated: true, completion: nil)
+                    update1.PostSearchVC.present(slideVC, animated: true, completion: nil)
                     
                 }
                 
@@ -756,6 +840,24 @@ extension PostNode {
             } else if vc is FeedViewController {
                 
                 if let update2 = vc as? FeedViewController {
+                    
+                    imgView.center = update2.view.center
+                    update2.view.addSubview(imgView)
+                    
+                }
+                
+            } else if vc is MainSearchVC {
+                
+                if let update2 = vc as? MainSearchVC {
+                    
+                    imgView.center = update2.view.center
+                    update2.PostSearchVC.view.addSubview(imgView)
+                    
+                }
+                
+            } else if vc is PostListWithHashtagVC {
+                
+                if let update2 = vc as? PostListWithHashtagVC {
                     
                     imgView.center = update2.view.center
                     update2.view.addSubview(imgView)
@@ -899,46 +1001,16 @@ extension PostNode {
     
     func totalLikeCount() {
         
-        APIManager().countLikedPost(id: post.id) { result in
-            switch result {
-            case .success(let apiResponse):
-    
-                guard apiResponse.body?["message"] as? String == "success",
-                      let likeCountFromQuery = apiResponse.body?["likes"] as? Int  else {
-                        return
-                }
-                
-                self.likeCount = likeCountFromQuery
-                
-                DispatchQueue.main.async {
-                    self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(likeCountFromQuery)))"
-                }
-               
-            case .failure(let error):
-                print("LikeCount: \(error)")
-            }
+        DispatchQueue.main.async {
+            self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeLikes ?? 0)))"
         }
         
     }
     
     func totalCmtCount() {
         
-        APIManager().countComment(post: post.id) { result in
-            switch result {
-            case .success(let apiResponse):
-             
-                guard apiResponse.body?["message"] as? String == "success",
-                      let commentsCountFromQuery = apiResponse.body?["comments"] as? Int  else {
-                        return
-                }
-                
-                DispatchQueue.main.async {
-                    self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(commentsCountFromQuery)))"
-                }
-                
-            case .failure(let error):
-                print("CmtCount: \(error)")
-            }
+        DispatchQueue.main.async {
+            self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeComments ?? 0)))"
         }
         
     }

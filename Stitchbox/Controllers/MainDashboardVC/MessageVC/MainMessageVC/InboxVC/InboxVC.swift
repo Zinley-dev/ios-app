@@ -416,7 +416,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         
         let channelVC = ChannelViewController(channelUrl: channel.channelUrl, messageListParams: mslp)
         hideMiddleBtn(vc: self)
-        channelVC.hidesBottomBarWhenPushed = true
+        //channelVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(channelVC, animated: true)
       
     }

@@ -1,51 +1,35 @@
 //
-//  fistBumpeeVC.swift
+//  FistBumpListVC.swift
 //  Stitchbox
 //
 //  Created by Khanh Duy Nguyen on 2/6/23.
 //
 
-import Foundation
 import UIKit
 import Alamofire
 import AsyncDisplayKit
-import RxSwift
 
-
-class fistBumpeeVC: UIViewController, ControllerType {
-    typealias ViewModelType = FistBumpViewModel
-    
+class FistBumperVC: UIViewController {
+   
     let backButton: UIButton = UIButton(type: .custom)
     
-    let group = DispatchGroup()
-    
     @IBOutlet weak var contentView: UIView!
-    var FistBumpList = [FistBumpUserModel]()
+    var fistBumpList = [FistBumpUserModel]()
     var tableNode: ASTableNode!
-    var viewModel = FistBumpViewModel()
-    var currentPage = 1
-    let disposeBag = DisposeBag()
+    
+    var currPage = 1
+
     var inSearchMode = false
     var searchUserList = [FistBumpUserModel]()
     
     required init?(coder aDecoder: NSCoder) {
-        
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
         
     }
     
-    init(userID: String){
-        super.init(nibName: nil, bundle: nil)
-        viewModel = FistBumpViewModel(userID: userID)
-        self.tableNode = ASTableNode(style: .plain)
-        self.wireDelegates()
-    }
-    
     override func viewDidLoad() {
-        bindUI(with: viewModel)
-        bindAction(with: viewModel)
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
@@ -53,44 +37,11 @@ class fistBumpeeVC: UIViewController, ControllerType {
         setupTableNode()
         
     }
-    
-    func bindUI(with viewModel: FistBumpViewModel) {
-        
-    }
-    
-    func bindAction(with viewModel: FistBumpViewModel) {
-        viewModel.input.fistBumpeeAccounts.subscribe{ FistBumpUsers in
-            self.insertNewRowsInTableNode(newUsers: FistBumpUsers)
-        }.disposed(by: disposeBag)
-        
-        viewModel.output.successObservable.subscribe{
-            result in
-            DispatchQueue.main.async {
-                switch result.element {
-                case .fistbump(let message):
-                    showNote(text: message)
-                case .unfistbump(let message):
-                    showNote(text: message)
-                case .follow(let message):
-                    showNote(text: message)
-                case .unfollow(let message):
-                    showNote(text: message)
-                case .none:
-                    break
-                }
-            }
-        }.disposed(by: disposeBag)
-        
-        viewModel.output.errorsObservable.subscribe{ (error) in
-            DispatchQueue.main.async {
-                showNote(text: error)
-            }
-        }.disposed(by: disposeBag)
-    }
+
     
 }
 
-extension fistBumpeeVC {
+extension FistBumperVC {
     
     func setupButtons() {
         
@@ -124,7 +75,7 @@ extension fistBumpeeVC {
     
 }
 
-extension fistBumpeeVC {
+extension FistBumperVC {
     
     func setupTableNode() {
         
@@ -161,12 +112,11 @@ extension fistBumpeeVC {
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
         
-        //
     }
     
 }
 
-extension fistBumpeeVC: ASTableDelegate {
+extension FistBumperVC: ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
         
@@ -186,8 +136,10 @@ extension fistBumpeeVC: ASTableDelegate {
     }
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        print("batchfetching start")
-        self.retrieveNextPageWithCompletion {
+        
+        self.retrieveNextPageWithCompletion { (newFollowers) in
+            
+            self.insertNewRowsInTableNode(newFistBumpers: newFollowers)
             
             context.completeBatchFetching(true)
             
@@ -198,11 +150,11 @@ extension fistBumpeeVC: ASTableDelegate {
     
 }
 
-extension fistBumpeeVC: ASTableDataSource {
+extension FistBumperVC: ASTableDataSource {
     
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
         
-        if self.FistBumpList.count == 0 {
+        if self.fistBumpList.count == 0 {
             
             tableNode.view.setEmptyMessage("No fist-bumped user!")
             
@@ -210,36 +162,18 @@ extension fistBumpeeVC: ASTableDataSource {
             tableNode.view.restore()
         }
         
-        return inSearchMode ? searchUserList.count : FistBumpList.count
+        return inSearchMode ? searchUserList.count : fistBumpList.count
         
         
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
-        let user = inSearchMode ? searchUserList[indexPath.row] : FistBumpList[indexPath.row]
+        let user = inSearchMode ? searchUserList[indexPath.row] : fistBumpList[indexPath.row]
         
         return {
             
             let node = FistBumpNode(with: user)
-            node.FollowAction = {
-                self.viewModel.follow(userId: user.userID) {
-                    node.user.isFollowing = true
-                    // reload node from table
-                    DispatchQueue.main.async {
-                        self.tableNode.reloadRows(at: [indexPath], with: .none)
-                    }
-                }
-            }
-            node.UnfollowAction = {
-                self.viewModel.unfollow(userId: user.userID) {
-                    node.user.isFollowing = false
-                    // reload node from table
-                    DispatchQueue.main.async {
-                        self.tableNode.reloadRows(at: [indexPath], with: .none)
-                    }
-                }
-            }
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -248,9 +182,10 @@ extension fistBumpeeVC: ASTableDataSource {
         
     }
     
+    
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
-        let user = inSearchMode ? searchUserList[indexPath.row] : FistBumpList[indexPath.row]
+        let user = inSearchMode ? searchUserList[indexPath.row] : fistBumpList[indexPath.row]
         
         if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
             //self.hidesBottomBarWhenPushed = true
@@ -261,42 +196,74 @@ extension fistBumpeeVC: ASTableDataSource {
         }
         
     }
+}
+
+extension FistBumperVC {
+    
+    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        
+            APIManager().getFistBumper(page: currPage) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                        return
+                    }
+                    
+                    if !data.isEmpty {
+                        self.currPage += 1
+                        print("Successfully retrieved \(data.count) fistBumpers.")
+                        let items = data
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                }
+            }
+        }
+    
+    }
+    
+    
+    func insertNewRowsInTableNode(newFistBumpers: [[String: Any]]) {
+        // Check if there are new posts to insert
+        guard !newFistBumpers.isEmpty else { return }
+        
+
+        // Calculate the range of new rows
+        let startIndex = fistBumpList.count
+        let endIndex = startIndex + newFistBumpers.count
+        
+        // Create an array of PostModel objects
+        let newItems = newFistBumpers.compactMap { FistBumpUserModel(JSON: $0) }
+        
+        // Append the new items to the existing array
+        fistBumpList.append(contentsOf: newItems)
+        
+        // Create an array of index paths for the new rows
+        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+        
+        // Insert the new rows
+        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
+       
+    }
+    
     
 }
 
-extension fistBumpeeVC {
-    
-    func retrieveNextPageWithCompletion( FistBump: @escaping () -> Void) {
-        
-        viewModel.getFistBumpee(page: currentPage) { [self] in
-            currentPage += 1
-            FistBump()
-        }
-        
-    }
-    
-    
-    func insertNewRowsInTableNode(newUsers: [FistBumpUserModel]) {
-        
-        guard newUsers.count > 0 else {
-            return
-        }
-        
-        let section = 0
-        var indexPaths: [IndexPath] = []
-        let total = FistBumpList.count + newUsers.count
-        
-        for row in FistBumpList.count ... total - 1 {
-            let path = IndexPath(row: row, section: section)
-            indexPaths.append(path)
-        }
-        FistBumpList.append(contentsOf: newUsers)
-        DispatchQueue.main.async {
-            self.tableNode.insertRows(at: indexPaths, with: .none)
-        }
-        
-        
-    }
-    
-    
-}

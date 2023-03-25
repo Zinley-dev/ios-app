@@ -132,7 +132,9 @@ public class SwiftLoader: UIView {
         
         if (self.animated) {
             UIView.animate(withDuration: 0.3, animations: { () -> Void in
-                self.alpha = 0
+                Dispatch.main.async {
+                    self.alpha = 0
+                }
             }, completion: { (finished) -> Void in
                 self.removeFromSuperview()
                 self.coverView?.removeFromSuperview()

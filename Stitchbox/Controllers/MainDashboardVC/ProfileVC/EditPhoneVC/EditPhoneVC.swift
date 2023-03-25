@@ -150,7 +150,7 @@ extension EditPhoneVC {
     func setupDefaultInfo() {
         
         if let phone = _AppCoreData.userDataSource.value?.phone, phone != "" {
-            phoneTextfield.placeholder = phone
+            phoneTextfield.placeholder = phone.dropFirst().lowercased()
         } else {
             phoneTextfield.placeholder = "Your phone"
         }

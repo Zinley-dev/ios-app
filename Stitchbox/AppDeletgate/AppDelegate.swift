@@ -18,6 +18,8 @@ import PixelSDK
 import UserNotifications
 import TikTokOpenSDK
 import OneSignal
+import GooglePlaces
+import GoogleMaps
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -26,7 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var voipRegistry: PKPushRegistry?
 
     static let sharedInstance = UIApplication.shared.delegate as! AppDelegate
-
+    private var audioLevel : Float = 0.0
+    
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
@@ -46,7 +49,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupOneSignal(launchOptions: launchOptions)
         getGameList()
         activeSpeaker()
+        //listenVolumeButton()
+        
+        GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
+        GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
+        
         return true
+    }
+    
+    func listenVolumeButton(){
+        
+         let audioSession = AVAudioSession.sharedInstance()
+         do {
+              try audioSession.setActive(true, options: [])
+         audioSession.addObserver(self, forKeyPath: "outputVolume",
+                                  options: NSKeyValueObservingOptions.new, context: nil)
+              audioLevel = audioSession.outputVolume
+         } catch {
+              print("Error")
+         }
     }
   
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {

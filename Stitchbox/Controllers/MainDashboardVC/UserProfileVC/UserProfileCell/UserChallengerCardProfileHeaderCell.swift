@@ -11,11 +11,13 @@ class UserChallengerCardProfileHeaderCell: UICollectionViewCell {
     
     @IBOutlet weak var startTime: UILabel!
     @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var fistBumpedLbl: UILabel!
     @IBOutlet weak var infoHeight: NSLayoutConstraint!
     @IBOutlet weak var badgeWidth: NSLayoutConstraint!
     @IBOutlet weak var userImgHeight: NSLayoutConstraint!
     @IBOutlet weak var userImgWidth: NSLayoutConstraint!
     @IBOutlet weak var userImgView: UIImageView!
+    @IBOutlet weak var badgeImgView: UIImageView!
     @IBOutlet weak var infoLbl: UILabel!
     
     @IBOutlet weak var game1: UIButton!

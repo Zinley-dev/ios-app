@@ -6,14 +6,11 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
+import ObjectMapper
 
 class ProfileViewController: UIViewController {
     typealias ViewModelType = ProfileViewModel
     // MARK: - Properties
-    private var viewModel: ViewModelType! = ViewModelType()
-    private let disposeBag = DisposeBag()
     private var currpage = 1
     
     enum Section: Hashable {
@@ -32,6 +29,7 @@ class ProfileViewController: UIViewController {
     var followerCount = 0
     var followingCount = 0
     var fistBumpedCount = 0
+    var hasLoaded = false
     
 
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -44,7 +42,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var challengeCardView: UIView!
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
-    
+   
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
     
@@ -57,79 +55,66 @@ class ProfileViewController: UIViewController {
         return ChallengeCardHeaderData(name: "Defaults")
     }
     
-    func bindingUI() {
     
-      
-        viewModel.output.myPostObservable.subscribe(onNext: { posts in
-            if posts.count == 10 {
-                self.currpage += 1
-            }
-            
-          DispatchQueue.main.async {
-            var snapshot = self.datasource.snapshot()
-              let items = snapshot.itemIdentifiers(inSection: .posts)
-              if items.count > 0 {
-                  if case Item.posts(let param) = items[items.count - 1] {
-                      if param.imageUrl != posts[posts.count - 1].imageUrl {
-                          snapshot.appendItems(posts.map({ Item.posts($0) }), toSection: .posts)
-                          self.datasource.apply(snapshot, animatingDifferences: true)
-                      }
-                  }
-              } else {
-                  snapshot.appendItems(posts.map({ Item.posts($0) }), toSection: .posts)
-                  self.datasource.apply(snapshot, animatingDifferences: true)
-                  
-              }
-              self.pullControl.endRefreshing()
-            
-          }
-            
-        })
-      
-      
-        viewModel.output.followersObservable.subscribe(onNext: { count in
-            let indexPath = IndexPath(item: 0, section: 0);
-            DispatchQueue.main.async {
-                if let cell = self.datasource.itemIdentifier(for: indexPath) {
-                    if case .header(var param) = cell {
-                        if (param.followers != count) {
-                            param.followers = count
-                            var snapshot = self.datasource.snapshot()
-                            // replace item
-                            snapshot.insertItems([.header(param)], beforeItem: cell)
-                            snapshot.deleteItems([cell])
-                            // update datasource
-                            self.datasource.apply(snapshot)
-                        }
-                    }
-                }
-            }
-        })
+    
+    func getMyPost(block: @escaping ([[String: Any]]) -> Void) {
         
-        viewModel.output.followingObservable.subscribe(onNext: { count in
-            let indexPath = IndexPath(item: 0, section: 0);
-            DispatchQueue.main.async {
-                if let cell = self.datasource.itemIdentifier(for: indexPath) {
-                    if case .header(var param) = cell {
-                        if (param.following != count) {
-                            param.following = count
-                            var snapshot = self.datasource.snapshot()
-                            // replace item
-                            snapshot.insertItems([.header(param)], beforeItem: cell)
-                            snapshot.deleteItems([cell])
-                            // update datasource
-                            self.datasource.apply(snapshot)
+            APIManager().getMyPost(page: currpage) { result in
+                switch result {
+                case .success(let apiResponse):
+                     
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                        return
+                    }
+                    if !data.isEmpty {
+                        print(data)
+                        print("Successfully retrieved \(data.count) posts.")
+                        self.currpage += 1
+                        let items = data
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
                         }
                     }
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
                 }
             }
-        })
+        }
+
+    }
+    
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+        
+        // Check if there are new posts to insert
+        guard !newPosts.isEmpty else { return }
+        let newItems = newPosts.compactMap { PostModel(JSON: $0) }
+        var snapshot = self.datasource.snapshot()
+       
+        snapshot.appendItems(newItems.map({Item.posts($0)}), toSection: .posts)
+        self.datasource.apply(snapshot, animatingDifferences: true)
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
   
+        NotificationCenter.default.addObserver(self, selector: #selector(ProfileViewController.refreshData), name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
+        
+        //refreshFollow
         collectionView.delegate = self
        
         
@@ -148,31 +133,60 @@ class ProfileViewController: UIViewController {
         
         configureDatasource()
         wireDelegate()
-        bindingUI()
-        oldTabbarFr = self.tabBarController?.tabBar.frame ?? .zero
-        // Load follwer, follwing
-        viewModel.getFollowers()
-        viewModel.getMyPost(page: currpage)
-        viewModel.getFollowing()
-        
+   
+        self.getFistBumperCount()
+        self.getFollowing()
+        self.getFollowers()
+
         self.setupChallengeView()
+        
+        self.getMyPost { (newPosts) in
+            
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
+        }
+        
+        delay(2) {
+            self.hasLoaded = true
+        }
+       
     }
+    
     
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
+
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         
         // tabbar
         showMiddleBtn(vc: self)
+        
+        // check if need to refresh somethings
+        
+        if needRecount, hasLoaded {
+            
+            needRecount = false
+            refreshFollow()
+            
+        }
+        
+        if needReloadPost, hasLoaded {
+            
+            needReloadPost = false
+            refreshPost()
+            
+        }
+
         
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Show the Navigation Bar
+
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
       
     }
@@ -186,7 +200,7 @@ class ProfileViewController: UIViewController {
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell {
         switch item {
-        case .header(let param):
+        case .header(_):
                 
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileHeaderCell.reuseIdentifier, for: indexPath) as? ProfileHeaderCell {
                 // display username
@@ -206,7 +220,8 @@ class ProfileViewController: UIViewController {
                 }
                
                 if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
-                    cell.discordLbl.text = "Added and verified"
+                    cell.discordLbl.isHidden = true
+                    cell.discordChecked.isHidden = false
                 } else {
                     cell.discordLbl.text = "None"
                 }
@@ -215,15 +230,10 @@ class ProfileViewController: UIViewController {
                     cell.descriptionLbl.text = about
                 }
                 
-            
-               
-                fistBumpedCount = param.fistBumped
-                followerCount = param.followers
-                followingCount = param.following
-               
-                cell.numberOfFollowers.text = "\(formatPoints(num: Double(param.followers)))"
-                cell.numberOfFollowing.text = "\(formatPoints(num: Double(param.following)))"
-                cell.numberOfFistBumps.text = "\(formatPoints(num: Double(param.fistBumped)))"
+
+                cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
+                cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
+                cell.numberOfFistBumps.text = "\(formatPoints(num: Double(fistBumpedCount)))"
                 
                 // add buttons target
                 cell.editBtn.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
@@ -303,8 +313,7 @@ class ProfileViewController: UIViewController {
                     cell.badgeImgView.image = UIImage.init(named: card.badge)
                     ChallengeView.badgeImgView.image = UIImage.init(named: card.badge)
                     
-                    print("Hello - \(card.games.count) - \(card.badge)")
-               
+    
                         if card.games.isEmpty == true {
                             cell.game1.isHidden = false
                             cell.game2.isHidden = true
@@ -440,9 +449,17 @@ class ProfileViewController: UIViewController {
                 }
                 
                 
-                cell.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
-                ChallengeView.fistBumpedLbl.text = "\(formatPoints(num: Double(fistBumpedCount)))"
+                let fullString = NSMutableAttributedString(string: "")
+                let image1Attachment = NSTextAttachment()
+                image1Attachment.image = UIImage(named: "fistBumpedStats")
+                image1Attachment.bounds = CGRect(x: 0, y: -2, width: 30, height: 12)
+                let image1String = NSAttributedString(attachment: image1Attachment)
+                fullString.append(image1String)
                 
+                
+                fullString.append(NSAttributedString(string: "  \(formatPoints(num: Double(fistBumpedCount)))"))
+                cell.fistBumpedLbl.attributedText = fullString
+                ChallengeView.fistBumpedLbl.attributedText = fullString
 
                 cell.EditChallenge.addTarget(self, action: #selector(editCardTapped), for: .touchUpInside)
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
@@ -488,6 +505,8 @@ class ProfileViewController: UIViewController {
         datasource.apply(snapshot(), animatingDifferences: false)
     }
     
+   
+    
     
     func setupChallengeView() {
     
@@ -515,16 +534,70 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController {
     
     @objc func refreshListData(_ sender: Any) {
-        print("REFRESH....")
-        // Load follwer, follwing
-        viewModel.getFollowers()
-        viewModel.getMyPost(page: 1)
-        viewModel.getFollowing()
+    
+        var snapshot = self.datasource.snapshot()
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        currpage = 1
         
-//        DispatchQueue.main.async {
-//            self.pullControl.endRefreshing()
-//        }
+        self.getMyPost { (newPosts) in
+            
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
+        }
+    
+        
+        reloadUserInformation {
+            self.reloadGetFollowers {
+                self.reloadUserInformation {
+                    self.reloadGetFistBumperCount {
+                        self.applyAllChange()
+                        Dispatch.main.async {
+                            self.pullControl.endRefreshing()
+                        }
+                    }
+                }
+            }
+        }
+        
+       
     }
+    
+    @objc func refreshData(_ sender: Any) {
+    
+        reloadUserInformation {
+            self.applyUIChange()
+            
+        }
+        
+       
+    }
+    
+    func refreshFollow() {
+    
+        reloadGetFollowers {
+            self.reloadGetFollowing {
+                self.applyHeaderChange()
+            }
+        }
+        
+       
+    }
+    
+    func refreshPost() {
+    
+        var snapshot = self.datasource.snapshot()
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        currpage = 1
+        
+        self.getMyPost { (newPosts) in
+            
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
+        }
+        
+       
+    }
+    
     
     @objc func settingTapped(_ sender: UIButton) {
         
@@ -540,10 +613,7 @@ extension ProfileViewController {
     
     
     @objc func fistBumpedlistTapped(_ sender: UIButton) {
-        
-        print("fistBumpedlistTapped")
-    
-        //MainFistBumpVC
+     
         if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
             MFBVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
@@ -555,13 +625,12 @@ extension ProfileViewController {
     
     @objc func followersTapped(_ sender: UIButton) {
         
-        print("followersTapped")
-        
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
             MFVC.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = true
             MFVC.followerCount = followerCount
             MFVC.followingCount = followingCount
+            MFVC.userId = _AppCoreData.userDataSource.value?.userID ?? ""
             hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
@@ -572,13 +641,12 @@ extension ProfileViewController {
     
     @objc func followingTapped(_ sender: UIButton) {
         
-        print("followingTapped")
-        
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
             MFVC.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = false
             MFVC.followerCount = followerCount
             MFVC.followingCount = followingCount
+            MFVC.userId = _AppCoreData.userDataSource.value?.userID ?? ""
             hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
@@ -645,14 +713,12 @@ extension ProfileViewController {
     
     @objc func avatarTapped(sender: AnyObject!) {
   
-        print("avatarTapped")
         showFullScreenAvatar()
   
     }
     
     @objc func coverImageTapped(sender: AnyObject!) {
   
-        print("coverImageTapped")
         showFullScreenCover()
   
     }
@@ -677,8 +743,7 @@ extension ProfileViewController {
     
     @objc func game1Tapped(_ sender: UIButton) {
         // make sure to check if any game is added unless peform adding game for +
-        print("game1Tapped")
-        
+
         if let card = _AppCoreData.userDataSource.value?.challengeCard
         {
             
@@ -733,8 +798,6 @@ extension ProfileViewController {
     }
     
     @objc func game2Tapped(_ sender: UIButton) {
-        
-        print("game2Tapped")
         
         if let card = _AppCoreData.userDataSource.value?.challengeCard
         {
@@ -1004,32 +1067,16 @@ extension ProfileViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-        let item = datasource.itemIdentifier(for: indexPath)
-       
-        switch item {
-            case .header(_):
-                print("header")
-                
-            case .challengeCard(_):
-                
-                print("challengeCard")
-                //showFullScreenChallengeCard()
-                
-            case .posts(_):
-                
-                let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
-                if indexPath.row == snap.count - 5 {
-                    
-                    print("Load next")
-                    
-                }
-        
-            case .none:
-                print("None")
+    
+        // Infinite scrolling logic
+        let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
+        if indexPath.row == snap.count - 5 {
+            self.getMyPost { (newPosts) in
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            }
         }
-        
     }
+
 
 }
 
@@ -1193,6 +1240,242 @@ extension ProfileViewController: UINavigationBarDelegate, UINavigationController
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
+}
+
+extension ProfileViewController {
+    
+    func getFollowing() {
+      
+        APIManager().getFollows(page:1) { result in
+            switch result {
+            case .success(let response):
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    self.followingCount = 0
+                    return
+                }
+            
+                if let followingsGet = data["total"] as? Int {
+                    self.followingCount = followingsGet
+                } else {
+                    self.followingCount = 0
+                }
+                
+                self.applyHeaderChange()
+               
+            case .failure(let error):
+                print("Error loading following: ", error)
+        
+            }
+        }
+    }
+    func getFollowers() {
+      
+        APIManager().getFollowers(page: 1) { result in
+            switch result {
+            case .success(let response):
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    return
+                }
+            
+                if let followersGet = data["total"] as? Int {
+                    self.followerCount = followersGet
+                } else {
+                    self.followerCount = 0
+                }
+                
+                self.applyHeaderChange()
+                
+            case .failure(let error):
+                print("Error loading follower: ", error)
+            }
+        }
+    }
+    func getFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "") {
+       
+        APIManager().getFistBumperCount(userID: userID){
+            result in
+            switch result {
+            case .success(let response):
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    self.fistBumpedCount = 0
+       
+                    return
+                }
+            
+                if let fistBumpedGet = data["total"] as? Int {
+                    self.fistBumpedCount = fistBumpedGet
+                } else {
+                    self.fistBumpedCount = 0
+                }
+                
+                self.applyHeaderChange()
+                
+            case .failure(let error):
+                print("Error loading fistbumpers: ", error)
+                self.fistBumpedCount = 0
+            }
+        }
+    }
+    
+    func applyHeaderChange() {
+        
+        Dispatch.main.async {
+            var updatedSnapshot = self.datasource.snapshot()
+            updatedSnapshot.reloadSections([.header])
+            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+        }
+        
+   
+    }
+    
+    func applyAllChange() {
+        Dispatch.main.async {
+            var updatedSnapshot = self.datasource.snapshot()
+            updatedSnapshot.reloadSections([.header, .challengeCard, .posts])
+            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+        }
+    
+    }
+    
+    func applyUIChange() {
+        
+        Dispatch.main.async {
+            var updatedSnapshot = self.datasource.snapshot()
+            updatedSnapshot.reloadSections([.header, .challengeCard])
+            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+        }
+        
+        
+    }
+    
+    
+    func reloadUserInformation(completed: @escaping DownloadComplete) {
+
+        APIManager().getme { result in
+            switch result {
+            case .success(let response):
+                
+                if let data = response.body {
+                    
+                    if !data.isEmpty {
+                        
+                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                            _AppCoreData.reset()
+                            _AppCoreData.userDataSource.accept(newUserData)
+                            completed()
+                        } else {
+                            completed()
+                        }
+                        
+                      
+                    } else {
+                        completed()
+                    }
+                    
+                } else {
+                    completed()
+                }
+                
+                
+            case .failure(let error):
+                print("Error loading profile: ", error)
+                completed()
+            }
+        }
+        
+    }
+    
+    
+    func reloadGetFollowing(completed: @escaping DownloadComplete) {
+      
+        APIManager().getFollows(page:1) { result in
+            switch result {
+            case .success(let response):
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    self.followingCount = 0
+                    completed()
+                    return
+                }
+            
+                if let followingsGet = data["total"] as? Int {
+                    self.followingCount = followingsGet
+                } else {
+                    self.followingCount = 0
+                }
+                
+                completed()
+               
+            case .failure(let error):
+                print("Error loading following: ", error)
+                completed()
+        
+            }
+        }
+    }
+    func reloadGetFollowers(completed: @escaping DownloadComplete) {
+      
+        APIManager().getFollowers(page: 1) { result in
+            switch result {
+            case .success(let response):
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    completed()
+                    return
+                }
+            
+                if let followersGet = data["total"] as? Int {
+                    self.followerCount = followersGet
+                } else {
+                    self.followerCount = 0
+                }
+                
+                completed()
+                
+            case .failure(let error):
+                print("Error loading follower: ", error)
+                completed()
+            }
+        }
+    }
+    func reloadGetFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "", completed: @escaping DownloadComplete) {
+       
+        APIManager().getFistBumperCount(userID: userID){
+            result in
+            switch result {
+            case .success(let response):
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["paging"] as? [String: Any] else {
+                    self.fistBumpedCount = 0
+                    completed()
+                    return
+                }
+            
+                if let fistBumpedGet = data["total"] as? Int {
+                    self.fistBumpedCount = fistBumpedGet
+                } else {
+                    self.fistBumpedCount = 0
+                }
+                
+                completed()
+                
+            case .failure(let error):
+                print("Error loading fistbumpers: ", error)
+                self.fistBumpedCount = 0
+                completed()
+            }
+        }
+    }
+    
+    
+    
 }
 
 

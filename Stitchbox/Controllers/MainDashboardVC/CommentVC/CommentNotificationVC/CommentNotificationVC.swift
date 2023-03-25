@@ -42,6 +42,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     var tableNode: ASTableNode!
     var reply_to_username: String!
     var LoadPath: [IndexPath] = []
+    var isPost = false
     //
     var selectedNotification: UserNotificationModel!
     
@@ -220,6 +221,10 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
             
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.reportRequest), name: (NSNotification.Name(rawValue: "notification_report_cmt")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.copyRequest), name: (NSNotification.Name(rawValue: "notification_copy_cmt")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.deleteRequest), name: (NSNotification.Name(rawValue: "notification_delete_cmt")), object: nil)
     
     }
     
@@ -245,6 +250,19 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         }
         
         loadingView.backgroundColor = self.view.backgroundColor
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "notification_report_cmt")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "notification_copy_cmt")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "notification_delete_cmt")), object: nil)
         
     }
     
@@ -436,18 +454,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
     }
     
-
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        
-
-        
-    }
     
     func wireDelegates() {
         
@@ -1338,6 +1344,7 @@ extension CommentNotificationVC {
                 let commentSettings = CommentSettings()
                 commentSettings.modalPresentationStyle = .custom
                 commentSettings.transitioningDelegate = self
+                commentSettings.isNotification = true
                 
                 global_presetingRate = Double(0.35)
                 global_cornerRadius = 45
@@ -1419,6 +1426,51 @@ extension CommentNotificationVC {
         
         CommentList.removeSubrange(start..<start+indexPaths.count)
         tableNode.deleteRows(at: indexPaths, with: .automatic)
+    }
+    
+    
+}
+
+extension CommentNotificationVC {
+    
+    @objc func copyRequest() {
+        
+        if let index = editedIndexpath?.row {
+            UIPasteboard.general.string = self.CommentList[index].text
+            showNote(text: "Copied successfully")
+        }
+        
+        
+        
+    }
+    
+    @objc func deleteRequest() {
+        
+        if let cmt = editedComment, let index = editedIndexpath?.row {
+            removeComment(items: cmt, indexPath: index)
+        }
+       
+    }
+    
+    @objc func reportRequest() {
+        
+        if let index = editedIndexpath?.row {
+            
+            let slideVC =  reportView()
+            
+            slideVC.comment_id = self.CommentList[index].comment_id
+            slideVC.comment_report = true
+            slideVC.modalPresentationStyle = .custom
+            slideVC.transitioningDelegate = self
+            global_presetingRate = Double(0.75)
+            global_cornerRadius = 35
+            
+            delay(0.1) {
+                self.present(slideVC, animated: true, completion: nil)
+            }
+            
+        }
+    
     }
     
     

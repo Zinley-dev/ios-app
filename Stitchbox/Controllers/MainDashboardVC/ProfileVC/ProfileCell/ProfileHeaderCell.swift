@@ -28,7 +28,7 @@ class ProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var avatarImage: UIImageView!
     @IBOutlet weak var coverImage: UIImageView!
     @IBOutlet weak var discordLbl: UILabel!
-    
+    @IBOutlet weak var discordChecked: UIImageView!
     @IBOutlet weak var followerStack: UIStackView!
     @IBOutlet weak var followingStack: UIStackView!
     

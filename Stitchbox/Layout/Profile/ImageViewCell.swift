@@ -51,16 +51,14 @@ class ImageViewCell: UICollectionViewCell {
    
         self.imageView.load(url: data.imageUrl, str: data.imageUrl.absoluteString)
         
-        print(data.setting)
-        
-        if let type = data.setting["mediaType"] as? String {
-            if type == "video" {
-                videoSignView.isHidden = false
-            } else {
-                videoSignView.isHidden = true
-            }
+        if !data.muxPlaybackId.isEmpty {
+            
+            videoSignView.isHidden = false
+            
         } else {
+            
             videoSignView.isHidden = true
+            
         }
       
     }

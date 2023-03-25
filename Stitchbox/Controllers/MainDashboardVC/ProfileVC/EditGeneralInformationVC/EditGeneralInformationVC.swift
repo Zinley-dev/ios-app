@@ -119,7 +119,9 @@ extension EditGeneralInformationVC {
                                     SwiftLoader.hide()
                                     self.infoTxtField.text = ""
                                     self.infoTxtField.placeholder = urlString
+                                    NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
                                     showNote(text: "Updated successfully")
+                                    
                                 }
                                 
                             case .failure(let error):
@@ -168,7 +170,7 @@ extension EditGeneralInformationVC {
                         
                         SwiftLoader.hide()
                         showNote(text: "Updated successfully")
-                
+                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
                         self.infoTxtField.placeholder = name
                         self.infoTxtField.text = ""
                         
@@ -257,6 +259,7 @@ extension EditGeneralInformationVC {
                     self.availaleUsernameLbl.isHidden = true
                     self.saveBtn.backgroundColor = .disableButtonBackground
                     self.saveBtn.titleLabel?.textColor = .lightGray
+                    NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
         
                 }
             case .failure(let error):
@@ -383,8 +386,8 @@ extension EditGeneralInformationVC {
             } else if type == "Username" {
                 
                 
-                delayItem.perform(after: 0.25) {
-                    if text != "" {
+                delayItem.perform(after: 0.35) {
+                    if text != "", text.count >= 3  {
                         self.checkAvailaleName(searchText: text)
                     }
                 }

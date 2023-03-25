@@ -41,6 +41,7 @@ class EditBioVC: UIViewController {
                     }
                     
                     DispatchQueue.main.async {
+                        reloadGlobalUserInformation()
                         showNote(text: "Updated successfully")
                     }
                   

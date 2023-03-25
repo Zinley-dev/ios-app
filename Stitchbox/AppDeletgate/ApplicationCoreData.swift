@@ -102,4 +102,15 @@ class ApplicationCoreData: NSObject {
             UserDefaults.standard.setValue(data, forKey: kUserProfile)
         }
     }
+    
+    func reset() {
+        // Clear userDataSource
+        self.userDataSource.accept(nil)
+        
+        // Clear data in UserDefaults
+        UserDefaults.standard.removeObject(forKey: kUserProfile)
+        
+        // Sync changes to UserDefaults
+        self.syncDown()
+    }
 }

@@ -264,10 +264,22 @@ extension NotificationVC {
             
             switch template {
                 
+                
+                
                 case "NEW_COMMENT":
-                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: notification.post)
+                    if let post = notification.post {
+                        openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
+                    } else {
+                        self.showErrorAlert("Oops!", msg: "This content is not available")
+                    }
+                   
                 case "REPLY_COMMENT":
-                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: notification.post)
+                    if let post = notification.post {
+                        openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
+                    } else {
+                        self.showErrorAlert("Oops!", msg: "This content is not available")
+                    }
+                 
                 case "NEW_FISTBUMP_1":
                     if let userId = notification.userId, let username = notification.username {
                         openUser(userId: userId, username: username)
@@ -287,7 +299,11 @@ extension NotificationVC {
                 case "NEW_FOLLOW_2":
                     openFollow()
                 case "NEW_TAG":
-                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: notification.post)
+                    if let post = notification.post {
+                        openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
+                    } else {
+                        self.showErrorAlert("Oops!", msg: "This content is not available")
+                    }
                 case "NEW_POST":
                     openPost(post: notification.post)
                 default:
@@ -337,7 +353,7 @@ extension NotificationVC {
         slideVC.root_id = rootComment
         slideVC.type = type
         slideVC.post = post
-        
+       
         global_presetingRate = Double(0.75)
         global_cornerRadius = 35
         
@@ -366,8 +382,9 @@ extension NotificationVC {
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
             MFVC.showFollowerFirst = true
-            //MFVC.followerCount = followerCount
-            //MFVC.followingCount = followingCount
+            MFVC.userId = _AppCoreData.userDataSource.value?.userID ?? ""
+            MFVC.followerCount = 0
+            MFVC.followingCount = 0
            
             self.navigationController?.pushViewController(MFVC, animated: true)
             
