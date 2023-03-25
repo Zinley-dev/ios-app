@@ -29,6 +29,7 @@ var global_suppport_game_list = [GameList]()
 var needRecount = false
 var needReloadPost = false
 
+
  let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
  let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
  let data3 = StreamingDomainModel(postKey: "3", streamingDomainModel: ["company": "Twitch", "domain": ["twitch.tv", "m.twitch.tv"], "status": true])
@@ -631,6 +632,8 @@ func reloadGlobalUserInformation() {
             if let data = response.body {
                 
                 if !data.isEmpty {
+                    
+                    print(data)
                     
                     if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
                         _AppCoreData.reset()

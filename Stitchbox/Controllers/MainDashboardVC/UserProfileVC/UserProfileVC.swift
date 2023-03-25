@@ -1083,7 +1083,7 @@ extension UserProfileVC {
     
     func showFullScreenAvatar() {
         
-        if selectAvatarImage.isHidden {
+        if selectAvatarImage.isHidden, selectAvatarImage != nil {
         
             self.backgroundView.isHidden = false
             self.selectAvatarImage.alpha = 1.0
@@ -1101,7 +1101,7 @@ extension UserProfileVC {
     
     func showFullScreenCover() {
         
-        if selectCoverImage.isHidden {
+        if selectCoverImage.isHidden, selectCoverImage.image != nil {
         
             self.backgroundView.isHidden = false
             self.selectCoverImage.alpha = 1.0

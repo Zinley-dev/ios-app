@@ -105,8 +105,6 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
             
         } 
             
-        
-    
     }
     
     
@@ -129,7 +127,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         loadingView.backgroundColor = self.view.backgroundColor
         
         
-        delay(1.5) {
+        delay(1.0) {
             
             UIView.animate(withDuration: 0.5) {
                 

@@ -71,6 +71,7 @@ class ProfileViewController: UIViewController {
                         return
                     }
                     if !data.isEmpty {
+                        print(data)
                         print("Successfully retrieved \(data.count) posts.")
                         self.currpage += 1
                         let items = data
@@ -132,7 +133,7 @@ class ProfileViewController: UIViewController {
         
         configureDatasource()
         wireDelegate()
-        
+   
         self.getFistBumperCount()
         self.getFollowing()
         self.getFollowers()

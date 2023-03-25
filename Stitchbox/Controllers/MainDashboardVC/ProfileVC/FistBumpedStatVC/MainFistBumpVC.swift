@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FLAnimatedImage
 
 class MainFistBumpVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, UISearchBarDelegate {
     
@@ -18,38 +19,42 @@ class MainFistBumpVC: UIViewController, UINavigationBarDelegate, UINavigationCon
     @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!
     
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
+    
     var searchController: UISearchController?
     var showfistBumperFirst = false
     var type = ""
     var ownerID = ""
+    var fistBumperCount = 0
+    var fistBumpeeCount = 0
     
-    
-    lazy var fistBumperVC: fistBumperVC = {
+    lazy var fistBumperVC: FistBumperVC = {
         
         
-        if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "fistBumperVC") as? fistBumperVC {
+        if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "FistBumperVC") as? FistBumperVC {
                     
             self.addVCAsChildVC(childViewController: controller)
             
             return controller
         } else {
-            return UIViewController() as! fistBumperVC
+            return UIViewController() as! FistBumperVC
         }
        
         
     }()
     
-    lazy var fistBumpeeVC: fistBumpeeVC = {
+    lazy var fistBumpeeVC: FistBumpeeVC = {
         
         
-        if let controller = UIStoryboard(name: "Dashboard", bundle: Bundle.main).instantiateViewController(withIdentifier: "fistBumpeeVC") as? fistBumpeeVC {
+        if let controller = UIStoryboard(name: "Dashboard", bundle: Bundle.main).instantiateViewController(withIdentifier: "FistBumpeeVC") as? FistBumpeeVC {
             
             self.addVCAsChildVC(childViewController: controller)
             
             return controller
             
         } else {
-            return UIViewController() as! fistBumpeeVC
+            return UIViewController() as! FistBumpeeVC
         }
                 
         
@@ -68,6 +73,64 @@ class MainFistBumpVC: UIViewController, UINavigationBarDelegate, UINavigationCon
             setupfistBumpeeView()
         }
         setupSearchController()
+        
+        
+        countFistBumpers() {
+            Dispatch.main.async {
+       
+                self.fistBumperBtn.setTitle("\(formatPoints(num: Double(self.fistBumperCount))) FistBumpers", for: .normal)
+            }
+        }
+        
+       
+        
+        countFistBumpees() {
+            Dispatch.main.async {
+                self.fistBumpeeBtn.setTitle("\(formatPoints(num: Double(self.fistBumpeeCount))) FistBumpees", for: .normal)
+            }
+        }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        do {
+            
+            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+            let gifData = try NSData(contentsOfFile: path) as Data
+            let image = FLAnimatedImage(animatedGIFData: gifData)
+            
+            
+            self.loadingImage.animatedImage = image
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        loadingView.backgroundColor = self.view.backgroundColor
+        
+        
+        delay(1.5) {
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                self.loadingView.alpha = 0
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
+                    
+                    self.loadingView.isHidden = true
+                    
+                }
+                
+            }
+            
+        }
         
     }
 
@@ -243,7 +306,7 @@ extension MainFistBumpVC {
         if fistBumperVC.view.isHidden == false {
             
             
-            fistBumperVC.searchUserList = fistBumpeeVC.FistBumpList
+            fistBumperVC.searchUserList = fistBumpeeVC.fistBumpList
             fistBumperVC.inSearchMode = true
             fistBumperVC.tableNode.reloadData()
             
@@ -256,7 +319,7 @@ extension MainFistBumpVC {
         if fistBumpeeVC.view.isHidden == false {
             
             
-            fistBumpeeVC.searchUserList = fistBumpeeVC.FistBumpList
+            fistBumpeeVC.searchUserList = fistBumpeeVC.fistBumpList
             fistBumpeeVC.inSearchMode = true
             fistBumpeeVC.tableNode.reloadData()
              
@@ -284,11 +347,11 @@ extension MainFistBumpVC {
         // Check which view controller is currently visible
         if !fistBumperVC.view.isHidden {
             // Set the searchUserList variable of the fistBumperVC to the full list of users and reload the table view
-            fistBumperVC.searchUserList = fistBumperVC.FistBumpList
+            fistBumperVC.searchUserList = fistBumperVC.fistBumpList
             fistBumperVC.tableNode.reloadData()
         } else if !fistBumpeeVC.view.isHidden {
             // Set the searchUserList variable of the fistBumpeeVC to the full list of users and reload the table view
-            fistBumpeeVC.searchUserList = fistBumpeeVC.FistBumpList
+            fistBumpeeVC.searchUserList = fistBumpeeVC.fistBumpList
             fistBumpeeVC.tableNode.reloadData()
         }
     }
@@ -296,16 +359,16 @@ extension MainFistBumpVC {
 
     func searchUsers(for searchText: String) {
             
-            let fistbump = !fistBumpeeVC.view.isHidden ? fistBumperVC.FistBumpList : fistBumpeeVC.FistBumpList
+            let fistbump = !fistBumpeeVC.view.isHidden ? fistBumperVC.fistBumpList : fistBumpeeVC.fistBumpList
             
             let searchUserList = fistbump.filter { $0.userName.range(of: searchText, options: .caseInsensitive) != nil }
             
             let targetVC = !fistBumperVC.view.isHidden ? fistBumperVC : fistBumpeeVC
     
-            if let updateVC = targetVC as? fistBumperVC {
+            if let updateVC = targetVC as? FistBumperVC {
                 updateVC.searchUserList = searchUserList
                 updateVC.tableNode.reloadData()
-            } else if let updateVC = targetVC as? fistBumpeeVC {
+            } else if let updateVC = targetVC as? FistBumpeeVC {
                 updateVC.searchUserList = searchUserList
                 updateVC.tableNode.reloadData()
             }
@@ -362,6 +425,76 @@ extension MainFistBumpVC {
         childViewController.willMove(toParent: nil)
         childViewController.view.removeFromSuperview()
         childViewController.removeFromParent()
+    }
+    
+}
+
+extension MainFistBumpVC {
+    
+    
+    func countFistBumpers(completed: @escaping DownloadComplete) {
+        
+        
+        APIManager().getFistBumperCount { result in
+            switch result {
+            case .success(let response):
+                
+                print(response)
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["count"] as? [String: Any] else {
+                        completed()
+                        return
+                }
+            
+                    if let fistBumpersGet = data["total"] as? Int {
+                        self.fistBumperCount = fistBumpersGet
+                    } else {
+                        self.fistBumperCount = 0
+                    }
+                    
+                    completed()
+                
+            case .failure(let error):
+                print("Error loading follower: ", error)
+                completed()
+               
+            }
+        }
+        
+       
+    }
+    
+    
+    func countFistBumpees(completed: @escaping DownloadComplete) {
+        
+        APIManager().getFistBumpeeCount { result in
+            switch result {
+            case .success(let response):
+                
+                print(response)
+                
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["count"] as? [String: Any] else {
+                        completed()
+                        return
+                }
+            
+                    if let fistBumpeesGet = data["total"] as? Int {
+                        self.fistBumpeeCount = fistBumpeesGet
+                    } else {
+                        self.fistBumpeeCount = 0
+                    }
+                    
+                    completed()
+                
+            case .failure(let error):
+                print("Error loading follower: ", error)
+                completed()
+               
+            }
+        }
+        
     }
     
 }

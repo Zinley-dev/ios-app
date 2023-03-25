@@ -86,9 +86,9 @@ class FollowNode: ASCellNode {
        
         } else {
             
-            if let user = user.userId {
+            if let userId = user.userId {
                 
-                if user == _AppCoreData.userDataSource.value?.userID {
+                if userId == _AppCoreData.userDataSource.value?.userID {
                     
                     DispatchQueue.main.async {
                         self.isFollowingUser = false
@@ -102,7 +102,48 @@ class FollowNode: ASCellNode {
                     
                 } else {
                     
-                    checkIfFollow()
+                    if user.isFollowing {
+                        
+                        DispatchQueue.main.async {
+                            self.isFollowingUser = true
+                            self.followBtnNode.backgroundColor = .primary
+                            self.followBtnNode.layer.borderWidth = 1.0
+                            self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
+                            self.followBtnNode.layer.cornerRadius = 10.0
+                            self.followBtnNode.clipsToBounds = true
+                            self.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.white, for: .normal)
+                        }
+                        
+                        
+                    } else {
+                        
+                        if self.user.loadFromUserId == _AppCoreData.userDataSource.value?.userID, self.user.loadFromMode == "follower" {
+                            
+                            DispatchQueue.main.async {
+                                self.isFollowingUser = false
+                                self.followBtnNode.backgroundColor = .white
+                                self.followBtnNode.layer.borderWidth = 1.0
+                                self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
+                                self.followBtnNode.layer.cornerRadius = 10.0
+                                self.followBtnNode.clipsToBounds = true
+                                self.followBtnNode.setTitle("+ follow back", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                            }
+                            
+                        } else {
+                            
+                            DispatchQueue.main.async {
+                                self.isFollowingUser = false
+                                self.followBtnNode.backgroundColor = .white
+                                self.followBtnNode.layer.borderWidth = 1.0
+                                self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
+                                self.followBtnNode.layer.cornerRadius = 10.0
+                                self.followBtnNode.clipsToBounds = true
+                                self.followBtnNode.setTitle("+ follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
                     
                 }
                 

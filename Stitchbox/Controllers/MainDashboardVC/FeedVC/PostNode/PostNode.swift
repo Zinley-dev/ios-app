@@ -419,7 +419,9 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 
                 if let update1 = vc as? FeedViewController {
                     
-                    update1.playTimeBar.setProgress(rate, animated: true)
+                    if update1.playTimeBar != nil {
+                        update1.playTimeBar.setProgress(rate, animated: true)
+                    }
                     
                 }
                 
@@ -427,7 +429,9 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 
                 if let update2 = vc as? SelectedPostVC {
                     
-                    update2.playTimeBar.setProgress(rate, animated: true)
+                    if update2.playTimeBar != nil {
+                        update2.playTimeBar.setProgress(rate, animated: true)
+                    }
                     
                 }
                 
@@ -436,8 +440,10 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 
                 if let update2 = vc as? MainSearchVC {
                     
-                    update2.PostSearchVC.playTimeBar.setProgress(rate, animated: true)
-                    
+                    if update2.PostSearchVC.playTimeBar != nil {
+                        update2.PostSearchVC.playTimeBar.setProgress(rate, animated: true)
+                    }
+                   
                 }
                 
                 
@@ -445,7 +451,10 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 
                 if let update2 = vc as? PostListWithHashtagVC {
                     
-                    update2.playTimeBar.setProgress(rate, animated: true)
+                    if update2.playTimeBar != nil {
+                        update2.playTimeBar.setProgress(rate, animated: true)
+                    }
+                    
                     
                 }
                 
@@ -992,46 +1001,16 @@ extension PostNode {
     
     func totalLikeCount() {
         
-        APIManager().countLikedPost(id: post.id) { result in
-            switch result {
-            case .success(let apiResponse):
-    
-                guard apiResponse.body?["message"] as? String == "success",
-                      let likeCountFromQuery = apiResponse.body?["likes"] as? Int  else {
-                        return
-                }
-                
-                self.likeCount = likeCountFromQuery
-                
-                DispatchQueue.main.async {
-                    self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(likeCountFromQuery)))"
-                }
-               
-            case .failure(let error):
-                print("LikeCount: \(error)")
-            }
+        DispatchQueue.main.async {
+            self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeLikes ?? 0)))"
         }
         
     }
     
     func totalCmtCount() {
         
-        APIManager().countComment(post: post.id) { result in
-            switch result {
-            case .success(let apiResponse):
-             
-                guard apiResponse.body?["message"] as? String == "success",
-                      let commentsCountFromQuery = apiResponse.body?["comments"] as? Int  else {
-                        return
-                }
-                
-                DispatchQueue.main.async {
-                    self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(commentsCountFromQuery)))"
-                }
-                
-            case .failure(let error):
-                print("CmtCount: \(error)")
-            }
+        DispatchQueue.main.async {
+            self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeComments ?? 0)))"
         }
         
     }

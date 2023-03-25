@@ -255,6 +255,8 @@ extension PostVC {
                     return
                 }
                 
+                print(apiResponse)
+                
                 if let settings = data.first?["settings"] as? [String: Any] {
                     
                     if let allowcomment = settings["allowcomment"] as? Bool {
@@ -639,7 +641,7 @@ extension PostVC {
             }
         }
         
-        
+       
     }
     
     

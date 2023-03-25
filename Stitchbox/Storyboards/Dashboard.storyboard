@@ -9639,15 +9639,37 @@
                                 <rect key="frame" x="0.0" y="101" width="375" height="677"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Pt-0e-Ojh">
+                                <rect key="frame" x="0.0" y="47" width="375" height="731"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hE5-oG-ifK" customClass="FLAnimatedImageView">
+                                        <rect key="frame" x="150" y="328" width="75" height="75"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="75" id="GXm-Jx-P5R"/>
+                                            <constraint firstAttribute="width" constant="75" id="SeR-fd-ejW"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="hE5-oG-ifK" firstAttribute="centerY" secondItem="4Pt-0e-Ojh" secondAttribute="centerY" id="V9R-1e-cWj"/>
+                                    <constraint firstItem="hE5-oG-ifK" firstAttribute="centerX" secondItem="4Pt-0e-Ojh" secondAttribute="centerX" id="XFr-oe-L9b"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Mst-0l-5xg"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
                             <constraint firstItem="6QZ-66-CmY" firstAttribute="leading" secondItem="Mst-0l-5xg" secondAttribute="leading" id="0WC-S8-NpR"/>
+                            <constraint firstItem="4Pt-0e-Ojh" firstAttribute="leading" secondItem="Mst-0l-5xg" secondAttribute="leading" id="2mf-XV-qHZ"/>
+                            <constraint firstItem="Mst-0l-5xg" firstAttribute="trailing" secondItem="4Pt-0e-Ojh" secondAttribute="trailing" id="FMD-LU-0r6"/>
                             <constraint firstItem="Mst-0l-5xg" firstAttribute="bottom" secondItem="6QZ-66-CmY" secondAttribute="bottom" id="J1k-hO-2zW"/>
                             <constraint firstItem="6QZ-66-CmY" firstAttribute="top" secondItem="rzB-CV-cip" secondAttribute="bottom" constant="10" id="L02-Aj-I7Q"/>
+                            <constraint firstItem="4Pt-0e-Ojh" firstAttribute="top" secondItem="Mst-0l-5xg" secondAttribute="top" id="NXm-HW-Obt"/>
                             <constraint firstItem="Mst-0l-5xg" firstAttribute="trailing" secondItem="6QZ-66-CmY" secondAttribute="trailing" id="P2a-u6-jfi"/>
                             <constraint firstItem="rzB-CV-cip" firstAttribute="leading" secondItem="Mst-0l-5xg" secondAttribute="leading" constant="8" id="Sxz-xj-ZP4"/>
+                            <constraint firstItem="Mst-0l-5xg" firstAttribute="bottom" secondItem="4Pt-0e-Ojh" secondAttribute="bottom" id="bag-xJ-Hs7"/>
                             <constraint firstItem="rzB-CV-cip" firstAttribute="top" secondItem="Mst-0l-5xg" secondAttribute="top" constant="10" id="uiP-e5-uoc"/>
                             <constraint firstItem="Mst-0l-5xg" firstAttribute="trailing" secondItem="rzB-CV-cip" secondAttribute="trailing" constant="8" id="w0a-z3-R3n"/>
                         </constraints>
@@ -9659,6 +9681,8 @@
                         <outlet property="contentViewTopConstant" destination="L02-Aj-I7Q" id="Gdu-Od-hsJ"/>
                         <outlet property="fistBumpeeBtn" destination="wYG-ln-kzf" id="5ki-jl-agQ"/>
                         <outlet property="fistBumperBtn" destination="1mM-mC-HrY" id="hiG-sx-B1D"/>
+                        <outlet property="loadingImage" destination="hE5-oG-ifK" id="IJi-O4-fvw"/>
+                        <outlet property="loadingView" destination="4Pt-0e-Ojh" id="7l4-Sg-AS7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XN8-lL-3YE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -9668,7 +9692,7 @@
         <!--Fist BumperVC-->
         <scene sceneID="Y7F-AA-VNI">
             <objects>
-                <viewController storyboardIdentifier="fistBumperVC" id="wyk-1V-4ai" customClass="fistBumperVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FistBumperVC" id="wyk-1V-4ai" customClass="FistBumperVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6A5-Y4-nd2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -9686,7 +9710,7 @@
         <!--Fist BumpeeVC-->
         <scene sceneID="eK5-UN-5BP">
             <objects>
-                <viewController storyboardIdentifier="fistBumpeeVC" id="Dsl-lr-6bx" customClass="fistBumpeeVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FistBumpeeVC" id="Dsl-lr-6bx" customClass="FistBumpeeVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kRd-dw-lzn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

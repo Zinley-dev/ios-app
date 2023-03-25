@@ -838,12 +838,28 @@ extension FeedViewController {
                 
                 posts.removeObject(deletingPost)
                 collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-               
+                reloadAllCurrentHashtag()
             }
             
         }
         
        
+    }
+    
+    func reloadAllCurrentHashtag() {
+        if !posts.isEmpty {
+            for index in 0..<posts.count {
+                let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
+                if let node = collectionNode.nodeForItem(at: indexPath) as? PostNode {
+                    
+                    if node.hashtagView != nil {
+                        node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
+                        node.hashtagView.collectionView.reloadData()
+                    }
+                    
+                }
+            }
+        }
     }
     
     @objc func reportPost() {

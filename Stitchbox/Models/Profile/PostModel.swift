@@ -6,8 +6,50 @@
 //
 import Foundation
 import ObjectMapper
+
+
+class Setting: Mappable {
+   
+    private(set) var allowComment: Bool = false
+    private(set) var isTitleGet: Bool = false
+    private(set) var mode: Int = 0
+    private(set) var mediaType: String = ""
+    private(set) var languageCode: String = ""
+
+      required init?(map: ObjectMapper.Map) {
+        
+      }
+      
+      func mapping(map: ObjectMapper.Map) {
+          allowComment <- map["allowComment"]
+          isTitleGet <- map["isTitleGet"]
+          mode <- map["mode"]
+          mediaType <- map["mediaType"]
+          languageCode <- map["languageCode"]
+      }
+}
+
+
+class EstimatedCount: Mappable {
+   
+    private(set) var sizeComments: Int = 0
+    private(set) var sizeLikes: Int = 0
+    private(set) var sizeViews: Int = 0
+
+      required init?(map: ObjectMapper.Map) {
+        
+      }
+      
+      func mapping(map: ObjectMapper.Map) {
+          sizeComments <- map["sizeComments"]
+          sizeLikes <- map["sizeLikes"]
+          sizeViews <- map["sizeViews"]
+      }
+}
+
+
 class PostMetadata: Mappable {
-  private(set) var contentmode: String = ""
+    private(set) var contentmode: String = ""
     private(set) var height: CGFloat = 0.0
     private(set) var lenght: Int = 0
     private(set) var width: CGFloat = 0.0
@@ -36,8 +78,9 @@ class PostModel: Mappable {
   private(set) var muxAssetId: String = ""
   private(set) var videoUrl: String = ""
   private(set) var streamUrl: String = ""
-    private(set) var owner: OwnerModel?
-  private(set) var setting: [String: Any] = ["": ""]
+  private(set) var owner: OwnerModel?
+  private(set) var setting: Setting?
+  private(set) var estimatedCount: EstimatedCount?
   private(set) var metadata: PostMetadata?
   private(set) var createdAt: Date?
   
@@ -54,12 +97,9 @@ class PostModel: Mappable {
     muxAssetId <- map ["mux.assetId"]
     owner <- map ["owner"]
     streamUrl <- map ["video.streamurl"]
-    setting["allowcomment"] <- map["settings.allowcomment"]
-    setting["mode"] <- map["settings.mode"]
-    setting["languageCode"] <- map["settings.languageCode"]
-    setting["mediaType"] <- map["settings.mediaType"]
-    setting["isTitleGet"] <- map["settings.isTitleGet"]
+    setting <- map["setting"]
     metadata <- map["metadata"]
+    estimatedCount <- map["estimatedCount"]
     createdAt <- (map["createdAt"], ISODateTransform())
     
     if image[0] != "" {

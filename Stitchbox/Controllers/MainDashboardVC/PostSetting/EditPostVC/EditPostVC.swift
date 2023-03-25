@@ -273,7 +273,7 @@ extension EditPostVC {
     func setDefaultComment() {
     
         
-        if selectedPost.setting["allowcomment"] as! Bool == true {
+        if selectedPost.setting?.allowComment == true {
             
             isAllowComment = true
             allowCmtSwitch.setOn(true, animated: true)
@@ -322,7 +322,7 @@ extension EditPostVC {
     
     func setDefaultMode() {
         
-        if selectedPost.setting["mode"] as! Int == 0 {
+        if selectedPost.setting?.mode == 0 {
             
             mode = 0
             
@@ -334,7 +334,7 @@ extension EditPostVC {
             followLbl.textColor = .lightGray
             onlyMeLbl.textColor = .lightGray
             
-        } else if selectedPost.setting["mode"] as! Int == 1 {
+        } else if selectedPost.setting?.mode == 1 {
             
             mode = 1
             
@@ -346,7 +346,7 @@ extension EditPostVC {
             followLbl.textColor = .secondary
             onlyMeLbl.textColor = .lightGray
             
-        } else if selectedPost.setting["mode"] as! Int == 2 {
+        } else if selectedPost.setting?.mode == 2 {
             
             mode = 2
             

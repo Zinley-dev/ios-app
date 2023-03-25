@@ -29,7 +29,6 @@ class FollowerVC: UIViewController {
     var userId = ""
     
     required init?(coder aDecoder: NSCoder) {
-        
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
@@ -244,28 +243,6 @@ extension FollowerVC: ASTableDataSource {
     
 }
 
-extension FollowerVC {
-    
-    func follow(item: FollowNode) {
-        /*
-        self.viewModel.insertfollow(userId: item.user.userId ?? "")
-        item.followAction = unfollow
-        item.followBtnNode.backgroundColor = UIColor.primary
-        item.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.white, for: .normal)
-        */
-        
-    }
-    func unfollow(item: FollowNode) {
-        /*
-        self.viewModel.unfollow(userId: item.user.userId ?? "")
-        item.followAction = follow
-        item.followBtnNode.backgroundColor = UIColor.white
-        item.followBtnNode.setTitle("+ Follow", with: UIFont(name: "Avenir-Medium", size: 13)!, with: UIColor.primary, for: .normal)
-         */
-    }
-    
-    
-}
 
 extension FollowerVC {
     
@@ -282,6 +259,7 @@ extension FollowerVC {
                         }
                         return
                     }
+                    
                     
                     if !data.isEmpty {
                         self.currPage += 1
