@@ -368,6 +368,7 @@ extension AccountAPI: EndPointType {
 
 public enum UserAPI {
     case getme
+    case deleteMe
     case getUserInfo(userId: String)
     case updateme (params: [String: Any])
     case updateChallengeCard (params: [String: Any])
@@ -397,6 +398,8 @@ extension UserAPI: EndPointType {
             return "/me"
         case .getUserInfo(let userId):
             return "/\(userId)"
+          case .deleteMe:
+            return "/"
         case .updateme:
             return "/me"
           case .updateChallengeCard:
@@ -438,6 +441,8 @@ extension UserAPI: EndPointType {
             return .get
           case .getUserInfo:
             return .get
+          case .deleteMe:
+            return .delete
         case .updateme:
             return .patch
           case .updateChallengeCard:
@@ -476,6 +481,8 @@ extension UserAPI: EndPointType {
     var task: HTTPTask {
         switch self {
         case .getme:
+            return .request
+          case .deleteMe:
             return .request
           case .getUserInfo:
             return .request
@@ -564,6 +571,7 @@ public enum PostAPI {
     case getHashtagPost(tag: String, page: Int)
     case getUserPost(user: String, page: Int)
     case lastSetting
+    case deleteMyPost(pid: String)
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -592,6 +600,8 @@ extension PostAPI: EndPointType {
             return "/high-trending"
             case .getUserPost(let user, let page):
                 return "/author/\(user)?page=\(page)&limit=10"
+          case .deleteMyPost(let pid):
+            return "/\(pid)"
         }
     }
     
@@ -617,6 +627,8 @@ extension PostAPI: EndPointType {
             return .get
             case .getUserPost:
                 return .get
+          case .deleteMyPost:
+            return .delete
         }
     }
     
@@ -642,6 +654,8 @@ extension PostAPI: EndPointType {
             return .request
             case .getUserPost:
                 return .request
+          case .deleteMyPost:
+            return .request
         }
     }
     
@@ -1261,6 +1275,42 @@ extension AccountActivityApi: EndPointType {
                 "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
     }
     
+}
+
+public enum ReportApi {
+  case create(params: [String: Any])
+}
+extension ReportApi: EndPointType {
+  var path: String {
+    switch self {
+      case .create:
+        return "/"
+    }
+  }
+  
+  var module: String {
+    return "report"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .create:
+        return .post
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .create(let params):
+        return .requestParameters(parameters: params)
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+  
 }
 
 

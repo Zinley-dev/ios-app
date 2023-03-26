@@ -42,6 +42,7 @@ struct APIManager {
     let notiManager = Manager<NotiApi>()
     let loginActManager = Manager<LoginActivityApi>()
     let accountActManager = Manager<AccountActivityApi>()
+    let reportManager = Manager<ReportApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -347,6 +348,12 @@ extension APIManager {
             completion(result)
         }
     }
+  func deleteMe(completion: @escaping APICompletion) {
+    userManager.request(.deleteMe){
+      result in
+      completion(result)
+    }
+  }
   
   func getUserInfo(userId: String, completion: @escaping APICompletion) {
     userManager.request(.getUserInfo(userId: userId)){
@@ -514,7 +521,11 @@ extension APIManager {
             completion(result)
         }
     }
-    
+    func deleteMyPost(pid: String, completion: @escaping APICompletion) {
+      postManager.request(.deleteMyPost(pid: pid)) { result in
+        completion(result)
+      }
+    }
 }
 
 
@@ -693,3 +704,15 @@ extension APIManager {
         }
     }
 }
+extension APIManager {
+  /**
+      type: String = POST | COMMENT | USER
+   */
+  func report(type: String, reason: String, note: String, completion: @escaping APICompletion) {
+    let params = ["type": type, "reason": reason, "note": note]
+    reportManager.request(.create(params: params)) { result in
+      completion(result)
+    }
+  }
+}
+
