@@ -627,8 +627,8 @@ extension PostVC {
             
         }
         contentPost = ["content": selectedDescTxtView, "images": [imageUrl], "tags": [userUID], "hashtags": update_hashtaglist, "streamLink": global_fullLink]
-        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "length": length!, "isHashtaged": true, "originWidth": origin_width!, "originHeight": origin_height!, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
-
+        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
+        contentPost["metadata"] = ["width": origin_width!, "height": origin_height!, "length": length!, "contentMode": 0]
         APIManager().createPost(params: contentPost) { result in
             switch result {
             case .success(let apiResponse):

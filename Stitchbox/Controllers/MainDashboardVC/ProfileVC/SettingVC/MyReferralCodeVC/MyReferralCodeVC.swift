@@ -37,7 +37,8 @@ class MyReferralCodeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("DEBUG")
+      print(_AppCoreData.userDataSource.value?.toJSON())
         // Do any additional setup after loading the view.
         setupButtons()
         setupPolicyLabel()
