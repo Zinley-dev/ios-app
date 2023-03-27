@@ -70,7 +70,7 @@ class PostVC: UIViewController {
         setupTextView()
         setupGesture()
         loadPreviousSetting()
-        
+        loadAvatar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,7 +96,9 @@ class PostVC: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         
-       
+        global_fullLink = ""
+        global_host = ""
+        
     }
     
     @IBAction func addMediaBtnPressed(_ sender: Any) {
@@ -244,6 +246,17 @@ class PostVC: UIViewController {
 
 extension PostVC {
     
+    
+    func loadAvatar() {
+        
+        if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+            let url = URL(string: avatarUrl)
+            avatarImage.load(url: url!, str: avatarUrl)
+        }
+        
+        
+    }
+    
     func loadPreviousSetting() {
         
         APIManager().getLastSettingPost { result in
@@ -257,9 +270,9 @@ extension PostVC {
                 
                 print(apiResponse)
                 
-                if let settings = data.first?["settings"] as? [String: Any] {
+                if let settings = data.first?["setting"] as? [String: Any] {
                     
-                    if let allowcomment = settings["allowcomment"] as? Bool {
+                    if let allowcomment = settings["allowComment"] as? Bool {
                         
                         if allowcomment == true {
                                   

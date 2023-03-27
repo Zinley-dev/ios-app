@@ -81,21 +81,10 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if self.tabBarController is DashboardTabBarController {
-            
-            if let updateBar = self.tabBarController as? DashboardTabBarController {
-                
-                //hidesBottomBarWhenPushed = false
-                updateBar.button.isHidden = false
-                updateBar.tabBar.isHidden = false
-                
-            }
-           
-        }
-        
         // tabbar
         showMiddleBtn(vc: self)
         checkCallForLayout()
+    
      
     }
     
@@ -252,8 +241,8 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         if let CCV = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "CreateChannelVC") as? CreateChannelVC {
             
-            hideMiddleBtn(vc: self)
             CCV.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(CCV, animated: true)
             
         }

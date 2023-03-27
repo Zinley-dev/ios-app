@@ -28,7 +28,12 @@ var selectedTabIndex = 0
 var global_suppport_game_list = [GameList]()
 var needRecount = false
 var needReloadPost = false
-
+var needRemove = false
+var newSlogan = ""
+var didChanged = false
+var reloadAddedGame = false
+var globalIsSound = false
+var shouldMute = false
 
  let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
  let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
@@ -395,7 +400,12 @@ func playVideoIfNeed(playIndex: Int) {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                        
-                        cell.videoNode.muted = true
+                        if globalIsSound == true {
+                            cell.videoNode.muted = true
+                        } else {
+                            cell.videoNode.muted = false
+                        }
+                        
                         cell.videoNode.play()
                       
                     }
@@ -416,7 +426,12 @@ func playVideoIfNeed(playIndex: Int) {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                         
-                        cell.videoNode.muted = true
+                        if globalIsSound == true {
+                            cell.videoNode.muted = true
+                        } else {
+                            cell.videoNode.muted = false
+                        }
+                        
                         cell.videoNode.play()
                     
                     }
@@ -438,7 +453,12 @@ func playVideoIfNeed(playIndex: Int) {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                         
-                        cell.videoNode.muted = true
+                        if globalIsSound == true {
+                            cell.videoNode.muted = true
+                        } else {
+                            cell.videoNode.muted = false
+                        }
+                        
                         cell.videoNode.play()
                     
                     }
@@ -459,7 +479,12 @@ func playVideoIfNeed(playIndex: Int) {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                         
-                        cell.videoNode.muted = true
+                        if globalIsSound == true {
+                            cell.videoNode.muted = true
+                        } else {
+                            cell.videoNode.muted = false
+                        }
+                        
                         cell.videoNode.play()
                     
                     }
@@ -650,6 +675,246 @@ func reloadGlobalUserInformation() {
             print("Error loading profile: ", error)
           
         }
+    }
+    
+}
+
+
+func unmuteVideoIfNeed() {
+  
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is FeedViewController {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if update1.currentIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? PostNode {
+                        
+                        if !cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        } else if vc is SelectedPostVC {
+            
+            if let update1 = vc as? SelectedPostVC {
+                
+                if update1.currentIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? PostNode {
+                        
+                        if !cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        } else if vc is MainSearchVC {
+            
+            if let update1 = vc as? MainSearchVC {
+                
+                if update1.PostSearchVC.currentIndex != nil {
+                    
+                    if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: update1.PostSearchVC.currentIndex!, section: 0)) as? PostNode {
+                        
+                        if !cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        } else if vc is PostListWithHashtagVC {
+            
+            if let update1 = vc as? PostListWithHashtagVC {
+                
+                if update1.currentIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? PostNode {
+                        
+                        if !cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        }
+             
+        
+    }
+    
+}
+
+
+func muteVideoIfNeed() {
+  
+    if let vc = UIViewController.currentViewController() {
+         
+        if vc is FeedViewController {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if update1.currentIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? PostNode {
+                        
+                        if !cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = true
+                            shouldMute = true
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        } else if vc is SelectedPostVC {
+            
+            if let update1 = vc as? SelectedPostVC {
+                
+                if update1.currentIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? PostNode {
+                        
+                        if !cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = true
+                            shouldMute = true
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        } else if vc is MainSearchVC {
+            
+            if let update1 = vc as? MainSearchVC {
+                
+                if update1.PostSearchVC.currentIndex != nil {
+                    
+                    if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: update1.PostSearchVC.currentIndex!, section: 0)) as? PostNode {
+                        
+                        if !cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = true
+                            shouldMute = true
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        } else if vc is PostListWithHashtagVC {
+            
+            if let update1 = vc as? PostListWithHashtagVC {
+                
+                if update1.currentIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? PostNode {
+                        
+                        if !cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = true
+                            shouldMute = true
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        }
+             
+        
     }
     
 }

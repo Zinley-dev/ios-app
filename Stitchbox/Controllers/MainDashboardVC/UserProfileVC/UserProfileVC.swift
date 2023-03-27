@@ -1289,7 +1289,7 @@ extension UserProfileVC {
 extension UserProfileVC {
     
     func loadUserData() {
-          
+  
         APIManager().getUserInfo(userId: self.userId!) { result in
           switch result {
             case .success(let response):
@@ -1302,10 +1302,12 @@ extension UserProfileVC {
             
             case .failure(let error):
               
+              print(error)
+              
               Dispatch.main.async {
                   self.NoticeBlockAndDismiss()
               }
-              print(error)
+           
           }
         }
       }

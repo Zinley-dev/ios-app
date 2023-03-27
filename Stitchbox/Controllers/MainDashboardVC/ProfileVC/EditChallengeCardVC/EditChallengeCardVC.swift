@@ -38,6 +38,7 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
     var didSelect = false
     var bID: Int?
     var didCreateSave = false
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +53,23 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
         collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
         
         configureDatasource()
-     
+        newSlogan = ""
+        didChanged = false
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if newSlogan != "", !didChanged {
+            didChanged = true
+            Dispatch.main.async {
+                var updatedSnapshot = self.datasource.snapshot()
+                updatedSnapshot.reloadSections([.challengeCard])
+                self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+            }
+            
+        }
         
     }
     
@@ -75,11 +92,21 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                 
                 if let card = _AppCoreData.userDataSource.value?.challengeCard
                 {
-                    if card.quote != "" {
-                        cell.infoLbl.text = card.quote
+                    
+                    if newSlogan != "" {
+                        
+                        cell.infoLbl.text = newSlogan
+                        
                     } else {
-                        cell.infoLbl.text = "Stitchbox's challenger"
+                        
+                        if card.quote != "" {
+                            cell.infoLbl.text = card.quote
+                        } else {
+                            cell.infoLbl.text = "Stitchbox's challenger"
+                        }
+                        
                     }
+                   
                     
                     if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
                       

@@ -148,12 +148,12 @@ class SettingVC: UIViewController {
             
             params = ["autoPlaySound": false]
             isSound = false
-            
+            globalIsSound = false
         } else {
             
             params = ["autoPlaySound": true]
             isSound = true
-            
+            globalIsSound = true
         }
 
         APIManager().updateSettings(params: params) {
@@ -226,9 +226,9 @@ class SettingVC: UIViewController {
                         case.failure(let error):
                             DispatchQueue.main.async {
                                 self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                            }
                         }
-                    }
+                }
+            }
         
     }
     
@@ -310,6 +310,7 @@ extension SettingVC {
             
                 DispatchQueue.main {
                     self.showErrorAlert("Oops!", msg: "Unable to retrieve your setting \(error.localizedDescription)")
+                    self.navigationController?.popViewController(animated: true)
                 }
                
             }

@@ -91,6 +91,8 @@ class BlockNode: ASCellNode {
         
         if isBlock {
             
+            unblock()
+            
         } else {
             
             if isFollowingUser {

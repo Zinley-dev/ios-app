@@ -520,6 +520,44 @@ extension SelectedPostVC {
     @objc func onClickDelete(_ sender: AnyObject) {
         
         print("Delete requested")
+        
+        if let id = editeddPost?.id, id != "" {
+            print(id)
+            
+            APIManager().deleteMyPost(pid: id) { result in
+                switch result {
+                  case .success(let response):
+                    
+                    Dispatch.main.async {
+                        
+                        needReloadPost = true
+                        self.removePost()
+                        
+                    }
+                    
+                  case .failure(let error):
+                    print(error)
+                    delay(0.1) {
+                        Dispatch.main.async {
+                            self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
+                        }
+
+                    }
+                    
+                }
+              }
+            
+        } else {
+        
+            delay(0.1) {
+                self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
+            }
+            
+        }
+        
+        
+        
+        
        
         
     }

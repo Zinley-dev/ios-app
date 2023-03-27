@@ -216,6 +216,17 @@ class EditPostVC: UIViewController {
 
 extension EditPostVC {
     
+    
+    func loadAvatar() {
+        
+        if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+            let url = URL(string: avatarUrl)
+            avatarImage.load(url: url!, str: avatarUrl)
+        }
+        
+        
+    }
+    
     func setupButtons() {
         
         setupBackButton()
@@ -233,7 +244,7 @@ extension EditPostVC {
         setDefaultComment()
         setDefaultHashtag()
         setDefaultStreamingLink()
-        
+        loadAvatar()
     }
     
     func setupBackButton() {
@@ -288,11 +299,15 @@ extension EditPostVC {
     
     func setDefaultDesc() {
         
-        
+        if selectedPost.content != "" {
+            
+            descTxtView.text = selectedPost.content
+        }
         
     }
     
     func setDefaultHashtag() {
+        
         
         
     }
@@ -466,7 +481,7 @@ extension EditPostVC {
     
     @objc func onClickPost(_ sender: AnyObject) {
         
-        
+            print("Edited click")
 
       
     }
