@@ -519,14 +519,12 @@ extension SelectedPostVC {
     
     @objc func onClickDelete(_ sender: AnyObject) {
         
-        print("Delete requested")
-        
+      
         if let id = editeddPost?.id, id != "" {
-            print(id)
             
             APIManager().deleteMyPost(pid: id) { result in
                 switch result {
-                  case .success(let response):
+                case .success(_):
                     
                     Dispatch.main.async {
                         

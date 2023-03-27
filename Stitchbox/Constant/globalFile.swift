@@ -400,10 +400,10 @@ func playVideoIfNeed(playIndex: Int) {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                        
-                        if globalIsSound == true {
-                            cell.videoNode.muted = true
-                        } else {
+                        if globalIsSound {
                             cell.videoNode.muted = false
+                        } else {
+                            cell.videoNode.muted = true
                         }
                         
                         cell.videoNode.play()
@@ -426,10 +426,10 @@ func playVideoIfNeed(playIndex: Int) {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                         
-                        if globalIsSound == true {
-                            cell.videoNode.muted = true
-                        } else {
+                        if globalIsSound{
                             cell.videoNode.muted = false
+                        } else {
+                            cell.videoNode.muted = true
                         }
                         
                         cell.videoNode.play()
@@ -453,10 +453,10 @@ func playVideoIfNeed(playIndex: Int) {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                         
-                        if globalIsSound == true {
-                            cell.videoNode.muted = true
-                        } else {
+                        if globalIsSound {
                             cell.videoNode.muted = false
+                        } else {
+                            cell.videoNode.muted = true
                         }
                         
                         cell.videoNode.play()
@@ -479,10 +479,10 @@ func playVideoIfNeed(playIndex: Int) {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                         
-                        if globalIsSound == true {
-                            cell.videoNode.muted = true
-                        } else {
+                        if globalIsSound {
                             cell.videoNode.muted = false
+                        } else {
+                            cell.videoNode.muted = true
                         }
                         
                         cell.videoNode.play()
