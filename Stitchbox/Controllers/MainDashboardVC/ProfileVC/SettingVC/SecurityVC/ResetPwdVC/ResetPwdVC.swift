@@ -59,22 +59,32 @@ class ResetPwdVC: UIViewController, ControllerType {
         
         // Do any additional setup after loading the view.
         setupButtons()
+        saveBtn.isEnabled = false
     }
     func bindUI(with viewModel: ChangePasswordViewModel) {
-        confirmNewPwdTextField.rx.text.subscribe{
-            retypePassword in
-            DispatchQueue.main.async {
-                if (String(describing: retypePassword ?? "").count <= 5
-                    || retypePassword != self.newPwdTextField.text
-                    || String(describing: self.currentPwdTextField.text ?? "").count <= 5 ) {
-                    self.saveBtn.backgroundColor = .darkGray
-                    self.saveBtn.tintColor = .lightGray
-                } else {
-                    self.saveBtn.backgroundColor = .primary
-                    self.saveBtn.tintColor = .white
-                }
-            }
-        }.disposed(by: disposeBag)
+      
+        newPwdTextField.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.passwordObserver).disposed(by: disposeBag)
+      confirmNewPwdTextField.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.rePasswordObserver).disposed(by: disposeBag)
+      currentPwdTextField.rx.text.map({ $0 ?? ""}).bind(to: viewModel.input.oldPasswordObserver).disposed(by: disposeBag)
+      
+      viewModel.isValidInput.bind(to: saveBtn.rx.isEnabled).disposed(by: disposeBag)
+      
+      viewModel.isValidPassword.subscribe(onNext: { isValid in
+        self.checkPassLengthLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+      })
+      viewModel.isHasUppercase.subscribe(onNext: { isValid in
+        self.checkPassUpperLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+      })
+      viewModel.isHasLowercase.subscribe(onNext: { isValid in
+        self.checkPassLowerLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+      })
+      viewModel.isHasNumber.subscribe(onNext: { isValid in
+        self.checkPassNumberLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+      })
+      viewModel.isHasSpecial.subscribe(onNext: { isValid in
+        self.checkPassSpecialLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+      })
+      
     }
     
     func bindAction(with viewModel: ChangePasswordViewModel) {
@@ -90,6 +100,9 @@ class ResetPwdVC: UIViewController, ControllerType {
             if result {
                 DispatchQueue.main.async {
                     showNote(text: "Password changed")
+                    if let navigationController = self.navigationController {
+                      navigationController.popViewController(animated: true)
+                    }
                 }
             }
         }.disposed(by: disposeBag)

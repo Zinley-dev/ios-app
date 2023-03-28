@@ -10,6 +10,9 @@ import ObjectMapper
 
 class ChangePasswordViewModel: ViewModelProtocol {
     struct Input {
+      let oldPasswordObserver: AnyObserver<String>
+      let passwordObserver: AnyObserver<String>
+      let rePasswordObserver: AnyObserver<String>
     }
     struct Action {
         let changePasswordDidTap: AnyObserver<(String, String, String)>
@@ -23,15 +26,52 @@ class ChangePasswordViewModel: ViewModelProtocol {
     let action: Action
     let output: Output
     
-    private let phoneSubject = PublishSubject<String>()
-    private let countryCodeSubject = PublishSubject<String>()
+  private let oldPasswordSubject = PublishSubject<String>()
+    private let passwordSubject = PublishSubject<String>()
+  private let rePasswordSubject = PublishSubject<String>()
     private let changePasswordDidTapSubject = PublishSubject<(String, String,String)>()
     private let resetResultSubject = PublishSubject<Bool>()
     private let errorsSubject = PublishSubject<String>()
     private let disposeBag = DisposeBag()
     
+  var isValidInput:Observable<Bool> {
+    return Observable.combineLatest(
+      isOldValidPassword, isValidPassword, isHasUppercase, isHasLowercase, isHasNumber, isHasSpecial, isPasswordMatch).map({ $0 && $1 && $2 && $3 && $4 && $5 && $6})
+  }
+  
+  var isPasswordMatch:Observable<Bool> {
+    return Observable.combineLatest(passwordSubject.asObservable(), rePasswordSubject.asObservable()).map { (pass, repass) in
+      return pass == repass
+    }
+  }
+  
+  var isOldValidPassword:Observable<Bool> {
+    oldPasswordSubject.map { $0.count > 6 }
+  }
+  
+  var isValidPassword:Observable<Bool> {
+    passwordSubject.map { $0.count > 8 }
+  }
+  
+  var isHasUppercase:Observable<Bool> {
+    let regex = try! NSRegularExpression(pattern: ".*[A-Z]+.*")
+    return passwordSubject.map { regex.firstMatch(in: $0, range: NSRange(location: 0, length: $0.count)) != nil }
+  }
+  var isHasLowercase:Observable<Bool> {
+    passwordSubject.map { $0 ~= ".*[a-z]+.*" }
+  }
+  var isHasNumber:Observable<Bool> {
+    passwordSubject.map { $0 ~= ".*[0-9]+.*" }
+  }
+  var isHasSpecial:Observable<Bool> {
+    passwordSubject.map { $0 ~= ".*[@!#$%^&*~]+.*" }
+  }
+  
     public init() {
-        input = Input()
+        input = Input(
+          oldPasswordObserver: oldPasswordSubject.asObserver(),
+          passwordObserver: passwordSubject.asObserver(),
+          rePasswordObserver: rePasswordSubject.asObserver())
         
         action = Action(changePasswordDidTap: changePasswordDidTapSubject.asObserver())
         
@@ -44,11 +84,6 @@ class ChangePasswordViewModel: ViewModelProtocol {
     func logic() {
         changePasswordDidTapSubject.asObservable()
             .subscribe (onNext: { (currentPassword, newPassword, retypePassword) in
-                // call api changePassword
-                if (isNotValidInput(Input: newPassword, RegEx: "\\w{6,18}")) {
-                    self.errorsSubject.onNext("New password in wrong format")
-                    return;
-                }
                 if (newPassword != retypePassword) {
                     self.errorsSubject.onNext("New password and retype password does not match!")
                     return;
@@ -59,10 +94,8 @@ class ChangePasswordViewModel: ViewModelProtocol {
                 APIManager().changepassword(params: params) {
                     result in switch result {
                     case .success(_):
-                        print("here")
                         self.resetResultSubject.onNext(true)
                     case .failure(let error):
-                        print("there")
                         self.errorsSubject.onNext(error.localizedDescription)
                     }
                 }
