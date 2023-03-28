@@ -49,9 +49,8 @@ class EditPostVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-
-        //global_fullLink = ""
-        //global_host = ""
+        global_host = ""
+        global_fullLink = ""
 
         setupButtons()
         setupDefaultView()
@@ -278,7 +277,29 @@ extension EditPostVC {
     
     func setDefaultStreamingLink() {
     
+        if selectedPost.streamLink != "" {
+            
+            let streamUrl = selectedPost.streamLink
+            
+            if let url = URL(string: streamUrl) {
+                
+                if let domain = url.host {
+                    
+                    if check_Url(host: domain) == true {
+                        
+                        global_host = domain
+                        global_fullLink = streamUrl
+                        DispatchQueue.main.async {
+                            self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
+                        }
 
+                    }
+                    
+                }
+            }
+            
+        }
+        
     }
     
     func setDefaultComment() {

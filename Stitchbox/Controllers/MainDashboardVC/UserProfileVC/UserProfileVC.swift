@@ -1248,6 +1248,7 @@ extension UserProfileVC {
         
         var snapshot = self.datasource.snapshot()
         snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
         currpage = 1
         
         self.getUserPost { (newPosts) in

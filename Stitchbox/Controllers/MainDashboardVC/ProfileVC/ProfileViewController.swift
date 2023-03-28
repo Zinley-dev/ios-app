@@ -71,6 +71,7 @@ class ProfileViewController: UIViewController {
                         return
                     }
                     if !data.isEmpty {
+                        print(data)
                         print("Successfully retrieved \(data.count) posts.")
                         self.currpage += 1
                         let items = data
@@ -536,6 +537,8 @@ extension ProfileViewController {
     
         var snapshot = self.datasource.snapshot()
         snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
+        
         currpage = 1
         
         self.getMyPost { (newPosts) in
@@ -586,6 +589,7 @@ extension ProfileViewController {
     
         var snapshot = self.datasource.snapshot()
         snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
         currpage = 1
         
         self.getMyPost { (newPosts) in

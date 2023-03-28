@@ -96,9 +96,6 @@ class PostVC: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        global_fullLink = ""
-        global_host = ""
-        
     }
     
     @IBAction func addMediaBtnPressed(_ sender: Any) {
@@ -371,28 +368,23 @@ extension PostVC {
                 
                 
                 
-                if let video = data.first?["video"] as? [String: Any] {
+                if let streamUrl = data.first?["streamLink"] as? String {
                     
-                    if let streamUrl = video["streamurl"] as? String, streamUrl != "" {
+                    if let url = URL(string: streamUrl) {
                         
-                        if let url = URL(string: streamUrl) {
+                        if let domain = url.host {
                             
-                            if let domain = url.host {
+                            if check_Url(host: domain) == true {
                                 
-                                if check_Url(host: domain) == true {
-                                    
-                                    global_host = domain
-                                    global_fullLink = streamUrl
-                                    DispatchQueue.main.async {
-                                        self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
-                                    }
-        
-                                }  
-                                
+                                global_host = domain
+                                global_fullLink = streamUrl
+                                DispatchQueue.main.async {
+                                    self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
+                                }
+    
                             }
+                            
                         }
-                        
-                        
                     }
 
                 }

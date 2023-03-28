@@ -220,7 +220,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             }
             
             
-            if let url = URL(string: post.streamUrl), !post.streamUrl.isEmpty {
+            if let url = URL(string: post.streamLink), !post.streamLink.isEmpty {
                 if let domain = url.host {
                     if check_Url(host: domain) {
                         self.buttonsView.hostLbl.text = "  \(domain)  "
@@ -842,7 +842,7 @@ extension PostNode {
         } else {
             performUnLike()
         }
-        
+         
     }
     
     
@@ -859,7 +859,7 @@ extension PostNode {
     }
     
     @objc func streamingLinkTapped() {
-        guard let url = URL(string: post.streamUrl), !post.streamUrl.isEmpty else { return }
+        guard let url = URL(string: post.streamLink), !post.streamLink.isEmpty else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 

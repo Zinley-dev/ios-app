@@ -528,16 +528,17 @@ extension SelectedPostVC {
       
         if let id = editeddPost?.id, id != "" {
             
+            Dispatch.main.async {
+                
+                self.removePost()
+                
+            }
+            
             APIManager().deleteMyPost(pid: id) { result in
                 switch result {
                 case .success(_):
+                    needReloadPost = true
                     
-                    Dispatch.main.async {
-                        
-                        needReloadPost = true
-                        self.removePost()
-                        
-                    }
                     
                   case .failure(let error):
                     print(error)
