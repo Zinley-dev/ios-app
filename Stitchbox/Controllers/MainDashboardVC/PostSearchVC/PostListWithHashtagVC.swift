@@ -788,8 +788,8 @@ extension PostListWithHashtagVC {
         let slideVC =  reportView()
         
         
-        slideVC.video_report = true
-        slideVC.highlight_id = editeddPost?.id ?? ""
+        slideVC.post_report = true
+        slideVC.postId = editeddPost?.id ?? ""
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
         global_presetingRate = Double(0.75)

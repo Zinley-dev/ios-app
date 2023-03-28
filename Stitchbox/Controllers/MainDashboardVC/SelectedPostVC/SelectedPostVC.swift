@@ -613,11 +613,13 @@ extension SelectedPostVC {
     @objc func onClickStats(_ sender: AnyObject) {
         
         print("Stats requested")
-        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StatsVC") as? StatsVC {
+        if let VVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewVC") as? ViewVC {
             
             
-            //pauseVideoIfNeed(pauseIndex: selectedIndex)
-            self.navigationController?.pushViewController(SVC, animated: true)
+            VVC.selected_item = editeddPost
+            delay(0.1) {
+                self.navigationController?.pushViewController(VVC, animated: true)
+            }
             
         }
         
@@ -855,8 +857,8 @@ extension SelectedPostVC {
         
         let slideVC = reportView()
         
-        slideVC.video_report = true
-        slideVC.highlight_id = editeddPost?.id ?? ""
+        slideVC.post_report = true
+        slideVC.postId = editeddPost?.id ?? ""
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
         global_presetingRate = Double(0.75)

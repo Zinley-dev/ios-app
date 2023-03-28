@@ -68,7 +68,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         //self.navigationController?.hidesBarsOnSwipe = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
+       
         
         
         //
@@ -87,6 +87,15 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         showMiddleBtn(vc: self)
         
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        delay(0.25) {
+            NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -874,8 +883,8 @@ extension FeedViewController {
         let slideVC =  reportView()
         
         
-        slideVC.video_report = true
-        slideVC.highlight_id = editeddPost?.id ?? ""
+        slideVC.post_report = true
+        slideVC.postId = editeddPost?.id ?? ""
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
         global_presetingRate = Double(0.75)

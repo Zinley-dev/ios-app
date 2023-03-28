@@ -167,15 +167,44 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     }
     
     @IBAction func SkipBtnPressed(_ sender: Any) {
-        
-        /*
-        var data = [String:Any]()
-        
+
         if reason != "" {
             
-            let device = UIDevice().type.rawValue
+            var type = ""
             
-            data = ["userUID": Auth.auth().currentUser!.uid, "reason": reason, "timeStamp": FieldValue.serverTimestamp(), "Device": device, "description": "nil", "status": "Pending"] as [String : Any]
+            if user_report == true {
+                type = "USER"
+            } else if post_report == true {
+                type = "POST"
+            } else if comment_report == true {
+                type = "COMMENT"
+            }
+            
+            presentSwiftLoader()
+            
+            APIManager().report(type: type, reason: reason, note: "") { result in
+                switch result {
+                case .success(_):
+                   
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                       
+                        Dispatch.main.async {
+                            self.view.endEditing(true)
+                            self.tableView.isHidden = true
+                            self.descriptionView.isHidden = true
+                            self.Cpview.isHidden = false
+                        }
+                    }
+                    
+                  case .failure(let error):
+                    Dispatch.main.async {
+                        print(error)
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "\(error.localizedDescription)")
+                    }
+                }
+            }
             
         } else {
             
@@ -183,101 +212,60 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             
         }
         
-        let db = DataService.instance.mainFireStoreRef
-        var ref: CollectionReference!
-        
-        if user_report == true {
-            ref = db.collection("user_report")
-            data.updateValue(user_id, forKey: "reported_userUID")
-        } else if video_report == true {
-            ref = db.collection("video_report")
-            data.updateValue(highlight_id, forKey: "highlight_id")
-        } else if comment_report == true {
-            ref = db.collection("comment_report")
-            data.updateValue(comment_id, forKey: "comment_id")
-        } else if challenge_report == true {
-            ref = db.collection("challenge_report")
-            data.updateValue(challenge_id, forKey: "challenge_id")
-        }
-        
-        
-        ref.addDocument(data: data) { err in
-            
-            if err != nil {
-                
-                self.showErrorAlert("Oops!", msg: err!.localizedDescription)
-                
-            } else {
-                
-                self.view.endEditing(true)
-                self.tableView.isHidden = true
-                self.descriptionView.isHidden = true
-                self.Cpview.isHidden = false
-                
-            }
-        }
-        */
-        
-        self.view.endEditing(true)
-        self.tableView.isHidden = true
-        self.descriptionView.isHidden = true
-        self.Cpview.isHidden = false
+       
         
     }
     
     @IBAction func SubmitBtnPressed(_ sender: Any) {
         
-        /*
+        
         if let text = descriptionTxtView.text, text != "", text != "Please provide us more detail about your report!", text.count > 20 {
-            
-            var data = [String:Any]()
-            
+        
             if reason != "" {
                 
-                let device = UIDevice().type.rawValue
+                var type = ""
                 
-                data = ["userUID": Auth.auth().currentUser!.uid, "reason": reason, "timeStamp": FieldValue.serverTimestamp(), "Device": device, "description": text, "status": "Pending"] as [String : Any]
+                if user_report == true {
+                    type = "USER"
+                } else if post_report == true {
+                    type = "POST"
+                } else if comment_report == true {
+                    type = "COMMENT"
+                }
+                
+                presentSwiftLoader()
+                
+                APIManager().report(type: type, reason: reason, note: text) { result in
+                    switch result {
+                    case .success(_):
+                       
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                           
+                            Dispatch.main.async {
+                                self.view.endEditing(true)
+                                self.tableView.isHidden = true
+                                self.descriptionView.isHidden = true
+                                self.Cpview.isHidden = false
+                            }
+                        }
+                        
+                      case .failure(let error):
+                        print(error)
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                            self.showErrorAlert("Oops!", msg: "\(error.localizedDescription)")
+                        }
+                    }
+                }
+               
                 
             } else {
                 
                 self.showErrorAlert("Oops!", msg: "Please dismiss and try again.")
                 
-                
             }
             
-            let db = DataService.instance.mainFireStoreRef
-            var ref: CollectionReference!
-            
-            if user_report == true {
-                ref = db.collection("user_report")
-                data.updateValue(user_id, forKey: "reported_userUID")
-            } else if video_report == true {
-                ref = db.collection("video_report")
-                data.updateValue(highlight_id, forKey: "highlight_id")
-            } else if comment_report == true {
-                ref = db.collection("comment_report")
-                data.updateValue(comment_id, forKey: "comment_id")
-            } else if challenge_report == true {
-                ref = db.collection("challenge_report")
-                data.updateValue(challenge_id, forKey: "challenge_id")
-            }
-            
-            
-            ref.addDocument(data: data) { err in
-                
-                if err != nil {
-                    
-                    self.showErrorAlert("Oops!", msg: err!.localizedDescription)
-                    
-                } else {
-                    
-                    self.view.endEditing(true)
-                    self.tableView.isHidden = true
-                    self.descriptionView.isHidden = true
-                    self.Cpview.isHidden = false
-                    
-                }
-            }
             
         } else {
             
@@ -286,7 +274,7 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             
         }
         
-        */
+        
         
     }
     

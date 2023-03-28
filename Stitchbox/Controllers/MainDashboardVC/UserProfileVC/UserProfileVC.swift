@@ -1668,7 +1668,7 @@ extension UserProfileVC {
         let slideVC =  reportView()
         
         slideVC.user_report = true
-        slideVC.user_id = self.userId!
+        slideVC.userId = self.userId!
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
         global_presetingRate = Double(0.75)
