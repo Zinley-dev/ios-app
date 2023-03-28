@@ -708,8 +708,21 @@ extension APIManager {
   /**
       type: String = POST | COMMENT | USER
    */
-  func report(type: String, reason: String, note: String, completion: @escaping APICompletion) {
-    let params = ["type": type, "reason": reason, "note": note]
+  func report(type: String, reason: String, note: String, reportId: String, completion: @escaping APICompletion) {
+    var params = ["type": type, "reason": reason, "note": note]
+      switch type {
+          case "USER":
+              params["reportUserId"] = reportId
+              break;
+          case "POST":
+              params["postId"] = reportId
+              break;
+          case "COMMENT":
+              params["commentId"] = reportId
+              break;
+          default:
+              break;
+      }
     reportManager.request(.create(params: params)) { result in
       completion(result)
     }
