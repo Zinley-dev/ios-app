@@ -90,7 +90,7 @@ extension TutorialVC {
     func createHeaderSection() -> NSCollectionLayoutSection {
         let screenWidth = UIScreen.main.bounds.width
         let safeAreaInsets = UIApplication.shared.windows.first?.safeAreaInsets ?? UIEdgeInsets.zero
-        let collectionViewBottomConstraint: CGFloat = 25
+        let collectionViewBottomConstraint: CGFloat = 20
         let screenHeight = UIScreen.main.bounds.height - safeAreaInsets.top - safeAreaInsets.bottom - collectionViewBottomConstraint
 
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(screenWidth), heightDimension: .absolute(screenHeight)))

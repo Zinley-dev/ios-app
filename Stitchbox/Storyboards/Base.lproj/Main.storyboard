@@ -1436,7 +1436,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zdZ-sv-ibT">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="711"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                                 <color key="backgroundColor" name="Background"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IF8-rR-zHO">
                                     <size key="itemSize" width="128" height="128"/>
@@ -1526,7 +1526,7 @@
                             <constraint firstItem="XDT-NC-TyD" firstAttribute="centerX" secondItem="gul-y9-TDz" secondAttribute="centerX" id="1tQ-og-vLU"/>
                             <constraint firstItem="zdZ-sv-ibT" firstAttribute="top" secondItem="gul-y9-TDz" secondAttribute="top" id="4cb-g3-eCm"/>
                             <constraint firstItem="XDT-NC-TyD" firstAttribute="top" secondItem="jf3-zT-gJV" secondAttribute="bottom" constant="16" id="5km-Au-4W6"/>
-                            <constraint firstAttribute="bottom" secondItem="zdZ-sv-ibT" secondAttribute="bottom" constant="25" id="DT9-Le-2UQ"/>
+                            <constraint firstAttribute="bottom" secondItem="zdZ-sv-ibT" secondAttribute="bottom" constant="20" id="DT9-Le-2UQ"/>
                             <constraint firstItem="jf3-zT-gJV" firstAttribute="centerX" secondItem="gul-y9-TDz" secondAttribute="centerX" id="P9i-zB-jqJ"/>
                             <constraint firstItem="zdZ-sv-ibT" firstAttribute="leading" secondItem="gul-y9-TDz" secondAttribute="leading" id="PNY-34-BlN"/>
                             <constraint firstItem="T6B-fb-2DA" firstAttribute="bottom" secondItem="XDT-NC-TyD" secondAttribute="bottom" constant="16" id="QFe-Yk-FaD"/>
