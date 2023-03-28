@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="paH-cP-umD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ww0-w9-tZg">
     <device id="retina5_5" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -1436,8 +1436,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zdZ-sv-ibT">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                <color key="backgroundColor" name="BorderColor"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="711"/>
+                                <color key="backgroundColor" name="Background"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IF8-rR-zHO">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -1475,7 +1475,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="jf3-zT-gJV">
-                                <rect key="frame" x="163" y="653" width="88" height="7"/>
+                                <rect key="frame" x="149.66666666666666" y="653" width="114.99999999999997" height="7"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Gc-0Q-WW8" customClass="circleView" customModule="Stitchbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="7" height="7"/>
@@ -1509,6 +1509,14 @@
                                             <constraint firstAttribute="width" constant="7" id="YFt-tQ-El6"/>
                                         </constraints>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z8S-lf-9nB" customClass="circleView" customModule="Stitchbox" customModuleProvider="target">
+                                        <rect key="frame" x="108.00000000000003" y="0.0" width="7" height="7"/>
+                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="7" id="Tt9-Um-NQ9"/>
+                                            <constraint firstAttribute="width" constant="7" id="lF4-fN-0yi"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -1518,7 +1526,7 @@
                             <constraint firstItem="XDT-NC-TyD" firstAttribute="centerX" secondItem="gul-y9-TDz" secondAttribute="centerX" id="1tQ-og-vLU"/>
                             <constraint firstItem="zdZ-sv-ibT" firstAttribute="top" secondItem="gul-y9-TDz" secondAttribute="top" id="4cb-g3-eCm"/>
                             <constraint firstItem="XDT-NC-TyD" firstAttribute="top" secondItem="jf3-zT-gJV" secondAttribute="bottom" constant="16" id="5km-Au-4W6"/>
-                            <constraint firstAttribute="bottom" secondItem="zdZ-sv-ibT" secondAttribute="bottom" id="DT9-Le-2UQ"/>
+                            <constraint firstAttribute="bottom" secondItem="zdZ-sv-ibT" secondAttribute="bottom" constant="25" id="DT9-Le-2UQ"/>
                             <constraint firstItem="jf3-zT-gJV" firstAttribute="centerX" secondItem="gul-y9-TDz" secondAttribute="centerX" id="P9i-zB-jqJ"/>
                             <constraint firstItem="zdZ-sv-ibT" firstAttribute="leading" secondItem="gul-y9-TDz" secondAttribute="leading" id="PNY-34-BlN"/>
                             <constraint firstItem="T6B-fb-2DA" firstAttribute="bottom" secondItem="XDT-NC-TyD" secondAttribute="bottom" constant="16" id="QFe-Yk-FaD"/>
@@ -1532,6 +1540,7 @@
                         <outlet property="view2" destination="F83-HG-vMi" id="wib-6f-2Wt"/>
                         <outlet property="view3" destination="6yt-h5-WSH" id="CFD-4w-QjD"/>
                         <outlet property="view4" destination="5Ek-DB-IrM" id="Z9j-xu-4QU"/>
+                        <outlet property="view5" destination="z8S-lf-9nB" id="ABU-7q-iJv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZZV-0N-OBq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
