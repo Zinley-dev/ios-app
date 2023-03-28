@@ -171,18 +171,24 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         if reason != "" {
             
             var type = ""
+            var reportId = ""
             
             if user_report == true {
                 type = "USER"
+                reportId = userId
             } else if post_report == true {
                 type = "POST"
+                reportId = postId
             } else if comment_report == true {
                 type = "COMMENT"
+                reportId = commentId
             }
             
             presentSwiftLoader()
             
-            APIManager().report(type: type, reason: reason, note: "") { result in
+          
+            
+            APIManager().report(type: type, reason: reason, note: "", reportId: reportId) { result in
                 switch result {
                 case .success(_):
                    
@@ -224,18 +230,22 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             if reason != "" {
                 
                 var type = ""
+                var reportId = ""
                 
                 if user_report == true {
                     type = "USER"
+                    reportId = userId
                 } else if post_report == true {
                     type = "POST"
+                    reportId = postId
                 } else if comment_report == true {
                     type = "COMMENT"
+                    reportId = commentId
                 }
                 
                 presentSwiftLoader()
                 
-                APIManager().report(type: type, reason: reason, note: text) { result in
+                APIManager().report(type: type, reason: reason, note: text, reportId: reportId) { result in
                     switch result {
                     case .success(_):
                        

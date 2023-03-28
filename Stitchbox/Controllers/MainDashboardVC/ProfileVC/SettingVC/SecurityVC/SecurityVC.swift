@@ -15,7 +15,8 @@ class SecurityVC: UIViewController {
     @IBOutlet weak var twoFactorAuthBtn: UIButton!
     @IBOutlet weak var resetPasswordBtn: UIButton!
     
-   
+    @IBOutlet weak var deleteAccountBtn: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +54,12 @@ class SecurityVC: UIViewController {
             self.navigationController?.pushViewController(LAVC, animated: true)
             
         }
+        
+    }
+    
+    @IBAction func deleteAccountBtnPressed(_ sender: Any) {
+        
+        
         
     }
     

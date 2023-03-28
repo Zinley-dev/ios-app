@@ -110,7 +110,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QjB-Ff-npc" customClass="ProgressBar" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="32" y="103" width="35" height="35"/>
+                                <rect key="frame" x="16" y="103" width="35" height="35"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="XuL-D6-Oyi"/>
@@ -144,7 +144,7 @@
                             <constraint firstItem="htG-J3-w8j" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="9JM-0r-hrq"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="12" id="FAH-dq-see"/>
                             <constraint firstItem="JRS-LC-MbQ" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="N5c-Aw-MWB"/>
-                            <constraint firstItem="QjB-Ff-npc" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="32" id="Wbn-Yc-2Lj"/>
+                            <constraint firstItem="QjB-Ff-npc" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="Wbn-Yc-2Lj"/>
                             <constraint firstAttribute="trailing" secondItem="JRS-LC-MbQ" secondAttribute="trailing" id="Xcu-YI-7ij"/>
                             <constraint firstItem="htG-J3-w8j" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="jh0-OE-AqN"/>
                             <constraint firstItem="JRS-LC-MbQ" firstAttribute="top" secondItem="htG-J3-w8j" secondAttribute="bottom" id="mZu-DS-1Id"/>
@@ -5482,17 +5482,30 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UyD-hL-NEd">
+                                <rect key="frame" x="32" y="271" width="311" height="34.333333333333314"/>
+                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Delete account"/>
+                                <connections>
+                                    <action selector="deleteAccountBtnPressed:" destination="OXk-gP-kIT" eventType="touchUpInside" id="10h-l5-MQZ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0Y4-TS-pyF"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstItem="UyD-hL-NEd" firstAttribute="leading" secondItem="0Y4-TS-pyF" secondAttribute="leading" constant="32" id="ERJ-ar-c0r"/>
                             <constraint firstItem="0Y4-TS-pyF" firstAttribute="trailing" secondItem="lzx-RG-l78" secondAttribute="trailing" constant="32" id="fza-pw-7uZ"/>
+                            <constraint firstItem="0Y4-TS-pyF" firstAttribute="trailing" secondItem="UyD-hL-NEd" secondAttribute="trailing" constant="32" id="hab-ag-4F9"/>
+                            <constraint firstItem="UyD-hL-NEd" firstAttribute="top" secondItem="lzx-RG-l78" secondAttribute="bottom" constant="32" id="jru-dR-adM"/>
                             <constraint firstItem="lzx-RG-l78" firstAttribute="top" secondItem="0Y4-TS-pyF" secondAttribute="top" constant="32" id="nOB-Qg-dPq"/>
                             <constraint firstItem="lzx-RG-l78" firstAttribute="leading" secondItem="0Y4-TS-pyF" secondAttribute="leading" constant="32" id="yFG-nz-nld"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="LoginActivityBtn" destination="YpU-yb-dRs" id="23a-OV-EdE"/>
+                        <outlet property="deleteAccountBtn" destination="UyD-hL-NEd" id="hWJ-jY-b1K"/>
                         <outlet property="resetPasswordBtn" destination="3zA-qb-kdy" id="F2H-YY-nW2"/>
                         <outlet property="twoFactorAuthBtn" destination="o40-B6-ZfK" id="eds-yT-rhC"/>
                     </connections>
