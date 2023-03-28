@@ -137,7 +137,7 @@ extension SelectedPostVC {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if !posts.isEmpty {
+        if !posts.isEmpty, scrollView == collectionNode.view {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -221,12 +221,18 @@ extension SelectedPostVC {
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-          navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        if scrollView == collectionNode.view {
+            
+            if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
+               navigationController?.setNavigationBarHidden(true, animated: true)
 
-       } else {
-          navigationController?.setNavigationBarHidden(false, animated: true)
-       }
+            } else {
+               navigationController?.setNavigationBarHidden(false, animated: true)
+            }
+            
+        }
+       
     }
 
 

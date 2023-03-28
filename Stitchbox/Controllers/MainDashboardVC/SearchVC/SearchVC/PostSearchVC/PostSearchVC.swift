@@ -103,6 +103,8 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
         currentIndex = 0
         isfirstLoad = true
         didScroll = false
+        shouldMute = nil
+        page = 1
         updateData()
                
     }
@@ -208,7 +210,7 @@ extension PostSearchVC {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if !posts.isEmpty {
+        if !posts.isEmpty, scrollView == collectionNode.view {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)

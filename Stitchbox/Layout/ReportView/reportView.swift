@@ -17,26 +17,23 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     @IBOutlet weak var report_title: UILabel!
     
     var user_report = false
-    var video_report = false
+    var post_report = false
     var comment_report = false
     var challenge_report = false
     
-    var highlight_id = ""
-    var challenge_id = ""
-    var user_id = ""
-    var comment_id = ""
+    var postId = ""
+    var userId = ""
+    var commentId = ""
     var reason = ""
-    
     
     //
     
     let user_report_list = ["Pretent to be somone", "Fake Account", "Fake Name", "Posting Inappropriate Things", "Bullying or harrasment", "Intellectual property violation","Sale of illegal or regulated stuffs", "Scam or fraud", "False information"]
     
-    let video_report_list = ["Wrong category", "It's spam", "Reporting wrong player", "Nudity or sexual activity", "Hate speech or symbols", "Violence or dangerous behaviors", "Bullying or harrasment", "Intellectual property violation","Sale of illegal or regulated stuffs", "False information"]
+    let post_report_list = ["Wrong category", "It's spam", "Reporting wrong player", "Nudity or sexual activity", "Hate speech or symbols", "Violence or dangerous behaviors", "Bullying or harrasment", "Intellectual property violation","Sale of illegal or regulated stuffs", "False information"]
     
     let comment_report_list = ["Wrong category", "It's spam", "Nudity or sexual activity", "Hate speech or symbols", "Violence or dangerous behaviors", "Bullying or harrasment", "Intellectual property violation","Sale of illegal or regulated stuffs", "False information"]
     
-    let challenge_report_list = ["Wrong category", "It's spam", "Nudity or sexual activity", "Hate speech or symbols", "Violence or dangerous behaviors", "Bullying or harrasment", "Intellectual property violation","Sale of illegal or regulated stuffs", "False information"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +47,7 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             
             report_title.text = "Why are you reporting this account?"
             
-        } else if video_report == true {
+        } else if user_report == true {
             
             report_title.text = "Why are you reporting this post?"
             
@@ -102,12 +99,10 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         
         if user_report == true {
             return user_report_list.count
-        } else if video_report == true {
-            return video_report_list.count
+        } else if post_report == true {
+            return post_report_list.count
         } else if comment_report == true {
             return comment_report_list.count
-        } else if challenge_report == true {
-            return challenge_report_list.count
         } else {
             return 0
         }
@@ -121,12 +116,10 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         
         if user_report == true {
             item = user_report_list[indexPath.row]
-        } else if video_report == true {
-            item = video_report_list[indexPath.row]
+        } else if post_report == true {
+            item = post_report_list[indexPath.row]
         } else if comment_report == true {
             item = comment_report_list[indexPath.row]
-        } else if challenge_report == true {
-            item = challenge_report_list[indexPath.row]
         } else {
             item = ""
         }
@@ -153,12 +146,10 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     
         if user_report == true {
             reason = user_report_list[indexPath.row]
-        } else if video_report == true {
-            reason = video_report_list[indexPath.row]
+        } else if post_report == true {
+            reason = post_report_list[indexPath.row]
         } else if comment_report == true {
             reason = comment_report_list[indexPath.row]
-        } else if challenge_report == true {
-            reason = challenge_report_list[indexPath.row]
         }
                 
         tableView.isHidden = true

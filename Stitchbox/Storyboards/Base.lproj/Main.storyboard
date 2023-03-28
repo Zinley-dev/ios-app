@@ -691,18 +691,41 @@
                                     </view>
                                 </subviews>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mol-uV-LVH">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loginBg" translatesAutoresizingMaskIntoConstraints="NO" id="VL2-S8-XMY">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="1Rh-0J-zgg">
+                                        <rect key="frame" x="141.66666666666666" y="303.66666666666669" width="130.99999999999997" height="129"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" name="Background"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="VL2-S8-XMY" secondAttribute="bottom" id="4jr-iF-twZ"/>
+                                    <constraint firstItem="1Rh-0J-zgg" firstAttribute="centerX" secondItem="mol-uV-LVH" secondAttribute="centerX" id="NCE-nv-5qP"/>
+                                    <constraint firstItem="1Rh-0J-zgg" firstAttribute="centerY" secondItem="mol-uV-LVH" secondAttribute="centerY" id="RYx-bG-Qko"/>
+                                    <constraint firstAttribute="trailing" secondItem="VL2-S8-XMY" secondAttribute="trailing" id="dqb-mQ-DBo"/>
+                                    <constraint firstItem="VL2-S8-XMY" firstAttribute="top" secondItem="mol-uV-LVH" secondAttribute="top" id="oBR-Zr-JQu"/>
+                                    <constraint firstItem="VL2-S8-XMY" firstAttribute="leading" secondItem="mol-uV-LVH" secondAttribute="leading" id="pco-HT-TEW"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="YOe-hH-cfx"/>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="qVK-ke-AcZ" secondAttribute="bottom" id="2Iy-U1-plm"/>
                             <constraint firstItem="oCy-aA-2gg" firstAttribute="top" secondItem="gCR-YF-C08" secondAttribute="top" id="2hw-Fw-q8C"/>
+                            <constraint firstAttribute="trailing" secondItem="mol-uV-LVH" secondAttribute="trailing" id="3ag-tK-mhG"/>
                             <constraint firstItem="YOe-hH-cfx" firstAttribute="trailing" secondItem="1gE-Sa-qHz" secondAttribute="trailing" constant="25" id="5bR-1c-zq3"/>
                             <constraint firstItem="znR-BX-pDM" firstAttribute="centerX" secondItem="gCR-YF-C08" secondAttribute="centerX" id="7nB-ok-l8j"/>
                             <constraint firstItem="QHM-oC-nqz" firstAttribute="centerX" secondItem="gCR-YF-C08" secondAttribute="centerX" id="9U8-HW-tyE"/>
                             <constraint firstItem="1gE-Sa-qHz" firstAttribute="top" secondItem="MoT-Op-8Rj" secondAttribute="bottom" constant="16" id="B6K-l3-mW1"/>
                             <constraint firstItem="1gE-Sa-qHz" firstAttribute="leading" secondItem="YOe-hH-cfx" secondAttribute="leading" constant="25" id="BNx-G0-yFu"/>
                             <constraint firstAttribute="trailing" secondItem="oCy-aA-2gg" secondAttribute="trailing" id="C7e-RE-pQk"/>
+                            <constraint firstAttribute="bottom" secondItem="mol-uV-LVH" secondAttribute="bottom" id="EfX-xg-2ao"/>
+                            <constraint firstItem="mol-uV-LVH" firstAttribute="leading" secondItem="gCR-YF-C08" secondAttribute="leading" id="Hd8-bS-e0T"/>
                             <constraint firstItem="qVK-ke-AcZ" firstAttribute="leading" secondItem="gCR-YF-C08" secondAttribute="leading" id="U8t-rJ-bmX"/>
                             <constraint firstItem="MoT-Op-8Rj" firstAttribute="top" secondItem="znR-BX-pDM" secondAttribute="bottom" constant="10" id="WnQ-p8-qPf"/>
                             <constraint firstItem="qVK-ke-AcZ" firstAttribute="top" secondItem="gCR-YF-C08" secondAttribute="top" id="cKb-k7-OSm"/>
@@ -710,6 +733,7 @@
                             <constraint firstAttribute="trailing" secondItem="qVK-ke-AcZ" secondAttribute="trailing" id="hO1-d4-RcC"/>
                             <constraint firstAttribute="bottom" secondItem="oCy-aA-2gg" secondAttribute="bottom" id="j2l-mE-rnW"/>
                             <constraint firstItem="QHM-oC-nqz" firstAttribute="top" secondItem="1gE-Sa-qHz" secondAttribute="bottom" constant="16" id="kC0-Z2-dCd"/>
+                            <constraint firstItem="mol-uV-LVH" firstAttribute="top" secondItem="gCR-YF-C08" secondAttribute="top" id="lMy-9R-46q"/>
                             <constraint firstItem="QHM-oC-nqz" firstAttribute="bottom" secondItem="YOe-hH-cfx" secondAttribute="bottom" constant="-32" id="u0G-Lv-Uq7"/>
                             <constraint firstItem="MoT-Op-8Rj" firstAttribute="centerX" secondItem="gCR-YF-C08" secondAttribute="centerX" id="yUB-KK-9xt"/>
                         </constraints>
@@ -721,6 +745,7 @@
                         <outlet property="blurView" destination="qVK-ke-AcZ" id="aRV-QJ-oIH"/>
                         <outlet property="btnLetStart" destination="zTP-qI-DtS" id="Yy6-gH-htm"/>
                         <outlet property="contentView" destination="oCy-aA-2gg" id="Paf-E4-1GL"/>
+                        <outlet property="launchingView" destination="mol-uV-LVH" id="Z6b-c4-qvY"/>
                         <outlet property="logo" destination="znR-BX-pDM" id="aU5-sF-4Fn"/>
                         <outlet property="startView" destination="1Xw-uL-hYg" id="Tt2-dG-Oqu"/>
                         <outlet property="termOfUseLbl" destination="QHM-oC-nqz" id="sPn-pu-8Uw"/>
@@ -738,7 +763,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sTa-qs-sJ7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1712" y="-153"/>
+            <point key="canvasLocation" x="-1713.0434782608697" y="-153.2608695652174"/>
         </scene>
         <!--Start NavVC-->
         <scene sceneID="HWd-vP-yzz">
@@ -1835,7 +1860,7 @@
     </scenes>
     <designables>
         <designable name="3uf-b9-C82">
-            <size key="intrinsicContentSize" width="110" height="34"/>
+            <size key="intrinsicContentSize" width="104" height="34"/>
         </designable>
         <designable name="Dlf-TU-NMz">
             <size key="intrinsicContentSize" width="39" height="29"/>
@@ -1847,7 +1872,7 @@
             <size key="intrinsicContentSize" width="39" height="29"/>
         </designable>
         <designable name="Nhf-Gd-k7X">
-            <size key="intrinsicContentSize" width="111.66666666666667" height="34"/>
+            <size key="intrinsicContentSize" width="105.66666666666667" height="34"/>
         </designable>
         <designable name="QHM-oC-nqz">
             <size key="intrinsicContentSize" width="557" height="14.333333333333334"/>
@@ -1874,6 +1899,7 @@
         <image name="apple" width="53" height="52"/>
         <image name="fb" width="53" height="52"/>
         <image name="gg" width="64" height="52"/>
+        <image name="loginBg" width="390" height="844"/>
         <image name="normal" width="53" height="52"/>
         <image name="regBg" width="390" height="844"/>
         <image name="ttw" width="53" height="53"/>

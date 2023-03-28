@@ -20,7 +20,7 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 class PostNode: ASCellNode, ASVideoNodeDelegate {
     
     weak var post: PostModel!
-    
+    var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: ASVideoNode
     var imageNode: ASImageNode
     var contentNode: ASTextNode
@@ -28,17 +28,18 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var buttonsNode: ASDisplayNode
     var hashtagsNode: ASDisplayNode
     var sidebuttonListView: ASDisplayNode!
-    
+    var shouldCountView = true
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
     var hashtagView: HashtagView!
     var sideButtonView: SideButton!
     var gradientNode: GradienView
-  
+    var time = 0
     var likeCount = 0
     var isLike = false
     var isSelectedPost = false
     var settingBtn : ((ASCellNode) -> Void)?
+    var isViewed = false
     
     init(with post: PostModel) {
         self.post = post
@@ -106,7 +107,27 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 self.sideButtonView.playSpeedBtn.setTitle("", for: .normal)
                 self.sideButtonView.soundBtn.setTitle("", for: .normal)
                 self.sideButtonView.playSpeedBtn.setImage(speedImage, for: .normal)
-                self.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                
+                
+                if let muteStatus = shouldMute {
+                    
+                    if muteStatus {
+                        self.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                    } else {
+                        self.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                    }
+                    
+                } else {
+                    
+                    if globalIsSound {
+                        self.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                    } else {
+                        self.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                    }
+                    
+                    
+                }
+              
                 self.sideButtonView.playSpeedBtn.isHidden = true
                 
                 self.sideButtonView.translatesAutoresizingMaskIntoConstraints = false
@@ -486,7 +507,7 @@ extension PostNode {
             
             if videoNode.muted == true {
                 videoNode.muted = false
-                
+                shouldMute = false
                 UIView.animate(withDuration: 0.1, animations: {
                     self.sideButtonView.soundBtn.transform = self.sideButtonView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
                     self.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
@@ -499,7 +520,7 @@ extension PostNode {
         
             } else {
                 videoNode.muted = true
-                
+                shouldMute = true
                 UIView.animate(withDuration: 0.1, animations: {
                     self.sideButtonView.soundBtn.transform = self.sideButtonView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
                     self.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
@@ -522,7 +543,7 @@ extension PostNode {
         
         setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.asset.duration.seconds)!))
     
-        /*
+        
         if (videoNode.currentItem?.asset.duration.seconds)! <= 15 {
             
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.8 {
@@ -580,10 +601,34 @@ extension PostNode {
             }
             
         }
-        */
         
     }
     
+    func videoDidPlay(toEnd videoNode: ASVideoNode) {
+    
+        shouldCountView = true
+       
+        
+    }
+    
+    @objc func endVideo() {
+        
+        if _AppCoreData.userDataSource.value != nil {
+            
+            time += 1
+            
+            if time < 2 {
+                
+                last_view_timestamp = NSDate().timeIntervalSince1970
+                isViewed = true
+            
+                
+            }
+            
+        }
+        
+        
+    }
     
 }
 

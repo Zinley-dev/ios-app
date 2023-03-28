@@ -423,7 +423,7 @@ extension PostVC {
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
-                            showNote(text: "Thank you, your video is being uploaded!")
+                            showNote(text: "Thank you, your content is being uploaded!")
                             self.dismiss(animated: true, completion: nil)
                             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
                         }
@@ -457,7 +457,7 @@ extension PostVC {
                             
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
-                    showNote(text: "Thank you, your video is being uploaded!")
+                    showNote(text: "Thank you, your content is being uploaded!")
                     self.dismiss(animated: true, completion: nil)
                     NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
                    

@@ -113,6 +113,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         currentIndex = 0
         isfirstLoad = true
         didScroll = false
+        shouldMute = nil
         updateData()
                
     }
@@ -364,7 +365,7 @@ extension FeedViewController {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if !posts.isEmpty {
+        if !posts.isEmpty, scrollView == collectionNode.view {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -449,21 +450,27 @@ extension FeedViewController {
 
 
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-          navigationController?.setNavigationBarHidden(true, animated: true)
-            changeTabBar(hidden: true, animated: true)
-            self.tabBarController?.tabBar.isTranslucent = true
-            hideMiddleBtn(vc: self)
-            bottomConstraint.constant = 20
-           
+        
+        if scrollView == collectionNode.view {
+            
+            if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
+               navigationController?.setNavigationBarHidden(true, animated: true)
+                 changeTabBar(hidden: true, animated: true)
+                 self.tabBarController?.tabBar.isTranslucent = true
+                 hideMiddleBtn(vc: self)
+                 bottomConstraint.constant = 20
+                
 
-       } else {
-          navigationController?.setNavigationBarHidden(false, animated: true)
-           changeTabBar(hidden: false, animated: false)
-           self.tabBarController?.tabBar.isTranslucent = false
-           showMiddleBtn(vc: self)
-           bottomConstraint.constant = 0
-       }
+            } else {
+               navigationController?.setNavigationBarHidden(false, animated: true)
+                changeTabBar(hidden: false, animated: false)
+                self.tabBarController?.tabBar.isTranslucent = false
+                showMiddleBtn(vc: self)
+                bottomConstraint.constant = 0
+            }
+            
+        }
+       
     }
     
     func changeTabBar(hidden:Bool, animated: Bool) {

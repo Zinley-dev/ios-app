@@ -19,7 +19,7 @@ class PushNotificationVC: UIViewController {
     @IBOutlet weak var FollowSwitch: UISwitch!
     @IBOutlet weak var MessageSwitch: UISwitch!
     
-    var settings: SettingModel!
+   
     var isCommentNoti = false
     var isMessageNoti = false
     var isPostNoti = false
@@ -38,7 +38,7 @@ class PushNotificationVC: UIViewController {
     
     func loadDefaultsValue() {
         
-        if settings.Notifications?.Posts == true {
+        if globalSetting.Notifications?.Posts == true {
             
             PostsSwitch.setOn(true, animated: true)
             isPostNoti = true
@@ -50,7 +50,7 @@ class PushNotificationVC: UIViewController {
             
         }
         
-        if settings.Notifications?.Message == true {
+        if globalSetting.Notifications?.Message == true {
             
             MessageSwitch.setOn(true, animated: true)
             isMessageNoti = true
@@ -62,7 +62,7 @@ class PushNotificationVC: UIViewController {
             
         }
         
-        if settings.Notifications?.Mention == true {
+        if globalSetting.Notifications?.Mention == true {
             
             MentionSwitch.setOn(true, animated: true)
             isMentionNoti = true
@@ -74,7 +74,7 @@ class PushNotificationVC: UIViewController {
             
         }
         
-        if settings.Notifications?.Follow == true {
+        if globalSetting.Notifications?.Follow == true {
             
             FollowSwitch.setOn(true, animated: true)
             isFollowNoti = true
@@ -86,7 +86,7 @@ class PushNotificationVC: UIViewController {
             
         }
         
-        if settings.Notifications?.Comment == true {
+        if globalSetting.Notifications?.Comment == true {
             
             CommentSwitch.setOn(true, animated: true)
             isCommentNoti = true

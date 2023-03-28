@@ -91,19 +91,10 @@ class UserProfileVC: UIViewController {
             self.setupChallengeView()
         
             self.loadUserData()
-            self.countFistBumped()
-            self.countFollowings()
-            self.countFollowers()
-            self.checkIfFollow()
-            self.checkIfFistBump()
-            
+           
             self.setupChallengeView()
             
-            self.getUserPost { (newPosts) in
-                
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-            }
+           
             
             NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.report), name: (NSNotification.Name(rawValue: "report_user")), object: nil)
@@ -1299,10 +1290,20 @@ extension UserProfileVC {
               
               self.userData = Mapper<UserDataSource>().map(JSONObject: data)
               self.applyUIChange()
-            
-            case .failure(let error):
               
-              print(error)
+              self.countFistBumped()
+              self.countFollowings()
+              self.countFollowers()
+              self.checkIfFollow()
+              self.checkIfFistBump()
+            
+              self.getUserPost { (newPosts) in
+                  
+                  self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                  
+              }
+              
+            case .failure(_):
               
               Dispatch.main.async {
                   self.NoticeBlockAndDismiss()
