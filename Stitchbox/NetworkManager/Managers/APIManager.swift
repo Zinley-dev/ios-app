@@ -354,6 +354,12 @@ extension APIManager {
       completion(result)
     }
   }
+    func undoDeleteMe(completion: @escaping APICompletion) {
+        userManager.request(.undoDelete){
+            result in
+            completion(result)
+        }
+    }
   
   func getUserInfo(userId: String, completion: @escaping APICompletion) {
     userManager.request(.getUserInfo(userId: userId)){

@@ -369,6 +369,7 @@ extension AccountAPI: EndPointType {
 public enum UserAPI {
     case getme
     case deleteMe
+    case undoDelete
     case getUserInfo(userId: String)
     case updateme (params: [String: Any])
     case updateChallengeCard (params: [String: Any])
@@ -400,6 +401,8 @@ extension UserAPI: EndPointType {
             return "/\(userId)"
           case .deleteMe:
             return "/"
+        case .undoDelete:
+            return "/undo"
         case .updateme:
             return "/me"
           case .updateChallengeCard:
@@ -443,6 +446,8 @@ extension UserAPI: EndPointType {
             return .get
           case .deleteMe:
             return .delete
+            case .undoDelete:
+                return .post
         case .updateme:
             return .patch
           case .updateChallengeCard:
@@ -484,6 +489,8 @@ extension UserAPI: EndPointType {
             return .request
           case .deleteMe:
             return .request
+            case .undoDelete:
+                return .request
           case .getUserInfo:
             return .request
         case .updateme(let params):
