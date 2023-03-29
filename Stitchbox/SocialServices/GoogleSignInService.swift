@@ -29,7 +29,7 @@ extension GoogleSignInService: LoginCoordinatorProtocol {
             guard let info = signInResult else { return }
             
             if let profiledata = info.user.profile {
-                
+                print("PROFILE DATA \(profiledata)")
                 let userId : String = info.user.userID ?? ""
                 let givenName : String = profiledata.givenName ?? ""
                 let familyName : String = profiledata.familyName ?? ""
@@ -39,6 +39,10 @@ extension GoogleSignInService: LoginCoordinatorProtocol {
                     let absoluteurl : String = imgurl.absoluteString
                     
                     let data = AuthResult(idToken: userId, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(familyName) \(givenName)", email: email, phone: nil, avatar: absoluteurl)
+                    print("DATA --> \(data.idToken)")
+                    print("DATA --> \(data.name)")
+                    print("DATA --> \(data.email)")
+                    print("DATA --> \(data.avatar)")
                     self.vm.completeSignIn(with: data)
                 }
             }

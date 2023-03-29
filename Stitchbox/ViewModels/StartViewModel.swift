@@ -56,6 +56,7 @@ class StartViewModel: ViewModelProtocol {
         
         // call api --> check auth
         var params = ["socialId": authResult.idToken!]
+        
         if selectedSignInMethod == .google {
             params["provider"] = "google"
         } else if selectedSignInMethod == .facebook {
@@ -103,7 +104,10 @@ class StartViewModel: ViewModelProtocol {
                 print(error)
                 
                 // save datasource signinMethod for first time login
-                let initMap = ["signinMethod": params["provider"], "socialId": authResult.idToken!]
+                    let initMap = ["signinMethod": params["provider"], "socialId": authResult.idToken!,
+                                   "avatar": authResult.avatar ?? "", "name": authResult.name ?? "", "email": authResult.email ?? ""]
+                    
+                    
                 let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
                 _AppCoreData.userDataSource.accept(newUserData)
                 
