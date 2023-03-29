@@ -7353,7 +7353,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NcO-ET-9u6">
-                                <rect key="frame" x="0.0" y="487" width="375" height="325"/>
+                                <rect key="frame" x="0.0" y="497" width="375" height="315"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kLc-HS-yQI">
                                         <rect key="frame" x="2" y="2" width="371" height="40"/>
@@ -7433,7 +7433,7 @@
                                     </view>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="1ZZ-kC-RqC">
                                         <rect key="frame" x="2" y="92" width="371" height="70"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" name="Background"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="4yn-iJ-VRt"/>
                                         </constraints>
@@ -7446,7 +7446,7 @@
                                         <cells/>
                                     </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Ea-Hn-smt">
-                                        <rect key="frame" x="0.0" y="162" width="375" height="161"/>
+                                        <rect key="frame" x="0.0" y="162" width="375" height="151"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="93z-pi-Ibx">
                                                 <rect key="frame" x="0.0" y="8" width="375" height="95"/>
@@ -7587,7 +7587,7 @@
                                     <constraint firstItem="LhG-v0-3lI" firstAttribute="leading" secondItem="NcO-ET-9u6" secondAttribute="leading" constant="2" id="0lP-qZ-VKv"/>
                                     <constraint firstAttribute="trailing" secondItem="kLc-HS-yQI" secondAttribute="trailing" constant="2" id="2aM-QW-v6B"/>
                                     <constraint firstAttribute="trailing" secondItem="LhG-v0-3lI" secondAttribute="trailing" constant="2" id="Fmc-4c-9Dv"/>
-                                    <constraint firstAttribute="height" constant="325" id="FyR-Gn-SDL"/>
+                                    <constraint firstAttribute="height" constant="315" id="FyR-Gn-SDL"/>
                                     <constraint firstItem="LhG-v0-3lI" firstAttribute="top" secondItem="kLc-HS-yQI" secondAttribute="bottom" constant="8" id="JYJ-gv-P4N"/>
                                     <constraint firstItem="5Ea-Hn-smt" firstAttribute="leading" secondItem="NcO-ET-9u6" secondAttribute="leading" id="SkJ-Da-iv5"/>
                                     <constraint firstItem="kLc-HS-yQI" firstAttribute="top" secondItem="NcO-ET-9u6" secondAttribute="top" constant="2" id="Ud0-ZO-fM2"/>
@@ -7603,7 +7603,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kE0-1p-VoU">
-                                <rect key="frame" x="0.0" y="47" width="375" height="428"/>
+                                <rect key="frame" x="0.0" y="47" width="375" height="438"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="BPe-zo-SyQ">
                                         <rect key="frame" x="8" y="8" width="60" height="60"/>
@@ -7652,7 +7652,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Hi, what's on your thought?" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cRi-4B-kHC">
-                                        <rect key="frame" x="8" y="76" width="359" height="344"/>
+                                        <rect key="frame" x="8" y="76" width="359" height="354"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>

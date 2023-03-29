@@ -306,7 +306,6 @@ extension UITextView {
 
 func pauseVideoIfNeed(pauseIndex: Int) {
   
-    print("test - pauseVideoIfNeed \(pauseIndex)")
     if let vc = UIViewController.currentViewController() {
          
         if vc is SelectedPostVC {
