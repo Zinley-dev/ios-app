@@ -296,8 +296,8 @@ class ProfileViewController: UIViewController {
                         cell.infoLbl.text = card.quote
                         ChallengeView.infoLbl.text = card.quote
                     } else {
-                        cell.infoLbl.text = "Stitchbox's challenger"
-                        ChallengeView.infoLbl.text = "Stitchbox's challenger"
+                        cell.infoLbl.text = "Stitchboxer"
+                        ChallengeView.infoLbl.text = "Stitchboxer"
                     }
                    
                     
@@ -1334,7 +1334,9 @@ extension ProfileViewController {
         Dispatch.main.async {
             var updatedSnapshot = self.datasource.snapshot()
             updatedSnapshot.reloadSections([.header])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
+            
+            
         }
         
    
@@ -1344,7 +1346,7 @@ extension ProfileViewController {
         Dispatch.main.async {
             var updatedSnapshot = self.datasource.snapshot()
             updatedSnapshot.reloadSections([.header, .challengeCard, .posts])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
         }
     
     }
@@ -1354,7 +1356,7 @@ extension ProfileViewController {
         Dispatch.main.async {
             var updatedSnapshot = self.datasource.snapshot()
             updatedSnapshot.reloadSections([.header, .challengeCard])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
         }
         
         

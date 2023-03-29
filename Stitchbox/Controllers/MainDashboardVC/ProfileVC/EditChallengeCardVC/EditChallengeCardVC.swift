@@ -102,7 +102,7 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                         if card.quote != "" {
                             cell.infoLbl.text = card.quote
                         } else {
-                            cell.infoLbl.text = "Stitchbox's challenger"
+                            cell.infoLbl.text = "Stitchboxer"
                         }
                         
                     }
@@ -741,7 +741,7 @@ extension EditChallengeCardVC {
     func reloadBadgeCell(_ indexPath: IndexPath) {
         var updatedSnapshot = datasource.snapshot()
         updatedSnapshot.reloadSections([.challengeCard])
-        self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+        self.datasource.apply(updatedSnapshot, animatingDifferences: false)
     }
 
     
