@@ -86,6 +86,9 @@ class CreateAccountViewModel: ViewModelProtocol {
         }
       
         input.usernameSubject.subscribe(onNext: { uname in
+            
+            
+            print("SUBCRIBE>...")
             if uname.count >= 3 {
 
                 APIManager().checkUsernameExist(username: uname) { result in

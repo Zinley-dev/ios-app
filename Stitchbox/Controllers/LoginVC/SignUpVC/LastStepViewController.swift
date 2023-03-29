@@ -47,6 +47,7 @@ class LastStepViewController: UIViewController, ControllerType {
         .observe(on: MainScheduler.asyncInstance)
         .throttle(.seconds(1), scheduler: MainScheduler.instance)
         .subscribe(onNext: { item in
+            print("TYPE.... \(item)")
           self.viewModel.input.usernameSubject.onNext(item ?? "")
         })
 //        .map({$0 ?? ""})
@@ -57,12 +58,12 @@ class LastStepViewController: UIViewController, ControllerType {
         
       viewModel.isValidInput.bind(to: submitButton.rx.isEnabled).disposed(by: disposeBag)
       
-      viewModel.isValidUsername.subscribe(onNext: { isValid in
-        if !isValid {
-          self.checkUsernameLabel.text = "Check availability"
-        }
-        self.checkUsernameLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
-      })
+//      viewModel.isValidUsername.subscribe(onNext: { isValid in
+//        if !isValid {
+//          self.checkUsernameLabel.text = "Check availability"
+//        }
+//        self.checkUsernameLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
+//      })
       viewModel.isValidPassword.subscribe(onNext: { isValid in
         self.checkPassLengthLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
       })
@@ -146,6 +147,7 @@ class LastStepViewController: UIViewController, ControllerType {
       
       viewModel.output.usernameExistObservable
         .subscribe { exist in
+            print("CHECK>.....\(exist)")
           DispatchQueue.main.async {
             if (exist) {
               self.checkUsernameLabel.text = "Username is available"
