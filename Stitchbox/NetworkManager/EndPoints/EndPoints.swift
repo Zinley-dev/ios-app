@@ -1284,12 +1284,12 @@ extension ReportApi: EndPointType {
   var path: String {
     switch self {
       case .create:
-        return "/"
+        return ""
     }
   }
   
   var module: String {
-    return "report"
+    return "/report"
   }
   
   var httpMethod: HTTPMethod {
