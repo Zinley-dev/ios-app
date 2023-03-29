@@ -482,11 +482,9 @@ extension VerifyCodeVC {
                 
             case .failure(let error):
                 
-                print(error)
-                
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
-                    self.showErrorAlert("Oops!", msg: "Unable to verify your code, please try again")
+                    self.showErrorAlert("Oops!", msg: "Unable to verify your code, please try again \(error.localizedDescription)")
                     
                     self.border1.backgroundColor = self.emptyColor.cgColor
                     self.border2.backgroundColor = self.emptyColor.cgColor
