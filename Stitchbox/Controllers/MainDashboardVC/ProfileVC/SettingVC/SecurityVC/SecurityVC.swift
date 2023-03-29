@@ -16,7 +16,7 @@ class SecurityVC: UIViewController {
     @IBOutlet weak var resetPasswordBtn: UIButton!
     
     @IBOutlet weak var deleteAccountBtn: UIButton!
-    
+    var isDelete = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +24,14 @@ class SecurityVC: UIViewController {
         // Do any additional setup after loading the view.
         setupButtons()
         emptyButtonsLbl()
+        
+        if _AppCoreData.userDataSource.value?.isDelete == true {
+            isDelete = true
+            deleteAccountBtn.setTitle("Cancel account deletion", for: .normal)
+        } else {
+            deleteAccountBtn.setTitle("Delete account", for: .normal)
+        }
+        
         
     }
     
@@ -60,8 +68,111 @@ class SecurityVC: UIViewController {
     @IBAction func deleteAccountBtnPressed(_ sender: Any) {
         
         
+        if let username = _AppCoreData.userDataSource.value?.userName {
+            
+            if isDelete {
+                
+                let alert = UIAlertController(title: "Hey \(username) and welcome back!", message: "If you choose to cancel account deletion request, all of your information is still safe and protected. Nothing needs to be done to keep using all available services at Stitchbox. Let's enjoy and have fun.", preferredStyle: UIAlertController.Style.actionSheet)
+
+                // add the actions (buttons)
+                alert.addAction(UIAlertAction(title: "Confirm to cancel", style: UIAlertAction.Style.destructive, handler: { action in
+                    
+                    self.requestUndoDeletion()
+                    
+                   
+                }))
+
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+
+                self.present(alert, animated: true, completion: nil)
+                
+                
+            } else {
+                
+                let alert = UIAlertController(title: "Hey \(username)! A quick reminder about your account deletion", message: "If you're considering deleting your Stitchbox account, please remember that you can cancel within 30 days. After that, all your information will be permanently deleted, which may take up to 90 days. We're here to help if you have any issues, and we appreciate your time on our platform.", preferredStyle: UIAlertController.Style.actionSheet)
+
+                // add the actions (buttons)
+                alert.addAction(UIAlertAction(title: "Confirm to delete", style: UIAlertAction.Style.destructive, handler: { action in
+                    
+                
+                    self.requestAccountDeletion()
+                    
+                }))
+
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+
+                self.present(alert, animated: true, completion: nil)
+                
+                
+            }
+            
+        }
+        
+
         
     }
+    
+    func requestUndoDeletion() {
+        
+        presentSwiftLoader()
+        
+        APIManager().undoDeleteMe { result in
+            switch result {
+            case .success(_):
+                
+                self.isDelete = false
+                
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                    self.deleteAccountBtn.setTitle("Delete account", for: .normal)
+                    reloadGlobalSettings()
+                }
+                
+                
+              case .failure(let error):
+                print(error)
+                self.isDelete = true
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: "Unable to remove account deletion request \(error.localizedDescription), please try again")
+                }
+                
+            }
+          }
+    
+    }
+    
+    func requestAccountDeletion() {
+        
+        presentSwiftLoader()
+        
+        APIManager().deleteMe { result in
+            switch result {
+            case .success(_):
+                
+                self.isDelete = true
+                
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                    self.deleteAccountBtn.setTitle("Cancel account deletion", for: .normal)
+                    reloadGlobalSettings()
+                }
+                
+                
+              case .failure(let error):
+                print(error)
+                self.isDelete = false
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: "Unable to request for account deletion \(error.localizedDescription), please try again")
+                }
+                
+            }
+          }
+        
+    }
+    
+    
     
 }
 
@@ -103,5 +214,15 @@ extension SecurityVC {
         }
     }
     
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 }

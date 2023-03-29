@@ -474,7 +474,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 }
             
                 let list = data.compactMap { GameList(JSON: $0) }
-                global_suppport_game_list += list
+                let filteredList = list.filter { $0.name != "Other" }
+                global_suppport_game_list += filteredList
                 
             case .failure(let error):
                 print(error)

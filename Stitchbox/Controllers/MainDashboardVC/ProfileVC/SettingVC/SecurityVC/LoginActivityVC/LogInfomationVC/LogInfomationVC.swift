@@ -11,6 +11,9 @@ import Alamofire
 
 class LogInfomationVC: UIViewController, GMSMapViewDelegate {
     
+    @IBOutlet weak var countryLbl: UILabel!
+    @IBOutlet weak var ispLbl: UILabel!
+    @IBOutlet weak var cityLbl: UILabel!
     @IBOutlet weak var actionLbl: UILabel!
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var regionLbl: UILabel!
@@ -47,13 +50,16 @@ class LogInfomationVC: UIViewController, GMSMapViewDelegate {
                                                 
                             if let status = dict["status"] as? String, status == "success" {
                                                     
-                                if let regionName = dict["regionName"] as? String, let lat = dict["lat"] as? CLLocationDegrees, let lon = dict["lon"] as? CLLocationDegrees, let query = dict["query"] as? String {
+                                if let regionName = dict["regionName"] as? String, let lat = dict["lat"] as? CLLocationDegrees, let lon = dict["lon"] as? CLLocationDegrees, let query = dict["query"] as? String, let city = dict["city"] as? String, let isp = dict["isp"] as? String, let country = dict["country"] as? String {
                                     
                                     
                                     let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
                                     self.centerMapOnUserLocation(location: location)
                                     self.regionLbl.text = regionName
                                     self.IPLbl.text = query
+                                    self.cityLbl.text = city
+                                    self.ispLbl.text = isp
+                                    self.countryLbl.text = country
                                 }
                                                
 
@@ -61,6 +67,9 @@ class LogInfomationVC: UIViewController, GMSMapViewDelegate {
                                 
                                 self.IPLbl.text = self.item.ip
                                 self.regionLbl.text = "Private range"
+                                self.countryLbl.text = "Private range"
+                                self.cityLbl.text = "Private range"
+                                self.ispLbl.text = "Private range"
                                 
                             }
                         }

@@ -15,12 +15,12 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var preloadingView: UIActivityIndicatorView!
     let homeButton: UIButton = UIButton(type: .custom)
 
     var willIndex: Int?
     var currentIndex: Int?
     var endIndex: Int?
-    
     var isfirstLoad = true
     var didScroll = false
 
@@ -38,6 +38,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
     lazy var delayItem3 = workItem()
+    
+    var lastLoadTime: Date?
     
     @IBOutlet weak var playTimeBar: UIProgressView!
     
@@ -82,6 +84,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        
+        preloadingView.hidesWhenStopped = true
+        preloadingView.startAnimating()
+        
+       
     
     }
     
@@ -90,7 +97,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewWillAppear(animated)
         
         showMiddleBtn(vc: self)
-        
+        loadFeed()
         
     }
     
@@ -730,6 +737,7 @@ extension FeedViewController {
                     return
                 }
                 if !data.isEmpty {
+                    self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data
                   
@@ -787,6 +795,11 @@ extension FeedViewController {
         
         // Insert the new rows
         collectionNode.insertItems(at: insertIndexPaths)
+        
+        if preloadingView.isAnimating {
+            preloadingView.stopAnimating()
+        }
+    
     }
 
 
@@ -928,5 +941,17 @@ extension FeedViewController {
        
         
     }
+    
+    
+    func loadFeed() {
+        let now = Date()
+        let fortyFiveMinutesAgo = now.addingTimeInterval(-2700) // 2700 seconds = 45 minutes
+        
+        if lastLoadTime != nil, lastLoadTime! < fortyFiveMinutesAgo, !posts.isEmpty {
+            pullControl.beginRefreshing()
+            clearAllData()
+        }
+    }
+
     
 }
