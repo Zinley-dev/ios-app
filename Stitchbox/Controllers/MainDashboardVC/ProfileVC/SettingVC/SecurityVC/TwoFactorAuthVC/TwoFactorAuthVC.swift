@@ -44,6 +44,7 @@ class TwoFactorAuthVC: UIViewController {
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
                     }
+                    reloadGlobalSettings()
 
                 case .failure(let error):
                     print(error)
@@ -105,6 +106,7 @@ class TwoFactorAuthVC: UIViewController {
                 case .success(let apiResponse):
                     
                     print(apiResponse)
+                    reloadGlobalSettings()
 
                 case .failure(let error):
                     print(error)

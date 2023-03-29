@@ -24,6 +24,11 @@
 			</array>
 		</dict>
 	</array>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
 	<key>FacebookAppID</key>
 	<string>663026798636026</string>
 	<key>FacebookClientToken</key>

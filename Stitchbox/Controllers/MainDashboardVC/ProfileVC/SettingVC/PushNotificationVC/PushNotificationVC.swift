@@ -122,7 +122,7 @@ class PushNotificationVC: UIViewController {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
-                            
+                            reloadGlobalSettings()
                         case.failure(let error):
                             DispatchQueue.main.async {
                                 self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
@@ -152,7 +152,7 @@ class PushNotificationVC: UIViewController {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
-                            
+                            reloadGlobalSettings()
                         case.failure(let error):
                             DispatchQueue.main.async {
                                 self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
@@ -181,7 +181,7 @@ class PushNotificationVC: UIViewController {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
-                            
+                            reloadGlobalSettings()
                         case.failure(let error):
                             DispatchQueue.main.async {
                                 self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
@@ -210,7 +210,7 @@ class PushNotificationVC: UIViewController {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
-                            
+                            reloadGlobalSettings()
                         case.failure(let error):
                             DispatchQueue.main.async {
                                 self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
@@ -228,18 +228,19 @@ class PushNotificationVC: UIViewController {
             
             params = ["notifications": ["message": false]]
             isMessageNoti = false
-            
+    
         } else {
             
             params = ["notifications": ["message": true]]
             isMessageNoti = true
+            
         }
         
         APIManager().updateSettings(params: params) {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
-                            
+                            reloadGlobalSettings()
                         case.failure(let error):
                             DispatchQueue.main.async {
                                 self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
