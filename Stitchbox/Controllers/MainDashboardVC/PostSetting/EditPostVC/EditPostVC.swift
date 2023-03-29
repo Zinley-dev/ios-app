@@ -49,9 +49,8 @@ class EditPostVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-
-        //global_fullLink = ""
-        //global_host = ""
+        global_host = ""
+        global_fullLink = ""
 
         setupButtons()
         setupDefaultView()
@@ -216,6 +215,17 @@ class EditPostVC: UIViewController {
 
 extension EditPostVC {
     
+    
+    func loadAvatar() {
+        
+        if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+            let url = URL(string: avatarUrl)
+            avatarImage.load(url: url!, str: avatarUrl)
+        }
+        
+        
+    }
+    
     func setupButtons() {
         
         setupBackButton()
@@ -233,7 +243,7 @@ extension EditPostVC {
         setDefaultComment()
         setDefaultHashtag()
         setDefaultStreamingLink()
-        
+        loadAvatar()
     }
     
     func setupBackButton() {
@@ -267,7 +277,29 @@ extension EditPostVC {
     
     func setDefaultStreamingLink() {
     
+        if selectedPost.streamLink != "" {
+            
+            let streamUrl = selectedPost.streamLink
+            
+            if let url = URL(string: streamUrl) {
+                
+                if let domain = url.host {
+                    
+                    if check_Url(host: domain) == true {
+                        
+                        global_host = domain
+                        global_fullLink = streamUrl
+                        DispatchQueue.main.async {
+                            self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
+                        }
 
+                    }
+                    
+                }
+            }
+            
+        }
+        
     }
     
     func setDefaultComment() {
@@ -288,11 +320,15 @@ extension EditPostVC {
     
     func setDefaultDesc() {
         
-        
+        if selectedPost.content != "" {
+            
+            descTxtView.text = selectedPost.content
+        }
         
     }
     
     func setDefaultHashtag() {
+        
         
         
     }
@@ -466,7 +502,7 @@ extension EditPostVC {
     
     @objc func onClickPost(_ sender: AnyObject) {
         
-        
+            print("Edited click")
 
       
     }

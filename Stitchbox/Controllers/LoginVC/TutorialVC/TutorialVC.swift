@@ -16,8 +16,9 @@ class TutorialVC: UIViewController {
     @IBOutlet weak var view2: circleView!
     @IBOutlet weak var view3: circleView!
     @IBOutlet weak var view4: circleView!
+    @IBOutlet weak var view5: circleView!
     
-    var tutorialList = ["welcome", "streaming link", "fist bump" , "challenge card"]
+    var tutorialList = ["welcome", "streaming link", "fist bump" , "challenge card", "tactics"]
     var currentIndex = 0
     var willIndex = 0
     
@@ -25,8 +26,9 @@ class TutorialVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        setupNavigationController()
+        //setupNavigationController()
         wireDelegates()
+        collectionView.alwaysBounceVertical = false
         
     }
     
@@ -42,6 +44,8 @@ class TutorialVC: UIViewController {
         case 2:
             nextIndex()
         case 3:
+            nextIndex()
+        case 4:
             print("Show next item here")
             RedirectionHelper.redirectToDashboard()
         default:
@@ -56,7 +60,6 @@ class TutorialVC: UIViewController {
         
         collectionView.scrollToItem(at: IndexPath(item: currentIndex, section: 0), at: .right, animated: true)
         
-        
     }
     
 
@@ -65,10 +68,6 @@ class TutorialVC: UIViewController {
 extension TutorialVC {
     
     func setupNavigationController() {
-        
-        //self.navigationController?.navigationItem.leftBarButtonItem = nil
-        //self.navigationController?.navigationItem.rightBarButtonItem = nil
-        //self.navigationController?.isNavigationBarHidden = true
         
         self.navigationController?.title = "DKM"
         
@@ -89,16 +88,24 @@ extension TutorialVC {
     }
     
     func createHeaderSection() -> NSCollectionLayoutSection {
-        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-    
-        let headerGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)), subitems: [headerItem])
-    
+        let screenWidth = UIScreen.main.bounds.width
+        let safeAreaInsets = UIApplication.shared.windows.first?.safeAreaInsets ?? UIEdgeInsets.zero
+        let collectionViewBottomConstraint: CGFloat = 20
+        let screenHeight = UIScreen.main.bounds.height - safeAreaInsets.top - safeAreaInsets.bottom - collectionViewBottomConstraint
+
+        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(screenWidth), heightDimension: .absolute(screenHeight)))
+
+        let headerGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(screenWidth), heightDimension: .absolute(screenHeight)), subitems: [headerItem])
+
         let section = NSCollectionLayoutSection(group: headerGroup)
-        
+
         section.orthogonalScrollingBehavior = .groupPaging
-        
+
         return section
     }
+
+
+
     
     
 }
@@ -165,25 +172,35 @@ extension TutorialVC: UICollectionViewDelegate, UICollectionViewDataSource {
             view2.backgroundColor = .lightGray
             view3.backgroundColor = .lightGray
             view4.backgroundColor = .lightGray
+            view5.backgroundColor = .lightGray
         case 1:
             view1.backgroundColor = .lightGray
             view2.backgroundColor = .white
             view3.backgroundColor = .lightGray
             view4.backgroundColor = .lightGray
+            view5.backgroundColor = .lightGray
         case 2:
             view1.backgroundColor = .lightGray
             view2.backgroundColor = .lightGray
             view3.backgroundColor = .white
             view4.backgroundColor = .lightGray
+            view5.backgroundColor = .lightGray
         case 3:
             view1.backgroundColor = .lightGray
             view2.backgroundColor = .lightGray
             view3.backgroundColor = .lightGray
             view4.backgroundColor = .white
+            view5.backgroundColor = .lightGray
+        case 4:
+            view1.backgroundColor = .lightGray
+            view2.backgroundColor = .lightGray
+            view3.backgroundColor = .lightGray
+            view4.backgroundColor = .lightGray
+            view5.backgroundColor = .white
         default:
             break
         }
-        controlBtn.setTitle(currentIndex == 3 ? "Let's go" : "Skip", for: .normal)
+        controlBtn.setTitle(currentIndex == 4 ? "Let's go" : "Skip", for: .normal)
     }
 
     

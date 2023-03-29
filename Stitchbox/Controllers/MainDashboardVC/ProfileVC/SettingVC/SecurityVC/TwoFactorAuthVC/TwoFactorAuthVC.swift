@@ -10,7 +10,7 @@ import UIKit
 class TwoFactorAuthVC: UIViewController {
 
     let backButton: UIButton = UIButton(type: .custom)
-    var settings: SettingModel!
+   
     
     
     var isPhone = false
@@ -207,8 +207,8 @@ extension TwoFactorAuthVC {
     
     func processDefaultData() {
         
-        if self.settings != nil {
-            if self.settings.EnableEmailTwoFactor == true {
+        if globalSetting != nil {
+            if globalSetting.EnableEmailTwoFactor == true {
                 self.EmailSwitch.setOn(true, animated: true)
                 isEmail = true
             } else {
@@ -216,7 +216,7 @@ extension TwoFactorAuthVC {
                 isEmail = false
             }
             
-            if self.settings.EnablePhoneTwoFactor == true {
+            if globalSetting.EnablePhoneTwoFactor == true {
                 self.PhoneSwitch.setOn(true, animated: true)
                 isPhone = true
             } else {

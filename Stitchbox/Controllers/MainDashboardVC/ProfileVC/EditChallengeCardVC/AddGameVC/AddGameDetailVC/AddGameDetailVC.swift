@@ -61,6 +61,7 @@ class AddGameDetailVC: UIViewController, UITextFieldDelegate {
                 pickYourGameTxtField.placeholder = game.name
                 gameLinkTxtField.placeholder = selectedGame.link
                 gameSelectedLbl.text = game.name
+                selectedName = game.name
                 //
                 
                 gameSelectedImage.load(url: URL(string: game.cover)!, str: game.cover)
@@ -405,6 +406,7 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
                 DispatchQueue.main {
                     SwiftLoader.hide()
                     showNote(text: "Game added successfully")
+                    reloadAddedGame = true
                     NotificationCenter.default.post(name:  (NSNotification.Name(rawValue: "refreshGameList")), object: nil)
                     self.navigationController?.popViewController(animated: true)
                 }

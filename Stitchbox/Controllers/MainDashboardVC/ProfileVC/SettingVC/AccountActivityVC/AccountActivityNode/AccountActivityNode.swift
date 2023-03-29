@@ -104,6 +104,34 @@ class AccountActivityNode: ASCellNode {
             
             descriptionNode.attributedText = NSAttributedString(string: "You have unliked a post", attributes: textAttributes)
             
+        } else if activity.content == "comment" {
+           
+            if activity.action == "CREATE" {
+                descriptionNode.attributedText = NSAttributedString(string: "You just created a new comment", attributes: textAttributes)
+            } else if activity.action == "DELETE" {
+                descriptionNode.attributedText = NSAttributedString(string: "You just deleted a comment", attributes: textAttributes)
+            } else if activity.action == "UPDATE" {
+                descriptionNode.attributedText = NSAttributedString(string: "You just updated a comment", attributes: textAttributes)
+            }
+            
+        } else if activity.content == "Upload image" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You just uploaded a new image", attributes: textAttributes)
+            
+        } else if activity.content == "post" {
+            
+            if activity.action == "CREATE" {
+                descriptionNode.attributedText = NSAttributedString(string: "You just created a new post", attributes: textAttributes)
+            } else if activity.action == "DELETE" {
+                descriptionNode.attributedText = NSAttributedString(string: "You just deleted a post", attributes: textAttributes)
+            } else if activity.action == "UPDATE" {
+                descriptionNode.attributedText = NSAttributedString(string: "You just updated a post", attributes: textAttributes)
+            }
+            
+        } else if activity.content == "Upload video" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You just uploaded a new video", attributes: textAttributes)
+            
         }
         
         

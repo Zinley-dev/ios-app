@@ -68,7 +68,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         //self.navigationController?.hidesBarsOnSwipe = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
+       
         
         
         //
@@ -87,6 +87,15 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         showMiddleBtn(vc: self)
         
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        delay(0.25) {
+            NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -113,6 +122,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         currentIndex = 0
         isfirstLoad = true
         didScroll = false
+        shouldMute = nil
         updateData()
                
     }
@@ -364,7 +374,7 @@ extension FeedViewController {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if !posts.isEmpty {
+        if !posts.isEmpty, scrollView == collectionNode.view {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -449,21 +459,27 @@ extension FeedViewController {
 
 
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-          navigationController?.setNavigationBarHidden(true, animated: true)
-            changeTabBar(hidden: true, animated: true)
-            self.tabBarController?.tabBar.isTranslucent = true
-            hideMiddleBtn(vc: self)
-            bottomConstraint.constant = 20
-           
+        
+        if scrollView == collectionNode.view {
+            
+            if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
+               navigationController?.setNavigationBarHidden(true, animated: true)
+                 changeTabBar(hidden: true, animated: true)
+                 self.tabBarController?.tabBar.isTranslucent = true
+                 hideMiddleBtn(vc: self)
+                 bottomConstraint.constant = 20
+                
 
-       } else {
-          navigationController?.setNavigationBarHidden(false, animated: true)
-           changeTabBar(hidden: false, animated: false)
-           self.tabBarController?.tabBar.isTranslucent = false
-           showMiddleBtn(vc: self)
-           bottomConstraint.constant = 0
-       }
+            } else {
+               navigationController?.setNavigationBarHidden(false, animated: true)
+                changeTabBar(hidden: false, animated: false)
+                self.tabBarController?.tabBar.isTranslucent = false
+                showMiddleBtn(vc: self)
+                bottomConstraint.constant = 0
+            }
+            
+        }
+       
     }
     
     func changeTabBar(hidden:Bool, animated: Bool) {
@@ -867,8 +883,8 @@ extension FeedViewController {
         let slideVC =  reportView()
         
         
-        slideVC.video_report = true
-        slideVC.highlight_id = editeddPost?.id ?? ""
+        slideVC.post_report = true
+        slideVC.postId = editeddPost?.id ?? ""
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
         global_presetingRate = Double(0.75)
