@@ -1119,6 +1119,7 @@ extension PostNode {
     }
 
     private func createMediaOverlaySpec(constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        
         let mediaSize = calculateMediaSize(constrainedSize: constrainedSize)
 
         if post.muxPlaybackId != "" {
@@ -1152,10 +1153,14 @@ extension PostNode {
         let clampedAspectRatio = max(min(aspectRatio, maxAspectRatio), minAspectRatio)
 
         let newWidth = maxWidth
-        let newHeight = maxWidth * clampedAspectRatio
+        let navigationBarHeight = navigationControllerHeight
+        let tabBarHeight = tabBarControllerHeight
+        let availableHeight = constrainedSize.max.height - 100 - navigationBarHeight - tabBarHeight
+        let newHeight = min(maxWidth * clampedAspectRatio, availableHeight)
 
         return CGSize(width: newWidth, height: newHeight)
     }
+
 
 
     private func createVideoOverlaySpec(mediaSize: CGSize) -> ASLayoutSpec {

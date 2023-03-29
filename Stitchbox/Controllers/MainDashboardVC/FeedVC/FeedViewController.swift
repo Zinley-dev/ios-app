@@ -47,6 +47,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewDidLoad()
 
         // Do any additional setup after loading the view
+        
+        navigationControllerHeight = self.navigationController!.navigationBar.frame.height
+        tabBarControllerHeight = (self.tabBarController?.tabBar.frame.height)!
+        
         setupButtons()
         setupCollectionNode()
         navigationControllerDelegate()
@@ -881,7 +885,6 @@ extension FeedViewController {
     @objc func reportPost() {
         
         let slideVC =  reportView()
-        
         
         slideVC.post_report = true
         slideVC.postId = editeddPost?.id ?? ""

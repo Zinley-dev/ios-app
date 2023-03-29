@@ -47,17 +47,13 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             
             report_title.text = "Why are you reporting this account?"
             
-        } else if user_report == true {
+        } else if post_report == true {
             
             report_title.text = "Why are you reporting this post?"
             
         } else if comment_report == true {
             
             report_title.text = "Why are you reporting this comment?"
-            
-        } else if challenge_report == true {
-            
-            report_title.text = "Why are you reporting this challenge?"
             
         }
         
