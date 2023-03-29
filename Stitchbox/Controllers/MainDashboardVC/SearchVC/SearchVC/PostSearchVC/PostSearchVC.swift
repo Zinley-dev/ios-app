@@ -103,6 +103,8 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
         currentIndex = 0
         isfirstLoad = true
         didScroll = false
+        shouldMute = nil
+        page = 1
         updateData()
                
     }
@@ -208,7 +210,7 @@ extension PostSearchVC {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if !posts.isEmpty {
+        if !posts.isEmpty, scrollView == collectionNode.view {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -677,8 +679,8 @@ extension PostSearchVC {
         
         let slideVC =  reportView()
         
-        slideVC.video_report = true
-        slideVC.highlight_id = editeddPost?.id ?? ""
+        slideVC.post_report = true
+        slideVC.postId = editeddPost?.id ?? ""
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
         global_presetingRate = Double(0.75)

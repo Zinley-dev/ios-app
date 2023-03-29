@@ -29,7 +29,6 @@ class SettingVC: UIViewController {
     @IBOutlet weak var StreamingLinkSwitch: UISwitch!
     @IBOutlet weak var PrivateAccountSwitch: UISwitch!
     
-    var settings: SettingModel!
     var isStreamLink = false
     var isSound = false
     var isPrivate = false
@@ -66,7 +65,6 @@ class SettingVC: UIViewController {
     @IBAction func pushNotificationBtnPressed(_ sender: Any) {
         
         if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PushNotificationVC") as? PushNotificationVC {
-            PNVC.settings = settings
             self.navigationController?.pushViewController(PNVC, animated: true)
             
         }
@@ -76,7 +74,6 @@ class SettingVC: UIViewController {
     @IBAction func securityBtnPressed(_ sender: Any) {
         
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SecurityVC") as? SecurityVC {
-            SVC.settings = settings
             self.navigationController?.pushViewController(SVC, animated: true)
             
         }
@@ -148,12 +145,14 @@ class SettingVC: UIViewController {
             
             params = ["autoPlaySound": false]
             isSound = false
-            
+            globalIsSound = false
+            shouldMute = true
         } else {
             
             params = ["autoPlaySound": true]
             isSound = true
-            
+            globalIsSound = true
+            shouldMute = false
         }
 
         APIManager().updateSettings(params: params) {
@@ -226,9 +225,9 @@ class SettingVC: UIViewController {
                         case.failure(let error):
                             DispatchQueue.main.async {
                                 self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                            }
                         }
-                    }
+                }
+            }
         
     }
     
@@ -300,7 +299,7 @@ extension SettingVC {
                         return
                 }
 
-                self.settings =  Mapper<SettingModel>().map(JSONObject: data)
+                globalSetting =  Mapper<SettingModel>().map(JSONObject: data)
                 
                 DispatchQueue.main {
                     self.processDefaultData()
@@ -310,6 +309,7 @@ extension SettingVC {
             
                 DispatchQueue.main {
                     self.showErrorAlert("Oops!", msg: "Unable to retrieve your setting \(error.localizedDescription)")
+                    self.navigationController?.popViewController(animated: true)
                 }
                
             }
@@ -320,8 +320,8 @@ extension SettingVC {
     
     func processDefaultData() {
         
-        if self.settings != nil {
-            if self.settings.AutoPlaySound == true {
+        if globalSetting != nil {
+            if globalSetting.AutoPlaySound == true {
                 self.SoundSwitch.setOn(true, animated: true)
                 isSound = true
             } else {
@@ -329,7 +329,7 @@ extension SettingVC {
                 isSound = false
             }
             
-            if self.settings.AllowStreamingLink == true {
+            if globalSetting.AllowStreamingLink == true {
                 self.StreamingLinkSwitch.setOn(true, animated: true)
                 isStreamLink = true
             } else {
@@ -337,7 +337,7 @@ extension SettingVC {
                 isStreamLink = false
             }
             
-            if self.settings.PrivateAccount == true {
+            if globalSetting.PrivateAccount == true {
                 self.PrivateAccountSwitch.setOn(true, animated: true)
                 isPrivate = true
             } else {

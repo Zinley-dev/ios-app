@@ -14,6 +14,7 @@ import ZSWTappableLabel
 import ZSWTaggedString
 import SafariServices
 import AuthenticationServices
+import ObjectMapper
 
 class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
@@ -30,7 +31,8 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
   private let disposeBag = DisposeBag()
   
   
-  @IBOutlet weak var blurView: UIView!
+    @IBOutlet weak var launchingView: UIView!
+    @IBOutlet weak var blurView: UIView!
   @IBOutlet weak var contentView: UIView!
   @IBOutlet weak var btnLetStart: UIButton!
   @IBOutlet var collectionLoginProviders: [UIButton]!
@@ -63,6 +65,26 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     super.viewDidLoad()
     
     if _AppCoreData.userSession.value == nil {
+        
+        
+        UIView.animate(withDuration: 0.5) {
+            
+            self.launchingView.alpha = 0
+            
+        }
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            
+            if self.launchingView.alpha == 0 {
+                
+                self.launchingView.isHidden = true
+                
+            }
+            
+        }
+        
+        
       buildUI()
       bindingUI()
       
@@ -91,8 +113,15 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
         
     } else {
-      RedirectionHelper.redirectToDashboard()
+        
+        self.loadNewestCoreData {
+            self.loadSettings {
+                RedirectionHelper.redirectToDashboard()
+            }
+        }
+    
     }
+      
     
   }
 
@@ -298,4 +327,73 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     
 }
 
+extension StartViewController {
+    
+    
+    func loadSettings(completed: @escaping DownloadComplete) {
+        
+        APIManager().getSettings { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body else {
+                    completed()
+                        return
+                }
+
+                let settings =  Mapper<SettingModel>().map(JSONObject: data)
+                globalSetting = settings
+                globalIsSound = settings?.AutoPlaySound ?? false
+                
+                completed()
+                
+            case .failure(_):
+            
+                completed()
+               
+            }
+        }
+        
+    }
+    
+    
+    func loadNewestCoreData(completed: @escaping DownloadComplete) {
+        
+        APIManager().getme { result in
+            switch result {
+            case .success(let response):
+                
+                if let data = response.body {
+                    
+                    if !data.isEmpty {
+                        
+                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                            _AppCoreData.reset()
+                            _AppCoreData.userDataSource.accept(newUserData)
+                            completed()
+                        } else {
+                            completed()
+                        }
+                        
+                      
+                    } else {
+                        completed()
+                    }
+                    
+                } else {
+                    completed()
+                }
+                
+                
+            case .failure(let error):
+                print("Error loading profile: ", error)
+                completed()
+            }
+        }
+        
+        
+    }
+    
+    
+}
 

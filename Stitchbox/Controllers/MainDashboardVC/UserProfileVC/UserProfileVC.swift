@@ -91,19 +91,10 @@ class UserProfileVC: UIViewController {
             self.setupChallengeView()
         
             self.loadUserData()
-            self.countFistBumped()
-            self.countFollowings()
-            self.countFollowers()
-            self.checkIfFollow()
-            self.checkIfFistBump()
-            
+           
             self.setupChallengeView()
             
-            self.getUserPost { (newPosts) in
-                
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-            }
+           
             
             NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.report), name: (NSNotification.Name(rawValue: "report_user")), object: nil)
@@ -1257,6 +1248,7 @@ extension UserProfileVC {
         
         var snapshot = self.datasource.snapshot()
         snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
         currpage = 1
         
         self.getUserPost { (newPosts) in
@@ -1289,7 +1281,7 @@ extension UserProfileVC {
 extension UserProfileVC {
     
     func loadUserData() {
-          
+  
         APIManager().getUserInfo(userId: self.userId!) { result in
           switch result {
             case .success(let response):
@@ -1299,13 +1291,25 @@ extension UserProfileVC {
               
               self.userData = Mapper<UserDataSource>().map(JSONObject: data)
               self.applyUIChange()
+              
+              self.countFistBumped()
+              self.countFollowings()
+              self.countFollowers()
+              self.checkIfFollow()
+              self.checkIfFistBump()
             
-            case .failure(let error):
+              self.getUserPost { (newPosts) in
+                  
+                  self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                  
+              }
+              
+            case .failure(_):
               
               Dispatch.main.async {
                   self.NoticeBlockAndDismiss()
               }
-              print(error)
+           
           }
         }
       }
@@ -1665,7 +1669,7 @@ extension UserProfileVC {
         let slideVC =  reportView()
         
         slideVC.user_report = true
-        slideVC.user_id = self.userId!
+        slideVC.userId = self.userId!
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
         global_presetingRate = Double(0.75)

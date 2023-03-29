@@ -70,7 +70,7 @@ class PostVC: UIViewController {
         setupTextView()
         setupGesture()
         loadPreviousSetting()
-        
+        loadAvatar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,7 +96,6 @@ class PostVC: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         
-       
     }
     
     @IBAction func addMediaBtnPressed(_ sender: Any) {
@@ -244,6 +243,17 @@ class PostVC: UIViewController {
 
 extension PostVC {
     
+    
+    func loadAvatar() {
+        
+        if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+            let url = URL(string: avatarUrl)
+            avatarImage.load(url: url!, str: avatarUrl)
+        }
+        
+        
+    }
+    
     func loadPreviousSetting() {
         
         APIManager().getLastSettingPost { result in
@@ -257,9 +267,9 @@ extension PostVC {
                 
                 print(apiResponse)
                 
-                if let settings = data.first?["settings"] as? [String: Any] {
+                if let settings = data.first?["setting"] as? [String: Any] {
                     
-                    if let allowcomment = settings["allowcomment"] as? Bool {
+                    if let allowcomment = settings["allowComment"] as? Bool {
                         
                         if allowcomment == true {
                                   
@@ -358,28 +368,23 @@ extension PostVC {
                 
                 
                 
-                if let video = data.first?["video"] as? [String: Any] {
+                if let streamUrl = data.first?["streamLink"] as? String {
                     
-                    if let streamUrl = video["streamurl"] as? String, streamUrl != "" {
+                    if let url = URL(string: streamUrl) {
                         
-                        if let url = URL(string: streamUrl) {
+                        if let domain = url.host {
                             
-                            if let domain = url.host {
+                            if check_Url(host: domain) == true {
                                 
-                                if check_Url(host: domain) == true {
-                                    
-                                    global_host = domain
-                                    global_fullLink = streamUrl
-                                    DispatchQueue.main.async {
-                                        self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
-                                    }
-        
-                                }  
-                                
+                                global_host = domain
+                                global_fullLink = streamUrl
+                                DispatchQueue.main.async {
+                                    self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
+                                }
+    
                             }
+                            
                         }
-                        
-                        
                     }
 
                 }
@@ -410,7 +415,7 @@ extension PostVC {
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
-                            showNote(text: "Thank you, your video is being uploaded!")
+                            showNote(text: "Thank you, your content is being uploaded!")
                             self.dismiss(animated: true, completion: nil)
                             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
                         }
@@ -444,7 +449,7 @@ extension PostVC {
                             
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
-                    showNote(text: "Thank you, your video is being uploaded!")
+                    showNote(text: "Thank you, your content is being uploaded!")
                     self.dismiss(animated: true, completion: nil)
                     NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
                    

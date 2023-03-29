@@ -7,6 +7,7 @@
 
 import UIKit
 import SendBirdUIKit
+import ObjectMapper
 
 class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -20,17 +21,49 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
         // Do any additional setup after loading the view.
         setupButtons()
-        
-        
-        
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.allowsSelection = true
-        
-        
+        startTableView()
+        reloadAddedGame = false
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if reloadAddedGame {
+            reloadAddedGame = false
+            APIManager().getme { result in
+                switch result {
+                case .success(let response):
+                    
+                    if let data = response.body {
+                        
+                        if !data.isEmpty {
+                            
+                            if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                                _AppCoreData.reset()
+                                _AppCoreData.userDataSource.accept(newUserData)
+                                Dispatch.main.async {
+                                    self.tableView.reloadData()
+                                }
+                                
+                            }
+                          
+                        }
+                        
+                    }
+                    
+                    
+                case .failure(let error):
+                    print("Error loading profile: ", error)
+                  
+                }
+            }
+        
+            
+        }
+        
+    }
+    
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -245,6 +278,16 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @objc func refreshGameList() {
         
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "refreshGameList")), object: nil)
+        
+    }
+    
+    func startTableView() {
+        
+    
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.allowsSelection = true
+
         
     }
 

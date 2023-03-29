@@ -77,7 +77,7 @@ class PostModel: Mappable {
   private(set) var muxPlaybackId: String = ""
   private(set) var muxAssetId: String = ""
   private(set) var videoUrl: String = ""
-  private(set) var streamUrl: String = ""
+  private(set) var streamLink: String = ""
   private(set) var owner: OwnerModel?
   private(set) var setting: Setting?
   private(set) var estimatedCount: EstimatedCount?
@@ -96,7 +96,7 @@ class PostModel: Mappable {
     muxPlaybackId <- map ["mux.playbackId"]
     muxAssetId <- map ["mux.assetId"]
     owner <- map ["owner"]
-    streamUrl <- map ["video.streamurl"]
+    streamLink <- map ["streamLink"]
     setting <- map["setting"]
     metadata <- map["metadata"]
     estimatedCount <- map["estimatedCount"]

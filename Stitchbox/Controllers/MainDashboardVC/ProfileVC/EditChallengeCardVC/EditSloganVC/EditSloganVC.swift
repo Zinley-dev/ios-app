@@ -14,7 +14,7 @@ class EditSloganVC: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var sloganTextField: UITextField! {
         didSet {
-            let redPlaceholderText = NSAttributedString(string: "Best adc NA?",
+            let redPlaceholderText = NSAttributedString(string: _AppCoreData.userDataSource.value?.challengeCard?.quote ?? "Best adc NA?",
                                                         attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             
             sloganTextField.attributedPlaceholder = redPlaceholderText
@@ -63,6 +63,7 @@ class EditSloganVC: UIViewController, UITextFieldDelegate {
                     
                     DispatchQueue.main {
                         SwiftLoader.hide()
+                        newSlogan = text
                         self.sloganTextField.text = ""
                         self.sloganTextField.placeholder = text
                         self.saveBtn.backgroundColor = .disableButtonBackground

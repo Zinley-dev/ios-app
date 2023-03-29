@@ -36,7 +36,6 @@
 		149F44F72956F8270084742A /* RoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149F44F62956F8270084742A /* RoundedImageView.swift */; };
 		14BDBFA12990D79300897D30 /* FistBumpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BDBFA02990D79300897D30 /* FistBumpViewModel.swift */; };
 		14C067682956EC4F002C79AE /* ReferralCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */; };
-		14C46C1C293D8DD1004D5D3A /* LoginTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */; };
 		14FADBC6297A000000E0A741 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBC5297A000000E0A741 /* SettingModel.swift */; };
 		14FADBC8297A420800E0A741 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBC7297A420800E0A741 /* UIImageViewExtension.swift */; };
 		14FADBCA297A538400E0A741 /* TwoWayBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBC9297A538400E0A741 /* TwoWayBinding.swift */; };
@@ -107,6 +106,8 @@
 		6A286B6329C980F000C72718 /* customizedMap.json in Resources */ = {isa = PBXBuildFile; fileRef = 6A286B6229C980F000C72718 /* customizedMap.json */; };
 		6A286B6729CD5EB200C72718 /* UserSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B6529CD5EB200C72718 /* UserSettingVC.swift */; };
 		6A286B6829CD5EB200C72718 /* UserSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A286B6629CD5EB200C72718 /* UserSettingVC.xib */; };
+		6A2B9A8129D26ACE00C2D9CD /* ViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B9A8029D26ACE00C2D9CD /* ViewVC.swift */; };
+		6A2B9A8429D26AE500C2D9CD /* ViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B9A8329D26AE400C2D9CD /* ViewCell.swift */; };
 		6A307CC129ADB18500A89529 /* CommentSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A307CBF29ADB18400A89529 /* CommentSettings.swift */; };
 		6A307CC229ADB18500A89529 /* CommentSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A307CC029ADB18400A89529 /* CommentSettings.xib */; };
 		6A307CC529B1A52B00A89529 /* RecentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A307CC429B1A52B00A89529 /* RecentModel.swift */; };
@@ -193,7 +194,7 @@
 		6A80F1B429C7B5560047595A /* CommentNotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1B329C7B5560047595A /* CommentNotificationVC.swift */; };
 		6A80F1B729C7B6EE0047595A /* CommentNotificationVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A80F1B629C7B6EE0047595A /* CommentNotificationVC.xib */; };
 		6A839B3829A0331E00BD0A9A /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3729A0331E00BD0A9A /* GameCell.swift */; };
-		6A839B3A29A0332600BD0A9A /* addNewPaymentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3929A0332500BD0A9A /* addNewPaymentCell.swift */; };
+		6A839B3A29A0332600BD0A9A /* addNewGameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3929A0332500BD0A9A /* addNewGameCell.swift */; };
 		6A839B3D29A035DE00BD0A9A /* AddGameDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3C29A035DE00BD0A9A /* AddGameDetailVC.swift */; };
 		6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3F29A03C4A00BD0A9A /* GameList.swift */; };
 		6A839B4329A0424700BD0A9A /* GameStatsDomainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B4229A0424700BD0A9A /* GameStatsDomainModel.swift */; };
@@ -429,7 +430,6 @@
 		149F44F62956F8270084742A /* RoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageView.swift; sourceTree = "<group>"; };
 		14BDBFA02990D79300897D30 /* FistBumpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FistBumpViewModel.swift; sourceTree = "<group>"; };
 		14C067672956EC4F002C79AE /* ReferralCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralCodeViewController.swift; sourceTree = "<group>"; };
-		14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTabBarController.swift; sourceTree = "<group>"; };
 		14FADBC5297A000000E0A741 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		14FADBC7297A420800E0A741 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		14FADBC9297A538400E0A741 /* TwoWayBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoWayBinding.swift; sourceTree = "<group>"; };
@@ -507,6 +507,8 @@
 		6A286B6229C980F000C72718 /* customizedMap.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = customizedMap.json; sourceTree = "<group>"; };
 		6A286B6529CD5EB200C72718 /* UserSettingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettingVC.swift; sourceTree = "<group>"; };
 		6A286B6629CD5EB200C72718 /* UserSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserSettingVC.xib; sourceTree = "<group>"; };
+		6A2B9A8029D26ACE00C2D9CD /* ViewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewVC.swift; sourceTree = "<group>"; };
+		6A2B9A8329D26AE400C2D9CD /* ViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewCell.swift; sourceTree = "<group>"; };
 		6A307CBF29ADB18400A89529 /* CommentSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentSettings.swift; sourceTree = "<group>"; };
 		6A307CC029ADB18400A89529 /* CommentSettings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentSettings.xib; sourceTree = "<group>"; };
 		6A307CC429B1A52B00A89529 /* RecentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentModel.swift; sourceTree = "<group>"; };
@@ -595,7 +597,7 @@
 		6A80F1B329C7B5560047595A /* CommentNotificationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentNotificationVC.swift; sourceTree = "<group>"; };
 		6A80F1B629C7B6EE0047595A /* CommentNotificationVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentNotificationVC.xib; sourceTree = "<group>"; };
 		6A839B3729A0331E00BD0A9A /* GameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
-		6A839B3929A0332500BD0A9A /* addNewPaymentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addNewPaymentCell.swift; sourceTree = "<group>"; };
+		6A839B3929A0332500BD0A9A /* addNewGameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addNewGameCell.swift; sourceTree = "<group>"; };
 		6A839B3C29A035DE00BD0A9A /* AddGameDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGameDetailVC.swift; sourceTree = "<group>"; };
 		6A839B3F29A03C4A00BD0A9A /* GameList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameList.swift; sourceTree = "<group>"; };
 		6A839B4229A0424700BD0A9A /* GameStatsDomainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatsDomainModel.swift; sourceTree = "<group>"; };
@@ -1426,6 +1428,23 @@
 			path = UserSettingVC;
 			sourceTree = "<group>";
 		};
+		6A2B9A7F29D26AC100C2D9CD /* ViewVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A2B9A8229D26AD700C2D9CD /* ViewCell */,
+				6A2B9A8029D26ACE00C2D9CD /* ViewVC.swift */,
+			);
+			path = ViewVC;
+			sourceTree = "<group>";
+		};
+		6A2B9A8229D26AD700C2D9CD /* ViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				6A2B9A8329D26AE400C2D9CD /* ViewCell.swift */,
+			);
+			name = ViewCell;
+			sourceTree = "<group>";
+		};
 		6A307CBE29ADADB400A89529 /* CommentSettings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1995,7 +2014,7 @@
 		6A839B3629A0330D00BD0A9A /* AddNewGameCell */ = {
 			isa = PBXGroup;
 			children = (
-				6A839B3929A0332500BD0A9A /* addNewPaymentCell.swift */,
+				6A839B3929A0332500BD0A9A /* addNewGameCell.swift */,
 			);
 			path = AddNewGameCell;
 			sourceTree = "<group>";
@@ -2078,6 +2097,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A2B9A7F29D26AC100C2D9CD /* ViewVC */,
 				6A78485C2984D1E3008B2263 /* NotificationVC */,
 				6A467E5529AD8CEB00214108 /* PostSearchVC */,
 				6AEA340B298F0B70005A4C5D /* CommentVC */,
@@ -2681,7 +2701,6 @@
 		6AEA74F72968074B005C802B /* Tabbar */ = {
 			isa = PBXGroup;
 			children = (
-				14C46C1B293D8DD1004D5D3A /* LoginTabBarController.swift */,
 				1457CDEB294862DF003C742F /* DashboardTabBar.swift */,
 			);
 			path = Tabbar;
@@ -3398,6 +3417,7 @@
 				6A286B6729CD5EB200C72718 /* UserSettingVC.swift in Sources */,
 				6AC6DA1329AD317600B18139 /* SideButton.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
+				6A2B9A8129D26ACE00C2D9CD /* ViewVC.swift in Sources */,
 				6A3F0A56297B6A9000366665 /* MainFollowVC.swift in Sources */,
 				6A307CD929B6850800A89529 /* PostSearchVC.swift in Sources */,
 				6AEA33E6298AA152005A4C5D /* VideoPostModel.swift in Sources */,
@@ -3416,7 +3436,7 @@
 				6A0D54462974E9300059530C /* ChallengerCardProfileHeaderCell.swift in Sources */,
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
 				6A839B3829A0331E00BD0A9A /* GameCell.swift in Sources */,
-				6A839B3A29A0332600BD0A9A /* addNewPaymentCell.swift in Sources */,
+				6A839B3A29A0332600BD0A9A /* addNewGameCell.swift in Sources */,
 				6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */,
 				14FADBCD297B072100E0A741 /* ChangePasswordViewModel.swift in Sources */,
 				141BB195293BA4F0004F4ED7 /* CountryPicker.swift in Sources */,
@@ -3426,6 +3446,7 @@
 				6AAD7A45294C6642003E3AB6 /* Bundle+QuickStart.swift in Sources */,
 				A5F2510729A76AB600373554 /* OwnerModel.swift in Sources */,
 				A5346488294B09B300FB6A94 /* ProfileViewController.swift in Sources */,
+				6A2B9A8429D26AE500C2D9CD /* ViewCell.swift in Sources */,
 				6AF973352978E4E900C76814 /* MorePersonalInfoVC.swift in Sources */,
 				6AAD7A3F294C6642003E3AB6 /* Int64+QuickStart.swift in Sources */,
 				6A58EA4D294EB280005FA3CD /* NotificationDelegate.swift in Sources */,
@@ -3489,7 +3510,6 @@
 				6AAD7A37294C6637003E3AB6 /* DirectCallDataSource.swift in Sources */,
 				A54A768829900E24003A8C4A /* ISODateTransform.swift in Sources */,
 				6AC6D9FC29A5C92700B18139 /* AutocompeteViewController.swift in Sources */,
-				14C46C1C293D8DD1004D5D3A /* LoginTabBarController.swift in Sources */,
 				A5A5E40929376172004E9207 /* Color.swift in Sources */,
 				6A9E4C742977AF2700B59176 /* BlockedListVC.swift in Sources */,
 				6AAD7A65294C699E003E3AB6 /* PresentationController.swift in Sources */,

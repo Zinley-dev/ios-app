@@ -119,7 +119,7 @@ extension AccountActivityVC {
         
         
         self.applyStyle()
-        self.tableNode.leadingScreensForBatching = 2
+        self.tableNode.leadingScreensForBatching = 5
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
         

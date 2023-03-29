@@ -137,7 +137,7 @@ extension SelectedPostVC {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if !posts.isEmpty {
+        if !posts.isEmpty, scrollView == collectionNode.view {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -221,12 +221,18 @@ extension SelectedPostVC {
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-          navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        if scrollView == collectionNode.view {
+            
+            if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
+               navigationController?.setNavigationBarHidden(true, animated: true)
 
-       } else {
-          navigationController?.setNavigationBarHidden(false, animated: true)
-       }
+            } else {
+               navigationController?.setNavigationBarHidden(false, animated: true)
+            }
+            
+        }
+       
     }
 
 
@@ -519,7 +525,44 @@ extension SelectedPostVC {
     
     @objc func onClickDelete(_ sender: AnyObject) {
         
-        print("Delete requested")
+      
+        if let id = editeddPost?.id, id != "" {
+            
+            Dispatch.main.async {
+                
+                self.removePost()
+                
+            }
+            
+            APIManager().deleteMyPost(pid: id) { result in
+                switch result {
+                case .success(_):
+                    needReloadPost = true
+                    
+                    
+                  case .failure(let error):
+                    print(error)
+                    delay(0.1) {
+                        Dispatch.main.async {
+                            self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
+                        }
+
+                    }
+                    
+                }
+              }
+            
+        } else {
+        
+            delay(0.1) {
+                self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
+            }
+            
+        }
+        
+        
+        
+        
        
         
     }
@@ -571,11 +614,13 @@ extension SelectedPostVC {
     @objc func onClickStats(_ sender: AnyObject) {
         
         print("Stats requested")
-        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StatsVC") as? StatsVC {
+        if let VVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewVC") as? ViewVC {
             
             
-            //pauseVideoIfNeed(pauseIndex: selectedIndex)
-            self.navigationController?.pushViewController(SVC, animated: true)
+            VVC.selected_item = editeddPost
+            delay(0.1) {
+                self.navigationController?.pushViewController(VVC, animated: true)
+            }
             
         }
         
@@ -813,8 +858,8 @@ extension SelectedPostVC {
         
         let slideVC = reportView()
         
-        slideVC.video_report = true
-        slideVC.highlight_id = editeddPost?.id ?? ""
+        slideVC.post_report = true
+        slideVC.postId = editeddPost?.id ?? ""
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
         global_presetingRate = Double(0.75)

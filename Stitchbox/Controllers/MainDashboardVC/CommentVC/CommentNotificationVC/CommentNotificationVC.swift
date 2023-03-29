@@ -1458,7 +1458,7 @@ extension CommentNotificationVC {
             
             let slideVC =  reportView()
             
-            slideVC.comment_id = self.CommentList[index].comment_id
+            slideVC.commentId = self.CommentList[index].comment_id
             slideVC.comment_report = true
             slideVC.modalPresentationStyle = .custom
             slideVC.transitioningDelegate = self
