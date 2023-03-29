@@ -330,7 +330,7 @@ extension SearchViewController {
         self.searchTableNode.view.topAnchor.constraint(equalTo: self.searchView.topAnchor, constant: 0).isActive = true
         self.searchTableNode.view.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor, constant: 0).isActive = true
         self.searchTableNode.view.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor, constant: 0).isActive = true
-        self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: -235).isActive = true
+        self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: -300).isActive = true
         
         self.recentTableNode.delegate = self
         self.searchTableNode.delegate = self

@@ -19,12 +19,20 @@ class ImageViewCell: UICollectionViewCell {
     
     private lazy var videoSignView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage.init(named: "play")
+        imageView.image = UIImage(named: "play")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        
+        // Add shadow to layer
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOpacity = 0.5
+        imageView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        imageView.layer.shadowRadius = 2
+        
         return imageView
     }()
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)

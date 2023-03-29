@@ -85,11 +85,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         showMiddleBtn(vc: self)
         checkCallForLayout()
     
-     
     }
-    
-    
-    
     
     func setupSearchController() {
         self.searchController = UISearchController(searchResultsController: nil)

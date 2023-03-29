@@ -26,23 +26,24 @@ class ChannelViewController: SBUChannelViewController {
     
     var getRoom: Room!
     var currentRoomID = ""
+    var shouldUnhide = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
         // Do any additional setup after loading the view.
         navigationItem.rightBarButtonItem = nil
         self.callLayout()
     
-        
     }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         changeTabBar(hidden: true)
         self.tabBarController?.tabBar.isTranslucent = true
+        hideMiddleBtn(vc: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -377,7 +378,7 @@ class ChannelViewController: SBUChannelViewController {
     }
 
     override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
+        if parent == nil, shouldUnhide {
             
             changeTabBar(hidden: false)
             self.tabBarController?.tabBar.isTranslucent = false

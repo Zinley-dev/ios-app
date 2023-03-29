@@ -151,34 +151,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.channelSettingsTheme.cellArrowIconTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.cellSwitchColor = UIColor.secondary
         SBUTheme.channelSettingsTheme.cellTypeIconTintColor = UIColor.white
-        SBUTheme.channelSettingsTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.channelSettingsTheme.backgroundColor = .background
         
         
         SBUTheme.userListTheme.navigationBarTintColor = UIColor.background
         
         
-        SBUTheme.messageSearchTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.messageSearchTheme.backgroundColor = .background
         SBUTheme.userListTheme.statusBarStyle = .lightContent
         
-        SBUTheme.overlayTheme.componentTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
-        SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.overlayTheme.componentTheme.backgroundColor = .background
+        SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = .background
         
-        SBUTheme.userProfileTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.userProfileTheme.backgroundColor = .background
         SBUTheme.userProfileTheme.usernameTextColor = UIColor.white
-        SBUTheme.messageSearchResultCellTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.messageSearchResultCellTheme.backgroundColor = .background
         
-        SBUTheme.userCellTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.userCellTheme.backgroundColor = .background
         
         
         SBUTheme.channelTheme.navigationBarTintColor = UIColor.background
-        SBUTheme.channelTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.channelTheme.backgroundColor = .background
         
         SBUTheme.channelTheme.leftBarButtonTintColor = UIColor.white
         SBUTheme.channelTheme.rightBarButtonTintColor = UIColor.white
         
-        SBUTheme.componentTheme.loadingBackgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.componentTheme.loadingBackgroundColor = .background
         SBUTheme.componentTheme.addReactionTintColor = UIColor.secondary
         SBUTheme.componentTheme.loadingSpinnerColor = UIColor.secondary
+        
+        SBUTheme.componentTheme.emptyViewBackgroundColor = .background
+        SBUTheme.componentTheme.backgroundColor = .background
+        
+
        
     }
 

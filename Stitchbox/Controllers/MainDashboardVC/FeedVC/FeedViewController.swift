@@ -89,6 +89,14 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         preloadingView.startAnimating()
         
        
+        if let tabBarController = self.tabBarController {
+            let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
+            for viewController in viewControllersToPreload {
+                _ = viewController.view
+            }
+        }
+
+
     
     }
     

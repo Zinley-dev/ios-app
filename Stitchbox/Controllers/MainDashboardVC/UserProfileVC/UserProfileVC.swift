@@ -131,6 +131,11 @@ class UserProfileVC: UIViewController {
                         cell.avatarImage.load(url: url!, str: data.avatarURL)
                         selectAvatarImage.load(url: url!, str: data.avatarURL)
                         
+                    } else {
+                        
+                        cell.avatarImage.image = UIImage.init(named: "defaultuser")
+                        selectAvatarImage.image = UIImage.init(named: "defaultuser")
+                        
                     }
                     
                     if data.cover != "" {
@@ -550,9 +555,6 @@ extension UserProfileVC {
             
     }
         
-        
-
-    
     
     @objc func messageTapped(_ sender: UIButton) {
         
@@ -572,9 +574,18 @@ extension UserProfileVC {
             checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-            self.navigationController?.pushViewController(channelVC, animated: true)
-
+           
+            let nav = UINavigationController(rootViewController: channelVC)
+            
+            // Customize the navigation bar appearance
+            channelVC.navigationController?.navigationBar.barTintColor = .background
+            channelVC.navigationController?.navigationBar.tintColor = .white
+            channelVC.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+            
+            nav.modalPresentationStyle = .fullScreen
+            //self.navigationController?.pushViewController(channelVC, animated: true)
+            self.present(nav, animated: true, completion: nil)
+            
         }
         
     }

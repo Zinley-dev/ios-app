@@ -667,14 +667,20 @@ extension PostNode {
                     if let vc = UIViewController.currentViewController() {
                         
                         let nav = UINavigationController(rootViewController: UPVC)
-                        
+
+                        // Set the user ID, nickname, and onPresent properties of UPVC
                         UPVC.userId = userId
                         UPVC.nickname = username
                         UPVC.onPresent = true
+
+                        // Customize the navigation bar appearance
+                        nav.navigationBar.barTintColor = .background
+                        nav.navigationBar.tintColor = .white
+                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
                         nav.modalPresentationStyle = .fullScreen
-                        nav.navigationItem.titleView?.tintColor = .white
-                        nav.navigationBar.tintColor = .background
                         vc.present(nav, animated: true, completion: nil)
+
                
                     }
                 }

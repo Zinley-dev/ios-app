@@ -212,7 +212,11 @@ class ProfileViewController: UIViewController {
                     let url = URL(string: avatarUrl)
                     cell.avatarImage.load(url: url!, str: avatarUrl)
                     selectAvatarImage.load(url: url!, str: avatarUrl)
+                } else {
+                    cell.avatarImage.image = UIImage.init(named: "defaultuser")
+                    selectAvatarImage.image = UIImage.init(named: "defaultuser")
                 }
+                
                 if let coverUrl = _AppCoreData.userDataSource.value?.cover, coverUrl != "" {
                     let url = URL(string: coverUrl)
                     cell.coverImage.load(url: url!, str: coverUrl)

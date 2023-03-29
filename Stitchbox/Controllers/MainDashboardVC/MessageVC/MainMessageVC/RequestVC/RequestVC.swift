@@ -240,6 +240,7 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         let channel = inSearchMode ? searchChannelList[indexPath.row] : channels[indexPath.row]
         let channelVC = RequestChannelVC(channelUrl: channel.channelUrl, messageListParams: nil)
         hideMiddleBtn(vc: self)
+        channelVC.shouldUnhide = true
         self.navigationController?.pushViewController(channelVC, animated: true)
 
         

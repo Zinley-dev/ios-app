@@ -129,8 +129,8 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="7TY-Lf-qtH">
-                                <rect key="frame" x="177.66666666666666" y="354.66666666666669" width="20" height="20"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="7TY-Lf-qtH">
+                                <rect key="frame" x="169" y="346" width="37" height="37"/>
                                 <color key="color" name="Secondary"/>
                             </activityIndicatorView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="JRS-LC-MbQ">
@@ -3486,7 +3486,7 @@
                                                         <constraint firstAttribute="height" constant="200" id="8EP-2G-SrZ"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="B1B-ma-e4c">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="B1B-ma-e4c">
                                                     <rect key="frame" x="16" y="165" width="70" height="70"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="70" id="Weq-da-5cz"/>
@@ -6683,7 +6683,7 @@
                                                         <constraint firstAttribute="height" constant="200" id="yjP-g2-xuz"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="bJW-xL-xpT">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bJW-xL-xpT">
                                                     <rect key="frame" x="16" y="165" width="70" height="70"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="70" id="XgH-9U-6T0"/>
@@ -6744,30 +6744,34 @@
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="VA0-US-sxm">
                                                             <rect key="frame" x="0.0" y="0.0" width="380" height="40"/>
                                                             <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="flI-9B-31X">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="125" height="40"/>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="flI-9B-31X">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="130" height="40"/>
                                                                     <color key="backgroundColor" name="Primary"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="width" constant="125" id="XCE-Oe-qyu"/>
+                                                                        <constraint firstAttribute="width" constant="130" id="XCE-Oe-qyu"/>
                                                                         <constraint firstAttribute="height" constant="40" id="zV3-VO-rPK"/>
                                                                     </constraints>
                                                                     <state key="normal" title="Button"/>
-                                                                    <buttonConfiguration key="configuration" style="plain" title="Follow"/>
+                                                                    <buttonConfiguration key="configuration" style="plain" title="Follow" titleAlignment="center">
+                                                                        <fontDescription key="titleFontDescription" type="boldSystem" pointSize="12"/>
+                                                                    </buttonConfiguration>
                                                                     <userDefinedRuntimeAttributes>
                                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                             <real key="value" value="20"/>
                                                                         </userDefinedRuntimeAttribute>
                                                                     </userDefinedRuntimeAttributes>
                                                                 </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bT1-J2-bUP">
-                                                                    <rect key="frame" x="135" y="0.0" width="125" height="40"/>
+                                                                <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bT1-J2-bUP">
+                                                                    <rect key="frame" x="140" y="0.0" width="130" height="40"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="width" constant="125" id="3AS-h1-fJF"/>
+                                                                        <constraint firstAttribute="width" constant="130" id="3AS-h1-fJF"/>
                                                                         <constraint firstAttribute="height" constant="40" id="sRp-W2-SqY"/>
                                                                     </constraints>
                                                                     <state key="normal" title="Button"/>
-                                                                    <buttonConfiguration key="configuration" style="plain" title="Message"/>
+                                                                    <buttonConfiguration key="configuration" style="plain" title="Message" titleAlignment="center">
+                                                                        <fontDescription key="titleFontDescription" type="boldSystem" pointSize="12"/>
+                                                                    </buttonConfiguration>
                                                                     <userDefinedRuntimeAttributes>
                                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                             <real key="value" value="20"/>
@@ -6775,7 +6779,7 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1h-cv-pYx">
-                                                                    <rect key="frame" x="270" y="0.0" width="110" height="40"/>
+                                                                    <rect key="frame" x="280" y="0.0" width="100" height="40"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="40" id="hiG-k1-p1n"/>
