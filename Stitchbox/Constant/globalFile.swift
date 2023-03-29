@@ -777,7 +777,7 @@ func reloadGlobalUserInformation() {
                     if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
                         _AppCoreData.reset()
                         _AppCoreData.userDataSource.accept(newUserData)
-                       
+                        syncSendbirdAccount()
                     } 
                   
                 }

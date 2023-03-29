@@ -22,23 +22,30 @@ class RequestChannelVC: SBUChannelViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-          
-        self.tabBarController?.tabBar.isHidden = true
-        self.tabBarController?.tabBar.frame = .zero
+        
+        changeTabBar(hidden: true)
+        self.tabBarController?.tabBar.isTranslucent = true
     }
-   
-    
+
+
     override func willMove(toParent parent: UIViewController?) {
-        super.willMove(toParent: parent)
-        
-        
-        if (parent != nil) {
-            self.tabBarController?.tabBar.frame = .zero
-            self.tabBarController?.tabBar.isHidden = true
-        }
+        if parent == nil {
             
-        
+            changeTabBar(hidden: false)
+            self.tabBarController?.tabBar.isTranslucent = false
+            
+        }
+      
     }
+    
+    func changeTabBar(hidden: Bool) {
+        guard let tabBar = self.tabBarController?.tabBar else {
+            return
+        }
+
+        tabBar.isHidden = hidden
+    }
+
     
 
     override func sendUserMessage(messageParams: SBDUserMessageParams, parentMessage: SBDBaseMessage? = nil) {

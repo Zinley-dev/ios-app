@@ -10,8 +10,6 @@ import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
 
-
-
 class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
 
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
@@ -25,7 +23,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     var editeddPost: PostModel?
     var startIndex: Int!
     var currentIndex: Int!
-    
+   
     
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
