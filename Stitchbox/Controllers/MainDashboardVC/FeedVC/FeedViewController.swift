@@ -47,6 +47,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewDidLoad()
 
         // Do any additional setup after loading the view
+        
+        navigationControllerHeight = self.navigationController!.navigationBar.frame.height
+        tabBarControllerHeight = (self.tabBarController?.tabBar.frame.height)!
+        
         setupButtons()
         setupCollectionNode()
         navigationControllerDelegate()
