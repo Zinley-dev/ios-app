@@ -886,7 +886,6 @@ extension FeedViewController {
         
         let slideVC =  reportView()
         
-        
         slideVC.post_report = true
         slideVC.postId = editeddPost?.id ?? ""
         slideVC.modalPresentationStyle = .custom
