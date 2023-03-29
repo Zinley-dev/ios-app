@@ -146,8 +146,7 @@ extension FistBumperVC: ASTableDelegate {
         }
         
     }
-    
-    
+
 }
 
 extension FistBumperVC: ASTableDataSource {
@@ -156,7 +155,7 @@ extension FistBumperVC: ASTableDataSource {
         
         if self.fistBumpList.count == 0 {
             
-            tableNode.view.setEmptyMessage("No fist-bumped user!")
+            tableNode.view.setEmptyMessage("No fistbumpers!")
             
         } else {
             tableNode.view.restore()

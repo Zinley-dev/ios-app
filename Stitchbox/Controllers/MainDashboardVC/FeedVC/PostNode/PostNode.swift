@@ -307,7 +307,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         }
   
     }
-    
+    /*
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
             
         
@@ -348,20 +348,22 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
         
         
-        if post.metadata?.width == post.metadata?.height {
-            mediaSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width)
-        } else {
-            
-            var newHeight = constrainedSize.max.width * (post.metadata?.height ?? constrainedSize.max.width) / (post.metadata?.width ?? constrainedSize.max.width)
-            
-            if newHeight > constrainedSize.max.height * 0.75 {
-                newHeight = constrainedSize.max.height * 0.75
-            } else if newHeight <= constrainedSize.max.height * 0.45 {
-                newHeight = constrainedSize.max.height * 0.45
-            }
-            
-            mediaSize = CGSize(width: constrainedSize.max.width, height: newHeight)
-        }
+        let originalWidth = CGFloat(post.metadata?.width ?? 1)
+        let originalHeight = CGFloat(post.metadata?.height ?? 1)
+
+        let aspectRatio = originalHeight / originalWidth
+        let maxWidth = constrainedSize.max.width
+
+        let minAspectRatio: CGFloat = 4 / 5 // 4:5 (portrait)
+        let maxAspectRatio: CGFloat = 1.91 / 1 // 1.91:1 (landscape)
+
+        let clampedAspectRatio = max(min(aspectRatio, maxAspectRatio), minAspectRatio)
+
+        let newWidth = maxWidth
+        let newHeight = maxWidth * clampedAspectRatio
+
+        mediaSize = CGSize(width: newWidth, height: newHeight)
+
         
         if post.muxPlaybackId != "" {
             
@@ -397,7 +399,9 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         verticalStack.children = children
        
         return verticalStack
-    }
+    }*/
+    
+    
     
     
     func getThumbnailVideoNodeURL(post: PostModel) -> URL? {
@@ -1063,3 +1067,111 @@ extension PostNode {
 }
 
 
+
+extension PostNode {
+    
+    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        setupHeaderNode(constrainedSize: constrainedSize)
+        setupContentNode()
+
+        let children: [ASLayoutElement] = [
+            createHeaderInsetSpec(),
+            createContentInsetSpecIfNeeded(),
+            createHashtagsInsetSpecIfNeeded(constrainedSize: constrainedSize),
+            createMediaOverlaySpec(constrainedSize: constrainedSize),
+            createButtonsInsetSpec(constrainedSize: constrainedSize)
+        ].compactMap { $0 }
+
+        let verticalStack = ASStackLayoutSpec.vertical()
+        verticalStack.children = children
+
+        return verticalStack
+    }
+
+    private func setupHeaderNode(constrainedSize: ASSizeRange) {
+        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
+    }
+
+    private func setupContentNode() {
+        contentNode.maximumNumberOfLines = 0
+        contentNode.truncationMode = .byWordWrapping
+        contentNode.style.flexShrink = 1
+    }
+
+    private func createHeaderInsetSpec() -> ASInsetLayoutSpec {
+        let headerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        return ASInsetLayoutSpec(insets: headerInset, child: headerNode)
+    }
+
+    private func createContentInsetSpecIfNeeded() -> ASInsetLayoutSpec? {
+        guard post.content != "" else { return nil }
+
+        let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 16)
+        return ASInsetLayoutSpec(insets: contentInset, child: contentNode)
+    }
+
+    private func createHashtagsInsetSpecIfNeeded(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec? {
+        guard !post.hashtags.isEmpty else { return nil }
+
+        hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
+        let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+        return ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
+    }
+
+    private func createMediaOverlaySpec(constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        let mediaSize = calculateMediaSize(constrainedSize: constrainedSize)
+
+        if post.muxPlaybackId != "" {
+            return createVideoOverlaySpec(mediaSize: mediaSize)
+        } else {
+            imageNode.style.preferredSize = mediaSize
+            return ASWrapperLayoutSpec(layoutElement: imageNode)
+        }
+    }
+
+    private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
+        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 75)
+        let buttonsInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        return ASInsetLayoutSpec(insets: buttonsInset, child: buttonsNode)
+    }
+
+    private func calculateMediaSize(constrainedSize: ASSizeRange) -> CGSize {
+        let originalWidth = CGFloat(post.metadata?.width ?? 1)
+        let originalHeight = CGFloat(post.metadata?.height ?? 1)
+
+        if originalWidth == 0 || originalHeight == 0 {
+            return CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width * 4 / 5) // default to 4:5 aspect ratio
+        }
+
+        let aspectRatio = originalHeight / originalWidth
+        let maxWidth = constrainedSize.max.width
+
+        let minAspectRatio: CGFloat = 4 / 5 // 4:5 (portrait)
+        let maxAspectRatio: CGFloat = 1.91 / 1 // 1.91:1 (landscape)
+
+        let clampedAspectRatio = max(min(aspectRatio, maxAspectRatio), minAspectRatio)
+
+        let newWidth = maxWidth
+        let newHeight = maxWidth * clampedAspectRatio
+
+        return CGSize(width: newWidth, height: newHeight)
+    }
+
+
+    private func createVideoOverlaySpec(mediaSize: CGSize) -> ASLayoutSpec {
+        sidebuttonListView.style.preferredSize = CGSize(width: 100, height: 60)
+        videoNode.style.preferredSize = mediaSize
+        gradientNode.style.preferredSize = mediaSize
+
+        let sidebuttonListInset = UIEdgeInsets(top: CGFloat.infinity, left: CGFloat.infinity, bottom: 0, right: 0)
+        let sidebuttonListInsetSpec = ASInsetLayoutSpec(insets: sidebuttonListInset, child: sidebuttonListView)
+
+        let firstOverlay = ASOverlayLayoutSpec(child: videoNode, overlay: gradientNode)
+        let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: sidebuttonListInsetSpec)
+
+        return secondOverlay
+    }
+
+
+    
+}
