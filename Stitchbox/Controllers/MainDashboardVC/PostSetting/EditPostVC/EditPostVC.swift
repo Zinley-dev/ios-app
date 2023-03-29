@@ -44,6 +44,7 @@ class EditPostVC: UIViewController {
     var renderedImage: UIImage!
     var selectedDescTxtView = ""
     var selectedPost: PostModel!
+    var firstLoad = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,9 +52,7 @@ class EditPostVC: UIViewController {
         // Do any additional setup after loading the view.
         global_host = ""
         global_fullLink = ""
-
         setupButtons()
-        setupDefaultView()
         settingAllDefaultValue()
         setupScrollView()
         setupTextView()
@@ -66,11 +65,17 @@ class EditPostVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if global_host != "" {
-            streamingLinkLbl.text = "Streaming link added for \(global_host)"
-        } else {
-            streamingLinkLbl.text = "Streaming link"
+        if !firstLoad {
+            firstLoad = false
+            if global_host != "" {
+                streamingLinkLbl.text = "Streaming link added for \(global_host)"
+            } else {
+                streamingLinkLbl.text = "Streaming link"
+            }
+            
         }
+        
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -96,15 +101,12 @@ class EditPostVC: UIViewController {
             isAllowComment =  false
             allowCmtSwitch.setOn(false, animated: true)
             
-            print("Allow comment: \(String(describing: self.isAllowComment))")
-            
             
         } else {
             
             isAllowComment = true
             allowCmtSwitch.setOn(true, animated: true)
             
-            print("Allow comment: \(String(describing: self.isAllowComment))")
             
         }
         
@@ -229,7 +231,7 @@ extension EditPostVC {
     func setupButtons() {
         
         setupBackButton()
-        createDisablePostBtn()
+        createPostBtn()
         emptyBtnLbl()
     
     }
@@ -329,6 +331,28 @@ extension EditPostVC {
     
     func setDefaultHashtag() {
         
+        delay(0.1) {
+            
+            self.hashtagList = self.selectedPost.hashtags
+            self.hiddenHashTagTxtField.text = self.hashtagList.joined(separator: "")
+            
+            if !self.hashtagList.isEmpty {
+                self.collectionHeight.constant = 70.0
+                self.settingViewHeight.constant = 315
+                self.collectionView.isHidden = false
+                self.hashtagLbl.text = "Hashtag added"
+                self.hashtagLbl.text = "Hashtag #"
+            } else {
+                self.collectionHeight.constant = 0.0
+                self.settingViewHeight.constant = 335 - 70
+                self.collectionView.isHidden = true
+                self.hashtagLbl.text = "Hashtag #"
+            }
+            
+         
+            self.collectionView.reloadData()
+            
+        }
         
         
     }
@@ -463,13 +487,6 @@ extension EditPostVC {
         streamingLinkBtn.setTitle("", for: .normal)
         
     }
-    
-    func setupDefaultView() {
-        
-        collectionHeight.constant = 0.0
-        settingViewHeight.constant = 335 - 70
-        
-    }
 
     func setupScrollView() {
         collectionView.contentInset = UIEdgeInsets.init(top: 0, left: 14, bottom: 0, right: 14)
@@ -502,7 +519,67 @@ extension EditPostVC {
     
     @objc func onClickPost(_ sender: AnyObject) {
         
-            print("Edited click")
+        
+        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
+            print("Can't get userDataSource")
+            return
+        }
+        
+        let loadUsername = userDataSource.userName
+        
+        var contentPost = [String: Any]()
+        
+        var update_hashtaglist = [String]()
+        
+        if hashtagList.isEmpty == true {
+            
+            update_hashtaglist = ["#\(loadUsername ?? "")"]
+            
+        } else {
+            
+            update_hashtaglist = hashtagList
+            if let username = loadUsername {
+                if !update_hashtaglist.contains("#\(username)") {
+                    update_hashtaglist.insert("#\(username)", at: 0)
+                }
+            }
+            
+            
+        }
+        
+        var updateText = ""
+        
+        
+        if let text = descTxtView.text {
+            updateText = text
+        }
+        
+        
+        contentPost = ["_id": selectedPost.id, "content": updateText, "streamLink": global_fullLink, "hashtags": update_hashtaglist]
+        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment]
+       
+        presentSwiftLoader()
+        APIManager().updatePost(params: contentPost) { result in
+            switch result {
+            case .success(_):
+                needReloadPost = true
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                    showNote(text: "Updated successfully!")
+                    self.navigationController?.popBack(3)
+                }
+                
+                
+            case .failure(let error):
+                print(error)
+                
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops", msg: "Unable to update \(error.localizedDescription)")
+            }
+        }
+    }
+        
 
       
     }

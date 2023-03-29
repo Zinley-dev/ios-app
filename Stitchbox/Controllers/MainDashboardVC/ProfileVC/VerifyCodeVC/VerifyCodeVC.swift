@@ -465,11 +465,11 @@ extension VerifyCodeVC {
         
         APIManager().verify2fa(otp: code, method: typeMethod) { result in
             switch result {
-            case .success(let apiResponse):
+            case .success(_):
            
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
-                    self.navigationController?.popBack(2)
+                    self.navigationController?.popBack(3)
                     
                     if self.type == "2FA - phone" {
                         turnOn2FAForPhone()
