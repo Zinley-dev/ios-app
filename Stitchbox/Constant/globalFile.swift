@@ -794,6 +794,28 @@ func reloadGlobalUserInformation() {
 }
 
 
+func reloadGlobalSettings() {
+    
+    APIManager().getSettings { result in
+        switch result {
+        case .success(let apiResponse):
+            
+            guard let data = apiResponse.body else {
+                    return
+            }
+
+            globalSetting =  Mapper<SettingModel>().map(JSONObject: data)
+           
+      
+        case .failure(let error):
+        
+            print(error)
+           
+        }
+    }
+    
+}
+
 func unmuteVideoIfNeed() {
   
     if let vc = UIViewController.currentViewController() {

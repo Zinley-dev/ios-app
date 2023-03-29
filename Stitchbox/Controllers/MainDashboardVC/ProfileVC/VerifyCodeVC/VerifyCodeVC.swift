@@ -470,7 +470,7 @@ extension VerifyCodeVC {
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     self.navigationController?.popBack(3)
-                    
+                    reloadGlobalSettings()
                     if self.type == "2FA - phone" {
                         turnOn2FAForPhone()
                     } else if self.type == "2FA - email" {

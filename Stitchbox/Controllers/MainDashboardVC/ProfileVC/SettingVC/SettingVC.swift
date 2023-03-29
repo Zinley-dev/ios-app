@@ -159,6 +159,7 @@ class SettingVC: UIViewController {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
+                            reloadGlobalSettings()
                             
                         case.failure(let error):
                             DispatchQueue.main.async {
@@ -189,6 +190,7 @@ class SettingVC: UIViewController {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
+                            reloadGlobalSettings()
                             
                         case.failure(let error):
                             DispatchQueue.main.async {
@@ -221,6 +223,7 @@ class SettingVC: UIViewController {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
+                            reloadGlobalSettings()
                             
                         case.failure(let error):
                             DispatchQueue.main.async {
@@ -291,28 +294,8 @@ extension SettingVC {
     
     func loadSettings() {
         
-        APIManager().getSettings { result in
-            switch result {
-            case .success(let apiResponse):
-                
-                guard let data = apiResponse.body else {
-                        return
-                }
-
-                globalSetting =  Mapper<SettingModel>().map(JSONObject: data)
-                
-                DispatchQueue.main {
-                    self.processDefaultData()
-                }
-                
-            case .failure(let error):
-            
-                DispatchQueue.main {
-                    self.showErrorAlert("Oops!", msg: "Unable to retrieve your setting \(error.localizedDescription)")
-                    self.navigationController?.popViewController(animated: true)
-                }
-               
-            }
+        DispatchQueue.main {
+            self.processDefaultData()
         }
         
         
