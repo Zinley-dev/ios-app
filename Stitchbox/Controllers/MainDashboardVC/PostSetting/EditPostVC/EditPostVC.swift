@@ -555,7 +555,7 @@ extension EditPostVC {
         }
         
         
-        contentPost = ["_id": selectedPost.id, "content": updateText, "streamLink": global_fullLink, "hashtags": update_hashtaglist]
+        contentPost = ["id": selectedPost.id, "content": updateText, "streamLink": global_fullLink, "hashtags": update_hashtaglist]
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment]
        
         presentSwiftLoader()

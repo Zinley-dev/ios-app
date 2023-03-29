@@ -610,7 +610,7 @@ extension PostAPI: EndPointType {
             case .create:
                 return .post
             case .update:
-                return .post
+                return .put
             case .getMyPost:
               return .get
             case .getHashtagPost:
