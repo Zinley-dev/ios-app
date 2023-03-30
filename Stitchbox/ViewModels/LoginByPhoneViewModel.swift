@@ -52,7 +52,7 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
           return;
         }
         // call api toward login api of backend
-        APIManager().phoneLogin(phone: countryCode + phone) { result in
+          APIManager().phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { result in
           switch result {
             case .success(let apiResponse):
               // get and process data

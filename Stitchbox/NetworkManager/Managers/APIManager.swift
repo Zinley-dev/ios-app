@@ -43,6 +43,7 @@ struct APIManager {
     let loginActManager = Manager<LoginActivityApi>()
     let accountActManager = Manager<AccountActivityApi>()
     let reportManager = Manager<ReportApi>()
+    let viewManager = Manager<ViewApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -733,5 +734,15 @@ extension APIManager {
       completion(result)
     }
   }
+}
+
+extension APIManager {
+
+    func createView(post: String, watchTime: Double, completion: @escaping APICompletion) {
+        viewManager.request(.create(postId: post, watchTime: watchTime)) { result in
+            completion(result)
+        }
+    }
+    
 }
 

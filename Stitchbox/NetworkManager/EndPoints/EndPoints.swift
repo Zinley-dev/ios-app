@@ -1321,4 +1321,43 @@ extension ReportApi: EndPointType {
 }
 
 
+public enum ViewApi {
+    case create(postId: String, watchTime: Double)
+}
+extension ViewApi: EndPointType {
+    var path: String {
+        switch self {
+            case .create(let postId, _):
+                return "/\(postId)"
+        }
+    }
+    
+    var module: String {
+        return "/view"
+    }
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+            case .create:
+                return .post
+        }
+    }
+    
+    var task: HTTPTask {
+        switch self {
+            case .create(_, let watchTime):
+                return .requestParameters(parameters: ["watchTime": watchTime])
+        }
+    }
+    
+    var headers: [String : String]? {
+        return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+                "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
+    }
+    
+}
+
+
+
+
 
