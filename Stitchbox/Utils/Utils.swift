@@ -223,6 +223,13 @@ extension String {
         let range = NSRange(location: 0, length: lhs.utf16.count)
         return regex.firstMatch(in: lhs, options: [], range: range) != nil
     }
+    func formatPhoneNumber() -> String {
+        let digits = CharacterSet.decimalDigits
+        // Remove all non-digit characters from the number
+        let strippedNumber = String(self.unicodeScalars.filter(digits.contains))
+        return strippedNumber
+    }
+    
 }
 
 extension UIImage {
