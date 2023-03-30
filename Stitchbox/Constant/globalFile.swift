@@ -35,6 +35,8 @@ var reloadAddedGame = false
 var globalIsSound = false
 var shouldMute: Bool?
 var globalSetting: SettingModel!
+var navigationControllerHeight:CGFloat = 0.0
+var tabBarControllerHeight:CGFloat = 0.0
 
  let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
  let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
@@ -775,7 +777,7 @@ func reloadGlobalUserInformation() {
                     if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
                         _AppCoreData.reset()
                         _AppCoreData.userDataSource.accept(newUserData)
-                       
+                        syncSendbirdAccount()
                     } 
                   
                 }
@@ -791,6 +793,28 @@ func reloadGlobalUserInformation() {
     
 }
 
+
+func reloadGlobalSettings() {
+    
+    APIManager().getSettings { result in
+        switch result {
+        case .success(let apiResponse):
+            
+            guard let data = apiResponse.body else {
+                    return
+            }
+
+            globalSetting =  Mapper<SettingModel>().map(JSONObject: data)
+           
+      
+        case .failure(let error):
+        
+            print(error)
+           
+        }
+    }
+    
+}
 
 func unmuteVideoIfNeed() {
   

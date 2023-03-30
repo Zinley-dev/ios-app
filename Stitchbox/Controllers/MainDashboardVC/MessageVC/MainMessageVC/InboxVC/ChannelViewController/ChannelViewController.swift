@@ -19,7 +19,7 @@ class ChannelViewController: SBUChannelViewController {
             image: SBUIconSet.iconBack.resize(targetSize: CGSize(width: 25.0, height: 25.0)),
             style: .plain,
             target: self,
-            action: #selector(onClickBack)
+            action:  #selector(onClickBack)
         )
         
     }()
@@ -30,7 +30,7 @@ class ChannelViewController: SBUChannelViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    
+       
         // Do any additional setup after loading the view.
         navigationItem.rightBarButtonItem = nil
         self.callLayout()
@@ -38,19 +38,11 @@ class ChannelViewController: SBUChannelViewController {
         
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.tabBarController?.tabBar.isHidden = true
-        self.tabBarController?.tabBar.frame = .zero
-        
-        
-        if self.tabBarController is DashboardTabBarController {
-            let tbctrl = self.tabBarController as! DashboardTabBarController
-            tbctrl.button.isHidden = true
-        }
-        
+        changeTabBar(hidden: true)
+        self.tabBarController?.tabBar.isTranslucent = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -66,20 +58,14 @@ class ChannelViewController: SBUChannelViewController {
     }
     
     
-    override func willMove(toParent parent: UIViewController?) {
-        super.willMove(toParent: parent)
-        
-        
-        if (parent != nil) {
-            
-            self.tabBarController?.tabBar.frame = .zero
-            self.tabBarController?.tabBar.isHidden = true
+    func changeTabBar(hidden: Bool) {
+        guard let tabBar = self.tabBarController?.tabBar else {
+            return
         }
-        
-        
+
+        tabBar.isHidden = hidden
     }
-    
-    
+
     
     func showErrorAlert(_ title: String, msg: String) {
         
@@ -162,7 +148,6 @@ class ChannelViewController: SBUChannelViewController {
                             return
                     }
                     
-                   
                     // Try to create a SendBirdRoom object from the data
                     let SBRoomInfo =  Mapper<SendBirdRoom>().map(JSONObject: data)
                     self.currentRoomID = SBRoomInfo?.room_id ?? ""
@@ -391,6 +376,14 @@ class ChannelViewController: SBUChannelViewController {
         }
     }
 
-    
+    override func willMove(toParent parent: UIViewController?) {
+        if parent == nil {
+            
+            changeTabBar(hidden: false)
+            self.tabBarController?.tabBar.isTranslucent = false
+            
+        }
+      
+    }
     
 }

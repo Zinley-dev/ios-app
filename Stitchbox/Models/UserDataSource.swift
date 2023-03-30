@@ -133,6 +133,14 @@ class UserDataSource: Mappable {
       set(newValue) { _birthday = newValue}
       get { return _birthday }
     }
+  private var _isDelete: Bool?
+  var isDelete: Bool {
+    set(newValue) { _isDelete = newValue }
+    get {
+      if (deletedAt != nil && status == 1) {return true;}
+      return false;
+    }
+  }
     private(set) var facebook: ThirdPartyCredential?
     private(set) var google: ThirdPartyCredential?
     private(set) var twitter: ThirdPartyCredential?
@@ -141,6 +149,9 @@ class UserDataSource: Mappable {
     private(set) var friendsIds: [String] = []
     private(set) var location: String = ""
     private(set) var createdAt: Date?
+    private(set) var deletedAt: Date?
+    private(set) var status: Int = 0
+    
     private(set) var ageRange: AgeRange?
     private(set) var challengeCard: ChallengeCardData?
     required init?(map: Map) {
@@ -177,6 +188,8 @@ class UserDataSource: Mappable {
         gender          <- map["gender"]
         location        <- map["location"]
         createdAt       <- (map["createdAt"], ISODateTransform())
+        deletedAt       <- (map["deletedAt"], ISODateTransform())
+        status          <- map["status"]
         ageRange        <- map["AgeRange"]
         discordUrl      <- map["discordLink"]
         challengeCard   <- map["challengeCard"]
