@@ -27,6 +27,9 @@ class FistBumpNode: ASCellNode {
     var avatarNode: ASNetworkImageNode!
     var actionBtnNode: ASButtonNode!
     var isFollowingUser = false
+    var allowProcess = true
+    
+    
     lazy var delayItem = workItem()
    
     init(with user: FistBumpUserModel) {
@@ -152,14 +155,22 @@ class FistBumpNode: ASCellNode {
     
     @objc func actionBtnPressed() {
        
-        if isFollowingUser {
+        if allowProcess {
             
-            unfollowUser()
+            allowProcess = false
             
-        } else {
+            if isFollowingUser {
+                
+                unfollowUser()
+                
+            } else {
+                
+                followUser()
+            }
             
-            followUser()
         }
+        
+        
         
         
     }
@@ -184,11 +195,13 @@ class FistBumpNode: ASCellNode {
                 
                 self.isFollowingUser = true
                 needRecount = true
+                self.allowProcess = true
                 
                 
             case .failure(_):
                 
                 DispatchQueue.main.async {
+                    self.allowProcess = true
                     showNote(text: "Something happened!")
                 }
                 
@@ -229,9 +242,11 @@ class FistBumpNode: ASCellNode {
             case .success(_):
                 self.isFollowingUser = false
                 needRecount = true
+                self.allowProcess = true
                 
             case .failure(_):
                 DispatchQueue.main.async {
+                    self.allowProcess = true
                     showNote(text: "Something happened!")
                 }
                 

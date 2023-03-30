@@ -313,10 +313,7 @@ class ProfileViewController: UIViewController {
                         ChallengeView.infoLbl.text = "Stitchboxer"
                     }
                    
-                    
-                    
                     if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
-                        print(createAt)
                         let DateFormatter = DateFormatter()
                         DateFormatter.dateStyle = .medium
                         DateFormatter.timeStyle = .none
@@ -972,18 +969,27 @@ extension ProfileViewController {
 extension ProfileViewController {
     
     func createHeaderSection() -> NSCollectionLayoutSection {
-        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(1000)))
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(1000)), subitems: [headerItem])
+        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)))
+        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)), subitems: [headerItem])
         
-        return NSCollectionLayoutSection(group: headerGroup)
+        let section = NSCollectionLayoutSection(group: headerGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        return section
     }
-    
+
     func createChallengeCardSection() -> NSCollectionLayoutSection {
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(226)), subitems: [headerItem])
-        headerGroup.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 20)
-        return NSCollectionLayoutSection(group: headerGroup)
+        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(226)), subitems: [headerItem])
+        headerGroup.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 0, trailing: 20)
+        
+        let section = NSCollectionLayoutSection(group: headerGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0)
+        
+        return section
     }
+
+
     
     func createPhotosSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),

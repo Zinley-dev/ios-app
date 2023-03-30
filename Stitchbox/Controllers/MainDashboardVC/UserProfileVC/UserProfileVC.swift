@@ -44,7 +44,8 @@ class UserProfileVC: UIViewController {
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
     var onPresent = false
-    
+    var allowProcess = true
+    var allowFistBumped = true
     var followerCount = 0
     var followingCount = 0
     var fistBumpedCount = 0
@@ -569,58 +570,81 @@ extension UserProfileVC {
     
     func followUser() {
         
-        self.isFollow = true
-        followerCount += 1
-        self.applyHeaderChange()
-        
-        APIManager().insertFollows(params: ["FollowId": userId ?? ""]) { result in
-            switch result {
-            case .success(_):
-              
-                
-                self.isFollow = true
-                needRecount = true
-               
-              
-            case .failure(_):
-                
-                DispatchQueue.main.async {
-                    self.isFollow = false
-                    self.followerCount += 1
-                    showNote(text: "Something happened!")
+        if allowProcess {
+            
+            self.allowProcess = false
+            self.isFollow = true
+            followerCount += 1
+            self.applyHeaderChange()
+            
+            APIManager().insertFollows(params: ["FollowId": userId ?? ""]) { result in
+                switch result {
+                case .success(_):
+                  
+                    self.allowProcess = true
+                    self.isFollow = true
+                    needRecount = true
+                    Dispatch.main.async {
+                        self.reloadPost()
+                    }
+                  
+                  
+                case .failure(_):
+                    
+                    DispatchQueue.main.async {
+                        self.allowProcess = true
+                        self.isFollow = false
+                        self.followerCount += 1
+                        showNote(text: "Something happened!")
+                    }
+                    
                 }
                 
             }
             
         }
+        
+        
            
     }
     
     
     func unfollowUser() {
         
-        self.isFollow = false
-        followerCount -= 1
-        self.applyHeaderChange()
-    
-            APIManager().unFollow(params: ["FollowId": userId ?? ""]) { result in
-                switch result {
-                case .success(_):
-                    
-                    self.isFollow = false
-                    needRecount = true
-                    
-                    
-                case .failure(_):
-                    DispatchQueue.main.async {
-                        self.isFollow = true
-                        self.followerCount -= 1
-                        showNote(text: "Something happened!")
+        if allowProcess {
+            
+            self.allowProcess = false
+            self.isFollow = false
+            followerCount -= 1
+            self.applyHeaderChange()
+        
+                APIManager().unFollow(params: ["FollowId": userId ?? ""]) { result in
+                    switch result {
+                    case .success(_):
+                        
+                        self.isFollow = false
+                        needRecount = true
+                        self.allowProcess = true
+                        
+                        Dispatch.main.async {
+                            self.reloadPost()
+                        }
+                        
+                    case .failure(_):
+                        DispatchQueue.main.async {
+                            self.allowProcess = true
+                            self.isFollow = true
+                            self.followerCount -= 1
+                            showNote(text: "Something happened!")
+                        }
+                        
+                        
                     }
-                    
-                    
                 }
-            }
+            
+        }
+        
+        
             
     }
         
@@ -753,28 +777,35 @@ extension UserProfileVC {
     
     func giveFistBump() {
         
-        fistBumpedAnimation()
-        
-        self.isFistBump = true
-        fistBumpedCount += 1
-        self.applyUIChange()
-        
-        APIManager().addFistBump(userID: self.userId!) { result in
-            switch result {
-            case .success(_):
-                
-                self.isFistBump = true
-               
-            case .failure(_):
-                DispatchQueue.main.async {
-                    self.isFistBump = false
-                    self.fistBumpedCount -= 1
-                    self.applyUIChange()
-                    showNote(text: "Something happened!")
+        if allowFistBumped {
+            
+            fistBumpedAnimation()
+            self.allowFistBumped = false
+            self.isFistBump = true
+            fistBumpedCount += 1
+            self.applyUIChange()
+            
+            APIManager().addFistBump(userID: self.userId!) { result in
+                switch result {
+                case .success(_):
+                    
+                    self.isFistBump = true
+                    self.allowFistBumped = true
+                   
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        self.isFistBump = false
+                        self.allowFistBumped = true
+                        self.fistBumpedCount -= 1
+                        self.applyUIChange()
+                        showNote(text: "Something happened!")
+                    }
+                    
+                    
                 }
-                
-                
             }
+            
+            
         }
         
         
@@ -782,27 +813,39 @@ extension UserProfileVC {
     
     func unfistBump() {
         
-        self.isFistBump = false
-        fistBumpedCount -= 1
-        self.applyUIChange()
         
-        APIManager().deleteFistBump(userID: self.userId!) { result in
-            switch result {
-            case .success(_):
-                
-                self.isFistBump = false
-               
-            case .failure(_):
-                DispatchQueue.main.async {
-                    self.isFistBump = true
-                    self.fistBumpedCount += 1
-                    self.applyUIChange()
-                    showNote(text: "Something happened!")
+        if allowFistBumped {
+            
+            
+            self.isFistBump = false
+            self.allowFistBumped = false
+            fistBumpedCount -= 1
+            self.applyUIChange()
+            
+            APIManager().deleteFistBump(userID: self.userId!) { result in
+                switch result {
+                case .success(_):
+                    
+                    self.isFistBump = false
+                    self.allowFistBumped = true
+                   
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        self.allowFistBumped = true
+                        self.isFistBump = true
+                        self.fistBumpedCount += 1
+                        self.applyUIChange()
+                        showNote(text: "Something happened!")
+                    }
+                    
+                    
                 }
-                
-                
             }
+            
+            
         }
+        
+        
         
     }
     
@@ -1001,14 +1044,21 @@ extension UserProfileVC {
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)))
         let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)), subitems: [headerItem])
         
-        return NSCollectionLayoutSection(group: headerGroup)
+        let section = NSCollectionLayoutSection(group: headerGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        return section
     }
-    
+
     func createChallengeCardSection() -> NSCollectionLayoutSection {
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(226)), subitems: [headerItem])
-        headerGroup.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 20)
-        return NSCollectionLayoutSection(group: headerGroup)
+        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(226)), subitems: [headerItem])
+        headerGroup.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 0, trailing: 20)
+        
+        let section = NSCollectionLayoutSection(group: headerGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0)
+        
+        return section
     }
     
     func createPhotosSection() -> NSCollectionLayoutSection {
@@ -1319,17 +1369,8 @@ extension UserProfileVC {
     
     @objc func clearAllData() {
         
-        var snapshot = self.datasource.snapshot()
-        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
-        datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
-        currpage = 1
-        
-        self.getUserPost { (newPosts) in
-            
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
-            
-        }
-        
+        reloadPost()
+
         checkIfFollow()
         checkIfFistBump()
     
@@ -1347,6 +1388,22 @@ extension UserProfileVC {
         }
         
                
+    }
+    
+    func reloadPost() {
+        
+        var snapshot = self.datasource.snapshot()
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
+        currpage = 1
+        
+        self.getUserPost { (newPosts) in
+            
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
+        }
+        
+        
     }
     
 }
@@ -1532,6 +1589,7 @@ extension UserProfileVC {
     }
     
     func checkIfFistBump() {
+        
         
         APIManager().isFistBumpee(userID: userId ?? "") { result in
                 switch result {

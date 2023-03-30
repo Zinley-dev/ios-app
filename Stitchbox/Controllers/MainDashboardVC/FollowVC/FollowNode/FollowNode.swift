@@ -27,6 +27,7 @@ class FollowNode: ASCellNode {
     var selectedColor = UIColor(red: 53, green: 46, blue: 113, alpha: 0.4)
     var isFollowingUser = false
     var denyBtn = false
+    var allowProcess = true
     
     init(with user: FollowModel) {
         
@@ -235,16 +236,13 @@ class FollowNode: ASCellNode {
             
         }
         
-       
-        
-        
     }
     
     
     @objc func followBtnPressed() {
         
-        if !denyBtn {
-            
+        if !denyBtn, allowProcess {
+            self.allowProcess = false
             if isFollowingUser {
                 
                 unfollowUser()
@@ -283,11 +281,13 @@ class FollowNode: ASCellNode {
                     
                     self.isFollowingUser = true
                     needRecount = true
+                    self.allowProcess = true
                     
                     
                 case .failure(_):
                     
                     DispatchQueue.main.async {
+                        self.allowProcess = true
                         showNote(text: "Something happened!")
                     }
                     
@@ -369,9 +369,10 @@ class FollowNode: ASCellNode {
                 case .success(_):
                     self.isFollowingUser = false
                     needRecount = true
-                    
+                    self.allowProcess = true
                 case .failure(_):
                     DispatchQueue.main.async {
+                        self.allowProcess = true
                         showNote(text: "Something happened!")
                     }
                     
