@@ -48,7 +48,16 @@ class NotificationNode: ASCellNode {
         
         let time = NSAttributedString(string: "\(timeAgoSinceDate(notification.updatedAt, numericDates: true))", attributes: timeAttributes)
         timeNode.attributedText = time
-        imageNode.url = URL(string: notification.avatarUrl)
+        
+        if notification.avatarUrl != "" {
+            
+            imageNode.url = URL(string: notification.avatarUrl)
+        } else {
+            
+            imageNode.image = UIImage.init(named: "defaultuser")
+            
+        }
+      
         imageNode.cornerRadius = OrganizerImageSize/2
         imageNode.clipsToBounds = true
         

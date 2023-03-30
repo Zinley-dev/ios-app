@@ -9,6 +9,7 @@ import UIKit
 import ObjectMapper
 import SendBirdSDK
 import FLAnimatedImage
+import SendBirdUIKit
 
 class UserProfileVC: UIViewController {
 
@@ -113,36 +114,41 @@ class UserProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
         
-        loadingView.backgroundColor = self.view.backgroundColor
-        
-        
-        delay(1.30) {
+        if !loadingView.isHidden {
             
-            UIView.animate(withDuration: 0.5) {
+            do {
                 
-                self.loadingView.alpha = 0
+                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                let gifData = try NSData(contentsOfFile: path) as Data
+                let image = FLAnimatedImage(animatedGIFData: gifData)
                 
+                
+                self.loadingImage.animatedImage = image
+                
+            } catch {
+                print(error.localizedDescription)
             }
             
+            loadingView.backgroundColor = self.view.backgroundColor
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            
+            delay(1.30) {
                 
-                if self.loadingView.alpha == 0 {
+                UIView.animate(withDuration: 0.5) {
                     
-                    self.loadingView.isHidden = true
+                    self.loadingView.alpha = 0
+                    
+                }
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    
+                    if self.loadingView.alpha == 0 {
+                        
+                        self.loadingView.isHidden = true
+                        
+                    }
                     
                 }
                 
@@ -150,7 +156,20 @@ class UserProfileVC: UIViewController {
             
         }
         
+
+        
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
     }
+
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -282,6 +301,9 @@ class UserProfileVC: UIViewController {
                         cell.userImgView.load(url: url!, str: data.avatarURL)
                         ChallengeView.userImgView.load(url: url!, str: data.avatarURL)
                         
+                    } else {
+                        cell.userImgView.image = UIImage.init(named: "defaultuser")
+                        ChallengeView.userImgView.image = UIImage.init(named: "defaultuser")
                     }
                     
                 }
@@ -606,7 +628,7 @@ extension UserProfileVC {
     @objc func messageTapped(_ sender: UIButton) {
         
         guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty else { return }
-
+        
         let channelParams = SBDGroupChannelParams()
         channelParams.isDistinct = true
         channelParams.addUserIds([self.userId ?? "", userUID])
@@ -621,17 +643,10 @@ extension UserProfileVC {
             checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
-           
-            let nav = UINavigationController(rootViewController: channelVC)
             
-            // Customize the navigation bar appearance
-            channelVC.navigationController?.navigationBar.barTintColor = .background
-            channelVC.navigationController?.navigationBar.tintColor = .white
-            channelVC.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-            
-            nav.modalPresentationStyle = .fullScreen
-            //self.navigationController?.pushViewController(channelVC, animated: true)
-            self.present(nav, animated: true, completion: nil)
+    
+            self.hidesBottomBarWhenPushed = false
+            self.navigationController?.pushViewController(channelVC, animated: true)
             
         }
         

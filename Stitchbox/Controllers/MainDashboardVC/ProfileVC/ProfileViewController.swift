@@ -181,6 +181,15 @@ class ProfileViewController: UIViewController {
         }
 
         
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -288,6 +297,10 @@ class ProfileViewController: UIViewController {
                     let url = URL(string: avatarUrl)
                     cell.userImgView.load(url: url!, str: avatarUrl)
                     ChallengeView.userImgView.load(url: url!, str: avatarUrl)
+                } else {
+                    cell.userImgView.image = UIImage.init(named: "defaultuser")
+                    ChallengeView.userImgView.image = UIImage.init(named: "defaultuser")
+                    
                 }
                 
                 if let card = _AppCoreData.userDataSource.value?.challengeCard
@@ -959,8 +972,8 @@ extension ProfileViewController {
 extension ProfileViewController {
     
     func createHeaderSection() -> NSCollectionLayoutSection {
-        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)))
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)), subitems: [headerItem])
+        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(1000)))
+        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(1000)), subitems: [headerItem])
         
         return NSCollectionLayoutSection(group: headerGroup)
     }

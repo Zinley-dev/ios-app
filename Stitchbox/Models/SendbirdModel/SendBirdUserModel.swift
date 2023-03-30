@@ -20,7 +20,7 @@ struct SearchUser : Mappable {
     }
     
     mutating func mapping(map: ObjectMapper.Map) {
-        userID <- map["ID"]
+        userID <- map["_id"]
         avatar <- map["avatar"]
         username <- map["username"]
     }

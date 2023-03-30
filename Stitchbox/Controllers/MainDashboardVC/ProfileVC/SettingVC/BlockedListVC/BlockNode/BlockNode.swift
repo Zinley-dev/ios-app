@@ -273,7 +273,13 @@ class BlockNode: ASCellNode {
     func loadInfo(uid: String ) {
         userNameNode.attributedText = NSAttributedString(string: user.blockUser.userName)
         nameNode.attributedText = NSAttributedString(string: user.blockUser.name)
-        avatarNode.url = URL(string: user.blockUser.avatarURL)
+        
+        if user.blockUser.avatarURL != "" {
+            avatarNode.url = URL(string: user.blockUser.avatarURL)
+        } else {
+            avatarNode.image = UIImage.init(named: "defaultuser")
+        }
+        
     }
     
 }

@@ -284,8 +284,13 @@ class FistBumpNode: ASCellNode {
     func loadInfo(uid: String) {
         userNameNode.attributedText = NSAttributedString(string: user.userName)
         nameNode.attributedText = NSAttributedString(string: user.name ?? "")
-        avatarNode.url = URL(string: user.avatar)
         
+        if user.avatar != "" {
+            avatarNode.url = URL(string: user.avatar)
+        } else {
+            avatarNode.image = UIImage.init(named: "defaultuser")
+        }
+       
     }
     
 }

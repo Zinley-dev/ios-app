@@ -263,6 +263,7 @@ extension FollowerVC {
                     
                     if !data.isEmpty {
                         self.currPage += 1
+            
                         print("Successfully retrieved \(data.count) followers.")
                         let items = data
                         DispatchQueue.main.async {
