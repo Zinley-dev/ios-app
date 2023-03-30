@@ -140,12 +140,6 @@ extension SearchViewController {
 
     }
     
-    func removeRecent() {
-        
-        
-        
-    }
-    
 }
 
 extension SearchViewController {
@@ -427,7 +421,7 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
                     MSVC.initialType = "post"
                     MSVC.hidesBottomBarWhenPushed = true
                     hideMiddleBtn(vc: self)
-                    MSVC.currentSearchText = item.game_name
+                    MSVC.currentSearchText = item.game_shortName
                     self.navigationController?.pushViewController(MSVC, animated: true)
                     
                 }

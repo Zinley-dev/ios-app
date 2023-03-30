@@ -47,6 +47,7 @@ class UserProfileHeaderCell: UICollectionViewCell {
         followersBtn.tintColor = .white
     }
     
+    /*
     override func prepareForReuse() {
         super.prepareForReuse()
         
@@ -65,7 +66,7 @@ class UserProfileHeaderCell: UICollectionViewCell {
         fistBumpImage.image = nil
         discordLbl.text = nil
         discordChecked.image = nil
-    }
+    }*/
     
     override func layoutSubviews() {
         super.layoutSubviews()

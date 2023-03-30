@@ -8,6 +8,7 @@
 import UIKit
 import ObjectMapper
 import SendBirdSDK
+import FLAnimatedImage
 
 class UserProfileVC: UIViewController {
 
@@ -35,6 +36,10 @@ class UserProfileVC: UIViewController {
     @IBOutlet weak var challengeCardView: UIView!
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
+    
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
     var onPresent = false
@@ -103,6 +108,48 @@ class UserProfileVC: UIViewController {
             
         }
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        do {
+            
+            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+            let gifData = try NSData(contentsOfFile: path) as Data
+            let image = FLAnimatedImage(animatedGIFData: gifData)
+            
+            
+            self.loadingImage.animatedImage = image
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        loadingView.backgroundColor = self.view.backgroundColor
+        
+        
+        delay(1.30) {
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                self.loadingView.alpha = 0
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
+                    
+                    self.loadingView.isHidden = true
+                    
+                }
+                
+            }
+            
+        }
+        
     }
     
     override func viewWillLayoutSubviews() {
