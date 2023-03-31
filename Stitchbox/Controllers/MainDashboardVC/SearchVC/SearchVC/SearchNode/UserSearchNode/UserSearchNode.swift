@@ -84,10 +84,17 @@ class UserSearchNode: ASCellNode {
             }
             
             
+            if user.avatarUrl != "" {
+                
+                self.imageNode.url = URL(string: user.avatarUrl)
+                
+            } else {
+                
+                self.imageNode.image = UIImage.init(named: "defaultuser")
+                
+            }
 
-            
-            self.imageNode.url = URL(string: user.avatarUrl ?? "https://st3.depositphotos.com/1767687/16607/v/450/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg")
-            
+          
         }
         
     }

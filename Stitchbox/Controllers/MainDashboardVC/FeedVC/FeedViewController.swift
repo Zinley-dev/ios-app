@@ -57,7 +57,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         setupCollectionNode()
         navigationControllerDelegate()
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         
@@ -135,12 +135,14 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     
     @objc private func refreshListData(_ sender: Any) {
-       // self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
-  
-        clearAllData()
-   
+
+        self.clearAllData()
+        
     }
+
+
+
     
     @objc func clearAllData() {
         

@@ -65,6 +65,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         // Create a refresh control and add it to the table view
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: #selector(InboxVC.refreshChannelList), for: .valueChanged)
+        self.refreshControl?.tintColor = .secondary
         self.groupChannelsTableView.addSubview(self.refreshControl!)
         
     }

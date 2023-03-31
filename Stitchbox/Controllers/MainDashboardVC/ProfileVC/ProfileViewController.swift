@@ -687,21 +687,20 @@ extension ProfileViewController {
         
         if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
            
-            if discord != ""
-            {
-                guard let requestUrl = URL(string: discord) else {
-                    return
-                }
+            if let username = _AppCoreData.userDataSource.value?.userName {
+                
+                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
 
-                if UIApplication.shared.canOpenURL(requestUrl) {
-                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                } else {
-                    showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(discord)")
-                }
-                
-            } else {
-                
-                showErrorAlert("Oops!", msg: "Can't open this link")
+                                // add the actions (buttons)
+                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                                    
+                                
+                    self.openLink(link: discord)
+                                    
+                }))
+
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 
             }
             
@@ -761,7 +760,7 @@ extension ProfileViewController {
     @objc func game1Tapped(_ sender: UIButton) {
         // make sure to check if any game is added unless peform adding game for +
 
-        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        if let card = _AppCoreData.userDataSource.value?.challengeCard, let username = _AppCoreData.userDataSource.value?.userName
         {
             
             if card.games.isEmpty == true {
@@ -785,30 +784,23 @@ extension ProfileViewController {
                 
                 if let game = card.games.first {
                     
-                    if game.link != ""
-                    {
-                        guard let requestUrl = URL(string: game.link) else {
-                            return
-                        }
-
-                        if UIApplication.shared.canOpenURL(requestUrl) {
-                             UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                        } else {
-                            showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
-                        }
-                        
-                    } else {
-                        
-                        showErrorAlert("Oops!", msg: "Can't open this link")
-                        
-                    }
+                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
                     
+                    // add the actions (buttons)
+                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                        
+                        
+                        self.openLink(link: game.link)
+                        
+                    }))
+                    
+                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                     
                 }
                 
                 
             }
-            
             
         }
         
@@ -816,29 +808,25 @@ extension ProfileViewController {
     
     @objc func game2Tapped(_ sender: UIButton) {
         
-        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        if let card = _AppCoreData.userDataSource.value?.challengeCard, let username = _AppCoreData.userDataSource.value?.userName
         {
             
             if card.games.count >= 2 {
                 
                 let game = card.games[1]
-                if game.link != ""
-                {
-                    guard let requestUrl = URL(string: game.link) else {
-                        return
-                    }
+                
+                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
 
-                    if UIApplication.shared.canOpenURL(requestUrl) {
-                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                    } else {
-                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
-                    }
-                    
-                } else {
-                    
-                    showErrorAlert("Oops!", msg: "Can't open this link")
-                    
-                }
+                                // add the actions (buttons)
+                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                                    
+                                
+                    self.openLink(link: game.link)
+                                    
+                }))
+
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 
             } else {
                 
@@ -866,29 +854,25 @@ extension ProfileViewController {
     
     @objc func game3Tapped(_ sender: UIButton) {
         
-        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        if let card = _AppCoreData.userDataSource.value?.challengeCard, let username = _AppCoreData.userDataSource.value?.userName
         {
             
             if card.games.count >= 3 {
                 
                 let game = card.games[2]
-                if game.link != ""
-                {
-                    guard let requestUrl = URL(string: game.link) else {
-                        return
-                    }
+                
+                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
 
-                    if UIApplication.shared.canOpenURL(requestUrl) {
-                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                    } else {
-                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
-                    }
-                    
-                } else {
-                    
-                    showErrorAlert("Oops!", msg: "Can't open this link")
-                    
-                }
+                                // add the actions (buttons)
+                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                                    
+                                
+                    self.openLink(link: game.link)
+                                    
+                }))
+
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 
             } else {
                 
@@ -916,29 +900,28 @@ extension ProfileViewController {
     
     @objc func game4Tapped(_ sender: UIButton) {
         
-        if let card = _AppCoreData.userDataSource.value?.challengeCard
+        if let card = _AppCoreData.userDataSource.value?.challengeCard, let username = _AppCoreData.userDataSource.value?.userName
         {
             
             if card.games.count >= 4 {
                 
                 let game = card.games[3]
-                if game.link != ""
-                {
-                    guard let requestUrl = URL(string: game.link) else {
-                        return
-                    }
+                
+                
+                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
 
-                    if UIApplication.shared.canOpenURL(requestUrl) {
-                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                    } else {
-                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
-                    }
-                    
-                } else {
-                    
-                    showErrorAlert("Oops!", msg: "Can't open this link")
-                    
-                }
+                                // add the actions (buttons)
+                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                                    
+                                
+                    self.openLink(link: game.link)
+                                    
+                }))
+
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+
+                self.present(alert, animated: true, completion: nil)
+
                 
             } else {
                 
@@ -963,6 +946,30 @@ extension ProfileViewController {
         }
         
     }
+    
+    
+    func openLink(link: String) {
+        
+        if link != ""
+        {
+            guard let requestUrl = URL(string: link) else {
+                return
+            }
+
+            if UIApplication.shared.canOpenURL(requestUrl) {
+                 UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+            } else {
+                showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(link)")
+            }
+            
+        } else {
+            
+            showErrorAlert("Oops!", msg: "Can't open this link")
+            
+        }
+        
+    }
+    
     
 }
 
