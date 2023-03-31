@@ -1054,3 +1054,23 @@ func muteVideoIfNeed() {
     }
     
 }
+
+func resetView(cell: PostNode) {
+    
+    if cell.isViewed == true {
+        
+        let currentTime = NSDate().timeIntervalSince1970
+        
+        let change = currentTime - cell.last_view_timestamp
+        
+        if change > 30.0 {
+            
+            cell.isViewed = false
+            cell.time = 0
+        
+        }
+        
+    }
+    
+    
+}

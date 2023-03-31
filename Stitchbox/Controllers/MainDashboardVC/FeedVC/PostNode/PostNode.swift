@@ -40,6 +40,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var isSelectedPost = false
     var settingBtn : ((ASCellNode) -> Void)?
     var isViewed = false
+    var currentTimeStamp: TimeInterval!
     
     init(with post: PostModel) {
         self.post = post
@@ -543,8 +544,7 @@ extension PostNode {
     
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
-        //currentTimeStamp = timeInterval
-        
+        currentTimeStamp = timeInterval
         setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.asset.duration.seconds)!))
     
         
@@ -554,7 +554,7 @@ extension PostNode {
                 
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
                
             }
@@ -564,7 +564,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.7 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -573,7 +573,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.6 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -582,7 +582,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.5 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -591,7 +591,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.4 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -600,7 +600,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.5 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -615,7 +615,7 @@ extension PostNode {
         
     }
     
-    @objc func endVideo() {
+    @objc func endVideo(watchTime: Double) {
         
         if _AppCoreData.userDataSource.value != nil {
             
@@ -626,6 +626,49 @@ extension PostNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
+                APIManager().createView(post: post.id, watchTime: watchTime) { result in
+                    
+                    switch result {
+                    case .success(let apiResponse):
+            
+                        print(apiResponse)
+                        
+                    case .failure(let error):
+                        print(error)
+                    }
+                
+                }
+                
+            }
+            
+        }
+        
+        
+    }
+    
+    func endImage() {
+        
+        if _AppCoreData.userDataSource.value != nil {
+            
+            time += 1
+            
+            if time < 2 {
+                
+                last_view_timestamp = NSDate().timeIntervalSince1970
+                isViewed = true
+            
+                APIManager().createView(post: post.id, watchTime: 0) { result in
+                    
+                    switch result {
+                    case .success(let apiResponse):
+            
+                        print(apiResponse)
+                        
+                    case .failure(let error):
+                        print(error)
+                    }
+                
+                }
                 
             }
             

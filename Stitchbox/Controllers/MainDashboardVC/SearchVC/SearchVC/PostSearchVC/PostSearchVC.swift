@@ -20,9 +20,10 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     var prev_keyword = ""
     var post_list = [PostModel]()
     
-    var willIndex: Int?
+  
     var currentIndex: Int?
-    var endIndex: Int?
+    var imageIndex: Int?
+    
     
     var isfirstLoad = true
     var didScroll = false
@@ -34,6 +35,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     var editeddPost: PostModel?
     var refresh_request = false
     var startIndex: Int!
+    var imageTimerWorkItem: DispatchWorkItem?
     
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -98,8 +100,6 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     @objc func clearAllData() {
         
         refresh_request = true
-        endIndex = 0
-        willIndex = nil
         currentIndex = 0
         isfirstLoad = true
         didScroll = false
@@ -239,9 +239,10 @@ extension PostSearchVC {
                 
                 foundVisibleVideo = true
                 playTimeBar.isHidden = false
-                
+                imageIndex = nil
             } else {
                 playTimeBar.isHidden = true
+                imageIndex = newPlayingIndex
             }
             
             
@@ -257,13 +258,39 @@ extension PostSearchVC {
                     currentIndex = newPlayingIndex
                     playVideoIfNeed(playIndex: currentIndex!)
                     isVideoPlaying = true
+                    
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
+                        
+                        resetView(cell: node)
+                        
+                    }
+                    
                 }
                 
             } else {
                 
                 if let currentIndex = currentIndex {
-                            pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                }
+
+                imageTimerWorkItem?.cancel()
+                imageTimerWorkItem = DispatchWorkItem { [weak self] in
+                    guard let self = self else { return }
+                    if self.imageIndex != nil {
+                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
+                            if self.imageIndex == self.newPlayingIndex {
+                                resetView(cell: node)
+                                node.endImage()
+                            }
                         }
+                    }
+                }
+
+                if let imageTimerWorkItem = imageTimerWorkItem {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
+                }
+
+            
                         // Reset the current playing index.
                 currentIndex = nil
                 

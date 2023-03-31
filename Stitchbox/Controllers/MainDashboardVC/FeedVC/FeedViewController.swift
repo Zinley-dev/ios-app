@@ -18,12 +18,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var preloadingView: UIActivityIndicatorView!
     let homeButton: UIButton = UIButton(type: .custom)
 
-    var willIndex: Int?
     var currentIndex: Int?
-    var endIndex: Int?
     var isfirstLoad = true
     var didScroll = false
-
+    var imageIndex: Int?
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var selected_item: PostModel!
@@ -33,7 +31,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var startIndex: Int!
     var isVideoPlaying = false
     var newPlayingIndex: Int?
-    
+    var imageTimerWorkItem: DispatchWorkItem?
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -147,12 +145,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @objc func clearAllData() {
         
         refresh_request = true
-        endIndex = 0
-        willIndex = nil
         currentIndex = 0
         isfirstLoad = true
         didScroll = false
         shouldMute = nil
+        imageIndex = nil
         updateData()
                
     }
@@ -433,9 +430,10 @@ extension FeedViewController {
                 
                 foundVisibleVideo = true
                 playTimeBar.isHidden = false
-                
+                imageIndex = nil
             } else {
                 playTimeBar.isHidden = true
+                imageIndex = newPlayingIndex
             }
             
             
@@ -451,13 +449,39 @@ extension FeedViewController {
                     currentIndex = newPlayingIndex
                     playVideoIfNeed(playIndex: currentIndex!)
                     isVideoPlaying = true
+                    
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
+                        
+                        resetView(cell: node)
+                        
+                    }
+                    
                 }
                 
             } else {
                 
                 if let currentIndex = currentIndex {
-                            pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                }
+
+                imageTimerWorkItem?.cancel()
+                imageTimerWorkItem = DispatchWorkItem { [weak self] in
+                    guard let self = self else { return }
+                    if self.imageIndex != nil {
+                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
+                            if self.imageIndex == self.newPlayingIndex {
+                                resetView(cell: node)
+                                node.endImage()
+                            }
                         }
+                    }
+                }
+
+                if let imageTimerWorkItem = imageTimerWorkItem {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
+                }
+
+            
                         // Reset the current playing index.
                 currentIndex = nil
                 
@@ -971,6 +995,5 @@ extension FeedViewController {
             clearAllData()
         }
     }
-
     
 }
