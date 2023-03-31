@@ -813,45 +813,75 @@ extension FeedViewController {
     
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newPosts.isEmpty else { return }
         
-        // Check if a refresh request has been made
-        if refresh_request {
+        // checking empty
+        guard newPosts.count > 0 else {
+            return
+        }
+        
+        if refresh_request == true {
+            
             refresh_request = false
             
-            // Delete existing rows if there are any
-            let numExistingItems = posts.count
-            if numExistingItems > 0 {
-                let deleteIndexPaths = (0..<numExistingItems).map { IndexPath(row: $0, section: 0) }
-                posts.removeAll()
-                collectionNode.deleteItems(at: deleteIndexPaths)
+
+            if self.posts.isEmpty != true {
+                
+               
+                var delete_indexPaths: [IndexPath] = []
+                
+                for row in 0...self.posts.count - 1 {
+                    let path = IndexPath(row: row, section: 0) // single indexpath
+                    delete_indexPaths.append(path) // app
+                }
+            
+                self.posts.removeAll()
+                self.collectionNode.deleteItems(at: delete_indexPaths)
+                   
             }
+            
         }
         
-        // Calculate the range of new rows
-        let startIndex = posts.count
-        let endIndex = startIndex + newPosts.count
+        // basic contruction
+        let section = 0
+        var items = [PostModel]()
+        var indexPaths: [IndexPath] = []
+        //
         
-        // Create an array of PostModel objects
-        let newItems = newPosts.compactMap { PostModel(JSON: $0) }
+        // current array = posts
         
-        // Append the new items to the existing array
-        posts.append(contentsOf: newItems)
+        let total = self.posts.count + newPosts.count
         
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
         
-        // Insert the new rows
-        collectionNode.insertItems(at: insertIndexPaths)
+        // 0 - 2 2-4 4-6
         
-        if preloadingView.isAnimating {
-            preloadingView.stopAnimating()
+        for row in self.posts.count...total-1 {
+            let path = IndexPath(row: row, section: section) // single indexpath
+            indexPaths.append(path) // app
         }
+        
+        //
+        
+        for i in newPosts {
+            
+            let item = PostModel(JSON: i)
+            items.append(item!)
+          
+        }
+        
+        //
+        
     
+        // array
+        
+        
+        
+        self.posts.append(contentsOf: items) // append new items to current items
+        //
+        self.collectionNode.insertItems(at: indexPaths)
+        
+      
+        
     }
-
-
     
 }
 

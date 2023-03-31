@@ -915,11 +915,11 @@ extension PostNode {
                 self.isLike = checkIsLike
                 if self.isLike {
                     DispatchQueue.main.async {
-                        self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+                        self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+                        self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
                     }
                 }
                 
@@ -974,7 +974,7 @@ extension PostNode {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {
@@ -988,7 +988,7 @@ extension PostNode {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {

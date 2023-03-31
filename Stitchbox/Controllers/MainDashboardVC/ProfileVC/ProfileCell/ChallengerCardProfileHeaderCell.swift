@@ -29,7 +29,7 @@ class ChallengerCardProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var gameWidth: NSLayoutConstraint!
     @IBOutlet weak var gameHeight: NSLayoutConstraint!
     
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -39,6 +39,8 @@ class ChallengerCardProfileHeaderCell: UICollectionViewCell {
         game2.setTitle("", for: .normal)
         game3.setTitle("", for: .normal)
         game4.setTitle("", for: .normal)
+        
+        
         
     }
     
@@ -57,13 +59,9 @@ class ChallengerCardProfileHeaderCell: UICollectionViewCell {
         game2.layer.cornerRadius = cornerRadius
         game3.layer.cornerRadius = cornerRadius
         game4.layer.cornerRadius = cornerRadius
-       
-    }
-    
-  
-    func configure() {
-       
         
+        badgeWidth.constant = self.frame.width * (131/729)
+       
     }
     
 }

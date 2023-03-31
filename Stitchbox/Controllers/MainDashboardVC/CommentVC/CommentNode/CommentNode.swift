@@ -168,7 +168,7 @@ class CommentNode: ASCellNode {
                         
                     } else {
                         
-                        time = NSAttributedString(string: "Edited \(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
+                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
                     }
                     
                 } else {
@@ -350,7 +350,7 @@ class CommentNode: ASCellNode {
                 if checkIsLike {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "liked")
+                        self.imageView.image = UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal)
                     }
                     
                     
@@ -360,7 +360,7 @@ class CommentNode: ASCellNode {
                 } else {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "likeEmpty")
+                        self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
                     }
             
                 }
@@ -368,7 +368,7 @@ class CommentNode: ASCellNode {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")
+                    self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
                 }
                 print(error)
             }
@@ -804,7 +804,7 @@ extension CommentNode {
     func likeComment() {
         
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "liked")
+            self.imageView.image = UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal)
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -830,7 +830,7 @@ extension CommentNode {
 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")
+                    self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -857,7 +857,7 @@ extension CommentNode {
     func unlikeComment() {
         
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "likeEmpty")
+            self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -882,7 +882,7 @@ extension CommentNode {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "liked")
+                    self.imageView.image = UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal)
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()
