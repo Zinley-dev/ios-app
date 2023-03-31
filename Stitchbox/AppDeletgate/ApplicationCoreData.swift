@@ -26,6 +26,12 @@ class ApplicationCoreData: NSObject {
     DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
       self.bindingData()
     }
+      
+      // Get ClientIP
+      getPublicIPAddress { ip, err in
+          UserDefaults.standard.setValue(ip ?? "", forKey: kUserIp)
+      }
+      
   }
   
   private func bindingData() {
@@ -55,8 +61,8 @@ class ApplicationCoreData: NSObject {
   
   // MARK: - Sync to local
     private func initSync() {
+       
         // Sync userSession
-        
         if UserDefaults.standard.object(forKey: kUserSession) is String {
             if let data = UserDefaults.standard.object(forKey: kUserSession) as? String {
                 let sessionData = SessionDataSource.init(JSONString: data)

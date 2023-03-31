@@ -58,7 +58,7 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
               // get and process data
               print(apiResponse)
               if let data = apiResponse.body?["data"], data != nil {
-                let newUserData = Mapper<UserDataSource>().map(JSON: ["phone": "\(countryCode)\(phone)", "signinMethod": "phone"])
+                  let newUserData = Mapper<UserDataSource>().map(JSON: ["phone": "\(countryCode)\(phone.formatPhoneNumber())", "signinMethod": "phone"])
                 _AppCoreData.userDataSource.accept(newUserData)
                 self.OTPSentSubject.onNext(true)
               } else {
