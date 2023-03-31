@@ -181,6 +181,12 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                                  timeoutInterval: 30.0)
         let userAgent = UAString()
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        if UserDefaults.standard.object(forKey: kUserIp) is String {
+            if let data = UserDefaults.standard.object(forKey: kUserIp) as? String {
+                request.setValue(data, forHTTPHeaderField: "Sb-Client-Ip")
+            }
+        }
+        
         request.httpMethod = route.httpMethod.rawValue
         switch route.task {
         case .request:
