@@ -980,7 +980,7 @@ extension ProfileViewController {
 
     func createChallengeCardSection() -> NSCollectionLayoutSection {
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(226)), subitems: [headerItem])
+        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(236)), subitems: [headerItem])
         headerGroup.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 0, trailing: 20)
         
         let section = NSCollectionLayoutSection(group: headerGroup)
