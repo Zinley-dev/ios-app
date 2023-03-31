@@ -668,7 +668,7 @@ extension UserProfileVC {
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
             
-    
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.hidesBottomBarWhenPushed = false
             self.navigationController?.pushViewController(channelVC, animated: true)
             
@@ -699,6 +699,7 @@ extension UserProfileVC {
             MFVC.followingCount = followingCount
             MFVC.userId = self.userId ?? ""
             MFVC.username = self.userData?.userName ?? ""
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -714,6 +715,7 @@ extension UserProfileVC {
             MFVC.followingCount = followingCount
             MFVC.userId = self.userId ?? ""
             MFVC.username = self.userData?.userName ?? ""
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -884,15 +886,7 @@ extension UserProfileVC {
 
 // selector for challengeCard
 extension UserProfileVC {
-    
-    @objc func editCardTapped(_ sender: UIButton) {
-        
-        if let ECCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditChallengeCardVC") as? EditChallengeCardVC {
-            self.navigationController?.pushViewController(ECCVC, animated: true)
-            
-        }
-        
-    }
+
     
     @objc func game1Tapped(_ sender: UIButton) {
         // make sure to check if any game is added unless peform adding game for +
@@ -1168,6 +1162,7 @@ extension UserProfileVC: UICollectionViewDelegate {
                     SPVC.selectedPost = selectedPost
                     SPVC.startIndex = indexPath.row
                     SPVC.hidesBottomBarWhenPushed = true
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
                     self.navigationController?.pushViewController(SPVC, animated: true)
                 }
 
