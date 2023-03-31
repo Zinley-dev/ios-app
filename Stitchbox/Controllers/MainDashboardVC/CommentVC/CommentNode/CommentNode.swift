@@ -103,7 +103,7 @@ class CommentNode: ASCellNode {
                             
                         } else {
                             
-                            time = NSAttributedString(string: "Edited \(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
+                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
                         }
                         
                     } else {

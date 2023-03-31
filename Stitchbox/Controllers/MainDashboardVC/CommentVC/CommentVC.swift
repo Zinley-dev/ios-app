@@ -161,7 +161,10 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         //
         
-        Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(CommentVC.calculateToTalCmt), userInfo: nil, repeats: true)
+       // Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(CommentVC.calculateToTalCmt), userInfo: nil, repeats: true)
+        
+        print(post.id)
+        
     }
     
     

@@ -308,103 +308,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         }
   
     }
-    /*
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-            
-        
-        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
-    
-        contentNode.maximumNumberOfLines = 0
-        contentNode.truncationMode = .byWordWrapping
-        contentNode.style.flexShrink = 1
-       
-        let headerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
-        
-        
-        var children: [ASLayoutElement] = [headerInsetSpec]
-        
-        let mediaSize: CGSize
-        
-        if post.content != "" {
-            
-            let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 16)
-            let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
-        
-            children.append(contentInsetSpec)
-        }
 
-        
-        if !post.hashtags.isEmpty {
-            
-            hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
-            
-            let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
-            let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
-            
-            
-            children.append(hashtagsInsetSpec)
-            
-        }
-        
-        
-        
-        let originalWidth = CGFloat(post.metadata?.width ?? 1)
-        let originalHeight = CGFloat(post.metadata?.height ?? 1)
 
-        let aspectRatio = originalHeight / originalWidth
-        let maxWidth = constrainedSize.max.width
-
-        let minAspectRatio: CGFloat = 4 / 5 // 4:5 (portrait)
-        let maxAspectRatio: CGFloat = 1.91 / 1 // 1.91:1 (landscape)
-
-        let clampedAspectRatio = max(min(aspectRatio, maxAspectRatio), minAspectRatio)
-
-        let newWidth = maxWidth
-        let newHeight = maxWidth * clampedAspectRatio
-
-        mediaSize = CGSize(width: newWidth, height: newHeight)
-
-        
-        if post.muxPlaybackId != "" {
-            
-            sidebuttonListView.style.preferredSize = CGSize(width: 100, height: 60)
-            videoNode.style.preferredSize = mediaSize
-            gradientNode.style.preferredSize = mediaSize
-            
-            let sidebuttonListInset = UIEdgeInsets(top: CGFloat.infinity, left: CGFloat.infinity, bottom: 0, right: 0)
-            let sidebuttonListInsetSpec = ASInsetLayoutSpec(insets: sidebuttonListInset, child: sidebuttonListView)
-            
-            let firsOverlay = ASOverlayLayoutSpec(child: videoNode, overlay: gradientNode)
-            let secondOverlay = ASOverlayLayoutSpec(child: firsOverlay, overlay: sidebuttonListInsetSpec)
-            
-            children.append(secondOverlay)
-            
-        } else {
-            
-           
-            imageNode.style.preferredSize = mediaSize
-            children.append(imageNode)
-            
-            
-        }
-        
-       
-        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 75)
-        let buttonsInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        let buttonsInsetSpec = ASInsetLayoutSpec(insets: buttonsInset, child: buttonsNode)
-        
-        children.append(buttonsInsetSpec)
-            
-        let verticalStack = ASStackLayoutSpec.vertical()
-        verticalStack.children = children
-       
-        return verticalStack
-    }*/
-    
-    
-    
-    
     func getThumbnailVideoNodeURL(post: PostModel) -> URL? {
         
         if post.muxPlaybackId != "" {
@@ -646,7 +551,7 @@ extension PostNode {
         
     }
     
-    func endImage() {
+    func endImage(id: String) {
         
         if _AppCoreData.userDataSource.value != nil {
             
@@ -657,7 +562,7 @@ extension PostNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
-                APIManager().createView(post: post.id, watchTime: 0) { result in
+                APIManager().createView(post: id, watchTime: 0) { result in
                     
                     switch result {
                     case .success(let apiResponse):
@@ -1097,7 +1002,7 @@ extension PostNode {
 
 extension PostNode {
     
-    func totalLikeCount() {
+    func totalLikeCountFromLocal() {
         
         DispatchQueue.main.async {
             self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeLikes ?? 0)))"
@@ -1105,10 +1010,56 @@ extension PostNode {
         
     }
     
-    func totalCmtCount() {
+    func totalCmtCountFromLocal() {
         
         DispatchQueue.main.async {
             self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeComments ?? 0)))"
+        }
+        
+    }
+    
+    func totalLikeCount() {
+        
+        APIManager().countLikedPost(id: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+    
+                guard apiResponse.body?["message"] as? String == "success",
+                      let likeCountFromQuery = apiResponse.body?["likes"] as? Int  else {
+                        return
+                }
+                
+                self.likeCount = likeCountFromQuery
+                
+                DispatchQueue.main.async {
+                    self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(likeCountFromQuery)))"
+                }
+               
+            case .failure(let error):
+                print("LikeCount: \(error)")
+            }
+        }
+        
+    }
+    
+    func totalCmtCount() {
+        
+        APIManager().countComment(post: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+             
+                guard apiResponse.body?["message"] as? String == "success",
+                      let commentsCountFromQuery = apiResponse.body?["comments"] as? Int  else {
+                        return
+                }
+                
+                DispatchQueue.main.async {
+                    self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(commentsCountFromQuery)))"
+                }
+                
+            case .failure(let error):
+                print("CmtCount: \(error)")
+            }
         }
         
     }

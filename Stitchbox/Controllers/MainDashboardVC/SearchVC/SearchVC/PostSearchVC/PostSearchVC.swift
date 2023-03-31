@@ -280,7 +280,7 @@ extension PostSearchVC {
                         if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
                             if self.imageIndex == self.newPlayingIndex {
                                 resetView(cell: node)
-                                node.endImage()
+                                node.endImage(id: node.post.id)
                             }
                         }
                     }
