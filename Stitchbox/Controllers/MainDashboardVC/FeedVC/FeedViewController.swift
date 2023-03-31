@@ -536,40 +536,46 @@ extension FeedViewController {
        
     }
     
-    func changeTabBar(hidden:Bool, animated: Bool) {
+    func changeTabBar(hidden: Bool, animated: Bool) {
         guard let tabBar = self.tabBarController?.tabBar else {
             return
         }
-        if tabBar.isHidden == hidden{
+
+        if tabBar.isHidden == hidden {
             return
         }
-        
+
         let frame = tabBar.frame
-        let frameMinY = frame.minY  //lower end of tabBar
+        let frameMinY = frame.minY
         let offset = hidden ? frame.size.height : -frame.size.height
         let viewHeight = self.view.frame.height
-        
-        //hidden but moved back up after moving app to background
+
         if frameMinY < viewHeight && tabBar.isHidden {
-            tabBar.alpha = 0
             tabBar.isHidden = false
+            tabBar.layer.zPosition = .greatestFiniteMagnitude
 
             UIView.animate(withDuration: 0.5) {
-                tabBar.alpha = 1
+                tabBar.frame = frame.offsetBy(dx: 0, dy: -offset)
             }
-            
+
             return
         }
 
-        let duration:TimeInterval = (animated ? 0.5 : 0.0)
+        let duration: TimeInterval = (animated ? 0.5 : 0.0)
         tabBar.isHidden = false
 
         UIView.animate(withDuration: duration, animations: {
             tabBar.frame = frame.offsetBy(dx: 0, dy: offset)
-        }, completion: { (true) in
+        }, completion: { _ in
             tabBar.isHidden = hidden
+
+            if !hidden {
+                tabBar.layer.zPosition = 0
+            }
         })
     }
+
+
     
 
 }

@@ -248,7 +248,7 @@ extension SelectedPostVC {
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         
-        if scrollView == collectionNode.view {
+        if scrollView == collectionNode.view, posts.count > 2 {
             
             if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
                navigationController?.setNavigationBarHidden(true, animated: true)
