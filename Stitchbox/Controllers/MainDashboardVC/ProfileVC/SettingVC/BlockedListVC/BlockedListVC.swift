@@ -282,27 +282,32 @@ extension BlockedListVC {
     
     
     func insertNewRowsInTableNode(newBlocks: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newBlocks.isEmpty else { return }
         
+        guard newBlocks.count > 0 else {
+            return
+        }
+        
+        let section = 0
+        var items = [BlockUserModel]()
+        var indexPaths: [IndexPath] = []
+        let total = self.blockList.count + newBlocks.count
+        
+        for row in self.blockList.count...total-1 {
+            let path = IndexPath(row: row, section: section)
+            indexPaths.append(path)
+        }
+        
+        for i in newBlocks {
 
-        // Calculate the range of new rows
-        let startIndex = blockList.count
-        let endIndex = startIndex + newBlocks.count
+            let item = BlockUserModel(JSON: i)
+            items.append(item!)
+          
+        }
         
-        // Create an array of PostModel objects
-        let newItems = newBlocks.compactMap { BlockUserModel(JSON: $0) }
+    
+        self.blockList.append(contentsOf: items)
+        self.tableNode.insertRows(at: indexPaths, with: .none)
         
-        // Append the new items to the existing array
-        blockList.append(contentsOf: newItems)
-        
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
-        
-        // Insert the new rows
-        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
-       
     }
-    
-    
+
 }

@@ -352,40 +352,35 @@ extension LoginActivityVC {
         }
         
     }
-     
+    
+    
     func insertNewRowsInTableNode(newActivities: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newActivities.isEmpty else { return }
         
-        // Check if a refresh request has been made
-        if refresh_request {
-            refresh_request = false
-            
-            // Delete existing rows if there are any
-            let numExistingItems = userLoginActivityList.count
-            if numExistingItems > 0 {
-                let deleteIndexPaths = (0..<numExistingItems).map { IndexPath(row: $0, section: 0) }
-                userLoginActivityList.removeAll()
-                tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
-            }
+        guard newActivities.count > 0 else {
+            return
         }
+        
+        let section = 0
+        var items = [UserLoginActivityModel]()
+        var indexPaths: [IndexPath] = []
+        let total = self.userLoginActivityList.count + newActivities.count
+        
+        for row in self.userLoginActivityList.count...total-1 {
+            let path = IndexPath(row: row, section: section)
+            indexPaths.append(path)
+        }
+        
+        for i in newActivities {
 
-        // Calculate the range of new rows
-        let startIndex = userLoginActivityList.count
-        let endIndex = startIndex + newActivities.count
+            let item = UserLoginActivityModel(userLoginActivity: i)
+            items.append(item)
+          
+        }
         
-        // Create an array of PostModel objects
-        let newItems = newActivities.compactMap { UserLoginActivityModel(userLoginActivity: $0) }
+    
+        self.userLoginActivityList.append(contentsOf: items)
+        self.tableNode.insertRows(at: indexPaths, with: .none)
         
-        // Append the new items to the existing array
-        userLoginActivityList.append(contentsOf: newItems)
-        
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
-        
-        // Insert the new rows
-        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
-       
     }
     
 }
