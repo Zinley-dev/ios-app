@@ -45,12 +45,16 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
   func logic() {
     sendOTPDidTapSubject.asObservable()
       .subscribe (onNext: { (phone, countryCode) in
-        print(phone, countryCode)
+        
         if(isNotValidInput(Input: phone, RegEx: #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{3,4}$"#)
            || isNotValidInput(Input: countryCode, RegEx: "^(\\+?\\d{1,3}|\\d{1,4})$")) {
           self.errorsSubject.onNext(NSError(domain: "Phone Number in wrong format", code: 200))
           return;
         }
+        
+        print("=====LOGIN=====")
+        print(phone, countryCode)
+        print(phone.formatPhoneNumber())
         // call api toward login api of backend
           APIManager().phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { result in
           switch result {
@@ -209,7 +213,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
         }
         else if (self.output.type == "phone") {
           self.loadingSubject.onNext(true)
-          APIManager().phoneVerify(phone: countryCode + phone, OTP: code) { result in switch result {
+          APIManager().phoneVerify(phone: countryCode + phone.formatPhoneNumber(), OTP: code) { result in switch result {
             case .success(let apiResponse):
               // get and process data
               if (apiResponse.body?["message"] as! String == "success") {
@@ -261,7 +265,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
           }
           // call api toward login api of backend
           self.loadingSubject.onNext(true)
-          APIManager().phoneVerify(phone: countryCode + phone, OTP: code) { result in switch result {
+          APIManager().phoneVerify(phone: countryCode + phone.formatPhoneNumber(), OTP: code) { result in switch result {
             case .success(let apiResponse):
               // get and process data
               if (apiResponse.body?["message"] as! String == "success") {
@@ -314,7 +318,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
         }
         self.loadingSubject.onNext(true)
         // call api toward login api of backend
-        APIManager().phoneLogin(phone: countryCode + phone) { result in switch result {
+        APIManager().phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { result in switch result {
           case .success(let apiResponse):
             // get and process data
             _ = apiResponse.body?["data"] as! [String: Any]?
