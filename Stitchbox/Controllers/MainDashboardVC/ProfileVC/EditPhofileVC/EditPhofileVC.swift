@@ -167,6 +167,10 @@ extension EditPhofileVC {
             bioTextField.text = about
         }
         
+        if let name = _AppCoreData.userDataSource.value?.name, name != "" {
+            nameTxtField.text = name
+        }
+        
         
     }
     

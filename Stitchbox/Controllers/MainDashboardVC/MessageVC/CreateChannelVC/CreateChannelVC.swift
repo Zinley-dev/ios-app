@@ -352,6 +352,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
 
                 var newUserList = [SBUUser]()
                 for user in data {
+                   
                     let preloadUser =  Mapper<SearchUser>().map(JSONObject: user)
                     let user = SBUUser(userId: preloadUser?.userID ?? "", nickname: preloadUser?.username ?? "", profileUrl: preloadUser?.avatar ?? "")
                     if !self.userList.contains(where: { $0.userId == user.userId }) {
@@ -394,12 +395,16 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     
     @objc func createChannel() {
         guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, !selectedUsers.isEmpty else { return }
-
+        
         let channelParams = SBDGroupChannelParams()
-        channelParams.isDistinct = true
+        
         channelParams.addUserIds(selectedUsers.map { $0.userId })
         if selectedUsers.count > 1 {
             channelParams.operatorUserIds = [userUID]
+            channelParams.isDistinct = false
+        } else {
+            channelParams.isDistinct = true
+            channelParams.addUserId(userUID)
         }
 
         SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in

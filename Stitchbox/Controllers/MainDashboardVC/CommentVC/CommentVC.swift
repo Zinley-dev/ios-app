@@ -161,7 +161,10 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         //
         
-        Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(CommentVC.calculateToTalCmt), userInfo: nil, repeats: true)
+       // Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(CommentVC.calculateToTalCmt), userInfo: nil, repeats: true)
+        
+        print(post.id)
+        
     }
     
     
@@ -594,6 +597,10 @@ extension CommentVC {
                     commentSettings.isCommentOwner = true
                 } else {
                     commentSettings.isCommentOwner = false
+                }
+                
+                if selectedCmt.is_title {
+                    commentSettings.isTitle = true
                 }
                
                 editedComment = selectedCmt

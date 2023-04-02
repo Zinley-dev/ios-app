@@ -57,13 +57,14 @@ class ContactUsVC: UIViewController, ControllerType {
         viewModel.output.successObservable.subscribe{
             result in
             DispatchQueue.main.async {
-                showNote(text: result)
+                self.navigationController?.popViewController(animated: true)
+                showNote(text: "Report sent!")
             }
         }.disposed(by: disposeBag)
         
         viewModel.output.errorsObservable.subscribe{ (error) in
             DispatchQueue.main.async {
-                showNote(text: error)
+                self.showErrorAlert("Oops!", msg: error.error?.localizedDescription ?? "Unable to send report request, please try again.")
             }
         }.disposed(by: disposeBag)
     }

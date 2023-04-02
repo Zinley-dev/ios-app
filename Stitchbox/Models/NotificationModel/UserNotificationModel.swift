@@ -240,7 +240,7 @@ class UserNotificationModel {
                 
             }
             
-            if let template = notification["template"] as? String {
+            if let template = notification["type"] as? String {
                 self._template = template
                 
                 if template == "NEW_POST" || template == "NEW_COMMENT" || template == "REPLY_COMMENT" || template == "NEW_TAG" {

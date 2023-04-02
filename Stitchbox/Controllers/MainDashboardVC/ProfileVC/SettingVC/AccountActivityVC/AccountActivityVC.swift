@@ -334,42 +334,36 @@ extension AccountActivityVC {
         }
   
     }
-     
-    func insertNewRowsInTableNode(newActivities: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newActivities.isEmpty else { return }
-        
-        // Check if a refresh request has been made
-        if refresh_request {
-            refresh_request = false
-            
-            // Delete existing rows if there are any
-            let numExistingItems = userLoginActivityList.count
-            if numExistingItems > 0 {
-                let deleteIndexPaths = (0..<numExistingItems).map { IndexPath(row: $0, section: 0) }
-                userLoginActivityList.removeAll()
-                tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
-            }
-        }
-
-        // Calculate the range of new rows
-        let startIndex = userLoginActivityList.count
-        let endIndex = startIndex + newActivities.count
-        
-        // Create an array of PostModel objects
-        let newItems = newActivities.compactMap { UserActivityModel(userActivityModel: $0) }
-        
-        // Append the new items to the existing array
-        UserActivityList.append(contentsOf: newItems)
-        
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
-        
-        // Insert the new rows
-        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
-       
-    }
     
+    func insertNewRowsInTableNode(newActivities: [[String: Any]]) {
+        
+        guard newActivities.count > 0 else {
+            return
+        }
+        
+        let section = 0
+        var items = [UserActivityModel]()
+        var indexPaths: [IndexPath] = []
+        let total = self.UserActivityList.count + newActivities.count
+        
+        for row in self.UserActivityList.count...total-1 {
+            let path = IndexPath(row: row, section: section)
+            indexPaths.append(path)
+        }
+        
+        for i in newActivities {
+
+            let item = UserActivityModel(userActivityModel: i)
+            items.append(item)
+          
+        }
+        
+    
+        self.UserActivityList.append(contentsOf: items)
+        self.tableNode.insertRows(at: indexPaths, with: .none)
+        
+    }
+
 }
 
 

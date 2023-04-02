@@ -69,6 +69,14 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
             
         }
        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
     }
     
@@ -138,12 +146,6 @@ extension SearchViewController {
             return nil
         }
 
-    }
-    
-    func removeRecent() {
-        
-        
-        
     }
     
 }
@@ -330,7 +332,7 @@ extension SearchViewController {
         self.searchTableNode.view.topAnchor.constraint(equalTo: self.searchView.topAnchor, constant: 0).isActive = true
         self.searchTableNode.view.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor, constant: 0).isActive = true
         self.searchTableNode.view.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor, constant: 0).isActive = true
-        self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: -235).isActive = true
+        self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: -300).isActive = true
         
         self.recentTableNode.delegate = self
         self.searchTableNode.delegate = self
@@ -427,7 +429,7 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
                     MSVC.initialType = "post"
                     MSVC.hidesBottomBarWhenPushed = true
                     hideMiddleBtn(vc: self)
-                    MSVC.currentSearchText = item.game_name
+                    MSVC.currentSearchText = item.game_shortName
                     self.navigationController?.pushViewController(MSVC, animated: true)
                     
                 }

@@ -82,7 +82,7 @@ import SwiftUI
         case false:
             backgroundColor = UIColor.other
             tintColor = UIColor.secondary
-            layer.borderColor = UIColor.secondary.cgColor
+            layer.borderColor = UIColor.primary.cgColor
         }
     }
 
@@ -97,7 +97,7 @@ import SwiftUI
         case false:
             backgroundColor = UIColor.secondary
             tintColor = UIColor.other
-            layer.borderColor = UIColor.secondary.cgColor
+            layer.borderColor = UIColor.primary.cgColor
         }
     }
 

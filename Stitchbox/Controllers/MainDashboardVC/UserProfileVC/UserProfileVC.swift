@@ -8,6 +8,8 @@
 import UIKit
 import ObjectMapper
 import SendBirdSDK
+import FLAnimatedImage
+import SendBirdUIKit
 
 class UserProfileVC: UIViewController {
 
@@ -35,10 +37,15 @@ class UserProfileVC: UIViewController {
     @IBOutlet weak var challengeCardView: UIView!
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
+    
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
     var onPresent = false
-    
+    var allowProcess = true
+    var allowFistBumped = true
     var followerCount = 0
     var followingCount = 0
     var fistBumpedCount = 0
@@ -105,6 +112,66 @@ class UserProfileVC: UIViewController {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+        if !loadingView.isHidden {
+            
+            do {
+                
+                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                let gifData = try NSData(contentsOfFile: path) as Data
+                let image = FLAnimatedImage(animatedGIFData: gifData)
+                
+                
+                self.loadingImage.animatedImage = image
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            loadingView.backgroundColor = self.view.backgroundColor
+            
+            
+            delay(1.30) {
+                
+                UIView.animate(withDuration: 0.5) {
+                    
+                    self.loadingView.alpha = 0
+                    
+                }
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    
+                    if self.loadingView.alpha == 0 {
+                        
+                        self.loadingView.isHidden = true
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+
+        
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+    }
+
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -130,6 +197,11 @@ class UserProfileVC: UIViewController {
                         let url = URL(string: data.avatarURL)
                         cell.avatarImage.load(url: url!, str: data.avatarURL)
                         selectAvatarImage.load(url: url!, str: data.avatarURL)
+                        
+                    } else {
+                        
+                        cell.avatarImage.image = UIImage.init(named: "defaultuser")
+                        selectAvatarImage.image = UIImage.init(named: "defaultuser")
                         
                     }
                     
@@ -230,10 +302,14 @@ class UserProfileVC: UIViewController {
                         cell.userImgView.load(url: url!, str: data.avatarURL)
                         ChallengeView.userImgView.load(url: url!, str: data.avatarURL)
                         
+                    } else {
+                        cell.userImgView.image = UIImage.init(named: "defaultuser")
+                        ChallengeView.userImgView.image = UIImage.init(named: "defaultuser")
                     }
                     
                 }
                 
+                ChallengeView.badgeWidth.constant = cell.badgeWidth.constant
                 
                 if let card = userData?.challengeCard
                 {
@@ -241,8 +317,8 @@ class UserProfileVC: UIViewController {
                         cell.infoLbl.text = card.quote
                         ChallengeView.infoLbl.text = card.quote
                     } else {
-                        cell.infoLbl.text = "Stitchbox's challenger"
-                        ChallengeView.infoLbl.text = "Stitchbox's challenger"
+                        cell.infoLbl.text = "Stitchboxer"
+                        ChallengeView.infoLbl.text = "Stitchboxer"
                     }
                    
                     
@@ -478,8 +554,6 @@ class UserProfileVC: UIViewController {
 // selector for header
 extension UserProfileVC {
     
-    
-    
     @objc func followAction(_ sender: UIButton) {
         
         if isFollow {
@@ -495,69 +569,97 @@ extension UserProfileVC {
     
     func followUser() {
         
-        self.isFollow = true
-        followerCount += 1
-        self.applyHeaderChange()
-        
-        APIManager().insertFollows(params: ["FollowId": userId ?? ""]) { result in
-            switch result {
-            case .success(_):
-              
-                
-                self.isFollow = true
-                needRecount = true
-               
-              
-            case .failure(_):
-                
-                DispatchQueue.main.async {
-                    self.isFollow = false
-                    self.followerCount += 1
-                    showNote(text: "Something happened!")
+        if allowProcess {
+            
+            self.allowProcess = false
+            self.isFollow = true
+            followerCount += 1
+            self.applyHeaderChange()
+            
+            APIManager().insertFollows(params: ["FollowId": userId ?? ""]) { result in
+                switch result {
+                case .success(_):
+                  
+                    self.allowProcess = true
+                    self.isFollow = true
+                    needRecount = true
+                    Dispatch.main.async {
+                        self.reloadPost()
+                    }
+                  
+                  
+                case .failure(let error):
+                    
+                    print(error)
+                    
+                    DispatchQueue.main.async {
+                        self.allowProcess = true
+                        self.isFollow = false
+                        self.followerCount += 1
+                        showNote(text: "Something happened!")
+                        self.applyHeaderChange()
+                    }
+                    
+                    
                 }
                 
             }
             
         }
+        
+        
            
     }
     
     
     func unfollowUser() {
         
-        self.isFollow = false
-        followerCount -= 1
-        self.applyHeaderChange()
-    
-            APIManager().unFollow(params: ["FollowId": userId ?? ""]) { result in
-                switch result {
-                case .success(_):
-                    
-                    self.isFollow = false
-                    needRecount = true
-                    
-                    
-                case .failure(_):
-                    DispatchQueue.main.async {
-                        self.isFollow = true
-                        self.followerCount -= 1
-                        showNote(text: "Something happened!")
+        if allowProcess {
+            
+            self.allowProcess = false
+            self.isFollow = false
+            followerCount -= 1
+            self.applyHeaderChange()
+        
+                APIManager().unFollow(params: ["FollowId": userId ?? ""]) { result in
+                    switch result {
+                    case .success(_):
+                        
+                        self.isFollow = false
+                        needRecount = true
+                        self.allowProcess = true
+                        
+                        Dispatch.main.async {
+                            self.reloadPost()
+                        }
+                        
+                    case .failure(let error):
+                        
+                        print(error)
+                        
+                        DispatchQueue.main.async {
+                            self.allowProcess = true
+                            self.isFollow = true
+                            self.followerCount -= 1
+                            showNote(text: "Something happened!")
+                            self.applyHeaderChange()
+                        }
+                        
+                        
                     }
-                    
-                    
                 }
-            }
+            
+        }
+        
+        
             
     }
         
-        
-
-    
     
     @objc func messageTapped(_ sender: UIButton) {
         
         guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty else { return }
-
+        
         let channelParams = SBDGroupChannelParams()
         channelParams.isDistinct = true
         channelParams.addUserIds([self.userId ?? "", userUID])
@@ -572,9 +674,11 @@ extension UserProfileVC {
             checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+            
             self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.hidesBottomBarWhenPushed = false
             self.navigationController?.pushViewController(channelVC, animated: true)
-
+            
         }
         
     }
@@ -602,6 +706,7 @@ extension UserProfileVC {
             MFVC.followingCount = followingCount
             MFVC.userId = self.userId ?? ""
             MFVC.username = self.userData?.userName ?? ""
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -617,6 +722,7 @@ extension UserProfileVC {
             MFVC.followingCount = followingCount
             MFVC.userId = self.userId ?? ""
             MFVC.username = self.userData?.userName ?? ""
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -627,25 +733,24 @@ extension UserProfileVC {
     @objc func discordTapped(_ sender: UIButton) {
         
         if let discord = userData?.discordUrl, discord != "" {
-           
-            if discord != ""
-            {
-                guard let requestUrl = URL(string: discord) else {
-                    return
-                }
+            
+            if let username = _AppCoreData.userDataSource.value?.userName {
+                
+                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
 
-                if UIApplication.shared.canOpenURL(requestUrl) {
-                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                } else {
-                    showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(discord)")
-                }
-                
-            } else {
-                
-                showErrorAlert("Oops!", msg: "Can't open this link")
+                                // add the actions (buttons)
+                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                                    
+                                
+                    self.openLink(link: discord)
+                                    
+                }))
+
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 
             }
-            
+           
         }
         
     }
@@ -680,28 +785,35 @@ extension UserProfileVC {
     
     func giveFistBump() {
         
-        fistBumpedAnimation()
-        
-        self.isFistBump = true
-        fistBumpedCount += 1
-        self.applyUIChange()
-        
-        APIManager().addFistBump(userID: self.userId!) { result in
-            switch result {
-            case .success(_):
-                
-                self.isFistBump = true
-               
-            case .failure(_):
-                DispatchQueue.main.async {
-                    self.isFistBump = false
-                    self.fistBumpedCount -= 1
-                    self.applyUIChange()
-                    showNote(text: "Something happened!")
+        if allowFistBumped {
+            
+            fistBumpedAnimation()
+            self.allowFistBumped = false
+            self.isFistBump = true
+            fistBumpedCount += 1
+            self.applyUIChange()
+            
+            APIManager().addFistBump(userID: self.userId!) { result in
+                switch result {
+                case .success(_):
+                    
+                    self.isFistBump = true
+                    self.allowFistBumped = true
+                   
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        self.isFistBump = false
+                        self.allowFistBumped = true
+                        self.fistBumpedCount -= 1
+                        self.applyUIChange()
+                        showNote(text: "Something happened!")
+                    }
+                    
+                    
                 }
-                
-                
             }
+            
+            
         }
         
         
@@ -709,27 +821,39 @@ extension UserProfileVC {
     
     func unfistBump() {
         
-        self.isFistBump = false
-        fistBumpedCount -= 1
-        self.applyUIChange()
         
-        APIManager().deleteFistBump(userID: self.userId!) { result in
-            switch result {
-            case .success(_):
-                
-                self.isFistBump = false
-               
-            case .failure(_):
-                DispatchQueue.main.async {
-                    self.isFistBump = true
-                    self.fistBumpedCount += 1
-                    self.applyUIChange()
-                    showNote(text: "Something happened!")
+        if allowFistBumped {
+            
+            
+            self.isFistBump = false
+            self.allowFistBumped = false
+            fistBumpedCount -= 1
+            self.applyUIChange()
+            
+            APIManager().deleteFistBump(userID: self.userId!) { result in
+                switch result {
+                case .success(_):
+                    
+                    self.isFistBump = false
+                    self.allowFistBumped = true
+                   
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        self.allowFistBumped = true
+                        self.isFistBump = true
+                        self.fistBumpedCount += 1
+                        self.applyUIChange()
+                        showNote(text: "Something happened!")
+                    }
+                    
+                    
                 }
-                
-                
             }
+            
+            
         }
+        
+        
         
     }
     
@@ -769,15 +893,7 @@ extension UserProfileVC {
 
 // selector for challengeCard
 extension UserProfileVC {
-    
-    @objc func editCardTapped(_ sender: UIButton) {
-        
-        if let ECCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditChallengeCardVC") as? EditChallengeCardVC {
-            self.navigationController?.pushViewController(ECCVC, animated: true)
-            
-        }
-        
-    }
+
     
     @objc func game1Tapped(_ sender: UIButton) {
         // make sure to check if any game is added unless peform adding game for +
@@ -789,30 +905,25 @@ extension UserProfileVC {
                
             } else {
                 
-                if let game = card.games.first {
+                let game = card.games[0]
+                
+                if let username = _AppCoreData.userDataSource.value?.userName {
                     
-                    if game.link != ""
-                    {
-                        guard let requestUrl = URL(string: game.link) else {
-                            return
-                        }
+                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
 
-                        if UIApplication.shared.canOpenURL(requestUrl) {
-                             UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                        } else {
-                            showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
-                        }
-                        
-                    } else {
-                        
-                        showErrorAlert("Oops!", msg: "Can't open this link")
-                        
-                    }
-                    
+                                    // add the actions (buttons)
+                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                                        
+                                    
+                        self.openLink(link: game.link)
+                                        
+                    }))
+
+                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                     
                 }
-                
-                
+     
             }
             
             
@@ -828,21 +939,21 @@ extension UserProfileVC {
             if card.games.count >= 2 {
                 
                 let game = card.games[1]
-                if game.link != ""
-                {
-                    guard let requestUrl = URL(string: game.link) else {
-                        return
-                    }
+                
+                if let username = _AppCoreData.userDataSource.value?.userName {
+                    
+                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
 
-                    if UIApplication.shared.canOpenURL(requestUrl) {
-                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                    } else {
-                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
-                    }
-                    
-                } else {
-                    
-                    showErrorAlert("Oops!", msg: "Can't open this link")
+                                    // add the actions (buttons)
+                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                                        
+                                    
+                        self.openLink(link: game.link)
+                                        
+                    }))
+
+                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                     
                 }
                 
@@ -861,21 +972,21 @@ extension UserProfileVC {
             if card.games.count >= 3 {
                 
                 let game = card.games[2]
-                if game.link != ""
-                {
-                    guard let requestUrl = URL(string: game.link) else {
-                        return
-                    }
+                
+                if let username = _AppCoreData.userDataSource.value?.userName {
+                    
+                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
 
-                    if UIApplication.shared.canOpenURL(requestUrl) {
-                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                    } else {
-                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
-                    }
-                    
-                } else {
-                    
-                    showErrorAlert("Oops!", msg: "Can't open this link")
+                                    // add the actions (buttons)
+                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                                        
+                                    
+                        self.openLink(link: game.link)
+                                        
+                    }))
+
+                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                     
                 }
                 
@@ -894,26 +1005,48 @@ extension UserProfileVC {
             if card.games.count >= 4 {
                 
                 let game = card.games[3]
-                if game.link != ""
-                {
-                    guard let requestUrl = URL(string: game.link) else {
-                        return
-                    }
+                
+                if let username = _AppCoreData.userDataSource.value?.userName {
+                    
+                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
 
-                    if UIApplication.shared.canOpenURL(requestUrl) {
-                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                    } else {
-                        showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(game.link)")
-                    }
-                    
-                } else {
-                    
-                    showErrorAlert("Oops!", msg: "Can't open this link")
+                                    // add the actions (buttons)
+                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                                        
+                                    
+                        self.openLink(link: game.link)
+                                        
+                    }))
+
+                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                     
                 }
                 
             }
             
+            
+        }
+        
+    }
+    
+    func openLink(link: String) {
+        
+        if link != ""
+        {
+            guard let requestUrl = URL(string: link) else {
+                return
+            }
+
+            if UIApplication.shared.canOpenURL(requestUrl) {
+                 UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+            } else {
+                showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(link)")
+            }
+            
+        } else {
+            
+            showErrorAlert("Oops!", msg: "Can't open this link")
             
         }
         
@@ -928,14 +1061,21 @@ extension UserProfileVC {
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)))
         let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(480)), subitems: [headerItem])
         
-        return NSCollectionLayoutSection(group: headerGroup)
+        let section = NSCollectionLayoutSection(group: headerGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        return section
     }
-    
+
     func createChallengeCardSection() -> NSCollectionLayoutSection {
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(226)), subitems: [headerItem])
-        headerGroup.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 20)
-        return NSCollectionLayoutSection(group: headerGroup)
+        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(236)), subitems: [headerItem])
+        headerGroup.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 0, trailing: 20)
+        
+        let section = NSCollectionLayoutSection(group: headerGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0)
+        
+        return section
     }
     
     func createPhotosSection() -> NSCollectionLayoutSection {
@@ -1029,6 +1169,7 @@ extension UserProfileVC: UICollectionViewDelegate {
                     SPVC.selectedPost = selectedPost
                     SPVC.startIndex = indexPath.row
                     SPVC.hidesBottomBarWhenPushed = true
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
                     self.navigationController?.pushViewController(SPVC, animated: true)
                 }
 
@@ -1246,17 +1387,8 @@ extension UserProfileVC {
     
     @objc func clearAllData() {
         
-        var snapshot = self.datasource.snapshot()
-        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
-        datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
-        currpage = 1
-        
-        self.getUserPost { (newPosts) in
-            
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
-            
-        }
-        
+        reloadPost()
+
         checkIfFollow()
         checkIfFistBump()
     
@@ -1274,6 +1406,22 @@ extension UserProfileVC {
         }
         
                
+    }
+    
+    func reloadPost() {
+        
+        var snapshot = self.datasource.snapshot()
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
+        datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
+        currpage = 1
+        
+        self.getUserPost { (newPosts) in
+            
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
+        }
+        
+        
     }
     
 }
@@ -1460,6 +1608,7 @@ extension UserProfileVC {
     
     func checkIfFistBump() {
         
+        
         APIManager().isFistBumpee(userID: userId ?? "") { result in
                 switch result {
                 case .success(let apiResponse):
@@ -1498,7 +1647,7 @@ extension UserProfileVC {
         Dispatch.main.async {
             var updatedSnapshot = self.datasource.snapshot()
             updatedSnapshot.reloadSections([.header])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
         }
         
    
@@ -1508,7 +1657,7 @@ extension UserProfileVC {
         Dispatch.main.async {
             var updatedSnapshot = self.datasource.snapshot()
             updatedSnapshot.reloadSections([.header, .challengeCard, .posts])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
         }
     
     }
@@ -1518,7 +1667,7 @@ extension UserProfileVC {
         Dispatch.main.async {
             var updatedSnapshot = self.datasource.snapshot()
             updatedSnapshot.reloadSections([.header, .challengeCard])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
         }
         
     }

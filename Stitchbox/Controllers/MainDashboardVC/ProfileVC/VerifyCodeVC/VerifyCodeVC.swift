@@ -344,7 +344,7 @@ extension VerifyCodeVC {
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     showNote(text: "Email is updated successfully")
-                    self.navigationController?.popBack(2)
+                    self.navigationController?.popBack(3)
                 }
                 
                 
@@ -418,7 +418,7 @@ extension VerifyCodeVC {
                 
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
-                    self.navigationController?.popBack(2)
+                    self.navigationController?.popBack(3)
                 }
                 
                 
@@ -469,7 +469,7 @@ extension VerifyCodeVC {
            
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
-                    self.navigationController?.popBack(3)
+                    self.navigationController?.popBack(2)
                     reloadGlobalSettings()
                     if self.type == "2FA - phone" {
                         turnOn2FAForPhone()

@@ -9,7 +9,7 @@
 import ObjectMapper
 
 class FistBumpUserModel: Mappable {
-    private(set) var avatar: String = "https://sgp1.digitaloceanspaces.com/dev.storage/6bab1242-88c5-4705-81e9-3a9e13c47d41.png"
+    private(set) var avatar: String = ""
     private(set) var name: String?
     private(set) var userID: String = ""
     private(set) var userName: String = ""

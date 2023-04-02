@@ -214,7 +214,7 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
                 label6.text = ""
                 
                 HidenTxtView.text = ""
-                
+                SwiftLoader.hide()
                 self.showErrorAlert("Oops!", msg: "Unkown error occurs, please dismiss and fill your phone again.")
                 
                 
@@ -272,6 +272,7 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
                     SwiftLoader.hide()
                     self.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
                   } else {
+                    SwiftLoader.hide()
                     self.presentErrorAlert(message: error.localizedDescription)
                   }
                 }
@@ -292,6 +293,7 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
                     RedirectionHelper.redirectToDashboard()
                 case .sendCodeSuccess:
                     DispatchQueue.main.async {
+                        SwiftLoader.hide()
                         self.presentMessage(message: "New OTP Sent Sucessfully")
                     }
                 }

@@ -23,7 +23,8 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     var editeddPost: PostModel?
     var startIndex: Int!
     var currentIndex: Int!
-   
+    var imageIndex: Int?
+    var imageTimerWorkItem: DispatchWorkItem?
     
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
@@ -51,11 +52,11 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickCopyLink), name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
         
        
     }
@@ -132,7 +133,7 @@ extension SelectedPostVC {
 
 extension SelectedPostVC {
     
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if !posts.isEmpty, scrollView == collectionNode.view {
@@ -164,9 +165,10 @@ extension SelectedPostVC {
                 
                 foundVisibleVideo = true
                 playTimeBar.isHidden = false
-                
+                imageIndex = nil
             } else {
                 playTimeBar.isHidden = true
+                imageIndex = newPlayingIndex
             }
             
             
@@ -182,13 +184,39 @@ extension SelectedPostVC {
                     currentIndex = newPlayingIndex
                     playVideoIfNeed(playIndex: currentIndex!)
                     isVideoPlaying = true
+                    
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
+                        
+                        resetView(cell: node)
+                        
+                    }
+                    
                 }
                 
             } else {
                 
                 if let currentIndex = currentIndex {
-                            pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                }
+
+                imageTimerWorkItem?.cancel()
+                imageTimerWorkItem = DispatchWorkItem { [weak self] in
+                    guard let self = self else { return }
+                    if self.imageIndex != nil {
+                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
+                            if self.imageIndex == self.newPlayingIndex {
+                                resetView(cell: node)
+                                node.endImage(id: node.post.id)
+                            }
                         }
+                    }
+                }
+
+                if let imageTimerWorkItem = imageTimerWorkItem {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
+                }
+
+            
                         // Reset the current playing index.
                 currentIndex = nil
                 
@@ -220,7 +248,7 @@ extension SelectedPostVC {
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         
-        if scrollView == collectionNode.view {
+        if scrollView == collectionNode.view, posts.count > 2 {
             
             if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
                navigationController?.setNavigationBarHidden(true, animated: true)
@@ -273,7 +301,7 @@ extension SelectedPostVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 100);
+        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
         
         return ASSizeRangeMake(min, max);
     }
@@ -505,11 +533,11 @@ extension SelectedPostVC {
             NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
             
             
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_post_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
             
             
             if onPresent {
@@ -774,6 +802,7 @@ extension SelectedPostVC {
             global_presetingRate = Double(0.35)
             global_cornerRadius = 45
             newsFeedSettingVC.isOwner = false
+            newsFeedSettingVC.isSelected = true
             editeddPost = item
             self.present(newsFeedSettingVC, animated: true, completion: nil)
             
