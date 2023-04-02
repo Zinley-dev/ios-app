@@ -27,6 +27,7 @@ class CommentSettings: UIViewController{
     var isPostOwner = false
     var isCommentOwner = false
     var isNotification = false
+    var isTitle = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +69,10 @@ class CommentSettings: UIViewController{
             
         }
         
+        if isTitle {
+            pinStack.isHidden = true
+            unpinStack.isHidden = true
+        }
         
 
     }

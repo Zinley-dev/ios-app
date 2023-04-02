@@ -303,6 +303,8 @@ class ProfileViewController: UIViewController {
                     
                 }
                 
+                ChallengeView.badgeWidth.constant = cell.badgeWidth.constant
+                
                 if let card = _AppCoreData.userDataSource.value?.challengeCard
                 {
                     if card.quote != "" {

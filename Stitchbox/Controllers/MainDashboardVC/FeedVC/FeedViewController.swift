@@ -879,6 +879,10 @@ extension FeedViewController {
         //
         self.collectionNode.insertItems(at: indexPaths)
         
+        
+        if preloadingView.isAnimating {
+            preloadingView.stopAnimating()
+        }
       
         
     }

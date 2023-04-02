@@ -25,7 +25,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
     
     var isVideoPlaying = false
     var newPlayingIndex: Int?
-    
+    var onPresent = false
     //====================================
     
   
@@ -244,9 +244,16 @@ extension PostListWithHashtagVC {
     
    
     @objc func onClickBack(_ sender: AnyObject) {
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
+        
+        if onPresent {
+            self.dismiss(animated: true)
+        } else {
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }
         }
+        
+        
     }
 
     

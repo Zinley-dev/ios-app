@@ -309,6 +309,7 @@ class UserProfileVC: UIViewController {
                     
                 }
                 
+                ChallengeView.badgeWidth.constant = cell.badgeWidth.constant
                 
                 if let card = userData?.challengeCard
                 {

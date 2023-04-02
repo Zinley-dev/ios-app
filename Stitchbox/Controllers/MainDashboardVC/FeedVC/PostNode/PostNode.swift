@@ -27,6 +27,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var headerNode: ASDisplayNode
     var buttonsNode: ASDisplayNode
     var hashtagsNode: ASDisplayNode
+    var separatorNode = ASDisplayNode()
     var sidebuttonListView: ASDisplayNode!
     var shouldCountView = true
     var headerView: PostHeader!
@@ -51,11 +52,13 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         self.hashtagsNode = ASDisplayNode()
         self.videoNode = ASVideoNode()
         self.sidebuttonListView = ASDisplayNode()
+        self.separatorNode = ASDisplayNode()
         self.gradientNode = GradienView()
         super.init()
         
         self.gradientNode.isLayerBacked = true
         self.gradientNode.isOpaque = false
+        self.separatorNode.backgroundColor = .darkGray
         
         DispatchQueue.main.async {
             
@@ -1074,12 +1077,16 @@ extension PostNode {
         setupHeaderNode(constrainedSize: constrainedSize)
         setupContentNode()
 
+        // Set the preferred size for the separator node
+        separatorNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 1)
+
         let children: [ASLayoutElement] = [
             createHeaderInsetSpec(),
             createContentInsetSpecIfNeeded(),
             createHashtagsInsetSpecIfNeeded(constrainedSize: constrainedSize),
             createMediaOverlaySpec(constrainedSize: constrainedSize),
-            createButtonsInsetSpec(constrainedSize: constrainedSize)
+            createButtonsInsetSpec(constrainedSize: constrainedSize),
+            separatorNode
         ].compactMap { $0 }
 
         let verticalStack = ASStackLayoutSpec.vertical()
@@ -1087,6 +1094,7 @@ extension PostNode {
 
         return verticalStack
     }
+
 
     private func setupHeaderNode(constrainedSize: ASSizeRange) {
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)

@@ -60,7 +60,7 @@ class ChallengerCardProfileHeaderCell: UICollectionViewCell {
         game3.layer.cornerRadius = cornerRadius
         game4.layer.cornerRadius = cornerRadius
         
-        badgeWidth.constant = self.frame.width * (131/729)
+        badgeWidth.constant = self.frame.width * (131/388)
        
     }
     
