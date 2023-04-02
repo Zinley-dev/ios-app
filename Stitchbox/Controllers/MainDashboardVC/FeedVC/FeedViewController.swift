@@ -632,7 +632,7 @@ extension FeedViewController: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 100);
+        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
         
         return ASSizeRangeMake(min, max);
     }

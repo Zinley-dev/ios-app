@@ -391,6 +391,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             completionHandler()
             
             
+        } else {
+            
+            let userInfo = response.notification.request.content.userInfo
+            print(userInfo)
+            
         }
         
         
@@ -490,6 +495,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
     }
     
+    func processUser() {
+        
+        
+    }
+    
+    func processComment() {
+        
+        
+        
+    }
 
     
 }

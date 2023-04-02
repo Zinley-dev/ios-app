@@ -407,12 +407,12 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
 
 extension PostNode {
     
-    
+    /*
     func didTap(_ videoNode: ASVideoNode) {
         
         soundProcess()
       
-    }
+    } */
     
     @objc func soundProcess() {
         
@@ -1163,7 +1163,7 @@ extension PostNode {
         let newWidth = maxWidth
         let navigationBarHeight = navigationControllerHeight
         let tabBarHeight = tabBarControllerHeight
-        let availableHeight = constrainedSize.max.height - 100 - navigationBarHeight - tabBarHeight
+        let availableHeight = constrainedSize.max.height - 200 - navigationBarHeight - tabBarHeight
         let newHeight = min(maxWidth * clampedAspectRatio, availableHeight)
 
         return CGSize(width: newWidth, height: newHeight)

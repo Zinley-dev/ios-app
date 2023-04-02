@@ -196,6 +196,8 @@ class UserNotificationModel {
     
     init(UserNotificationModel: Dictionary<String, Any>) {
         
+        print(UserNotificationModel)
+        
         if let isRead = UserNotificationModel["isRead"] as? Bool {
             self._isRead = isRead
         }

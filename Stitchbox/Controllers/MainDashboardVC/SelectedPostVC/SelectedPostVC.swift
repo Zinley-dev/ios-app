@@ -52,11 +52,11 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickCopyLink), name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
         
        
     }
@@ -301,7 +301,7 @@ extension SelectedPostVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 100);
+        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
         
         return ASSizeRangeMake(min, max);
     }
@@ -533,11 +533,11 @@ extension SelectedPostVC {
             NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
             
             
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_post_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
             
             
             if onPresent {
@@ -802,6 +802,7 @@ extension SelectedPostVC {
             global_presetingRate = Double(0.35)
             global_cornerRadius = 45
             newsFeedSettingVC.isOwner = false
+            newsFeedSettingVC.isSelected = true
             editeddPost = item
             self.present(newsFeedSettingVC, animated: true, completion: nil)
             
