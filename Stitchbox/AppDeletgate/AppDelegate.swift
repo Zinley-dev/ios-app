@@ -71,6 +71,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
          }
     }
   
+  func convertStringToDictionary(text: String) -> [String:AnyObject]? {
+    if let data = text.data(using: .utf8) {
+      do {
+        let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
+        return json
+      } catch {
+        print("Something went wrong")
+      }
+    }
+    return nil
+  }
+  
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
       // OneSignal initialization
       OneSignal.initWithLaunchOptions(launchOptions)
@@ -81,6 +93,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
       OneSignal.promptForPushNotifications(userResponse: { accepted in
         print("User accepted notifications: \(accepted)")
       })
+      
+      
+      OneSignal.setNotificationOpenedHandler { result in
+        let notification: OSNotification = result.notification
+        print("Message: ", notification.body ?? "empty body")
+        print("badge number: ", notification.badge)
+        print("notification sound: ", notification.sound ?? "No sound")
+        
+        if let additionalData = notification.additionalData {
+          print("additionalData: ", additionalData)
+          
+          let text = additionalData["data"] as! String
+          
+          let data = self.convertStringToDictionary(text: text)
+          
+          print(data)
+
+          print(data?["metadata"])
+          
+        }
+      }
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
