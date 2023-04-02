@@ -82,6 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             print("User accepted notifications: \(accepted)")
         })
         
+        
         // Set a notification opened handler
         OneSignal.setNotificationOpenedHandler { result in
             let notification: OSNotification = result.notification
@@ -140,6 +141,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
     }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        // Update badge number
+        if let aps = userInfo["aps"] as? [String: AnyObject], let badgeCount = aps["badge"] as? Int {
+            UIApplication.shared.applicationIconBadgeNumber = badgeCount
+            
+            // Get tab bar controller and update badge number
+            if let tabBarController = self.window?.rootViewController as? UITabBarController {
+                if let tabItems = tabBarController.tabBar.items {
+                    let tabItem = tabItems[0]
+                    tabItem.badgeValue = badgeCount > 0 ? "\(badgeCount)" : nil
+                }
+            }
+        }
+        
+        // Call completion handler
+        completionHandler(.newData)
+    }
+
+
 
     // Helper function to convert a string to a dictionary
     func convertStringToDictionary(text: String) -> [String:Any]? {
