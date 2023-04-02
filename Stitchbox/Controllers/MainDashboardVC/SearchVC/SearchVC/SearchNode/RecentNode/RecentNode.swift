@@ -63,7 +63,16 @@ class RecentNode: ASCellNode {
                 self.belowNameNode.attributedText = NSAttributedString(string: item.game_shortName ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
 
                 
-                self.imageNode.url = URL(string: item.coverUrl ?? "https://st3.depositphotos.com/1767687/16607/v/450/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg")
+                if item.coverUrl != "" {
+                    
+                    self.imageNode.url = URL(string: item.coverUrl)
+                } else {
+                    
+                    self.imageNode.image = UIImage.init(named: "search")
+                    
+                }
+                
+                
                 self.imageNode.contentMode = .scaleAspectFit
                 self.imageNode.backgroundColor = .lightGray
                 
@@ -93,8 +102,15 @@ class RecentNode: ASCellNode {
                 
                 self.belowNameNode.attributedText = NSAttributedString(string: item.user_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
 
-                
-                self.imageNode.url = URL(string: item.avatarUrl ?? "https://st3.depositphotos.com/1767687/16607/v/450/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg")
+                if item.avatarUrl != "" {
+                    
+                    self.imageNode.url = URL(string: item.avatarUrl)
+                } else {
+                    
+                    self.imageNode.image = UIImage.init(named: "defaultuser")
+                    
+                }
+    
                 
                 self.loadGameIfNeed()
             }

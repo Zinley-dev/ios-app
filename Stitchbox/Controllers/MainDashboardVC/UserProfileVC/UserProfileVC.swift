@@ -554,8 +554,6 @@ class UserProfileVC: UIViewController {
 // selector for header
 extension UserProfileVC {
     
-    
-    
     @objc func followAction(_ sender: UIButton) {
         
         if isFollow {
@@ -590,14 +588,18 @@ extension UserProfileVC {
                     }
                   
                   
-                case .failure(_):
+                case .failure(let error):
+                    
+                    print(error)
                     
                     DispatchQueue.main.async {
                         self.allowProcess = true
                         self.isFollow = false
                         self.followerCount += 1
                         showNote(text: "Something happened!")
+                        self.applyHeaderChange()
                     }
+                    
                     
                 }
                 
@@ -631,12 +633,16 @@ extension UserProfileVC {
                             self.reloadPost()
                         }
                         
-                    case .failure(_):
+                    case .failure(let error):
+                        
+                        print(error)
+                        
                         DispatchQueue.main.async {
                             self.allowProcess = true
                             self.isFollow = true
                             self.followerCount -= 1
                             showNote(text: "Something happened!")
+                            self.applyHeaderChange()
                         }
                         
                         

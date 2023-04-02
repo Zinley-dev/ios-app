@@ -402,13 +402,7 @@ extension NotificationVC {
         
     }
     
-    
-    
-    func openUserList() {
-        
-        
-    }
-    
+
     func setRead(notiId: String) {
         
         print(notiId)

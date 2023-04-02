@@ -24,7 +24,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     var type = ""
     var ownerID = ""
     var username: String?
-    
+    var onPresent = false
     var followerCount = 0
     var followingCount = 0
     var userId: String?
@@ -589,9 +589,14 @@ extension MainFollowVC {
     }
     
     @objc func onClickBack(_ sender: AnyObject) {
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
+        if onPresent {
+            self.dismiss(animated: true)
+        } else {
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }
         }
+       
     }
     
     

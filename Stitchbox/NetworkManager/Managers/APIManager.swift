@@ -697,6 +697,16 @@ extension APIManager {
       completion(result)
     }
   }
+  func getBadge(completion: @escaping APICompletion) {
+    notiManager.request(.badge) { result in
+      completion(result)
+    }
+  }
+  func resetBadge(completion: @escaping APICompletion) {
+    notiManager.request(.resetBadge) { result in
+      completion(result)
+    }
+  }
 }
 
 extension APIManager {

@@ -1159,6 +1159,8 @@ extension SearchFeedAPI: EndPointType {
 public enum NotiApi {
     case getNotis(page: Int = 1, limit: Int = 20)
     case read(notiId: String)
+  case badge
+  case resetBadge
 }
 extension NotiApi: EndPointType {
     var path: String {
@@ -1167,16 +1169,15 @@ extension NotiApi: EndPointType {
                 return "?page=\(page)&limit=\(limit)"
             case .read(let notiId):
               return "/\(notiId)"
+          case .badge:
+            return "/badge"
+          case .resetBadge:
+            return "/reset-badge"
         }
     }
     
     var module: String {
-        switch self {
-            case .getNotis:
-                return "/notification"
-            case .read:
-              return "/notification"
-        }
+      return "/notification"
     }
     
     var httpMethod: HTTPMethod {
@@ -1185,6 +1186,10 @@ extension NotiApi: EndPointType {
                 return .get
           case .read:
             return .get
+          case .badge:
+            return .get
+          case .resetBadge:
+            return .post
         }
     }
     
@@ -1193,6 +1198,10 @@ extension NotiApi: EndPointType {
             case .getNotis:
                 return .request
           case .read:
+            return .request
+          case .badge:
+            return .request
+          case .resetBadge:
             return .request
         }
     }

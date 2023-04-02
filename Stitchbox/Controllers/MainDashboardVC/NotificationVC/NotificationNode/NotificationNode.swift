@@ -49,6 +49,7 @@ class NotificationNode: ASCellNode {
         let time = NSAttributedString(string: "\(timeAgoSinceDate(notification.updatedAt, numericDates: true))", attributes: timeAttributes)
         timeNode.attributedText = time
         
+
         if notification.avatarUrl != "" {
             
             imageNode.url = URL(string: notification.avatarUrl)

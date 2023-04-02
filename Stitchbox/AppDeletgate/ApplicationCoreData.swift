@@ -7,6 +7,7 @@
 
 import RxRelay
 import RxSwift
+import OneSignal
 
 class ApplicationCoreData: NSObject {
   public static let sharedInstance    = ApplicationCoreData()
@@ -57,6 +58,19 @@ class ApplicationCoreData: NSObject {
     self.timerRefeshToken?.invalidate()
     self.timerRefeshToken = nil
     self.syncDown()
+    OneSignal.removeExternalUserId({ results in
+      // The results will contain push and email success statuses
+      print("External user id update complete with results: ", results!.description)
+      // Push can be expected in almost every situation with a success status, but
+      // as a pre-caution its good to verify it exists
+      if let pushResults = results!["push"] {
+        print("Remove external user id push status: ", pushResults)
+      }
+      // Verify the email is set or check that the results have an email success status
+      if let emailResults = results!["email"] {
+        print("Remove external user id email status: ", emailResults)
+      }
+    })
   }
   
   // MARK: - Sync to local
