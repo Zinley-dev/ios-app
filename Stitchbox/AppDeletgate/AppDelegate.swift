@@ -70,7 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
               print("Error")
          }
     }
-  
 
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         // Initialize OneSignal
