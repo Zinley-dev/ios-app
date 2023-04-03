@@ -102,7 +102,7 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                         if card.quote != "" {
                             cell.infoLbl.text = card.quote
                         } else {
-                            cell.infoLbl.text = "Stitchbox's challenger"
+                            cell.infoLbl.text = "Stitchboxer"
                         }
                         
                     }
@@ -617,7 +617,7 @@ extension EditChallengeCardVC {
     
     func createChallengeCardSection() -> NSCollectionLayoutSection {
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(226)), subitems: [headerItem])
+        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(226)), subitems: [headerItem])
         headerGroup.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 20)
         return NSCollectionLayoutSection(group: headerGroup)
     }
@@ -741,7 +741,7 @@ extension EditChallengeCardVC {
     func reloadBadgeCell(_ indexPath: IndexPath) {
         var updatedSnapshot = datasource.snapshot()
         updatedSnapshot.reloadSections([.challengeCard])
-        self.datasource.apply(updatedSnapshot, animatingDifferences: true)
+        self.datasource.apply(updatedSnapshot, animatingDifferences: false)
     }
 
     

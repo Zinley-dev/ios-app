@@ -64,6 +64,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         
+        if let currentFeedVC = currentVC as? FeedViewController {
+            currentFeedVC.loadFeed()
+        }
+        
         
     }
 

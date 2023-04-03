@@ -23,6 +23,7 @@ class BlockNode: ASCellNode {
     var nameNode: ASTextNode!
     var avatarNode: ASNetworkImageNode!
     var actionBtnNode: ASButtonNode!
+    var allowProcess = true
    
     
     lazy var delayItem = workItem()
@@ -89,23 +90,30 @@ class BlockNode: ASCellNode {
     
     @objc func actionBtnPressed() {
         
-        if isBlock {
-            
-            unblock()
-            
-        } else {
-            
-            if isFollowingUser {
+        
+        if allowProcess {
+            self.allowProcess = false
+            if isBlock {
                 
-                unfollowUser()
+                unblock()
                 
             } else {
                 
-                followUser()
+                if isFollowingUser {
+                    
+                    unfollowUser()
+                    
+                } else {
+                    
+                    followUser()
+                }
+                
+                
             }
             
-            
         }
+        
+       
        
     }
     
@@ -127,10 +135,12 @@ class BlockNode: ASCellNode {
             case .success(_):
               
                 self.isBlock = false
+                self.allowProcess = true
                 
             case .failure(_):
                 
                 DispatchQueue.main.async {
+                    self.allowProcess = true
                     showNote(text: "Something happened!")
                 }
                 
@@ -172,11 +182,13 @@ class BlockNode: ASCellNode {
                 
                 self.isFollowingUser = true
                 needRecount = true
+                self.allowProcess = true
                 
                 
             case .failure(_):
                 
                 DispatchQueue.main.async {
+                    self.allowProcess = true
                     showNote(text: "Something happened!")
                 }
                 
@@ -218,9 +230,11 @@ class BlockNode: ASCellNode {
             case .success(_):
                 self.isFollowingUser = false
                 needRecount = true
+                self.allowProcess = true
                 
             case .failure(_):
                 DispatchQueue.main.async {
+                    self.allowProcess = true
                     showNote(text: "Something happened!")
                 }
                 
@@ -273,7 +287,13 @@ class BlockNode: ASCellNode {
     func loadInfo(uid: String ) {
         userNameNode.attributedText = NSAttributedString(string: user.blockUser.userName)
         nameNode.attributedText = NSAttributedString(string: user.blockUser.name)
-        avatarNode.url = URL(string: user.blockUser.avatarURL)
+        
+        if user.blockUser.avatarURL != "" {
+            avatarNode.url = URL(string: user.blockUser.avatarURL)
+        } else {
+            avatarNode.image = UIImage.init(named: "defaultuser")
+        }
+        
     }
     
 }

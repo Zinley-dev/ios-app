@@ -32,6 +32,7 @@ class EditBioVC: UIViewController {
         
         if let bio = bioTextView.text {
     
+            presentSwiftLoader()
             APIManager().updateme(params: ["about": bio]) { result in
                 switch result {
                 case .success(let apiResponse):
@@ -41,12 +42,16 @@ class EditBioVC: UIViewController {
                     }
                     
                     DispatchQueue.main.async {
-                        reloadGlobalUserInformation()
+                        SwiftLoader.hide()
+                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
                         showNote(text: "Updated successfully")
                     }
                   
                 case .failure(let error):
-                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                    DispatchQueue.main.async {
+                        self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                    }
+                    
                 }
             }
             
@@ -154,7 +159,7 @@ extension EditBioVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars <= 200    // 200 Limit Value
+        return numberOfChars <= 1000    // 500 Limit Value
     }
     
 }

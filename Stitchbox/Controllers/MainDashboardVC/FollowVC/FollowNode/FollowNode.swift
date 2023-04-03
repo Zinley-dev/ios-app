@@ -21,35 +21,36 @@ class FollowNode: ASCellNode {
     lazy var delayItem = workItem()
     var attemptCount = 0
     var userNameNode: ASTextNode!
-    var NameNode: ASTextNode!
-    var AvatarNode: ASNetworkImageNode!
+    var nameNode: ASTextNode!
+    var avatarNode: ASNetworkImageNode!
     var followBtnNode: ASButtonNode!
     var selectedColor = UIColor(red: 53, green: 46, blue: 113, alpha: 0.4)
     var isFollowingUser = false
     var denyBtn = false
+    var allowProcess = true
     
     init(with user: FollowModel) {
         
         self.user = user
         self.userNameNode = ASTextNode()
-        self.AvatarNode = ASNetworkImageNode()
+        self.avatarNode = ASNetworkImageNode()
         self.followBtnNode = ASButtonNode()
-        self.NameNode = ASTextNode()
+        self.nameNode = ASTextNode()
         
         super.init()
         
         self.backgroundColor = UIColor.clear
         
         self.selectionStyle = .none
-        AvatarNode.cornerRadius = OrganizerImageSize/2
-        AvatarNode.clipsToBounds = true
+        avatarNode.cornerRadius = OrganizerImageSize/2
+        avatarNode.clipsToBounds = true
         userNameNode.isLayerBacked = true
-        AvatarNode.shouldRenderProgressImages = true
-        AvatarNode.isLayerBacked = true
+        avatarNode.shouldRenderProgressImages = true
+        avatarNode.isLayerBacked = true
 
    
         userNameNode.backgroundColor = UIColor.clear
-        NameNode.backgroundColor = UIColor.clear
+        nameNode.backgroundColor = UIColor.clear
         followBtnNode.backgroundColor = user.action == "following" ? UIColor.primary : UIColor.white
         followBtnNode.tintColor  = UIColor.primary
 
@@ -156,11 +157,18 @@ class FollowNode: ASCellNode {
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
         self.userNameNode.attributedText = NSAttributedString(string: user.username ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+        self.nameNode.attributedText = NSAttributedString(string: user.name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+        
+        
+        if let userAvatar = user.avatar {
+            
+            avatarNode.url = URL(string: userAvatar)
+            
+        } else {
+            
+            avatarNode.image = UIImage.init(named: "defaultuser")
+        }
 
-        
-        AvatarNode.url = URL(string: user.avatar ?? "https://st3.depositphotos.com/1767687/16607/v/450/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg")
-    
-        
         
     }
     
@@ -228,16 +236,13 @@ class FollowNode: ASCellNode {
             
         }
         
-       
-        
-        
     }
     
     
     @objc func followBtnPressed() {
         
-        if !denyBtn {
-            
+        if !denyBtn, allowProcess {
+            self.allowProcess = false
             if isFollowingUser {
                 
                 unfollowUser()
@@ -276,11 +281,13 @@ class FollowNode: ASCellNode {
                     
                     self.isFollowingUser = true
                     needRecount = true
+                    self.allowProcess = true
                     
                     
                 case .failure(_):
                     
                     DispatchQueue.main.async {
+                        self.allowProcess = true
                         showNote(text: "Something happened!")
                     }
                     
@@ -362,9 +369,10 @@ class FollowNode: ASCellNode {
                 case .success(_):
                     self.isFollowingUser = false
                     needRecount = true
-                    
+                    self.allowProcess = true
                 case .failure(_):
                     DispatchQueue.main.async {
+                        self.allowProcess = true
                         showNote(text: "Something happened!")
                     }
                     
@@ -408,14 +416,14 @@ class FollowNode: ASCellNode {
         let headerSubStack = ASStackLayoutSpec.vertical()
         
         
-        AvatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
+        avatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
         followBtnNode.style.preferredSize = CGSize(width: 120.0, height: 25.0)
         
         headerSubStack.style.flexShrink = 16.0
         headerSubStack.style.flexGrow = 16.0
         headerSubStack.spacing = 7.0
         
-        headerSubStack.children = [userNameNode, NameNode]
+        headerSubStack.children = [userNameNode, nameNode]
       
   
         let headerStack = ASStackLayoutSpec.horizontal()
@@ -424,7 +432,7 @@ class FollowNode: ASCellNode {
         headerStack.spacing = 10
         headerStack.justifyContent = ASStackLayoutJustifyContent.start
         headerStack.alignItems = .center
-        headerStack.children = [AvatarNode, headerSubStack, followBtnNode]
+        headerStack.children = [avatarNode, headerSubStack, followBtnNode]
         
         return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16), child: headerStack)
             

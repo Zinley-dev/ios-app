@@ -70,50 +70,89 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
               print("Error")
          }
     }
-  
-  func convertStringToDictionary(text: String) -> [String:AnyObject]? {
-    if let data = text.data(using: .utf8) {
-      do {
-        let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
-        return json
-      } catch {
-        print("Something went wrong")
-      }
-    }
-    return nil
-  }
-  
-    func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
-      // OneSignal initialization
-      OneSignal.initWithLaunchOptions(launchOptions)
-      OneSignal.setAppId("209c3011-21c8-43ba-aff2-b2865e03aee5")
-      
-      // promptForPushNotifications will show the native iOS notification permission prompt.
-      // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 8)
-      OneSignal.promptForPushNotifications(userResponse: { accepted in
-        print("User accepted notifications: \(accepted)")
-      })
-      
-      
-      OneSignal.setNotificationOpenedHandler { result in
-        let notification: OSNotification = result.notification
-        print("Message: ", notification.body ?? "empty body")
-        print("badge number: ", notification.badge)
-        print("notification sound: ", notification.sound ?? "No sound")
-        
-        if let additionalData = notification.additionalData {
-          print("additionalData: ", additionalData)
-          
-          let text = additionalData["data"] as! String
-          let data = self.convertStringToDictionary(text: text)
-          
-          print(data)
 
-          print(data?["metadata"])
-          
+    func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
+        // Initialize OneSignal
+        OneSignal.initWithLaunchOptions(launchOptions)
+        OneSignal.setAppId("YOUR_APP_ID")
+        
+        // Prompt the user to allow push notifications
+        OneSignal.promptForPushNotifications(userResponse: { accepted in
+            print("User accepted notifications: \(accepted)")
+        })
+        
+        // Set a notification opened handler
+        OneSignal.setNotificationOpenedHandler { result in
+            let notification: OSNotification = result.notification
+            
+            // Extract the additional data from the notification
+            if let additionalData = notification.additionalData,
+               let text = additionalData["data"] as? String,
+               let data = self.convertStringToDictionary(text: text),
+               let metadata = data["metadata"] as? String,
+               let metaDataDict = self.convertStringToDictionary(text: metadata) {
+                
+                let metaDataOneSignal = OneSignalNotiModel(OneSignalNotiModel: metaDataDict)
+                
+                if let template = metaDataOneSignal.template{
+                    
+                    switch template {
+                        
+                        case "NEW_COMMENT":
+                            if let post = metaDataOneSignal.post {
+                                self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
+                            }
+                           
+                        case "REPLY_COMMENT":
+                            if let post = metaDataOneSignal.post {
+                                self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
+                            }
+                         
+                        case "NEW_FISTBUMP_1":
+                            if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                                self.openUser(userId: userId, username: username)
+                            }
+                        case "NEW_FISTBUMP_2":
+                            self.openFistBumpList()
+                        case "NEW_FOLLOW_1":
+                           
+                            if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                                self.openUser(userId: userId, username: username)
+                            }
+                        
+                        case "NEW_FOLLOW_2":
+                            self.openFollow()
+                        case "NEW_TAG":
+                            if let post = metaDataOneSignal.post {
+                                self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
+                            }
+                        case "NEW_POST":
+                            self.openPost(post: metaDataOneSignal.post)
+                        default:
+                            print("None")
+                        
+                    }
+                    
+                    
+                }
+                
+            }
         }
-      }
     }
+
+    // Helper function to convert a string to a dictionary
+    func convertStringToDictionary(text: String) -> [String:Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any]
+                return json
+            } catch {
+                print("Error converting string to dictionary: \(error.localizedDescription)")
+            }
+        }
+        return nil
+    }
+
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
          if keyPath == "outputVolume"{
@@ -183,34 +222,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.channelSettingsTheme.cellArrowIconTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.cellSwitchColor = UIColor.secondary
         SBUTheme.channelSettingsTheme.cellTypeIconTintColor = UIColor.white
-        SBUTheme.channelSettingsTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.channelSettingsTheme.backgroundColor = .background
         
         
         SBUTheme.userListTheme.navigationBarTintColor = UIColor.background
         
         
-        SBUTheme.messageSearchTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.messageSearchTheme.backgroundColor = .background
         SBUTheme.userListTheme.statusBarStyle = .lightContent
         
-        SBUTheme.overlayTheme.componentTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
-        SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.overlayTheme.componentTheme.backgroundColor = .background
+        SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = .background
         
-        SBUTheme.userProfileTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.userProfileTheme.backgroundColor = .background
         SBUTheme.userProfileTheme.usernameTextColor = UIColor.white
-        SBUTheme.messageSearchResultCellTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.messageSearchResultCellTheme.backgroundColor = .background
         
-        SBUTheme.userCellTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.userCellTheme.backgroundColor = .background
         
         
         SBUTheme.channelTheme.navigationBarTintColor = UIColor.background
-        SBUTheme.channelTheme.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.channelTheme.backgroundColor = .background
         
         SBUTheme.channelTheme.leftBarButtonTintColor = UIColor.white
         SBUTheme.channelTheme.rightBarButtonTintColor = UIColor.white
         
-        SBUTheme.componentTheme.loadingBackgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        SBUTheme.componentTheme.loadingBackgroundColor = .background
         SBUTheme.componentTheme.addReactionTintColor = UIColor.secondary
         SBUTheme.componentTheme.loadingSpinnerColor = UIColor.secondary
+        
+        SBUTheme.componentTheme.emptyViewBackgroundColor = .background
+        SBUTheme.componentTheme.backgroundColor = .background
+        
+
        
     }
 
@@ -418,8 +462,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             completionHandler()
             
             
+        } else {
+            completionHandler()
         }
-        
+            
         
         
     }
@@ -506,7 +552,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 }
             
                 let list = data.compactMap { GameList(JSON: $0) }
-                global_suppport_game_list += list
+                let filteredList = list.filter { $0.name != "Other" }
+                global_suppport_game_list += filteredList
                 
             case .failure(let error):
                 print(error)
@@ -516,7 +563,151 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
     }
     
+    func openFistBumpList() {
+        
+        if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: MFBVC)
 
+                // Set the user ID, nickname, and onPresent properties of UPVC
+                MFBVC.onPresent = true
+
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                nav.modalPresentationStyle = .fullScreen
+                vc.present(nav, animated: true, completion: nil)
+
+       
+            }
+        }
+
+        
+    }
+    
+    func openPost(post: PostModel) {
+        
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: SPVC)
+
+                // Set the user ID, nickname, and onPresent properties of UPVC
+                SPVC.onPresent = true
+                SPVC.selectedPost = [post]
+                SPVC.startIndex = 0
+               
+                
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                nav.modalPresentationStyle = .fullScreen
+                vc.present(nav, animated: true, completion: nil)
+                
+            }
+            
+
+        }
+        
+        
+    }
+    
+    func openComment(commentId: String, rootComment: String, replyToComment: String, type: String, post: PostModel) {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            let slideVC = CommentNotificationVC()
+            
+            slideVC.commentId = commentId
+            slideVC.reply_to_cid = replyToComment
+            slideVC.root_id = rootComment
+            slideVC.type = type
+            slideVC.post = post
+           
+            global_presetingRate = Double(0.75)
+            global_cornerRadius = 35
+            
+            slideVC.modalPresentationStyle = .custom
+            slideVC.transitioningDelegate = vc.self
+            
+            vc.present(slideVC, animated: true, completion: nil)
+            
+            
+        }
+        
+        
+    }
+    
+    func openUser(userId: String, username: String) {
+        
+    
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: UPVC)
+
+                // Set the user ID, nickname, and onPresent properties of UPVC
+                UPVC.onPresent = true
+                UPVC.userId = userId
+                UPVC.nickname = username
+               
+                
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                nav.modalPresentationStyle = .fullScreen
+                vc.present(nav, animated: true, completion: nil)
+                
+       
+            }
+            
+
+        }
+        
+    }
+    
+    func openFollow() {
+        
+        if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: MFVC)
+
+                // Set the user ID, nickname, and onPresent properties of UPVC
+                MFVC.onPresent = true
+                MFVC.showFollowerFirst = true
+                MFVC.userId = _AppCoreData.userDataSource.value?.userID ?? ""
+                MFVC.followerCount = 0
+                MFVC.followingCount = 0
+               
+                
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                nav.modalPresentationStyle = .fullScreen
+                vc.present(nav, animated: true, completion: nil)
+                
+       
+            }
+            
+        }
+        
+        
+    }
     
 }
 

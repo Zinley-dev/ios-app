@@ -1361,6 +1361,10 @@ extension CommentNotificationVC {
                 } else {
                     commentSettings.isCommentOwner = false
                 }
+                
+                if selectedCmt.is_title {
+                    commentSettings.isTitle = true
+                }
                
                 editedComment = selectedCmt
                 editedIndexpath = indexPath

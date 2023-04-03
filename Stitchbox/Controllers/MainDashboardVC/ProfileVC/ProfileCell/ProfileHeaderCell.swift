@@ -61,6 +61,21 @@ class ProfileHeaderCell: UICollectionViewCell {
         fistBumpedListBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
     }
     
+    /*
+    override func prepareForReuse() {
+            super.prepareForReuse()
+            
+            // Reset any configurations or content before reuse
+            descriptionLbl.text = nil
+            usernameLbl.text = nil
+            numberOfFollowing.text = nil
+            numberOfFollowers.text = nil
+            numberOfFistBumps.text = nil
+            avatarImage.image = nil
+            coverImage.image = nil
+            discordLbl.text = nil
+            discordChecked.image = nil
+        }*/
 
     
 }

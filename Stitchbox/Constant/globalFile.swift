@@ -38,7 +38,7 @@ var globalSetting: SettingModel!
 var navigationControllerHeight:CGFloat = 0.0
 var tabBarControllerHeight:CGFloat = 0.0
 
- let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitch", "domain": ["stitchbox.gg"], "status": true])
+ let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitchbox", "domain": ["stitchbox.gg"], "status": true])
  let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
  let data3 = StreamingDomainModel(postKey: "3", streamingDomainModel: ["company": "Twitch", "domain": ["twitch.tv", "m.twitch.tv"], "status": true])
  let data4 = StreamingDomainModel(postKey: "4", streamingDomainModel: ["company": "Facebook gaming", "domain": ["facebook.com", "m.facebook.com"], "status": true])
@@ -54,8 +54,8 @@ var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
 var back_frame = CGRect(x: -10, y: 0, width: 35, height: 25)
 var discord_domain = ["discordapp.com", "discord.com", "discord.co", "discord.gg", "watchanimeattheoffice.com", "dis.gd", "discord.media", "discordapp.net", "discordstatus.com" ]
 
-let muteImage = UIImage.init(named: "3xmute")?.resize(targetSize: CGSize(width: 26, height: 26))
-let unmuteImage = UIImage.init(named: "3xunmute")?.resize(targetSize: CGSize(width: 26, height: 26))
+let muteImage = UIImage.init(named: "3xmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)
+let unmuteImage = UIImage.init(named: "3xunmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)
 let speedImage = UIImage.init(named: "Speed_4x")?.resize(targetSize: CGSize(width: 25, height: 25))
 
 typealias DownloadComplete = () -> ()
@@ -1052,5 +1052,25 @@ func muteVideoIfNeed() {
              
         
     }
+    
+}
+
+func resetView(cell: PostNode) {
+    
+    if cell.isViewed == true {
+        
+        let currentTime = NSDate().timeIntervalSince1970
+        
+        let change = currentTime - cell.last_view_timestamp
+        
+        if change > 30.0 {
+            
+            cell.isViewed = false
+            cell.time = 0
+        
+        }
+        
+    }
+    
     
 }

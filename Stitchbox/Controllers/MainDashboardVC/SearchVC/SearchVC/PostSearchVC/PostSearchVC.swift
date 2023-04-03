@@ -20,9 +20,10 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     var prev_keyword = ""
     var post_list = [PostModel]()
     
-    var willIndex: Int?
+  
     var currentIndex: Int?
-    var endIndex: Int?
+    var imageIndex: Int?
+    
     
     var isfirstLoad = true
     var didScroll = false
@@ -34,6 +35,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     var editeddPost: PostModel?
     var refresh_request = false
     var startIndex: Int!
+    var imageTimerWorkItem: DispatchWorkItem?
     
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -98,8 +100,6 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     @objc func clearAllData() {
         
         refresh_request = true
-        endIndex = 0
-        willIndex = nil
         currentIndex = 0
         isfirstLoad = true
         didScroll = false
@@ -239,9 +239,10 @@ extension PostSearchVC {
                 
                 foundVisibleVideo = true
                 playTimeBar.isHidden = false
-                
+                imageIndex = nil
             } else {
                 playTimeBar.isHidden = true
+                imageIndex = newPlayingIndex
             }
             
             
@@ -257,13 +258,39 @@ extension PostSearchVC {
                     currentIndex = newPlayingIndex
                     playVideoIfNeed(playIndex: currentIndex!)
                     isVideoPlaying = true
+                    
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
+                        
+                        resetView(cell: node)
+                        
+                    }
+                    
                 }
                 
             } else {
                 
                 if let currentIndex = currentIndex {
-                            pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                }
+
+                imageTimerWorkItem?.cancel()
+                imageTimerWorkItem = DispatchWorkItem { [weak self] in
+                    guard let self = self else { return }
+                    if self.imageIndex != nil {
+                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
+                            if self.imageIndex == self.newPlayingIndex {
+                                resetView(cell: node)
+                                node.endImage(id: node.post.id)
+                            }
                         }
+                    }
+                }
+
+                if let imageTimerWorkItem = imageTimerWorkItem {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
+                }
+
+            
                         // Reset the current playing index.
                 currentIndex = nil
                 
@@ -349,7 +376,7 @@ extension PostSearchVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 100);
+        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
         
         return ASSizeRangeMake(min, max);
     }
@@ -558,40 +585,77 @@ extension PostSearchVC {
   
     }
     
-    
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newPosts.isEmpty else { return }
         
-        // Check if a refresh request has been made
-        if refresh_request {
-            refresh_request = false
-            
-            // Delete existing rows if there are any
-            let numExistingItems = posts.count
-            if numExistingItems > 0 {
-                let deleteIndexPaths = (0..<numExistingItems).map { IndexPath(row: $0, section: 0) }
-                posts.removeAll()
-                collectionNode.deleteItems(at: deleteIndexPaths)
-            }
+        // checking empty
+        guard newPosts.count > 0 else {
+            return
         }
         
-        // Calculate the range of new rows
-        let startIndex = posts.count
-        let endIndex = startIndex + newPosts.count
+        if refresh_request == true {
+            
+            refresh_request = false
+            
+
+            if self.posts.isEmpty != true {
+                
+               
+                var delete_indexPaths: [IndexPath] = []
+                
+                for row in 0...self.posts.count - 1 {
+                    let path = IndexPath(row: row, section: 0) // single indexpath
+                    delete_indexPaths.append(path) // app
+                }
+            
+                self.posts.removeAll()
+                self.collectionNode.deleteItems(at: delete_indexPaths)
+                   
+            }
+            
+        }
         
-        // Create an array of PostModel objects
-        let newItems = newPosts.compactMap { PostModel(JSON: $0) }
+        // basic contruction
+        let section = 0
+        var items = [PostModel]()
+        var indexPaths: [IndexPath] = []
+        //
         
-        // Append the new items to the existing array
-        posts.append(contentsOf: newItems)
+        // current array = posts
         
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+        let total = self.posts.count + newPosts.count
         
-        // Insert the new rows
-        collectionNode.insertItems(at: insertIndexPaths)
+        
+        // 0 - 2 2-4 4-6
+        
+        for row in self.posts.count...total-1 {
+            let path = IndexPath(row: row, section: section) // single indexpath
+            indexPaths.append(path) // app
+        }
+        
+        //
+        
+        for i in newPosts {
+            
+            let item = PostModel(JSON: i)
+            items.append(item!)
+          
+        }
+        
+        //
+        
+    
+        // array
+        
+        
+        
+        self.posts.append(contentsOf: items) // append new items to current items
+        //
+        self.collectionNode.insertItems(at: indexPaths)
+        
+      
+        
     }
+
 
 }
 

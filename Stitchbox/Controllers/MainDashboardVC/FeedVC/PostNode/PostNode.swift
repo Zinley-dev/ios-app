@@ -27,6 +27,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var headerNode: ASDisplayNode
     var buttonsNode: ASDisplayNode
     var hashtagsNode: ASDisplayNode
+    var separatorNode = ASDisplayNode()
     var sidebuttonListView: ASDisplayNode!
     var shouldCountView = true
     var headerView: PostHeader!
@@ -40,6 +41,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var isSelectedPost = false
     var settingBtn : ((ASCellNode) -> Void)?
     var isViewed = false
+    var currentTimeStamp: TimeInterval!
     
     init(with post: PostModel) {
         self.post = post
@@ -50,11 +52,13 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         self.hashtagsNode = ASDisplayNode()
         self.videoNode = ASVideoNode()
         self.sidebuttonListView = ASDisplayNode()
+        self.separatorNode = ASDisplayNode()
         self.gradientNode = GradienView()
         super.init()
         
         self.gradientNode.isLayerBacked = true
         self.gradientNode.isOpaque = false
+        self.separatorNode.backgroundColor = .darkGray
         
         DispatchQueue.main.async {
             
@@ -307,103 +311,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         }
   
     }
-    /*
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-            
-        
-        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
-    
-        contentNode.maximumNumberOfLines = 0
-        contentNode.truncationMode = .byWordWrapping
-        contentNode.style.flexShrink = 1
-       
-        let headerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
-        
-        
-        var children: [ASLayoutElement] = [headerInsetSpec]
-        
-        let mediaSize: CGSize
-        
-        if post.content != "" {
-            
-            let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 16)
-            let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
-        
-            children.append(contentInsetSpec)
-        }
 
-        
-        if !post.hashtags.isEmpty {
-            
-            hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
-            
-            let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
-            let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
-            
-            
-            children.append(hashtagsInsetSpec)
-            
-        }
-        
-        
-        
-        let originalWidth = CGFloat(post.metadata?.width ?? 1)
-        let originalHeight = CGFloat(post.metadata?.height ?? 1)
 
-        let aspectRatio = originalHeight / originalWidth
-        let maxWidth = constrainedSize.max.width
-
-        let minAspectRatio: CGFloat = 4 / 5 // 4:5 (portrait)
-        let maxAspectRatio: CGFloat = 1.91 / 1 // 1.91:1 (landscape)
-
-        let clampedAspectRatio = max(min(aspectRatio, maxAspectRatio), minAspectRatio)
-
-        let newWidth = maxWidth
-        let newHeight = maxWidth * clampedAspectRatio
-
-        mediaSize = CGSize(width: newWidth, height: newHeight)
-
-        
-        if post.muxPlaybackId != "" {
-            
-            sidebuttonListView.style.preferredSize = CGSize(width: 100, height: 60)
-            videoNode.style.preferredSize = mediaSize
-            gradientNode.style.preferredSize = mediaSize
-            
-            let sidebuttonListInset = UIEdgeInsets(top: CGFloat.infinity, left: CGFloat.infinity, bottom: 0, right: 0)
-            let sidebuttonListInsetSpec = ASInsetLayoutSpec(insets: sidebuttonListInset, child: sidebuttonListView)
-            
-            let firsOverlay = ASOverlayLayoutSpec(child: videoNode, overlay: gradientNode)
-            let secondOverlay = ASOverlayLayoutSpec(child: firsOverlay, overlay: sidebuttonListInsetSpec)
-            
-            children.append(secondOverlay)
-            
-        } else {
-            
-           
-            imageNode.style.preferredSize = mediaSize
-            children.append(imageNode)
-            
-            
-        }
-        
-       
-        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 75)
-        let buttonsInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        let buttonsInsetSpec = ASInsetLayoutSpec(insets: buttonsInset, child: buttonsNode)
-        
-        children.append(buttonsInsetSpec)
-            
-        let verticalStack = ASStackLayoutSpec.vertical()
-        verticalStack.children = children
-       
-        return verticalStack
-    }*/
-    
-    
-    
-    
     func getThumbnailVideoNodeURL(post: PostModel) -> URL? {
         
         if post.muxPlaybackId != "" {
@@ -498,12 +407,12 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
 
 extension PostNode {
     
-    
+    /*
     func didTap(_ videoNode: ASVideoNode) {
         
         soundProcess()
       
-    }
+    } */
     
     @objc func soundProcess() {
         
@@ -543,8 +452,7 @@ extension PostNode {
     
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
-        //currentTimeStamp = timeInterval
-        
+        currentTimeStamp = timeInterval
         setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.asset.duration.seconds)!))
     
         
@@ -554,7 +462,7 @@ extension PostNode {
                 
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
                
             }
@@ -564,7 +472,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.7 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -573,7 +481,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.6 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -582,7 +490,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.5 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -591,7 +499,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.4 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -600,7 +508,7 @@ extension PostNode {
             if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.5 {
                 if shouldCountView {
                     shouldCountView = false
-                    endVideo()
+                    endVideo(watchTime: Double(timeInterval))
                 }
             }
             
@@ -615,7 +523,7 @@ extension PostNode {
         
     }
     
-    @objc func endVideo() {
+    @objc func endVideo(watchTime: Double) {
         
         if _AppCoreData.userDataSource.value != nil {
             
@@ -626,6 +534,49 @@ extension PostNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
+                APIManager().createView(post: post.id, watchTime: watchTime) { result in
+                    
+                    switch result {
+                    case .success(let apiResponse):
+            
+                        print(apiResponse)
+                        
+                    case .failure(let error):
+                        print(error)
+                    }
+                
+                }
+                
+            }
+            
+        }
+        
+        
+    }
+    
+    func endImage(id: String) {
+        
+        if _AppCoreData.userDataSource.value != nil {
+            
+            time += 1
+            
+            if time < 2 {
+                
+                last_view_timestamp = NSDate().timeIntervalSince1970
+                isViewed = true
+            
+                APIManager().createView(post: id, watchTime: 0) { result in
+                    
+                    switch result {
+                    case .success(let apiResponse):
+            
+                        print(apiResponse)
+                        
+                    case .failure(let error):
+                        print(error)
+                    }
+                
+                }
                 
             }
             
@@ -667,14 +618,20 @@ extension PostNode {
                     if let vc = UIViewController.currentViewController() {
                         
                         let nav = UINavigationController(rootViewController: UPVC)
-                        
+
+                        // Set the user ID, nickname, and onPresent properties of UPVC
                         UPVC.userId = userId
                         UPVC.nickname = username
                         UPVC.onPresent = true
+
+                        // Customize the navigation bar appearance
+                        nav.navigationBar.barTintColor = .background
+                        nav.navigationBar.tintColor = .white
+                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
                         nav.modalPresentationStyle = .fullScreen
-                        nav.navigationItem.titleView?.tintColor = .white
-                        nav.navigationBar.tintColor = .background
                         vc.present(nav, animated: true, completion: nil)
+
                
                     }
                 }
@@ -961,11 +918,11 @@ extension PostNode {
                 self.isLike = checkIsLike
                 if self.isLike {
                     DispatchQueue.main.async {
-                        self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+                        self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+                        self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
                     }
                 }
                 
@@ -1020,7 +977,7 @@ extension PostNode {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {
@@ -1034,7 +991,7 @@ extension PostNode {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+            self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {
@@ -1048,7 +1005,7 @@ extension PostNode {
 
 extension PostNode {
     
-    func totalLikeCount() {
+    func totalLikeCountFromLocal() {
         
         DispatchQueue.main.async {
             self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeLikes ?? 0)))"
@@ -1056,10 +1013,56 @@ extension PostNode {
         
     }
     
-    func totalCmtCount() {
+    func totalCmtCountFromLocal() {
         
         DispatchQueue.main.async {
             self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeComments ?? 0)))"
+        }
+        
+    }
+    
+    func totalLikeCount() {
+        
+        APIManager().countLikedPost(id: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+    
+                guard apiResponse.body?["message"] as? String == "success",
+                      let likeCountFromQuery = apiResponse.body?["likes"] as? Int  else {
+                        return
+                }
+                
+                self.likeCount = likeCountFromQuery
+                
+                DispatchQueue.main.async {
+                    self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(likeCountFromQuery)))"
+                }
+               
+            case .failure(let error):
+                print("LikeCount: \(error)")
+            }
+        }
+        
+    }
+    
+    func totalCmtCount() {
+        
+        APIManager().countComment(post: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+             
+                guard apiResponse.body?["message"] as? String == "success",
+                      let commentsCountFromQuery = apiResponse.body?["comments"] as? Int  else {
+                        return
+                }
+                
+                DispatchQueue.main.async {
+                    self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(commentsCountFromQuery)))"
+                }
+                
+            case .failure(let error):
+                print("CmtCount: \(error)")
+            }
         }
         
     }
@@ -1074,12 +1077,16 @@ extension PostNode {
         setupHeaderNode(constrainedSize: constrainedSize)
         setupContentNode()
 
+        // Set the preferred size for the separator node
+        separatorNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 1)
+
         let children: [ASLayoutElement] = [
             createHeaderInsetSpec(),
             createContentInsetSpecIfNeeded(),
             createHashtagsInsetSpecIfNeeded(constrainedSize: constrainedSize),
             createMediaOverlaySpec(constrainedSize: constrainedSize),
-            createButtonsInsetSpec(constrainedSize: constrainedSize)
+            createButtonsInsetSpec(constrainedSize: constrainedSize),
+            separatorNode
         ].compactMap { $0 }
 
         let verticalStack = ASStackLayoutSpec.vertical()
@@ -1087,6 +1094,7 @@ extension PostNode {
 
         return verticalStack
     }
+
 
     private func setupHeaderNode(constrainedSize: ASSizeRange) {
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
@@ -1155,7 +1163,7 @@ extension PostNode {
         let newWidth = maxWidth
         let navigationBarHeight = navigationControllerHeight
         let tabBarHeight = tabBarControllerHeight
-        let availableHeight = constrainedSize.max.height - 100 - navigationBarHeight - tabBarHeight
+        let availableHeight = constrainedSize.max.height - 200 - navigationBarHeight - tabBarHeight
         let newHeight = min(maxWidth * clampedAspectRatio, availableHeight)
 
         return CGSize(width: newWidth, height: newHeight)

@@ -11,6 +11,7 @@ import SendBirdCalls
 
 class RequestChannelVC: SBUChannelViewController {
 
+    var shouldUnhide = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,11 +26,12 @@ class RequestChannelVC: SBUChannelViewController {
         
         changeTabBar(hidden: true)
         self.tabBarController?.tabBar.isTranslucent = true
+        hideMiddleBtn(vc: self)
     }
 
 
     override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
+        if parent == nil, shouldUnhide {
             
             changeTabBar(hidden: false)
             self.tabBarController?.tabBar.isTranslucent = false

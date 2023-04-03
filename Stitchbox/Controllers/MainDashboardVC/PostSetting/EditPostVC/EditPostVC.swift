@@ -550,7 +550,7 @@ extension EditPostVC {
         var updateText = ""
         
         
-        if let text = descTxtView.text {
+        if let text = descTxtView.text, text != "Hi, what's on your thought?" {
             updateText = text
         }
         

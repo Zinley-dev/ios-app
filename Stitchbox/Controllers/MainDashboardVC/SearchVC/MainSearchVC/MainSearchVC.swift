@@ -147,6 +147,19 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+    }
 
     
     @IBAction func userBtnPressed(_ sender: Any) {
@@ -332,7 +345,7 @@ extension MainSearchVC {
         self.searchTableNode.view.topAnchor.constraint(equalTo: self.searchView.topAnchor, constant: 0).isActive = true
         self.searchTableNode.view.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor, constant: 0).isActive = true
         self.searchTableNode.view.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor, constant: 0).isActive = true
-        self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: -235).isActive = true
+        self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: -300).isActive = true
         
         self.searchTableNode.delegate = self
         self.searchTableNode.dataSource = self

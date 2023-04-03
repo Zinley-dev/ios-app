@@ -28,6 +28,7 @@ class MainFistBumpVC: UIViewController, UINavigationBarDelegate, UINavigationCon
     var ownerID = ""
     var fistBumperCount = 0
     var fistBumpeeCount = 0
+    var onPresent = false
     
     lazy var fistBumperVC: FistBumperVC = {
         
@@ -398,9 +399,16 @@ extension MainFistBumpVC {
     }
     
     @objc func onClickBack(_ sender: AnyObject) {
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
+        
+        if onPresent {
+            self.dismiss(animated: true)
+        } else {
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }
         }
+        
+        
     }
     
     

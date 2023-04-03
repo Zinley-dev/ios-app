@@ -243,29 +243,34 @@ extension FistBumpeeVC {
     
     }
     
-    
     func insertNewRowsInTableNode(newFistBumpees: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newFistBumpees.isEmpty else { return }
         
+        guard newFistBumpees.count > 0 else {
+            return
+        }
+        
+        let section = 0
+        var items = [FistBumpUserModel]()
+        var indexPaths: [IndexPath] = []
+        let total = self.fistBumpList.count + newFistBumpees.count
+        
+        for row in self.fistBumpList.count...total-1 {
+            let path = IndexPath(row: row, section: section)
+            indexPaths.append(path)
+        }
+        
+        for i in newFistBumpees {
 
-        // Calculate the range of new rows
-        let startIndex = fistBumpList.count
-        let endIndex = startIndex + newFistBumpees.count
+            let item = FistBumpUserModel(JSON: i)
+            items.append(item!)
+          
+        }
         
-        // Create an array of PostModel objects
-        let newItems = newFistBumpees.compactMap { FistBumpUserModel(JSON: $0) }
-        
-        // Append the new items to the existing array
-        fistBumpList.append(contentsOf: newItems)
-        
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
-        
-        // Insert the new rows
-        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
-       
-    }
     
+        self.fistBumpList.append(contentsOf: items)
+        self.tableNode.insertRows(at: indexPaths, with: .none)
+        
+    }
+ 
     
 }

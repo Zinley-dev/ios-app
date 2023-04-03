@@ -15,15 +15,13 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var preloadingView: UIActivityIndicatorView!
     let homeButton: UIButton = UIButton(type: .custom)
 
-    var willIndex: Int?
     var currentIndex: Int?
-    var endIndex: Int?
-    
     var isfirstLoad = true
     var didScroll = false
-
+    var imageIndex: Int?
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var selected_item: PostModel!
@@ -33,11 +31,13 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var startIndex: Int!
     var isVideoPlaying = false
     var newPlayingIndex: Int?
-    
+    var imageTimerWorkItem: DispatchWorkItem?
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
     lazy var delayItem3 = workItem()
+    
+    var lastLoadTime: Date?
     
     @IBOutlet weak var playTimeBar: UIProgressView!
     
@@ -55,7 +55,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         setupCollectionNode()
         navigationControllerDelegate()
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         
@@ -82,6 +82,19 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        
+        preloadingView.hidesWhenStopped = true
+        preloadingView.startAnimating()
+        
+       
+        if let tabBarController = self.tabBarController {
+            let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
+            for viewController in viewControllersToPreload {
+                _ = viewController.view
+            }
+        }
+
+
     
     }
     
@@ -90,7 +103,16 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewWillAppear(animated)
         
         showMiddleBtn(vc: self)
+        loadFeed()
         
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
     }
     
@@ -111,22 +133,23 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     
     @objc private func refreshListData(_ sender: Any) {
-       // self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
-  
-        clearAllData()
-   
+
+        self.clearAllData()
+        
     }
+
+
+
     
     @objc func clearAllData() {
         
         refresh_request = true
-        endIndex = 0
-        willIndex = nil
         currentIndex = 0
         isfirstLoad = true
         didScroll = false
         shouldMute = nil
+        imageIndex = nil
         updateData()
                
     }
@@ -407,9 +430,10 @@ extension FeedViewController {
                 
                 foundVisibleVideo = true
                 playTimeBar.isHidden = false
-                
+                imageIndex = nil
             } else {
                 playTimeBar.isHidden = true
+                imageIndex = newPlayingIndex
             }
             
             
@@ -425,13 +449,39 @@ extension FeedViewController {
                     currentIndex = newPlayingIndex
                     playVideoIfNeed(playIndex: currentIndex!)
                     isVideoPlaying = true
+                    
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
+                        
+                        resetView(cell: node)
+                        
+                    }
+                    
                 }
                 
             } else {
                 
                 if let currentIndex = currentIndex {
-                            pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                }
+
+                imageTimerWorkItem?.cancel()
+                imageTimerWorkItem = DispatchWorkItem { [weak self] in
+                    guard let self = self else { return }
+                    if self.imageIndex != nil {
+                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
+                            if self.imageIndex == self.newPlayingIndex {
+                                resetView(cell: node)
+                                node.endImage(id: node.post.id)
+                            }
                         }
+                    }
+                }
+
+                if let imageTimerWorkItem = imageTimerWorkItem {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
+                }
+
+            
                         // Reset the current playing index.
                 currentIndex = nil
                 
@@ -486,40 +536,46 @@ extension FeedViewController {
        
     }
     
-    func changeTabBar(hidden:Bool, animated: Bool) {
+    func changeTabBar(hidden: Bool, animated: Bool) {
         guard let tabBar = self.tabBarController?.tabBar else {
             return
         }
-        if tabBar.isHidden == hidden{
+
+        if tabBar.isHidden == hidden {
             return
         }
-        
+
         let frame = tabBar.frame
-        let frameMinY = frame.minY  //lower end of tabBar
+        let frameMinY = frame.minY
         let offset = hidden ? frame.size.height : -frame.size.height
         let viewHeight = self.view.frame.height
-        
-        //hidden but moved back up after moving app to background
+
         if frameMinY < viewHeight && tabBar.isHidden {
-            tabBar.alpha = 0
             tabBar.isHidden = false
+            tabBar.layer.zPosition = .greatestFiniteMagnitude
 
             UIView.animate(withDuration: 0.5) {
-                tabBar.alpha = 1
+                tabBar.frame = frame.offsetBy(dx: 0, dy: -offset)
             }
-            
+
             return
         }
 
-        let duration:TimeInterval = (animated ? 0.5 : 0.0)
+        let duration: TimeInterval = (animated ? 0.5 : 0.0)
         tabBar.isHidden = false
 
         UIView.animate(withDuration: duration, animations: {
             tabBar.frame = frame.offsetBy(dx: 0, dy: offset)
-        }, completion: { (true) in
+        }, completion: { _ in
             tabBar.isHidden = hidden
+
+            if !hidden {
+                tabBar.layer.zPosition = 0
+            }
         })
     }
+
+
     
 
 }
@@ -576,7 +632,7 @@ extension FeedViewController: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 100);
+        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
         
         return ASSizeRangeMake(min, max);
     }
@@ -730,6 +786,7 @@ extension FeedViewController {
                     return
                 }
                 if !data.isEmpty {
+                    self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data
                   
@@ -756,40 +813,79 @@ extension FeedViewController {
     
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newPosts.isEmpty else { return }
         
-        // Check if a refresh request has been made
-        if refresh_request {
-            refresh_request = false
-            
-            // Delete existing rows if there are any
-            let numExistingItems = posts.count
-            if numExistingItems > 0 {
-                let deleteIndexPaths = (0..<numExistingItems).map { IndexPath(row: $0, section: 0) }
-                posts.removeAll()
-                collectionNode.deleteItems(at: deleteIndexPaths)
-            }
+        // checking empty
+        guard newPosts.count > 0 else {
+            return
         }
         
-        // Calculate the range of new rows
-        let startIndex = posts.count
-        let endIndex = startIndex + newPosts.count
+        if refresh_request == true {
+            
+            refresh_request = false
+            
+
+            if self.posts.isEmpty != true {
+                
+               
+                var delete_indexPaths: [IndexPath] = []
+                
+                for row in 0...self.posts.count - 1 {
+                    let path = IndexPath(row: row, section: 0) // single indexpath
+                    delete_indexPaths.append(path) // app
+                }
+            
+                self.posts.removeAll()
+                self.collectionNode.deleteItems(at: delete_indexPaths)
+                   
+            }
+            
+        }
         
-        // Create an array of PostModel objects
-        let newItems = newPosts.compactMap { PostModel(JSON: $0) }
+        // basic contruction
+        let section = 0
+        var items = [PostModel]()
+        var indexPaths: [IndexPath] = []
+        //
         
-        // Append the new items to the existing array
-        posts.append(contentsOf: newItems)
+        // current array = posts
         
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+        let total = self.posts.count + newPosts.count
         
-        // Insert the new rows
-        collectionNode.insertItems(at: insertIndexPaths)
+        
+        // 0 - 2 2-4 4-6
+        
+        for row in self.posts.count...total-1 {
+            let path = IndexPath(row: row, section: section) // single indexpath
+            indexPaths.append(path) // app
+        }
+        
+        //
+        
+        for i in newPosts {
+            
+            let item = PostModel(JSON: i)
+            items.append(item!)
+          
+        }
+        
+        //
+        
+    
+        // array
+        
+        
+        
+        self.posts.append(contentsOf: items) // append new items to current items
+        //
+        self.collectionNode.insertItems(at: indexPaths)
+        
+        
+        if preloadingView.isAnimating {
+            preloadingView.stopAnimating()
+        }
+      
+        
     }
-
-
     
 }
 
@@ -927,6 +1023,17 @@ extension FeedViewController {
         self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
        
         
+    }
+    
+    
+    func loadFeed() {
+        let now = Date()
+        let fortyFiveMinutesAgo = now.addingTimeInterval(-2700) // 2700 seconds = 45 minutes
+        
+        if lastLoadTime != nil, lastLoadTime! < fortyFiveMinutesAgo, !posts.isEmpty {
+            pullControl.beginRefreshing()
+            clearAllData()
+        }
     }
     
 }

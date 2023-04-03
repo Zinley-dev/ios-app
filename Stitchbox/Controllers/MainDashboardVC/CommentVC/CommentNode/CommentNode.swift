@@ -103,7 +103,7 @@ class CommentNode: ASCellNode {
                             
                         } else {
                             
-                            time = NSAttributedString(string: "Edited \(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
+                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
                         }
                         
                     } else {
@@ -168,7 +168,7 @@ class CommentNode: ASCellNode {
                         
                     } else {
                         
-                        time = NSAttributedString(string: "Edited \(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
+                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
                     }
                     
                 } else {
@@ -273,43 +273,65 @@ class CommentNode: ASCellNode {
     
     @objc func replyToBtnPressed() {
         
-        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != post.reply_to {
             
-            if let vc = UIViewController.currentViewController() {
+            if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
                 
-                let nav = UINavigationController(rootViewController: UPVC)
-                
-                UPVC.userId = post.reply_to
-                UPVC.nickname = post.reply_to_username
-                UPVC.onPresent = true
-                nav.modalPresentationStyle = .fullScreen
-                nav.navigationItem.titleView?.tintColor = .white
-                nav.navigationBar.tintColor = .background
-                vc.present(nav, animated: true, completion: nil)
-       
+                if let vc = UIViewController.currentViewController() {
+                    
+                    let nav = UINavigationController(rootViewController: UPVC)
+
+                    // Set the user ID, nickname, and onPresent properties of UPVC
+                    UPVC.userId = post.reply_to
+                    UPVC.nickname = post.reply_to_username
+                    UPVC.onPresent = true
+
+                    // Customize the navigation bar appearance
+                    nav.navigationBar.barTintColor = .background
+                    nav.navigationBar.tintColor = .white
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                    nav.modalPresentationStyle = .fullScreen
+                    vc.present(nav, animated: true, completion: nil)
+           
+                }
             }
+            
+            
         }
+        
+        
     }
     
     @objc func usernameBtnPressed() {
         
-        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+        
+        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != post.comment_uid {
             
-            if let vc = UIViewController.currentViewController() {
+            if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
                 
-                let nav = UINavigationController(rootViewController: UPVC)
-                
-                UPVC.userId = post.comment_uid
-                UPVC.nickname = post.comment_username
-                UPVC.onPresent = true
-                nav.modalPresentationStyle = .fullScreen
-                nav.navigationItem.titleView?.tintColor = .white
-                nav.navigationBar.tintColor = .background
-                vc.present(nav, animated: true, completion: nil)
-                
+                if let vc = UIViewController.currentViewController() {
+                    
+                    let nav = UINavigationController(rootViewController: UPVC)
+
+                    // Set the user ID, nickname, and onPresent properties of UPVC
+                    UPVC.userId = post.comment_uid
+                    UPVC.nickname = post.comment_username
+                    UPVC.onPresent = true
+
+                    // Customize the navigation bar appearance
+                    nav.navigationBar.barTintColor = .background
+                    nav.navigationBar.tintColor = .white
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                    nav.modalPresentationStyle = .fullScreen
+                    vc.present(nav, animated: true, completion: nil)
+                    
+                }
             }
+            
         }
-       
+
         
     }
     
@@ -340,7 +362,7 @@ class CommentNode: ASCellNode {
                 if checkIsLike {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "liked")
+                        self.imageView.image = UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal)
                     }
                     
                     
@@ -350,7 +372,7 @@ class CommentNode: ASCellNode {
                 } else {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "likeEmpty")
+                        self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
                     }
             
                 }
@@ -358,7 +380,7 @@ class CommentNode: ASCellNode {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")
+                    self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
                 }
                 print(error)
             }
@@ -535,18 +557,42 @@ class CommentNode: ASCellNode {
                 label.handleMentionTap {  mention in
                     print(mention)
                     //self.checkIfUserValidAndPresentVC(username: mention)
+                    
+                    
                 }
                 
                 label.handleHashtagTap { hashtag in
                           
                     var selectedHashtag = hashtag
                     selectedHashtag.insert("#", at: selectedHashtag.startIndex)
+                
+                    if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+                        
+                        if let vc = UIViewController.currentViewController() {
+                            
+                            let nav = UINavigationController(rootViewController: PLHVC)
+
+                            // Set the user ID, nickname, and onPresent properties of UPVC
+                            PLHVC.searchHashtag = selectedHashtag
+                            PLHVC.onPresent = true
+
+                            // Customize the navigation bar appearance
+                            nav.navigationBar.barTintColor = .background
+                            nav.navigationBar.tintColor = .white
+                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                            nav.modalPresentationStyle = .fullScreen
+                            vc.present(nav, animated: true, completion: nil)
+                   
+                        }
+                    }
+                    
+                    
                     
                     
                 }
                 
                 label.handleURLTap { string in
-                    
                     
                     
                     let url = string.absoluteString
@@ -565,108 +611,7 @@ class CommentNode: ASCellNode {
                                 
                                 if let id = queryItem.value {
                                     
-                                    /*
-                                    let db = DataService.instance.mainFireStoreRef
-                                    
-                                    
-                                    db.collection("Highlights").document(id).getDocument {  (snap, err) in
-                                        
-                                        if err != nil {
-                                            
-                                            print(err!.localizedDescription)
-                                            return
-                                        }
-                                        
-                                        
-                                        if snap?.exists != false {
-                                            
-                                            if let status = snap!.data()!["h_status"] as? String, let owner_uid = snap!.data()!["userUID"] as? String, let mode = snap!.data()!["mode"] as? String {
-                                                
-                                                if status == "Ready", !global_block_list.contains(owner_uid) {
-                                                    
-                                                    if mode != "Only me" {
-                                                        
-                                                        if mode == "Followers"  {
-                                                            
-                                                            if global_following_list.contains(owner_uid) ||  owner_uid == Auth.auth().currentUser?.uid {
-                                                                
-                                                                let i = HighlightsModel(postKey: snap!.documentID, Highlight_model: snap!.data()!)
-                                                                self.presentViewController(id: id, items: [i])
-                                                                
-                                                            } else {
-                                                                
-                                                                if let vc = UIViewController.currentViewController() {
-                                                                    
-                                                                    if vc is notificationVC {
-                                                                        
-                                                                        if let update = vc as? notificationVC {
-                                                                            update.showErrorAlert("Oops!", msg: "This video can't be viewed now.")
-                                                                        }
-                                                                        
-                                                                    } else if vc is CommentNotificationVC {
-                                                                        
-                                                                        if let update = vc as? CommentNotificationVC {
-                                                                            update.showErrorAlert("Oops!", msg: "This video can't be viewed now.")
-                                                                        }
-                                                                        
-                                                                    }
-                                                                                                              
-                                                                     
-                                                                }
-                                                                
-                                                            }
-                                                            
-                                                        } else if mode == "Public" {
-                                                            
-                                                            let i = HighlightsModel(postKey: snap!.documentID, Highlight_model: snap!.data()!)
-                                                            self.presentViewController(id: id, items: [i])
-                                                            
-                                                        }
-                                                        
-                                                    } else{
-                                                        
-                                                        if owner_uid == Auth.auth().currentUser?.uid {
-                                                            
-                                                            let i = HighlightsModel(postKey: snap!.documentID, Highlight_model: snap!.data()!)
-                                                            self.presentViewController(id: id, items: [i])
-                                                            
-                                                            
-                                                        } else {
-                                                            
-                                                            if let vc = UIViewController.currentViewController() {
-                                                                
-                                                                if vc is notificationVC {
-                                                                    
-                                                                    if let update = vc as? notificationVC {
-                                                                        update.showErrorAlert("Oops!", msg: "This video can't be viewed now.")
-                                                                    }
-                                                                    
-                                                                } else if vc is CommentNotificationVC {
-                                                                    
-                                                                    if let update = vc as? CommentNotificationVC {
-                                                                        update.showErrorAlert("Oops!", msg: "This video can't be viewed now.")
-                                                                    }
-                                                                    
-                                                                }
-                                                                                                          
-                                                                 
-                                                            }
-                                                            
-                                                        }
-                                                        
-                                                        
-                                                    }
-                                                    
-                                                }
-                                                
-                                            }
-                                            
-                                        }
-
-                                        
-                                    } */
-                                   
-                                    
+  
                                 }
                 
                             } else if queryItem.name == "up" {
@@ -794,7 +739,7 @@ extension CommentNode {
     func likeComment() {
         
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "liked")
+            self.imageView.image = UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal)
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -820,7 +765,7 @@ extension CommentNode {
 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")
+                    self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -847,7 +792,7 @@ extension CommentNode {
     func unlikeComment() {
         
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "likeEmpty")
+            self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -872,7 +817,7 @@ extension CommentNode {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "liked")
+                    self.imageView.image = UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal)
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()
