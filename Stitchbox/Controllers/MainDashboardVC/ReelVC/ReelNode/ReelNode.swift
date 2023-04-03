@@ -1,10 +1,11 @@
 //
-//  PostNode.swift
+//  ReelNode.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 1/27/23.
+//  Created by Khoi Nguyen on 4/2/23.
 //
 
+import Foundation
 import UIKit
 import AsyncDisplayKit
 import Alamofire
@@ -17,7 +18,7 @@ fileprivate let FontSize: CGFloat = 13
 fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
-class PostNode: ASCellNode, ASVideoNodeDelegate {
+class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
     weak var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
@@ -27,7 +28,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var headerNode: ASDisplayNode
     var buttonsNode: ASDisplayNode
     var hashtagsNode: ASDisplayNode
-    var separatorNode = ASDisplayNode()
+    var backgroundImage: GradientImageNode
     var sidebuttonListView: ASDisplayNode!
     var shouldCountView = true
     var headerView: PostHeader!
@@ -52,25 +53,27 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         self.hashtagsNode = ASDisplayNode()
         self.videoNode = ASVideoNode()
         self.sidebuttonListView = ASDisplayNode()
-        self.separatorNode = ASDisplayNode()
         self.gradientNode = GradienView()
+        self.backgroundImage = GradientImageNode()
         super.init()
         
         self.gradientNode.isLayerBacked = true
         self.gradientNode.isOpaque = false
-        self.separatorNode.backgroundColor = .darkGray
+        
         
         DispatchQueue.main.async {
             
             self.headerView = PostHeader()
             self.headerNode.view.addSubview(self.headerView)
             self.headerView.settingBtn.setTitle("", for: .normal)
-            
             self.headerView.translatesAutoresizingMaskIntoConstraints = false
             self.headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
             self.headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
             self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
             self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
+            
+            self.headerView.settingBtn.isHidden = true
+
             
             if self.isSelectedPost == false {
                 
@@ -88,6 +91,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             self.buttonsView.commentBtn.setTitle("", for: .normal)
             self.buttonsView.shareBtn.setTitle("", for: .normal)
             self.buttonsView.streamlinkBtn.setTitle("", for: .normal)
+        
+        
             
             self.buttonsView.translatesAutoresizingMaskIntoConstraints = false
             self.buttonsView.topAnchor.constraint(equalTo: self.buttonsNode.view.topAnchor, constant: 0).isActive = true
@@ -111,7 +116,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 self.sideButtonView.playSpeedBtn.setTitle("", for: .normal)
                 self.sideButtonView.soundBtn.setTitle("", for: .normal)
                 self.sideButtonView.playSpeedBtn.setImage(speedImage, for: .normal)
-                
+               
                 
                 if let muteStatus = shouldMute {
                     
@@ -141,61 +146,61 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 self.sideButtonView.trailingAnchor.constraint(equalTo: self.sidebuttonListView.view.trailingAnchor, constant: 0).isActive = true
                 
                
-                let soundTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.soundProcess))
+                let soundTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.soundProcess))
                 soundTap.numberOfTapsRequired = 1
                 self.sideButtonView.soundBtn.addGestureRecognizer(soundTap)
 
             }
             
-            let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.userTapped))
+            let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
             avatarTap.numberOfTapsRequired = 1
             self.headerView.avatarImage.isUserInteractionEnabled = true
             self.headerView.avatarImage.addGestureRecognizer(avatarTap)
             
-            let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.userTapped))
+            let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
             usernameTap.numberOfTapsRequired = 1
             self.headerView.usernameLbl.isUserInteractionEnabled = true
             self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
             
             
-            let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.userTapped))
+            let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
             username2Tap.numberOfTapsRequired = 1
             self.headerView.timeLbl.isUserInteractionEnabled = true
             self.headerView.timeLbl.addGestureRecognizer(username2Tap)
             
 
-            let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.shareTapped))
+            let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.shareTapped))
             shareTap.numberOfTapsRequired = 1
             self.buttonsView.shareBtn.addGestureRecognizer(shareTap)
             
             
-            let likeTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.likeTapped))
+            let likeTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeTapped))
             likeTap.numberOfTapsRequired = 1
             self.buttonsView.likeBtn.addGestureRecognizer(likeTap)
             
-            let commentTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.cmtTapped))
+            let commentTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.cmtTapped))
             commentTap.numberOfTapsRequired = 1
             self.buttonsView.commentBtn.addGestureRecognizer(commentTap)
             
             
-            let settingTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.settingTapped))
+            let settingTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.settingTapped))
             settingTap.numberOfTapsRequired = 1
             self.headerView.settingBtn.addGestureRecognizer(settingTap)
             
             
-            let streamLinkTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.streamingLinkTapped))
+            let streamLinkTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.streamingLinkTapped))
             streamLinkTap.numberOfTapsRequired = 1
             self.buttonsView.streamlinkBtn.addGestureRecognizer(streamLinkTap)
             
             
-            let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostNode.likeHandle))
+            let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeHandle))
             doubleTap.numberOfTapsRequired = 2
             self.view.addGestureRecognizer(doubleTap)
             
             doubleTap.delaysTouchesBegan = true
             
             
-            let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(PostNode.settingTapped))
+            let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ReelNode.settingTapped))
             longPress.minimumPressDuration = 0.5
             self.view.addGestureRecognizer(longPress)
             
@@ -250,7 +255,6 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
        
         
         automaticallyManagesSubnodes = true
-        self.imageNode.contentMode = .scaleAspectFill
         
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -263,17 +267,37 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
         
         
-        
         if post.muxPlaybackId != "" {
             self.videoNode.url = self.getThumbnailVideoNodeURL(post: post)
             self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
             self.videoNode.shouldAutoplay = false
             self.videoNode.shouldAutorepeat = true
-            self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-            self.videoNode.contentMode = .scaleAspectFill
+            self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
             self.videoNode.muted = false
             self.videoNode.delegate = self
             
+            
+            if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
+                // Calculate aspect ratio
+                let aspectRatio = Float(width) / Float(height)
+
+                // Set contentMode based on aspect ratio
+                if aspectRatio >= 0.5 && aspectRatio <= 0.6 { // Close to 9:16 aspect ratio (vertical)
+                    self.videoNode.contentMode = .scaleAspectFill
+                } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
+                    self.videoNode.contentMode = .scaleAspectFit
+                    self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                } else {
+                    // Default contentMode, adjust as needed
+                    self.videoNode.contentMode = .scaleAspectFit
+                    self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                }
+            } else {
+                // Default contentMode, adjust as needed
+                self.videoNode.contentMode = .scaleAspectFit
+                self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+            }
+
             
             DispatchQueue.main.async {
                 self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
@@ -281,7 +305,29 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
             }
         } else {
             
+            if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
+                // Calculate aspect ratio
+                let aspectRatio = Float(width) / Float(height)
+
+                // Set contentMode based on aspect ratio
+                if aspectRatio >= 0.5 && aspectRatio <= 0.6 { // Close to 9:16 aspect ratio (vertical)
+                    self.imageNode.contentMode = .scaleAspectFill
+                } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
+                    self.imageNode.contentMode = .scaleAspectFit
+                } else {
+                    // Default contentMode, adjust as needed
+                    self.imageNode.contentMode = .scaleAspectFit
+                }
+            } else {
+                // Default contentMode, adjust as needed
+                self.imageNode.contentMode = .scaleAspectFit
+            }
             
+            Dispatch.main.async {
+                self.backgroundImage.setGradientImage(with: post.imageUrl)
+            }
+            
+        
             imageStorage.async.object(forKey: post.imageUrl.absoluteString) { result in
                 if case .value(let image) = result {
                     
@@ -349,9 +395,9 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         if let vc = UIViewController.currentViewController() {
             
             
-            if vc is FeedViewController {
+            if vc is ReelVC {
                 
-                if let update1 = vc as? FeedViewController {
+                if let update1 = vc as? ReelVC {
                     
                     if update1.playTimeBar != nil {
                         update1.playTimeBar.setProgress(rate, animated: true)
@@ -359,42 +405,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                     
                 }
                 
-            } else if vc is SelectedPostVC {
-                
-                if let update2 = vc as? SelectedPostVC {
-                    
-                    if update2.playTimeBar != nil {
-                        update2.playTimeBar.setProgress(rate, animated: true)
-                    }
-                    
-                }
-                
-                
-            } else if vc is MainSearchVC {
-                
-                if let update2 = vc as? MainSearchVC {
-                    
-                    if update2.PostSearchVC.playTimeBar != nil {
-                        update2.PostSearchVC.playTimeBar.setProgress(rate, animated: true)
-                    }
-                   
-                }
-                
-                
-            } else if vc is PostListWithHashtagVC {
-                
-                if let update2 = vc as? PostListWithHashtagVC {
-                    
-                    if update2.playTimeBar != nil {
-                        update2.playTimeBar.setProgress(rate, animated: true)
-                    }
-                    
-                    
-                }
-                
-                
-            }
-                 
+            }     
             
         }
         
@@ -405,31 +416,12 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
 
 }
 
-extension PostNode {
+extension ReelNode {
     
     
     func didTap(_ videoNode: ASVideoNode) {
         
-        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
-            
-            if let vc = UIViewController.currentViewController() {
-                
-                let nav = UINavigationController(rootViewController: RVC)
-
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                RVC.posts = [post]
-
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-
-       
-            }
-        }
+        soundProcess()
       
     }
     
@@ -607,7 +599,7 @@ extension PostNode {
 }
 
 
-extension PostNode {
+extension ReelNode {
     
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
     
@@ -623,7 +615,7 @@ extension PostNode {
 }
 
 
-extension PostNode {
+extension ReelNode {
     
     
     @objc func userTapped() {
@@ -1022,7 +1014,7 @@ extension PostNode {
 
 }
 
-extension PostNode {
+extension ReelNode {
     
     func totalLikeCountFromLocal() {
         
@@ -1089,121 +1081,67 @@ extension PostNode {
 }
 
 
+extension ReelNode
+{
 
-extension PostNode {
-    
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        setupHeaderNode(constrainedSize: constrainedSize)
-        setupContentNode()
-
-        // Set the preferred size for the separator node
-        separatorNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 1)
-
-        let children: [ASLayoutElement] = [
-            createHeaderInsetSpec(),
-            createContentInsetSpecIfNeeded(),
-            createHashtagsInsetSpecIfNeeded(constrainedSize: constrainedSize),
-            createMediaOverlaySpec(constrainedSize: constrainedSize),
-            createButtonsInsetSpec(constrainedSize: constrainedSize),
-            separatorNode
-        ].compactMap { $0 }
-
-        let verticalStack = ASStackLayoutSpec.vertical()
-        verticalStack.children = children
-
-        return verticalStack
-    }
-
-
-    private func setupHeaderNode(constrainedSize: ASSizeRange) {
+        
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
-    }
-
-    private func setupContentNode() {
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
-    }
 
-    private func createHeaderInsetSpec() -> ASInsetLayoutSpec {
-        let headerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        return ASInsetLayoutSpec(insets: headerInset, child: headerNode)
-    }
-
-    private func createContentInsetSpecIfNeeded() -> ASInsetLayoutSpec? {
-        guard post.content != "" else { return nil }
+        let headerInset = UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
+        let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
         let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 16)
-        return ASInsetLayoutSpec(insets: contentInset, child: contentNode)
-    }
-
-    private func createHashtagsInsetSpecIfNeeded(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec? {
-        guard !post.hashtags.isEmpty else { return nil }
+        let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
 
         hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
         let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
-        return ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
-    }
+        let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
 
-    private func createMediaOverlaySpec(constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        
-        let mediaSize = calculateMediaSize(constrainedSize: constrainedSize)
-
-        if post.muxPlaybackId != "" {
-            return createVideoOverlaySpec(mediaSize: mediaSize)
-        } else {
-            imageNode.style.preferredSize = mediaSize
-            return ASWrapperLayoutSpec(layoutElement: imageNode)
-        }
-    }
-
-    private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
         buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 75)
         let buttonsInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        return ASInsetLayoutSpec(insets: buttonsInset, child: buttonsNode)
-    }
+        let buttonsInsetSpec = ASInsetLayoutSpec(insets: buttonsInset, child: buttonsNode)
 
-    private func calculateMediaSize(constrainedSize: ASSizeRange) -> CGSize {
-        let originalWidth = CGFloat(post.metadata?.width ?? 1)
-        let originalHeight = CGFloat(post.metadata?.height ?? 1)
-
-        if originalWidth == 0 || originalHeight == 0 {
-            return CGSize(width: constrainedSize.max.width, height: constrainedSize.max.width * 4 / 5) // default to 4:5 aspect ratio
+        let verticalStack = ASStackLayoutSpec.vertical()
+        
+        verticalStack.children = [headerInsetSpec]
+        
+        if post.content != "" {
+            verticalStack.children?.append(contentInsetSpec)
         }
+        
+        verticalStack.children?.append(contentsOf: [hashtagsInsetSpec, buttonsInsetSpec])
 
-        let aspectRatio = originalHeight / originalWidth
-        let maxWidth = constrainedSize.max.width
+        let verticalStackInset = UIEdgeInsets(top: 0, left: 8, bottom: 8, right: 8)
+        let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
 
-        let minAspectRatio: CGFloat = 4 / 5 // 4:5 (portrait)
-        let maxAspectRatio: CGFloat = 1.91 / 1 // 1.91:1 (landscape)
+        let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
 
-        let clampedAspectRatio = max(min(aspectRatio, maxAspectRatio), minAspectRatio)
+        let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let textInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
+        let textInsetSpec1 = ASInsetLayoutSpec(insets: inset, child: gradientNode)
+        let textInsetSpec2 = ASInsetLayoutSpec(insets: inset, child: backgroundImage)
+       
 
-        let newWidth = maxWidth
-        let navigationBarHeight = navigationControllerHeight
-        let tabBarHeight = tabBarControllerHeight
-        let availableHeight = constrainedSize.max.height - 200 - navigationBarHeight - tabBarHeight
-        let newHeight = min(maxWidth * clampedAspectRatio, availableHeight)
+        let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: textInsetSpec)
+        let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
+        let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
 
-        return CGSize(width: newWidth, height: newHeight)
+        return thirdOverlay
     }
 
 
-
-    private func createVideoOverlaySpec(mediaSize: CGSize) -> ASLayoutSpec {
-        sidebuttonListView.style.preferredSize = CGSize(width: 100, height: 60)
-        videoNode.style.preferredSize = mediaSize
-        gradientNode.style.preferredSize = mediaSize
-
-        let sidebuttonListInset = UIEdgeInsets(top: CGFloat.infinity, left: CGFloat.infinity, bottom: 0, right: 0)
-        let sidebuttonListInsetSpec = ASInsetLayoutSpec(insets: sidebuttonListInset, child: sidebuttonListView)
-
-        let firstOverlay = ASOverlayLayoutSpec(child: videoNode, overlay: gradientNode)
-        let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: sidebuttonListInsetSpec)
-
-        return secondOverlay
-    }
 
 
     
+    
 }
+
+
+
+
+
+

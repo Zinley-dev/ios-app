@@ -1,8 +1,8 @@
 //
-//  FeedViewController.swift
+//  ReelVC.swift
 //  Stitchbox
 //
-//  Created by Nghiem Minh Hoang on 26/10/2022.
+//  Created by Khoi Nguyen on 4/2/23.
 //
 
 import UIKit
@@ -10,13 +10,12 @@ import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
 
-class FeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
+class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
 
-    @IBOutlet weak var progressBar: ProgressBar!
+
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var preloadingView: UIActivityIndicatorView!
-    let homeButton: UIButton = UIButton(type: .custom)
+
+    let backButton: UIButton = UIButton(type: .custom)
 
     var currentIndex: Int?
     var isfirstLoad = true
@@ -32,7 +31,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var isVideoPlaying = false
     var newPlayingIndex: Int?
     var imageTimerWorkItem: DispatchWorkItem?
-    let backButton: UIButton = UIButton(type: .custom)
+
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
     lazy var delayItem3 = workItem()
@@ -47,13 +46,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewDidLoad()
 
         // Do any additional setup after loading the view
-        
-        navigationControllerHeight = self.navigationController!.navigationBar.frame.height
-        tabBarControllerHeight = (self.tabBarController?.tabBar.frame.height)!
-        
+
         setupButtons()
         setupCollectionNode()
-        navigationControllerDelegate()
+       
         
         pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
@@ -69,42 +65,22 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
             collectionNode.view.addSubview(pullControl)
         }
         
-        //self.navigationController?.hidesBarsOnSwipe = true
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
-       
-        
-        
-        //
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
-        
-        preloadingView.hidesWhenStopped = true
-        preloadingView.startAnimating()
-        
-       
-        if let tabBarController = self.tabBarController {
-            let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
-            for viewController in viewControllersToPreload {
-                _ = viewController.view
-            }
-        }
-
-    
+ 
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        checkNotification()
-        showMiddleBtn(vc: self)
-        loadFeed()
+        /*
+        NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_reel")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_reel")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_reel")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_reel")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_reel")), object: nil)
         
+     
+       
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backgroundColor = .background
@@ -113,23 +89,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+         */
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        delay(0.25) {
-            NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
-        
-    }
     
     
     @objc private func refreshListData(_ sender: Any) {
@@ -138,277 +101,48 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         self.clearAllData()
         
     }
-
-
-
     
-    @objc func clearAllData() {
-        
-        refresh_request = true
-        currentIndex = 0
-        isfirstLoad = true
-        didScroll = false
-        shouldMute = nil
-        imageIndex = nil
-        updateData()
-               
-    }
-    
-    
-    func updateData() {
-        self.retrieveNextPageWithCompletion { (newPosts) in
-                
-            if newPosts.count > 0 {
-                        
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                                 
-            } else {
-              
-                
-                self.refresh_request = false
-                self.posts.removeAll()
-                self.collectionNode.reloadData()
-                
-                if self.posts.isEmpty == true {
-                    
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
-                    
-                 
-                } else {
-                    
-                    self.collectionNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) {
-                
-                
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-             
-                    
-            }
-              
-          
-        }
-        
-        
-    }
-     
 
 }
 
-extension FeedViewController {
-    
-    @objc func updateProgressBar() {
-        
-        if (global_percentComplete == 0.00) || (global_percentComplete == 100.0) {
-            
-            DispatchQueue.main.async {
-                self.progressBar.isHidden = true
-               
-            }
-            global_percentComplete = 0.00
-            
-        } else {
-            
-            
-            DispatchQueue.main.async {
-                self.progressBar.isHidden = false
-                self.progressBar.progress = (CGFloat(global_percentComplete)/100)
-               
-            }
 
-        }
-        
-    }
-    
-    
-    @objc func shouldScrollToTop() {
-        
-        if currentIndex != 0, currentIndex != nil {
-            
-            navigationController?.setNavigationBarHidden(false, animated: true)
-            
-            if collectionNode.numberOfItems(inSection: 0) != 0 {
-                
-                if currentIndex == 1 {
-                    collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                } else {
-                    
-                    collectionNode.scrollToItem(at: IndexPath(row: 1, section: 0), at: .centeredVertically, animated: false)
-                    collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-                }
-        
-            }
-            
-        } else {
-            
-            delayItem3.perform(after: 0.25) {
-                self.clearAllData()
-            }
-
-        }
-            
-    }
-    
-    func checkNotification() {
-        
-        APIManager().getBadge { result in
-            switch result {
-            case .success(let apiResponse):
-                
-                if let data = apiResponse.body {
-                    
-                    if let badge = data["badge"] as? Int {
-                        
-                        if badge == 0 {
-                            
-                            Dispatch.main.async {
-                                self.setupEmptyNotiButton()
-                            }
-                            
-                        } else {
-                            Dispatch.main.async {
-                                self.setupHasNotiButton()
-                            }
-                        }
-                        
-                    } else {
-                        
-                        Dispatch.main.async {
-                            self.setupEmptyNotiButton()
-                        }
-                        
-                    }
- 
-                }
-                
-            case .failure(let error):
-                Dispatch.main.async {
-                    self.setupEmptyNotiButton()
-                }
-                print(error)
-                
-        }
-    }
-        
-        
-        
-    }
-    
-    
-    
-}
-
-extension FeedViewController {
+extension ReelVC {
     
     func setupButtons() {
         
-        setupHomeButton()
+        setupBackButton()
+        
 
     }
     
-    
-    func setupHomeButton() {
+    func setupBackButton() {
+        
         
         // Do any additional setup after loading the view.
-        homeButton.setImage(UIImage.init(named: "Logo")?.resize(targetSize: CGSize(width: 35, height: 35)), for: [])
-        homeButton.addTarget(self, action: #selector(onClickHome(_:)), for: .touchUpInside)
-        homeButton.frame = back_frame
-        homeButton.setTitleColor(UIColor.white, for: .normal)
-        homeButton.setTitle("", for: .normal)
-        homeButton.sizeToFit()
-        let homeButtonBarButton = UIBarButtonItem(customView: homeButton)
+        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        backButton.frame = back_frame
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        backButton.setTitle("", for: .normal)
+        backButton.sizeToFit()
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+        
+        self.navigationItem.leftBarButtonItem = backButtonBarButton
+        
+    }
     
-        self.navigationItem.leftBarButtonItem = homeButtonBarButton
+    @objc func onClickBack(_ sender: AnyObject) {
+        
+     
+        self.dismiss(animated: true)
        
     }
-    
-    
-    func setupEmptyNotiButton() {
-        
-         let notiButton = UIButton(type: .custom)
-         notiButton.setImage(UIImage.init(named: "noNoti"), for: [])
-         notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
-         notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-         let notiBarButton = UIBarButtonItem(customView: notiButton)
 
-         let searchButton = UIButton(type: .custom)
-         searchButton.setImage(UIImage(named: "search"), for: [])
-         searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
-         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-         let searchBarButton = UIBarButtonItem(customView: searchButton)
-        
-        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        fixedSpace.width = 2
-        
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
-        
-    }
-    
-    
-    func setupHasNotiButton() {
-        
-         let notiButton = UIButton(type: .custom)
-         notiButton.setImage(UIImage.init(named: "homeNoti"), for: [])
-         notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
-         notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-         let notiBarButton = UIBarButtonItem(customView: notiButton)
-
-         let searchButton = UIButton(type: .custom)
-         searchButton.setImage(UIImage(named: "search"), for: [])
-         searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
-         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-         let searchBarButton = UIBarButtonItem(customView: searchButton)
-        
-        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        fixedSpace.width = 2
-        
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
-        
-    }
     
 }
 
-extension FeedViewController {
-    
-    @objc func onClickHome(_ sender: AnyObject) {
-        shouldScrollToTop()
-    }
-    
-    @objc func onClickNoti(_ sender: AnyObject) {
-        if let NVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "NotificationVC") as? NotificationVC {
-            
-            resetNoti()
-            NVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(NVC, animated: true)
-            
-        }
-    }
-    
-    @objc func onClickSearch(_ sender: AnyObject) {
-        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
-            
-            SVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(SVC, animated: true)
-            
-        }
-    }
-    
-}
 
-extension FeedViewController {
+extension ReelVC {
     
     func showErrorAlert(_ title: String, msg: String) {
                                                                                                                                            
@@ -447,7 +181,7 @@ extension FeedViewController {
 }
 
 
-extension FeedViewController {
+extension ReelVC {
     
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -475,7 +209,7 @@ extension FeedViewController {
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
 
             // Calculate the visible cells.
-            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
+            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? ReelNode }
 
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
@@ -518,9 +252,9 @@ extension FeedViewController {
                     playVideoIfNeed(playIndex: currentIndex!)
                     isVideoPlaying = true
                     
-                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? ReelNode {
                         
-                        resetView(cell: node)
+                        resetViewForReel(cell: node)
                         
                     }
                     
@@ -536,9 +270,9 @@ extension FeedViewController {
                 imageTimerWorkItem = DispatchWorkItem { [weak self] in
                     guard let self = self else { return }
                     if self.imageIndex != nil {
-                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
+                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? ReelNode {
                             if self.imageIndex == self.newPlayingIndex {
-                                resetView(cell: node)
+                                resetViewForReel(cell: node)
                                 node.endImage(id: node.post.id)
                             }
                         }
@@ -557,7 +291,7 @@ extension FeedViewController {
 
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
+            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
                 if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
                     if let currentTime = cell.videoNode.currentItem?.currentTime() {
                         cell.videoNode.player?.seek(to: currentTime)
@@ -580,75 +314,9 @@ extension FeedViewController {
     }
 
 
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        
-        if scrollView == collectionNode.view {
-            
-            if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-               navigationController?.setNavigationBarHidden(true, animated: true)
-                 changeTabBar(hidden: true, animated: true)
-                 self.tabBarController?.tabBar.isTranslucent = true
-                 hideMiddleBtn(vc: self)
-                 bottomConstraint.constant = 20
-                
-
-            } else {
-               navigationController?.setNavigationBarHidden(false, animated: true)
-                changeTabBar(hidden: false, animated: false)
-                self.tabBarController?.tabBar.isTranslucent = false
-                showMiddleBtn(vc: self)
-                bottomConstraint.constant = 0
-            }
-            
-        }
-       
-    }
-    
-    func changeTabBar(hidden: Bool, animated: Bool) {
-        guard let tabBar = self.tabBarController?.tabBar else {
-            return
-        }
-
-        if tabBar.isHidden == hidden {
-            return
-        }
-
-        let frame = tabBar.frame
-        let frameMinY = frame.minY
-        let offset = hidden ? frame.size.height : -frame.size.height
-        let viewHeight = self.view.frame.height
-
-        if frameMinY < viewHeight && tabBar.isHidden {
-            tabBar.isHidden = false
-            tabBar.layer.zPosition = .greatestFiniteMagnitude
-
-            UIView.animate(withDuration: 0.5) {
-                tabBar.frame = frame.offsetBy(dx: 0, dy: -offset)
-            }
-
-            return
-        }
-
-        let duration: TimeInterval = (animated ? 0.5 : 0.0)
-        tabBar.isHidden = false
-
-        UIView.animate(withDuration: duration, animations: {
-            tabBar.frame = frame.offsetBy(dx: 0, dy: offset)
-        }, completion: { _ in
-            tabBar.isHidden = hidden
-
-            if !hidden {
-                tabBar.layer.zPosition = 0
-            }
-        })
-    }
-
-
-    
-
 }
 
-extension FeedViewController {
+extension ReelVC {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
@@ -696,11 +364,11 @@ extension FeedViewController {
     
 }
 
-extension FeedViewController: ASCollectionDelegate {
+extension ReelVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
+        let max = CGSize(width: self.view.layer.frame.width, height: contentView.frame.height);
         
         return ASSizeRangeMake(min, max);
     }
@@ -711,7 +379,7 @@ extension FeedViewController: ASCollectionDelegate {
     
 }
 
-extension FeedViewController: ASCollectionDataSource {
+extension ReelVC: ASCollectionDataSource {
     
     func numberOfSections(in collectionNode: ASCollectionNode) -> Int {
         
@@ -728,7 +396,7 @@ extension FeedViewController: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = PostNode(with: post)
+            let node = ReelNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -784,12 +452,12 @@ extension FeedViewController: ASCollectionDataSource {
 }
 
 
-extension FeedViewController {
+extension ReelVC {
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
         //flowLayout.minimumInteritemSpacing = 5.0
-        //flowLayout.minimumLineSpacing = 5.0
+        flowLayout.minimumLineSpacing = 0.0
         //flowLayout.estimatedItemSize = .zero
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
@@ -819,7 +487,7 @@ extension FeedViewController {
     
     func applyStyle() {
         
-        self.collectionNode.view.isPagingEnabled = false
+        self.collectionNode.view.isPagingEnabled = true
         self.collectionNode.view.backgroundColor = UIColor.clear
         self.collectionNode.view.showsVerticalScrollIndicator = false
         self.collectionNode.view.allowsSelection = false
@@ -837,9 +505,8 @@ extension FeedViewController {
     
 }
 
-extension FeedViewController {
+extension ReelVC {
     
-
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
         APIManager().getUserFeed { result in
@@ -938,26 +605,18 @@ extension FeedViewController {
         
         //
         
-    
-        // array
-        
-        
-        
         self.posts.append(contentsOf: items) // append new items to current items
         //
         self.collectionNode.insertItems(at: indexPaths)
         
-        
-        if preloadingView.isAnimating {
-            preloadingView.stopAnimating()
-        }
-      
+
         
     }
     
 }
 
-extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDelegate {
+/*
+extension ReelVC: UINavigationBarDelegate, UINavigationControllerDelegate {
     
     func navigationControllerDelegate() {
         self.navigationController?.navigationBar.delegate = self
@@ -966,9 +625,9 @@ extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDel
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
-}
+} */
 
-extension FeedViewController {
+extension ReelVC {
     
     func settingPost(item: PostModel) {
         
@@ -1034,7 +693,7 @@ extension FeedViewController {
         if !posts.isEmpty {
             for index in 0..<posts.count {
                 let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
-                if let node = collectionNode.nodeForItem(at: indexPath) as? PostNode {
+                if let node = collectionNode.nodeForItem(at: indexPath) as? ReelNode {
                     
                     if node.hashtagView != nil {
                         node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
@@ -1084,45 +743,63 @@ extension FeedViewController {
         }
       
     }
-    
-    func switchToProfileVC() {
-        
-        changeTabBar(hidden: false, animated: false)
-        self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
-       
-        
-    }
-    
-    
-    func loadFeed() {
-        let now = Date()
-        let fortyFiveMinutesAgo = now.addingTimeInterval(-2700) // 2700 seconds = 45 minutes
-        
-        if lastLoadTime != nil, lastLoadTime! < fortyFiveMinutesAgo, !posts.isEmpty {
-            pullControl.beginRefreshing()
-            clearAllData()
-        }
-    }
-    
-    func resetNoti() {
-        
-        APIManager().resetBadge { result in
-            switch result {
-            case .success(let apiResponse):
-                
-                
-                print(apiResponse)
-                
-                Dispatch.main.async {
-                    self.setupEmptyNotiButton()
-                }
 
-            case .failure(let error):
-                
-                print(error)
-                
-        }
+    
+}
+
+extension ReelVC {
+    
+    @objc func clearAllData() {
+        
+        refresh_request = true
+        currentIndex = 0
+        isfirstLoad = true
+        didScroll = false
+        shouldMute = nil
+        imageIndex = nil
+        updateData()
+               
     }
+    
+    
+    func updateData() {
+        self.retrieveNextPageWithCompletion { (newPosts) in
+                
+            if newPosts.count > 0 {
+                        
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+                                 
+            } else {
+              
+                self.refresh_request = false
+                self.posts.removeAll()
+                self.collectionNode.reloadData()
+                
+                if self.posts.isEmpty == true {
+                    
+                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                 
+                } else {
+                    
+                    self.collectionNode.view.restore()
+                    
+                }
+                
+            }
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+            self.delayItem.perform(after: 0.75) {
+                
+                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                
+            }
+              
+          
+        }
         
         
     }

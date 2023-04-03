@@ -378,6 +378,23 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                 
             }
             
+        } else if vc is ReelVC {
+            
+            if let update1 = vc as? ReelVC {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? ReelNode {
+                    
+                    if cell.sideButtonView != nil {
+                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                    }
+                    
+                    cell.videoNode.player?.seek(to: CMTime.zero)
+                    cell.videoNode.pause()
+                    
+                }
+                
+            }
+            
         }
              
         
@@ -563,6 +580,61 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
+                        if let muteStatus = shouldMute {
+                            
+                            if cell.sideButtonView != nil {
+                                
+                                if muteStatus {
+                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                                } else {
+                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                                }
+                            }
+                           
+                            if muteStatus {
+                                cell.videoNode.muted = true
+                            } else {
+                                cell.videoNode.muted = false
+                            }
+                            
+                            cell.videoNode.play()
+                            
+                        } else {
+                            
+                            if cell.sideButtonView != nil {
+                                
+                                if globalIsSound {
+                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                                } else {
+                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                                }
+                            }
+                           
+                            if globalIsSound {
+                                cell.videoNode.muted = false
+                            } else {
+                                cell.videoNode.muted = true
+                            }
+                            
+                            cell.videoNode.play()
+                            
+                        }
+                    
+                    }
+                    
+                }
+                
+            }
+            
+        }  else if vc is ReelVC {
+            
+            if let update1 = vc as? ReelVC {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? ReelNode {
+                    
+                    if !cell.videoNode.isPlaying() {
+                        
+            
                         if let muteStatus = shouldMute {
                             
                             if cell.sideButtonView != nil {
@@ -928,6 +1000,33 @@ func unmuteVideoIfNeed() {
                 
             }
             
+        } else if vc is ReelVC {
+            
+            if let update1 = vc as? ReelVC {
+                
+                if update1.newPlayingIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
+                        
+                        if cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
         }
              
         
@@ -1048,6 +1147,33 @@ func muteVideoIfNeed() {
                 
             }
             
+        } else if vc is ReelVC {
+            
+            if let update1 = vc as? ReelVC {
+                
+                if update1.newPlayingIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
+                        
+                        if cell.videoNode.isPlaying() {
+                            
+                            cell.videoNode.muted = true
+                            shouldMute = true
+                            
+                            if cell.sideButtonView != nil {
+                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
         }
              
         
@@ -1056,6 +1182,26 @@ func muteVideoIfNeed() {
 }
 
 func resetView(cell: PostNode) {
+    
+    if cell.isViewed == true {
+        
+        let currentTime = NSDate().timeIntervalSince1970
+        
+        let change = currentTime - cell.last_view_timestamp
+        
+        if change > 30.0 {
+            
+            cell.isViewed = false
+            cell.time = 0
+        
+        }
+        
+    }
+    
+    
+}
+
+func resetViewForReel(cell: ReelNode) {
     
     if cell.isViewed == true {
         
