@@ -23,12 +23,17 @@
 				<string>stitchbox</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sb</string>
+			</array>
+		</dict>
 	</array>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-    </dict>
 	<key>FacebookAppID</key>
 	<string>663026798636026</string>
 	<key>FacebookClientToken</key>
@@ -42,6 +47,11 @@
 		<string>snssdk1180</string>
 		<string>snssdk1233</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>TikTokAppID</key>
 	<string>aw3hzih2me6rk0vg</string>
 	<key>UIAppFonts</key>

@@ -69,6 +69,10 @@
 		395477BF294D714F008EED97 /* CreateAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477BE294D714F008EED97 /* CreateAccountViewModel.swift */; };
 		3962E496299FE50700047977 /* NewPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3962E495299FE50700047977 /* NewPasswordViewModel.swift */; };
 		396B6AB829B2CA4700ED1DAD /* InsightModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396B6AB729B2CA4700ED1DAD /* InsightModel.swift */; };
+		396F520029DB25DE00BF78BE /* DeeplinkCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396F51FF29DB25DE00BF78BE /* DeeplinkCoordinator.swift */; };
+		396F520229DB25EF00BF78BE /* DeeplinkHandlerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396F520129DB25EF00BF78BE /* DeeplinkHandlerProtocol.swift */; };
+		396F520429DB261700BF78BE /* ProfileDeeplinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396F520329DB261700BF78BE /* ProfileDeeplinkHandler.swift */; };
+		396F520629DB266000BF78BE /* PostDeeplinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396F520529DB266000BF78BE /* PostDeeplinkHandler.swift */; };
 		39E8046C299A9A10002F13A5 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E8046B299A9A10002F13A5 /* NotificationService.swift */; };
 		39E80470299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 39E80469299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		579D046ABA2BF9108B6D1B46 /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 284839D90B9CDE22C0FAE530 /* Pods_OneSignalNotificationServiceExtension.framework */; };
@@ -469,6 +473,10 @@
 		395477BE294D714F008EED97 /* CreateAccountViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewModel.swift; sourceTree = "<group>"; };
 		3962E495299FE50700047977 /* NewPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewModel.swift; sourceTree = "<group>"; };
 		396B6AB729B2CA4700ED1DAD /* InsightModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightModel.swift; sourceTree = "<group>"; };
+		396F51FF29DB25DE00BF78BE /* DeeplinkCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkCoordinator.swift; sourceTree = "<group>"; };
+		396F520129DB25EF00BF78BE /* DeeplinkHandlerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkHandlerProtocol.swift; sourceTree = "<group>"; };
+		396F520329DB261700BF78BE /* ProfileDeeplinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDeeplinkHandler.swift; sourceTree = "<group>"; };
+		396F520529DB266000BF78BE /* PostDeeplinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDeeplinkHandler.swift; sourceTree = "<group>"; };
 		39E80469299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E8046B299A9A10002F13A5 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		39E8046D299A9A10002F13A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -966,6 +974,7 @@
 		390FD7362909264D0068B883 /* Stitchbox */ = {
 			isa = PBXGroup;
 			children = (
+				396F51FE29DB25BF00BF78BE /* DeeplinkHandler */,
 				6A286B6129C980E700C72718 /* CustomizedMap */,
 				6A0CF644296E2E2B00155889 /* Layout */,
 				6A70D5082969F5BE008D80E6 /* CountryPickerView-master */,
@@ -1164,6 +1173,17 @@
 				395477B529425274008EED97 /* LoginCoordinatorProtocol.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		396F51FE29DB25BF00BF78BE /* DeeplinkHandler */ = {
+			isa = PBXGroup;
+			children = (
+				396F51FF29DB25DE00BF78BE /* DeeplinkCoordinator.swift */,
+				396F520129DB25EF00BF78BE /* DeeplinkHandlerProtocol.swift */,
+				396F520329DB261700BF78BE /* ProfileDeeplinkHandler.swift */,
+				396F520529DB266000BF78BE /* PostDeeplinkHandler.swift */,
+			);
+			path = DeeplinkHandler;
 			sourceTree = "<group>";
 		};
 		39E8046A299A9A10002F13A5 /* OneSignalNotificationServiceExtension */ = {
@@ -3375,6 +3395,7 @@
 				6AEA3413298F0FB8005A4C5D /* StartNavVC.swift in Sources */,
 				396B6AB829B2CA4700ED1DAD /* InsightModel.swift in Sources */,
 				6A662784296578E000A4488B /* uploadImageGroupModel.swift in Sources */,
+				396F520629DB266000BF78BE /* PostDeeplinkHandler.swift in Sources */,
 				6A0CF641296AB18100155889 /* FinalResetVC.swift in Sources */,
 				6A9E4C802977B34500B59176 /* UserActivityModel.swift in Sources */,
 				6A80F1A429B6934C0047595A /* HashtagSearchNode.swift in Sources */,
@@ -3397,6 +3418,7 @@
 				6AAD7A08294C5DBB003E3AB6 /* RequestVC.swift in Sources */,
 				A5746D0329BB350000EA143E /* UABuilder.swift in Sources */,
 				6A58EA53294EB301005FA3CD /* CacheConfig.swift in Sources */,
+				396F520229DB25EF00BF78BE /* DeeplinkHandlerProtocol.swift in Sources */,
 				6A3F0A802980BF8500366665 /* FollowNode.swift in Sources */,
 				6A66277E2965772200A4488B /* HTTPTask.swift in Sources */,
 				6AC6DA0629A6C8EB00B18139 /* CommentNode.swift in Sources */,
@@ -3573,6 +3595,7 @@
 				6AEA3408298DE1AB005A4C5D /* EditPostVC.swift in Sources */,
 				6AEC6901295178E2000393D8 /* SendBirdRoomModel.swift in Sources */,
 				14621E32298B374B0023694D /* FistBumpUserModel.swift in Sources */,
+				396F520429DB261700BF78BE /* ProfileDeeplinkHandler.swift in Sources */,
 				6A58EA56294ECAE6005FA3CD /* ChannelViewController.swift in Sources */,
 				14FADBC6297A000000E0A741 /* SettingModel.swift in Sources */,
 				1457CDEC294862DF003C742F /* DashboardTabBar.swift in Sources */,
@@ -3581,6 +3604,7 @@
 				A5D1E9DF2984422800839311 /* FollowerModel.swift in Sources */,
 				6A0CF64E296E2F0200155889 /* ProfileView.swift in Sources */,
 				6A9E4C6E29768BE100B59176 /* FindFriendsNode.swift in Sources */,
+				396F520029DB25DE00BF78BE /* DeeplinkCoordinator.swift in Sources */,
 				6A9E4C762977AF3700B59176 /* AccountActivityVC.swift in Sources */,
 				6AAD7A18294C65DD003E3AB6 /* AppDelegate+SoundEffects.swift in Sources */,
 				6A80F1AC29BA78E70047595A /* GameListView.swift in Sources */,

@@ -105,7 +105,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
           print("additionalData: ", additionalData)
           
           let text = additionalData["data"] as! String
-          
           let data = self.convertStringToDictionary(text: text)
           
           print(data)
