@@ -414,20 +414,25 @@ extension PostNode {
             
             if let vc = UIViewController.currentViewController() {
                 
-                let nav = UINavigationController(rootViewController: RVC)
+                if vc is FeedViewController || vc is MainSearchVC || vc is PostListWithHashtagVC {
+                    
+                    let nav = UINavigationController(rootViewController: RVC)
 
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                RVC.posts = [post]
+                    // Set the user ID, nickname, and onPresent properties of UPVC
+                    RVC.posts = [post]
 
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                    // Customize the navigation bar appearance
+                    nav.navigationBar.barTintColor = .background
+                    nav.navigationBar.tintColor = .white
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
+                    nav.modalPresentationStyle = .fullScreen
+                    vc.present(nav, animated: true, completion: nil)
+                    
+                } else {
+                    soundProcess()
+                }
 
-       
             }
         }
       

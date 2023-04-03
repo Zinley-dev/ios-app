@@ -363,7 +363,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         if post.muxPlaybackId != "" {
             
-            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.png?time=0.025"
+            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.png?time=1"
             
             return URL(string: urlString)
             
@@ -405,7 +405,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                     
                 }
                 
-            }     
+            }
             
         }
         
@@ -1101,10 +1101,6 @@ extension ReelNode
         let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
         let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
 
-        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 75)
-        let buttonsInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        let buttonsInsetSpec = ASInsetLayoutSpec(insets: buttonsInset, child: buttonsNode)
-
         let verticalStack = ASStackLayoutSpec.vertical()
         
         verticalStack.children = [headerInsetSpec]
@@ -1113,7 +1109,7 @@ extension ReelNode
             verticalStack.children?.append(contentInsetSpec)
         }
         
-        verticalStack.children?.append(contentsOf: [hashtagsInsetSpec, buttonsInsetSpec])
+        verticalStack.children?.append(contentsOf: [hashtagsInsetSpec])
 
         let verticalStackInset = UIEdgeInsets(top: 0, left: 8, bottom: 8, right: 8)
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
@@ -1121,16 +1117,25 @@ extension ReelNode
         let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
 
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let imageInsetSpec = ASInsetLayoutSpec(insets: inset, child: imageNode)
         let textInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
         let textInsetSpec1 = ASInsetLayoutSpec(insets: inset, child: gradientNode)
         let textInsetSpec2 = ASInsetLayoutSpec(insets: inset, child: backgroundImage)
        
+        if post.muxPlaybackId != "" {
+            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: textInsetSpec)
+            let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
+            let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
 
-        let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: textInsetSpec)
-        let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
-        let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
+            return thirdOverlay
+        } else {
+            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: imageInsetSpec)
+            let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
+            let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
 
-        return thirdOverlay
+            return thirdOverlay
+        }
+        
     }
 
 
