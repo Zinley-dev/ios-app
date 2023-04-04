@@ -133,7 +133,7 @@ class UserLoginActivityModel {
         if let createdAt = userLoginActivity["createdAt"] as? Date {
             self._createdAt = createdAt
         } else {
-            if let createdAtFail = userLoginActivity["created_at"] {
+            if let createdAtFail = userLoginActivity["createdAt"] {
                 self._createdAt = transformFromJSON(createdAtFail)
             }
         }
