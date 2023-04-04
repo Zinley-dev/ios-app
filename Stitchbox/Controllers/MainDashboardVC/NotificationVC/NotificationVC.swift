@@ -342,10 +342,21 @@ extension NotificationVC {
     
     func openPost(post: PostModel) {
         
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
-            SPVC.selectedPost = [post]
-            SPVC.startIndex = 0
-            self.navigationController?.pushViewController(SPVC, animated: true)
+        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+            
+            let nav = UINavigationController(rootViewController: RVC)
+
+            // Set the user ID, nickname, and onPresent properties of UPVC
+            RVC.posts = [post]
+           
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+            
         }
         
         

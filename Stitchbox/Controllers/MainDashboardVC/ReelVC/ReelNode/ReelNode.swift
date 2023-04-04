@@ -41,7 +41,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var isViewed = false
     var currentTimeStamp: TimeInterval!
     private var originalVideoTransform: CGAffineTransform = .identity
-   
+    var originalCenter: CGPoint?
+    
     
     init(with post: PostModel) {
         self.post = post
@@ -88,7 +89,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.buttonsView.commentBtn.setTitle("", for: .normal)
             self.buttonsView.shareBtn.setTitle("", for: .normal)
             self.buttonsView.streamlinkBtn.setTitle("", for: .normal)
-            self.buttonsView.soundBtn.setTitle("", for: .normal)
             
             self.hashtagView = HashtagView()
             self.hashtagsNode.view.addSubview(self.hashtagView)
@@ -98,39 +98,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.hashtagView.bottomAnchor.constraint(equalTo: self.hashtagsNode.view.bottomAnchor, constant: 0).isActive = true
             self.hashtagView.leadingAnchor.constraint(equalTo: self.hashtagsNode.view.leadingAnchor, constant: 0).isActive = true
             self.hashtagView.trailingAnchor.constraint(equalTo: self.hashtagsNode.view.trailingAnchor, constant: 0).isActive = true
-              
-            if post.muxPlaybackId != "" {
-                
-               
-                self.buttonsView.soundBtn.setTitle("", for: .normal)
-                
-               
-                
-                if let muteStatus = shouldMute {
-                    
-                    if muteStatus {
-                        self.buttonsView.soundBtn.setImage(muteImage, for: .normal)
-                    } else {
-                        self.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
-                    }
-                    
-                } else {
-                    
-                    if globalIsSound {
-                        self.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
-                    } else {
-                        self.buttonsView.soundBtn.setImage(muteImage, for: .normal)
-                    }
-                    
-                    
-                }
-              
-           
-                let soundTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.soundProcess))
-                soundTap.numberOfTapsRequired = 1
-                self.buttonsView.soundBtn.addGestureRecognizer(soundTap)
 
-            }
             
             let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
             avatarTap.numberOfTapsRequired = 1
@@ -181,7 +149,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             
             let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ReelNode.settingTapped))
-            longPress.minimumPressDuration = 0.5
+            longPress.minimumPressDuration = 0.65
             self.view.addGestureRecognizer(longPress)
             
             longPress.delaysTouchesBegan = true
@@ -281,12 +249,15 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
                 
                 let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+                pinchGestureRecognizer.delegate = self
                 self.videoNode.view.addGestureRecognizer(pinchGestureRecognizer)
 
                 let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
                 panGestureRecognizer.delegate = self
                 panGestureRecognizer.minimumNumberOfTouches = 2
                 self.videoNode.view.addGestureRecognizer(panGestureRecognizer)
+                
+       
               
             }
             
@@ -316,8 +287,9 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             }
             
             Dispatch.main.async {
-                self.imageNode.view.isUserInteractionEnabled = true
+                
                 let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+                pinchGestureRecognizer.delegate = self
                 self.imageNode.view.addGestureRecognizer(pinchGestureRecognizer)
 
                 let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
@@ -368,21 +340,31 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
         if recognizer.state == .began {
             disableSroll()
-            originalVideoTransform = view.transform
-        
         }
 
         if recognizer.state == .changed {
             let scale = recognizer.scale
             let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
-            view.transform = view.transform.concatenating(scaleTransform)
+            let tempTransform = view.transform.concatenating(scaleTransform)
+            view.transform = tempTransform
+          
             recognizer.scale = 1
         }
 
         if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
+            
+            let scale = recognizer.scale
+            let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
+            let tempTransform = view.transform.concatenating(scaleTransform)
+            
             UIView.animate(withDuration: 0.2, animations: {
-                view.transform = CGAffineTransform.identity
+                if tempTransform.a < 1.0 {
+                    view.transform = CGAffineTransform.identity
+                }
+                    }, completion: { _ in
+                        self.enableScroll()
             })
+        
         }
     }
 
@@ -390,24 +372,28 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         guard let view = recognizer.view else { return }
 
         if recognizer.state == .began {
-            originalVideoTransform = view.transform
+            disableSroll()
+            originalCenter = view.center
         }
 
         if recognizer.state == .changed {
             let translation = recognizer.translation(in: view)
-            let translationTransform = CGAffineTransform(translationX: translation.x, y: translation.y)
-            view.transform = view.transform.concatenating(translationTransform)
+            view.center = CGPoint(x: view.center.x + translation.x, y: view.center.y + translation.y)
             recognizer.setTranslation(.zero, in: view)
         }
 
         if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
+           
             UIView.animate(withDuration: 0.2, animations: {
-                        view.transform = CGAffineTransform.identity
+                        view.center = self.originalCenter!
                     }, completion: { _ in
                         self.enableScroll()
                     })
+            
         }
     }
+
+
     
     
     func getThumbnailBackgroundVideoNodeURL(post: PostModel) -> URL? {
@@ -497,28 +483,12 @@ extension ReelNode {
             if videoNode.muted == true {
                 videoNode.muted = false
                 shouldMute = false
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.buttonsView.soundBtn.transform = self.buttonsView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
-                    self.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
-                    }, completion: { _ in
-                      // Step 2
-                      UIView.animate(withDuration: 0.1, animations: {
-                          self.buttonsView.soundBtn.transform = CGAffineTransform.identity
-                      })
-                    })
+                animateUnmute()
         
             } else {
                 videoNode.muted = true
                 shouldMute = true
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.buttonsView.soundBtn.transform = self.buttonsView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
-                    self.buttonsView.soundBtn.setImage(muteImage, for: .normal)
-                    }, completion: { _ in
-                      // Step 2
-                      UIView.animate(withDuration: 0.1, animations: {
-                          self.buttonsView.soundBtn.transform = CGAffineTransform.identity
-                      })
-                    })
+                animateMute()
             }
             
         }
@@ -868,6 +838,98 @@ extension ReelNode {
         
     }
     
+    func animateMute() {
+        
+        let imgView = UIImageView()
+        imgView.image = muteImage
+        imgView.frame.size = CGSize(width: 45, height: 45)
+       
+        if let vc = UIViewController.currentViewController() {
+             
+            if vc is ReelVC {
+                
+                if let update1 = vc as? ReelVC {
+                    
+                    imgView.center = update1.view.center
+                    update1.view.addSubview(imgView)
+                    
+                }
+                
+            }
+                        
+                        
+                        
+                   
+        }
+        
+        
+        imgView.transform = CGAffineTransform.identity
+        
+        UIView.animate(withDuration: 1) {
+            
+            imgView.alpha = 0
+            
+        }
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            
+            if imgView.alpha == 0 {
+                
+                imgView.removeFromSuperview()
+                
+            }
+            
+        }
+        
+    }
+    
+    func animateUnmute() {
+        
+        let imgView = UIImageView()
+        imgView.image = unmuteImage
+        imgView.frame.size = CGSize(width:45, height: 45)
+       
+        if let vc = UIViewController.currentViewController() {
+             
+            if vc is ReelVC {
+                
+                if let update1 = vc as? ReelVC {
+                    
+                    imgView.center = update1.view.center
+                    update1.view.addSubview(imgView)
+                    
+                }
+                
+            }
+                        
+                        
+                        
+                   
+        }
+        
+        
+        imgView.transform = CGAffineTransform.identity
+        
+        UIView.animate(withDuration: 1) {
+            
+            imgView.alpha = 0
+            
+        }
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            
+            if imgView.alpha == 0 {
+                
+                imgView.removeFromSuperview()
+                
+            }
+            
+        }
+        
+    }
+    
     func checkIfLike() {
         
         APIManager().hasLikedPost(id: post.id) { result in
@@ -1095,11 +1157,17 @@ extension ReelNode
 }
 
 
+
 // Add a UIGestureRecognizerDelegate extension to allow simultaneous recognition
 extension ReelNode: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+
 }
 
 extension ReelNode {

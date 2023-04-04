@@ -409,7 +409,7 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? ReelNode {
                     
                     if cell.buttonsView != nil {
-                        cell.buttonsView.soundBtn.setImage(muteImage, for: .normal)
+                        
                         
                         if !cell.buttonsView.streamView.isHidden {
                             
@@ -696,15 +696,7 @@ func playVideoIfNeed(playIndex: Int) {
                         }
             
                         if let muteStatus = shouldMute {
-                            
-                            if cell.buttonsView != nil {
-                                
-                                if muteStatus {
-                                    cell.buttonsView.soundBtn.setImage(muteImage, for: .normal)
-                                } else {
-                                    cell.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
-                                }
-                            }
+                        
                            
                             if muteStatus {
                                 cell.videoNode.muted = true
@@ -716,15 +708,7 @@ func playVideoIfNeed(playIndex: Int) {
                             
                         } else {
                             
-                            if cell.buttonsView != nil {
-                                
-                                if globalIsSound {
-                                    cell.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
-                                } else {
-                                    cell.buttonsView.soundBtn.setImage(muteImage, for: .normal)
-                                }
-                            }
-                           
+
                             if globalIsSound {
                                 cell.videoNode.muted = false
                             } else {
@@ -1070,12 +1054,7 @@ func unmuteVideoIfNeed() {
                         
                         if cell.videoNode.isPlaying() {
                             
-                            cell.videoNode.muted = false
-                            shouldMute = false
-                            
-                            if cell.buttonsView != nil {
-                                cell.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
-                            }
+                            cell.soundProcess()
                             
                         }
                         
@@ -1217,12 +1196,7 @@ func muteVideoIfNeed() {
                         
                         if cell.videoNode.isPlaying() {
                             
-                            cell.videoNode.muted = true
-                            shouldMute = true
-                            
-                            if cell.buttonsView != nil {
-                                cell.buttonsView.soundBtn.setImage(muteImage, for: .normal)
-                            }
+                            cell.soundProcess()
                             
                         }
                         
@@ -1336,4 +1310,25 @@ func presentStreamingIntro() {
     }
     
     
+}
+
+
+class DelayedPanGestureRecognizer: UIPanGestureRecognizer {
+    private var touchDownTime: Date?
+    private let delayTime: TimeInterval = 0.25 // Set the delay time to 0.25 seconds
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesBegan(touches, with: event)
+        
+        touchDownTime = Date()
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesMoved(touches, with: event)
+        
+        if let touchDownTime = touchDownTime,
+           Date().timeIntervalSince(touchDownTime) < delayTime {
+            state = .failed // Delay recognition of the pan gesture until the user has held their finger down for at least delayTime
+        }
+    }
 }

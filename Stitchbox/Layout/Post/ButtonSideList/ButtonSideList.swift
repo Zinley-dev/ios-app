@@ -18,8 +18,7 @@ class ButtonSideList: UIView {
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var likeCountLbl: UILabel!
     @IBOutlet weak var streamlinkBtn: UIButton!
-    @IBOutlet weak var soundBtn: UIButton!
- 
+   
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet var streamView: UIView!
 

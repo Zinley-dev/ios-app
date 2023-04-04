@@ -891,7 +891,6 @@ extension FeedViewController {
         
     }
     
-    
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
         
         // checking empty
@@ -899,17 +898,17 @@ extension FeedViewController {
             return
         }
         
-        if refresh_request == true {
+        if refresh_request {
             
             refresh_request = false
             
 
-            if self.posts.isEmpty != true {
+            if !self.posts.isEmpty {
                 
                
                 var delete_indexPaths: [IndexPath] = []
                 
-                for row in 0...self.posts.count - 1 {
+                for row in 0..<self.posts.count {
                     let path = IndexPath(row: row, section: 0) // single indexpath
                     delete_indexPaths.append(path) // app
                 }
@@ -921,34 +920,22 @@ extension FeedViewController {
             
         }
         
-        // basic contruction
-        let section = 0
+        // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()
-        var indexPaths: [IndexPath] = []
-        //
-        
-        // current array = posts
-        
-        let total = self.posts.count + newPosts.count
-        
-        
-        // 0 - 2 2-4 4-6
-        
-        for row in self.posts.count...total-1 {
-            let path = IndexPath(row: row, section: section) // single indexpath
-            indexPaths.append(path) // app
-        }
-        
-        //
-        
         for i in newPosts {
+            if let item = PostModel(JSON: i) {
+                if !self.posts.contains(item) {
+                    self.posts.append(item)
+                    items.append(item)
+                }
+            }
             
-            let item = PostModel(JSON: i)
-            items.append(item!)
-          
         }
         
-        //
+        // Construct index paths for the new rows
+        let startIndex = self.posts.count - items.count
+        let endIndex = startIndex + items.count - 1
+        let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
         
         if firstAnimated {
             
@@ -974,19 +961,12 @@ extension FeedViewController {
             
         }
         
-    
-        // array
-        
-        
-        
-        self.posts.append(contentsOf: items) // append new items to current items
-        //
+
+        // Insert new items at index paths
         self.collectionNode.insertItems(at: indexPaths)
-        
       
-      
-        
     }
+
     
 }
 

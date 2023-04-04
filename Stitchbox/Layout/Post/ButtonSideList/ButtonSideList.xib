@@ -18,7 +18,6 @@
                 <outlet property="likeBtn" destination="EP3-LO-Gfd" id="pmV-gX-BJu"/>
                 <outlet property="likeCountLbl" destination="TUD-7i-hmt" id="9wB-Yc-109"/>
                 <outlet property="shareBtn" destination="X2b-3W-qyV" id="S5o-Ah-d3d"/>
-                <outlet property="soundBtn" destination="nqb-rE-dex" id="LUU-vR-GFM"/>
                 <outlet property="streamView" destination="7iW-rQ-Yzm" id="mne-mI-iIf"/>
                 <outlet property="streamlinkBtn" destination="dqo-Lv-Gj7" id="JB8-xZ-lsZ"/>
             </connections>
@@ -29,7 +28,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mhd-rC-eac">
-                    <rect key="frame" x="97" y="72" width="50" height="266"/>
+                    <rect key="frame" x="97" y="132" width="50" height="206"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="51s-pf-seo">
                             <rect key="frame" x="0.0" y="0.0" width="50" height="68"/>
@@ -82,20 +81,6 @@
                                     </constraints>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" image="share"/>
-                                </button>
-                            </subviews>
-                        </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ykG-c7-PPY">
-                            <rect key="frame" x="0.0" y="216" width="50" height="50"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nqb-rE-dex">
-                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="50" id="Ljq-vr-rse"/>
-                                        <constraint firstAttribute="width" constant="50" id="WA9-bh-dlg"/>
-                                    </constraints>
-                                    <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain"/>
                                 </button>
                             </subviews>
                         </stackView>

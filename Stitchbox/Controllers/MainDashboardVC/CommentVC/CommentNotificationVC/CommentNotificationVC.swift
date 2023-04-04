@@ -875,24 +875,24 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     @IBAction func vỉewPostBtnPressed(_ sender: Any) {
         
         if let viewPost = self.post {
-            
-            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        
+            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
                 
-                let nav = UINavigationController(rootViewController: SPVC)
-                
+                let nav = UINavigationController(rootViewController: RVC)
+
+                // Set the user ID, nickname, and onPresent properties of UPVC
+                RVC.posts = [viewPost]
+               
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
                 nav.modalPresentationStyle = .fullScreen
-                nav.navigationItem.titleView?.tintColor = .white
-                nav.navigationBar.tintColor = .background
-                
-                SPVC.selectedPost = [viewPost]
-                SPVC.startIndex = 0
-                SPVC.onPresent = true
-                
                 self.present(nav, animated: true, completion: nil)
                 
             }
-            
-            
+
         } else {
             
             self.showErrorAlert("Oops!", msg: "This post is temporarily unavailable.")
