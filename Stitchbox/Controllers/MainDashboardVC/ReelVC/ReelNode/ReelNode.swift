@@ -86,7 +86,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.buttonsView.commentBtn.setTitle("", for: .normal)
             self.buttonsView.shareBtn.setTitle("", for: .normal)
             self.buttonsView.streamlinkBtn.setTitle("", for: .normal)
-        
+            self.buttonsView.soundBtn.setTitle("", for: .normal)
             
             self.hashtagView = HashtagView()
             self.hashtagsNode.view.addSubview(self.hashtagView)
