@@ -40,7 +40,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var settingBtn : ((ASCellNode) -> Void)?
     var isViewed = false
     var currentTimeStamp: TimeInterval!
-    private var originalVideoTransform: CGAffineTransform = .identity
     var originalCenter: CGPoint?
     
     
@@ -287,6 +286,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             }
             
             Dispatch.main.async {
+                
+                self.imageNode.view.isUserInteractionEnabled = true
                 
                 let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
                 pinchGestureRecognizer.delegate = self

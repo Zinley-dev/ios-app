@@ -243,11 +243,13 @@ extension ReelVC {
                         
                         if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex, section: 0)) as? ReelNode {
                             
-                            node.videoNode.view.transform = CGAffineTransform.identity
-                            node.imageNode.view.transform = CGAffineTransform.identity
+                            if node.videoNode.currentItem != nil {
+                                node.videoNode.view.transform = CGAffineTransform.identity
+                            } else if node.imageNode.image != nil {
+                                node.imageNode.view.transform = CGAffineTransform.identity
+                            }
                             
-                        
-                         
+                  
                         }
                         
                         pauseVideoIfNeed(pauseIndex: currentIndex)
@@ -269,18 +271,37 @@ extension ReelVC {
                 
                 if let currentIndex = currentIndex {
                     
+                    
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex, section: 0)) as? ReelNode {
                         
-                        node.videoNode.view.transform = CGAffineTransform.identity
-                        node.imageNode.view.transform = CGAffineTransform.identity
+                        if node.videoNode.currentItem != nil {
+                            node.videoNode.view.transform = CGAffineTransform.identity
+                        } else if node.imageNode.image != nil {
+                            node.imageNode.view.transform = CGAffineTransform.identity
+                        }
                         
-                      
+              
+                    }
+
+                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                    
+                }
+                
+                if self.imageIndex != nil {
+                    
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: imageIndex!, section: 0)) as? ReelNode {
                         
+                        if node.videoNode.currentItem != nil {
+                            node.videoNode.view.transform = CGAffineTransform.identity
+                        } else if node.imageNode.image != nil {
+                            node.imageNode.view.transform = CGAffineTransform.identity
+                        }
+                        
+              
                     }
                     
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
                 }
-
+                
                 imageTimerWorkItem?.cancel()
                 imageTimerWorkItem = DispatchWorkItem { [weak self] in
                     guard let self = self else { return }
