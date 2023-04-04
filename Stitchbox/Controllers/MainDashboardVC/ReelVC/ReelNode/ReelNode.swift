@@ -647,7 +647,7 @@ extension ReelNode {
         
         let loadUsername = userDataSource.userName
         
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(post.id)")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(post.id)")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
@@ -660,7 +660,7 @@ extension ReelNode {
             
             if vc is ReelVC {
                 
-                if let update1 = vc as? SelectedPostVC {
+                if let update1 = vc as? ReelVC {
                     
                     update1.present(ac, animated: true, completion: nil)
                     
