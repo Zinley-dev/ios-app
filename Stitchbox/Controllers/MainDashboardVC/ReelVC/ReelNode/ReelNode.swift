@@ -244,7 +244,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         
         if post.muxPlaybackId != "" {
-            self.videoNode.url = self.getThumbnailVideoNodeURL(post: post)
+            self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
             self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
             self.videoNode.shouldAutoplay = false
             self.videoNode.shouldAutorepeat = true
@@ -340,6 +340,19 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
   
     }
 
+    func getThumbnailBackgroundVideoNodeURL(post: PostModel) -> URL? {
+        
+        if post.muxPlaybackId != "" {
+            
+            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.png?time=0.025"
+            
+            return URL(string: urlString)
+            
+        } else {
+            return nil
+        }
+        
+    }
 
     func getThumbnailVideoNodeURL(post: PostModel) -> URL? {
         
