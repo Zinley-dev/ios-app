@@ -318,6 +318,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.sideButtonView != nil {
                         cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
                     }
                     
                     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -335,6 +341,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.sideButtonView != nil {
                         cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
                     }
                     
                     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -352,6 +364,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.sideButtonView != nil {
                         cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
                     }
                     
                     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -369,6 +387,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.sideButtonView != nil {
                         cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
                     }
                     
                     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -419,6 +443,12 @@ func playVideoIfNeed(playIndex: Int) {
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
                     
                     if !cell.videoNode.isPlaying() {
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
                         
                         if let muteStatus = shouldMute {
                             
@@ -477,6 +507,12 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
+                        
                         if let muteStatus = shouldMute {
                             
                             if cell.sideButtonView != nil {
@@ -531,6 +567,11 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
             
                         if let muteStatus = shouldMute {
                             
@@ -585,6 +626,13 @@ func playVideoIfNeed(playIndex: Int) {
                 if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
                     
                     if !cell.videoNode.isPlaying() {
+                        
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
                         
                         if let muteStatus = shouldMute {
                             
@@ -1266,3 +1314,26 @@ extension UIView {
     }
 }
 
+
+func presentStreamingIntro() {
+    
+    if let SIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingIntroVC") as? StreamingIntroVC {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            let nav = UINavigationController(rootViewController: SIVC)
+
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            vc.present(nav, animated: true, completion: nil)
+
+
+        }
+    }
+    
+    
+}

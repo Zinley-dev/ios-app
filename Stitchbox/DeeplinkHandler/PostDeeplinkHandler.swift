@@ -50,16 +50,15 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
                             
                             if let post = PostModel(JSON: data) {
                                 
-                                if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                                if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
                                     
                                     if let vc = UIViewController.currentViewController() {
                                         
-                                        let nav = UINavigationController(rootViewController: SPVC)
+                                        let nav = UINavigationController(rootViewController: RVC)
 
-                                        SPVC.selectedPost = [post]
-                                        SPVC.startIndex = 0
-                                        SPVC.onPresent = true
-
+                                        // Set the user ID, nickname, and onPresent properties of UPVC
+                                        RVC.posts = [post]
+                                       
                                         // Customize the navigation bar appearance
                                         nav.navigationBar.barTintColor = .background
                                         nav.navigationBar.tintColor = .white

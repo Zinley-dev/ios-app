@@ -617,6 +617,7 @@ extension FeedViewController {
                 changeTabBar(hidden: false, animated: false)
                 self.tabBarController?.tabBar.isTranslucent = false
                 showMiddleBtn(vc: self)
+               
                 bottomConstraint.constant = 0
             }
             
@@ -633,35 +634,26 @@ extension FeedViewController {
             return
         }
 
-        let frame = tabBar.frame
-        let frameMinY = frame.minY
-        let offset = hidden ? frame.size.height : -frame.size.height
-        let viewHeight = self.view.frame.height
+        let duration: TimeInterval = (animated ? 0.25 : 0.0)
 
-        if frameMinY < viewHeight && tabBar.isHidden {
+        if hidden {
+            UIView.animate(withDuration: duration, animations: {
+                tabBar.alpha = 0
+            }, completion: { _ in
+                tabBar.isHidden = true
+                tabBar.alpha = 1 // Reset the alpha back to 1
+            })
+        } else {
             tabBar.isHidden = false
-            tabBar.layer.zPosition = .greatestFiniteMagnitude
+            tabBar.alpha = 0
 
-            UIView.animate(withDuration: 0.5) {
-                tabBar.frame = frame.offsetBy(dx: 0, dy: -offset)
+            UIView.animate(withDuration: duration) {
+                tabBar.alpha = 1
             }
-
-            return
         }
-
-        let duration: TimeInterval = (animated ? 0.5 : 0.0)
-        tabBar.isHidden = false
-
-        UIView.animate(withDuration: duration, animations: {
-            tabBar.frame = frame.offsetBy(dx: 0, dy: offset)
-        }, completion: { _ in
-            tabBar.isHidden = hidden
-
-            if !hidden {
-                tabBar.layer.zPosition = 0
-            }
-        })
     }
+
+
 
 
     

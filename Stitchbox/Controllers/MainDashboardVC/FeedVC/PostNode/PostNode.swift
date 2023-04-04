@@ -897,7 +897,11 @@ extension PostNode {
     }
     
     @objc func streamingLinkTapped() {
-        guard let url = URL(string: post.streamLink), !post.streamLink.isEmpty else { return }
+        guard let url = URL(string: post.streamLink), !post.streamLink.isEmpty else {
+            presentStreamingIntro()
+            return
+            
+        }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 

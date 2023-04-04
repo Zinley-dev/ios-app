@@ -186,6 +186,7 @@
 		6A6FB09229DA586C003FCF6E /* GradientImageNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09129DA586C003FCF6E /* GradientImageNode.swift */; };
 		6A6FB09629DB6F2B003FCF6E /* ButtonSideList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */; };
 		6A6FB09729DB6F2B003FCF6E /* ButtonSideList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */; };
+		6A6FB09A29DBBC20003FCF6E /* StreamingIntroVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09929DBBC20003FCF6E /* StreamingIntroVC.swift */; };
 		6A78485B2984D1BA008B2263 /* PostNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485A2984D1BA008B2263 /* PostNode.swift */; };
 		6A78485E2984D1F6008B2263 /* NotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485D2984D1F6008B2263 /* NotificationVC.swift */; };
 		6A7848642985096F008B2263 /* StreamingLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7848632985096F008B2263 /* StreamingLinkVC.swift */; };
@@ -601,6 +602,7 @@
 		6A6FB09129DA586C003FCF6E /* GradientImageNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientImageNode.swift; sourceTree = "<group>"; };
 		6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonSideList.swift; sourceTree = "<group>"; };
 		6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonSideList.xib; sourceTree = "<group>"; };
+		6A6FB09929DBBC20003FCF6E /* StreamingIntroVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingIntroVC.swift; sourceTree = "<group>"; };
 		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "CountryPickerView-master"; sourceTree = "<group>"; };
 		6A78485A2984D1BA008B2263 /* PostNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNode.swift; sourceTree = "<group>"; };
 		6A78485D2984D1F6008B2263 /* NotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationVC.swift; sourceTree = "<group>"; };
@@ -1944,6 +1946,14 @@
 			path = ButtonSideList;
 			sourceTree = "<group>";
 		};
+		6A6FB09829DBBC00003FCF6E /* StreamingIntroVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A6FB09929DBBC20003FCF6E /* StreamingIntroVC.swift */,
+			);
+			path = StreamingIntroVC;
+			sourceTree = "<group>";
+		};
 		6A7848592984D1AA008B2263 /* PostNode */ = {
 			isa = PBXGroup;
 			children = (
@@ -2164,6 +2174,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A6FB09829DBBC00003FCF6E /* StreamingIntroVC */,
 				6A6FB08A29DA4155003FCF6E /* ReelVC */,
 				6A2B9A7F29D26AC100C2D9CD /* ViewVC */,
 				6A78485C2984D1E3008B2263 /* NotificationVC */,
@@ -3538,6 +3549,7 @@
 				6A58EA4D294EB280005FA3CD /* NotificationDelegate.swift in Sources */,
 				6A6C30DE2963F4720070167A /* ModerationVC.swift in Sources */,
 				6A784868298628CE008B2263 /* StreamingListVC.swift in Sources */,
+				6A6FB09A29DBBC20003FCF6E /* StreamingIntroVC.swift in Sources */,
 				A5D1E9ED2984DA2000839311 /* CreatePostRequest.swift in Sources */,
 				6A3F0A5C297CB83F00366665 /* AddVC.swift in Sources */,
 				6A0CF643296AB19200155889 /* NewPasswordVC.swift in Sources */,
@@ -3947,7 +3959,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -3991,7 +4003,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
