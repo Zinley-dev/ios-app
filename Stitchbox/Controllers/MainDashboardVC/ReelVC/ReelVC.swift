@@ -12,11 +12,9 @@ import Alamofire
 
 class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
 
-
     @IBOutlet weak var contentView: UIView!
 
     let backButton: UIButton = UIButton(type: .custom)
-
     var currentIndex: Int?
     var isfirstLoad = true
     var didScroll = false
@@ -230,6 +228,9 @@ extension ReelVC {
                 playTimeBar.isHidden = true
                 imageIndex = newPlayingIndex
             }
+            
+            
+
             
             
             if foundVisibleVideo {
