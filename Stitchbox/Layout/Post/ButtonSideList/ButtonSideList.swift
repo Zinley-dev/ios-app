@@ -7,7 +7,9 @@
 
 import UIKit
 
-class ButtonsHeader: UIView {
+class ButtonSideList: UIView {
+    
+    @IBOutlet var contentView: UIView!
     
     @IBOutlet weak var shareBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
@@ -16,10 +18,12 @@ class ButtonsHeader: UIView {
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var likeCountLbl: UILabel!
     @IBOutlet weak var streamlinkBtn: UIButton!
+    @IBOutlet weak var soundBtn: UIButton!
+ 
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet var streamView: UIView!
-    @IBOutlet var contentView: UIView!
 
-    let kCONTENT_XIB_NAME = "ButtonsHeader"
+    let kCONTENT_XIB_NAME = "ButtonSideList"
     
     override init(frame: CGRect) {
         super.init(frame: frame)

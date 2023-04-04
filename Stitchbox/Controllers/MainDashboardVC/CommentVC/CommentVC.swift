@@ -592,8 +592,8 @@ extension CommentVC {
                 } else {
                     commentSettings.isPostOwner = false
                 }
-                
-                if uid == selectedCmt.owner_uid {
+
+                if uid == selectedCmt.comment_uid {
                     commentSettings.isCommentOwner = true
                 } else {
                     commentSettings.isCommentOwner = false
@@ -829,6 +829,7 @@ extension CommentVC {
                     }
                     if !data.isEmpty {
                         print("Successfully retrieved \(data.count) comments.")
+                        print(data)
                         let items = data
                         self.cmtPage += 1
                     
@@ -984,90 +985,65 @@ extension CommentVC {
             // If the comment ID is nil, return early
             return
         }
-        
+
         if self.CommentList[root_index].lastCmtSnapshot == nil {
             self.CommentList[root_index].lastCmtSnapshot = 1
         }
-        
+
         APIManager().getReply(for: commentId, page: self.CommentList[root_index].lastCmtSnapshot) { result in
             switch result {
             case .success(let apiResponse):
-               
-                guard let replyData = apiResponse.body?["data"] as? [[String:Any]],
+
+                guard let replyData = apiResponse.body?["data"] as? [[String: Any]],
                       !replyData.isEmpty else {
                     // If the API response is not successful or the reply data is empty, return early
                     return
                 }
-                
+
                 // Filter out any reply data that has already been loaded
-                var newReplyData = replyData.filter { reply in
+                let newReplyData = replyData.filter { reply in
                     let cmtId = reply["_id"] as! String
                     let newReplyModel = CommentModel(postKey: cmtId, Comment_model: reply)
                     return !self.checkDuplicateLoading(post: newReplyModel)
                 }
-                
+
                 guard !newReplyData.isEmpty else {
                     // If there is no new reply data to load, return early
                     return
                 }
-                
+
+                var mutableReplyData = newReplyData
+                mutableReplyData[mutableReplyData.count - 1]["hasReply"] = true
+
                 let section = 0
                 var indexPaths: [IndexPath] = []
 
-                var last = 0
                 var start = indexex + 1
-                
-                
-                
-                for row in start...newReplyData.count + start - 1 {
-                    
+
+                for row in start..<start + mutableReplyData.count {
                     let path = IndexPath(row: row, section: section)
                     indexPaths.append(path)
-                    
-                    last = row
-                    
                 }
-                
-                newReplyData[newReplyData.count - 1].updateValue(true, forKey: "hasReply")
-                
-                for item in newReplyData {
-                    
-        
-                    let items = CommentModel(postKey: item["_id"] as! String, Comment_model: item)
-     
-                    self.CommentList.insert(items, at: start)
-                    
-                    start += 1
-                    
-                }
-                
+
+                let newCommentModels = mutableReplyData.map { CommentModel(postKey: $0["_id"] as! String, Comment_model: $0) }
+                self.CommentList.insert(contentsOf: newCommentModels, at: start)
+
                 DispatchQueue.main.async {
-                    self.tableNode.insertRows(at: indexPaths,with: .none)
-                    
-                    self.CommentList[root_index].lastCmtSnapshot += 1
-                    
-                    
-                    var updatePath: [IndexPath] = []
-                    
-                    for row in indexex + 1 ... self.CommentList.count - 1 {
-                        let path = IndexPath(row: row, section: 0)
-                        updatePath.append(path)
-                    }
-                    
-                    
-                    self.tableNode.reloadRows(at: updatePath, with: .automatic)
-                    
-                    
-                    self.tableNode.scrollToRow(at: IndexPath(row: last, section: 0), at: .bottom, animated: true)
+                    self.tableNode.performBatch(animated: true, updates: {
+                        self.tableNode.insertRows(at: indexPaths, with: .none)
+                    }, completion: { _ in
+                        self.CommentList[root_index].lastCmtSnapshot += 1
+                        self.tableNode.scrollToRow(at: IndexPath(row: indexex + newCommentModels.count, section: 0), at: .bottom, animated: true)
+                    })
                 }
-                
-                
-                
+
             case .failure(let error):
                 print("CmtCount: \(error)")
             }
         }
     }
+
+
 
     
     func sendCommentBtn() {
@@ -1076,7 +1052,7 @@ extension CommentVC {
         guard let commentText = cmtTxtView.text, !commentText.isEmpty else {
             return
         }
-        
+
         guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
             print("Can't get userUID")
             return
@@ -1094,11 +1070,11 @@ extension CommentVC {
         if let replyToCID = reply_to_cid {
             data.updateValue(replyToCID, forKey: "replyTo")
         }
-        
+
         if let root = root_id {
             data.updateValue(root, forKey: "parentId")
         }
-        
+
         if !mention_list.isEmpty {
             data.updateValue(mention_list, forKey: "mention")
         }
@@ -1106,7 +1082,7 @@ extension CommentVC {
         // Call the API to create a comment
         APIManager().createComment(params: data) { [weak self] result in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success", let returnData = apiResponse.body?["data"] as? [String: Any] else {
@@ -1118,7 +1094,7 @@ extension CommentVC {
                 }
                 
                 var isReply: Bool?
-            
+                
                 if self.root_id != nil {
                     isReply = true
                 } else {
@@ -1130,19 +1106,14 @@ extension CommentVC {
                 update["owner"] = ["_id": userUID, "avatar": userDataSource.avatarURL, "username": userDataSource.userName, "name": userDataSource.name]
                 
                 if self.reply_to_cid != nil {
-                    
                     data["replyTo"] = ["_id": self.reply_to_cid!, "owner": ["username": self.reply_to_username!, "_id": self.reply_to_cid!]]
-    
                 }
                 
-              
                 data.merge(dict: update)
                 
                 // Insert the comment into the CommentList array and the corresponding row into tableNode
                 let item = CommentModel(postKey: id, Comment_model: data)
                 let start: Int
-                
-                
                 
                 if let index = self.index {
                     start = index + 1
@@ -1152,7 +1123,6 @@ extension CommentVC {
                         self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
                         self.tableNode.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
                     }
-                   
                 } else {
                     if self.CommentList.isEmpty || !self.CommentList[0].is_title {
                         start = 0
@@ -1166,19 +1136,11 @@ extension CommentVC {
                         self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
                         self.tableNode.scrollToRow(at: IndexPath(row: start, section: 0), at: .top, animated: true)
                     }
-                    
                 }
                 
-                // Reload rows in tableNode
-                let updatePath = (start ..< self.CommentList.count).map { IndexPath(row: $0, section: 0) }
-                DispatchQueue.main.async {
-                    self.tableNode.reloadRows(at: updatePath, with: .automatic)
-                }
-                
-
                 // Update UI elements
                 self.calculateToTalCmt()
-
+                
                 self.root_id = nil
                 self.reply_to_uid = nil
                 self.reply_to_cid = nil
@@ -1192,23 +1154,28 @@ extension CommentVC {
                 self.hashtag_arr.removeAll()
                 self.mention_arr.removeAll()
                 
-                DispatchQueue.main.async {
-                    showNote(text: "Comment sent!")
-                    self.searchResultContainerView.isHidden = true
-                    self.cmtTxtView.text = ""
-                    self.placeholderLabel.isHidden = !self.cmtTxtView.text.isEmpty
-                    self.cmtTxtView.resignFirstResponder()
+                UIView.animate(withDuration: 0.3) {
+                    //showNote(text: "Comment sent!")
+                    
+                    Dispatch.main.async {
+                        self.searchResultContainerView.isHidden = true
+                        self.cmtTxtView.text = ""
+                        self.placeholderLabel.isHidden = !self.cmtTxtView.text.isEmpty
+                        self.cmtTxtView.resignFirstResponder()
+                    }
+                    
+                    
                 }
                 
-            
             case .failure(let error):
                 print(error)
                 DispatchQueue.main.async {
                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
-            }
+            } }
         }
-    }
+
+
     
 }
 

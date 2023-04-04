@@ -129,10 +129,24 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="7TY-Lf-qtH">
-                                <rect key="frame" x="169" y="346" width="37" height="37"/>
-                                <color key="color" name="Secondary"/>
-                            </activityIndicatorView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rla-m0-I86">
+                                <rect key="frame" x="0.0" y="91" width="375" height="638"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pQ7-eE-6yk" customClass="FLAnimatedImageView">
+                                        <rect key="frame" x="150" y="281.66666666666669" width="75" height="75"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="75" id="IjP-RR-Bpf"/>
+                                            <constraint firstAttribute="height" constant="75" id="kq9-uC-Bch"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="pQ7-eE-6yk" firstAttribute="centerY" secondItem="Rla-m0-I86" secondAttribute="centerY" id="kN1-uB-yo9"/>
+                                    <constraint firstItem="pQ7-eE-6yk" firstAttribute="centerX" secondItem="Rla-m0-I86" secondAttribute="centerX" id="mdR-21-Na3"/>
+                                </constraints>
+                            </view>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="JRS-LC-MbQ">
                                 <rect key="frame" x="0.0" y="727.33333333333337" width="375" height="2.6666666666666288"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -147,22 +161,25 @@
                             <constraint firstAttribute="bottom" secondItem="JRS-LC-MbQ" secondAttribute="bottom" id="4jN-qC-z5a"/>
                             <constraint firstItem="htG-J3-w8j" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="6LN-sT-Cqd"/>
                             <constraint firstItem="htG-J3-w8j" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="9JM-0r-hrq"/>
+                            <constraint firstItem="Rla-m0-I86" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="9el-ci-5qP"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="12" id="FAH-dq-see"/>
-                            <constraint firstItem="7TY-Lf-qtH" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="GKO-9K-LJu"/>
                             <constraint firstItem="JRS-LC-MbQ" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="N5c-Aw-MWB"/>
-                            <constraint firstItem="7TY-Lf-qtH" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="VPW-ps-hMZ"/>
+                            <constraint firstItem="Rla-m0-I86" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="Pou-1N-uLM"/>
+                            <constraint firstItem="Rla-m0-I86" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="UO6-lF-sY4"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="Wbn-Yc-2Lj"/>
                             <constraint firstAttribute="trailing" secondItem="JRS-LC-MbQ" secondAttribute="trailing" id="Xcu-YI-7ij"/>
                             <constraint firstItem="JRS-LC-MbQ" firstAttribute="top" secondItem="htG-J3-w8j" secondAttribute="bottom" id="mZu-DS-1Id"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="htG-J3-w8j" secondAttribute="trailing" id="t8Z-HB-O6a"/>
+                            <constraint firstAttribute="bottom" secondItem="Rla-m0-I86" secondAttribute="bottom" id="zqD-tw-tT0"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="lDt-lA-xKs"/>
                     <connections>
                         <outlet property="bottomConstraint" destination="4jN-qC-z5a" id="wEB-AL-GkM"/>
                         <outlet property="contentView" destination="htG-J3-w8j" id="HXh-FB-sVL"/>
+                        <outlet property="loadingImage" destination="pQ7-eE-6yk" id="GTg-7U-sSG"/>
+                        <outlet property="loadingView" destination="Rla-m0-I86" id="NcH-Fj-7Ti"/>
                         <outlet property="playTimeBar" destination="JRS-LC-MbQ" id="fOM-rx-LHm"/>
-                        <outlet property="preloadingView" destination="7TY-Lf-qtH" id="NUm-MN-ZSW"/>
                         <outlet property="progressBar" destination="QjB-Ff-npc" id="AWD-Qc-Mjw"/>
                     </connections>
                 </viewController>
@@ -10025,8 +10042,8 @@
         <image name="btnCallEnd" width="78" height="76"/>
         <image name="btnSpeaker" width="78" height="76"/>
         <image name="challenge_card" width="340" height="200"/>
-        <image name="chat" width="29" height="28"/>
-        <image name="chat.filled" width="27" height="26"/>
+        <image name="chat" width="33" height="33"/>
+        <image name="chat.filled" width="33" height="33"/>
         <image name="checkmark_2" width="18" height="18"/>
         <image name="contactUs" width="25" height="25"/>
         <image name="darkBg" width="390" height="844"/>
@@ -10037,9 +10054,9 @@
         <image name="fistBumpedStats" width="66.666664123535156" height="32.666667938232422"/>
         <image name="following" width="30" height="30"/>
         <image name="game_add" width="30" height="30.5"/>
-        <image name="gpt_bot" width="38" height="38"/>
-        <image name="gpt_bot_filled" width="38" height="38"/>
-        <image name="home" width="36" height="37"/>
+        <image name="gpt_bot" width="34" height="34"/>
+        <image name="gpt_bot_filled" width="34" height="34"/>
+        <image name="home" width="34" height="35"/>
         <image name="home.filled" width="24" height="26"/>
         <image name="img_icon_nofi_off" width="36" height="36"/>
         <image name="img_toast_check" width="40" height="32"/>

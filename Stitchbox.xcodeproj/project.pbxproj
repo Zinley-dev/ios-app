@@ -184,6 +184,8 @@
 		6A6FB08C29DA416C003FCF6E /* ReelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB08B29DA416C003FCF6E /* ReelVC.swift */; };
 		6A6FB08F29DA4294003FCF6E /* ReelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB08E29DA4294003FCF6E /* ReelNode.swift */; };
 		6A6FB09229DA586C003FCF6E /* GradientImageNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09129DA586C003FCF6E /* GradientImageNode.swift */; };
+		6A6FB09629DB6F2B003FCF6E /* ButtonSideList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */; };
+		6A6FB09729DB6F2B003FCF6E /* ButtonSideList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */; };
 		6A78485B2984D1BA008B2263 /* PostNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485A2984D1BA008B2263 /* PostNode.swift */; };
 		6A78485E2984D1F6008B2263 /* NotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485D2984D1F6008B2263 /* NotificationVC.swift */; };
 		6A7848642985096F008B2263 /* StreamingLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7848632985096F008B2263 /* StreamingLinkVC.swift */; };
@@ -597,6 +599,8 @@
 		6A6FB08B29DA416C003FCF6E /* ReelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReelVC.swift; sourceTree = "<group>"; };
 		6A6FB08E29DA4294003FCF6E /* ReelNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReelNode.swift; sourceTree = "<group>"; };
 		6A6FB09129DA586C003FCF6E /* GradientImageNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientImageNode.swift; sourceTree = "<group>"; };
+		6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonSideList.swift; sourceTree = "<group>"; };
+		6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonSideList.xib; sourceTree = "<group>"; };
 		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "CountryPickerView-master"; sourceTree = "<group>"; };
 		6A78485A2984D1BA008B2263 /* PostNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNode.swift; sourceTree = "<group>"; };
 		6A78485D2984D1F6008B2263 /* NotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationVC.swift; sourceTree = "<group>"; };
@@ -1931,6 +1935,15 @@
 			path = GradientImageNode;
 			sourceTree = "<group>";
 		};
+		6A6FB09329DB6E1C003FCF6E /* ButtonSideList */ = {
+			isa = PBXGroup;
+			children = (
+				6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */,
+				6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */,
+			);
+			path = ButtonSideList;
+			sourceTree = "<group>";
+		};
 		6A7848592984D1AA008B2263 /* PostNode */ = {
 			isa = PBXGroup;
 			children = (
@@ -2583,6 +2596,7 @@
 		6AEA33EA298CE474005A4C5D /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				6A6FB09329DB6E1C003FCF6E /* ButtonSideList */,
 				6AC6DA1029AD30E700B18139 /* SideButton */,
 				6AEA33F5298DC8CF005A4C5D /* HashtagView */,
 				6AEA33EC298CE48A005A4C5D /* ButtonsHeader */,
@@ -3154,6 +3168,7 @@
 				147BDB682928B1E1003511C3 /* Colors.xcassets in Resources */,
 				6A6C30D529626D3C0070167A /* LeaveView.xib in Resources */,
 				6AC6D9F429A5C78C00B18139 /* load2.gif in Resources */,
+				6A6FB09729DB6F2B003FCF6E /* ButtonSideList.xib in Resources */,
 				1457CCD929464DD6003C742F /* IconSet.xcassets in Resources */,
 				6AEA33F8298DC8E1005A4C5D /* HashtagView.xib in Resources */,
 				6A80F1B729C7B6EE0047595A /* CommentNotificationVC.xib in Resources */,
@@ -3636,6 +3651,7 @@
 				149F44F72956F8270084742A /* RoundedImageView.swift in Sources */,
 				6AEA74FA29680B53005C802B /* NormalLoginVC.swift in Sources */,
 				A5DF81FD295D3FE200E8DDB8 /* SearchViewController.swift in Sources */,
+				6A6FB09629DB6F2B003FCF6E /* ButtonSideList.swift in Sources */,
 				6AAD7A1E294C65DD003E3AB6 /* UIApplication+QuickStart.swift in Sources */,
 				14BDBFA12990D79300897D30 /* FistBumpViewModel.swift in Sources */,
 				A5F9C91C296C14ED00D339A1 /* ResetPasswordViewModel.swift in Sources */,

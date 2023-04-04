@@ -190,6 +190,7 @@ class UserProfileVC: UIViewController {
                     // display username
                     if let username = data.userName, username != "" {
                         cell.usernameLbl.text = username
+                        navigationItem.title = username
                     }
                     
                     if data.avatarURL != "" {
@@ -1802,7 +1803,7 @@ extension UserProfileVC {
 
         if let id = self.userId {
             
-            let link = "https://dualteam.page.link/dual?up=\(id)"
+            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")

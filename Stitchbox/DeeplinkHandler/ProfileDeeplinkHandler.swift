@@ -23,15 +23,33 @@ final class ProfileDeeplinkHandler: DeeplinkHandlerProtocol {
   }
   
   func openURL(_ url: URL) {
-    guard canOpenURL(url) else {
-      return
-    }
-    
-    // mock the navigation
-    let viewController = UIViewController()
-    print(url.path)
-    viewController.title = "Account"
-    viewController.view.backgroundColor = .yellow
-    rootViewController?.present(viewController, animated: true)
+      guard canOpenURL(url) else {
+          return
+      }
+      
+      let id = url.lastPathComponent
+      
+      if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+          
+          if let vc = UIViewController.currentViewController() {
+              
+              let nav = UINavigationController(rootViewController: UPVC)
+
+              // Set the user ID, nickname, and onPresent properties of UPVC
+              UPVC.userId = id
+              UPVC.onPresent = true
+
+              // Customize the navigation bar appearance
+              nav.navigationBar.barTintColor = .background
+              nav.navigationBar.tintColor = .white
+              nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+              nav.modalPresentationStyle = .fullScreen
+              vc.present(nav, animated: true, completion: nil)
+
+
+          }
+      }
+
   }
 }

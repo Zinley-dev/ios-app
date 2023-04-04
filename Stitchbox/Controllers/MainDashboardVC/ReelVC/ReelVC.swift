@@ -68,31 +68,24 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
  
     }
     
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        /*
+    override func viewDidAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_reel")), object: nil)
-        
-     
-       
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-         */
-        
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile_reel")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post_reel")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_post_reel")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post_reel")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post_reel")), object: nil)
+        
+    }
     
     
     @objc private func refreshListData(_ sender: Any) {
@@ -637,7 +630,14 @@ extension ReelVC {
         
         global_presetingRate = Double(0.35)
         global_cornerRadius = 45
-        newsFeedSettingVC.isOwner = false
+        
+        if editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
+            newsFeedSettingVC.isOwner = true
+        } else {
+            newsFeedSettingVC.isOwner = false
+        }
+ 
+        newsFeedSettingVC.isReels = true
         editeddPost = item
         self.present(newsFeedSettingVC, animated: true, completion: nil)
         
@@ -647,7 +647,7 @@ extension ReelVC {
     
         if let id = self.editeddPost?.id {
            
-            let link = "https://dualteam.page.link/dual?p=\(id)"
+            let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -662,7 +662,7 @@ extension ReelVC {
         
         if let id = self.editeddPost?.owner?.id {
             
-            let link = "https://dualteam.page.link/dual?up=\(id)"
+            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")
@@ -730,7 +730,7 @@ extension ReelVC {
         }
         
         let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(editeddPost?.id ?? "")")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(editeddPost?.id ?? "")")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in

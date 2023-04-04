@@ -248,7 +248,7 @@ extension SelectedPostVC {
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         
-        if scrollView == collectionNode.view, posts.count > 2 {
+        if scrollView == collectionNode.view, posts.count > 3 {
             
             if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
                navigationController?.setNavigationBarHidden(true, animated: true)
@@ -617,7 +617,7 @@ extension SelectedPostVC {
         
         if let postID = editeddPost?.id, postID != "" {
             
-            let items: [Any] = ["Hi I am \(userDataSource.userName ?? "") from Stitchbox, let's check out this with me!", URL(string: "https://dualteam.page.link/dual?p=\(postID)")!]
+            let items: [Any] = ["Hi I am \(userDataSource.userName ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(postID)")!]
             let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
             
             ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
@@ -656,7 +656,7 @@ extension SelectedPostVC {
         
         if let postID = editeddPost?.id, postID != "" {
             
-            let link = "https://dualteam.page.link/dual?p=\(postID)"
+            let link = "https://stitchbox.gg/app/post/?uid=\(postID)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -821,7 +821,7 @@ extension SelectedPostVC {
     
         if let id = self.editeddPost?.id {
            
-            let link = "https://dualteam.page.link/dual?p=\(id)"
+            let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -836,7 +836,7 @@ extension SelectedPostVC {
         
         if let id = self.editeddPost?.owner?.id {
             
-            let link = "https://dualteam.page.link/dual?up=\(id)"
+            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")
@@ -906,7 +906,7 @@ extension SelectedPostVC {
         }
         
         let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(editeddPost?.id ?? "")")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(editeddPost?.id ?? "")")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in

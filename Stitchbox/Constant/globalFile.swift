@@ -384,8 +384,14 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                 
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? ReelNode {
                     
-                    if cell.sideButtonView != nil {
-                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                    if cell.buttonsView != nil {
+                        cell.buttonsView.soundBtn.setImage(muteImage, for: .normal)
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
                     }
                     
                     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -634,15 +640,21 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
             
                         if let muteStatus = shouldMute {
                             
-                            if cell.sideButtonView != nil {
+                            if cell.buttonsView != nil {
                                 
                                 if muteStatus {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                                    cell.buttonsView.soundBtn.setImage(muteImage, for: .normal)
                                 } else {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                                    cell.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
                                 }
                             }
                            
@@ -656,12 +668,12 @@ func playVideoIfNeed(playIndex: Int) {
                             
                         } else {
                             
-                            if cell.sideButtonView != nil {
+                            if cell.buttonsView != nil {
                                 
                                 if globalIsSound {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                                    cell.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
                                 } else {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                                    cell.buttonsView.soundBtn.setImage(muteImage, for: .normal)
                                 }
                             }
                            
@@ -1013,8 +1025,8 @@ func unmuteVideoIfNeed() {
                             cell.videoNode.muted = false
                             shouldMute = false
                             
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                            if cell.buttonsView != nil {
+                                cell.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
                             }
                             
                         }
@@ -1160,8 +1172,8 @@ func muteVideoIfNeed() {
                             cell.videoNode.muted = true
                             shouldMute = true
                             
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                            if cell.buttonsView != nil {
+                                cell.buttonsView.soundBtn.setImage(muteImage, for: .normal)
                             }
                             
                         }
@@ -1220,3 +1232,37 @@ func resetViewForReel(cell: ReelNode) {
     
     
 }
+
+extension UIView {
+    private static var originalTransformKey: UInt8 = 0
+    
+    private var originalTransform: CGAffineTransform? {
+        get {
+            return objc_getAssociatedObject(self, &UIView.originalTransformKey) as? CGAffineTransform
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &UIView.originalTransformKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    func spin(duration: Double = 3.5) {
+        if originalTransform == nil {
+            originalTransform = self.transform
+        }
+        
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
+        rotationAnimation.toValue = NSNumber(value: Double.pi * 2)
+        rotationAnimation.duration = duration
+        rotationAnimation.repeatCount = .infinity
+        
+        self.layer.add(rotationAnimation, forKey: "spinAnimation")
+    }
+    
+    func stopSpin() {
+        self.layer.removeAnimation(forKey: "spinAnimation")
+        if let originalTransform = originalTransform {
+            self.transform = originalTransform
+        }
+    }
+}
+

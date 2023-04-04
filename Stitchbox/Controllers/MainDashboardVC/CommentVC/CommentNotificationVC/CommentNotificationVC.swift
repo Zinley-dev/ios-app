@@ -657,8 +657,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
     }
 
-    
-    
     func sendCommentBtn() {
         // Check condition here
 
@@ -721,46 +719,35 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 if self.reply_to_cid != nil {
                     
                     data["replyTo"] = ["_id": self.reply_to_cid!, "owner": ["username": self.reply_to_username!, "_id": self.reply_to_cid!]]
-    
+
                 }
                 
-              
                 data.merge(dict: update)
-                
-                // Insert the comment into the CommentList array and the corresponding row into tableNode
+
+                // Insert the comment into the CommentList array
                 let item = CommentModel(postKey: id, Comment_model: data)
                 let start: Int
                 
-                
-                
                 if let index = self.index {
                     start = index + 1
-                    self.CommentList.insert(item, at: start)
-                    
-                    DispatchQueue.main.async {
-                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
-                        self.tableNode.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
-                    }
-                   
                 } else {
                     if self.CommentList.isEmpty || !self.CommentList[0].is_title {
                         start = 0
                     } else {
                         start = 1
                     }
-                    
-                    self.CommentList.insert(item, at: start)
-                    
-                    DispatchQueue.main.async {
-                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
-                        self.tableNode.scrollToRow(at: IndexPath(row: start, section: 0), at: .top, animated: true)
-                    }
-                    
                 }
                 
-                // Reload rows in tableNode
-                let updatePath = (start ..< self.CommentList.count).map { IndexPath(row: $0, section: 0) }
+                self.CommentList.insert(item, at: start)
+
                 DispatchQueue.main.async {
+                    self.tableNode.performBatch(animated: true, updates: {
+                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
+                    }, completion: { _ in
+                        self.tableNode.scrollToRow(at: IndexPath(row: start, section: 0), at: .top, animated: true)
+                    })
+
+                    let updatePath = (start + 1 ..< self.CommentList.count).map { IndexPath(row: $0, section: 0) }
                     self.tableNode.reloadRows(at: updatePath, with: .automatic)
                 }
                 
@@ -785,7 +772,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     self.cmtTxtView.resignFirstResponder()
                 }
                 
-            
             case .failure(let error):
                 print(error)
                 DispatchQueue.main.async {
@@ -794,6 +780,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             }
         }
     }
+
+
     
     @objc func handleKeyboardShow(notification: Notification) {
         
@@ -1174,8 +1162,6 @@ extension CommentNotificationVC: ASTableDataSource {
         return index
     }
     
-    
-    
     func loadReplied(item: CommentModel, indexex: Int, root_index: Int) {
         guard let commentId = item.comment_id else {
             // If the comment ID is nil, return early
@@ -1197,7 +1183,7 @@ extension CommentNotificationVC: ASTableDataSource {
                 }
                 
                 // Filter out any reply data that has already been loaded
-                var newReplyData = replyData.filter { reply in
+                let newReplyData = replyData.filter { reply in
                     let cmtId = reply["_id"] as! String
                     let newReplyModel = CommentModel(postKey: cmtId, Comment_model: reply)
                     return !self.checkDuplicateLoading(post: newReplyModel)
@@ -1209,62 +1195,34 @@ extension CommentNotificationVC: ASTableDataSource {
                 }
                 
                 let section = 0
-                var indexPaths: [IndexPath] = []
-
-                var last = 0
-                var start = indexex + 1
+                let start = indexex + 1
+                let end = start + newReplyData.count - 1
                 
+                let indexPaths = (start...end).map { IndexPath(row: $0, section: section) }
                 
+                var updatedReplyData = newReplyData
+                updatedReplyData[updatedReplyData.count - 1]["hasReply"] = true
                 
-                for row in start...newReplyData.count + start - 1 {
-                    
-                    let path = IndexPath(row: row, section: section)
-                    indexPaths.append(path)
-                    
-                    last = row
-                    
-                }
-                
-                newReplyData[newReplyData.count - 1].updateValue(true, forKey: "hasReply")
-                
-                for item in newReplyData {
-                    
-        
-                    let items = CommentModel(postKey: item["_id"] as! String, Comment_model: item)
-     
-                    self.CommentList.insert(items, at: start)
-                    
-                    start += 1
-                    
-                }
+                let newCommentModels = updatedReplyData.map { CommentModel(postKey: $0["_id"] as! String, Comment_model: $0) }
+                self.CommentList.insert(contentsOf: newCommentModels, at: start)
                 
                 DispatchQueue.main.async {
-                    self.tableNode.insertRows(at: indexPaths,with: .none)
+                    self.tableNode.insertRows(at: indexPaths, with: .none)
                     
                     self.CommentList[root_index].lastCmtSnapshot += 1
                     
-                    
-                    var updatePath: [IndexPath] = []
-                    
-                    for row in indexex + 1 ... self.CommentList.count - 1 {
-                        let path = IndexPath(row: row, section: 0)
-                        updatePath.append(path)
-                    }
-                    
-                    
+                    let updatePath = (indexex + 1...self.CommentList.count - 1).map { IndexPath(row: $0, section: 0) }
                     self.tableNode.reloadRows(at: updatePath, with: .automatic)
                     
-                    
-                    self.tableNode.scrollToRow(at: IndexPath(row: last, section: 0), at: .bottom, animated: true)
+                    self.tableNode.scrollToRow(at: IndexPath(row: end, section: 0), at: .bottom, animated: true)
                 }
-                
-                
                 
             case .failure(let error):
                 print("CmtCount: \(error)")
             }
         }
     }
+
  
     func checkDuplicateLoading(post: CommentModel) -> Bool {
         return CommentList.contains { $0.comment_id == post.comment_id }
@@ -1356,7 +1314,7 @@ extension CommentNotificationVC {
                     commentSettings.isPostOwner = false
                 }
                 
-                if uid == selectedCmt.owner_uid {
+                if uid == selectedCmt.comment_uid {
                     commentSettings.isCommentOwner = true
                 } else {
                     commentSettings.isCommentOwner = false

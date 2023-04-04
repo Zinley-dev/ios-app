@@ -9,13 +9,17 @@ import UIKit
 import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
+import FLAnimatedImage
 
 class FeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
 
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var preloadingView: UIActivityIndicatorView!
+    
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
+  
     let homeButton: UIButton = UIButton(type: .custom)
 
     var currentIndex: Int?
@@ -36,7 +40,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
     lazy var delayItem3 = workItem()
-    
+    var firstAnimated = true
     var lastLoadTime: Date?
     
     @IBOutlet weak var playTimeBar: UIProgressView!
@@ -83,9 +87,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         
-        preloadingView.hidesWhenStopped = true
-        preloadingView.startAnimating()
-        
        
         if let tabBarController = self.tabBarController {
             let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
@@ -113,6 +114,25 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+        if firstAnimated {
+            
+            do {
+                
+                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                let gifData = try NSData(contentsOfFile: path) as Data
+                let image = FLAnimatedImage(animatedGIFData: gifData)
+                
+                
+                self.loadingImage.animatedImage = image
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            loadingView.backgroundColor = self.view.backgroundColor
+ 
+        }
         
     }
     
@@ -938,6 +958,30 @@ extension FeedViewController {
         
         //
         
+        if firstAnimated {
+            
+            firstAnimated = false
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                self.loadingView.alpha = 0
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
+                    
+                    self.loadingView.isHidden = true
+                    
+                }
+                
+            }
+            
+            
+        }
+        
     
         // array
         
@@ -947,10 +991,7 @@ extension FeedViewController {
         //
         self.collectionNode.insertItems(at: indexPaths)
         
-        
-        if preloadingView.isAnimating {
-            preloadingView.stopAnimating()
-        }
+      
       
         
     }
@@ -978,7 +1019,13 @@ extension FeedViewController {
         
         global_presetingRate = Double(0.35)
         global_cornerRadius = 45
-        newsFeedSettingVC.isOwner = false
+        
+        if editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
+            newsFeedSettingVC.isOwner = true
+        } else {
+            newsFeedSettingVC.isOwner = false
+        }
+        
         editeddPost = item
         self.present(newsFeedSettingVC, animated: true, completion: nil)
         
@@ -988,7 +1035,7 @@ extension FeedViewController {
     
         if let id = self.editeddPost?.id {
            
-            let link = "https://dualteam.page.link/dual?p=\(id)"
+            let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -1003,7 +1050,7 @@ extension FeedViewController {
         
         if let id = self.editeddPost?.owner?.id {
             
-            let link = "https://dualteam.page.link/dual?up=\(id)"
+            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")
@@ -1071,7 +1118,7 @@ extension FeedViewController {
         }
         
         let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(editeddPost?.id ?? "")")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(editeddPost?.id ?? "")")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in

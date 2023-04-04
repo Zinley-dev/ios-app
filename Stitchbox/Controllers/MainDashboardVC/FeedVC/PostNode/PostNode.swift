@@ -229,16 +229,13 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                     if check_Url(host: domain) {
                         self.buttonsView.hostLbl.text = "  \(domain)  "
                     } else {
-                        self.buttonsView.hostLbl.isHidden = true
-                        self.buttonsView.streamView.isHidden = true
+                        self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
                     }
                 } else {
-                    self.buttonsView.hostLbl.isHidden = true
-                    self.buttonsView.streamView.isHidden = true
+                    self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
                 }
             } else {
-                self.buttonsView.hostLbl.isHidden = true
-                self.buttonsView.streamView.isHidden = true
+                self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
             }
 
             self.checkIfLike()
@@ -420,6 +417,24 @@ extension PostNode {
 
                     // Set the user ID, nickname, and onPresent properties of UPVC
                     RVC.posts = [post]
+                    
+                    if let update1 = vc as? FeedViewController {
+                        if let currentIndex = update1.posts.firstIndex(of: post) {
+                            let endIndex = min(currentIndex+5, update1.posts.count-1)
+                            RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                        }
+                    } else if let update1 = vc as? MainSearchVC {
+                        if let currentIndex = update1.PostSearchVC.posts.firstIndex(of: post) {
+                            let endIndex = min(currentIndex+5, update1.PostSearchVC.posts.count-1)
+                            RVC.posts.append(contentsOf: Array(update1.PostSearchVC.posts[(currentIndex+1)...endIndex]))
+                        }
+                    } else if let update1 = vc as? PostListWithHashtagVC {
+                        if let currentIndex = update1.posts.firstIndex(of: post) {
+                            let endIndex = min(currentIndex+5, update1.posts.count-1)
+                            RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                        }
+                    }
+
 
                     // Customize the navigation bar appearance
                     nav.navigationBar.barTintColor = .background
@@ -430,7 +445,45 @@ extension PostNode {
                     vc.present(nav, animated: true, completion: nil)
                     
                 } else {
-                    soundProcess()
+                   
+                    if vc is SelectedPostVC  {
+                        
+                        if let update1 = vc as? SelectedPostVC {
+                            
+                            if update1.onPresent == true {
+                                
+                                let nav = UINavigationController(rootViewController: RVC)
+
+                                // Set the user ID, nickname, and onPresent properties of UPVC
+                                RVC.posts = [post]
+                                if let currentIndex = update1.posts.firstIndex(of: post) {
+                                    let endIndex = min(currentIndex+5, update1.posts.count-1)
+                                    RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                                }
+
+                                // Customize the navigation bar appearance
+                                nav.navigationBar.barTintColor = .background
+                                nav.navigationBar.tintColor = .white
+                                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                                nav.modalPresentationStyle = .fullScreen
+                                vc.present(nav, animated: true, completion: nil)
+                                
+                            } else {
+                                
+                                soundProcess()
+                                
+                            }
+                            
+                        }
+                        
+                    } else {
+                        
+                        soundProcess()
+                        
+                    }
+                    
+                    
                 }
 
             }

@@ -670,7 +670,13 @@ extension PostSearchVC {
         
         global_presetingRate = Double(0.35)
         global_cornerRadius = 45
-        newsFeedSettingVC.isOwner = false
+        
+        if editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
+            newsFeedSettingVC.isOwner = true
+        } else {
+            newsFeedSettingVC.isOwner = false
+        }
+        
         newsFeedSettingVC.isSearch = true
         editeddPost = item
         self.present(newsFeedSettingVC, animated: true, completion: nil)
@@ -681,7 +687,7 @@ extension PostSearchVC {
     
         if let id = self.editeddPost?.id {
            
-            let link = "https://dualteam.page.link/dual?p=\(id)"
+            let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -696,7 +702,7 @@ extension PostSearchVC {
         
         if let id = self.editeddPost?.owner?.id {
             
-            let link = "https://dualteam.page.link/dual?up=\(id)"
+            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")
@@ -764,7 +770,7 @@ extension PostSearchVC {
         }
         
         let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(editeddPost?.id ?? "")")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(editeddPost?.id ?? "")")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in

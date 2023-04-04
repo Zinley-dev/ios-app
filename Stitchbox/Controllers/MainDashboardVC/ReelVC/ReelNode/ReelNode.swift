@@ -26,15 +26,12 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var imageNode: ASImageNode
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
-    var buttonsNode: ASDisplayNode
     var hashtagsNode: ASDisplayNode
     var backgroundImage: GradientImageNode
-    var sidebuttonListView: ASDisplayNode!
     var shouldCountView = true
     var headerView: PostHeader!
-    var buttonsView: ButtonsHeader!
+    var buttonsView: ButtonSideList!
     var hashtagView: HashtagView!
-    var sideButtonView: SideButton!
     var gradientNode: GradienView
     var time = 0
     var likeCount = 0
@@ -49,10 +46,9 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.imageNode = ASImageNode()
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
-        self.buttonsNode = ASDisplayNode()
+        
         self.hashtagsNode = ASDisplayNode()
         self.videoNode = ASVideoNode()
-        self.sidebuttonListView = ASDisplayNode()
         self.gradientNode = GradienView()
         self.backgroundImage = GradientImageNode()
         super.init()
@@ -85,20 +81,12 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 
             }
             
-            self.buttonsView = ButtonsHeader()
-            self.buttonsNode.view.addSubview(self.buttonsView)
+            self.buttonsView = ButtonSideList()
             self.buttonsView.likeBtn.setTitle("", for: .normal)
             self.buttonsView.commentBtn.setTitle("", for: .normal)
             self.buttonsView.shareBtn.setTitle("", for: .normal)
             self.buttonsView.streamlinkBtn.setTitle("", for: .normal)
         
-        
-            
-            self.buttonsView.translatesAutoresizingMaskIntoConstraints = false
-            self.buttonsView.topAnchor.constraint(equalTo: self.buttonsNode.view.topAnchor, constant: 0).isActive = true
-            self.buttonsView.bottomAnchor.constraint(equalTo: self.buttonsNode.view.bottomAnchor, constant: 0).isActive = true
-            self.buttonsView.leadingAnchor.constraint(equalTo: self.buttonsNode.view.leadingAnchor, constant: 0).isActive = true
-            self.buttonsView.trailingAnchor.constraint(equalTo: self.buttonsNode.view.trailingAnchor, constant: 0).isActive = true
             
             self.hashtagView = HashtagView()
             self.hashtagsNode.view.addSubview(self.hashtagView)
@@ -111,44 +99,34 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
               
             if post.muxPlaybackId != "" {
                 
-                self.sideButtonView = SideButton()
-                self.sidebuttonListView.view.addSubview(self.sideButtonView)
-                self.sideButtonView.playSpeedBtn.setTitle("", for: .normal)
-                self.sideButtonView.soundBtn.setTitle("", for: .normal)
-                self.sideButtonView.playSpeedBtn.setImage(speedImage, for: .normal)
+               
+                self.buttonsView.soundBtn.setTitle("", for: .normal)
+                
                
                 
                 if let muteStatus = shouldMute {
                     
                     if muteStatus {
-                        self.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        self.buttonsView.soundBtn.setImage(muteImage, for: .normal)
                     } else {
-                        self.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        self.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
                     }
                     
                 } else {
                     
                     if globalIsSound {
-                        self.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        self.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
                     } else {
-                        self.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        self.buttonsView.soundBtn.setImage(muteImage, for: .normal)
                     }
                     
                     
                 }
               
-                self.sideButtonView.playSpeedBtn.isHidden = true
-                
-                self.sideButtonView.translatesAutoresizingMaskIntoConstraints = false
-                self.sideButtonView.topAnchor.constraint(equalTo: self.sidebuttonListView.view.topAnchor, constant: 0).isActive = true
-                self.sideButtonView.bottomAnchor.constraint(equalTo: self.sidebuttonListView.view.bottomAnchor, constant: 0).isActive = true
-                self.sideButtonView.leadingAnchor.constraint(equalTo: self.sidebuttonListView.view.leadingAnchor, constant: 0).isActive = true
-                self.sideButtonView.trailingAnchor.constraint(equalTo: self.sidebuttonListView.view.trailingAnchor, constant: 0).isActive = true
-                
-               
+           
                 let soundTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.soundProcess))
                 soundTap.numberOfTapsRequired = 1
-                self.sideButtonView.soundBtn.addGestureRecognizer(soundTap)
+                self.buttonsView.soundBtn.addGestureRecognizer(soundTap)
 
             }
             
@@ -229,21 +207,19 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             }
             
             
+            
             if let url = URL(string: post.streamLink), !post.streamLink.isEmpty {
                 if let domain = url.host {
                     if check_Url(host: domain) {
                         self.buttonsView.hostLbl.text = "  \(domain)  "
                     } else {
-                        self.buttonsView.hostLbl.isHidden = true
-                        self.buttonsView.streamView.isHidden = true
+                        self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
                     }
                 } else {
-                    self.buttonsView.hostLbl.isHidden = true
-                    self.buttonsView.streamView.isHidden = true
+                    self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
                 }
             } else {
-                self.buttonsView.hostLbl.isHidden = true
-                self.buttonsView.streamView.isHidden = true
+                self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
             }
 
             self.checkIfLike()
@@ -261,7 +237,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         paragraphStyle.alignment = .left
         
         headerNode.backgroundColor = UIColor.clear
-        buttonsNode.backgroundColor = UIColor.clear
+       
         
         self.contentNode.attributedText = NSAttributedString(string: post.content, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
         
@@ -355,6 +331,12 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             }
             
         }
+        
+        
+        DispatchQueue.main.async() {
+            self.buttonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: 0), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
+            self.view.addSubview(self.buttonsView)
+        }
   
     }
 
@@ -433,12 +415,12 @@ extension ReelNode {
                 videoNode.muted = false
                 shouldMute = false
                 UIView.animate(withDuration: 0.1, animations: {
-                    self.sideButtonView.soundBtn.transform = self.sideButtonView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
-                    self.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                    self.buttonsView.soundBtn.transform = self.buttonsView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
+                    self.buttonsView.soundBtn.setImage(unmuteImage, for: .normal)
                     }, completion: { _ in
                       // Step 2
                       UIView.animate(withDuration: 0.1, animations: {
-                          self.sideButtonView.soundBtn.transform = CGAffineTransform.identity
+                          self.buttonsView.soundBtn.transform = CGAffineTransform.identity
                       })
                     })
         
@@ -446,12 +428,12 @@ extension ReelNode {
                 videoNode.muted = true
                 shouldMute = true
                 UIView.animate(withDuration: 0.1, animations: {
-                    self.sideButtonView.soundBtn.transform = self.sideButtonView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
-                    self.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                    self.buttonsView.soundBtn.transform = self.buttonsView.soundBtn.transform.scaledBy(x: 0.9, y: 0.9)
+                    self.buttonsView.soundBtn.setImage(muteImage, for: .normal)
                     }, completion: { _ in
                       // Step 2
                       UIView.animate(withDuration: 0.1, animations: {
-                          self.sideButtonView.soundBtn.transform = CGAffineTransform.identity
+                          self.buttonsView.soundBtn.transform = CGAffineTransform.identity
                       })
                     })
             }
@@ -647,23 +629,6 @@ extension ReelNode {
                     }
                 }
                 
-            } else {
-                
-                if let vc = UIViewController.currentViewController() {
-                    
-                    if vc is FeedViewController {
-                        
-                        if let update1 = vc as? FeedViewController {
-                            
-                            update1.switchToProfileVC()
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-                
             }
             
             
@@ -693,33 +658,9 @@ extension ReelNode {
         
         if let vc = UIViewController.currentViewController() {
             
-            if vc is SelectedPostVC {
+            if vc is ReelVC {
                 
                 if let update1 = vc as? SelectedPostVC {
-                    
-                    update1.present(ac, animated: true, completion: nil)
-                    
-                }
-                
-            } else if vc is FeedViewController {
-                
-                if let update1 = vc as? FeedViewController {
-                    
-                    update1.present(ac, animated: true, completion: nil)
-                    
-                }
-                
-            } else if vc is MainSearchVC {
-                
-                if let update1 = vc as? MainSearchVC {
-                    
-                    update1.PostSearchVC.present(ac, animated: true, completion: nil)
-                    
-                }
-                
-            } else if vc is PostListWithHashtagVC {
-                
-                if let update1 = vc as? PostListWithHashtagVC {
                     
                     update1.present(ac, animated: true, completion: nil)
                     
@@ -739,9 +680,9 @@ extension ReelNode {
         
         if let vc = UIViewController.currentViewController() {
             
-            if vc is SelectedPostVC {
+            if vc is ReelVC {
                 
-                if let update1 = vc as? SelectedPostVC {
+                if let update1 = vc as? ReelVC {
                     
                     let slideVC = CommentVC()
                     
@@ -753,53 +694,6 @@ extension ReelNode {
                     update1.present(slideVC, animated: true, completion: nil)
                     
                 }
-                
-            } else if vc is FeedViewController {
-                
-                if let update1 = vc as? FeedViewController {
-                    
-                    let slideVC = CommentVC()
-                    
-                    slideVC.post = self.post
-                    slideVC.modalPresentationStyle = .custom
-                    slideVC.transitioningDelegate = update1.self
-                    global_presetingRate = Double(0.75)
-                    global_cornerRadius = 35
-                    update1.present(slideVC, animated: true, completion: nil)
-                    
-                }
-                
-            } else if vc is PostListWithHashtagVC {
-                
-                if let update1 = vc as? PostListWithHashtagVC {
-                    
-                    let slideVC = CommentVC()
-                    
-                    slideVC.post = self.post
-                    slideVC.modalPresentationStyle = .custom
-                    slideVC.transitioningDelegate = update1.self
-                    global_presetingRate = Double(0.75)
-                    global_cornerRadius = 35
-                    update1.present(slideVC, animated: true, completion: nil)
-                    
-                }
-                
-                
-            } else if vc is MainSearchVC {
-                
-                if let update1 = vc as? MainSearchVC {
-                    
-                    let slideVC = CommentVC()
-                    
-                    slideVC.post = self.post
-                    slideVC.modalPresentationStyle = .custom
-                    slideVC.transitioningDelegate = update1.self
-                    global_presetingRate = Double(0.75)
-                    global_cornerRadius = 35
-                    update1.PostSearchVC.present(slideVC, animated: true, completion: nil)
-                    
-                }
-                
                 
             }
             
@@ -845,39 +739,12 @@ extension ReelNode {
        
         if let vc = UIViewController.currentViewController() {
              
-            if vc is SelectedPostVC {
+            if vc is ReelVC {
                 
-                if let update1 = vc as? SelectedPostVC {
+                if let update1 = vc as? ReelVC {
                     
                     imgView.center = update1.view.center
                     update1.view.addSubview(imgView)
-                    
-                }
-                
-            } else if vc is FeedViewController {
-                
-                if let update2 = vc as? FeedViewController {
-                    
-                    imgView.center = update2.view.center
-                    update2.view.addSubview(imgView)
-                    
-                }
-                
-            } else if vc is MainSearchVC {
-                
-                if let update2 = vc as? MainSearchVC {
-                    
-                    imgView.center = update2.view.center
-                    update2.PostSearchVC.view.addSubview(imgView)
-                    
-                }
-                
-            } else if vc is PostListWithHashtagVC {
-                
-                if let update2 = vc as? PostListWithHashtagVC {
-                    
-                    imgView.center = update2.view.center
-                    update2.view.addSubview(imgView)
                     
                 }
                 
@@ -1094,7 +961,7 @@ extension ReelNode
         let headerInset = UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
-        let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 16)
+        let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 200)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
 
         hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
