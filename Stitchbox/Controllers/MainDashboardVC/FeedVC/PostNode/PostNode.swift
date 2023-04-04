@@ -43,6 +43,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var isViewed = false
     var currentTimeStamp: TimeInterval!
     
+    
     init(with post: PostModel) {
         self.post = post
         self.imageNode = ASImageNode()

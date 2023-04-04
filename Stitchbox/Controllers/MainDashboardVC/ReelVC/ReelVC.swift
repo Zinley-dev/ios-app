@@ -470,6 +470,8 @@ extension ReelVC {
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
+        //self.collectionNode.view.isScrollEnabled = false
+        
         self.applyStyle()
         self.wireDelegates()
         

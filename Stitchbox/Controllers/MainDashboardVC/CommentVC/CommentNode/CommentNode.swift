@@ -558,8 +558,6 @@ class CommentNode: ASCellNode {
                 
                 label.handleMentionTap {  mention in
                     print(mention)
-                    //self.checkIfUserValidAndPresentVC(username: mention)
-                    
                     
                 }
                 

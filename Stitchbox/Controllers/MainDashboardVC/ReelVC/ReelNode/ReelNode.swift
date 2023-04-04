@@ -40,13 +40,15 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var settingBtn : ((ASCellNode) -> Void)?
     var isViewed = false
     var currentTimeStamp: TimeInterval!
+    private var originalVideoTransform: CGAffineTransform = .identity
+   
     
     init(with post: PostModel) {
         self.post = post
         self.imageNode = ASImageNode()
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
-        
+        //self.scrollView = UIScrollView()
         self.hashtagsNode = ASDisplayNode()
         self.videoNode = ASVideoNode()
         self.gradientNode = GradienView()
@@ -277,8 +279,19 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             DispatchQueue.main.async {
                 self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
- 
+                
+                let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+                self.videoNode.view.addGestureRecognizer(pinchGestureRecognizer)
+
+                let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
+                panGestureRecognizer.delegate = self
+                panGestureRecognizer.minimumNumberOfTouches = 2
+                self.videoNode.view.addGestureRecognizer(panGestureRecognizer)
+              
             }
+            
+            
+            
         } else {
             
             if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
@@ -290,17 +303,27 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                     self.imageNode.contentMode = .scaleAspectFill
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
                     self.imageNode.contentMode = .scaleAspectFit
+                    self.backgroundImage.setGradientImage(with: post.imageUrl)
                 } else {
                     // Default contentMode, adjust as needed
                     self.imageNode.contentMode = .scaleAspectFit
+                    self.backgroundImage.setGradientImage(with: post.imageUrl)
                 }
             } else {
                 // Default contentMode, adjust as needed
                 self.imageNode.contentMode = .scaleAspectFit
+                self.backgroundImage.setGradientImage(with: post.imageUrl)
             }
             
             Dispatch.main.async {
-                self.backgroundImage.setGradientImage(with: post.imageUrl)
+                self.imageNode.view.isUserInteractionEnabled = true
+                let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+                self.imageNode.view.addGestureRecognizer(pinchGestureRecognizer)
+
+                let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
+                panGestureRecognizer.delegate = self
+                panGestureRecognizer.minimumNumberOfTouches = 2
+                self.imageNode.view.addGestureRecognizer(panGestureRecognizer)
             }
             
         
@@ -332,14 +355,61 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
         }
         
-        
         DispatchQueue.main.async() {
             self.buttonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: 0), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
             self.view.addSubview(self.buttonsView)
         }
   
     }
+    
+    
+    @objc private func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
+        guard let view = recognizer.view else { return }
 
+        if recognizer.state == .began {
+            disableSroll()
+            originalVideoTransform = view.transform
+        
+        }
+
+        if recognizer.state == .changed {
+            let scale = recognizer.scale
+            let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
+            view.transform = view.transform.concatenating(scaleTransform)
+            recognizer.scale = 1
+        }
+
+        if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
+            UIView.animate(withDuration: 0.2, animations: {
+                view.transform = CGAffineTransform.identity
+            })
+        }
+    }
+
+    @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
+        guard let view = recognizer.view else { return }
+
+        if recognizer.state == .began {
+            originalVideoTransform = view.transform
+        }
+
+        if recognizer.state == .changed {
+            let translation = recognizer.translation(in: view)
+            let translationTransform = CGAffineTransform(translationX: translation.x, y: translation.y)
+            view.transform = view.transform.concatenating(translationTransform)
+            recognizer.setTranslation(.zero, in: view)
+        }
+
+        if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
+            UIView.animate(withDuration: 0.2, animations: {
+                        view.transform = CGAffineTransform.identity
+                    }, completion: { _ in
+                        self.enableScroll()
+                    })
+        }
+    }
+    
+    
     func getThumbnailBackgroundVideoNodeURL(post: PostModel) -> URL? {
         
         if post.muxPlaybackId != "" {
@@ -1021,16 +1091,59 @@ extension ReelNode
         }
         
     }
-
-
-
-
-    
     
 }
 
 
+// Add a UIGestureRecognizerDelegate extension to allow simultaneous recognition
+extension ReelNode: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+}
 
+extension ReelNode {
+    
+    func disableSroll() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if vc is ReelVC {
+                
+                if let update1 = vc as? ReelVC {
+                    
+                    update1.collectionNode.view.isScrollEnabled = false
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    func enableScroll() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if vc is ReelVC {
+                
+                if let update1 = vc as? ReelVC {
+                    
+                    update1.collectionNode.view.isScrollEnabled = true
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+    }
+    
+}
 
 
 
