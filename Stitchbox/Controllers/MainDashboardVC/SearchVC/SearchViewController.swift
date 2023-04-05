@@ -214,7 +214,7 @@ extension SearchViewController {
                 
             } else {
                 DispatchQueue.main.async {
-                    self.hideAnimation()  
+                    self.hideAnimation()
                 }
             }
             
@@ -658,7 +658,9 @@ extension SearchViewController {
                     
                     UIView.animate(withDuration: 0.5) {
                         
-                        self.loadingView.alpha = 0
+                        Dispatch.main.async {
+                            self.loadingView.alpha = 0
+                        }
                         
                     }
                     

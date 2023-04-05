@@ -255,8 +255,6 @@ extension NotificationVC {
             
             switch template {
                 
-                
-                
                 case "NEW_COMMENT":
                     if let post = notification.post {
                         openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
@@ -513,6 +511,8 @@ extension NotificationVC {
             return
         }
         
+        print(newNotis)
+        
         let section = 0
         var items = [UserNotificationModel]()
         var indexPaths: [IndexPath] = []
@@ -579,7 +579,9 @@ extension NotificationVC: ASTableDataSource {
                     
                     UIView.animate(withDuration: 0.5) {
                         
-                        self.loadingView.alpha = 0
+                        Dispatch.main.async {
+                            self.loadingView.alpha = 0
+                        }
                         
                     }
                     

@@ -335,7 +335,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     @objc private func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
         //guard let view = videoNode.view else { return }
     
-    
         if recognizer.state == .began {
             disableSroll()
         }

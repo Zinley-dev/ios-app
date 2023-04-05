@@ -1424,7 +1424,9 @@ extension CommentNotificationVC {
                     
                     UIView.animate(withDuration: 0.5) {
                         
-                        self.loadingView.alpha = 0
+                        Dispatch.main.async {
+                            self.loadingView.alpha = 0
+                        }
                         
                     }
                     
