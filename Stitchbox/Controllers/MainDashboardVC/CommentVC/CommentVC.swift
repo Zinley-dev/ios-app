@@ -22,6 +22,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     @IBOutlet weak var avatarBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var avatarView: UIImageView!
     var mention_list = [String]()
+    var mention_dict = [[String: Any]]()
     var total = 0
     var isTitle = false
     var cmtPage = 1
@@ -265,6 +266,7 @@ extension CommentVC {
         } else {
             
             uid_dict.removeAll()
+            mention_dict.removeAll()
             self.searchResultContainerView.isHidden = true
         }
        
@@ -1072,13 +1074,25 @@ extension CommentVC {
         }
 
         // Append values to mention_list array
-        uid_dict.values.forEach {
-            if !mention_list.contains($0) {
-                mention_list.append($0)
+        for (key, value) in uid_dict {
+            
+            if !mention_list.contains(key) {
+                mention_list.append(value)
+                
+                let dict = ["username": key, "_id": value] as? [String: Any]
+                mention_dict.append(dict!)
+                
             }
+            
+            
+            
         }
 
         var data = ["content": commentText, "postId": post.id] as [String : Any]
+        
+        if !mention_dict.isEmpty {
+            data.updateValue(mention_dict, forKey: "mention_dict")
+        }
 
         if let replyToCID = reply_to_cid {
             data.updateValue(replyToCID, forKey: "replyTo")
@@ -1166,6 +1180,7 @@ extension CommentVC {
                 self.mention_list.removeAll()
                 self.hashtag_arr.removeAll()
                 self.mention_arr.removeAll()
+                self.uid_dict.removeAll()
                 
                 UIView.animate(withDuration: 0.3) {
                     //showNote(text: "Comment sent!")
@@ -1242,6 +1257,7 @@ extension CommentVC {
             mention_list.removeAll()
             hashtag_arr.removeAll()
             mention_arr.removeAll()
+            mention_dict.removeAll()
             
             //
             self.searchResultContainerView.isHidden = true

@@ -29,6 +29,9 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     var isVideoPlaying = false
     var newPlayingIndex: Int?
     var imageTimerWorkItem: DispatchWorkItem?
+    var page = 1
+    var searchHashtag: String!
+    var keyword: String!
 
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -36,9 +39,15 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
     var lastLoadTime: Date?
     
+    var isSearch = false
+    var isReel = false
+    var isHashtag = false
+    
     @IBOutlet weak var playTimeBar: UIProgressView!
     
     private var pullControl = UIRefreshControl()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -408,7 +417,12 @@ extension ReelVC: ASCollectionDelegate {
     }
     
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
-        return true
+        if isReel || isSearch || isHashtag {
+            return true
+        } else {
+            return false
+        }
+     
     }
     
 }
@@ -460,19 +474,51 @@ extension ReelVC: ASCollectionDataSource {
             context.completeBatchFetching(true)
             clearAllData()
             
-            
         } else {
             
             if refresh_request == false {
-                self.retrieveNextPageWithCompletion { (newPosts) in
+                
+                
+                if isReel {
                     
-                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                    
+                    self.retrieveNextPageForReelsWithCompletion { (newPosts) in
+                        
+                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                        
 
+                        context.completeBatchFetching(true)
+                        
+                        
+                    }
+                    
+                } else if isSearch {
+                    
+                    self.retrieveNextPageForSearchWithCompletion { (newPosts) in
+                        
+                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                        
+
+                        context.completeBatchFetching(true)
+                        
+                        
+                    }
+                    
+                } else if isHashtag {
+                    
+                    self.retrieveNextPageForHashtagWithCompletion { (newPosts) in
+                        
+                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    
+                        context.completeBatchFetching(true)
+                        
+                    }
+                    
+                    
+                } else {
                     context.completeBatchFetching(true)
-                    
-                    
                 }
+                
+                
             } else {
                 context.completeBatchFetching(true)
             }
@@ -544,42 +590,143 @@ extension ReelVC {
 
 extension ReelVC {
     
-    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-        
-        APIManager().getUserFeed { result in
-            switch result {
-            case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                if !data.isEmpty {
-                    self.lastLoadTime = Date()
-                    print("Successfully retrieved \(data.count) posts.")
-                    let items = data
-                  
-                    DispatchQueue.main.async {
-                        block(items)
-                    }
-                } else {
+    func retrieveNextPageForReelsWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+            
+            APIManager().getUserFeed { result in
+                switch result {
+                case .success(let apiResponse):
                     
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                        return
+                    }
+                    if !data.isEmpty {
+                        self.lastLoadTime = Date()
+                        print("Successfully retrieved \(data.count) posts.")
+                        let items = data
+                      
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
-                    }
                 }
-            case .failure(let error):
-                print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
             }
         }
+        
     }
+    
+    
+    func retrieveNextPageForSearchWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+            
+        if keyword != "" {
+            
+                APIManager().searchPost(query: keyword, page: page) { result in
+                    switch result {
+                    case .success(let apiResponse):
+                        print(apiResponse)
+                        guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                            let item = [[String: Any]]()
+                            DispatchQueue.main.async {
+                                block(item)
+                            }
+                            return
+                        }
+                        if !data.isEmpty {
+                            print("Successfully retrieved \(data.count) posts.")
+                            let items = data
+                            self.page += 1
+                            DispatchQueue.main.async {
+                                block(items)
+                            }
+                        } else {
+                            
+                            let item = [[String: Any]]()
+                            DispatchQueue.main.async {
+                                block(item)
+                            }
+                        }
+                    case .failure(let error):
+                        print(error)
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                    }
+                }
+            }
+            
+        } else {
+            
+            let item = [[String: Any]]()
+            DispatchQueue.main.async {
+                block(item)
+            }
+        }
+        
+    }
+    
+    func retrieveNextPageForHashtagWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+            
+        if let hashtag = searchHashtag, hashtag != "" {
+            
+                let finalTag = hashtag.dropFirst()
+            
+            APIManager().getHashtagPost(tag: String(finalTag), page: page) { result in
+                    switch result {
+                    case .success(let apiResponse):
+                        
+                        guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                            let item = [[String: Any]]()
+                            DispatchQueue.main.async {
+                                block(item)
+                            }
+                            return
+                        }
+                        if !data.isEmpty {
+                            print("Successfully retrieved \(data.count) posts.")
+                            self.page += 1
+                            let items = data
+                            DispatchQueue.main.async {
+                                block(items)
+                            }
+                        } else {
+                            
+                            let item = [[String: Any]]()
+                            DispatchQueue.main.async {
+                                block(item)
+                            }
+                        }
+                    case .failure(let error):
+                        print(error)
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                    }
+                }
+            }
+            
+            
+        } else {
+            
+            let item = [[String: Any]]()
+            DispatchQueue.main.async {
+                block(item)
+            }
+            
+        }
         
     }
     
@@ -638,17 +785,6 @@ extension ReelVC {
     
 }
 
-/*
-extension ReelVC: UINavigationBarDelegate, UINavigationControllerDelegate {
-    
-    func navigationControllerDelegate() {
-        self.navigationController?.navigationBar.delegate = self
-    }
-    
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
-} */
 
 extension ReelVC {
     
@@ -793,42 +929,130 @@ extension ReelVC {
     
     
     func updateData() {
-        self.retrieveNextPageWithCompletion { (newPosts) in
-                
-            if newPosts.count > 0 {
-                        
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                                 
-            } else {
-              
-                self.refresh_request = false
-                self.posts.removeAll()
-                self.collectionNode.reloadData()
-                
-                if self.posts.isEmpty == true {
+        
+
+        if isReel {
+            
+            self.retrieveNextPageForReelsWithCompletion { (newPosts) in
                     
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
-                 
+                if newPosts.count > 0 {
+                            
+                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    
+                                     
                 } else {
+                  
+                    self.refresh_request = false
+                    self.posts.removeAll()
+                    self.collectionNode.reloadData()
                     
-                    self.collectionNode.view.restore()
+                    if self.posts.isEmpty == true {
+                        
+                        self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                     
+                    } else {
+                        
+                        self.collectionNode.view.restore()
+                        
+                    }
                     
                 }
                 
-            }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) {
+                if self.pullControl.isRefreshing == true {
+                    self.pullControl.endRefreshing()
+                }
                 
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-            }
+                self.delayItem.perform(after: 0.75) {
+                    
+                    self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                    
+                }
+                  
               
-          
+            }
+            
+        } else if isSearch {
+            
+            self.retrieveNextPageForSearchWithCompletion { (newPosts) in
+                    
+                if newPosts.count > 0 {
+                            
+                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    
+                                     
+                } else {
+                  
+                    self.refresh_request = false
+                    self.posts.removeAll()
+                    self.collectionNode.reloadData()
+                    
+                    if self.posts.isEmpty == true {
+                        
+                        self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                     
+                    } else {
+                        
+                        self.collectionNode.view.restore()
+                        
+                    }
+                    
+                }
+                
+                if self.pullControl.isRefreshing == true {
+                    self.pullControl.endRefreshing()
+                }
+                
+                self.delayItem.perform(after: 0.75) {
+                    
+                    self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                    
+                }
+                  
+              
+            }
+            
+            
+        } else if isHashtag {
+            
+            self.retrieveNextPageForHashtagWithCompletion { (newPosts) in
+                    
+                if newPosts.count > 0 {
+                            
+                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    
+                                     
+                } else {
+                  
+                    self.refresh_request = false
+                    self.posts.removeAll()
+                    self.collectionNode.reloadData()
+                    
+                    if self.posts.isEmpty == true {
+                        
+                        self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                     
+                    } else {
+                        
+                        self.collectionNode.view.restore()
+                        
+                    }
+                    
+                }
+                
+                if self.pullControl.isRefreshing == true {
+                    self.pullControl.endRefreshing()
+                }
+                
+                self.delayItem.perform(after: 0.75) {
+                    
+                    self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                    
+                }
+                  
+              
+            }
+            
+            
         }
         
         

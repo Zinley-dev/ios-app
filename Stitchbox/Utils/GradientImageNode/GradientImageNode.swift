@@ -65,7 +65,7 @@ class GradientImageNode: ASDisplayNode {
                     switch response.result {
                     case let .success(value):
                      
-                        try? imageStorage.setObject(value, forKey: url.absoluteString)
+                        try? imageStorage.setObject(value, forKey: url.absoluteString, expiry: .seconds(3000))
                         
                         DispatchQueue.main.async {
                             let palletes = Vibrant.from(value).getPalette()

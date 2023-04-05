@@ -241,11 +241,13 @@ class UserNotificationModel {
                 if let template = content["type"] as? String {
                     self._template = template
                     
+                    
                     if template == "NEW_POST" || template == "NEW_COMMENT" || template == "REPLY_COMMENT" || template == "NEW_TAG" {
                         
                         if let getPostId = self._postId, getPostId != "" {
                             
-                         
+                            print(getPostId)
+                                
                             APIManager().getPostDetail(postId: getPostId) { result in
                                 switch result {
                                     

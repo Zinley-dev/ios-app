@@ -557,7 +557,49 @@ class CommentNode: ASCellNode {
                 
                 
                 label.handleMentionTap {  mention in
-                    print(mention)
+                    
+                  
+                    if let mentionArr = self.post.mention {
+                        
+                        for item in mentionArr {
+                            
+                            if let username = item["username"] as? String, username == mention {
+                                
+                                if let id = item["_id"] as? String {
+                                    
+                                    if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+                                        
+                                        if let vc = UIViewController.currentViewController() {
+                                            
+                                            let nav = UINavigationController(rootViewController: UPVC)
+
+                                            // Set the user ID, nickname, and onPresent properties of UPVC
+                                            UPVC.userId = id
+                                            UPVC.nickname = username
+                                            UPVC.onPresent = true
+
+                                            // Customize the navigation bar appearance
+                                            nav.navigationBar.barTintColor = .background
+                                            nav.navigationBar.tintColor = .white
+                                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                                            nav.modalPresentationStyle = .fullScreen
+                                            vc.present(nav, animated: true, completion: nil)
+                                            return
+
+
+                                        }
+                                    }
+                                    
+                                }
+                                
+                              
+                            }
+                                
+                            
+                        }
+                        
+                    }
                     
                 }
                 
@@ -761,7 +803,12 @@ class CommentNode: ASCellNode {
     
     func loadInfo(uid: String ) {
         
-        avatarNode.url = URL(string: post.comment_avatarUrl)
+        
+        if post.comment_avatarUrl != "" {
+            avatarNode.url = URL(string: post.comment_avatarUrl)
+        } else {
+            avatarNode.image = UIImage.init(named: "defaultuser")
+        }
         
         
         if self.post.comment_uid == self.post.owner_uid {

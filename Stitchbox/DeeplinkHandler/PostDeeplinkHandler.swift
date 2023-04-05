@@ -24,9 +24,13 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
     guard canOpenURL(url) else {
       return
     }
+      
+      if _AppCoreData.userDataSource.value != nil {
+          let id = url.lastPathComponent
+          getPost(id: id)
+      }
     
-      let id = url.lastPathComponent
-      getPost(id: id)
+  
   }
     
     func getPost(id: String) {

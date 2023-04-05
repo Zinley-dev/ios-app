@@ -36,7 +36,19 @@ class CommentModel {
     fileprivate var _just_add: Bool!
     fileprivate var _reply_to_cid: String!
     fileprivate var _IsNoti: Bool!
+    fileprivate var _mention: [[String:Any]]!
     var _is_pinned: Bool!
+    
+    
+    var mention: [[String:Any]]! {
+        get {
+            if _mention == nil {
+                _mention = [[:]]
+            }
+            return _mention
+        }
+        
+    }
     
     
     var replyTotal: Int! {
@@ -275,6 +287,18 @@ class CommentModel {
     init(postKey: String, Comment_model: Dictionary<String, Any>) {
         
         self._comment_id = postKey
+    
+        if let mention = Comment_model["mention"] as? [[String: Any]] {
+            
+            self._mention = mention
+            
+        }
+        
+        if let mention = Comment_model["mention_dict"] as? [[String: Any]]  {
+            
+            self._mention = mention
+            
+        }
         
         if let owner = Comment_model["owner"] as? [String: Any] {
             

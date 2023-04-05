@@ -413,26 +413,57 @@ extension PostNode {
             if let vc = UIViewController.currentViewController() {
                 
                 if vc is FeedViewController || vc is MainSearchVC || vc is PostListWithHashtagVC {
-                    
+            
                     let nav = UINavigationController(rootViewController: RVC)
 
                     // Set the user ID, nickname, and onPresent properties of UPVC
                     RVC.posts = [post]
                     
+                    if vc is FeedViewController {
+                        RVC.isReel = true
+                    } else if vc is MainSearchVC {
+                        
+                        if let update1 = vc as? MainSearchVC {
+                            
+                
+                            RVC.keyword = update1.PostSearchVC.keyword
+                            
+                        }
+                        
+                        RVC.isSearch = true
+                        
+                    } else if vc is PostListWithHashtagVC {
+                        
+                        if let update1 = vc as? PostListWithHashtagVC {
+                            
+                           
+                            RVC.searchHashtag = update1.searchHashtag
+                            
+                        }
+                        
+                        RVC.isHashtag = true
+                    }
+                    
                     if let update1 = vc as? FeedViewController {
                         if let currentIndex = update1.posts.firstIndex(of: post) {
-                            let endIndex = min(currentIndex+5, update1.posts.count-1)
-                            RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                            if currentIndex < update1.posts.count - 1 {
+                                let endIndex = min(currentIndex+5, update1.posts.count-1)
+                                RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                            }
                         }
                     } else if let update1 = vc as? MainSearchVC {
                         if let currentIndex = update1.PostSearchVC.posts.firstIndex(of: post) {
-                            let endIndex = min(currentIndex+5, update1.PostSearchVC.posts.count-1)
-                            RVC.posts.append(contentsOf: Array(update1.PostSearchVC.posts[(currentIndex+1)...endIndex]))
+                            if currentIndex < update1.PostSearchVC.posts.count - 1 {
+                                let endIndex = min(currentIndex+5, update1.PostSearchVC.posts.count-1)
+                                RVC.posts.append(contentsOf: Array(update1.PostSearchVC.posts[(currentIndex+1)...endIndex]))
+                            }
                         }
                     } else if let update1 = vc as? PostListWithHashtagVC {
                         if let currentIndex = update1.posts.firstIndex(of: post) {
-                            let endIndex = min(currentIndex+5, update1.posts.count-1)
-                            RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                            if currentIndex < update1.posts.count - 1 {
+                                let endIndex = min(currentIndex+5, update1.posts.count-1)
+                                RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                            }
                         }
                     }
 
@@ -457,9 +488,12 @@ extension PostNode {
 
                                 // Set the user ID, nickname, and onPresent properties of UPVC
                                 RVC.posts = [post]
+                                
                                 if let currentIndex = update1.posts.firstIndex(of: post) {
-                                    let endIndex = min(currentIndex+5, update1.posts.count-1)
-                                    RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                                    if currentIndex < update1.posts.count - 1 {
+                                        let endIndex = min(currentIndex+5, update1.posts.count-1)
+                                        RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                                    }
                                 }
 
                                 // Customize the navigation bar appearance

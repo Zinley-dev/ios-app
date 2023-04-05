@@ -456,6 +456,17 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="streaming link" translatesAutoresizingMaskIntoConstraints="NO" id="Qe7-TS-tex">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4RK-lZ-1aC">
+                                <rect key="frame" x="136.66666666666666" y="730" width="101.66666666666666" height="32"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Learn more">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="learnMoreBtnPressed:" destination="kCt-us-HNR" eventType="touchUpInside" id="MmX-u8-Wkc"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="AaE-l0-w41"/>
                         <color key="backgroundColor" name="Background"/>
@@ -463,9 +474,14 @@
                             <constraint firstAttribute="bottom" secondItem="Qe7-TS-tex" secondAttribute="bottom" id="7qm-tz-Ubl"/>
                             <constraint firstItem="Qe7-TS-tex" firstAttribute="top" secondItem="aJP-Xf-OcP" secondAttribute="top" id="9R6-u7-syg"/>
                             <constraint firstAttribute="trailing" secondItem="Qe7-TS-tex" secondAttribute="trailing" id="Bbh-yW-PWS"/>
+                            <constraint firstItem="AaE-l0-w41" firstAttribute="bottom" secondItem="4RK-lZ-1aC" secondAttribute="bottom" constant="16" id="F0h-hu-UDP"/>
+                            <constraint firstItem="4RK-lZ-1aC" firstAttribute="centerX" secondItem="aJP-Xf-OcP" secondAttribute="centerX" id="hQ6-Ip-X05"/>
                             <constraint firstItem="Qe7-TS-tex" firstAttribute="leading" secondItem="aJP-Xf-OcP" secondAttribute="leading" id="ndH-So-iJc"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="learnMoreBtn" destination="4RK-lZ-1aC" id="Uwo-Jt-ciW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0A1-17-RVh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

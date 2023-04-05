@@ -48,6 +48,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     
     var hasSetPointOrigin = false
     var pointOrigin: CGPoint?
+    var mention_dict = [[String: Any]]()
     
     //
     @IBOutlet weak var tView: UIView!
@@ -349,7 +350,11 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
                 if !data.isEmpty {
                     
+                    print(data)
+                    
                     let item = CommentModel(postKey: data["_id"] as! String, Comment_model: data)
+                    
+            
                     
                     if item.isReply == false {
                         self.root_id = item.comment_id
@@ -538,6 +543,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         } else {
             
             uid_dict.removeAll()
+            mention_dict.removeAll()
             self.searchResultContainerView.isHidden = true
         }
     }
@@ -651,13 +657,25 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         }
 
         // Append values to mention_list array
-        uid_dict.values.forEach {
-            if !mention_list.contains($0) {
-                mention_list.append($0)
+        for (key, value) in uid_dict {
+            
+            if !mention_list.contains(key) {
+                mention_list.append(value)
+                
+                let dict = ["username": key, "_id": value] as? [String: Any]
+                mention_dict.append(dict!)
+                
             }
+            
+            
+            
         }
 
         var data = ["content": commentText, "postId": post.id] as [String : Any]
+        
+        if !mention_dict.isEmpty {
+            data.updateValue(mention_dict, forKey: "mention_dict")
+        }
 
         if let replyToCID = reply_to_cid {
             data.updateValue(replyToCID, forKey: "replyTo")
@@ -732,11 +750,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     self.tableNode.reloadRows(at: updatePath, with: .automatic)
                 }
                 
-                self.root_id = nil
-                self.reply_to_uid = nil
-                self.reply_to_cid = nil
-                self.reply_to_username = nil
-                self.index = nil
                 self.isSending = false
                 
                 // Clear arrays and UI elements
@@ -744,6 +757,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 self.mention_list.removeAll()
                 self.hashtag_arr.removeAll()
                 self.mention_arr.removeAll()
+                self.mention_dict.removeAll()
                 
                 DispatchQueue.main.async {
                     showNote(text: "Comment sent!")
@@ -808,6 +822,16 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         if cmtTxtView.text.isEmpty == true {
             placeholderLabel.text = "Add comment..."
             viewHeight.constant = 75
+            
+            // remove all
+            uid_dict.removeAll()
+            mention_list.removeAll()
+            hashtag_arr.removeAll()
+            mention_arr.removeAll()
+            mention_dict.removeAll()
+            
+            //
+            self.searchResultContainerView.isHidden = true
             
             
             

@@ -321,7 +321,7 @@ extension EditChallengeCardVC {
 // selector for challengeCard
 extension EditChallengeCardVC {
     
-    @objc func editCardTapped(_ sender: UIButton) {
+    func editCard() {
         
         let alert = UIAlertController(title: "Hi, \(_AppCoreData.userDataSource.value?.userName ?? "user")!", message: "Challenge card update", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -353,6 +353,12 @@ extension EditChallengeCardVC {
         }))
 
         self.present(alert, animated: true)
+        
+    }
+    
+    @objc func editCardTapped(_ sender: UIButton) {
+        
+        editCard()
         
     }
     
@@ -687,7 +693,7 @@ extension EditChallengeCardVC {
        
         switch item {
             case .challengeCard(_):
-                print("header")
+                editCard()
                 
             case .badges(_):
                 

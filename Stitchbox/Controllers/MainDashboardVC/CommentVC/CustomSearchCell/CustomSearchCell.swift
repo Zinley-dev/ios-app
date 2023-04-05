@@ -41,6 +41,7 @@ class CustomSearchCell: UITableViewCell {
     func configureCell(type: String, text: String, url: String) {
         
         textLbl.text = text
+ 
         
         if type == "user" {
         
@@ -51,12 +52,23 @@ class CustomSearchCell: UITableViewCell {
             
             let imageNode = ASNetworkImageNode()
             imageNode.cornerRadius = ImageView.frame.width / 2
+            
             imageNode.clipsToBounds =  true
             
             
-            imageNode.contentMode = .scaleAspectFit
+            if url != "" {
+                
+                imageNode.url = URL.init(string: url)
+                
+            } else {
+                
+                imageNode.image = UIImage.init(named: "defaultuser")
+                
+            }
+        
+            imageNode.contentMode = .scaleAspectFill
             imageNode.shouldRenderProgressImages = true
-            imageNode.url = URL.init(string: url)
+    
             imageNode.frame = ImageView.layer.bounds
             ImageView.image = nil
             

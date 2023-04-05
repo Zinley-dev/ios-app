@@ -6,16 +6,32 @@
 //
 
 import UIKit
+import SafariServices
 
 class StreamingIntroVC: UIViewController {
 
     let backButton: UIButton = UIButton(type: .custom)
+    
+    @IBOutlet weak var learnMoreBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupButtons()
+        
+    }
+    
+    @IBAction func learnMoreBtnPressed(_ sender: Any) {
+        let link = URL(string: "https://stitchbox.gg/")
+        
+        guard let URL = link else {
+            return
+        }
+        
+        let SF = SFSafariViewController(url: URL)
+        SF.modalPresentationStyle = .fullScreen
+        self.present(SF, animated: true)
         
     }
     
