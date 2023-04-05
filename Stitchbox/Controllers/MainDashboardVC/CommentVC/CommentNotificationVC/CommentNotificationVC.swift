@@ -56,7 +56,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var cmtTxtView: UITextView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    
+    var firstAnimated = true
     var placeholderLabel : UILabel!
     //
     
@@ -341,10 +341,11 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             case .success(let apiResponse):
                
                 guard let data = apiResponse.body else {
+                    DispatchQueue.main.async {
+                        self.hideAnimation()
+                    }
                     return
                 }
-                
-                print(data)
                 
                 if !data.isEmpty {
                     
@@ -373,7 +374,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         DispatchQueue.main.async {
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
-                            
+                            self.hideAnimation()
                         }
                        
                     }
@@ -393,6 +394,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         DispatchQueue.main.async {
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                            self.hideAnimation()
                             
                         }
                         
@@ -415,6 +417,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     DispatchQueue.main.async {
                         
                         self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                        self.hideAnimation()
                         
                     }
                     
@@ -459,28 +462,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
-        
-        delay(1) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-        }
-        
         
     }
     
@@ -1435,5 +1416,32 @@ extension CommentNotificationVC {
     
     }
     
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        self.loadingView.alpha = 0
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
+        
+    }
     
 }

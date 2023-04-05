@@ -309,6 +309,8 @@ extension FollowerVC {
         // Insert the new rows
         tableNode.insertRows(at: insertIndexPaths, with: .automatic)
        
+        
+
     }
     
 }

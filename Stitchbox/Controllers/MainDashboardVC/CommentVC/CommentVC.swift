@@ -37,7 +37,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     var reply_to_uid: String!
     var reply_to_cid: String!
     var reply_to_username: String!
-
+    var firstAnimated = true
     //var CmtQuery: Query!
     var prev_id: String!
     
@@ -160,10 +160,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         
         //
-        
-       // Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(CommentVC.calculateToTalCmt), userInfo: nil, repeats: true)
-        
-        print(post.id)
+    
         
     }
     
@@ -176,20 +173,24 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        do {
+        if firstAnimated {
             
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
+            do {
+                
+                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                let gifData = try NSData(contentsOfFile: path) as Data
+                let image = FLAnimatedImage(animatedGIFData: gifData)
+                
+                
+                self.loadingImage.animatedImage = image
+                
+            } catch {
+                print(error.localizedDescription)
+            }
             
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
+            loadingView.backgroundColor = self.view.backgroundColor
+ 
         }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
         
     }
     
@@ -429,29 +430,7 @@ extension CommentVC {
         DispatchQueue.main.async {
             self.tableNode.reloadData()
         }
-        delay(0.5) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                DispatchQueue.main.async {
-                    self.loadingView.alpha = 0
-                }
-            
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-          
-            
-        }
-       
+        
     }
     
 }
@@ -856,6 +835,7 @@ extension CommentVC {
     
     func insertNewRowsInTableNode(newPosts: [[String: Any]]) {
         guard newPosts.count > 0 else {
+            hideAnimation()
             return
         }
         
@@ -891,12 +871,43 @@ extension CommentVC {
         self.CommentList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
         
+        hideAnimation()
+        
     }
 
 
     func checkDuplicateLoading(post: CommentModel) -> Bool {
         return CommentList.contains { $0.comment_id == post.comment_id }
     }
+    
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        self.loadingView.alpha = 0
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
+        
+    }
+   
     
     
 }

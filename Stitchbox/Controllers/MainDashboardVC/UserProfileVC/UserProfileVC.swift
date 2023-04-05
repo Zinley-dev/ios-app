@@ -49,7 +49,7 @@ class UserProfileVC: UIViewController {
     var followerCount = 0
     var followingCount = 0
     var fistBumpedCount = 0
-    
+    var firstAnimated = true
     var isFollow = false
     var isFistBump = false
 
@@ -132,28 +132,6 @@ class UserProfileVC: UIViewController {
             }
             
             loadingView.backgroundColor = self.view.backgroundColor
-            
-            
-            delay(1.30) {
-                
-                UIView.animate(withDuration: 0.5) {
-                    
-                    self.loadingView.alpha = 0
-                    
-                }
-                
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    
-                    if self.loadingView.alpha == 0 {
-                        
-                        self.loadingView.isHidden = true
-                        
-                    }
-                    
-                }
-                
-            }
             
         }
         
@@ -1440,6 +1418,7 @@ extension UserProfileVC {
               
               self.userData = Mapper<UserDataSource>().map(JSONObject: data)
               self.applyUIChange()
+              self.hideAnimation()
               
               self.countFistBumped()
               self.countFollowings()
@@ -1456,6 +1435,7 @@ extension UserProfileVC {
             case .failure(_):
               
               Dispatch.main.async {
+                  self.hideAnimation()
                   self.NoticeBlockAndDismiss()
               }
            
@@ -1916,6 +1896,35 @@ extension UserProfileVC {
 
         
         self.present(sheet, animated: true, completion: nil)
+        
+    }
+    
+    
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        self.loadingView.alpha = 0
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
         
     }
     

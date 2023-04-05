@@ -249,7 +249,7 @@ extension ReelVC {
                                 node.imageNode.view.transform = CGAffineTransform.identity
                             }
                             
-                  
+    
                         }
                         
                         pauseVideoIfNeed(pauseIndex: currentIndex)
@@ -275,12 +275,11 @@ extension ReelVC {
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex, section: 0)) as? ReelNode {
                         
                         if node.videoNode.currentItem != nil {
-                            node.videoNode.view.transform = CGAffineTransform.identity
+                            view.transform = CGAffineTransform.identity
                         } else if node.imageNode.image != nil {
                             node.imageNode.view.transform = CGAffineTransform.identity
                         }
                         
-              
                     }
 
                     pauseVideoIfNeed(pauseIndex: currentIndex)
@@ -297,7 +296,6 @@ extension ReelVC {
                             node.imageNode.view.transform = CGAffineTransform.identity
                         }
                         
-              
                     }
                     
                 }
@@ -433,6 +431,7 @@ extension ReelVC: ASCollectionDataSource {
         
         return {
             let node = ReelNode(with: post)
+            node.collectionNode = self.collectionNode
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             

@@ -20,6 +20,7 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
+    weak var collectionNode: ASCollectionNode?
     weak var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: ASVideoNode
@@ -41,6 +42,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var isViewed = false
     var currentTimeStamp: TimeInterval!
     var originalCenter: CGPoint?
+ 
+    var pinchGestureRecognizer: UIPinchGestureRecognizer!
+    var panGestureRecognizer: UIPanGestureRecognizer!
+
+    //var panGestureRecognizer: UIPanGestureRecognizer!
     
     
     init(with post: PostModel) {
@@ -60,6 +66,15 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         
         DispatchQueue.main.async {
+            
+            let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+            self.view.addGestureRecognizer(pinchGestureRecognizer)
+            
+            
+            self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
+            self.panGestureRecognizer.delegate = self
+            self.panGestureRecognizer.minimumNumberOfTouches = 2
+            self.view.addGestureRecognizer(self.panGestureRecognizer)
             
             self.headerView = PostHeader()
             self.headerNode.view.addSubview(self.headerView)
@@ -246,18 +261,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             DispatchQueue.main.async {
                 self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
-                
-                let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
-                pinchGestureRecognizer.delegate = self
-                self.videoNode.view.addGestureRecognizer(pinchGestureRecognizer)
-
-                let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
-                panGestureRecognizer.delegate = self
-                panGestureRecognizer.minimumNumberOfTouches = 2
-                self.videoNode.view.addGestureRecognizer(panGestureRecognizer)
-                
-       
-              
             }
             
             
@@ -288,15 +291,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             Dispatch.main.async {
                 
                 self.imageNode.view.isUserInteractionEnabled = true
-                
-                let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
-                pinchGestureRecognizer.delegate = self
-                self.imageNode.view.addGestureRecognizer(pinchGestureRecognizer)
 
-                let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
-                panGestureRecognizer.delegate = self
-                panGestureRecognizer.minimumNumberOfTouches = 2
-                self.imageNode.view.addGestureRecognizer(panGestureRecognizer)
             }
             
         
@@ -331,14 +326,16 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         DispatchQueue.main.async() {
             self.buttonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: 0), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
             self.view.addSubview(self.buttonsView)
+            self.originalCenter = self.view.center
         }
   
     }
     
     
     @objc private func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
-        guard let view = recognizer.view else { return }
-
+        //guard let view = videoNode.view else { return }
+    
+    
         if recognizer.state == .began {
             disableSroll()
         }
@@ -346,9 +343,17 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         if recognizer.state == .changed {
             let scale = recognizer.scale
             let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
-            let tempTransform = view.transform.concatenating(scaleTransform)
-            view.transform = tempTransform
           
+            
+            if post.muxPlaybackId != "" {
+                let tempTransform = videoNode.view.transform.concatenating(scaleTransform)
+                videoNode.view.transform = tempTransform
+            } else {
+                let tempTransform = imageNode.view.transform.concatenating(scaleTransform)
+                imageNode.view.transform = tempTransform
+            }
+            
+        
             recognizer.scale = 1
         }
 
@@ -356,37 +361,67 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             let scale = recognizer.scale
             let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
-            let tempTransform = view.transform.concatenating(scaleTransform)
             
-            UIView.animate(withDuration: 0.2, animations: {
-                if tempTransform.a < 1.0 {
-                    view.transform = CGAffineTransform.identity
-                }
-                    }, completion: { _ in
-                        self.enableScroll()
-            })
+            if post.muxPlaybackId != "" {
+                let tempTransform = videoNode.view.transform.concatenating(scaleTransform)
+                
+                UIView.animate(withDuration: 0.2, animations: {
+                    if tempTransform.a < 1.0 {
+                        self.videoNode.view.transform = CGAffineTransform.identity
+                        //self.videoNode.view.center = self.originalCenter!
+                    }
+                        }, completion: { _ in
+                            self.enableScroll()
+                })
+            } else {
+                let tempTransform = imageNode.view.transform.concatenating(scaleTransform)
+                
+                UIView.animate(withDuration: 0.2, animations: {
+                    if tempTransform.a < 1.0 {
+                        self.imageNode.view.transform = CGAffineTransform.identity
+                        //self.imageNode.view.center = self.originalCenter!
+                    }
+                        }, completion: { _ in
+                            self.enableScroll()
+                })
+            }
+  
         
         }
     }
-
+    
+    
     @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
-        guard let view = recognizer.view else { return }
+        //guard let view = recognizer.view else { return }
 
         if recognizer.state == .began {
             disableSroll()
-            originalCenter = view.center
+           
         }
 
         if recognizer.state == .changed {
-            let translation = recognizer.translation(in: view)
-            view.center = CGPoint(x: view.center.x + translation.x, y: view.center.y + translation.y)
-            recognizer.setTranslation(.zero, in: view)
+            
+            if post.muxPlaybackId != "" {
+                
+                let translation = recognizer.translation(in: videoNode.view)
+                videoNode.view.center = CGPoint(x: videoNode.view.center.x + translation.x, y: videoNode.view.center.y + translation.y)
+                recognizer.setTranslation(.zero, in: videoNode.view)
+                
+            } else {
+                
+                let translation = recognizer.translation(in: imageNode.view)
+                imageNode.view.center = CGPoint(x: imageNode.view.center.x + translation.x, y: imageNode.view.center.y + translation.y)
+                recognizer.setTranslation(.zero, in: imageNode.view)
+                
+            }
+            
+            
         }
 
         if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
            
             UIView.animate(withDuration: 0.2, animations: {
-                        view.center = self.originalCenter!
+                        
                     }, completion: { _ in
                         self.enableScroll()
                     })
@@ -470,12 +505,10 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
 extension ReelNode {
     
-    
     func didTap(_ videoNode: ASVideoNode) {
-        
         soundProcess()
-      
     }
+    
     
     @objc func soundProcess() {
         
@@ -1157,20 +1190,6 @@ extension ReelNode
     
 }
 
-
-
-// Add a UIGestureRecognizerDelegate extension to allow simultaneous recognition
-extension ReelNode: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-
-}
-
 extension ReelNode {
     
     func disableSroll() {
@@ -1214,5 +1233,26 @@ extension ReelNode {
     
 }
 
+extension ReelNode: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UIPinchGestureRecognizer || otherGestureRecognizer is UIPinchGestureRecognizer {
+            return true
+        }
 
+        // Check for the collectionNode's panGestureRecognizer
+        if let collectionNodePanGestureRecognizer = collectionNode?.view.panGestureRecognizer, otherGestureRecognizer == collectionNodePanGestureRecognizer {
+            return true
+        }
+        
+        if gestureRecognizer is UIPanGestureRecognizer || otherGestureRecognizer is UIPanGestureRecognizer {
+            return true
+        }
+
+        return false
+    }
+
+
+    
+}
 

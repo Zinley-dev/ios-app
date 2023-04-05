@@ -19,7 +19,7 @@ class BlockedListVC: UIViewController {
     @IBOutlet weak var loadingView: UIView!
     var blockList = [BlockUserModel]()
     var tableNode: ASTableNode!
-    
+    var firstAnimated = true
     var currentPage = 1
     
     required init?(coder aDecoder: NSCoder) {
@@ -58,26 +58,24 @@ class BlockedListVC: UIViewController {
         loadingView.backgroundColor = self.view.backgroundColor
         
         
-        delay(1.0) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
+        if firstAnimated {
                     
-                    self.loadingView.isHidden = true
+                    do {
+                        
+                        let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                        let gifData = try NSData(contentsOfFile: path) as Data
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+                        
+                        
+                        self.loadingImage.animatedImage = image
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                     
+                    loadingView.backgroundColor = self.view.backgroundColor
+         
                 }
-                
-            }
-            
-        }
         
         
         let navigationBarAppearance = UINavigationBarAppearance()
@@ -284,6 +282,7 @@ extension BlockedListVC {
     func insertNewRowsInTableNode(newBlocks: [[String: Any]]) {
         
         guard newBlocks.count > 0 else {
+            hideAnimation()
             return
         }
         
@@ -307,6 +306,36 @@ extension BlockedListVC {
     
         self.blockList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
+        
+        hideAnimation()
+        
+    }
+    
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        self.loadingView.alpha = 0
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
         
     }
 

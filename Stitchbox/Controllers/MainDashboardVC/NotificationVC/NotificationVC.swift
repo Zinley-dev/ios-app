@@ -21,7 +21,7 @@ class NotificationVC: UIViewController {
     var refresh_request = false
     var tableNode: ASTableNode!
     var UserNotificationList = [UserNotificationModel]()
-    
+    var firstAnimated = true
     lazy var delayItem = workItem()
     
     
@@ -73,42 +73,24 @@ class NotificationVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
-        
-        
-        delay(1.0) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
+        if firstAnimated {
                     
-                    self.loadingView.isHidden = true
+                    do {
+                        
+                        let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                        let gifData = try NSData(contentsOfFile: path) as Data
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+                        
+                        
+                        self.loadingImage.animatedImage = image
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                     
+                    loadingView.backgroundColor = self.view.backgroundColor
+         
                 }
-                
-            }
-            
-        }
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -527,6 +509,7 @@ extension NotificationVC {
     func insertNewRowsInTableNode(newNotis: [[String: Any]]) {
         
         guard newNotis.count > 0 else {
+            hideAnimation()
             return
         }
         
@@ -550,6 +533,7 @@ extension NotificationVC {
     
         self.UserNotificationList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
+        hideAnimation()
         
     }
     
@@ -584,6 +568,34 @@ extension NotificationVC: ASTableDataSource {
             
             return node
         }
+        
+    }
+    
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        self.loadingView.alpha = 0
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
         
     }
     

@@ -32,7 +32,7 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     var searchTableNode: ASTableNode!
     lazy var delayItem = workItem()
     var firstLoad = true
-    
+    var firstAnimated = true
     let backButton: UIButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
@@ -157,11 +157,9 @@ extension SearchViewController {
         APIManager().getRecent { result in
             switch result {
             case .success(let apiResponse):
-                
-                
-                print(apiResponse)
-                
+
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    
                     return
                 }
                 
@@ -209,33 +207,15 @@ extension SearchViewController {
             if !recentList.isEmpty {
                 
                 DispatchQueue.main.async {
+                    self.hideAnimation()
                     self.recentTableNode.reloadData()
                     
                 }
                 
-            }
-            
-            delay(0.25) {
-                
-                UIView.animate(withDuration: 0.5) {
-                    
-                    DispatchQueue.main.async {
-                        self.loadingView.alpha = 0
-                    }
-                
+            } else {
+                DispatchQueue.main.async {
+                    self.hideAnimation()  
                 }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    
-                    if self.loadingView.alpha == 0 {
-                        
-                        self.loadingView.isHidden = true
-                        
-                    }
-                    
-                }
-              
-                
             }
             
         }
@@ -666,6 +646,35 @@ extension SearchViewController {
             }
 
         }
+        
+    }
+    
+    
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        self.loadingView.alpha = 0
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
         
     }
     
