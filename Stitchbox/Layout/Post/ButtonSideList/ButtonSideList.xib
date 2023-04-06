@@ -119,7 +119,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  stitchbox.gg  " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0m1-lQ-zh7">
-                    <rect key="frame" x="38" y="384" width="84" height="20"/>
+                    <rect key="frame" x="38" y="488" width="84" height="20"/>
                     <color key="backgroundColor" red="0.2043532539" green="0.2043532539" blue="0.2043532539" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="d9S-KV-SN4"/>
@@ -142,7 +142,7 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="7iW-rQ-Yzm" secondAttribute="trailing" constant="8" id="ab5-H2-lxy"/>
                 <constraint firstAttribute="bottom" secondItem="7iW-rQ-Yzm" secondAttribute="bottom" constant="16" id="auy-8i-iT0"/>
                 <constraint firstItem="7iW-rQ-Yzm" firstAttribute="top" secondItem="Mhd-rC-eac" secondAttribute="bottom" constant="16" id="qHi-8V-IFa"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="0m1-lQ-zh7" secondAttribute="bottom" constant="110" id="qIq-GW-MCY"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="0m1-lQ-zh7" secondAttribute="bottom" constant="6" id="qIq-GW-MCY"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <userDefinedRuntimeAttributes>
