@@ -32,6 +32,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     var page = 1
     var searchHashtag: String!
     var keyword: String!
+    
 
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -483,6 +484,7 @@ extension ReelVC: ASCollectionDataSource {
                     
                     self.retrieveNextPageForReelsWithCompletion { (newPosts) in
                         
+                        
                         self.insertNewRowsInCollectionNode(newPosts: newPosts)
                         
 
@@ -495,10 +497,32 @@ extension ReelVC: ASCollectionDataSource {
                     
                     self.retrieveNextPageForSearchWithCompletion { (newPosts) in
                         
-                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
                         
+                        if newPosts.isEmpty {
+                            
+                            self.retrieveNextPageForReelsWithCompletion { (newPosts) in
+                                
+                                
+                                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                                
 
-                        context.completeBatchFetching(true)
+                                context.completeBatchFetching(true)
+                                
+                                
+                            }
+                            
+                            
+                        } else {
+                            
+                            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                            
+
+                            context.completeBatchFetching(true)
+                            
+                        }
+                        
+                        
+                        
                         
                         
                     }
@@ -507,10 +531,28 @@ extension ReelVC: ASCollectionDataSource {
                     
                     self.retrieveNextPageForHashtagWithCompletion { (newPosts) in
                         
-                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                    
-                        context.completeBatchFetching(true)
-                        
+                        if newPosts.isEmpty {
+                            
+                            self.retrieveNextPageForReelsWithCompletion { (newPosts) in
+                                
+                                
+                                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                                
+
+                                context.completeBatchFetching(true)
+                                
+                                
+                            }
+                            
+                            
+                        } else {
+                            
+                            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                            
+
+                            context.completeBatchFetching(true)
+                            
+                        }
                     }
                     
                     

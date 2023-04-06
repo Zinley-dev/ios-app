@@ -51,7 +51,7 @@ var emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-wit
 let xBtn = UIImage(named: "1024x")?.resize(targetSize: CGSize(width: 12, height: 12))
 
 var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
-var back_frame = CGRect(x: -10, y: 0, width: 35, height: 25)
+var back_frame = CGRect(x: 0, y: 0, width: 55, height: 55)
 var discord_domain = ["discordapp.com", "discord.com", "discord.co", "discord.gg", "watchanimeattheoffice.com", "dis.gd", "discord.media", "discordapp.net", "discordstatus.com" ]
 
 let muteImage = UIImage.init(named: "3xmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)

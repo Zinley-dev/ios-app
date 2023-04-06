@@ -70,6 +70,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
               print("Error")
          }
     }
+    
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "outputVolume" {
+            let audioSession = AVAudioSession.sharedInstance()
+
+            if audioSession.outputVolume > audioLevel {
+                unmuteVideoIfNeed()
+            } else {
+                volumeOutputList.append(audioSession.outputVolume)
+
+                delayItem.perform(after: 0.6) {
+
+                    if self.volumeOutputList.count == 2 {
+                        muteVideoIfNeed()
+                    }
+
+                    self.volumeOutputList.removeAll()
+
+                }
+            }
+
+            audioLevel = audioSession.outputVolume
+        }
+    }
+
 
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         // Initialize OneSignal
@@ -175,31 +201,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return nil
     }
 
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-         if keyPath == "outputVolume"{
-              let audioSession = AVAudioSession.sharedInstance()
-             
-             
-              if audioSession.outputVolume > audioLevel {
-                   unmuteVideoIfNeed()
-              } else {
-                  volumeOutputList.append(audioSession.outputVolume)
-                
-                  delayItem.perform(after: 0.6) {
-                      
-                      if self.volumeOutputList.count == 2 {
-                          muteVideoIfNeed()
-                      }
-                      
-                      self.volumeOutputList.removeAll()
-                      
-                  }
-              }
-            
-            audioLevel = audioSession.outputVolume
-         }
-    }
 
     func setupPixelSDK() {
         

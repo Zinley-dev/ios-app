@@ -323,9 +323,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
         }
         
+        
         DispatchQueue.main.async() {
-            self.buttonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: 0), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
+            self.buttonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: -100), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
             self.view.addSubview(self.buttonsView)
+            //self.buttonsView.backgroundColor = .red
             self.originalCenter = self.view.center
         }
   
@@ -1143,11 +1145,11 @@ extension ReelNode
         let headerInset = UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
-        let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 200)
+        let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 170)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
 
-        hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 30)
-        let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+        hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 35)
+        let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
         let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
 
         let verticalStack = ASStackLayoutSpec.vertical()
