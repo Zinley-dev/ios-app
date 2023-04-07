@@ -1917,27 +1917,31 @@ extension UserProfileVC {
                     
                     firstAnimated = false
                     
-                    UIView.animate(withDuration: 0.5) {
-                        
-                        Dispatch.main.async {
-                            self.loadingView.alpha = 0
-                        }
-                     
+            delay(1) {
+                
+                UIView.animate(withDuration: 0.5) {
+                    
+                    Dispatch.main.async {
+                        self.loadingView.alpha = 0
                     }
+                 
+                }
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    if self.loadingView.alpha == 0 {
                         
-                        if self.loadingView.alpha == 0 {
-                            
-                            self.loadingView.isHidden = true
-                            
-                        }
+                        self.loadingView.isHidden = true
                         
                     }
-                    
                     
                 }
+                
+                
+            }
+            
+        }
         
     }
     
