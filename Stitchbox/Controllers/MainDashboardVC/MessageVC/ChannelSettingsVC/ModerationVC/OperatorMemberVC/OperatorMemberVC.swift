@@ -43,6 +43,20 @@ class OperatorMemberVC: UIViewController, UINavigationControllerDelegate, UITabl
     
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+    }
+    
     func getUsers() {
         guard let members = channel?.members else { return }
         let filteredMembers = members.compactMap { $0 as? SBDMember }
@@ -82,21 +96,33 @@ class OperatorMemberVC: UIViewController, UINavigationControllerDelegate, UITabl
         
     }
     
-    
     func setupBackButton() {
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
-        backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Operators", for: .normal)
-        backButton.sizeToFit()
-        let backButtonBarButton = UIBarButtonItem(customView: backButton)
     
+        backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        navigationItem.title = "Operators"
+      
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+
+
+        
     }
+
     
     func setupAddButton() {
         

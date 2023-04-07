@@ -205,6 +205,9 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             userBtn.layer.addSublayer(userBorder)
             postBorder.removeFromSuperlayer()
             PostSearchVC.view.isHidden = true
+            if PostSearchVC.currentIndex != nil {
+                PostSearchVC.pauseVideo(index: PostSearchVC.currentIndex ?? 0)
+            }
             hashTagBorder.removeFromSuperlayer()
             HashtagSearchVC.view.isHidden = true
             pauseVideoIfNeed(pauseIndex: PostSearchVC.currentIndex ?? 0)
@@ -214,14 +217,22 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             UserSearchVC.view.isHidden = true
             hashTagBorder.removeFromSuperlayer()
             HashtagSearchVC.view.isHidden = true
-            playVideoIfNeed(playIndex: PostSearchVC.currentIndex ?? 0)
+            
+            if self.PostSearchVC.currentIndex != nil {
+                //newPlayingIndex
+                self.PostSearchVC.playVideo(index: self.PostSearchVC.currentIndex ?? 0)
+              
+            }
+          
         case SearchMode.hashTags:
             hashtagBtn.layer.addSublayer(hashTagBorder)
             userBorder.removeFromSuperlayer()
             UserSearchVC.view.isHidden = true
             postBorder.removeFromSuperlayer()
             PostSearchVC.view.isHidden = true
-            pauseVideoIfNeed(pauseIndex: PostSearchVC.currentIndex ?? 0)
+            if PostSearchVC.currentIndex != nil {
+                PostSearchVC.pauseVideo(index: PostSearchVC.currentIndex ?? 0)
+            }
         }
         sendSearchRequestToTargetVC()
     }
@@ -296,19 +307,29 @@ extension MainSearchVC {
     
     
     func setupBackButton() {
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+    
         backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
-        backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-        self.navigationItem.title = "Search"
-       
+
+
+        
     }
     
     

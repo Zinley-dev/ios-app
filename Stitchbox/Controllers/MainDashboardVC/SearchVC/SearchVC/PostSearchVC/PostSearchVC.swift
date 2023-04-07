@@ -70,6 +70,26 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if currentIndex != nil {
+            //newPlayingIndex
+            pauseVideoIfNeed(pauseIndex: currentIndex!)
+        }
+    
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if currentIndex != nil {
+            //newPlayingIndex
+            playVideoIfNeed(playIndex: currentIndex!)
+        }
+        
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(PostSearchVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_search")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PostSearchVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_search")), object: nil)
@@ -763,6 +783,88 @@ extension PostSearchVC {
             self.present(ac, animated: true, completion: nil)
         }
       
+    }
+    
+    
+    func pauseVideo(index: Int) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if cell.sideButtonView != nil {
+                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.stopSpin()
+                    
+                }
+            }
+            
+            cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    
+    func playVideo(index: Int) {
+        
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if !cell.videoNode.isPlaying() {
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.spin()
+                    
+                }
+                
+                if let muteStatus = shouldMute {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if muteStatus {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        }
+                    }
+                   
+                    if muteStatus {
+                        cell.videoNode.muted = true
+                    } else {
+                        cell.videoNode.muted = false
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                } else {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if globalIsSound {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                    }
+                   
+                    if globalIsSound {
+                        cell.videoNode.muted = false
+                    } else {
+                        cell.videoNode.muted = true
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                }
+ 
+              
+            }
+            
+        }
+        
     }
     
 }

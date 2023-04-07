@@ -55,6 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         
+     
         return true
     }
     
@@ -239,7 +240,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.messageInputTheme.buttonTintColor = UIColor.white
         
         
-        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.background
+        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.rightBarButtonTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.leftBarButtonTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.cellArrowIconTintColor = UIColor.white
@@ -276,8 +277,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         SBUTheme.componentTheme.emptyViewBackgroundColor = .background
         SBUTheme.componentTheme.backgroundColor = .background
-        
-
        
     }
 

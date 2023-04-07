@@ -82,6 +82,17 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if currentIndex != nil {
+            //newPlayingIndex
+            pauseVideo(index: currentIndex!)
+        }
+    
+    }
+
+    
     override func viewDidAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_hashtag")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_hashtag")), object: nil)
@@ -140,6 +151,12 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
                 
             }
             
+        }
+        
+        if currentIndex != nil {
+            //newPlayingIndex
+            playVideo(index: currentIndex!)
+          
         }
         
     }
@@ -229,17 +246,29 @@ extension PostListWithHashtagVC {
     
     
     func setupBackButton() {
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = back_frame
-        backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.sizeToFit()
-        let backButtonBarButton = UIBarButtonItem(customView: backButton)
     
+        backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        backButton.setTitle("", for: .normal)
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+
+
+        
     }
     
    
@@ -875,6 +904,87 @@ extension PostListWithHashtagVC {
             self.present(ac, animated: true, completion: nil)
         }
       
+    }
+    
+    func pauseVideo(index: Int) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if cell.sideButtonView != nil {
+                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.stopSpin()
+                    
+                }
+            }
+            
+            cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    
+    func playVideo(index: Int) {
+        
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if !cell.videoNode.isPlaying() {
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.spin()
+                    
+                }
+                
+                if let muteStatus = shouldMute {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if muteStatus {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        }
+                    }
+                   
+                    if muteStatus {
+                        cell.videoNode.muted = true
+                    } else {
+                        cell.videoNode.muted = false
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                } else {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if globalIsSound {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                    }
+                   
+                    if globalIsSound {
+                        cell.videoNode.muted = false
+                    } else {
+                        cell.videoNode.muted = true
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                }
+ 
+              
+            }
+            
+        }
+        
     }
     
 }

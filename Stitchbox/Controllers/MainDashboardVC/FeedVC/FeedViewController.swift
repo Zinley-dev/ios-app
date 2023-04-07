@@ -98,6 +98,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     }
     
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -134,6 +135,12 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
  
         }
         
+        if currentIndex != nil {
+            //newPlayingIndex
+            playVideo(index: currentIndex!)
+          
+        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -148,6 +155,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewWillDisappear(animated)
         
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
+        
+        if currentIndex != nil {
+            //newPlayingIndex
+            pauseVideo(index: currentIndex!)
+        }
         
     }
     
@@ -1125,24 +1137,106 @@ extension FeedViewController {
     
     func resetNoti() {
         
-        APIManager().resetBadge { result in
-            switch result {
-            case .success(let apiResponse):
-                
-                
-                print(apiResponse)
-                
-                Dispatch.main.async {
-                    self.setupEmptyNotiButton()
-                }
+            APIManager().resetBadge { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    
+                    print(apiResponse)
+                    
+                    Dispatch.main.async {
+                        self.setupEmptyNotiButton()
+                    }
 
-            case .failure(let error):
-                
-                print(error)
-                
+                case .failure(let error):
+                    
+                    print(error)
+                    
+            }
         }
-    }
         
+        
+    }
+    
+    
+    func pauseVideo(index: Int) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if cell.sideButtonView != nil {
+                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.stopSpin()
+                    
+                }
+            }
+            
+            cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    
+    func playVideo(index: Int) {
+        
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if !cell.videoNode.isPlaying() {
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.spin()
+                    
+                }
+                
+                if let muteStatus = shouldMute {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if muteStatus {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        }
+                    }
+                   
+                    if muteStatus {
+                        cell.videoNode.muted = true
+                    } else {
+                        cell.videoNode.muted = false
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                } else {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if globalIsSound {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                    }
+                   
+                    if globalIsSound {
+                        cell.videoNode.muted = false
+                    } else {
+                        cell.videoNode.muted = true
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                }
+ 
+              
+            }
+            
+        }
         
     }
     

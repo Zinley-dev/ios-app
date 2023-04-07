@@ -44,7 +44,7 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         self.channel?.refresh()
         setupBackButton()
@@ -55,9 +55,25 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         NotificationCenter.default.addObserver(self, selector: #selector(ChannelSettingsVC.changeName), name: (NSNotification.Name(rawValue: "changeName")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ChannelSettingsVC.changeAvatar), name: (NSNotification.Name(rawValue: "changeAvatar")), object: nil)
         container.editControllerDelegate = self
- 
+        
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+        navigationItem.title = "Settings"
+    }
+
+
     
     @objc func leaveChannel() {
         
@@ -308,21 +324,32 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
 
     
     func setupBackButton() {
-        
     
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Settings", for: .normal)
-        backButton.sizeToFit()
+        
+        
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+
+
+        
     }
-    
+
  
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
