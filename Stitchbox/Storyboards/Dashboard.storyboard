@@ -187,26 +187,34 @@
             </objects>
             <point key="canvasLocation" x="-1442.4000000000001" y="1614.5320197044337"/>
         </scene>
-        <!--View Controller-->
+        <!--Intro TacticsVC-->
         <scene sceneID="TLo-ON-iiT">
             <objects>
-                <viewController id="fKf-fz-GNV" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="IntroTacticsVC" id="fKf-fz-GNV" customClass="IntroTacticsVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GWk-SY-sD6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SB Automation Tactics" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aFD-VF-SV8">
-                                <rect key="frame" x="102" y="354" width="171" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose your game" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HWB-vT-0Jz">
+                                <rect key="frame" x="119" y="107" width="137" height="18"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fRI-um-MgK">
+                                <rect key="frame" x="0.0" y="141" width="375" height="588"/>
+                                <color key="backgroundColor" systemColor="systemMintColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Kr1-VJ-hL7"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
-                            <constraint firstItem="aFD-VF-SV8" firstAttribute="centerX" secondItem="GWk-SY-sD6" secondAttribute="centerX" id="3ct-Kq-kuK"/>
-                            <constraint firstItem="aFD-VF-SV8" firstAttribute="centerY" secondItem="GWk-SY-sD6" secondAttribute="centerY" id="frn-oI-nDU"/>
+                            <constraint firstItem="Kr1-VJ-hL7" firstAttribute="trailing" secondItem="fRI-um-MgK" secondAttribute="trailing" id="OpU-tu-hYU"/>
+                            <constraint firstItem="fRI-um-MgK" firstAttribute="top" secondItem="HWB-vT-0Jz" secondAttribute="bottom" constant="16" id="Qsm-cR-Z6h"/>
+                            <constraint firstItem="Kr1-VJ-hL7" firstAttribute="bottom" secondItem="fRI-um-MgK" secondAttribute="bottom" id="SaY-LS-7zq"/>
+                            <constraint firstItem="fRI-um-MgK" firstAttribute="leading" secondItem="Kr1-VJ-hL7" secondAttribute="leading" id="YaP-GN-3LL"/>
+                            <constraint firstItem="HWB-vT-0Jz" firstAttribute="top" secondItem="Kr1-VJ-hL7" secondAttribute="top" constant="16" id="bW3-xL-EQK"/>
+                            <constraint firstItem="HWB-vT-0Jz" firstAttribute="centerX" secondItem="GWk-SY-sD6" secondAttribute="centerX" id="hFW-o9-YMf"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="DDh-Ja-4q3"/>
@@ -10158,6 +10166,9 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemMintColor">
+            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

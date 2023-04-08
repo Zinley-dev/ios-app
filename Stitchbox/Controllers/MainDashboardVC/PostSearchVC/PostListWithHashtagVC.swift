@@ -57,9 +57,20 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
 
         // Do any additional setup after loading the view.
         
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
         if let hashtag = searchHashtag {
             
             navigationItem.title = hashtag
+            
+            
             //todo: customized search to search only in hashtag_list
             setupCollectionNode()
             pullControl.tintColor = UIColor.systemOrange
@@ -99,6 +110,8 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_hashtag")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_hashtag")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_hashtag")), object: nil)
+        
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -130,7 +143,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         }
         
         loadingView.backgroundColor = self.view.backgroundColor
-        
+        navigationController?.setNavigationBarHidden(false, animated: true)
         
         delay(1.25) {
             
@@ -266,8 +279,6 @@ extension PostListWithHashtagVC {
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
         
     }
     
@@ -678,8 +689,8 @@ extension PostListWithHashtagVC {
         
         if let hashtag = searchHashtag, hashtag != "" {
             
-                let finalTag = hashtag.dropFirst()
-            
+            let finalTag = hashtag.dropFirst()
+            print(finalTag)
             APIManager().getHashtagPost(tag: String(finalTag), page: page) { result in
                     switch result {
                     case .success(let apiResponse):

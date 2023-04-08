@@ -845,16 +845,18 @@ extension ReelVC {
                     items.append(item)
                 }
             }
-            
         }
-        
-        // Construct index paths for the new rows
-        let startIndex = self.posts.count - items.count
-        let endIndex = startIndex + items.count - 1
-        let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
 
-        // Insert new items at index paths
-        self.collectionNode.insertItems(at: indexPaths)
+        if !items.isEmpty {
+            // Construct index paths for the new rows
+            let startIndex = self.posts.count - items.count
+            let endIndex = startIndex + items.count - 1
+            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
+
+            // Insert new items at index paths
+            self.collectionNode.insertItems(at: indexPaths)
+        }
+
       
     }
     
