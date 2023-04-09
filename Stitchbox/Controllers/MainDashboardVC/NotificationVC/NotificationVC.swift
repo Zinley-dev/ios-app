@@ -194,8 +194,9 @@ extension NotificationVC {
 
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Notifications", for: .normal)
+        backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.title = "Notifications"
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
 

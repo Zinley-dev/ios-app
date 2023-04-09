@@ -31,6 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     lazy var delayItem = workItem()
     private var audioLevel : Float = 0.0
     
+    private var previousVolume: Float = 0.0
+    private var outputVolumeObserver: NSKeyValueObservation?
+    private var consecutiveVolumeDownPresses: Int = 0
+    
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
@@ -50,7 +54,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupOneSignal(launchOptions: launchOptions)
         getGameList()
         activeSpeaker()
-        listenVolumeButton()
+        setupVolumeObserver()
+        //listenVolumeButton()
         
         GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
@@ -59,42 +64,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
-    func listenVolumeButton(){
-        
-         let audioSession = AVAudioSession.sharedInstance()
-         do {
-              try audioSession.setActive(true, options: [])
-         audioSession.addObserver(self, forKeyPath: "outputVolume",
-                                  options: NSKeyValueObservingOptions.new, context: nil)
-              audioLevel = audioSession.outputVolume
-         } catch {
-              print("Error")
-         }
+    private func setupVolumeObserver() {
+        let audioSession = AVAudioSession.sharedInstance()
+        previousVolume = audioSession.outputVolume
+        outputVolumeObserver = audioSession.observe(\.outputVolume) { [weak self] _, _ in
+            self?.handleVolumeChange()
+        }
     }
     
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "outputVolume" {
-            let audioSession = AVAudioSession.sharedInstance()
-
-            if audioSession.outputVolume > audioLevel {
-                unmuteVideoIfNeed()
-            } else {
-                volumeOutputList.append(audioSession.outputVolume)
-
-                delayItem.perform(after: 0.6) {
-
-                    if self.volumeOutputList.count == 2 {
-                        muteVideoIfNeed()
-                    }
-
-                    self.volumeOutputList.removeAll()
-
-                }
+    private func handleVolumeChange() {
+        let audioSession = AVAudioSession.sharedInstance()
+        let currentVolume = audioSession.outputVolume
+        
+        if currentVolume > previousVolume {
+            consecutiveVolumeDownPresses = 0
+            unmuteVideoIfNeed()
+        } else if currentVolume < previousVolume {
+            consecutiveVolumeDownPresses += 1
+            if consecutiveVolumeDownPresses >= 2 {
+                muteVideoIfNeed()
+                consecutiveVolumeDownPresses = 0
             }
-
-            audioLevel = audioSession.outputVolume
         }
+        
+        previousVolume = currentVolume
     }
 
 
