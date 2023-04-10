@@ -766,8 +766,8 @@ extension APIManager {
     }
   }
   
-  func updateLatestRiot(params: [String: Any], completion: @escaping APICompletion) {
-    userManager.request(.riotLatestUpdate(params: params)) { result in
+  func updateLatestRiot(completion: @escaping APICompletion) {
+    userManager.request(.riotLatestUpdate) { result in
       completion(result)
     }
   }

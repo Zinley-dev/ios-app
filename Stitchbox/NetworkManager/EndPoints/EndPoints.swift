@@ -382,7 +382,7 @@ public enum UserAPI {
     case uploadavatar
     case uploadcover
     case riotUpdate(params: [String: Any])
-    case riotLatestUpdate(params: [String: Any])
+    case riotLatestUpdate
     case usernameExist(params: [String: Any])
     case phoneExist(params: [String: Any])
     case emailExist(params: [String: Any])
@@ -511,8 +511,8 @@ extension UserAPI: EndPointType {
             return .requestParameters(parameters: params)
           case .riotUpdate(let params):
             return .requestParameters(parameters: params)
-          case .riotLatestUpdate(let params):
-            return .requestParameters(parameters: params)
+          case .riotLatestUpdate:
+            return .request
         case .updateEmail(let params):
             return .requestParameters(parameters: params)
         case .verifyEmail(let params):
