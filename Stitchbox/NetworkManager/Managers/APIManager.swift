@@ -764,7 +764,7 @@ extension APIManager {
    params = { "riotUsername": "", "region": "" }
    
    */
-  func updateRiot(params: [String: Any], completion: @escaping APICompletion) {
+  func confirmRiot(params: [String: Any], completion: @escaping APICompletion) {
     userManager.request(.riotUpdate(params: params)) { result in
       completion(result)
     }
