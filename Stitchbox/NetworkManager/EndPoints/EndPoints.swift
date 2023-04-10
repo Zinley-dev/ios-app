@@ -381,6 +381,8 @@ public enum UserAPI {
     case updatepassword (params: [String: Any])
     case uploadavatar
     case uploadcover
+    case riotUpdate(params: [String: Any])
+    case riotLatestUpdate(params: [String: Any])
     case usernameExist(params: [String: Any])
     case phoneExist(params: [String: Any])
     case emailExist(params: [String: Any])
@@ -409,6 +411,10 @@ extension UserAPI: EndPointType {
             return "/me/challenge-card"
         case .updateEmail:
           return "/email"
+          case .riotUpdate:
+            return "/riot-update"
+          case .riotLatestUpdate:
+            return "/riot-latest-update"
         case .updatePhone:
           return "/phone"
         case .verifyPhone:
@@ -456,6 +462,10 @@ extension UserAPI: EndPointType {
             return .patch
           case .updateEmail:
             return .patch
+          case .riotUpdate:
+            return .patch
+          case .riotLatestUpdate:
+            return .patch
           case .verifyEmail:
             return .patch
           case .verifyPhone:
@@ -498,6 +508,10 @@ extension UserAPI: EndPointType {
           case .updateChallengeCard(let params):
             return .requestParameters(parameters: params)
         case .updatePhone(let params):
+            return .requestParameters(parameters: params)
+          case .riotUpdate(let params):
+            return .requestParameters(parameters: params)
+          case .riotLatestUpdate(let params):
             return .requestParameters(parameters: params)
         case .updateEmail(let params):
             return .requestParameters(parameters: params)
@@ -1365,6 +1379,47 @@ extension ViewApi: EndPointType {
     }
     
 }
+
+
+
+public enum RiotApi {
+  case searchUserRiot(region: String, username: String)
+}
+extension RiotApi: EndPointType {
+  var path: String {
+    switch self {
+      case .searchUserRiot(let region, let username):
+        return "/userinfo/\(region)/\(username)"
+    }
+  }
+  
+  var module: String {
+    return "/riot"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .searchUser:
+        return .searchUserRiot
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .searchUserRiot:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+  
+}
+
+
+
 
 
 

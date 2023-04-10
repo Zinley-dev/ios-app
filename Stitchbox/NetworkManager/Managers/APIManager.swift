@@ -44,6 +44,7 @@ struct APIManager {
     let accountActManager = Manager<AccountActivityApi>()
     let reportManager = Manager<ReportApi>()
     let viewManager = Manager<ViewApi>()
+    let riotManager = Manager<RiotApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -754,5 +755,28 @@ extension APIManager {
         }
     }
     
+}
+
+
+extension APIManager {
+  
+  func updateRiot(params: [String: Any], completion: @escaping APICompletion) {
+    userManager.request(.riotUpdate(params: params)) { result in
+      completion(result)
+    }
+  }
+  
+  func updateLatestRiot(params: [String: Any], completion: @escaping APICompletion) {
+    userManager.request(.riotLatestUpdate(params: params)) { result in
+      completion(result)
+    }
+  }
+  
+  func searchUserRiot(region: String, username: String, completion: @escaping APICompletion) {
+    riotManager.request(.searchUserRiot(region: region, username: username) { result in
+      completion(result)
+    }
+  }
+  
 }
 
