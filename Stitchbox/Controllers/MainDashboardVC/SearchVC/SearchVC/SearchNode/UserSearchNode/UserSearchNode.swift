@@ -87,6 +87,7 @@ class UserSearchNode: ASCellNode {
             if user.avatarUrl != "" {
                 
                 self.imageNode.url = URL(string: user.avatarUrl)
+                self.cacheUrlIfNeed(url: user.avatarUrl)
                 
             } else {
                 
@@ -95,6 +96,39 @@ class UserSearchNode: ASCellNode {
             }
 
           
+        }
+        
+    }
+    
+    func cacheUrlIfNeed(url: String) {
+        
+        
+        imageStorage.async.object(forKey: url) { result in
+            if case .value(_) = result {
+                
+        
+               
+            } else {
+                
+                
+             AF.request(url).responseImage { response in
+                    
+                    
+                    switch response.result {
+                    case let .success(value):
+                     
+                        try? imageStorage.setObject(value, forKey: url, expiry: .seconds(3000))
+                        
+                    case let .failure(error):
+                        print(error)
+                    }
+                    
+                    
+                    
+                }
+                
+            }
+            
         }
         
     }

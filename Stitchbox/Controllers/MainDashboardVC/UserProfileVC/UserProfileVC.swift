@@ -49,7 +49,7 @@ class UserProfileVC: UIViewController {
     var followerCount = 0
     var followingCount = 0
     var fistBumpedCount = 0
-    
+    var firstAnimated = true
     var isFollow = false
     var isFistBump = false
 
@@ -133,28 +133,6 @@ class UserProfileVC: UIViewController {
             
             loadingView.backgroundColor = self.view.backgroundColor
             
-            
-            delay(1.30) {
-                
-                UIView.animate(withDuration: 0.5) {
-                    
-                    self.loadingView.alpha = 0
-                    
-                }
-                
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    
-                    if self.loadingView.alpha == 0 {
-                        
-                        self.loadingView.isHidden = true
-                        
-                    }
-                    
-                }
-                
-            }
-            
         }
         
 
@@ -190,6 +168,7 @@ class UserProfileVC: UIViewController {
                     // display username
                     if let username = data.userName, username != "" {
                         cell.usernameLbl.text = username
+                        navigationItem.title = username
                     }
                     
                     if data.avatarURL != "" {
@@ -1319,22 +1298,33 @@ extension UserProfileVC {
         setupTitle()
     }
     
+    
     func setupBackButton() {
-        
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+    
         backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
-        backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-        
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
+
+
         
     }
-    
+
     func setupTitle() {
         
         navigationItem.title = nickname
@@ -1439,6 +1429,7 @@ extension UserProfileVC {
               
               self.userData = Mapper<UserDataSource>().map(JSONObject: data)
               self.applyUIChange()
+              self.hideAnimation()
               
               self.countFistBumped()
               self.countFollowings()
@@ -1455,6 +1446,7 @@ extension UserProfileVC {
             case .failure(_):
               
               Dispatch.main.async {
+                  self.hideAnimation()
                   self.NoticeBlockAndDismiss()
               }
            
@@ -1802,7 +1794,7 @@ extension UserProfileVC {
 
         if let id = self.userId {
             
-            let link = "https://dualteam.page.link/dual?up=\(id)"
+            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")
@@ -1915,6 +1907,41 @@ extension UserProfileVC {
 
         
         self.present(sheet, animated: true, completion: nil)
+        
+    }
+    
+    
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+            delay(1) {
+                
+                UIView.animate(withDuration: 0.5) {
+                    
+                    Dispatch.main.async {
+                        self.loadingView.alpha = 0
+                    }
+                 
+                }
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    
+                    if self.loadingView.alpha == 0 {
+                        
+                        self.loadingView.isHidden = true
+                        
+                    }
+                    
+                }
+                
+                
+            }
+            
+        }
         
     }
     

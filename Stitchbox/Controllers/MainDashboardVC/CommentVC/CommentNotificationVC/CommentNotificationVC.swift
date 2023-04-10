@@ -48,6 +48,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     
     var hasSetPointOrigin = false
     var pointOrigin: CGPoint?
+    var mention_dict = [[String: Any]]()
     
     //
     @IBOutlet weak var tView: UIView!
@@ -56,7 +57,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var cmtTxtView: UITextView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    
+    var firstAnimated = true
     var placeholderLabel : UILabel!
     //
     
@@ -341,14 +342,19 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             case .success(let apiResponse):
                
                 guard let data = apiResponse.body else {
+                    DispatchQueue.main.async {
+                        self.hideAnimation()
+                    }
                     return
                 }
                 
-                print(data)
-                
                 if !data.isEmpty {
                     
+                    print(data)
+                    
                     let item = CommentModel(postKey: data["_id"] as! String, Comment_model: data)
+                    
+            
                     
                     if item.isReply == false {
                         self.root_id = item.comment_id
@@ -373,7 +379,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         DispatchQueue.main.async {
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
-                            
+                            self.hideAnimation()
                         }
                        
                     }
@@ -393,6 +399,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         DispatchQueue.main.async {
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                            self.hideAnimation()
                             
                         }
                         
@@ -415,6 +422,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     DispatchQueue.main.async {
                         
                         self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
+                        self.hideAnimation()
                         
                     }
                     
@@ -459,28 +467,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
-        
-        delay(1) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-        }
-        
         
     }
     
@@ -557,6 +543,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         } else {
             
             uid_dict.removeAll()
+            mention_dict.removeAll()
             self.searchResultContainerView.isHidden = true
         }
     }
@@ -657,8 +644,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
     }
 
-    
-    
     func sendCommentBtn() {
         // Check condition here
 
@@ -672,13 +657,25 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         }
 
         // Append values to mention_list array
-        uid_dict.values.forEach {
-            if !mention_list.contains($0) {
-                mention_list.append($0)
+        for (key, value) in uid_dict {
+            
+            if !mention_list.contains(key) {
+                mention_list.append(value)
+                
+                let dict = ["username": key, "_id": value] as? [String: Any]
+                mention_dict.append(dict!)
+                
             }
+            
+            
+            
         }
 
         var data = ["content": commentText, "postId": post.id] as [String : Any]
+        
+        if !mention_dict.isEmpty {
+            data.updateValue(mention_dict, forKey: "mention_dict")
+        }
 
         if let replyToCID = reply_to_cid {
             data.updateValue(replyToCID, forKey: "replyTo")
@@ -721,54 +718,38 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 if self.reply_to_cid != nil {
                     
                     data["replyTo"] = ["_id": self.reply_to_cid!, "owner": ["username": self.reply_to_username!, "_id": self.reply_to_cid!]]
-    
+
                 }
                 
-              
                 data.merge(dict: update)
-                
-                // Insert the comment into the CommentList array and the corresponding row into tableNode
+
+                // Insert the comment into the CommentList array
                 let item = CommentModel(postKey: id, Comment_model: data)
                 let start: Int
                 
-                
-                
                 if let index = self.index {
                     start = index + 1
-                    self.CommentList.insert(item, at: start)
-                    
-                    DispatchQueue.main.async {
-                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
-                        self.tableNode.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
-                    }
-                   
                 } else {
                     if self.CommentList.isEmpty || !self.CommentList[0].is_title {
                         start = 0
                     } else {
                         start = 1
                     }
-                    
-                    self.CommentList.insert(item, at: start)
-                    
-                    DispatchQueue.main.async {
-                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
-                        self.tableNode.scrollToRow(at: IndexPath(row: start, section: 0), at: .top, animated: true)
-                    }
-                    
                 }
                 
-                // Reload rows in tableNode
-                let updatePath = (start ..< self.CommentList.count).map { IndexPath(row: $0, section: 0) }
+                self.CommentList.insert(item, at: start)
+
                 DispatchQueue.main.async {
+                    self.tableNode.performBatch(animated: true, updates: {
+                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
+                    }, completion: { _ in
+                        self.tableNode.scrollToRow(at: IndexPath(row: start, section: 0), at: .top, animated: true)
+                    })
+
+                    let updatePath = (start + 1 ..< self.CommentList.count).map { IndexPath(row: $0, section: 0) }
                     self.tableNode.reloadRows(at: updatePath, with: .automatic)
                 }
                 
-                self.root_id = nil
-                self.reply_to_uid = nil
-                self.reply_to_cid = nil
-                self.reply_to_username = nil
-                self.index = nil
                 self.isSending = false
                 
                 // Clear arrays and UI elements
@@ -776,6 +757,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 self.mention_list.removeAll()
                 self.hashtag_arr.removeAll()
                 self.mention_arr.removeAll()
+                self.mention_dict.removeAll()
                 
                 DispatchQueue.main.async {
                     showNote(text: "Comment sent!")
@@ -785,7 +767,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     self.cmtTxtView.resignFirstResponder()
                 }
                 
-            
             case .failure(let error):
                 print(error)
                 DispatchQueue.main.async {
@@ -794,6 +775,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             }
         }
     }
+
+
     
     @objc func handleKeyboardShow(notification: Notification) {
         
@@ -839,6 +822,16 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         if cmtTxtView.text.isEmpty == true {
             placeholderLabel.text = "Add comment..."
             viewHeight.constant = 75
+            
+            // remove all
+            uid_dict.removeAll()
+            mention_list.removeAll()
+            hashtag_arr.removeAll()
+            mention_arr.removeAll()
+            mention_dict.removeAll()
+            
+            //
+            self.searchResultContainerView.isHidden = true
             
             
             
@@ -887,24 +880,24 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     @IBAction func vỉewPostBtnPressed(_ sender: Any) {
         
         if let viewPost = self.post {
-            
-            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        
+            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
                 
-                let nav = UINavigationController(rootViewController: SPVC)
-                
+                let nav = UINavigationController(rootViewController: RVC)
+
+                // Set the user ID, nickname, and onPresent properties of UPVC
+                RVC.posts = [viewPost]
+               
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
                 nav.modalPresentationStyle = .fullScreen
-                nav.navigationItem.titleView?.tintColor = .white
-                nav.navigationBar.tintColor = .background
-                
-                SPVC.selectedPost = [viewPost]
-                SPVC.startIndex = 0
-                SPVC.onPresent = true
-                
                 self.present(nav, animated: true, completion: nil)
                 
             }
-            
-            
+
         } else {
             
             self.showErrorAlert("Oops!", msg: "This post is temporarily unavailable.")
@@ -1174,8 +1167,6 @@ extension CommentNotificationVC: ASTableDataSource {
         return index
     }
     
-    
-    
     func loadReplied(item: CommentModel, indexex: Int, root_index: Int) {
         guard let commentId = item.comment_id else {
             // If the comment ID is nil, return early
@@ -1197,7 +1188,7 @@ extension CommentNotificationVC: ASTableDataSource {
                 }
                 
                 // Filter out any reply data that has already been loaded
-                var newReplyData = replyData.filter { reply in
+                let newReplyData = replyData.filter { reply in
                     let cmtId = reply["_id"] as! String
                     let newReplyModel = CommentModel(postKey: cmtId, Comment_model: reply)
                     return !self.checkDuplicateLoading(post: newReplyModel)
@@ -1209,62 +1200,34 @@ extension CommentNotificationVC: ASTableDataSource {
                 }
                 
                 let section = 0
-                var indexPaths: [IndexPath] = []
-
-                var last = 0
-                var start = indexex + 1
+                let start = indexex + 1
+                let end = start + newReplyData.count - 1
                 
+                let indexPaths = (start...end).map { IndexPath(row: $0, section: section) }
                 
+                var updatedReplyData = newReplyData
+                updatedReplyData[updatedReplyData.count - 1]["hasReply"] = true
                 
-                for row in start...newReplyData.count + start - 1 {
-                    
-                    let path = IndexPath(row: row, section: section)
-                    indexPaths.append(path)
-                    
-                    last = row
-                    
-                }
-                
-                newReplyData[newReplyData.count - 1].updateValue(true, forKey: "hasReply")
-                
-                for item in newReplyData {
-                    
-        
-                    let items = CommentModel(postKey: item["_id"] as! String, Comment_model: item)
-     
-                    self.CommentList.insert(items, at: start)
-                    
-                    start += 1
-                    
-                }
+                let newCommentModels = updatedReplyData.map { CommentModel(postKey: $0["_id"] as! String, Comment_model: $0) }
+                self.CommentList.insert(contentsOf: newCommentModels, at: start)
                 
                 DispatchQueue.main.async {
-                    self.tableNode.insertRows(at: indexPaths,with: .none)
+                    self.tableNode.insertRows(at: indexPaths, with: .none)
                     
                     self.CommentList[root_index].lastCmtSnapshot += 1
                     
-                    
-                    var updatePath: [IndexPath] = []
-                    
-                    for row in indexex + 1 ... self.CommentList.count - 1 {
-                        let path = IndexPath(row: row, section: 0)
-                        updatePath.append(path)
-                    }
-                    
-                    
+                    let updatePath = (indexex + 1...self.CommentList.count - 1).map { IndexPath(row: $0, section: 0) }
                     self.tableNode.reloadRows(at: updatePath, with: .automatic)
                     
-                    
-                    self.tableNode.scrollToRow(at: IndexPath(row: last, section: 0), at: .bottom, animated: true)
+                    self.tableNode.scrollToRow(at: IndexPath(row: end, section: 0), at: .bottom, animated: true)
                 }
-                
-                
                 
             case .failure(let error):
                 print("CmtCount: \(error)")
             }
         }
     }
+
  
     func checkDuplicateLoading(post: CommentModel) -> Bool {
         return CommentList.contains { $0.comment_id == post.comment_id }
@@ -1356,7 +1319,7 @@ extension CommentNotificationVC {
                     commentSettings.isPostOwner = false
                 }
                 
-                if uid == selectedCmt.owner_uid {
+                if uid == selectedCmt.comment_uid {
                     commentSettings.isCommentOwner = true
                 } else {
                     commentSettings.isCommentOwner = false
@@ -1477,5 +1440,34 @@ extension CommentNotificationVC {
     
     }
     
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        Dispatch.main.async {
+                            self.loadingView.alpha = 0
+                        }
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
+        
+    }
     
 }

@@ -43,11 +43,6 @@
                 <constraint firstAttribute="trailing" secondItem="28E-sR-mep" secondAttribute="trailing" id="oV8-0j-R6Y"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                    <real key="value" value="25"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
             <point key="canvasLocation" x="-10.869565217391305" y="-67.299107142857139"/>
         </view>
     </objects>

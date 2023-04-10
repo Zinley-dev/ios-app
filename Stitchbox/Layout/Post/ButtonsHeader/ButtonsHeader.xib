@@ -144,11 +144,6 @@
                 <constraint firstAttribute="bottom" secondItem="p1f-k7-At0" secondAttribute="bottom" constant="8" id="eYA-uK-pLi"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                    <real key="value" value="25"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
             <point key="canvasLocation" x="-395.6521739130435" y="-302.67857142857139"/>
         </view>
     </objects>

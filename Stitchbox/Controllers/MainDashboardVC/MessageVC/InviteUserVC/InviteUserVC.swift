@@ -45,10 +45,11 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     var createButtonItem: UIBarButtonItem?
     var cancelButtonItem: UIBarButtonItem?
     
-    private lazy var titleView: UIView? = _titleView
+    //private lazy var titleView: UIView? = _titleView
     private lazy var leftBarButton: UIBarButtonItem? = _leftBarButton
     private lazy var rightBarButton: UIBarButtonItem? = _rightBarButton
    
+    /*
     private lazy var _titleView: SBUNavigationTitleView = {
         var titleView: SBUNavigationTitleView
         if #available(iOS 11, *) {
@@ -58,10 +59,10 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50)
             )
         }
-        titleView.text = ""
+        titleView.text = "Add members"
         titleView.textAlignment = .center
         return titleView
-    }()
+    }() */
     
     private lazy var _leftBarButton: UIBarButtonItem = {
         
@@ -71,7 +72,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
         leftButton.frame = back_frame
         leftButton.setTitleColor(UIColor.white, for: .normal)
-        leftButton.setTitle("     Add members", for: .normal)
+        leftButton.setTitle("", for: .normal)
         leftButton.sizeToFit()
         
         let backButtonBarButton = UIBarButtonItem(customView: leftButton)
@@ -95,7 +96,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         // Do any additional setup after loading the view.
         self.navigationItem.leftBarButtonItem = self.leftBarButton
         self.navigationItem.rightBarButtonItem = self.rightBarButton
-        self.navigationItem.titleView = self.titleView
+        navigationItem.title = "Add members"
         self.navigationItem.largeTitleDisplayMode = .never
 
         self.searchController = UISearchController(searchResultsController: nil)
@@ -134,6 +135,21 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         
         
        
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
     }
     
     func loadBanUsers(completed: @escaping DownloadComplete) {

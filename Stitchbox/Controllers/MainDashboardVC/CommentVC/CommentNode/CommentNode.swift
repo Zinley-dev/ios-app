@@ -513,7 +513,9 @@ class CommentNode: ASCellNode {
     
     
     override func layout() {
-        addActiveLabelToCmtNode()
+        delay(0.025) {
+            self.addActiveLabelToCmtNode()
+        }
     }
     
     
@@ -524,7 +526,7 @@ class CommentNode: ASCellNode {
             self.cmtNode.view.isUserInteractionEnabled = true
             
             
-            let label =  ActiveLabel()
+            let label = ActiveLabel()
             
             //
             self.cmtNode.view.addSubview(label)
@@ -546,7 +548,7 @@ class CommentNode: ASCellNode {
                 //label.attributedText = textAttributes
             
                 label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-                label.mentionColor = self.selectedColor
+                label.mentionColor = .secondary
                 label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
                 
                 if self.post.reply_to != "" {
@@ -555,9 +557,49 @@ class CommentNode: ASCellNode {
                 
                 
                 label.handleMentionTap {  mention in
-                    print(mention)
-                    //self.checkIfUserValidAndPresentVC(username: mention)
                     
+                  
+                    if let mentionArr = self.post.mention {
+                        
+                        for item in mentionArr {
+                            
+                            if let username = item["username"] as? String, username == mention {
+                                
+                                if let id = item["_id"] as? String {
+                                    
+                                    if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+                                        
+                                        if let vc = UIViewController.currentViewController() {
+                                            
+                                            let nav = UINavigationController(rootViewController: UPVC)
+
+                                            // Set the user ID, nickname, and onPresent properties of UPVC
+                                            UPVC.userId = id
+                                            UPVC.nickname = username
+                                            UPVC.onPresent = true
+
+                                            // Customize the navigation bar appearance
+                                            nav.navigationBar.barTintColor = .background
+                                            nav.navigationBar.tintColor = .white
+                                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                                            nav.modalPresentationStyle = .fullScreen
+                                            vc.present(nav, animated: true, completion: nil)
+                                            return
+
+
+                                        }
+                                    }
+                                    
+                                }
+                                
+                              
+                            }
+                                
+                            
+                        }
+                        
+                    }
                     
                 }
                 
@@ -565,6 +607,7 @@ class CommentNode: ASCellNode {
                           
                     var selectedHashtag = hashtag
                     selectedHashtag.insert("#", at: selectedHashtag.startIndex)
+                    
                 
                     if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
                         
@@ -597,36 +640,30 @@ class CommentNode: ASCellNode {
                     
                     let url = string.absoluteString
                     
-                    if url.contains("https://dualteam.page.link/") {
-                              
-                        guard let components = URLComponents(url: string, resolvingAgainstBaseURL: false),let queryItems = components.queryItems else {
-                            
-                            return
-                            
-                        }
+                    if url.contains("https://stitchbox.gg/app/account/") {
                         
-                        for queryItem in queryItems {
-                            
-                            if queryItem.name == "p" {
-                                
-                                if let id = queryItem.value {
-                                    
-  
-                                }
-                
-                            } else if queryItem.name == "up" {
-                                
-                                if let id = queryItem.value {
-                                    
-                                    self.moveToUserProfileVC(uid: id)
-                                    
-                                }
-                                
-                             
-                            }
-                            
-                            
+                        
+                        let id = string.lastPathComponent
+                        
+                        if id != "" {
+                            self.moveToUserProfileVC(id: id)
                         }
+                              
+                        
+                        
+                        
+                        
+                    } else if url.contains("https://stitchbox.gg/app/post/") {
+                        
+                        
+                        let id = string.lastPathComponent
+                        
+                        if id != "" {
+                            self.openPost(id: id)
+                        }
+                              
+                        
+                        
                         
                         
                     } else {
@@ -651,14 +688,92 @@ class CommentNode: ASCellNode {
             
     }
     
-    func moveToUserProfileVC(uid: String) {
+    func moveToUserProfileVC(id: String) {
         
-        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: UPVC)
+
+                // Set the user ID, nickname, and onPresent properties of UPVC
+                UPVC.userId = id
+                UPVC.onPresent = true
+
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                nav.modalPresentationStyle = .fullScreen
+                vc.present(nav, animated: true, completion: nil)
+
+
+            }
+        }
         
     }
     
-    func presentViewController(id: String, items: [PostModel]) {
+    func openPost(id: String) {
       
+        presentSwiftLoader()
+        
+        APIManager().getPostDetail(postId: id) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body else {
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                    }
+                  return
+                }
+               
+                if !data.isEmpty {
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                        
+                        if let post = PostModel(JSON: data) {
+                            
+                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+                                
+                                if let vc = UIViewController.currentViewController() {
+                                    
+                                    let nav = UINavigationController(rootViewController: RVC)
+
+                                    // Set the user ID, nickname, and onPresent properties of UPVC
+                                    RVC.posts = [post]
+                                   
+                                    // Customize the navigation bar appearance
+                                    nav.navigationBar.barTintColor = .background
+                                    nav.navigationBar.tintColor = .white
+                                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                                    nav.modalPresentationStyle = .fullScreen
+                                    vc.present(nav, animated: true, completion: nil)
+
+
+                                }
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                } else {
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                    }
+                }
+
+            case .failure(let error):
+                print(error)
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                }
+                
+        }
+    }
         
     }
     
@@ -688,7 +803,12 @@ class CommentNode: ASCellNode {
     
     func loadInfo(uid: String ) {
         
-        avatarNode.url = URL(string: post.comment_avatarUrl)
+        
+        if post.comment_avatarUrl != "" {
+            avatarNode.url = URL(string: post.comment_avatarUrl)
+        } else {
+            avatarNode.image = UIImage.init(named: "defaultuser")
+        }
         
         
         if self.post.comment_uid == self.post.owner_uid {

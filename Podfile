@@ -54,6 +54,7 @@ target 'Stitchbox' do
   pod 'OneSignalXCFramework', '>= 3.0.0', '< 4.0'
   pod 'GoogleMaps'
   pod 'GooglePlaces'
+  pod 'swift-vibrant'
   
   target 'StitchboxTests' do
     inherit! :search_paths

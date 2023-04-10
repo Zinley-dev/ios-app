@@ -9,8 +9,6 @@ import UIKit
 
 class ButtonsHeader: UIView {
     
-
-  
     @IBOutlet weak var shareBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
     @IBOutlet weak var commentCountLbl: UILabel!

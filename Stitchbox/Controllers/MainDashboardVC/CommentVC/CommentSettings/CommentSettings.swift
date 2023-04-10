@@ -61,6 +61,9 @@ class CommentSettings: UIViewController{
                 
                 if !isCommentOwner {
                     deleteStack.isHidden = true
+                    
+                } else {
+                    reportStack.isHidden = true
                 }
                 
             } else {

@@ -31,6 +31,8 @@ class NewsFeedSettingVC: UIViewController {
     var isSearch = false
     var isHashtag = false
     var isSelected = false
+    var isReels = false
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +67,8 @@ class NewsFeedSettingVC: UIViewController {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_hashtag")), object: nil)
         } else if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_selected")), object: nil)
+        } else if isReels {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_reel")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
         }
@@ -81,6 +85,8 @@ class NewsFeedSettingVC: UIViewController {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_hashtag")), object: nil)
         } else if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
+        } else if isReels {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_reel")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
         }
@@ -103,6 +109,8 @@ class NewsFeedSettingVC: UIViewController {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_hashtag")), object: nil)
         } else if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_selected")), object: nil)
+        } else if isReels {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_reel")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post")), object: nil)
         }
@@ -121,6 +129,8 @@ class NewsFeedSettingVC: UIViewController {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_hashtag")), object: nil)
         } else if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
+        } else if isReels {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_reel")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
         }
@@ -140,6 +150,8 @@ class NewsFeedSettingVC: UIViewController {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_hashtag")), object: nil)
         } else if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
+        } else if isReels {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_reel")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         }

@@ -43,6 +43,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
     var isViewed = false
     var currentTimeStamp: TimeInterval!
     
+    
     init(with post: PostModel) {
         self.post = post
         self.imageNode = ASImageNode()
@@ -229,16 +230,13 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                     if check_Url(host: domain) {
                         self.buttonsView.hostLbl.text = "  \(domain)  "
                     } else {
-                        self.buttonsView.hostLbl.isHidden = true
-                        self.buttonsView.streamView.isHidden = true
+                        self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
                     }
                 } else {
-                    self.buttonsView.hostLbl.isHidden = true
-                    self.buttonsView.streamView.isHidden = true
+                    self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
                 }
             } else {
-                self.buttonsView.hostLbl.isHidden = true
-                self.buttonsView.streamView.isHidden = true
+                self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
             }
 
             self.checkIfLike()
@@ -407,12 +405,126 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
 
 extension PostNode {
     
-    /*
+    
     func didTap(_ videoNode: ASVideoNode) {
         
-        soundProcess()
+        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                if vc is FeedViewController || vc is MainSearchVC || vc is PostListWithHashtagVC {
+            
+                    let nav = UINavigationController(rootViewController: RVC)
+
+                    // Set the user ID, nickname, and onPresent properties of UPVC
+                    RVC.posts = [post]
+                    
+                    if vc is FeedViewController {
+                        RVC.isReel = true
+                    } else if vc is MainSearchVC {
+                        
+                        if let update1 = vc as? MainSearchVC {
+                            
+                
+                            RVC.keyword = update1.PostSearchVC.keyword
+                            
+                        }
+                        
+                        RVC.isSearch = true
+                        
+                    } else if vc is PostListWithHashtagVC {
+                        
+                        if let update1 = vc as? PostListWithHashtagVC {
+                            
+                           
+                            RVC.searchHashtag = update1.searchHashtag
+                            
+                        }
+                        
+                        RVC.isHashtag = true
+                    }
+                    
+                    if let update1 = vc as? FeedViewController {
+                        if let currentIndex = update1.posts.firstIndex(of: post) {
+                            if currentIndex < update1.posts.count - 1 {
+                                let endIndex = min(currentIndex+5, update1.posts.count-1)
+                                RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                            }
+                        }
+                    } else if let update1 = vc as? MainSearchVC {
+                        if let currentIndex = update1.PostSearchVC.posts.firstIndex(of: post) {
+                            if currentIndex < update1.PostSearchVC.posts.count - 1 {
+                                let endIndex = min(currentIndex+5, update1.PostSearchVC.posts.count-1)
+                                RVC.posts.append(contentsOf: Array(update1.PostSearchVC.posts[(currentIndex+1)...endIndex]))
+                            }
+                        }
+                    } else if let update1 = vc as? PostListWithHashtagVC {
+                        if let currentIndex = update1.posts.firstIndex(of: post) {
+                            if currentIndex < update1.posts.count - 1 {
+                                let endIndex = min(currentIndex+5, update1.posts.count-1)
+                                RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                            }
+                        }
+                    }
+
+
+                    // Customize the navigation bar appearance
+                    nav.navigationBar.barTintColor = .background
+                    nav.navigationBar.tintColor = .white
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                    nav.modalPresentationStyle = .fullScreen
+                    vc.present(nav, animated: true, completion: nil)
+                    
+                } else {
+                   
+                    if vc is SelectedPostVC  {
+                        
+                        if let update1 = vc as? SelectedPostVC {
+                            
+                            if update1.onPresent == true {
+                                
+                                let nav = UINavigationController(rootViewController: RVC)
+
+                                // Set the user ID, nickname, and onPresent properties of UPVC
+                                RVC.posts = [post]
+                                
+                                if let currentIndex = update1.posts.firstIndex(of: post) {
+                                    if currentIndex < update1.posts.count - 1 {
+                                        let endIndex = min(currentIndex+5, update1.posts.count-1)
+                                        RVC.posts.append(contentsOf: Array(update1.posts[(currentIndex+1)...endIndex]))
+                                    }
+                                }
+
+                                // Customize the navigation bar appearance
+                                nav.navigationBar.barTintColor = .background
+                                nav.navigationBar.tintColor = .white
+                                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                                nav.modalPresentationStyle = .fullScreen
+                                vc.present(nav, animated: true, completion: nil)
+                                
+                            } else {
+                                
+                                soundProcess()
+                                
+                            }
+                            
+                        }
+                        
+                    } else {
+                        
+                        soundProcess()
+                        
+                    }
+                    
+                    
+                }
+
+            }
+        }
       
-    } */
+    }
     
     @objc func soundProcess() {
         
@@ -671,7 +783,7 @@ extension PostNode {
         
         let loadUsername = userDataSource.userName
         
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(post.id)")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(post.id)")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
@@ -820,7 +932,11 @@ extension PostNode {
     }
     
     @objc func streamingLinkTapped() {
-        guard let url = URL(string: post.streamLink), !post.streamLink.isEmpty else { return }
+        guard let url = URL(string: post.streamLink), !post.streamLink.isEmpty else {
+            presentStreamingIntro()
+            return
+            
+        }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 

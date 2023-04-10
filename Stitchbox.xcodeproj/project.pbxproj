@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1181C5F8306B06A2EDC59738 /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76AA26B3E99DDB661C2CD105 /* Pods_Stitchbox_StitchboxUITests.framework */; };
 		14120DE72991C94100AE51E0 /* MainFistBumpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14120DE62991C94100AE51E0 /* MainFistBumpVC.swift */; };
 		14120DE92991CF0B00AE51E0 /* FistBumpeeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14120DE82991CF0B00AE51E0 /* FistBumpeeVC.swift */; };
 		14131D7E293B3666001F7631 /* Components.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14131D7D293B3666001F7631 /* Components.storyboard */; };
@@ -44,8 +43,6 @@
 		14FADBD1297FBA4800E0A741 /* ContactUsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBD0297FBA4800E0A741 /* ContactUsViewModel.swift */; };
 		14FFF78229857C860086E2D9 /* CountryPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = 14FFF78129857C860086E2D9 /* CountryPickerView */; };
 		14FFF78829881EA40086E2D9 /* ListDisplayDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFF78729881EA40086E2D9 /* ListDisplayDataSource.swift */; };
-		1E54AE2480EB59BBE26D7150 /* Pods_StitchboxUnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79ACF83D42E676CEAB60803D /* Pods_StitchboxUnitTests.framework */; };
-		31D1DD3B84D8E9E8881FB3D3 /* Pods_StitchboxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A44C8C1E3B06EA1C3924377E /* Pods_StitchboxTests.framework */; };
 		390FD7382909264D0068B883 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7372909264D0068B883 /* AppDelegate.swift */; };
 		390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7392909264D0068B883 /* SceneDelegate.swift */; };
 		390FD73C2909264D0068B883 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD73B2909264D0068B883 /* StartViewController.swift */; };
@@ -75,7 +72,8 @@
 		396F520629DB266000BF78BE /* PostDeeplinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396F520529DB266000BF78BE /* PostDeeplinkHandler.swift */; };
 		39E8046C299A9A10002F13A5 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E8046B299A9A10002F13A5 /* NotificationService.swift */; };
 		39E80470299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 39E80469299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		579D046ABA2BF9108B6D1B46 /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 284839D90B9CDE22C0FAE530 /* Pods_OneSignalNotificationServiceExtension.framework */; };
+		3FB6E3AD6B72E4D476B892D4 /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A6887875BE797C45E26400 /* Pods_OneSignalNotificationServiceExtension.framework */; };
+		40DC3D222152EE5561DD5E9E /* Pods_Stitchbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E91577A6BF8BFEAFC143FD1 /* Pods_Stitchbox.framework */; };
 		6A0B8B6C2996DC2D00E724B7 /* EditBirthdayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0B8B6B2996DC2D00E724B7 /* EditBirthdayVC.swift */; };
 		6A0CF638296AABEC00155889 /* ResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF637296AABEC00155889 /* ResetPasswordVC.swift */; };
 		6A0CF63B296AAC1D00155889 /* PhoneResetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF63A296AAC1D00155889 /* PhoneResetVC.swift */; };
@@ -183,6 +181,12 @@
 		6A6C3108296426F80070167A /* EditChannelDataModView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6C3106296426F80070167A /* EditChannelDataModView.swift */; };
 		6A6C3109296426F80070167A /* EditChannelDataModView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6C3107296426F80070167A /* EditChannelDataModView.xib */; };
 		6A6FB08929DA01B9003FCF6E /* OneSignalNotiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB08829DA01B9003FCF6E /* OneSignalNotiModel.swift */; };
+		6A6FB08C29DA416C003FCF6E /* ReelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB08B29DA416C003FCF6E /* ReelVC.swift */; };
+		6A6FB08F29DA4294003FCF6E /* ReelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB08E29DA4294003FCF6E /* ReelNode.swift */; };
+		6A6FB09229DA586C003FCF6E /* GradientImageNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09129DA586C003FCF6E /* GradientImageNode.swift */; };
+		6A6FB09629DB6F2B003FCF6E /* ButtonSideList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */; };
+		6A6FB09729DB6F2B003FCF6E /* ButtonSideList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */; };
+		6A6FB09A29DBBC20003FCF6E /* StreamingIntroVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09929DBBC20003FCF6E /* StreamingIntroVC.swift */; };
 		6A78485B2984D1BA008B2263 /* PostNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485A2984D1BA008B2263 /* PostNode.swift */; };
 		6A78485E2984D1F6008B2263 /* NotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485D2984D1F6008B2263 /* NotificationVC.swift */; };
 		6A7848642985096F008B2263 /* StreamingLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7848632985096F008B2263 /* StreamingLinkVC.swift */; };
@@ -190,6 +194,7 @@
 		6A784869298628CE008B2263 /* StreamingListVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A784867298628CE008B2263 /* StreamingListVC.xib */; };
 		6A78486C29862931008B2263 /* StreamingDomainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78486B29862931008B2263 /* StreamingDomainModel.swift */; };
 		6A78486F29862C32008B2263 /* streamingListNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78486E29862C32008B2263 /* streamingListNode.swift */; };
+		6A802CC529E22D7200099F53 /* IntroTacticsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */; };
 		6A80F1A129B6921D0047595A /* UserSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A029B6921D0047595A /* UserSearchNode.swift */; };
 		6A80F1A429B6934C0047595A /* HashtagSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A329B6934C0047595A /* HashtagSearchNode.swift */; };
 		6A80F1A729BA766C0047595A /* UserNotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A629BA766C0047595A /* UserNotificationModel.swift */; };
@@ -326,6 +331,7 @@
 		6AF97349297B5A7500C76814 /* ProfilePostsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF97347297B5A7500C76814 /* ProfilePostsHeaderView.xib */; };
 		6AF9734A297B5A7500C76814 /* ProfilePostsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF97348297B5A7500C76814 /* ProfilePostsHeaderView.swift */; };
 		8D55CBE9298905F200D10C02 /* EditPhofileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D55CBE8298905F200D10C02 /* EditPhofileVC.swift */; };
+		9D0DA86A7B340D372B3CC5D7 /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D421467A7EEB091E48A883 /* Pods_Stitchbox_StitchboxUITests.framework */; };
 		A5346488294B09B300FB6A94 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5346487294B09B300FB6A94 /* ProfileViewController.swift */; };
 		A540A8D2294721190085CC45 /* GoogleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D1294721190085CC45 /* GoogleSignInService.swift */; };
 		A540A8D4294726300085CC45 /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540A8D3294726300085CC45 /* StartViewModel.swift */; };
@@ -355,7 +361,8 @@
 		A5E2A41A2979B9CD0045F110 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E2A4192979B9CD0045F110 /* ProfileViewModel.swift */; };
 		A5F2510729A76AB600373554 /* OwnerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F2510629A76AB600373554 /* OwnerModel.swift */; };
 		A5F9C91C296C14ED00D339A1 /* ResetPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F9C91B296C14ED00D339A1 /* ResetPasswordViewModel.swift */; };
-		FB3005A2A5EF2FBEE887046A /* Pods_Stitchbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169D8DEA6FB678265B4193E1 /* Pods_Stitchbox.framework */; };
+		E166CA704BA3F8FE31FDDB43 /* Pods_StitchboxUnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5318703345FD058000C4D21 /* Pods_StitchboxUnitTests.framework */; };
+		E4602256941C0A64E0376B64 /* Pods_StitchboxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96618EA6D41655D874DAB4F3 /* Pods_StitchboxTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -404,9 +411,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		089B5F655FABBE36B07DB9E4 /* Pods-StitchboxUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.release.xcconfig"; sourceTree = "<group>"; };
-		0AF98ACDA37BD5010E9BC383 /* Pods-Stitchbox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.release.xcconfig"; sourceTree = "<group>"; };
-		0ED264647EB277A526885C2D /* Pods-StitchboxTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.debug.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.debug.xcconfig"; sourceTree = "<group>"; };
+		05A6887875BE797C45E26400 /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		14120DE62991C94100AE51E0 /* MainFistBumpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFistBumpVC.swift; sourceTree = "<group>"; };
 		14120DE82991CF0B00AE51E0 /* FistBumpeeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FistBumpeeVC.swift; sourceTree = "<group>"; };
 		14131D7D293B3666001F7631 /* Components.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Components.storyboard; sourceTree = "<group>"; };
@@ -444,8 +449,7 @@
 		14FADBD0297FBA4800E0A741 /* ContactUsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsViewModel.swift; sourceTree = "<group>"; };
 		14FFF78429857CAA0086E2D9 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "CountryPickerView-master"; path = "Stitchbox/CountryPickerView-master"; sourceTree = "<group>"; };
 		14FFF78729881EA40086E2D9 /* ListDisplayDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDisplayDataSource.swift; sourceTree = "<group>"; };
-		169D8DEA6FB678265B4193E1 /* Pods_Stitchbox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		284839D90B9CDE22C0FAE530 /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1748455FAD4B1731E5DA2054 /* Pods-StitchboxUnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.debug.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		390FD7342909264D0068B883 /* Stitchbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stitchbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		390FD7372909264D0068B883 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		390FD7392909264D0068B883 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -482,7 +486,10 @@
 		39E8046B299A9A10002F13A5 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		39E8046D299A9A10002F13A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39E80475299A9DEB002F13A5 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
-		65EA758202BD172C9F9B8CDB /* Pods-StitchboxUnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.debug.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3FC84F8054234562A738E663 /* Pods-Stitchbox-StitchboxUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		51A476941FDA7DCD0FE015C7 /* Pods-Stitchbox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.release.xcconfig"; sourceTree = "<group>"; };
+		5DF86C89B0DFA0F96503B673 /* Pods-StitchboxUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxUnitTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxUnitTests/Pods-StitchboxUnitTests.release.xcconfig"; sourceTree = "<group>"; };
+		5E91577A6BF8BFEAFC143FD1 /* Pods_Stitchbox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A0B8B6B2996DC2D00E724B7 /* EditBirthdayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBirthdayVC.swift; sourceTree = "<group>"; };
 		6A0CF637296AABEC00155889 /* ResetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordVC.swift; sourceTree = "<group>"; };
 		6A0CF63A296AAC1D00155889 /* PhoneResetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneResetVC.swift; sourceTree = "<group>"; };
@@ -591,6 +598,12 @@
 		6A6C3106296426F80070167A /* EditChannelDataModView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditChannelDataModView.swift; sourceTree = "<group>"; };
 		6A6C3107296426F80070167A /* EditChannelDataModView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditChannelDataModView.xib; sourceTree = "<group>"; };
 		6A6FB08829DA01B9003FCF6E /* OneSignalNotiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneSignalNotiModel.swift; sourceTree = "<group>"; };
+		6A6FB08B29DA416C003FCF6E /* ReelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReelVC.swift; sourceTree = "<group>"; };
+		6A6FB08E29DA4294003FCF6E /* ReelNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReelNode.swift; sourceTree = "<group>"; };
+		6A6FB09129DA586C003FCF6E /* GradientImageNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientImageNode.swift; sourceTree = "<group>"; };
+		6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonSideList.swift; sourceTree = "<group>"; };
+		6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonSideList.xib; sourceTree = "<group>"; };
+		6A6FB09929DBBC20003FCF6E /* StreamingIntroVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingIntroVC.swift; sourceTree = "<group>"; };
 		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "CountryPickerView-master"; sourceTree = "<group>"; };
 		6A78485A2984D1BA008B2263 /* PostNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNode.swift; sourceTree = "<group>"; };
 		6A78485D2984D1F6008B2263 /* NotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationVC.swift; sourceTree = "<group>"; };
@@ -599,6 +612,7 @@
 		6A784867298628CE008B2263 /* StreamingListVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamingListVC.xib; sourceTree = "<group>"; };
 		6A78486B29862931008B2263 /* StreamingDomainModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamingDomainModel.swift; sourceTree = "<group>"; };
 		6A78486E29862C32008B2263 /* streamingListNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = streamingListNode.swift; sourceTree = "<group>"; };
+		6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroTacticsVC.swift; sourceTree = "<group>"; };
 		6A80F1A029B6921D0047595A /* UserSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchNode.swift; sourceTree = "<group>"; };
 		6A80F1A329B6934C0047595A /* HashtagSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagSearchNode.swift; sourceTree = "<group>"; };
 		6A80F1A629BA766C0047595A /* UserNotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationModel.swift; sourceTree = "<group>"; };
@@ -734,12 +748,12 @@
 		6AF97344297B5A2A00C76814 /* BadgesHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BadgesHeaderView.xib; path = Stitchbox/Layout/Profile/BadgesHeaderVcView/BadgesHeaderView.xib; sourceTree = SOURCE_ROOT; };
 		6AF97347297B5A7500C76814 /* ProfilePostsHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfilePostsHeaderView.xib; sourceTree = "<group>"; };
 		6AF97348297B5A7500C76814 /* ProfilePostsHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePostsHeaderView.swift; sourceTree = "<group>"; };
-		76AA26B3E99DDB661C2CD105 /* Pods_Stitchbox_StitchboxUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox_StitchboxUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		77804A916EFB45D19A0C39B5 /* Pods-Stitchbox-StitchboxUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		79ACF83D42E676CEAB60803D /* Pods_StitchboxUnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StitchboxUnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8021646BEC99B991C6550780 /* Pods-Stitchbox-StitchboxUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8D55CBE8298905F200D10C02 /* EditPhofileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhofileVC.swift; sourceTree = "<group>"; };
-		A44C8C1E3B06EA1C3924377E /* Pods_StitchboxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StitchboxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		916E595DF31A8187D9975654 /* Pods-StitchboxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.release.xcconfig"; sourceTree = "<group>"; };
+		93356314CD48BEBFAFBC22AB /* Pods-Stitchbox-StitchboxUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox-StitchboxUITests.release.xcconfig"; path = "Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests.release.xcconfig"; sourceTree = "<group>"; };
+		94BCDEC833C183B07A88B2FA /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		96618EA6D41655D874DAB4F3 /* Pods_StitchboxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StitchboxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9ABF6C9C0CCFD758075306E2 /* Pods-Stitchbox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.debug.xcconfig"; sourceTree = "<group>"; };
 		A5346487294B09B300FB6A94 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		A540A8D1294721190085CC45 /* GoogleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInService.swift; sourceTree = "<group>"; };
 		A540A8D3294726300085CC45 /* StartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
@@ -769,10 +783,10 @@
 		A5E2A4192979B9CD0045F110 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		A5F2510629A76AB600373554 /* OwnerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerModel.swift; sourceTree = "<group>"; };
 		A5F9C91B296C14ED00D339A1 /* ResetPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewModel.swift; sourceTree = "<group>"; };
-		A74C1A09E8918C22BD097F3F /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
-		BE299FE66BD7444A550FF138 /* Pods-StitchboxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.release.xcconfig"; sourceTree = "<group>"; };
-		D59DFE76243DD75C3F99518F /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
-		FCE4655A3C3AA3A33FBED1BB /* Pods-Stitchbox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.debug.xcconfig"; sourceTree = "<group>"; };
+		B8FB5D57B5025D2C3A646200 /* Pods-StitchboxTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.debug.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E00878E0BF538B55116EE01E /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
+		E0D421467A7EEB091E48A883 /* Pods_Stitchbox_StitchboxUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stitchbox_StitchboxUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5318703345FD058000C4D21 /* Pods_StitchboxUnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StitchboxUnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -780,7 +794,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E54AE2480EB59BBE26D7150 /* Pods_StitchboxUnitTests.framework in Frameworks */,
+				E166CA704BA3F8FE31FDDB43 /* Pods_StitchboxUnitTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,7 +803,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14FFF78229857C860086E2D9 /* CountryPickerView in Frameworks */,
-				FB3005A2A5EF2FBEE887046A /* Pods_Stitchbox.framework in Frameworks */,
+				40DC3D222152EE5561DD5E9E /* Pods_Stitchbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -797,7 +811,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				31D1DD3B84D8E9E8881FB3D3 /* Pods_StitchboxTests.framework in Frameworks */,
+				E4602256941C0A64E0376B64 /* Pods_StitchboxTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,7 +819,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1181C5F8306B06A2EDC59738 /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */,
+				9D0DA86A7B340D372B3CC5D7 /* Pods_Stitchbox_StitchboxUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -813,7 +827,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				579D046ABA2BF9108B6D1B46 /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */,
+				3FB6E3AD6B72E4D476B892D4 /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -933,18 +947,6 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
-		2C1AB4F57E73BF301D625F51 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				284839D90B9CDE22C0FAE530 /* Pods_OneSignalNotificationServiceExtension.framework */,
-				169D8DEA6FB678265B4193E1 /* Pods_Stitchbox.framework */,
-				76AA26B3E99DDB661C2CD105 /* Pods_Stitchbox_StitchboxUITests.framework */,
-				A44C8C1E3B06EA1C3924377E /* Pods_StitchboxTests.framework */,
-				79ACF83D42E676CEAB60803D /* Pods_StitchboxUnitTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		390FD72B2909264D0068B883 = {
 			isa = PBXGroup;
 			children = (
@@ -958,7 +960,7 @@
 				390FD7352909264D0068B883 /* Products */,
 				7314760A83549794B5D020AC /* Pods */,
 				A5D1E9E92984D96F00839311 /* Recovered References */,
-				2C1AB4F57E73BF301D625F51 /* Frameworks */,
+				D6163F83C35F6FB6600B62A4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1086,6 +1088,7 @@
 		390FD77D29092BA70068B883 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				6A6FB09029DA585A003FCF6E /* GradientImageNode */,
 				6AC6DA1529AD33D500B18139 /* GradienView */,
 				6A136361299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift */,
 				6A0D543D297242140059530C /* CellFromNib.swift */,
@@ -1911,6 +1914,48 @@
 			path = OneSignalNotiModel;
 			sourceTree = "<group>";
 		};
+		6A6FB08A29DA4155003FCF6E /* ReelVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A6FB08D29DA4270003FCF6E /* ReelNode */,
+				6A6FB08B29DA416C003FCF6E /* ReelVC.swift */,
+			);
+			path = ReelVC;
+			sourceTree = "<group>";
+		};
+		6A6FB08D29DA4270003FCF6E /* ReelNode */ = {
+			isa = PBXGroup;
+			children = (
+				6A6FB08E29DA4294003FCF6E /* ReelNode.swift */,
+			);
+			path = ReelNode;
+			sourceTree = "<group>";
+		};
+		6A6FB09029DA585A003FCF6E /* GradientImageNode */ = {
+			isa = PBXGroup;
+			children = (
+				6A6FB09129DA586C003FCF6E /* GradientImageNode.swift */,
+			);
+			path = GradientImageNode;
+			sourceTree = "<group>";
+		};
+		6A6FB09329DB6E1C003FCF6E /* ButtonSideList */ = {
+			isa = PBXGroup;
+			children = (
+				6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */,
+				6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */,
+			);
+			path = ButtonSideList;
+			sourceTree = "<group>";
+		};
+		6A6FB09829DBBC00003FCF6E /* StreamingIntroVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A6FB09929DBBC20003FCF6E /* StreamingIntroVC.swift */,
+			);
+			path = StreamingIntroVC;
+			sourceTree = "<group>";
+		};
 		6A7848592984D1AA008B2263 /* PostNode */ = {
 			isa = PBXGroup;
 			children = (
@@ -1968,6 +2013,14 @@
 				6A78486E29862C32008B2263 /* streamingListNode.swift */,
 			);
 			path = streamingListNode;
+			sourceTree = "<group>";
+		};
+		6A802CC329E22D5000099F53 /* SB-Tactics */ = {
+			isa = PBXGroup;
+			children = (
+				6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */,
+			);
+			path = "SB-Tactics";
 			sourceTree = "<group>";
 		};
 		6A80F19E29B692010047595A /* SearchNode */ = {
@@ -2131,6 +2184,9 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A802CC329E22D5000099F53 /* SB-Tactics */,
+				6A6FB09829DBBC00003FCF6E /* StreamingIntroVC */,
+				6A6FB08A29DA4155003FCF6E /* ReelVC */,
 				6A2B9A7F29D26AC100C2D9CD /* ViewVC */,
 				6A78485C2984D1E3008B2263 /* NotificationVC */,
 				6A467E5529AD8CEB00214108 /* PostSearchVC */,
@@ -2562,6 +2618,7 @@
 		6AEA33EA298CE474005A4C5D /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				6A6FB09329DB6E1C003FCF6E /* ButtonSideList */,
 				6AC6DA1029AD30E700B18139 /* SideButton */,
 				6AEA33F5298DC8CF005A4C5D /* HashtagView */,
 				6AEA33EC298CE48A005A4C5D /* ButtonsHeader */,
@@ -2839,16 +2896,16 @@
 		7314760A83549794B5D020AC /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D59DFE76243DD75C3F99518F /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
-				A74C1A09E8918C22BD097F3F /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
-				FCE4655A3C3AA3A33FBED1BB /* Pods-Stitchbox.debug.xcconfig */,
-				0AF98ACDA37BD5010E9BC383 /* Pods-Stitchbox.release.xcconfig */,
-				77804A916EFB45D19A0C39B5 /* Pods-Stitchbox-StitchboxUITests.debug.xcconfig */,
-				8021646BEC99B991C6550780 /* Pods-Stitchbox-StitchboxUITests.release.xcconfig */,
-				0ED264647EB277A526885C2D /* Pods-StitchboxTests.debug.xcconfig */,
-				BE299FE66BD7444A550FF138 /* Pods-StitchboxTests.release.xcconfig */,
-				65EA758202BD172C9F9B8CDB /* Pods-StitchboxUnitTests.debug.xcconfig */,
-				089B5F655FABBE36B07DB9E4 /* Pods-StitchboxUnitTests.release.xcconfig */,
+				94BCDEC833C183B07A88B2FA /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				E00878E0BF538B55116EE01E /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+				9ABF6C9C0CCFD758075306E2 /* Pods-Stitchbox.debug.xcconfig */,
+				51A476941FDA7DCD0FE015C7 /* Pods-Stitchbox.release.xcconfig */,
+				3FC84F8054234562A738E663 /* Pods-Stitchbox-StitchboxUITests.debug.xcconfig */,
+				93356314CD48BEBFAFBC22AB /* Pods-Stitchbox-StitchboxUITests.release.xcconfig */,
+				B8FB5D57B5025D2C3A646200 /* Pods-StitchboxTests.debug.xcconfig */,
+				916E595DF31A8187D9975654 /* Pods-StitchboxTests.release.xcconfig */,
+				1748455FAD4B1731E5DA2054 /* Pods-StitchboxUnitTests.debug.xcconfig */,
+				5DF86C89B0DFA0F96503B673 /* Pods-StitchboxUnitTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -2899,6 +2956,18 @@
 			path = ProfileVM;
 			sourceTree = "<group>";
 		};
+		D6163F83C35F6FB6600B62A4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				05A6887875BE797C45E26400 /* Pods_OneSignalNotificationServiceExtension.framework */,
+				5E91577A6BF8BFEAFC143FD1 /* Pods_Stitchbox.framework */,
+				E0D421467A7EEB091E48A883 /* Pods_Stitchbox_StitchboxUITests.framework */,
+				96618EA6D41655D874DAB4F3 /* Pods_StitchboxTests.framework */,
+				F5318703345FD058000C4D21 /* Pods_StitchboxUnitTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2906,7 +2975,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 147187E72920A3A20039B89E /* Build configuration list for PBXNativeTarget "StitchboxUnitTests" */;
 			buildPhases = (
-				F974B4BA528A7D522A0985B9 /* [CP] Check Pods Manifest.lock */,
+				7A611A1772705954EB03FBAC /* [CP] Check Pods Manifest.lock */,
 				147187DB2920A3A20039B89E /* Sources */,
 				147187DC2920A3A20039B89E /* Frameworks */,
 				147187DD2920A3A20039B89E /* Resources */,
@@ -2925,13 +2994,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 390FD75E2909264F0068B883 /* Build configuration list for PBXNativeTarget "Stitchbox" */;
 			buildPhases = (
-				FFC83CD06DAC785191B658CF /* [CP] Check Pods Manifest.lock */,
+				D4C2584DEBC1AAA965A50808 /* [CP] Check Pods Manifest.lock */,
 				390FD7302909264D0068B883 /* Sources */,
 				390FD7312909264D0068B883 /* Frameworks */,
 				390FD7322909264D0068B883 /* Resources */,
 				39E80471299A9A10002F13A5 /* Embed Foundation Extensions */,
-				5FD797A39FADA1292278C0B4 /* [CP] Embed Pods Frameworks */,
-				EED924923C5E3ED34AB1CDB9 /* [CP] Copy Pods Resources */,
+				75673082ADF5B8D4B7250E6D /* [CP] Embed Pods Frameworks */,
+				50954067A355A3CC8B0C90C5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2950,7 +3019,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 390FD7612909264F0068B883 /* Build configuration list for PBXNativeTarget "StitchboxTests" */;
 			buildPhases = (
-				6A5AB72517DE35CD81809F8C /* [CP] Check Pods Manifest.lock */,
+				C51FBC89C15FC9C9C9D1947A /* [CP] Check Pods Manifest.lock */,
 				390FD7462909264F0068B883 /* Sources */,
 				390FD7472909264F0068B883 /* Frameworks */,
 				390FD7482909264F0068B883 /* Resources */,
@@ -2969,12 +3038,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 390FD7642909264F0068B883 /* Build configuration list for PBXNativeTarget "StitchboxUITests" */;
 			buildPhases = (
-				DEA183C90E1F7718873299B4 /* [CP] Check Pods Manifest.lock */,
+				B1AF286FD125A51D293D8820 /* [CP] Check Pods Manifest.lock */,
 				390FD7502909264F0068B883 /* Sources */,
 				390FD7512909264F0068B883 /* Frameworks */,
 				390FD7522909264F0068B883 /* Resources */,
-				AF8AF98B7B4B35FDD438EDE3 /* [CP] Embed Pods Frameworks */,
-				074D14534E98BE4B4C90EE36 /* [CP] Copy Pods Resources */,
+				88B156048D60FC11928C8A0F /* [CP] Embed Pods Frameworks */,
+				5C549F3530139B1743439422 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2990,7 +3059,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 39E80474299A9A10002F13A5 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
 			buildPhases = (
-				03828CF056C8253AADCA5C93 /* [CP] Check Pods Manifest.lock */,
+				3646F7AA057AEE40EA772D35 /* [CP] Check Pods Manifest.lock */,
 				39E80465299A9A10002F13A5 /* Sources */,
 				39E80466299A9A10002F13A5 /* Frameworks */,
 				39E80467299A9A10002F13A5 /* Resources */,
@@ -3121,6 +3190,7 @@
 				147BDB682928B1E1003511C3 /* Colors.xcassets in Resources */,
 				6A6C30D529626D3C0070167A /* LeaveView.xib in Resources */,
 				6AC6D9F429A5C78C00B18139 /* load2.gif in Resources */,
+				6A6FB09729DB6F2B003FCF6E /* ButtonSideList.xib in Resources */,
 				1457CCD929464DD6003C742F /* IconSet.xcassets in Resources */,
 				6AEA33F8298DC8E1005A4C5D /* HashtagView.xib in Resources */,
 				6A80F1B729C7B6EE0047595A /* CommentNotificationVC.xib in Resources */,
@@ -3153,7 +3223,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		03828CF056C8253AADCA5C93 /* [CP] Check Pods Manifest.lock */ = {
+		3646F7AA057AEE40EA772D35 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3175,102 +3245,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		074D14534E98BE4B4C90EE36 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5FD797A39FADA1292278C0B4 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6A5AB72517DE35CD81809F8C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-StitchboxTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AF8AF98B7B4B35FDD438EDE3 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DEA183C90E1F7718873299B4 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Stitchbox-StitchboxUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EED924923C5E3ED34AB1CDB9 /* [CP] Copy Pods Resources */ = {
+		50954067A355A3CC8B0C90C5 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3287,7 +3262,41 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F974B4BA528A7D522A0985B9 /* [CP] Check Pods Manifest.lock */ = {
+		5C549F3530139B1743439422 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		75673082ADF5B8D4B7250E6D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stitchbox/Pods-Stitchbox-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7A611A1772705954EB03FBAC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3309,7 +3318,68 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FFC83CD06DAC785191B658CF /* [CP] Check Pods Manifest.lock */ = {
+		88B156048D60FC11928C8A0F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stitchbox-StitchboxUITests/Pods-Stitchbox-StitchboxUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B1AF286FD125A51D293D8820 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Stitchbox-StitchboxUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C51FBC89C15FC9C9C9D1947A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-StitchboxTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4C2584DEBC1AAA965A50808 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3379,6 +3449,7 @@
 				6AC6DA0029A5CA1800B18139 /* CustomSearchCell.swift in Sources */,
 				14FADBC8297A420800E0A741 /* UIImageViewExtension.swift in Sources */,
 				390FD782290931900068B883 /* NormalLoginViewController.swift in Sources */,
+				6A6FB09229DA586C003FCF6E /* GradientImageNode.swift in Sources */,
 				6A307CD729B684FB00A89529 /* HashtagSearchVC.swift in Sources */,
 				6AEA33E9298C7D31005A4C5D /* SelectedPostVC.swift in Sources */,
 				6A467E5729AD8D0700214108 /* PostListWithHashtagVC.swift in Sources */,
@@ -3464,6 +3535,7 @@
 				6A6C3108296426F80070167A /* EditChannelDataModView.swift in Sources */,
 				6A0CF63B296AAC1D00155889 /* PhoneResetVC.swift in Sources */,
 				A540A8DA294731320085CC45 /* AppleSignInService.swift in Sources */,
+				6A802CC529E22D7200099F53 /* IntroTacticsVC.swift in Sources */,
 				6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */,
 				6A286B5A29C90D4B00C72718 /* UserLoginActivityModel.swift in Sources */,
 				6A3F0A8C2982331F00366665 /* UserProfileVC.swift in Sources */,
@@ -3489,6 +3561,7 @@
 				6A58EA4D294EB280005FA3CD /* NotificationDelegate.swift in Sources */,
 				6A6C30DE2963F4720070167A /* ModerationVC.swift in Sources */,
 				6A784868298628CE008B2263 /* StreamingListVC.swift in Sources */,
+				6A6FB09A29DBBC20003FCF6E /* StreamingIntroVC.swift in Sources */,
 				A5D1E9ED2984DA2000839311 /* CreatePostRequest.swift in Sources */,
 				6A3F0A5C297CB83F00366665 /* AddVC.swift in Sources */,
 				6A0CF643296AB19200155889 /* NewPasswordVC.swift in Sources */,
@@ -3518,6 +3591,7 @@
 				1429CD032950119100CDBCC8 /* SNavigationItem.swift in Sources */,
 				14120DE92991CF0B00AE51E0 /* FistBumpeeVC.swift in Sources */,
 				14FFF78829881EA40086E2D9 /* ListDisplayDataSource.swift in Sources */,
+				6A6FB08F29DA4294003FCF6E /* ReelNode.swift in Sources */,
 				6A3F0A6C297FA44200366665 /* HashtagVC.swift in Sources */,
 				A540A8D2294721190085CC45 /* GoogleSignInService.swift in Sources */,
 				6A467E5A29AD946D00214108 /* NewsFeedSettingVC.swift in Sources */,
@@ -3536,6 +3610,7 @@
 				8D55CBE9298905F200D10C02 /* EditPhofileVC.swift in Sources */,
 				390FD77C29092B9C0068B883 /* Contants.swift in Sources */,
 				6AF6C4992997057100DD8D37 /* EditEmailVC.swift in Sources */,
+				6A6FB08C29DA416C003FCF6E /* ReelVC.swift in Sources */,
 				6AEA33E3298A2E33005A4C5D /* ProgressBar.swift in Sources */,
 				6AEA340D298F0B84005A4C5D /* CommentVC.swift in Sources */,
 				6AF9733B2978FDAC00C76814 /* EditBioVC.swift in Sources */,
@@ -3600,6 +3675,7 @@
 				149F44F72956F8270084742A /* RoundedImageView.swift in Sources */,
 				6AEA74FA29680B53005C802B /* NormalLoginVC.swift in Sources */,
 				A5DF81FD295D3FE200E8DDB8 /* SearchViewController.swift in Sources */,
+				6A6FB09629DB6F2B003FCF6E /* ButtonSideList.swift in Sources */,
 				6AAD7A1E294C65DD003E3AB6 /* UIApplication+QuickStart.swift in Sources */,
 				14BDBFA12990D79300897D30 /* FistBumpViewModel.swift in Sources */,
 				A5F9C91C296C14ED00D339A1 /* ResetPasswordViewModel.swift in Sources */,
@@ -3703,7 +3779,7 @@
 /* Begin XCBuildConfiguration section */
 		147187E52920A3A20039B89E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 65EA758202BD172C9F9B8CDB /* Pods-StitchboxUnitTests.debug.xcconfig */;
+			baseConfigurationReference = 1748455FAD4B1731E5DA2054 /* Pods-StitchboxUnitTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -3727,7 +3803,7 @@
 		};
 		147187E62920A3A20039B89E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 089B5F655FABBE36B07DB9E4 /* Pods-StitchboxUnitTests.release.xcconfig */;
+			baseConfigurationReference = 5DF86C89B0DFA0F96503B673 /* Pods-StitchboxUnitTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -3865,7 +3941,7 @@
 		};
 		390FD75F2909264F0068B883 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FCE4655A3C3AA3A33FBED1BB /* Pods-Stitchbox.debug.xcconfig */;
+			baseConfigurationReference = 9ABF6C9C0CCFD758075306E2 /* Pods-Stitchbox.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -3895,7 +3971,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -3909,7 +3985,7 @@
 		};
 		390FD7602909264F0068B883 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0AF98ACDA37BD5010E9BC383 /* Pods-Stitchbox.release.xcconfig */;
+			baseConfigurationReference = 51A476941FDA7DCD0FE015C7 /* Pods-Stitchbox.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -3939,7 +4015,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -3953,7 +4029,7 @@
 		};
 		390FD7622909264F0068B883 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0ED264647EB277A526885C2D /* Pods-StitchboxTests.debug.xcconfig */;
+			baseConfigurationReference = B8FB5D57B5025D2C3A646200 /* Pods-StitchboxTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3973,7 +4049,7 @@
 		};
 		390FD7632909264F0068B883 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE299FE66BD7444A550FF138 /* Pods-StitchboxTests.release.xcconfig */;
+			baseConfigurationReference = 916E595DF31A8187D9975654 /* Pods-StitchboxTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3993,7 +4069,7 @@
 		};
 		390FD7652909264F0068B883 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 77804A916EFB45D19A0C39B5 /* Pods-Stitchbox-StitchboxUITests.debug.xcconfig */;
+			baseConfigurationReference = 3FC84F8054234562A738E663 /* Pods-Stitchbox-StitchboxUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -4011,7 +4087,7 @@
 		};
 		390FD7662909264F0068B883 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8021646BEC99B991C6550780 /* Pods-Stitchbox-StitchboxUITests.release.xcconfig */;
+			baseConfigurationReference = 93356314CD48BEBFAFBC22AB /* Pods-Stitchbox-StitchboxUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -4029,7 +4105,7 @@
 		};
 		39E80472299A9A10002F13A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D59DFE76243DD75C3F99518F /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
+			baseConfigurationReference = 94BCDEC833C183B07A88B2FA /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
@@ -4058,7 +4134,7 @@
 		};
 		39E80473299A9A10002F13A5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A74C1A09E8918C22BD097F3F /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+			baseConfigurationReference = E00878E0BF538B55116EE01E /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;

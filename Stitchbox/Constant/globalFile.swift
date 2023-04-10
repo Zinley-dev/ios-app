@@ -37,21 +37,22 @@ var shouldMute: Bool?
 var globalSetting: SettingModel!
 var navigationControllerHeight:CGFloat = 0.0
 var tabBarControllerHeight:CGFloat = 0.0
+let horizontalPadding: CGFloat = 12
 
- let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitchbox", "domain": ["stitchbox.gg"], "status": true])
- let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
- let data3 = StreamingDomainModel(postKey: "3", streamingDomainModel: ["company": "Twitch", "domain": ["twitch.tv", "m.twitch.tv"], "status": true])
- let data4 = StreamingDomainModel(postKey: "4", streamingDomainModel: ["company": "Facebook gaming", "domain": ["facebook.com", "m.facebook.com"], "status": true])
- let data5 = StreamingDomainModel(postKey: "5", streamingDomainModel: ["company": "Bigo Live", "domain": ["bigo.tv"], "status": true])
- let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company": "Nonolive", "domain": ["nonolive.com"], "status": true])
- let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
+let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitchbox", "domain": ["stitchbox.gg"], "status": true])
+let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
+let data3 = StreamingDomainModel(postKey: "3", streamingDomainModel: ["company": "Twitch", "domain": ["twitch.tv", "m.twitch.tv"], "status": true])
+let data4 = StreamingDomainModel(postKey: "4", streamingDomainModel: ["company": "Facebook gaming", "domain": ["facebook.com", "m.facebook.com"], "status": true])
+let data5 = StreamingDomainModel(postKey: "5", streamingDomainModel: ["company": "Bigo Live", "domain": ["bigo.tv"], "status": true])
+let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company": "Nonolive", "domain": ["nonolive.com"], "status": true])
+let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
 
 var emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-with-concrete-floor_53876-70804.jpg?w=1380"
 
 let xBtn = UIImage(named: "1024x")?.resize(targetSize: CGSize(width: 12, height: 12))
 
 var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
-var back_frame = CGRect(x: -10, y: 0, width: 35, height: 25)
+var back_frame = CGRect(x: 0, y: 0, width: 44, height: 44)
 var discord_domain = ["discordapp.com", "discord.com", "discord.co", "discord.gg", "watchanimeattheoffice.com", "dis.gd", "discord.media", "discordapp.net", "discordstatus.com" ]
 
 let muteImage = UIImage.init(named: "3xmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)
@@ -318,6 +319,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.sideButtonView != nil {
                         cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
                     }
                     
                     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -335,6 +342,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.sideButtonView != nil {
                         cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
                     }
                     
                     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -352,6 +365,12 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.sideButtonView != nil {
                         cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
                     }
                     
                     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -369,6 +388,35 @@ func pauseVideoIfNeed(pauseIndex: Int) {
                     
                     if cell.sideButtonView != nil {
                         cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
+                    }
+                    
+                    cell.videoNode.player?.seek(to: CMTime.zero)
+                    cell.videoNode.pause()
+                    
+                }
+                
+            }
+            
+        } else if vc is ReelVC {
+            
+            if let update1 = vc as? ReelVC {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? ReelNode {
+                    
+                    if cell.buttonsView != nil {
+                        
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.stopSpin()
+                            
+                        }
                     }
                     
                     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -396,6 +444,12 @@ func playVideoIfNeed(playIndex: Int) {
                 if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
                     
                     if !cell.videoNode.isPlaying() {
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
                         
                         if let muteStatus = shouldMute {
                             
@@ -454,6 +508,12 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
+                        
                         if let muteStatus = shouldMute {
                             
                             if cell.sideButtonView != nil {
@@ -508,6 +568,11 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
             
                         if let muteStatus = shouldMute {
                             
@@ -563,6 +628,13 @@ func playVideoIfNeed(playIndex: Int) {
                     
                     if !cell.videoNode.isPlaying() {
                         
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
+                        
                         if let muteStatus = shouldMute {
                             
                             if cell.sideButtonView != nil {
@@ -593,6 +665,51 @@ func playVideoIfNeed(playIndex: Int) {
                                 }
                             }
                            
+                            if globalIsSound {
+                                cell.videoNode.muted = false
+                            } else {
+                                cell.videoNode.muted = true
+                            }
+                            
+                            cell.videoNode.play()
+                            
+                        }
+                    
+                    }
+                    
+                }
+                
+            }
+            
+        }  else if vc is ReelVC {
+            
+            if let update1 = vc as? ReelVC {
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? ReelNode {
+                    
+                    if !cell.videoNode.isPlaying() {
+                        
+                        
+                        if !cell.buttonsView.streamView.isHidden {
+                            
+                            cell.buttonsView.streamView.spin()
+                            
+                        }
+            
+                        if let muteStatus = shouldMute {
+                        
+                           
+                            if muteStatus {
+                                cell.videoNode.muted = true
+                            } else {
+                                cell.videoNode.muted = false
+                            }
+                            
+                            cell.videoNode.play()
+                            
+                        } else {
+                            
+
                             if globalIsSound {
                                 cell.videoNode.muted = false
                             } else {
@@ -928,6 +1045,28 @@ func unmuteVideoIfNeed() {
                 
             }
             
+        } else if vc is ReelVC {
+            
+            if let update1 = vc as? ReelVC {
+                
+                if update1.newPlayingIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
+                        
+                        if cell.videoNode.isPlaying() {
+                            
+                            cell.soundProcess()
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
         }
              
         
@@ -1048,6 +1187,28 @@ func muteVideoIfNeed() {
                 
             }
             
+        } else if vc is ReelVC {
+            
+            if let update1 = vc as? ReelVC {
+                
+                if update1.newPlayingIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
+                        
+                        if cell.videoNode.isPlaying() {
+                            
+                            cell.soundProcess()
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
         }
              
         
@@ -1073,4 +1234,102 @@ func resetView(cell: PostNode) {
     }
     
     
+}
+
+func resetViewForReel(cell: ReelNode) {
+    
+    if cell.isViewed == true {
+        
+        let currentTime = NSDate().timeIntervalSince1970
+        
+        let change = currentTime - cell.last_view_timestamp
+        
+        if change > 30.0 {
+            
+            cell.isViewed = false
+            cell.time = 0
+        
+        }
+        
+    }
+    
+    
+}
+
+extension UIView {
+    private static var originalTransformKey: UInt8 = 0
+    
+    private var originalTransform: CGAffineTransform? {
+        get {
+            return objc_getAssociatedObject(self, &UIView.originalTransformKey) as? CGAffineTransform
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &UIView.originalTransformKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    func spin(duration: Double = 3.5) {
+        if originalTransform == nil {
+            originalTransform = self.transform
+        }
+        
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
+        rotationAnimation.toValue = NSNumber(value: Double.pi * 2)
+        rotationAnimation.duration = duration
+        rotationAnimation.repeatCount = .infinity
+        
+        self.layer.add(rotationAnimation, forKey: "spinAnimation")
+    }
+    
+    func stopSpin() {
+        self.layer.removeAnimation(forKey: "spinAnimation")
+        if let originalTransform = originalTransform {
+            self.transform = originalTransform
+        }
+    }
+}
+
+
+func presentStreamingIntro() {
+    
+    if let SIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingIntroVC") as? StreamingIntroVC {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            let nav = UINavigationController(rootViewController: SIVC)
+
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            vc.present(nav, animated: true, completion: nil)
+
+
+        }
+    }
+    
+    
+}
+
+
+class DelayedPanGestureRecognizer: UIPanGestureRecognizer {
+    private var touchDownTime: Date?
+    private let delayTime: TimeInterval = 0.25 // Set the delay time to 0.25 seconds
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesBegan(touches, with: event)
+        
+        touchDownTime = Date()
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesMoved(touches, with: event)
+        
+        if let touchDownTime = touchDownTime,
+           Date().timeIntervalSince(touchDownTime) < delayTime {
+            state = .failed // Delay recognition of the pan gesture until the user has held their finger down for at least delayTime
+        }
+    }
 }

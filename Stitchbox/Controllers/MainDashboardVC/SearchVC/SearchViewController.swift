@@ -32,7 +32,7 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     var searchTableNode: ASTableNode!
     lazy var delayItem = workItem()
     var firstLoad = true
-    
+    var firstAnimated = true
     let backButton: UIButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
@@ -157,11 +157,9 @@ extension SearchViewController {
         APIManager().getRecent { result in
             switch result {
             case .success(let apiResponse):
-                
-                
-                print(apiResponse)
-                
+
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    
                     return
                 }
                 
@@ -209,33 +207,15 @@ extension SearchViewController {
             if !recentList.isEmpty {
                 
                 DispatchQueue.main.async {
+                    self.hideAnimation()
                     self.recentTableNode.reloadData()
                     
                 }
                 
-            }
-            
-            delay(0.25) {
-                
-                UIView.animate(withDuration: 0.5) {
-                    
-                    DispatchQueue.main.async {
-                        self.loadingView.alpha = 0
-                    }
-                
+            } else {
+                DispatchQueue.main.async {
+                    self.hideAnimation()
                 }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    
-                    if self.loadingView.alpha == 0 {
-                        
-                        self.loadingView.isHidden = true
-                        
-                    }
-                    
-                }
-              
-                
             }
             
         }
@@ -281,18 +261,29 @@ extension SearchViewController {
     }
     
     func setupBackButton() {
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+    
         backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
-        backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+
+
+        
     }
     
    
@@ -666,6 +657,37 @@ extension SearchViewController {
             }
 
         }
+        
+    }
+    
+    
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        Dispatch.main.async {
+                            self.loadingView.alpha = 0
+                        }
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
         
     }
     

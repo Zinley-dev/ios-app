@@ -70,6 +70,26 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if currentIndex != nil {
+            //newPlayingIndex
+            pauseVideoIfNeed(pauseIndex: currentIndex!)
+        }
+    
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if currentIndex != nil {
+            //newPlayingIndex
+            playVideoIfNeed(playIndex: currentIndex!)
+        }
+        
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(PostSearchVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_search")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PostSearchVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_search")), object: nil)
@@ -585,6 +605,7 @@ extension PostSearchVC {
   
     }
     
+    
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
         
         // checking empty
@@ -592,17 +613,17 @@ extension PostSearchVC {
             return
         }
         
-        if refresh_request == true {
+        if refresh_request {
             
             refresh_request = false
             
 
-            if self.posts.isEmpty != true {
+            if !self.posts.isEmpty {
                 
                
                 var delete_indexPaths: [IndexPath] = []
                 
-                for row in 0...self.posts.count - 1 {
+                for row in 0..<self.posts.count {
                     let path = IndexPath(row: row, section: 0) // single indexpath
                     delete_indexPaths.append(path) // app
                 }
@@ -614,46 +635,26 @@ extension PostSearchVC {
             
         }
         
-        // basic contruction
-        let section = 0
+        // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()
-        var indexPaths: [IndexPath] = []
-        //
-        
-        // current array = posts
-        
-        let total = self.posts.count + newPosts.count
-        
-        
-        // 0 - 2 2-4 4-6
-        
-        for row in self.posts.count...total-1 {
-            let path = IndexPath(row: row, section: section) // single indexpath
-            indexPaths.append(path) // app
-        }
-        
-        //
-        
         for i in newPosts {
+            if let item = PostModel(JSON: i) {
+                if !self.posts.contains(item) {
+                    self.posts.append(item)
+                    items.append(item)
+                }
+            }
             
-            let item = PostModel(JSON: i)
-            items.append(item!)
-          
         }
         
-        //
-        
-    
-        // array
-        
-        
-        
-        self.posts.append(contentsOf: items) // append new items to current items
-        //
+        // Construct index paths for the new rows
+        let startIndex = self.posts.count - items.count
+        let endIndex = startIndex + items.count - 1
+        let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
+
+        // Insert new items at index paths
         self.collectionNode.insertItems(at: indexPaths)
-        
       
-        
     }
 
 
@@ -670,7 +671,13 @@ extension PostSearchVC {
         
         global_presetingRate = Double(0.35)
         global_cornerRadius = 45
-        newsFeedSettingVC.isOwner = false
+        
+        if editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
+            newsFeedSettingVC.isOwner = true
+        } else {
+            newsFeedSettingVC.isOwner = false
+        }
+        
         newsFeedSettingVC.isSearch = true
         editeddPost = item
         self.present(newsFeedSettingVC, animated: true, completion: nil)
@@ -681,7 +688,7 @@ extension PostSearchVC {
     
         if let id = self.editeddPost?.id {
            
-            let link = "https://dualteam.page.link/dual?p=\(id)"
+            let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -696,7 +703,7 @@ extension PostSearchVC {
         
         if let id = self.editeddPost?.owner?.id {
             
-            let link = "https://dualteam.page.link/dual?up=\(id)"
+            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")
@@ -764,7 +771,7 @@ extension PostSearchVC {
         }
         
         let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(editeddPost?.id ?? "")")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(editeddPost?.id ?? "")")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
@@ -776,6 +783,88 @@ extension PostSearchVC {
             self.present(ac, animated: true, completion: nil)
         }
       
+    }
+    
+    
+    func pauseVideo(index: Int) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if cell.sideButtonView != nil {
+                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.stopSpin()
+                    
+                }
+            }
+            
+            cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    
+    func playVideo(index: Int) {
+        
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if !cell.videoNode.isPlaying() {
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.spin()
+                    
+                }
+                
+                if let muteStatus = shouldMute {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if muteStatus {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        }
+                    }
+                   
+                    if muteStatus {
+                        cell.videoNode.muted = true
+                    } else {
+                        cell.videoNode.muted = false
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                } else {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if globalIsSound {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                    }
+                   
+                    if globalIsSound {
+                        cell.videoNode.muted = false
+                    } else {
+                        cell.videoNode.muted = true
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                }
+ 
+              
+            }
+            
+        }
+        
     }
     
 }

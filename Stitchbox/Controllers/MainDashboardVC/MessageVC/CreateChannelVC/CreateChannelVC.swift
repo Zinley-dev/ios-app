@@ -30,20 +30,9 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     var createButtonItem: UIBarButtonItem?
     var cancelButtonItem: UIBarButtonItem?
     
-    private lazy var titleView: UIView? = _titleView
     private lazy var leftBarButton: UIBarButtonItem? = _leftBarButton
     private lazy var rightBarButton: UIBarButtonItem? = _rightBarButton
     
-    private lazy var _titleView: UILabel = {
-        var titleView = UILabel()
-        titleView.backgroundColor = UIColor.clear
-        titleView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 55)
-        titleView.text = ""
-        titleView.textAlignment = .center
-        titleView.textColor = UIColor.white
-        
-        return titleView
-    }()
     
     private lazy var _leftBarButton: UIBarButtonItem = {
         
@@ -54,7 +43,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
         leftButton.frame = back_frame
         leftButton.setTitleColor(UIColor.white, for: .normal)
-        leftButton.setTitle("     New message", for: .normal)
+        leftButton.setTitle("", for: .normal)
         leftButton.sizeToFit()
         
         let backButtonBarButton = UIBarButtonItem(customView: leftButton)
@@ -88,12 +77,27 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
     }
 
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+       
+        
+    }
 
     // setup initial view
     func setupNavigationView() {
         self.navigationItem.leftBarButtonItem = self.leftBarButton
         self.navigationItem.rightBarButtonItem = self.rightBarButton
-        self.navigationItem.titleView = self.titleView
+        navigationItem.title = "New Message"
         self.navigationItem.largeTitleDisplayMode = .never
     }
     

@@ -52,7 +52,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HBG-jA-Rvu">
                     <rect key="frame" x="0.0" y="560" width="414" height="75"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v1U-BN-FXq">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="v1U-BN-FXq">
                             <rect key="frame" x="15" y="15" width="30" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="IGN-4P-p4T"/>
@@ -142,6 +142,7 @@
         </view>
     </objects>
     <resources>
+        <image name="defaultuser" width="278" height="278"/>
         <image name="send2" width="33.333332061767578" height="33.333332061767578"/>
         <namedColor name="Background">
             <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

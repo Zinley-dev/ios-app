@@ -248,7 +248,7 @@ extension SelectedPostVC {
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         
-        if scrollView == collectionNode.view, posts.count > 2 {
+        if scrollView == collectionNode.view, posts.count > 3 {
             
             if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
                navigationController?.setNavigationBarHidden(true, animated: true)
@@ -494,22 +494,32 @@ extension SelectedPostVC {
       
     }
     
-    
     func setupBackButton() {
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
+    
+        backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
-        backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+
+
+        
     }
-    
+
     func setupTitle() {
         
         self.navigationItem.title = "Posts"
@@ -617,7 +627,7 @@ extension SelectedPostVC {
         
         if let postID = editeddPost?.id, postID != "" {
             
-            let items: [Any] = ["Hi I am \(userDataSource.userName ?? "") from Stitchbox, let's check out this with me!", URL(string: "https://dualteam.page.link/dual?p=\(postID)")!]
+            let items: [Any] = ["Hi I am \(userDataSource.userName ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(postID)")!]
             let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
             
             ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
@@ -656,7 +666,7 @@ extension SelectedPostVC {
         
         if let postID = editeddPost?.id, postID != "" {
             
-            let link = "https://dualteam.page.link/dual?p=\(postID)"
+            let link = "https://stitchbox.gg/app/post/?uid=\(postID)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -821,7 +831,7 @@ extension SelectedPostVC {
     
         if let id = self.editeddPost?.id {
            
-            let link = "https://dualteam.page.link/dual?p=\(id)"
+            let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -836,7 +846,7 @@ extension SelectedPostVC {
         
         if let id = self.editeddPost?.owner?.id {
             
-            let link = "https://dualteam.page.link/dual?up=\(id)"
+            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")
@@ -906,7 +916,7 @@ extension SelectedPostVC {
         }
         
         let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://dualteam.page.link/dual?p=\(editeddPost?.id ?? "")")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(editeddPost?.id ?? "")")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in

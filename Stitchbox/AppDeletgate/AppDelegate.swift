@@ -31,6 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     lazy var delayItem = workItem()
     private var audioLevel : Float = 0.0
     
+    private var previousVolume: Float = 0.0
+    private var outputVolumeObserver: NSKeyValueObservation?
+    private var consecutiveVolumeDownPresses: Int = 0
+    
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
@@ -50,26 +54,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupOneSignal(launchOptions: launchOptions)
         getGameList()
         activeSpeaker()
-        listenVolumeButton()
+        setupVolumeObserver()
+        //listenVolumeButton()
         
         GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         
+     
         return true
     }
     
-    func listenVolumeButton(){
-        
-         let audioSession = AVAudioSession.sharedInstance()
-         do {
-              try audioSession.setActive(true, options: [])
-         audioSession.addObserver(self, forKeyPath: "outputVolume",
-                                  options: NSKeyValueObservingOptions.new, context: nil)
-              audioLevel = audioSession.outputVolume
-         } catch {
-              print("Error")
-         }
+    private func setupVolumeObserver() {
+        let audioSession = AVAudioSession.sharedInstance()
+        previousVolume = audioSession.outputVolume
+        outputVolumeObserver = audioSession.observe(\.outputVolume) { [weak self] _, _ in
+            self?.handleVolumeChange()
+        }
     }
+    
+    private func handleVolumeChange() {
+        let audioSession = AVAudioSession.sharedInstance()
+        let currentVolume = audioSession.outputVolume
+        
+        if currentVolume > previousVolume {
+            consecutiveVolumeDownPresses = 0
+            unmuteVideoIfNeed()
+        } else if currentVolume < previousVolume {
+            consecutiveVolumeDownPresses += 1
+            if consecutiveVolumeDownPresses >= 2 {
+                muteVideoIfNeed()
+                consecutiveVolumeDownPresses = 0
+            }
+        }
+        
+        previousVolume = currentVolume
+    }
+
 
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         // Initialize OneSignal
@@ -80,6 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         OneSignal.promptForPushNotifications(userResponse: { accepted in
             print("User accepted notifications: \(accepted)")
         })
+        
         
         // Set a notification opened handler
         OneSignal.setNotificationOpenedHandler { result in
@@ -139,6 +160,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
     }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        // Update badge number
+        if let aps = userInfo["aps"] as? [String: AnyObject], let badgeCount = aps["badge"] as? Int {
+            UIApplication.shared.applicationIconBadgeNumber = badgeCount
+            
+            // Get tab bar controller and update badge number
+            if let tabBarController = self.window?.rootViewController as? UITabBarController {
+                if let tabItems = tabBarController.tabBar.items {
+                    let tabItem = tabItems[0]
+                    tabItem.badgeValue = badgeCount > 0 ? "\(badgeCount)" : nil
+                }
+            }
+        }
+        
+        // Call completion handler
+        completionHandler(.newData)
+    }
+
+
 
     // Helper function to convert a string to a dictionary
     func convertStringToDictionary(text: String) -> [String:Any]? {
@@ -153,31 +195,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return nil
     }
 
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-         if keyPath == "outputVolume"{
-              let audioSession = AVAudioSession.sharedInstance()
-             
-             
-              if audioSession.outputVolume > audioLevel {
-                   unmuteVideoIfNeed()
-              } else {
-                  volumeOutputList.append(audioSession.outputVolume)
-                
-                  delayItem.perform(after: 0.6) {
-                      
-                      if self.volumeOutputList.count == 2 {
-                          muteVideoIfNeed()
-                      }
-                      
-                      self.volumeOutputList.removeAll()
-                      
-                  }
-              }
-            
-            audioLevel = audioSession.outputVolume
-         }
-    }
 
     func setupPixelSDK() {
         
@@ -216,7 +233,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.messageInputTheme.buttonTintColor = UIColor.white
         
         
-        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.background
+        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.rightBarButtonTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.leftBarButtonTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.cellArrowIconTintColor = UIColor.white
@@ -253,8 +270,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         SBUTheme.componentTheme.emptyViewBackgroundColor = .background
         SBUTheme.componentTheme.backgroundColor = .background
-        
-
        
     }
 
@@ -706,6 +721,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
         }
         
+        
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        UIApplication.shared.applicationIconBadgeNumber = 0
         
     }
     

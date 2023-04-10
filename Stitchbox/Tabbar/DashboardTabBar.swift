@@ -126,6 +126,15 @@ import SendBirdCalls
             }
             
         }
+        
+        // Get the selected tab bar item and clear the badge value
+                if let tabItems = tabBarController.tabBar.items, let selectedTabItem = tabBarController.selectedViewController?.tabBarItem {
+                    if let index = tabItems.firstIndex(of: selectedTabItem) {
+                        let tabItem = tabItems[index]
+                        tabItem.badgeValue = nil
+                    }
+                }
+        
     }
     
     func presentPostVC() {

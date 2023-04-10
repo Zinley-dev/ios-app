@@ -77,7 +77,8 @@ extension EditBioVC {
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Edit Bio", for: .normal)
+        backButton.setTitle("", for: .normal)
+        navigationItem.title = "Edit Bio"
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
     

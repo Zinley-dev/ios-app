@@ -34,7 +34,7 @@ class ChannelViewController: SBUChannelViewController {
         // Do any additional setup after loading the view.
         navigationItem.rightBarButtonItem = nil
         self.callLayout()
-    
+        
     }
 
     
@@ -44,6 +44,17 @@ class ChannelViewController: SBUChannelViewController {
         changeTabBar(hidden: true)
         self.tabBarController?.tabBar.isTranslucent = true
         hideMiddleBtn(vc: self)
+    
+        let navigationBarAppearance = UINavigationBarAppearance()
+                navigationBarAppearance.configureWithOpaqueBackground()
+                navigationBarAppearance.backgroundColor = .background
+                navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+                navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+                self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+                self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+                navigationController?.setNavigationBarHidden(false, animated: false)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -94,6 +105,18 @@ class ChannelViewController: SBUChannelViewController {
         if let selected_channel = channel {
             
             if let CCV = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ChannelSettingsVC") as? ChannelSettingsVC {
+                
+                let navigationBarAppearance = UINavigationBarAppearance()
+                navigationBarAppearance.configureWithOpaqueBackground()
+                navigationBarAppearance.backgroundColor = .background
+                navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+                navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+                CCV.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+                CCV.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+                
+                
+                
                 CCV.channel = selected_channel
                 self.navigationController?.pushViewController(CCV, animated: true)
                 

@@ -35,7 +35,7 @@ class AddGameDetailVC: UIViewController, UITextFieldDelegate {
     var selectedID = ""
     let backButton: UIButton = UIButton(type: .custom)
     var selectedDomainList = [GameStatsDomainModel]()
-    var suppport_game_list = [GameList]()
+    var support_game_list = [GameList]()
     var dayPicker = UIPickerView()
     
     var mode = ""
@@ -47,16 +47,19 @@ class AddGameDetailVC: UIViewController, UITextFieldDelegate {
 
         // Do any additional setup after loading the view.
         setupButtons()
-        loadGameList()
+        //loadGameList()
         self.dayPicker.delegate = self
+        self.support_game_list = global_suppport_game_list
         
         gameLinkTxtField.delegate = self
         gameLinkTxtField.addTarget(self, action: #selector(AddGameDetailVC.textFieldDidChange(_:)), for: .editingChanged)
         
+    
+        
         if mode == "Update" && selectedGame != nil {
             
             
-            if let game = global_suppport_game_list.first(where: { $0._id == selectedGame.gameId }) {
+            if let game = support_game_list.first(where: { $0._id == selectedGame.gameId }) {
                 
                 pickYourGameTxtField.placeholder = game.name
                 gameLinkTxtField.placeholder = selectedGame.link
@@ -73,6 +76,17 @@ class AddGameDetailVC: UIViewController, UITextFieldDelegate {
                     
             }
         }
+        
+        if let gameList = _AppCoreData.userDataSource.value?.challengeCard?.games {
+            
+        
+            support_game_list = support_game_list.filter { supportGame in
+                !gameList.contains(where: { $0.gameId == supportGame._id })
+            }
+            
+            
+        }
+        
     }
     
     override func viewWillLayoutSubviews() {
@@ -152,9 +166,9 @@ extension AddGameDetailVC {
                 if let gameList = _AppCoreData.userDataSource.value?.challengeCard?.games, !gameList.isEmpty {
                     let gameNameSet = Set(gameList.map { $0.gameName })
                     let newGames = list.filter { !gameNameSet.contains($0.name) }
-                    self.suppport_game_list += newGames
+                    self.support_game_list += newGames
                 } else {
-                    self.suppport_game_list += list
+                    self.support_game_list += list
                 }
                 
             case .failure(let error):
@@ -178,22 +192,32 @@ extension AddGameDetailVC {
     
     }
     
-    
     func setupBackButton() {
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+    
         backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Add Game", for: .normal)
-        backButton.sizeToFit()
+        navigationItem.title = "Add Game"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+
+
+        
     }
-    
+
    
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
@@ -214,7 +238,7 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
-        return suppport_game_list.count
+        return support_game_list.count
     }
     
     
@@ -226,8 +250,8 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
             pickerLabel?.font = UIFont.systemFont(ofSize: 15)
             pickerLabel?.textAlignment = .center
         }
-        if suppport_game_list[row].name != "" {
-            pickerLabel?.text = suppport_game_list[row].name
+        if support_game_list[row].name != "" {
+            pickerLabel?.text = support_game_list[row].name
         } else {
             pickerLabel?.text = "Error loading"
         }
@@ -241,11 +265,11 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
     
    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        guard !suppport_game_list.isEmpty, row >= 0, row < suppport_game_list.count else {
+        guard !support_game_list.isEmpty, row >= 0, row < support_game_list.count else {
             return
         }
         
-        let rowSelectedGame = suppport_game_list[row]
+        let rowSelectedGame = support_game_list[row]
         guard !rowSelectedGame.name.isEmpty, rowSelectedGame.name != "Other" else {
             return
         }
@@ -354,7 +378,7 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
             return
         }
         
-        guard let currentGame = suppport_game_list.first(where: { $0._id == selectedID }) else {
+        guard let currentGame = support_game_list.first(where: { $0._id == selectedID }) else {
             showErrorAlert("Oops", msg: "Please make sure all your input is correct or we can't verify your url")
             return
         }

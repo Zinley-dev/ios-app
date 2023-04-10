@@ -21,7 +21,7 @@ class NotificationVC: UIViewController {
     var refresh_request = false
     var tableNode: ASTableNode!
     var UserNotificationList = [UserNotificationModel]()
-    
+    var firstAnimated = true
     lazy var delayItem = workItem()
     
     
@@ -73,42 +73,24 @@ class NotificationVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
-        
-        
-        delay(1.0) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
+        if firstAnimated {
                     
-                    self.loadingView.isHidden = true
+                    do {
+                        
+                        let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                        let gifData = try NSData(contentsOfFile: path) as Data
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+                        
+                        
+                        self.loadingImage.animatedImage = image
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                     
+                    loadingView.backgroundColor = self.view.backgroundColor
+         
                 }
-                
-            }
-            
-        }
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -196,19 +178,32 @@ extension NotificationVC {
     
     
     func setupBackButton() {
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = back_frame
-        backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Notifications", for: .normal)
-        backButton.sizeToFit()
-        let backButtonBarButton = UIBarButtonItem(customView: backButton)
     
+        backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        backButton.setTitle("", for: .normal)
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.title = "Notifications"
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+
+
+        
     }
+
     
     func showErrorAlert(_ title: String, msg: String) {
                                                                                                                                            
@@ -272,8 +267,6 @@ extension NotificationVC {
         if let template = notification.template {
             
             switch template {
-                
-                
                 
                 case "NEW_COMMENT":
                     if let post = notification.post {
@@ -342,10 +335,21 @@ extension NotificationVC {
     
     func openPost(post: PostModel) {
         
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
-            SPVC.selectedPost = [post]
-            SPVC.startIndex = 0
-            self.navigationController?.pushViewController(SPVC, animated: true)
+        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+            
+            let nav = UINavigationController(rootViewController: RVC)
+
+            // Set the user ID, nickname, and onPresent properties of UPVC
+            RVC.posts = [post]
+           
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+            
         }
         
         
@@ -516,8 +520,11 @@ extension NotificationVC {
     func insertNewRowsInTableNode(newNotis: [[String: Any]]) {
         
         guard newNotis.count > 0 else {
+            hideAnimation()
             return
         }
+        
+        print(newNotis)
         
         let section = 0
         var items = [UserNotificationModel]()
@@ -539,6 +546,7 @@ extension NotificationVC {
     
         self.UserNotificationList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
+        hideAnimation()
         
     }
     
@@ -573,6 +581,36 @@ extension NotificationVC: ASTableDataSource {
             
             return node
         }
+        
+    }
+    
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        Dispatch.main.async {
+                            self.loadingView.alpha = 0
+                        }
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
         
     }
     

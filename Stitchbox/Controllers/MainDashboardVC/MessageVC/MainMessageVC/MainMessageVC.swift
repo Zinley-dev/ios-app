@@ -77,6 +77,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         NotificationCenter.default.addObserver(self, selector: #selector(MainMessageVC.checkCallForLayout), name: (NSNotification.Name(rawValue: "checkCallForLayout")), object: nil)
         
     }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

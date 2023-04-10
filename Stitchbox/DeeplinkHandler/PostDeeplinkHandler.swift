@@ -24,11 +24,82 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
     guard canOpenURL(url) else {
       return
     }
+      
+      if _AppCoreData.userDataSource.value != nil {
+          let id = url.lastPathComponent
+          getPost(id: id)
+      }
     
-    // mock the navigation
-    let viewController = UIViewController()
-    print(url.path)
-    viewController.view.backgroundColor = .orange
-    rootViewController?.present(viewController, animated: true)
+  
   }
+    
+    func getPost(id: String) {
+        
+            presentSwiftLoader()
+            
+            APIManager().getPostDetail(postId: id) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let data = apiResponse.body else {
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                        }
+                      return
+                    }
+                   
+                    if !data.isEmpty {
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                            
+                            if let post = PostModel(JSON: data) {
+                                
+                                if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+                                    
+                                    if let vc = UIViewController.currentViewController() {
+                                        
+                                        let nav = UINavigationController(rootViewController: RVC)
+
+                                        // Set the user ID, nickname, and onPresent properties of UPVC
+                                        RVC.posts = [post]
+                                       
+                                        // Customize the navigation bar appearance
+                                        nav.navigationBar.barTintColor = .background
+                                        nav.navigationBar.tintColor = .white
+                                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                                        nav.modalPresentationStyle = .fullScreen
+                                        vc.present(nav, animated: true, completion: nil)
+
+
+                                    }
+                                }
+                                
+                                
+                            }
+                            
+                        }
+                        
+                    } else {
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                        }
+                    }
+
+                case .failure(let error):
+                    print(error)
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                    }
+                    
+            }
+        }
+        
+        
+    }
+    
+    
+    
+    
+    
 }
