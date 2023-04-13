@@ -205,15 +205,41 @@
                                 <rect key="frame" x="0.0" y="141" width="375" height="588"/>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YDh-aQ-5sT" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="127.66666666666669" y="342.66666666666669" width="120" height="44"/>
+                                <color key="backgroundColor" red="0.51372551919999998" green="0.52549022440000004" blue="0.54509806630000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="K29-q1-Hay"/>
+                                    <constraint firstAttribute="width" constant="120" id="TlB-Yh-X1d"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Save">
+                                    <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="testBtnPressed:" destination="fKf-fz-GNV" eventType="touchUpInside" id="UVh-Qf-QoF"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Kr1-VJ-hL7"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstItem="YDh-aQ-5sT" firstAttribute="centerY" secondItem="GWk-SY-sD6" secondAttribute="centerY" id="2Uz-n8-1R5"/>
                             <constraint firstItem="Kr1-VJ-hL7" firstAttribute="trailing" secondItem="fRI-um-MgK" secondAttribute="trailing" id="OpU-tu-hYU"/>
                             <constraint firstItem="fRI-um-MgK" firstAttribute="top" secondItem="HWB-vT-0Jz" secondAttribute="bottom" constant="16" id="Qsm-cR-Z6h"/>
                             <constraint firstItem="Kr1-VJ-hL7" firstAttribute="bottom" secondItem="fRI-um-MgK" secondAttribute="bottom" id="SaY-LS-7zq"/>
                             <constraint firstItem="fRI-um-MgK" firstAttribute="leading" secondItem="Kr1-VJ-hL7" secondAttribute="leading" id="YaP-GN-3LL"/>
                             <constraint firstItem="HWB-vT-0Jz" firstAttribute="top" secondItem="Kr1-VJ-hL7" secondAttribute="top" constant="16" id="bW3-xL-EQK"/>
+                            <constraint firstItem="YDh-aQ-5sT" firstAttribute="centerX" secondItem="GWk-SY-sD6" secondAttribute="centerX" id="dY9-5N-xeN"/>
                             <constraint firstItem="HWB-vT-0Jz" firstAttribute="centerX" secondItem="GWk-SY-sD6" secondAttribute="centerX" id="hFW-o9-YMf"/>
                         </constraints>
                     </view>
@@ -10057,6 +10083,9 @@
         </designable>
         <designable name="UB3-9W-WJT">
             <size key="intrinsicContentSize" width="329" height="15.666666666666666"/>
+        </designable>
+        <designable name="YDh-aQ-5sT">
+            <size key="intrinsicContentSize" width="36" height="30"/>
         </designable>
         <designable name="bzb-HO-UxG">
             <size key="intrinsicContentSize" width="36" height="30"/>

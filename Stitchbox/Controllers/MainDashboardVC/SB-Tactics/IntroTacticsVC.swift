@@ -24,5 +24,10 @@ class IntroTacticsVC: UIViewController {
         
     }
     
+    @IBAction func testBtnPressed(_ sender: Any) {
+        
 
+        
+    }
+    
 }

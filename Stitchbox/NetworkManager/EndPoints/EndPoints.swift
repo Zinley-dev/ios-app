@@ -1381,7 +1381,7 @@ extension ViewApi: EndPointType {
 }
 
 
-
+/*
 public enum RiotApi {
   case searchUserRiot(region: String, username: String)
 }
@@ -1417,7 +1417,7 @@ extension RiotApi: EndPointType {
   }
   
 }
-
+*/
 
 
 
