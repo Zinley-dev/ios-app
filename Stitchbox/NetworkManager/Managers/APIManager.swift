@@ -777,7 +777,7 @@ extension APIManager {
   }
   
   func searchUserRiot(region: String, username: String, completion: @escaping APICompletion) {
-    riotManager.request(.searchUserRiot(region: region, username: username) { result in
+    riotManager.request(.searchUserRiot(region: region, username: username)) { result in
       completion(result)
     }
   }
