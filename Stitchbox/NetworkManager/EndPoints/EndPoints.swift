@@ -1381,7 +1381,7 @@ extension ViewApi: EndPointType {
 }
 
 
-/*
+
 public enum RiotApi {
   case searchUserRiot(region: String, username: String)
 }
@@ -1399,8 +1399,8 @@ extension RiotApi: EndPointType {
   
   var httpMethod: HTTPMethod {
     switch self {
-      case .searchUser:
-        return .searchUserRiot
+      case .searchUserRiot:
+        return .get
     }
   }
   
@@ -1417,7 +1417,79 @@ extension RiotApi: EndPointType {
   }
   
 }
-*/
+
+public enum SupportedGameApi {
+  case getSupportedGame
+}
+extension SupportedGameApi: EndPointType {
+  var path: String {
+    switch self {
+      case .getSupportedGame:
+        return "/"
+    }
+  }
+  
+  var module: String {
+    return "/supported-games"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getSupportedGame:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getSupportedGame:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+  
+}
+
+public enum SupportedRegionApi {
+  case getSupportedRegion
+}
+extension SupportedRegionApi: EndPointType {
+  var path: String {
+    switch self {
+      case .getSupportedRegion:
+        return "/"
+    }
+  }
+  
+  var module: String {
+    return "/supported-regions"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getSupportedRegion:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getSupportedRegion:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+  
+}
+
 
 
 
