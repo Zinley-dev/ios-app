@@ -45,6 +45,8 @@ struct APIManager {
     let reportManager = Manager<ReportApi>()
     let viewManager = Manager<ViewApi>()
     let riotManager = Manager<RiotApi>()
+  let supportedGameManager = Manager<SupportedGameApi>()
+  let supportedRegionManager = Manager<SupportedRegionApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -782,5 +784,16 @@ extension APIManager {
     }
   }
   
+  func getSupportedGame(completion: @escaping APICompletion) {
+    supportedGameManager.request(.getSupportedGame) { result in
+      completion(result)
+    }
+  }
+  
+  func getSupportedRegion(completion: @escaping APICompletion) {
+    supportedRegionManager.request(.getSupportedRegion) { result in
+      completion(result)
+    }
+  }
 }
 
