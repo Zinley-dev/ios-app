@@ -1399,8 +1399,8 @@ extension RiotApi: EndPointType {
   
   var httpMethod: HTTPMethod {
     switch self {
-      case .searchUser:
-        return .searchUserRiot
+      case .searchUserRiot:
+        return .get
     }
   }
   
