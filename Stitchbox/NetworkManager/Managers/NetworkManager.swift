@@ -172,7 +172,9 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     
     fileprivate func buildRequest(from route: EndPoint) -> URLRequest? {
         // Check API endpoint is valid
-        guard let endpointUrl = URL(string: APIBuilder.baseURL + route.module + route.path) else {
+        let encodedChar = String(APIBuilder.baseURL + route.module + route.path).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+
+        guard let endpointUrl = URL(string: encodedChar!) else {
             return nil
         }
         
