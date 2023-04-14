@@ -56,15 +56,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+    
         
         if let hashtag = searchHashtag {
             
@@ -172,6 +164,16 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
           
         }
         
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+    
     }
     
     
@@ -289,6 +291,14 @@ extension PostListWithHashtagVC {
             self.dismiss(animated: true)
         } else {
             if let navigationController = self.navigationController {
+                
+                let transparentAppearance = UINavigationBarAppearance()
+                transparentAppearance.configureWithTransparentBackground()
+                transparentAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+                transparentAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+                self.navigationController?.navigationBar.standardAppearance = transparentAppearance
+                self.navigationController?.navigationBar.scrollEdgeAppearance = transparentAppearance
+                
                 navigationController.popViewController(animated: true)
             }
         }

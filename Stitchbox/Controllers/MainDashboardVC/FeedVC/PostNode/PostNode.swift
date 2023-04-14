@@ -469,9 +469,9 @@ extension PostNode {
 
 
                     // Customize the navigation bar appearance
-                    nav.navigationBar.barTintColor = .background
-                    nav.navigationBar.tintColor = .white
-                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                    nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                    nav.navigationBar.shadowImage = UIImage()
+                    nav.navigationBar.isTranslucent = true
 
                     nav.modalPresentationStyle = .fullScreen
                     vc.present(nav, animated: true, completion: nil)
@@ -497,9 +497,9 @@ extension PostNode {
                                 }
 
                                 // Customize the navigation bar appearance
-                                nav.navigationBar.barTintColor = .background
-                                nav.navigationBar.tintColor = .white
-                                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                                nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                                nav.navigationBar.shadowImage = UIImage()
+                                nav.navigationBar.isTranslucent = true
 
                                 nav.modalPresentationStyle = .fullScreen
                                 vc.present(nav, animated: true, completion: nil)
@@ -631,8 +631,7 @@ extension PostNode {
     func videoDidPlay(toEnd videoNode: ASVideoNode) {
     
         shouldCountView = true
-       
-        
+    
     }
     
     @objc func endVideo(watchTime: Double) {
@@ -662,7 +661,6 @@ extension PostNode {
             }
             
         }
-        
         
     }
     

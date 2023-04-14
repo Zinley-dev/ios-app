@@ -762,9 +762,9 @@ extension APIManager {
 
 extension APIManager {
   
-  /*
+/*
    params = { "riotUsername": "", "region": "" }
-   
+   */
 
   func confirmRiot(params: [String: Any], completion: @escaping APICompletion) {
     userManager.request(.riotUpdate(params: params)) { result in
@@ -782,7 +782,7 @@ extension APIManager {
     riotManager.request(.searchUserRiot(region: region, username: username)) { result in
       completion(result)
     }
-  } */
+  }
   
   func getSupportedGame(completion: @escaping APICompletion) {
     supportedGameManager.request(.getSupportedGame) { result in
