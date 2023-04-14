@@ -171,7 +171,7 @@ class RiotAccountModel {
     
  
     init(riotAccountModel: Dictionary<String, Any>) {
-        
+
         if let id = riotAccountModel["id"] as? String {
             self._id = id
         }
@@ -227,6 +227,10 @@ class RiotAccountModel {
                 self._border_image_url = border_image_url
             }
             
+            if let lp = solo_tier_info["lp"] as? Int {
+                self._lp = lp
+            }
+          
         }
     
     }

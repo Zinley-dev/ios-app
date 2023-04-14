@@ -11,14 +11,6 @@ import FLAnimatedImage
 
 class RiotSyncVC: UIViewController, UINavigationControllerDelegate, UISearchBarDelegate, UITextFieldDelegate {
     
-    struct SearchRecord {
-        let keyWord: String
-        let timeStamp: Double
-        let items: [RiotAccountModel]
-    }
-    
-    let EXPIRE_TIME = 20.0 //s
-    var searchHist = [SearchRecord]()
     var regionList = [RegionModel]()
     var searchRegion = ""
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
@@ -240,8 +232,36 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
-
+        let account = searchList[indexPath.row]
         
+        
+        syncRiotAccount(account: account)
+        
+        
+    }
+
+    
+    func syncRiotAccount(account: RiotAccountModel) {
+        
+    
+        if let username = _AppCoreData.userDataSource.value?.userName, let name = account.name {
+            
+            let alert = UIAlertController(title: "Hey \(username)!", message: "Please confirm if \(name) is your account. We will sync this account with SB-Tactics by default. You can change this anytime in the settings.", preferredStyle: UIAlertController.Style.actionSheet)
+
+                            // add the actions (buttons)
+            alert.addAction(UIAlertAction(title: "Confirm to sync", style: UIAlertAction.Style.default, handler: { action in
+                                
+              
+                                
+            }))
+
+            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+
+            self.present(alert, animated: true, completion: nil)
+            
+        }
+        
+       
     }
     
     
@@ -266,10 +286,7 @@ extension RiotSyncVC {
 
     func search(for searchText: String) {
         
-        //check local result first
-        if checkLocalRecords(searchText: searchText){
-            return
-        }
+        print(searchText)
         
         APIManager().searchUserRiot(region: searchRegion, username: searchText) { result in
             switch result {
@@ -287,9 +304,6 @@ extension RiotSyncVC {
                         newSearchList.append(RiotAccountModel(riotAccountModel: item))
                     }
                     
-                    let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
-                    self.searchHist.append(newSearchRecord)
-                    
                     self.searchList = newSearchList
                     DispatchQueue.main.async {
                         self.searchTableNode.reloadData()
@@ -304,31 +318,6 @@ extension RiotSyncVC {
             }
         }
         
-    }
-    
-    func checkLocalRecords(searchText: String) -> Bool {
-       
-        for (i, record) in searchHist.enumerated() {
-            if record.keyWord == searchText {
-                print("time: \(Date().timeIntervalSince1970 - record.timeStamp)")
-                if Date().timeIntervalSince1970 - record.timeStamp <= EXPIRE_TIME {
-                    let retrievedSearchList = record.items
-                    
-                    if self.searchList != retrievedSearchList {
-                        self.searchList = retrievedSearchList
-                        DispatchQueue.main.async {
-                            self.searchTableNode.reloadData(completion: nil)
-                        }
-                    }
-                    return true
-                } else {
-
-                    searchHist.remove(at: i)
-                }
-            }
-        }
-
-        return false
     }
     
  
