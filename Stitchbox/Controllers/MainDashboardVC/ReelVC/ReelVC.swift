@@ -73,6 +73,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             collectionNode.view.addSubview(pullControl)
         }
         
+      
  
     }
     
@@ -96,15 +97,19 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
           
         }
         
+     
     }
     
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_reel")), object: nil)
+    
     }
     
     override func viewDidDisappear(_ animated: Bool) {

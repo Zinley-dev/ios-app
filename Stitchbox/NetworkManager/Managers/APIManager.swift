@@ -762,10 +762,10 @@ extension APIManager {
 
 extension APIManager {
   
-  /*
+/*
    params = { "riotUsername": "", "region": "" }
-   
    */
+
   func confirmRiot(params: [String: Any], completion: @escaping APICompletion) {
     userManager.request(.riotUpdate(params: params)) { result in
       completion(result)
