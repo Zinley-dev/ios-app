@@ -78,6 +78,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bottomConstraint" destination="vto-AS-N7u" id="Od5-YX-Fv8"/>
                         <outlet property="contentview" destination="7Fb-uW-uVk" id="ltJ-2r-nqR"/>
                         <outlet property="regionTxtField" destination="hBC-5q-IbW" id="x0B-ed-0lx"/>
                     </connections>

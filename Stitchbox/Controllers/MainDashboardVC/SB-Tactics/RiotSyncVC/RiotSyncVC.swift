@@ -21,7 +21,7 @@ class RiotSyncVC: UIViewController, UINavigationControllerDelegate, UISearchBarD
     var searchHist = [SearchRecord]()
     var regionList = [RegionModel]()
     var searchRegion = ""
-    
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
     var searchController: UISearchController?
     var searchList = [RiotAccountModel]()
@@ -67,6 +67,12 @@ class RiotSyncVC: UIViewController, UINavigationControllerDelegate, UISearchBarD
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
         
     }
     
@@ -441,5 +447,23 @@ extension RiotSyncVC: UIPickerViewDelegate, UIPickerViewDataSource {
         
     }
     
+    
+}
+
+
+extension RiotSyncVC {
+    
+    @objc func handleKeyboardShow(notification: Notification) {
+        
+        bottomConstraint.constant = 300
+        
+        
+    }
+    
+    @objc func handleKeyboardHide(notification: Notification) {
+        
+        bottomConstraint.constant = 0
+        
+    }
     
 }
