@@ -87,6 +87,21 @@
             </objects>
             <point key="canvasLocation" x="-7815.1999999999998" y="1602.7093596059115"/>
         </scene>
+        <!--Chat Bot-->
+        <scene sceneID="LoE-Bi-tTa">
+            <objects>
+                <viewController storyboardIdentifier="SB_ChatBot" id="nPS-Oz-LEx" customClass="SB_ChatBot" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DSN-oS-HiD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="qrr-D5-J2o"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3ZN-ue-vEE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-7784" y="2347"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="9GJ-aD-yj4">
             <objects>

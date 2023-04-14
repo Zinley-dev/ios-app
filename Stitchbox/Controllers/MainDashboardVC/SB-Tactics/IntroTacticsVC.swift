@@ -220,8 +220,9 @@ extension IntroTacticsVC: ASCollectionDataSource, ASCollectionDelegate {
 extension IntroTacticsVC {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let min = CGSize(width: self.view.layer.frame.width / 3, height: self.view.layer.frame.width / 3 * 1.5);
-        let max = CGSize(width: self.view.layer.frame.width / 3, height: self.view.layer.frame.width / 3 * 1.5);
+        let size = self.collectionNode.view.layer.frame.width / 3 - 10
+        let min = CGSize(width: size, height: size * 1.5);
+        let max = CGSize(width: size, height: size * 1.5);
         
         return ASSizeRangeMake(min, max);
     }
@@ -243,13 +244,26 @@ extension IntroTacticsVC {
             if let data = _AppCoreData.userDataSource.value {
                 
                 // check for if already linked or null then process search and sync
-                //RiotSyncVC
-                
-                if let RSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "RiotSyncVC") as? RiotSyncVC {
-                   
-                    RSVC.hidesBottomBarWhenPushed = true
-                    hideMiddleBtn(vc: self)
-                    self.navigationController?.pushViewController(RSVC, animated: true)
+
+                if game.name == "League of Legends" {
+                    
+                    if let RSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "RiotSyncVC") as? RiotSyncVC {
+                       
+                        RSVC.hidesBottomBarWhenPushed = true
+                        hideMiddleBtn(vc: self)
+                        self.navigationController?.pushViewController(RSVC, animated: true)
+                    }
+                    
+                } else {
+                    
+                    
+                    if let SBCB = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ChatBot") as? SB_ChatBot {
+                       
+                        SBCB.hidesBottomBarWhenPushed = true
+                        hideMiddleBtn(vc: self)
+                        self.navigationController?.pushViewController(SBCB, animated: true)
+                    }
+                    
                 }
                 
                 

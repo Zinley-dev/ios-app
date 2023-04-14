@@ -217,6 +217,7 @@
 		6A839B4B29A048B300BD0A9A /* domainListNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B4A29A048B300BD0A9A /* domainListNode.swift */; };
 		6A9E3AF129E913D2002B36D7 /* RiotAccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E3AF029E913D2002B36D7 /* RiotAccountModel.swift */; };
 		6A9E3AF429E91790002B36D7 /* RiotSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E3AF329E91790002B36D7 /* RiotSearchNode.swift */; };
+		6A9E3AF729E9D2D0002B36D7 /* SB-ChatBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E3AF629E9D2D0002B36D7 /* SB-ChatBot.swift */; };
 		6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */; };
 		6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6329767ED500B59176 /* FindFriendsVC.swift */; };
 		6A9E4C6629767EE100B59176 /* MyReferralCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6529767EE100B59176 /* MyReferralCodeVC.swift */; };
@@ -641,6 +642,7 @@
 		6A839B4A29A048B300BD0A9A /* domainListNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = domainListNode.swift; sourceTree = "<group>"; };
 		6A9E3AF029E913D2002B36D7 /* RiotAccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiotAccountModel.swift; sourceTree = "<group>"; };
 		6A9E3AF329E91790002B36D7 /* RiotSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiotSearchNode.swift; sourceTree = "<group>"; };
+		6A9E3AF629E9D2D0002B36D7 /* SB-ChatBot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SB-ChatBot.swift"; sourceTree = "<group>"; };
 		6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationVC.swift; sourceTree = "<group>"; };
 		6A9E4C6329767ED500B59176 /* FindFriendsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsVC.swift; sourceTree = "<group>"; };
 		6A9E4C6529767EE100B59176 /* MyReferralCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReferralCodeVC.swift; sourceTree = "<group>"; };
@@ -2065,6 +2067,7 @@
 		6A802CC329E22D5000099F53 /* SB-Tactics */ = {
 			isa = PBXGroup;
 			children = (
+				6A9E3AF529E9D2BB002B36D7 /* SB-ChatBot */,
 				6A9E3AF229E91780002B36D7 /* RiotSearchNode */,
 				6A5C556629E8EF9D006F51DD /* RiotSyncVC */,
 				6A5C556329E8AC6F006F51DD /* TacticsGameNode */,
@@ -2211,6 +2214,14 @@
 				6A9E3AF329E91790002B36D7 /* RiotSearchNode.swift */,
 			);
 			path = RiotSearchNode;
+			sourceTree = "<group>";
+		};
+		6A9E3AF529E9D2BB002B36D7 /* SB-ChatBot */ = {
+			isa = PBXGroup;
+			children = (
+				6A9E3AF629E9D2D0002B36D7 /* SB-ChatBot.swift */,
+			);
+			path = "SB-ChatBot";
 			sourceTree = "<group>";
 		};
 		6A9E4C5E29767E8500B59176 /* MyReferralCodeVC */ = {
@@ -3566,6 +3577,7 @@
 				6ABA61232977D938003BFB5B /* LoginActivityVC.swift in Sources */,
 				6AAD7A08294C5DBB003E3AB6 /* RequestVC.swift in Sources */,
 				A5746D0329BB350000EA143E /* UABuilder.swift in Sources */,
+				6A9E3AF729E9D2D0002B36D7 /* SB-ChatBot.swift in Sources */,
 				6A58EA53294EB301005FA3CD /* CacheConfig.swift in Sources */,
 				396F520229DB25EF00BF78BE /* DeeplinkHandlerProtocol.swift in Sources */,
 				6A3F0A802980BF8500366665 /* FollowNode.swift in Sources */,

@@ -11,7 +11,7 @@ import AsyncDisplayKit
 
 fileprivate let OrganizerImageSize: CGFloat = 40
 fileprivate let HorizontalBuffer: CGFloat = 10
-fileprivate let FontSize: CGFloat = 17
+fileprivate let FontSize: CGFloat = 15
 
 class TacticsGameNode: ASCellNode {
     
@@ -40,7 +40,7 @@ class TacticsGameNode: ASCellNode {
         paragraphStyles.alignment = .center
         
         let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles]
-        self.nameNode.attributedText = NSAttributedString(string: "League Of Legends", attributes: textAttributes)
+        self.nameNode.attributedText = NSAttributedString(string: "\(game.name ?? "")", attributes: textAttributes)
         self.imageNode.backgroundColor = .clear
        
         imageNode.url = URL(string: game.logo)
@@ -55,7 +55,7 @@ class TacticsGameNode: ASCellNode {
         
         let headerSubStack = ASStackLayoutSpec.vertical()
         
-        imageNode.style.preferredSize = CGSize(width: constrainedSize.max.width - 48, height: constrainedSize.max.width - 48)
+        imageNode.style.preferredSize = CGSize(width: constrainedSize.max.width - 64, height: constrainedSize.max.width - 64)
        
         headerSubStack.style.flexShrink = 16.0
         headerSubStack.style.flexGrow = 16.0
@@ -88,9 +88,5 @@ class TacticsGameNode: ASCellNode {
             return insetLayoutSpec
         }
     }
-
-
-
-
 
 }

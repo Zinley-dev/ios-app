@@ -264,6 +264,12 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
        
     }
     
+    func finalSyncAccount() {
+        
+        
+        
+    }
+    
     
 }
 
@@ -285,8 +291,6 @@ extension RiotSyncVC {
     
 
     func search(for searchText: String) {
-        
-        print(searchText)
         
         APIManager().searchUserRiot(region: searchRegion, username: searchText) { result in
             switch result {
