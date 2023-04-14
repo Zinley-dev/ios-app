@@ -76,7 +76,10 @@ class RiotSearchNode: ASCellNode {
         
         if user.tier != "" {
             self.rankNode.attributedText = NSAttributedString(string: "\(user.tier ?? "") \(user.division ?? 0) - \(user.lp ?? 0)LP", attributes: textAttributes)
+        } else {
+            self.rankNode.attributedText = NSAttributedString(string: "Level - \(user.level ?? 0)", attributes: textAttributes)
         }
+            
         
 
         
