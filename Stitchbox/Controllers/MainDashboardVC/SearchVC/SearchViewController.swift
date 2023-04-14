@@ -234,8 +234,6 @@ extension SearchViewController {
         self.searchController?.searchBar.searchTextField.textColor = .white
         self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search for anything", attributes: [.foregroundColor: UIColor.lightGray])
         
-        //definesPresentationContext = true
-        
     }
     
 }

@@ -41,7 +41,7 @@ class TacticsGameNode: ASCellNode {
         
         let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles]
         self.nameNode.attributedText = NSAttributedString(string: "League Of Legends", attributes: textAttributes)
-        self.imageNode.backgroundColor = .blue
+        self.imageNode.backgroundColor = .clear
        
         imageNode.url = URL(string: game.logo)
         imageNode.contentMode = .scaleAspectFit

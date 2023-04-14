@@ -11,6 +11,7 @@ import Foundation
 class RegionModel {
   
     fileprivate var _id: String!
+    fileprivate var _name: String!
     fileprivate var _shortName: String!
     fileprivate var _status: Bool!
     
@@ -21,6 +22,16 @@ class RegionModel {
             }
             
             return _id
+        }
+    }
+    
+    var name: String! {
+        get {
+            if _name == nil {
+                _name = ""
+            }
+            
+            return _name
         }
     }
     
@@ -55,6 +66,10 @@ class RegionModel {
             self._shortName = shortName
         }
         
+        if let name = regionModel["name"] as? String {
+            self._name = name
+        }
+
         if let status = regionModel["status"] as? Bool {
             self._status = status
         }
