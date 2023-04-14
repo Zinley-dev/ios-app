@@ -233,8 +233,8 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
         let account = searchList[indexPath.row]
-        
-        
+        self.view.endEditing(true)
+        self.searchController?.searchBar.endEditing(true)
         syncRiotAccount(account: account)
         
         
@@ -243,7 +243,6 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
     
     func syncRiotAccount(account: RiotAccountModel) {
         
-    
         if let username = _AppCoreData.userDataSource.value?.userName, let name = account.name {
             
             let alert = UIAlertController(title: "Hey \(username)!", message: "Please confirm if \(name) is your account. We will sync this account with SB-Tactics by default. You can change this anytime in the settings.", preferredStyle: UIAlertController.Style.actionSheet)
@@ -251,7 +250,7 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
                             // add the actions (buttons)
             alert.addAction(UIAlertAction(title: "Confirm to sync", style: UIAlertAction.Style.default, handler: { action in
                                 
-              
+                self.finalSyncAccount(account: account)
                                 
             }))
 
@@ -264,9 +263,41 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
        
     }
     
-    func finalSyncAccount() {
+    func finalSyncAccount(account: RiotAccountModel) {
         
+        let data = ["RiotUsername": account.name!, "RiotAccountId": account.acct_id!, "RiotId": account.id!, "RiotPuuid": account.puuid!, "RiotLevel": account.level!, "RiotSummonerId": account.summoner_id!, "RiotProfileImage": account.profile_image_url!, "Tier": account.tier!, "Division": account.division!, "TierImage": account.tier_image_url!, "Region": searchRegion] as [String : Any]
         
+        APIManager().confirmRiot(params: data) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard apiResponse.body?["message"] as? String == "success" else {
+                        return
+                }
+                
+                
+                DispatchQueue.main {
+                    
+                    SwiftLoader.hide()
+                    reloadGlobalUserInformation()
+                    
+                   /*
+                    self.navigationController?.pushViewController(channelVC, animated: true)
+                    self.navigationController?.viewControllers.remove(at: 1)
+                    */
+                    
+                    
+                }
+                
+            case .failure(let error):
+                SwiftLoader.hide()
+                
+                DispatchQueue.main {
+                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                }
+              
+            }
+        }
         
     }
     
@@ -440,6 +471,16 @@ extension RiotSyncVC: UIPickerViewDelegate, UIPickerViewDataSource {
         
     }
     
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 }
 

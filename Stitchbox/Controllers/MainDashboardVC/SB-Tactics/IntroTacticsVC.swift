@@ -247,12 +247,22 @@ extension IntroTacticsVC {
 
                 if game.name == "League of Legends" {
                     
+                    //SB_ProfileVC
+                    
+                    if let SBPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ProfileVC") as? SB_ProfileVC {
+                       
+                        SBPVC.hidesBottomBarWhenPushed = true
+                        hideMiddleBtn(vc: self)
+                        self.navigationController?.pushViewController(SBPVC, animated: true)
+                    }
+                    
+                    /*
                     if let RSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "RiotSyncVC") as? RiotSyncVC {
                        
                         RSVC.hidesBottomBarWhenPushed = true
                         hideMiddleBtn(vc: self)
                         self.navigationController?.pushViewController(RSVC, animated: true)
-                    }
+                    }*/
                     
                 } else {
                     
