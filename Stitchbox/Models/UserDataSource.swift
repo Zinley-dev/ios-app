@@ -10,17 +10,17 @@ import ObjectMapper
 
 class RiotLOLAccount: Mappable {
    
-    private(set) var RiotUsername: String = ""
-    private(set) var RiotAccountId: String = ""
-    private(set) var RiotId: String = ""
-    private(set) var RiotLevel: Int = 0
-    private(set) var RiotSummonerId: String = ""
-    private(set) var RiotProfileImage: String = ""
-    private(set) var RiotPuuid: String = ""
-    private(set) var Tier: String = ""
-    private(set) var Division: Int = 0
-    private(set) var TierImage: String = ""
-    private(set) var Region: String = ""
+    private(set) var riotUsername: String = ""
+    private(set) var riotAccountId: String = ""
+    private(set) var riotId: Int64 = 0
+    private(set) var riotLevel: Int = 0
+    private(set) var riotSummonerId: String = ""
+    private(set) var riotProfileImage: String = ""
+    private(set) var riotPuuid: String = ""
+    private(set) var tier: String = ""
+    private(set) var division: Int = 0
+    private(set) var tierImage: String = ""
+    private(set) var region: String = ""
     
     required init?(map: ObjectMapper.Map) {
         
@@ -28,17 +28,17 @@ class RiotLOLAccount: Mappable {
     
     func mapping(map: ObjectMapper.Map) {
         
-        RiotUsername <- map["RiotUsername"]
-        RiotAccountId <- map["RiotAccountId"]
-        RiotId <- map["RiotId"]
-        RiotLevel <- map["RiotLevel"]
-        RiotSummonerId <- map["RiotSummonerId"]
-        RiotProfileImage <- map["RiotProfileImage"]
-        RiotPuuid <- map["RiotPuuid"]
-        Tier <- map["Tier"]
-        Division <- map["Division"]
-        TierImage <- map["TierImage"]
-        Region <- map["Region"]
+        riotUsername <- map["riotUsername"]
+        riotAccountId <- map["riotAccountId"]
+        riotId <- map["riotId"]
+        riotLevel <- map["riotLevel"]
+        riotSummonerId <- map["riotSummonerId"]
+        riotProfileImage <- map["riotProfileImage"]
+        riotPuuid <- map["riotPuuid"]
+        tier <- map["rier"]
+        division <- map["division"]
+        tierImage <- map["tierImage"]
+        region <- map["region"]
         
     }
     
@@ -231,5 +231,6 @@ class UserDataSource: Mappable {
         ageRange        <- map["AgeRange"]
         discordUrl      <- map["discordLink"]
         challengeCard   <- map["challengeCard"]
+        riotLOLAccount  <- map["riotAccount"]
     }
 }

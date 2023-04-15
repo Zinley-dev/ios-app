@@ -17,8 +17,6 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     let chatTableView: UITableView = UITableView()
     let userInputTextView: UITextView = UITextView()
     let sendButton: UIButton = UIButton(type: .system)
-
-    var maxInputTextViewHeight: CGFloat = 120
     
     // Sample chat data
     var messages: [(String, Bool)] = [("Welcome to SB ChatBot, how can I help you?", false)] // (message, isUserMessage)
@@ -153,7 +151,7 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
 
         if message.1 { // User message
             cell.textLabel?.textColor = UIColor.black
-            cell.textLabel?.textAlignment = .right
+            cell.textLabel?.textAlignment = .left
             cell.backgroundColor = .tertiary
             
             if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
@@ -299,15 +297,16 @@ extension SB_ChatBot {
         }
     
     
-    func textViewDidChange(_ textView: UITextView) {
-            let maxHeight = maxInputTextViewHeight
-            if textView.contentSize.height >= maxHeight {
-                textView.isScrollEnabled = true
-            } else {
-                textView.isScrollEnabled = false
-                textView.invalidateIntrinsicContentSize()
-            }
-        }
+
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let message = messages[indexPath.row]
+        
+        showNote(text: "Chat copied")
+        UIPasteboard.general.string = message.0
+        
+    }
         
     
 }
