@@ -22,6 +22,7 @@ class RiotSyncVC: UIViewController, UINavigationControllerDelegate, UISearchBarD
     @IBOutlet weak var contentview: UIView!
     let backButton: UIButton = UIButton(type: .custom)
     var dayPicker = UIPickerView()
+    var regionName = "NA"
     
     
     @IBOutlet weak var regionTxtField: UITextField! {
@@ -265,11 +266,15 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
     
     func finalSyncAccount(account: RiotAccountModel) {
         
-        let data = ["RiotUsername": account.name!, "RiotAccountId": account.acct_id!, "RiotId": account.id!, "RiotPuuid": account.puuid!, "RiotLevel": account.level!, "RiotSummonerId": account.summoner_id!, "RiotProfileImage": account.profile_image_url!, "Tier": account.tier!, "Division": account.division!, "TierImage": account.tier_image_url!, "Region": searchRegion] as [String : Any]
+        let data = ["riotUsername": account.name!, "riotAccountId": account.acct_id!, "riotId": account.id!, "riotPuuid": account.puuid!, "riotLevel": account.level!, "riotSummonerId": account.summoner_id!, "riotProfileImage": account.profile_image_url!, "tier": account.tier!, "division": account.division!, "tierImage": account.tier_image_url!, "region": regionName] as [String : Any]
+       
+        print(data)
         
         APIManager().confirmRiot(params: data) { result in
             switch result {
             case .success(let apiResponse):
+                
+                print(apiResponse)
                 
                 guard apiResponse.body?["message"] as? String == "success" else {
                         return
@@ -281,18 +286,21 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
                     SwiftLoader.hide()
                     reloadGlobalUserInformation()
                     
-                   /*
-                    self.navigationController?.pushViewController(channelVC, animated: true)
-                    self.navigationController?.viewControllers.remove(at: 1)
-                    */
+                    if let SBPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ProfileVC") as? SB_ProfileVC {
+                       
+                        self.navigationController?.pushViewController(SBPVC, animated: true)
+                        self.navigationController?.viewControllers.remove(at: 1)
+                        
+                    }
                     
                     
                 }
                 
             case .failure(let error):
-                SwiftLoader.hide()
                 
                 DispatchQueue.main {
+                    print(error)
+                    SwiftLoader.hide()
                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
               
@@ -465,7 +473,7 @@ extension RiotSyncVC: UIPickerViewDelegate, UIPickerViewDataSource {
                   
             regionTxtField.text = regionList[row].name
             searchRegion = regionList[row].shortName
-            
+            regionName = regionList[row].name
         }
     
         

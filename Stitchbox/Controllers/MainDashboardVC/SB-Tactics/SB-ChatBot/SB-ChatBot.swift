@@ -10,15 +10,18 @@ import UIKit
 class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
 
     
-    let inputContainerView: UIStackView = UIStackView()
+    let inputBackgroundView = UIView()
+    
     let backButton: UIButton = UIButton(type: .custom)
     var bottomConstraint: NSLayoutConstraint!
     let chatTableView: UITableView = UITableView()
     let userInputTextView: UITextView = UITextView()
     let sendButton: UIButton = UIButton(type: .system)
 
+    var maxInputTextViewHeight: CGFloat = 120
+    
     // Sample chat data
-    var messages: [(String, Bool)] = [("Hello, how can I help you?", false)] // (message, isUserMessage)
+    var messages: [(String, Bool)] = [("Welcome to SB-ChatBot, how can I help you?", false)] // (message, isUserMessage)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +35,9 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         setupKeyboardNotifications()
         setupTapGestureToDismissKeyboard()
         setupLayout()
+        
+        chatTableView.register(ChatCell.self, forCellReuseIdentifier: "chatCell")
+
         
     }
     
@@ -51,11 +57,12 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     }
     
     func setupInputContainerView() {
-            inputContainerView.axis = .horizontal
-            inputContainerView.spacing = 10
-            inputContainerView.alignment = .center
-            inputContainerView.addArrangedSubview(userInputTextView)
-            inputContainerView.addArrangedSubview(sendButton)
+            inputBackgroundView.backgroundColor = .background
+            inputBackgroundView.layer.cornerRadius = 10
+            inputBackgroundView.layer.shadowColor = UIColor.black.cgColor
+            inputBackgroundView.layer.shadowOffset = CGSize(width: 0, height: -1)
+            inputBackgroundView.layer.shadowOpacity = 0.1
+            inputBackgroundView.layer.shadowRadius = 2
         }
     
     func setupChatTableView() {
@@ -64,10 +71,11 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         chatTableView.register(UITableViewCell.self, forCellReuseIdentifier: "chatCell")
         chatTableView.separatorStyle = .none
         chatTableView.rowHeight = UITableView.automaticDimension
-        chatTableView.estimatedRowHeight = 44
+        chatTableView.estimatedRowHeight = 66
         chatTableView.backgroundColor = .background
     }
-  
+    
+   
     
     func setupSendButton() {
         if let sendImage = UIImage(named: "send2") {
@@ -83,41 +91,56 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
 
     func setupUserInputTextView() {
-            userInputTextView.layer.borderWidth = 1
-            userInputTextView.layer.cornerRadius = 5
-            userInputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-            userInputTextView.delegate = self
-            userInputTextView.backgroundColor = .darkGray
-        }
+         userInputTextView.layer.borderWidth = 1
+         userInputTextView.layer.borderColor = UIColor.lightGray.cgColor
+         userInputTextView.layer.cornerRadius = 5
+         userInputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+         userInputTextView.delegate = self
+         userInputTextView.isScrollEnabled = false
+         userInputTextView.backgroundColor = .darkGray
+         userInputTextView.textColor = .white
+     }
 
     func setupLayout() {
-            chatTableView.translatesAutoresizingMaskIntoConstraints = false
-            userInputTextView.translatesAutoresizingMaskIntoConstraints = false
-            sendButton.translatesAutoresizingMaskIntoConstraints = false
-            inputContainerView.translatesAutoresizingMaskIntoConstraints = false
+        chatTableView.translatesAutoresizingMaskIntoConstraints = false
+        userInputTextView.translatesAutoresizingMaskIntoConstraints = false
+        sendButton.translatesAutoresizingMaskIntoConstraints = false
+        inputBackgroundView.translatesAutoresizingMaskIntoConstraints = false
 
-            view.addSubview(chatTableView)
-            view.addSubview(inputContainerView)
+        view.addSubview(chatTableView)
+        view.addSubview(inputBackgroundView)
+        view.addSubview(userInputTextView)
+        view.addSubview(sendButton)
 
-            bottomConstraint = inputContainerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+        bottomConstraint = userInputTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
 
-            NSLayoutConstraint.activate([
-                chatTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                chatTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                chatTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        NSLayoutConstraint.activate([
+            chatTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            chatTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            chatTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-                inputContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-                inputContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-                bottomConstraint,
+            inputBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            inputBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            inputBackgroundView.bottomAnchor.constraint(equalTo: userInputTextView.bottomAnchor, constant: 10),
+            inputBackgroundView.topAnchor.constraint(equalTo: userInputTextView.topAnchor, constant: -10),
 
-                chatTableView.bottomAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: -10),
+            chatTableView.bottomAnchor.constraint(equalTo: inputBackgroundView.topAnchor, constant: -10),
 
-                userInputTextView.heightAnchor.constraint(equalToConstant: 40),
-                sendButton.heightAnchor.constraint(equalTo: userInputTextView.heightAnchor)
-            ])
-        }
+            userInputTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 40),
+            userInputTextView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
+            userInputTextView.widthAnchor.constraint(lessThanOrEqualToConstant: view.frame.width * 0.75),
+            userInputTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            bottomConstraint,
 
-
+            sendButton.widthAnchor.constraint(equalToConstant: 44),
+            sendButton.leadingAnchor.constraint(equalTo: userInputTextView.trailingAnchor, constant: 8),
+            sendButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            sendButton.bottomAnchor.constraint(equalTo: userInputTextView.bottomAnchor)
+        ])
+        
+        userInputTextView.font = UIFont.systemFont(ofSize: 13) // Set the font size here
+        
+    }
 
         
         func setupKeyboardNotifications() {
@@ -130,31 +153,50 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             return messages.count
         }
     
-    
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatCell
         let message = messages[indexPath.row]
-        
+
         cell.textLabel?.text = message.0
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 15) // Set the font size here
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.lineBreakMode = .byWordWrapping
-        
-        
-        if message.1 {
+
+        if message.1 { // User message
             cell.textLabel?.textColor = UIColor.black
             cell.textLabel?.textAlignment = .right
             cell.backgroundColor = .lightGray
-        } else {
+            
+            if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
+                
+                let url = URL(string: avatarUrl)
+                cell.avatarImageView.load(url: url!, str: avatarUrl)
+                 
+            } else {
+                
+                cell.avatarImageView.image = UIImage(named: "defaultuser")
+                
+            }
+            
+            cell.avatarImageView.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -8).isActive = true
+            cell.textLabel?.leadingAnchor.constraint(greaterThanOrEqualTo: cell.leadingAnchor, constant: 8).isActive = true
+            cell.textLabel?.trailingAnchor.constraint(equalTo: cell.avatarImageView.leadingAnchor, constant: -8).isActive = true
+        } else { // Chatbot message
             cell.textLabel?.textColor = UIColor.white
             cell.textLabel?.textAlignment = .left
             cell.backgroundColor = .background
+            cell.avatarImageView.image = UIImage(named: "defaultuser")
+            cell.avatarImageView.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 8).isActive = true
+            cell.textLabel?.leadingAnchor.constraint(equalTo: cell.avatarImageView.trailingAnchor, constant: 8).isActive = true
+            cell.textLabel?.trailingAnchor.constraint(lessThanOrEqualTo: cell.trailingAnchor, constant: -8).isActive = true
         }
-        
+
         cell.selectionStyle = .none
+        
+        
         return cell
     }
-            
+
 
 
 }
@@ -266,5 +308,17 @@ extension SB_ChatBot {
             let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
             return updatedText.count <= 500
         }
+    
+    
+    func textViewDidChange(_ textView: UITextView) {
+            let maxHeight = maxInputTextViewHeight
+            if textView.contentSize.height >= maxHeight {
+                textView.isScrollEnabled = true
+            } else {
+                textView.isScrollEnabled = false
+                textView.invalidateIntrinsicContentSize()
+            }
+        }
+        
     
 }

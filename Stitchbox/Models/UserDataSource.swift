@@ -7,6 +7,43 @@
 
 import ObjectMapper
 
+
+class RiotLOLAccount: Mappable {
+   
+    private(set) var RiotUsername: String = ""
+    private(set) var RiotAccountId: String = ""
+    private(set) var RiotId: String = ""
+    private(set) var RiotLevel: Int = 0
+    private(set) var RiotSummonerId: String = ""
+    private(set) var RiotProfileImage: String = ""
+    private(set) var RiotPuuid: String = ""
+    private(set) var Tier: String = ""
+    private(set) var Division: Int = 0
+    private(set) var TierImage: String = ""
+    private(set) var Region: String = ""
+    
+    required init?(map: ObjectMapper.Map) {
+        
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        RiotUsername <- map["RiotUsername"]
+        RiotAccountId <- map["RiotAccountId"]
+        RiotId <- map["RiotId"]
+        RiotLevel <- map["RiotLevel"]
+        RiotSummonerId <- map["RiotSummonerId"]
+        RiotProfileImage <- map["RiotProfileImage"]
+        RiotPuuid <- map["RiotPuuid"]
+        Tier <- map["Tier"]
+        Division <- map["Division"]
+        TierImage <- map["TierImage"]
+        Region <- map["Region"]
+        
+    }
+    
+}
+
 class Game: Mappable {
     private(set) var gameId: String = ""
     private(set) var gameName: String = ""
@@ -154,6 +191,7 @@ class UserDataSource: Mappable {
     
     private(set) var ageRange: AgeRange?
     private(set) var challengeCard: ChallengeCardData?
+    private(set) var riotLOLAccount: RiotLOLAccount?
     required init?(map: Map) {
         //
     }
