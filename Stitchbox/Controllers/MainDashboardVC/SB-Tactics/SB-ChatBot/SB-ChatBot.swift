@@ -21,7 +21,7 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var maxInputTextViewHeight: CGFloat = 120
     
     // Sample chat data
-    var messages: [(String, Bool)] = [("Welcome to SB-ChatBot, how can I help you?", false)] // (message, isUserMessage)
+    var messages: [(String, Bool)] = [("Welcome to SB ChatBot, how can I help you?", false)] // (message, isUserMessage)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,29 +35,16 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         setupKeyboardNotifications()
         setupTapGestureToDismissKeyboard()
         setupLayout()
-        
         chatTableView.register(ChatCell.self, forCellReuseIdentifier: "chatCell")
-
         
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
-    }
-    
+  
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
     func setupInputContainerView() {
-            inputBackgroundView.backgroundColor = .background
+            inputBackgroundView.backgroundColor = .darkGray
             inputBackgroundView.layer.cornerRadius = 10
             inputBackgroundView.layer.shadowColor = UIColor.black.cgColor
             inputBackgroundView.layer.shadowOffset = CGSize(width: 0, height: -1)
@@ -75,7 +62,6 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         chatTableView.backgroundColor = .background
     }
     
-   
     
     func setupSendButton() {
         if let sendImage = UIImage(named: "send2") {
@@ -91,9 +77,12 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
 
     func setupUserInputTextView() {
+        /*
          userInputTextView.layer.borderWidth = 1
          userInputTextView.layer.borderColor = UIColor.lightGray.cgColor
          userInputTextView.layer.cornerRadius = 5
+        
+        */
          userInputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
          userInputTextView.delegate = self
          userInputTextView.isScrollEnabled = false
@@ -119,8 +108,8 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             chatTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             chatTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            inputBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            inputBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            inputBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            inputBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             inputBackgroundView.bottomAnchor.constraint(equalTo: userInputTextView.bottomAnchor, constant: 10),
             inputBackgroundView.topAnchor.constraint(equalTo: userInputTextView.topAnchor, constant: -10),
 
@@ -129,12 +118,12 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             userInputTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 40),
             userInputTextView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
             userInputTextView.widthAnchor.constraint(lessThanOrEqualToConstant: view.frame.width * 0.75),
-            userInputTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            userInputTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             bottomConstraint,
 
             sendButton.widthAnchor.constraint(equalToConstant: 44),
             sendButton.leadingAnchor.constraint(equalTo: userInputTextView.trailingAnchor, constant: 8),
-            sendButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            sendButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             sendButton.bottomAnchor.constraint(equalTo: userInputTextView.bottomAnchor)
         ])
         
@@ -165,7 +154,7 @@ class SB_ChatBot: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         if message.1 { // User message
             cell.textLabel?.textColor = UIColor.black
             cell.textLabel?.textAlignment = .right
-            cell.backgroundColor = .lightGray
+            cell.backgroundColor = .tertiary
             
             if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
                 

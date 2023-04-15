@@ -812,9 +812,6 @@ extension FeedViewController {
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
-        //flowLayout.minimumInteritemSpacing = 5.0
-        //flowLayout.minimumLineSpacing = 5.0
-        //flowLayout.estimatedItemSize = .zero
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
@@ -833,7 +830,6 @@ extension FeedViewController {
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
         self.applyStyle()
-        self.wireDelegates()
         
         // Reload the data on the collection node
         self.collectionNode.reloadData()
@@ -852,12 +848,6 @@ extension FeedViewController {
         
     }
     
-    func wireDelegates() {
-        
-        self.collectionNode.delegate = self
-        self.collectionNode.dataSource = self
-        
-    }
     
 }
 

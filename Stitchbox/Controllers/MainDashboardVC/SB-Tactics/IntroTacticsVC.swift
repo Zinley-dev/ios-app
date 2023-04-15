@@ -28,6 +28,7 @@ class IntroTacticsVC: UIViewController {
         
         navigationItem.title = "SB-Tactics"
         setupCollectionNode()
+        navigationControllerDelegate()
         
         self.getsupportGame { (newGames) in
             
@@ -305,4 +306,15 @@ extension IntroTacticsVC {
     }
     
     
+}
+
+extension IntroTacticsVC: UINavigationBarDelegate, UINavigationControllerDelegate {
+    
+    func navigationControllerDelegate() {
+        self.navigationController?.navigationBar.delegate = self
+    }
+    
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
 }
