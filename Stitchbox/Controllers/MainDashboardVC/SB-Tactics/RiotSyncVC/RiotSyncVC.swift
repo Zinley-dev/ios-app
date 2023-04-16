@@ -266,15 +266,14 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
     
     func finalSyncAccount(account: RiotAccountModel) {
         
-        let data = ["riotUsername": account.name!, "riotAccountId": account.acct_id!, "riotId": account.id!, "riotPuuid": account.puuid!, "riotLevel": account.level!, "riotSummonerId": account.summoner_id!, "riotProfileImage": account.profile_image_url!, "tier": account.tier!, "division": account.division!, "tierImage": account.tier_image_url!, "region": regionName] as [String : Any]
-       
-        print(data)
+        presentSwiftLoader()
         
+        let data = ["riotUsername": account.name!, "riotAccountId": account.acct_id!, "riotId": String(account.id ?? 0), "riotPuuid": account.puuid!, "riotLevel": account.level!, "riotSummonerId": account.summoner_id!, "riotProfileImage": account.profile_image_url!, "tier": account.tier!, "division": String(account.division ?? 0), "tierImage": account.tier_image_url!, "region": regionName] as [String : Any]
+        
+    
         APIManager().confirmRiot(params: data) { result in
             switch result {
             case .success(let apiResponse):
-                
-                print(apiResponse)
                 
                 guard apiResponse.body?["message"] as? String == "success" else {
                         return
@@ -283,16 +282,18 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
                 
                 DispatchQueue.main {
                     
-                    SwiftLoader.hide()
+                    
                     reloadGlobalUserInformation()
                     
                     if let SBPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ProfileVC") as? SB_ProfileVC {
                        
-                        self.navigationController?.pushViewController(SBPVC, animated: true)
-                        self.navigationController?.viewControllers.remove(at: 1)
-                        
+                        delay(1.5) {
+                            SwiftLoader.hide()
+                            self.navigationController?.pushViewController(SBPVC, animated: true)
+                            self.navigationController?.viewControllers.remove(at: 1)
+                        }
+   
                     }
-                    
                     
                 }
                 

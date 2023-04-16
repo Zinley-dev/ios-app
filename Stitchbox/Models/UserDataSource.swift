@@ -8,19 +8,40 @@
 import ObjectMapper
 
 
+class Rank: Mappable {
+   
+    private(set) var queueType: String = ""
+    private(set) var tier: String = ""
+    private(set) var division: String = ""
+    private(set) var tierImage: String = ""
+    
+    required init?(map: ObjectMapper.Map) {
+        
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        tier <- map["tier"]
+        division <- map["division"]
+        tierImage <- map["tierImage"]
+        queueType <- map["queueType"]
+        
+    }
+    
+}
+
+
 class RiotLOLAccount: Mappable {
    
     private(set) var riotUsername: String = ""
     private(set) var riotAccountId: String = ""
-    private(set) var riotId: Int64 = 0
+    private(set) var riotId: String = ""
     private(set) var riotLevel: Int = 0
     private(set) var riotSummonerId: String = ""
     private(set) var riotProfileImage: String = ""
     private(set) var riotPuuid: String = ""
-    private(set) var tier: String = ""
-    private(set) var division: Int = 0
-    private(set) var tierImage: String = ""
     private(set) var region: String = ""
+    private(set) var rank: Rank?
     
     required init?(map: ObjectMapper.Map) {
         
@@ -29,16 +50,14 @@ class RiotLOLAccount: Mappable {
     func mapping(map: ObjectMapper.Map) {
         
         riotUsername <- map["riotUsername"]
-        riotAccountId <- map["riotAccountId"]
+        riotAccountId <- map["accountId"]
         riotId <- map["riotId"]
-        riotLevel <- map["riotLevel"]
+        riotLevel <- map["level"]
         riotSummonerId <- map["riotSummonerId"]
-        riotProfileImage <- map["riotProfileImage"]
-        riotPuuid <- map["riotPuuid"]
-        tier <- map["rier"]
-        division <- map["division"]
-        tierImage <- map["tierImage"]
+        riotProfileImage <- map["profileIcon"]
+        riotPuuid <- map["puuid"]
         region <- map["region"]
+        rank <- map["rank"]
         
     }
     

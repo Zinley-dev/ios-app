@@ -149,12 +149,8 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
         }
 
-        
-      
     }
-    
 
-    
     
     func tappableLabel(_ tappableLabel: ZSWTappableLabel, tappedAt idx: Int, withAttributes attributes: [NSAttributedString.Key : Any] = [:]) {
         guard let URL = attributes[StartViewController.URLAttributeName] as? URL else {

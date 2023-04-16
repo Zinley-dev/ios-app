@@ -11,15 +11,16 @@ class SB_ProfileVC: UIViewController, UICollectionViewDelegate {
 
     enum Section: Hashable {
         case profileHeader
-        case badges
+        case history
     }
 
     enum Item: Hashable {
         case profileHeader(ChallengeCardHeaderData)
-        case badges(badgeThumbnail)
+        case history(badgeThumbnail)
     }
 
     let backButton: UIButton = UIButton(type: .custom)
+    let rightButton: UIButton = UIButton(type: .custom)
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
@@ -28,17 +29,12 @@ class SB_ProfileVC: UIViewController, UICollectionViewDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
    
-    var fistBumpedCount = 0
-   
     var demoChallengeData: ChallengeCardHeaderData {
         return ChallengeCardHeaderData(name: "Planet Pennies")
     }
     
-    var didSelectIndex: IndexPath?
-    var didSelect = false
-    var bID: Int?
-    var didCreateSave = false
-  
+   
+    var pullControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,12 +45,20 @@ class SB_ProfileVC: UIViewController, UICollectionViewDelegate {
         collectionView.delegate = self
        
         collectionView.setCollectionViewLayout(createLayout(), animated: true)
-        collectionView.register(BadgesHeaderView.nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BadgesHeaderView.reuseIdentifier)
+        collectionView.register(RiotHistoryView.nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RiotHistoryView.reuseIdentifier)
         collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
         
         configureDatasource()
-        newSlogan = ""
-        didChanged = false
+        
+        pullControl.tintColor = UIColor.secondary
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+        
+        if #available(iOS 10.0, *) {
+            collectionView.refreshControl = pullControl
+        } else {
+            collectionView.addSubview(pullControl)
+        }
+        
         
     }
     
@@ -65,6 +69,37 @@ class SB_ProfileVC: UIViewController, UICollectionViewDelegate {
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LOLProfileHeaderCell.reuseIdentifier, for: indexPath) as? LOLProfileHeaderCell {
             
+                
+                if let data = _AppCoreData.userDataSource.value?.riotLOLAccount {
+                    
+                    cell.region.text = data.region
+                    cell.username.text = data.riotUsername
+                    cell.level.text = "Level \(data.riotLevel)"
+                    
+                    if data.rank?.tier != "" {
+                        cell.rank.text = "\(data.rank?.tier ?? "None") \(data.rank?.division ?? "0") - 79LP"
+                    } else {
+                        cell.rank.text = ""
+                    }
+                 
+                    
+                    if data.riotProfileImage != "" {
+                        let url = URL(string: data.riotProfileImage)
+                        cell.iconImgView.load(url: url!, str: data.riotProfileImage)
+                    } else {
+                        cell.iconImgView.image = UIImage.init(named: "defaultuser")
+                    }
+                    
+                    if data.rank?.tierImage != "" {
+                        let url = URL(string: data.rank!.tierImage)
+                        cell.rankImgView.load(url: url!, str: data.rank!.tierImage)
+                    }
+                    
+                    cell.liveGame.addTarget(self, action: #selector(liveTacticsTapped), for: .touchUpInside)
+                    cell.refresh.addTarget(self, action: #selector(refreshTapped), for: .touchUpInside)
+                    cell.upgrade.addTarget(self, action: #selector(upgradeTapped), for: .touchUpInside)
+                
+                }
 
                
                 return cell
@@ -76,7 +111,7 @@ class SB_ProfileVC: UIViewController, UICollectionViewDelegate {
                 
             }
             
-        case .badges(let data):
+        case .history(let data):
             
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
                 
@@ -115,7 +150,8 @@ extension SB_ProfileVC {
     func setupButtons() {
         
         setupBackButton()
-    
+        setupRightButton()
+        navigationItem.title = "League of Legends"
     }
     
     
@@ -136,10 +172,35 @@ extension SB_ProfileVC {
 
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        navigationItem.title = "League Of Legends"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
+
+  
+    }
+    
+    
+    func setupRightButton() {
+    
+        rightButton.frame = back_frame
+        rightButton.contentMode = .center
+
+        if let backImage = UIImage(named: "edit_challengeCard") {
+            let imageSize = CGSize(width: 25, height: 25)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 + horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 - horizontalPadding)
+            rightButton.imageEdgeInsets = padding
+            rightButton.setImage(backImage, for: [])
+        }
+
+        rightButton.addTarget(self, action: #selector(onClickEdit(_:)), for: .touchUpInside)
+        rightButton.setTitleColor(UIColor.white, for: .normal)
+    
+        let rightButtonBarButton = UIBarButtonItem(customView: rightButton)
+
+        self.navigationItem.rightBarButtonItem = rightButtonBarButton
 
   
     }
@@ -150,7 +211,16 @@ extension SB_ProfileVC {
             navigationController.popViewController(animated: true)
         }
     }
-
+    
+    @objc func onClickEdit(_ sender: AnyObject) {
+        if let navigationController = self.navigationController {
+            if let RSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "RiotSyncVC") as? RiotSyncVC {
+               
+                navigationController.pushViewController(RSVC, animated: true)
+                
+            }
+        }
+    }
     
 }
 
@@ -199,26 +269,62 @@ extension SB_ProfileVC {
         switch section {
         case .profileHeader:
             return createProfileSection()
-        case .badges:
+        case .history:
             return createPhotosSection()
         }
     }
     
     private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView {
-        return collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BadgesHeaderView.reuseIdentifier, for: indexPath)
+        return collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RiotHistoryView.reuseIdentifier, for: indexPath)
     }
     
     func snapshot() -> Snapshot {
         var snapshot = Snapshot()
 
-        snapshot.appendSections([.profileHeader, .badges])
+        snapshot.appendSections([.profileHeader, .history])
         snapshot.appendItems([.profileHeader(demoChallengeData)], toSection: .profileHeader)
-        snapshot.appendItems(badgeThumbnail.demoPhotos.map({ Item.badges($0) }), toSection: .badges)
+     
         return snapshot
     }
     
 
 }
+
+extension SB_ProfileVC {
+    
+    //In_gameVC
+    
+    @objc func liveTacticsTapped(_ sender: UIButton) {
+     
+        if let IGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "In_gameVC") as? In_gameVC {
+           
+            self.navigationController?.pushViewController(IGVC, animated: true)
+
+        }
+     
+    }
+    
+    @objc func refreshTapped(_ sender: UIButton) {
+        // make sure to check if any game is added unless peform adding game for +
+
+        
+    }
+    
+    @objc func upgradeTapped(_ sender: UIButton) {
+        // make sure to check if any game is added unless peform adding game for +
+
+        
+    }
+    
+    
+    @objc func refreshListData(_ sender: Any) {
+    
+        pullControl.endRefreshing()
+       
+    }
+    
+}
+
 
 extension SB_ProfileVC {
     
