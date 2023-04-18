@@ -15,9 +15,7 @@ class NavigationVC: UINavigationController, UINavigationControllerDelegate, UINa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        bar.delegate = self
-        
+    
         if let navigationController = self.navigationController {
                     navigationController.navigationBar.prefersLargeTitles = false
                     navigationController.navigationBar.isTranslucent = false
