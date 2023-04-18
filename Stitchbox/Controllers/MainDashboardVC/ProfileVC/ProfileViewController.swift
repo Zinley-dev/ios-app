@@ -149,6 +149,14 @@ class ProfileViewController: UIViewController {
         delay(2) {
             self.hasLoaded = true
         }
+        
+        
+        if let navigationController = self.navigationController {
+                    navigationController.navigationBar.prefersLargeTitles = false
+                    navigationController.navigationBar.isTranslucent = false
+                }
+        
+        
        
     }
     
@@ -1272,9 +1280,6 @@ extension ProfileViewController: UINavigationBarDelegate, UINavigationController
         self.navigationController?.navigationBar.delegate = self
     }
     
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
 }
 
 extension ProfileViewController {

@@ -95,6 +95,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
             }
         }
 
+        
+        if let navigationController = self.navigationController {
+                    navigationController.navigationBar.prefersLargeTitles = false
+                    navigationController.navigationBar.isTranslucent = false
+                }
     
     }
     
@@ -978,9 +983,6 @@ extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDel
         self.navigationController?.navigationBar.delegate = self
     }
     
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
 }
 
 extension FeedViewController {

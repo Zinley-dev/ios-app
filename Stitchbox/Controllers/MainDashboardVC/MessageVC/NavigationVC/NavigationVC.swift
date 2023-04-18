@@ -18,11 +18,12 @@ class NavigationVC: UINavigationController, UINavigationControllerDelegate, UINa
         
         bar.delegate = self
         
+        if let navigationController = self.navigationController {
+                    navigationController.navigationBar.prefersLargeTitles = false
+                    navigationController.navigationBar.isTranslucent = false
+                }
     }
     
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
     
 
 }

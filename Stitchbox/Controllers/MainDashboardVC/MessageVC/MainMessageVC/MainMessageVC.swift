@@ -76,6 +76,12 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         NotificationCenter.default.addObserver(self, selector: #selector(MainMessageVC.checkCallForLayout), name: (NSNotification.Name(rawValue: "checkCallForLayout")), object: nil)
         
+        
+        if let navigationController = self.navigationController {
+                    navigationController.navigationBar.prefersLargeTitles = false
+                    navigationController.navigationBar.isTranslucent = false
+                }
+        
     }
 
     
@@ -172,10 +178,6 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         return UIBarButtonItem.init(customView: titleLabel)
     }
         
-    
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
     
     func setupWithCall() {
         let createButton = UIButton(type: .custom)

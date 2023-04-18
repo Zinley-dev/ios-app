@@ -76,6 +76,11 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
               ]
           })
         
+        
+        if let navigationController = self.navigationController {
+                    navigationController.navigationBar.prefersLargeTitles = false
+                    navigationController.navigationBar.isTranslucent = false
+                }
        
           
         let string = NSLocalizedString("*We currently provide service for selected games. More games will be added soon. Tap to learn more about our <link type='TOU'>Terms of use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
@@ -374,7 +379,4 @@ extension IntroTacticsVC: UINavigationBarDelegate, UINavigationControllerDelegat
         self.navigationController?.navigationBar.delegate = self
     }
     
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
 }
