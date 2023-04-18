@@ -162,7 +162,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
 
     func settingUpLayoutNavView() {
         
-        self.navigationController?.navigationBar.delegate = self
+        self.navigationController?.delegate = self
         navigationItem.leftBarButtonItem = nil
         navigationItem.titleView = UIView()
         navigationItem.leftBarButtonItem = self.createLeftTitleItem(text: "Messages")

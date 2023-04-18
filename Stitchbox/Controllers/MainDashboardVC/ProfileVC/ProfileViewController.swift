@@ -1277,7 +1277,7 @@ extension ProfileViewController {
 extension ProfileViewController: UINavigationBarDelegate, UINavigationControllerDelegate {
     
     func wireDelegate() {
-        self.navigationController?.navigationBar.delegate = self
+        self.navigationController?.delegate = self
     }
     
 }

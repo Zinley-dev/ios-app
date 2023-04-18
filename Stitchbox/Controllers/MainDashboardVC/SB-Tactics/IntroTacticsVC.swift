@@ -376,7 +376,7 @@ extension IntroTacticsVC {
 extension IntroTacticsVC: UINavigationBarDelegate, UINavigationControllerDelegate {
     
     func navigationControllerDelegate() {
-        self.navigationController?.navigationBar.delegate = self
+        self.navigationController?.delegate = self
     }
     
 }

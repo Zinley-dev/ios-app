@@ -980,7 +980,7 @@ extension FeedViewController {
 extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDelegate {
     
     func navigationControllerDelegate() {
-        self.navigationController?.navigationBar.delegate = self
+        self.navigationController?.delegate = self
     }
     
 }
