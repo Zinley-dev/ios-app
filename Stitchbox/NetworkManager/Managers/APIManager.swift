@@ -481,6 +481,11 @@ extension APIManager {
 
 
 extension APIManager {
+  func getPostStats(postId: String, completion: @escaping APICompletion) {
+    postManager.request(.stats(pid: postId)) { result in
+      completion(result)
+    }
+  }
   func getPostDetail(postId: String, completion: @escaping APICompletion) {
     postManager.request(.getPost(pid: postId)) { result in
       completion(result)
@@ -788,6 +793,12 @@ extension APIManager {
   
   func searchUserRiot(region: String, username: String, completion: @escaping APICompletion) {
     riotManager.request(.searchUserRiot(region: region, username: username)) { result in
+      completion(result)
+    }
+  }
+  
+  func userInGame(completion: @escaping APICompletion) {
+    riotManager.request(.userInGame) { result in
       completion(result)
     }
   }
