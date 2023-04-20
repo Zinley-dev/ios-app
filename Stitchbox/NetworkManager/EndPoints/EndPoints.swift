@@ -593,6 +593,7 @@ public enum PostAPI {
     case getUserPost(user: String, page: Int)
     case lastSetting
     case deleteMyPost(pid: String)
+    case stats(pid: String)
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -623,6 +624,8 @@ extension PostAPI: EndPointType {
                 return "/author/\(user)?page=\(page)&limit=10"
           case .deleteMyPost(let pid):
             return "/\(pid)"
+          case .stats(let pid):
+            return "/stats/\(pid)"
         }
     }
     
@@ -650,6 +653,8 @@ extension PostAPI: EndPointType {
                 return .get
           case .deleteMyPost:
             return .delete
+          case .stats:
+            return .get
         }
     }
     
@@ -676,6 +681,8 @@ extension PostAPI: EndPointType {
             case .getUserPost:
                 return .request
           case .deleteMyPost:
+            return .request
+          case .stats:
             return .request
         }
     }
@@ -1384,12 +1391,15 @@ extension ViewApi: EndPointType {
 
 public enum RiotApi {
   case searchUserRiot(region: String, username: String)
+  case userInGame
 }
 extension RiotApi: EndPointType {
   var path: String {
     switch self {
       case .searchUserRiot(let region, let username):
         return "/userinfo/\(region)/\(username)"
+      case .userInGame
+        return "/spectator"
     }
   }
   
@@ -1401,12 +1411,16 @@ extension RiotApi: EndPointType {
     switch self {
       case .searchUserRiot:
         return .get
+      case .userInGame
+        return .get
     }
   }
   
   var task: HTTPTask {
     switch self {
       case .searchUserRiot:
+        return .request
+      case .userInGame
         return .request
     }
   }

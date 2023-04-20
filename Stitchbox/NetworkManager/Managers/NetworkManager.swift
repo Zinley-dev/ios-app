@@ -102,6 +102,11 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         if let request = buildRequest(from: route) {
           print("Request URL --> \(request.url)")
             task = session.dataTask(with: request, completionHandler: { data, response, error in
+              print("==============BBB+============")
+                print(error)
+              print(response)
+              print(data)
+              print("==============BBB+============")
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
                 }
