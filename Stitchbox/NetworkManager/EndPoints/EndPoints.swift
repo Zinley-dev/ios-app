@@ -1398,7 +1398,7 @@ extension RiotApi: EndPointType {
     switch self {
       case .searchUserRiot(let region, let username):
         return "/userinfo/\(region)/\(username)"
-      case .userInGame
+      case .userInGame:
         return "/spectator"
     }
   }
@@ -1411,7 +1411,7 @@ extension RiotApi: EndPointType {
     switch self {
       case .searchUserRiot:
         return .get
-      case .userInGame
+      case .userInGame:
         return .get
     }
   }
@@ -1420,7 +1420,7 @@ extension RiotApi: EndPointType {
     switch self {
       case .searchUserRiot:
         return .request
-      case .userInGame
+      case .userInGame:
         return .request
     }
   }
