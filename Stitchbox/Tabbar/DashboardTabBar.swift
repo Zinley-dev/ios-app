@@ -141,6 +141,7 @@ import SendBirdCalls
         
         if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
             
+            
             PNVC.modalPresentationStyle = .fullScreen
             self.present(PNVC, animated: true)
         }

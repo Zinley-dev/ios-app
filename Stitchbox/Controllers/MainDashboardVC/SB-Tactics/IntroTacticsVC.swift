@@ -40,12 +40,6 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
 
         // Do any additional setup after loading the view.
         
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
         navigationItem.title = "SB-Tactics"
         setupCollectionNode()
         navigationControllerDelegate()
@@ -76,17 +70,26 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
               ]
           })
         
-        
-        if let navigationController = self.navigationController {
-                    navigationController.navigationBar.prefersLargeTitles = false
-                    navigationController.navigationBar.isTranslucent = false
-                }
-       
+     
           
         let string = NSLocalizedString("*We currently provide service for selected games. More games will be added soon. Tap to learn more about our <link type='TOU'>Terms of use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
           
         termOfUsedLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        if let navigationController = self.navigationController {
+            navigationController.navigationBar.prefersLargeTitles = false
+            navigationController.navigationBar.standardAppearance = navigationBarAppearance
+            navigationController.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+            navigationController.navigationBar.isTranslucent = false
+        }
+
         
     }
     
@@ -95,13 +98,20 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         
         showMiddleBtn(vc: self)
         
+        
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backgroundColor = .background
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
 
-
+        if let navigationController = self.navigationController {
+            navigationController.navigationBar.prefersLargeTitles = false
+            navigationController.navigationBar.standardAppearance = navigationBarAppearance
+            navigationController.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+            navigationController.navigationBar.isTranslucent = false
+        }
+       
     }
     
     func tappableLabel(_ tappableLabel: ZSWTappableLabel, tappedAt idx: Int, withAttributes attributes: [NSAttributedString.Key : Any] = [:]) {
