@@ -1392,7 +1392,7 @@ extension ViewApi: EndPointType {
 public enum RiotApi {
   case searchUserRiot(region: String, username: String)
   case userInGame
-  case stats(puuid: String)
+  case stats(puuid: String, queue: String)
 }
 extension RiotApi: EndPointType {
   var path: String {
@@ -1401,8 +1401,8 @@ extension RiotApi: EndPointType {
         return "/userinfo/\(region)/\(username)"
       case .userInGame:
         return "/spectator"
-      case .stats(let puuid):
-        return "/stats/\(puuid)"
+      case .stats(let puuid, let queue):
+        return "/stats/\(puuid)?queue=\(queue)"
     }
   }
   
