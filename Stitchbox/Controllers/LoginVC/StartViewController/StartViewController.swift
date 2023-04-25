@@ -363,6 +363,8 @@ extension StartViewController {
                 if let data = response.body {
                     
                     if !data.isEmpty {
+                        
+                        print(data)
                       
                         if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
                             _AppCoreData.reset()

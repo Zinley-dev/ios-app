@@ -226,8 +226,8 @@ class ProfileViewController: UIViewController {
                 }
                 
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
-                    let url = URL(string: avatarUrl)
-                    cell.avatarImage.load(url: url!, str: avatarUrl)
+                                    let url = URL(string: avatarUrl)
+                                    cell.avatarImage.load(url: url!, str: avatarUrl)
                     selectAvatarImage.load(url: url!, str: avatarUrl)
                 } else {
                     cell.avatarImage.image = UIImage.init(named: "defaultuser")

@@ -268,7 +268,7 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
         
         presentSwiftLoader()
         
-        let data = ["riotUsername": account.name!, "riotAccountId": account.acct_id!, "riotId": String(account.id ?? 0), "riotPuuid": account.puuid!, "riotLevel": account.level!, "riotSummonerId": account.summoner_id!, "riotProfileImage": account.profile_image_url!, "tier": account.tier!, "division": String(account.division ?? 0), "tierImage": account.tier_image_url!, "region": regionName] as [String : Any]
+        let data = ["riotUsername": account.name!, "riotAccountId": account.acct_id!, "riotId": String(account.id ?? 0), "riotPuuid": account.puuid!, "riotLevel": account.level!, "riotSummonerId": account.summoner_id!, "riotProfileImage": account.profile_image_url!, "tier": account.tier!, "division": String(account.division ?? 0), "tierImage": account.tier_image_url!, "region": regionName, "lp": account.lp ?? 0] as [String : Any]
         
     
         APIManager().confirmRiot(params: data) { result in

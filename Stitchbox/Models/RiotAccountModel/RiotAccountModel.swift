@@ -171,8 +171,7 @@ class RiotAccountModel {
     
  
     init(riotAccountModel: Dictionary<String, Any>) {
-
-      
+        
         if let id = riotAccountModel["id"] as? Int64 {
             self._id = id
         }

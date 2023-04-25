@@ -77,7 +77,7 @@ class SB_ProfileVC: UIViewController, UICollectionViewDelegate {
                     cell.level.text = "Level \(data.riotLevel)"
                     
                     if data.rank?.tier != "" {
-                        cell.rank.text = "\(data.rank?.tier ?? "None") \(data.rank?.division ?? "0") - 79LP"
+                        cell.rank.text = "\(data.rank?.tier ?? "None") \(data.rank?.division ?? "0") - \(data.lp)LP"
                     } else {
                         cell.rank.text = ""
                     }

@@ -41,7 +41,9 @@ class RiotLOLAccount: Mappable {
     private(set) var riotProfileImage: String = ""
     private(set) var riotPuuid: String = ""
     private(set) var region: String = ""
+    private(set) var lp: Int = 0
     private(set) var rank: Rank?
+    
     
     required init?(map: ObjectMapper.Map) {
         
@@ -53,6 +55,7 @@ class RiotLOLAccount: Mappable {
         riotAccountId <- map["accountId"]
         riotId <- map["riotId"]
         riotLevel <- map["level"]
+        lp <- map["lp"]
         riotSummonerId <- map["riotSummonerId"]
         riotProfileImage <- map["profileIcon"]
         riotPuuid <- map["puuid"]
