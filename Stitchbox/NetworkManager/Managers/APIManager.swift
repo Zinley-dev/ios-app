@@ -815,8 +815,8 @@ extension APIManager {
     }
   }
   
-  func getSummonerStat(puuid: String, queue: String = "420", completion: @escaping APICompletion) {
-    riotManager.request(.stats(puuid: puuid, queue: queue)) { result in
+  func getSummonerStat(name: String, queue: String = "420", completion: @escaping APICompletion) {
+    riotManager.request(.stats(name: name, queue: queue)) { result in
       completion(result)
     }
   }

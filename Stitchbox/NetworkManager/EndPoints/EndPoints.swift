@@ -1401,8 +1401,8 @@ extension RiotApi: EndPointType {
         return "/userinfo/\(region)/\(username)"
       case .userInGame:
         return "/spectator"
-      case .stats(let puuid, let queue):
-        return "/stats/\(puuid)?queue=\(queue)"
+      case .stats(let name, let queue):
+        return "/stats/\(name)?queue=\(queue)"
     }
   }
   
