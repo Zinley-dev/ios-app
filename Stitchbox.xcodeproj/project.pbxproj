@@ -285,6 +285,7 @@
 		6ABA61232977D938003BFB5B /* LoginActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABA61222977D938003BFB5B /* LoginActivityVC.swift */; };
 		6ABA61252977D946003BFB5B /* ResetPwdVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABA61242977D946003BFB5B /* ResetPwdVC.swift */; };
 		6ABA61272977D999003BFB5B /* TwoFactorAuthVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABA61262977D999003BFB5B /* TwoFactorAuthVC.swift */; };
+		6ABDDC7F29F8948E00CDAD39 /* CurrentChampionStatsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDDC7E29F8948E00CDAD39 /* CurrentChampionStatsModel.swift */; };
 		6AC6D9F129A5C78C00B18139 /* load3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9E929A5C78A00B18139 /* load3.gif */; };
 		6AC6D9F229A5C78C00B18139 /* fox3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9EA29A5C78A00B18139 /* fox3.gif */; };
 		6AC6D9F329A5C78C00B18139 /* load.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9EB29A5C78B00B18139 /* load.gif */; };
@@ -719,6 +720,7 @@
 		6ABA61222977D938003BFB5B /* LoginActivityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginActivityVC.swift; sourceTree = "<group>"; };
 		6ABA61242977D946003BFB5B /* ResetPwdVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPwdVC.swift; sourceTree = "<group>"; };
 		6ABA61262977D999003BFB5B /* TwoFactorAuthVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoFactorAuthVC.swift; sourceTree = "<group>"; };
+		6ABDDC7E29F8948E00CDAD39 /* CurrentChampionStatsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChampionStatsModel.swift; sourceTree = "<group>"; };
 		6AC6D9E929A5C78A00B18139 /* load3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = load3.gif; sourceTree = "<group>"; };
 		6AC6D9EA29A5C78A00B18139 /* fox3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fox3.gif; sourceTree = "<group>"; };
 		6AC6D9EB29A5C78B00B18139 /* load.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = load.gif; sourceTree = "<group>"; };
@@ -865,6 +867,7 @@
 		143684302918C5B800FA87D7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6ABDDC7D29F8948300CDAD39 /* CurrentChampionStatsModel */,
 				6AB9F82229F5C79A007370FF /* InGameModel */,
 				6A9E3AEF29E913C3002B36D7 /* RiotAccountModel */,
 				6A5C556929E8F7B7006F51DD /* RegionModel */,
@@ -2632,6 +2635,14 @@
 			path = LoginActivityVC;
 			sourceTree = "<group>";
 		};
+		6ABDDC7D29F8948300CDAD39 /* CurrentChampionStatsModel */ = {
+			isa = PBXGroup;
+			children = (
+				6ABDDC7E29F8948E00CDAD39 /* CurrentChampionStatsModel.swift */,
+			);
+			path = CurrentChampionStatsModel;
+			sourceTree = "<group>";
+		};
 		6AC6D9F929A5C91500B18139 /* CommentNode */ = {
 			isa = PBXGroup;
 			children = (
@@ -3729,6 +3740,7 @@
 				6A3F0A5F297CBA5600366665 /* PostVC.swift in Sources */,
 				6AE1CE70294D6A4A00B1C435 /* SelectedUserCollectionViewCell.swift in Sources */,
 				6AF6C49D2997058F00DD8D37 /* VerifyCodeVC.swift in Sources */,
+				6ABDDC7F29F8948E00CDAD39 /* CurrentChampionStatsModel.swift in Sources */,
 				3962E496299FE50700047977 /* NewPasswordViewModel.swift in Sources */,
 				A540A8D8294731120085CC45 /* TwitterSignInService.swift in Sources */,
 				6A12359A294EFC58004B612E /* globalFile.swift in Sources */,

@@ -166,8 +166,6 @@ extension In_gameVC {
                     return
                 }
                 
-                print(data)
-                
                 let inGameModel = InGameModel(data: data)
                 
                 DispatchQueue.main.async {
@@ -188,6 +186,8 @@ extension In_gameVC {
                     self.addTapGestureToView(self.player4RedView)
                     self.addTapGestureToView(self.player5RedView)
 
+                    
+                    self.calculateChampionWinRate(championName: "Ryze")
                 }
               
             case .failure(let error):
@@ -201,6 +201,45 @@ extension In_gameVC {
         }
     }
     
+    
+    func getPlayerStats(queue: String, championName: String, completion: @escaping (CurrentChampionStatsModel?) -> Void) {
+        let defaultPuuid = "8WNQjmUr_5elVzvbq5dkAe4UoVOggjfEaIiI_X8Mlvq0e2K_K1w2MOv1oQpmTzpEDPx04XEBw-3Qug"
+        APIManager().getSummonerStat(puuid: defaultPuuid, queue: "420") { result in
+            switch result {
+            case .success(let apiResponse):
+                guard let data = apiResponse.body?["data"] as? [String: Any],
+                      let championStats = CurrentChampionStatsModel(data: data) else {
+                    completion(nil)
+                    return
+                }
+                completion(championStats)
+            case .failure(let error):
+                print(error)
+                completion(nil)
+            }
+        }
+    }
+
+    func calculateChampionWinRate(championName: String) {
+        getPlayerStats(queue: "420", championName: championName) { championStats in
+            guard let stats = championStats else {
+                print("Error: Could not retrieve champion stats")
+                return
+            }
+
+            let totalGamesPlayed = stats.championCount[championName] ?? 0
+            let totalGamesWon = stats.championWin[championName] ?? 0
+
+            if totalGamesPlayed > 0 {
+                let winRate = Double(totalGamesWon) / Double(totalGamesPlayed) * 100
+                let roundedWinRate = round(winRate * 100) / 100
+                print("\(championName) has been played \(totalGamesPlayed) times with a win rate of \(roundedWinRate)%")
+            } else {
+                print("\(championName) has not been played")
+            }
+        }
+    }
+
     
     func updatePlayerLabels(inGameModel: InGameModel) {
         if inGameModel.blueTeam.count == 5 {
