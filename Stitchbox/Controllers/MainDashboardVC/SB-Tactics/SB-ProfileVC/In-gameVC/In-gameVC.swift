@@ -203,8 +203,8 @@ extension In_gameVC {
     
     
     func getPlayerStats(queue: String, championName: String, completion: @escaping (CurrentChampionStatsModel?) -> Void) {
-        let defaultPuuid = "8WNQjmUr_5elVzvbq5dkAe4UoVOggjfEaIiI_X8Mlvq0e2K_K1w2MOv1oQpmTzpEDPx04XEBw-3Qug"
-        APIManager().getSummonerStat(puuid: defaultPuuid, queue: "420") { result in
+        let defaultPuuid = "1122356"
+        APIManager().getSummonerStat(name: defaultPuuid, queue: "420") { result in
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [String: Any],
