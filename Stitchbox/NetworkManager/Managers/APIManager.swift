@@ -820,5 +820,17 @@ extension APIManager {
       completion(result)
     }
   }
+  
+  func getRiotHistory(completion: @escaping APICompletion) {
+    riotManager.request(.history) { result in
+      completion(result)
+    }
+  }
+  
+  func getMatchDetect(match: String, completion: @escaping APICompletion) {
+    riotManager.request(.detect(match: match)) { result in
+      completion(result)
+    }
+  }
 }
 
