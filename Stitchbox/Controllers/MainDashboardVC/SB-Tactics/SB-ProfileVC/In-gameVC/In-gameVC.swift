@@ -63,8 +63,8 @@ class In_gameVC: UIViewController, UINavigationBarDelegate, UINavigationControll
 
         // Do any additional setup after loading the view.
         setupButtons()
-        loadGameInfo()
-       
+        //loadGameInfo()
+        self.calculateChampionWinRate(championName: "Ryze")
              
     }
     
@@ -165,7 +165,7 @@ extension In_gameVC {
 
                     return
                 }
-                
+              
                 let inGameModel = InGameModel(data: data)
                 
                 DispatchQueue.main.async {
@@ -203,8 +203,7 @@ extension In_gameVC {
     
     
     func getPlayerStats(queue: String, championName: String, completion: @escaping (CurrentChampionStatsModel?) -> Void) {
-        let defaultPuuid = "1122356"
-        APIManager().getSummonerStat(name: defaultPuuid, queue: "420") { result in
+        APIManager().getSummonerStat(region: "NA", name: "1122356", queue: "420") { result in
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [String: Any],
@@ -212,6 +211,9 @@ extension In_gameVC {
                     completion(nil)
                     return
                 }
+                
+                print(data)
+                
                 completion(championStats)
             case .failure(let error):
                 print(error)
