@@ -1393,6 +1393,8 @@ public enum RiotApi {
   case searchUserRiot(region: String, username: String)
   case userInGame
   case stats(region: String, name: String, queue: String)
+  case detect(match: String)
+  case history
 }
 extension RiotApi: EndPointType {
   var path: String {
@@ -1403,6 +1405,10 @@ extension RiotApi: EndPointType {
         return "/spectator"
       case .stats(let region, let name, let queue):
         return "/stats/\(region)/\(name)?queue=\(queue)"
+      case .history:
+        return "/history"
+      case .detect(let match):
+        return "/detect/\(match)"
     }
   }
   
@@ -1418,6 +1424,10 @@ extension RiotApi: EndPointType {
         return .get
       case .stats:
         return .get
+      case .history:
+        return .get
+      case .detect:
+        return .get
     }
   }
   
@@ -1428,6 +1438,10 @@ extension RiotApi: EndPointType {
       case .userInGame:
         return .request
       case .stats:
+        return .request
+      case .history:
+        return .request
+      case .detect:
         return .request
     }
   }
