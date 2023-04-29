@@ -1377,36 +1377,56 @@
                         <outlet property="gameTimeLbl" destination="NKt-8F-0FY" id="rg3-kA-dzH"/>
                         <outlet property="gameTypeLbl" destination="xx0-kt-NCM" id="H2t-gT-Zj0"/>
                         <outlet property="notCurrentlyInGameLbl" destination="XAF-8H-3lu" id="Eh1-vb-GuS"/>
+                        <outlet property="player1BlueGameLbl" destination="RlH-55-Q4n" id="nSB-AR-TWM"/>
                         <outlet property="player1BlueImage" destination="nOg-f7-jha" id="1M0-GS-jXE"/>
                         <outlet property="player1BlueNameLbl" destination="Hq2-kY-8c3" id="ygQ-VJ-eV5"/>
                         <outlet property="player1BlueView" destination="kVD-NR-OtA" id="2YT-xi-ma6"/>
+                        <outlet property="player1BlueWRLbl" destination="IBV-V1-mBb" id="QMS-80-Pez"/>
+                        <outlet property="player1RedGameLbl" destination="J0D-jO-dwN" id="ZSJ-MM-CAg"/>
                         <outlet property="player1RedImage" destination="foh-Ze-7F2" id="XmH-qN-oCR"/>
                         <outlet property="player1RedNameLbl" destination="8fU-Yh-RpR" id="xpD-gA-lIL"/>
                         <outlet property="player1RedView" destination="Lq6-eF-4UG" id="Ofi-Ec-54R"/>
+                        <outlet property="player1RedWRLbl" destination="ANa-Lf-Aso" id="r4v-Qz-Mve"/>
+                        <outlet property="player2BlueGameLbl" destination="CxD-PN-H4s" id="IBG-mg-bSD"/>
                         <outlet property="player2BlueImage" destination="cAH-3N-VSq" id="5qm-fD-2eM"/>
-                        <outlet property="player2BlueNameLbl" destination="XW5-bb-Ffr" id="R4h-z5-KSq"/>
+                        <outlet property="player2BlueNameLbl" destination="XW5-bb-Ffr" id="iEw-RD-SZl"/>
                         <outlet property="player2BlueView" destination="VYW-RH-kal" id="W5N-XE-f8f"/>
+                        <outlet property="player2BlueWRLbl" destination="8bH-Mz-rGj" id="Cc1-39-hHS"/>
+                        <outlet property="player2RedGameLbl" destination="oec-V0-UAX" id="kg6-8s-6O4"/>
                         <outlet property="player2RedImage" destination="7w9-c5-kRD" id="phn-E6-oKV"/>
                         <outlet property="player2RedNameLbl" destination="RkF-gW-Zz9" id="BfX-cd-Isl"/>
                         <outlet property="player2RedView" destination="DNF-Cl-S3F" id="hmo-lY-pDU"/>
+                        <outlet property="player2RedWRLbl" destination="DjS-Mw-GXM" id="EEY-r8-hbh"/>
+                        <outlet property="player3BlueGameLbl" destination="4ny-b3-sCa" id="6yX-Y1-7re"/>
                         <outlet property="player3BlueImage" destination="xaH-L2-Lv4" id="S0A-Ds-VtB"/>
                         <outlet property="player3BlueNameLbl" destination="2W9-fQ-LVz" id="hQQ-Uj-V5d"/>
                         <outlet property="player3BlueView" destination="psW-Vi-9OR" id="w7Z-mV-dfL"/>
+                        <outlet property="player3BlueWRLbl" destination="c5U-t3-GuX" id="gZr-iY-QTd"/>
+                        <outlet property="player3RedGameLbl" destination="psq-Dt-KTy" id="xPI-iN-gQL"/>
                         <outlet property="player3RedImage" destination="DjT-nf-WH2" id="Jh0-px-mVX"/>
                         <outlet property="player3RedNameLbl" destination="abY-5f-pmz" id="9ss-Wc-43N"/>
                         <outlet property="player3RedView" destination="f1r-PB-ZWN" id="RtV-ir-zQl"/>
+                        <outlet property="player3RedWRLbl" destination="npF-SF-2M8" id="DcH-jd-foy"/>
+                        <outlet property="player4BlueGameLbl" destination="YXn-IQ-b74" id="ELv-BN-biq"/>
                         <outlet property="player4BlueImage" destination="qTP-Kj-sDO" id="4Pe-99-p2b"/>
                         <outlet property="player4BlueNameLbl" destination="SRJ-52-YHS" id="ghG-8b-1t7"/>
                         <outlet property="player4BlueView" destination="gql-yn-IK1" id="2aj-Kc-Q9p"/>
+                        <outlet property="player4BlueWRLbl" destination="kmA-xc-aX8" id="gKG-Vd-gfe"/>
+                        <outlet property="player4RedGameLbl" destination="a2Z-Ta-Lfa" id="8zr-eA-eFF"/>
                         <outlet property="player4RedImage" destination="PIB-bh-j8g" id="mj1-HI-Y8v"/>
                         <outlet property="player4RedNameLbl" destination="Rdv-hr-wXo" id="IJe-Qp-58e"/>
                         <outlet property="player4RedView" destination="VZe-bE-eO7" id="lrQ-eZ-SLJ"/>
+                        <outlet property="player4RedWRLbl" destination="slf-4D-1vp" id="D6k-n6-hMX"/>
+                        <outlet property="player5BlueGameLbl" destination="5lY-VN-pwz" id="h5L-5C-2ys"/>
                         <outlet property="player5BlueImage" destination="cN3-XV-fSd" id="X4M-u7-MAh"/>
                         <outlet property="player5BlueNameLbl" destination="uBC-Bw-PYI" id="DDN-fe-osw"/>
                         <outlet property="player5BlueView" destination="ygg-hH-srC" id="MWi-iF-wHV"/>
+                        <outlet property="player5BlueWRLbl" destination="N0I-KJ-InC" id="dHF-7N-BEf"/>
+                        <outlet property="player5RedGameLbl" destination="ay6-kf-159" id="Sau-g9-1N6"/>
                         <outlet property="player5RedImage" destination="xEk-lF-UnU" id="BIX-er-Gs1"/>
                         <outlet property="player5RedNameLbl" destination="FAf-aT-Qo1" id="hUs-df-TXf"/>
                         <outlet property="player5RedView" destination="HDF-ys-eyb" id="r2M-qe-Bim"/>
+                        <outlet property="player5RedWRLbl" destination="nfO-VG-Lpl" id="8Nm-XJ-vk5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NWE-XO-iVP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
