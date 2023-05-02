@@ -15,7 +15,7 @@ struct ContentView: View {
     @FocusState var isTextFieldFocused: Bool
     @State private var scrollOffset: CGFloat = .zero
     @State private var contentSize: CGSize = .zero
-
+    
     var body: some View {
         chatListView
            
@@ -70,9 +70,9 @@ struct ContentView: View {
     
     private func isUserNearBottom() -> Bool {
         let scrollableContentHeight = contentSize.height - UIScreen.main.bounds.height
-        return scrollableContentHeight - abs(scrollOffset) < 100 // Change this value to adjust the sensitivity
+        let threshold: CGFloat = 5.0
+        return (scrollableContentHeight - abs(scrollOffset)) < threshold
     }
-
 
     func bottomView(image: String, proxy: ScrollViewProxy) -> some View {
         HStack(alignment: .top, spacing: 8) {
@@ -98,12 +98,13 @@ struct ContentView: View {
             TextField("Ask us anything!", text: $vm.inputMessage, axis: .vertical)
                 #if os(iOS) || os(macOS)
                 .textFieldStyle(.plain)
-                .scrollContentBackground(.hidden) // <- Hide it
                 .background(.clear) // To see this
                 .foregroundColor(.white)
+                .accentColor(.gray) // Set the color of the placeholder
                 #endif
                 .focused($isTextFieldFocused)
                 .disabled(vm.isInteractingWithChatGPT)
+
             
             if vm.isInteractingWithChatGPT {
                 DotLoadingView().frame(width: 40, height: 30)
@@ -116,21 +117,21 @@ struct ContentView: View {
                     }
                 } label: {
                     Image.init("send2")
-                  
                 }
                 #if os(macOS)
                 .buttonStyle(.borderless)
                 .keyboardShortcut(.defaultAction)
-                .foregroundColor(.white) // Set the color of the button icon to white
-                .background(Color.clear) // Set the background color of the button to black
+                .foregroundColor(.white)
+                .background(Color.clear)
                 #endif
                 .disabled(vm.inputMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
         }
         .padding(.horizontal, 16)
         .padding(.top, 12)
-        .background(Color.clear) // Set the background color of the entire bottom view to black
+        .background(Color.clear)
     }
+
 
     
     private func scrollToBottom(proxy: ScrollViewProxy) {

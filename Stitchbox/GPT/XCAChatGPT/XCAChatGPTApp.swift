@@ -15,11 +15,14 @@ struct ChatBotView: View {
             ContentView(vm: vm)
                 .toolbar {
                     ToolbarItem {
-                        Button("Clear") {
+                        Button(action: {
                             vm.clearMessages()
+                        }) {
+                            Text("Clear")
+                                .foregroundColor(Color(red: (254.0/255.0), green: (138.0/255.0), blue: (92.0/255.0)))
                         }
                         .disabled(vm.isInteractingWithChatGPT)
-                        .tint(Color(red: (254.0/255.0), green: (138.0/255.0), blue: (92.0/255.0)))
+                        .buttonStyle(PlainButtonStyle())
                     }
                     
                 }
@@ -27,6 +30,7 @@ struct ChatBotView: View {
         
     }
 }
+
 
 
 

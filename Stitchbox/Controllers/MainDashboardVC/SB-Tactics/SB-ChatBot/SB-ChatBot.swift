@@ -11,7 +11,8 @@ import SwiftUI
 class SB_ChatBot: UIViewController {
 
     let backButton: UIButton = UIButton(type: .custom)
-   
+ 
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,11 +41,7 @@ class SB_ChatBot: UIViewController {
                
         hostingController.didMove(toParent: self)
         
-        
     }
-
-
-
 
 }
 
@@ -100,5 +97,7 @@ extension SB_ChatBot {
                 navigationController.popViewController(animated: true)
             }
         }
+    
+    
     
 }

@@ -34,7 +34,10 @@ struct MessageRowView: View {
             let responseImage = "defaultuser"
             
             
-            messageRow(rowType: message.send, image: sendImage ?? "defaultuser", bgColor: Color.clear)
+            if let send = message.send {
+                messageRow(rowType: send, image: sendImage ?? "defaultuser", bgColor: Color.clear)
+            }
+
             
             if let response = message.response {
                 messageRow(rowType: response, image: responseImage, bgColor: Color.clear, responseError: message.responseError, isUser: false,showDotLoading: message.isInteractingWithChatGPT)

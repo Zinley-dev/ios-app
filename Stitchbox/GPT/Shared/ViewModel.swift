@@ -28,7 +28,18 @@ class ViewModel: ObservableObject {
             synthesizer = .init()
         }
         #endif
+
+        let welcomeMessage = MessageRow(
+            isInteractingWithChatGPT: false,
+            sendImage: nil,
+            send: nil,
+            responseImage: "openai",
+            response: .rawText("Welcome to SB-ChatBot! How can I help you today?")
+        )
+        self.messages.append(welcomeMessage)
+
     }
+
     
     @MainActor
     func sendTapped() async {
@@ -57,7 +68,7 @@ class ViewModel: ObservableObject {
         }
         self.messages.remove(at: index)
         #if os(iOS)
-        await sendAttributed(text: message.sendText)
+        await sendAttributed(text: message.sendText ?? "")
         #else
         await send(text: message.sendText)
         #endif
@@ -131,6 +142,7 @@ class ViewModel: ObservableObject {
         isInteractingWithChatGPT = false
         speakLastResponse()
     }
+
     #endif
     
     @MainActor

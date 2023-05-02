@@ -346,6 +346,7 @@ extension IntroTacticsVC {
                     
                     
                     if let SBCB = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ChatBot") as? SB_ChatBot {
+                        
                        
                         SBCB.hidesBottomBarWhenPushed = true
                         hideMiddleBtn(vc: self)
