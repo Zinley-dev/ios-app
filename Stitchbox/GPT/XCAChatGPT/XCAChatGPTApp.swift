@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ChatBotView: View {
     @StateObject var vm = ViewModel(api: ChatGPTAPI(apiKey: "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"))
-    @State var isShowingTokenizer = false
     
     var body: some View {
         NavigationView {
@@ -20,40 +19,12 @@ struct ChatBotView: View {
                             vm.clearMessages()
                         }
                         .disabled(vm.isInteractingWithChatGPT)
+                        .tint(Color(red: (254.0/255.0), green: (138.0/255.0), blue: (92.0/255.0)))
                     }
                     
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Tokenizer") {
-                            self.isShowingTokenizer = true
-                        }
-                        .disabled(vm.isInteractingWithChatGPT)
-                    }
                 }
         }
-        .fullScreenCover(isPresented: $isShowingTokenizer) {
-            NavigationTokenView(isPresented: $isShowingTokenizer)
-        }
-    }
-}
-
-
-
-
-struct NavigationTokenView: View {
-    @Binding var isPresented: Bool
-
-    var body: some View {
-        NavigationView {
-            TokenizerView()
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Close") {
-                            isPresented = false
-                        }
-                    }
-                }
-        }
-        .interactiveDismissDisabled()
+        
     }
 }
 

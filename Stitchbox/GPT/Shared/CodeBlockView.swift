@@ -22,7 +22,7 @@ struct CodeBlockView: View {
             header
                 .padding(.horizontal)
                 .padding(.vertical, 8)
-                .background(Color(red: 9/255, green: 49/255, blue: 69/255))
+                .background(Color.black)
             
             ScrollView(.horizontal, showsIndicators: true) {
                 Text(parserResult.attributedString)

@@ -45,15 +45,15 @@ struct MessageRowView: View {
     
     func messageRow(rowType: MessageRowType, image: String, bgColor: Color, responseError: String? = nil, isUser: Bool = true,showDotLoading: Bool = false) -> some View {
         #if os(watchOS)
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
             messageRowContent(rowType: rowType, image: image, responseError: responseError, showDotLoading: showDotLoading)
         }
         
-        .padding(16)
+        .padding(8)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(bgColor)
         #else
-        HStack(alignment: .top, spacing: 24) {
+        HStack(alignment: .top, spacing: 8) {
             messageRowContent(rowType: rowType, image: image, responseError: responseError, isUser: isUser,showDotLoading: showDotLoading)
         }
         #if os(tvOS)
@@ -66,26 +66,26 @@ struct MessageRowView: View {
         #endif
     }
     @ViewBuilder
-    func imageBuilder(image:String) -> some View {
+    func imageBuilder(image: String) -> some View {
         if image.hasPrefix("http"), let url = URL(string: image) {
             AsyncImage(url: url) { image in
                 image
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: imageSize.width, height: imageSize.height)
                     .cornerRadius(imageSize.width/2)
-                    
             } placeholder: {
                 ProgressView()
             }
-
         } else {
             Image(image)
                 .resizable()
+                .aspectRatio(contentMode: .fill)
                 .frame(width: imageSize.width, height: imageSize.height)
                 .cornerRadius(imageSize.width/2)
-            
         }
     }
+
     
     @ViewBuilder
     func messageRowContent(rowType: MessageRowType, image: String, responseError: String? = nil, isUser: Bool = true,showDotLoading: Bool = false) -> some View {
@@ -117,8 +117,9 @@ struct MessageRowView: View {
                 Button("Regenerate response") {
                     retryCallback(message)
                 }
-                .foregroundColor(.accentColor)
+                .foregroundColor(.white)
                 .padding(.top)
+            
             }
             
             if showDotLoading {
@@ -128,7 +129,7 @@ struct MessageRowView: View {
                     .padding()
                 #else
                 DotLoadingView()
-                    .frame(width: 60, height: 30)
+                    .frame(width: 40, height: 30)
                 #endif
                 
             }
@@ -151,7 +152,7 @@ struct MessageRowView: View {
                 if parsed.isCodeBlock {
                     #if os(iOS)
                     CodeBlockView(parserResult: parsed)
-                        .padding(.bottom, 24)
+                        .padding(.bottom, 36)
                     #else
                     Text(parsed.attributedString)
                         #if os(iOS) || os(macOS)
@@ -198,6 +199,7 @@ struct MessageRowView: View {
             Text(text)
                 .focusable()
                 .multilineTextAlignment(.leading)
+                .font(UIFont.systemFont(ofSize: 10))
                 
         }
     }
