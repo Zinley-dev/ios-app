@@ -9,6 +9,7 @@ import SwiftUI
 #if os(iOS)
 import Markdown
 #endif
+import SendBirdUIKit
 
 struct MessageRowView: View {
     
@@ -33,12 +34,13 @@ struct MessageRowView: View {
             let responseImage = "defaultuser"
             
             
-            messageRow(rowType: message.send, image: sendImage ?? "defaultuser", bgColor: Color(red: 52/255, green: 53/255, blue: 65/255, opacity: 0.5))
+            messageRow(rowType: message.send, image: sendImage ?? "defaultuser", bgColor: Color.clear)
             
             if let response = message.response {
-                messageRow(rowType: response, image: responseImage, bgColor: Color(red: 52/255, green: 53/255, blue: 65/255, opacity: 0.5), responseError: message.responseError, isUser: false,showDotLoading: message.isInteractingWithChatGPT)
+                messageRow(rowType: response, image: responseImage, bgColor: Color.clear, responseError: message.responseError, isUser: false,showDotLoading: message.isInteractingWithChatGPT)
             }
         }
+        .background(Color.clear) // set the background color to clear
     }
     
     func messageRow(rowType: MessageRowType, image: String, bgColor: Color, responseError: String? = nil, isUser: Bool = true,showDotLoading: Bool = false) -> some View {
@@ -131,11 +133,14 @@ struct MessageRowView: View {
                 
             }
         }
-        .foregroundColor(isUser ? .white : .black)
+        .foregroundColor(.white)
         .padding()
-        .background(isUser ? .blue: .gray.opacity(0.1))
+        .background(isUser ? Color(red: (53.0/255.0), green: (46.0/255.0), blue: (113.0/255.0)): Color(red: 51/255, green: 51/255, blue: 51/255))
         .cornerRadius(16)
         
+        
+        
+        //SBUTheme.componentTheme
         if !isUser {Spacer()}
         if isUser {imageBuilder(image: image)}
     }

@@ -44,10 +44,11 @@ struct ContentView: View {
             }
             .onChange(of: vm.messages.last?.responseText) { _ in  scrollToBottom(proxy: proxy)
             }
+            // Set the background color to a specific color
+            .background(Color(red: 58/255, green: 60/255, blue: 64/255, opacity: 1.0))
         }
-        .background(.background)
     }
-    
+
     func bottomView(image: String, proxy: ScrollViewProxy) -> some View {
         HStack(alignment: .top, spacing: 8) {
             if image.hasPrefix("http"), let url = URL(string: image) {
@@ -70,6 +71,8 @@ struct ContentView: View {
             TextField("Ask us anything!", text: $vm.inputMessage, axis: .vertical)
                 #if os(iOS) || os(macOS)
                 .textFieldStyle(.roundedBorder)
+                .background(Color.black) // Set the background color of the text field area to black
+                .foregroundColor(.white) // Set the text color of the text field to white
                 #endif
                 .focused($isTextFieldFocused)
                 .disabled(vm.isInteractingWithChatGPT)
@@ -91,14 +94,17 @@ struct ContentView: View {
                 #if os(macOS)
                 .buttonStyle(.borderless)
                 .keyboardShortcut(.defaultAction)
-                .foregroundColor(.accentColor)
+                .foregroundColor(.white) // Set the color of the button icon to white
+                .background(Color.black) // Set the background color of the button to black
                 #endif
                 .disabled(vm.inputMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
         }
         .padding(.horizontal, 16)
         .padding(.top, 12)
+        .background(Color.black) // Set the background color of the entire bottom view to black
     }
+
     
     private func scrollToBottom(proxy: ScrollViewProxy) {
         guard let id = vm.messages.last?.id else { return }
