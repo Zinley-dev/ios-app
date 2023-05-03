@@ -98,18 +98,18 @@ struct MessageRowView: View {
             switch rowType {
             case .attributed(let attributedOutput):
                 attributedView(results: attributedOutput.results)
-                    .font(.system(size: 14)) // Set font here
+                    .font(.system(size: 15)) // And here
 
                 
             case .rawText(let text):
                 if !text.isEmpty {
                     #if os(tvOS)
                     responseTextView(text: text)
-                        .font(.system(size: 14)) // And here
+                        .font(.system(size: 15)) // And here
                     #else
                     Text(text)
                         .multilineTextAlignment(.leading)
-                        .font(.system(size: 14)) // And here
+                        .font(.system(size: 15)) // And here
                         #if os(iOS) || os(macOS)
                         .textSelection(.enabled)
                         #endif
@@ -162,20 +162,20 @@ struct MessageRowView: View {
                     #if os(iOS)
                     CodeBlockView(parserResult: parsed)
                         .padding(.bottom, 36)
-                        .font(.system(size: 14)) // Set font here
+                        .font(.system(size: 15)) // And here
                         
                     #else
                     Text(parsed.attributedString)
                         #if os(iOS) || os(macOS)
                         .textSelection(.enabled)
-                        .font(.system(size: 14)) // Set font here
+                        .font(.system(size: 15)) // And here
                         #endif
                     #endif
                 } else {
                     Text(parsed.attributedString)
                         #if os(iOS) || os(macOS)
                         .textSelection(.enabled)
-                        .font(.system(size: 14)) // Set font here
+                        .font(.system(size: 15)) // And here
                         #endif
                 }
             }
@@ -212,7 +212,7 @@ struct MessageRowView: View {
             Text(text)
                 .focusable()
                 .multilineTextAlignment(.leading)
-                .font(.system(size: 14)) // Set font here
+                .font(.system(size: 15)) // And here
                 
         }
     }

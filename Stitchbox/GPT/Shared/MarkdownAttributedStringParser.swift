@@ -14,7 +14,7 @@ import Highlighter
 /// https://github.com/christianselig/Markdownosaur/blob/main/Sources/Markdownosaur/Markdownosaur.swift
 
 public struct MarkdownAttributedStringParser: MarkupVisitor {
-    let baseFontSize: CGFloat = UIFont.preferredFont(forTextStyle: .body).pointSize
+    let baseFontSize: CGFloat = 15.0
     let highlighter: Highlighter = {
         let highlighter = Highlighter()!
         highlighter.setTheme("stackoverflow-dark")

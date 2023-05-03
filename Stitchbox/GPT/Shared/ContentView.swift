@@ -76,7 +76,7 @@ struct ContentView: View {
     }
 
     func bottomView(image: String, proxy: ScrollViewProxy) -> some View {
-        HStack(alignment: .top, spacing: 8) {
+        HStack(alignment: .center, spacing: 8) {
             if image.hasPrefix("http"), let url = URL(string: image) {
                 AsyncImage(url: url) { image in
                     image
@@ -105,7 +105,7 @@ struct ContentView: View {
                 .background(.clear) // To see this
                 .foregroundColor(.white)
                 .accentColor(Color(red: 194.0 / 255.0, green: 169.0 / 255.0, blue: 250.0 / 255.0, opacity: 1.0)) // Set the color of the placeholder
-                .font(.system(size: 14)) // And here
+                .font(.system(size: 15)) // And here
             
                 #endif
                 .focused($isTextFieldFocused)
@@ -138,6 +138,7 @@ struct ContentView: View {
         .padding(.horizontal, 16)
         .padding(.top, 12)
         .background(Color.clear)
+       
     }
 
 
