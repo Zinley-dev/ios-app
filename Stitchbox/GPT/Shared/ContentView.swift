@@ -95,15 +95,21 @@ struct ContentView: View {
                     .cornerRadius(15)
             }
             
-            TextField("Ask us anything!", text: $vm.inputMessage, axis: .vertical)
+
+            
+            TextField("", text: $vm.inputMessage, prompt: Text("Ask us anything!").foregroundColor(.gray), axis: .vertical)
                 #if os(iOS) || os(macOS)
                 .textFieldStyle(.plain)
+                .preferredColorScheme(.dark)
                 .background(.clear) // To see this
                 .foregroundColor(.white)
-                .accentColor(.gray) // Set the color of the placeholder
+                //.accentColor(.gray) // Set the color of the placeholder
+            
                 #endif
                 .focused($isTextFieldFocused)
                 .disabled(vm.isInteractingWithChatGPT)
+            
+            
 
             
             if vm.isInteractingWithChatGPT {
@@ -161,5 +167,20 @@ struct ContentSizeKey: PreferenceKey {
 
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
         value = CGSize(width: max(value.width, nextValue().width), height: max(value.height, nextValue().height))
+    }
+}
+
+struct SuperTextField: View {
+
+    var placeholder: Text
+    @Binding var text: String
+    var editingChanged: (Bool)->() = { _ in }
+    var commit: ()->() = { }
+
+    var body: some View {
+        ZStack(alignment: .leading) {
+            if text.isEmpty { placeholder }
+            TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
+        }
     }
 }

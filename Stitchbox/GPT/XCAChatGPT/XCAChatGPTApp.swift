@@ -26,6 +26,8 @@ struct ChatBotView: View {
                     }
                     
                 }
+                .toolbarBackground(.clear)
+            
         }
         
     }

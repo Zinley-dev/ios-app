@@ -11,8 +11,7 @@ import SwiftUI
 class SB_ChatBot: UIViewController {
 
     let backButton: UIButton = UIButton(type: .custom)
- 
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
