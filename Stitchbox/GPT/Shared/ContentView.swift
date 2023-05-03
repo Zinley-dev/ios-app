@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVKit
+import SendBirdUIKit
 
 struct ContentView: View {
         
@@ -103,7 +104,8 @@ struct ContentView: View {
                 .preferredColorScheme(.dark)
                 .background(.clear) // To see this
                 .foregroundColor(.white)
-                //.accentColor(.gray) // Set the color of the placeholder
+                .accentColor(Color(red: 194.0 / 255.0, green: 169.0 / 255.0, blue: 250.0 / 255.0, opacity: 1.0)) // Set the color of the placeholder
+                .font(.system(size: 14)) // And here
             
                 #endif
                 .focused($isTextFieldFocused)

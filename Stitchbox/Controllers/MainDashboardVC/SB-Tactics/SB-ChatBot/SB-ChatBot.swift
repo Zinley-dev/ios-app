@@ -7,28 +7,30 @@
 
 import UIKit
 import SwiftUI
+import Combine
+
 
 class SB_ChatBot: UIViewController {
 
     let backButton: UIButton = UIButton(type: .custom)
-
+    let toolbarActions = ToolbarActions()
+    var subscriptions = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         setupButtons()
         
         // Create SwiftUI view
-        let chatBotView = ChatBotView()
-               
+        let chatBotView = ChatBotView(toolbarActions: toolbarActions)
+        
         // Create Hosting Controller
         let hostingController = UIHostingController(rootView: chatBotView)
-               
+        
         // Add as child view controller
         addChild(hostingController)
         view.addSubview(hostingController.view)
-               
+        
         // Configure constraints
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -37,9 +39,21 @@ class SB_ChatBot: UIViewController {
             hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-               
+        
         hostingController.didMove(toParent: self)
         
+        Publishers.CombineLatest(toolbarActions.$clearAction, toolbarActions.$isClearActionDisabled)
+                    .sink { [weak self] clearAction, isDisabled in
+                        let barButton = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(self?.clearTapped))
+                        barButton.isEnabled = !isDisabled
+                        barButton.tintColor = .white
+                        self?.navigationItem.rightBarButtonItem = barButton
+                    }
+                    .store(in: &subscriptions)
+    }
+    
+    @objc func clearTapped() {
+        toolbarActions.clearAction?()
     }
 
 }

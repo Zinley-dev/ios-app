@@ -98,14 +98,18 @@ struct MessageRowView: View {
             switch rowType {
             case .attributed(let attributedOutput):
                 attributedView(results: attributedOutput.results)
+                    .font(.system(size: 14)) // Set font here
+
                 
             case .rawText(let text):
                 if !text.isEmpty {
                     #if os(tvOS)
                     responseTextView(text: text)
+                        .font(.system(size: 14)) // And here
                     #else
                     Text(text)
                         .multilineTextAlignment(.leading)
+                        .font(.system(size: 14)) // And here
                         #if os(iOS) || os(macOS)
                         .textSelection(.enabled)
                         #endif
@@ -116,12 +120,14 @@ struct MessageRowView: View {
                 Text("Error: \(error)")
                     .foregroundColor(.red)
                     .multilineTextAlignment(.leading)
+                    .font(.system(size: 14)) // Set font here
                 
                 Button("Regenerate response") {
                     retryCallback(message)
                 }
                 .foregroundColor(.white)
                 .padding(.top)
+                .font(.system(size: 14)) // Set font here
             
             }
             
@@ -141,7 +147,7 @@ struct MessageRowView: View {
         .padding()
         .background(isUser ? Color(red: (53.0/255.0), green: (46.0/255.0), blue: (113.0/255.0)): Color(red: 51/255, green: 51/255, blue: 51/255))
         .cornerRadius(16)
-        
+        .font(.system(size: 14)) // Set font here
         
         
         //SBUTheme.componentTheme
@@ -156,16 +162,20 @@ struct MessageRowView: View {
                     #if os(iOS)
                     CodeBlockView(parserResult: parsed)
                         .padding(.bottom, 36)
+                        .font(.system(size: 14)) // Set font here
+                        
                     #else
                     Text(parsed.attributedString)
                         #if os(iOS) || os(macOS)
                         .textSelection(.enabled)
+                        .font(.system(size: 14)) // Set font here
                         #endif
                     #endif
                 } else {
                     Text(parsed.attributedString)
                         #if os(iOS) || os(macOS)
                         .textSelection(.enabled)
+                        .font(.system(size: 14)) // Set font here
                         #endif
                 }
             }
@@ -202,7 +212,7 @@ struct MessageRowView: View {
             Text(text)
                 .focusable()
                 .multilineTextAlignment(.leading)
-                .font(UIFont.systemFont(ofSize: 10))
+                .font(.system(size: 14)) // Set font here
                 
         }
     }

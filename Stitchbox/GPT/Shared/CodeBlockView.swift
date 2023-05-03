@@ -23,11 +23,13 @@ struct CodeBlockView: View {
                 .padding(.horizontal)
                 .padding(.vertical, 8)
                 .background(Color.black)
+                .font(.system(size: 14)) // And here
             
             ScrollView(.horizontal, showsIndicators: true) {
                 Text(parserResult.attributedString)
                     .padding(.horizontal, 16)
                     .textSelection(.enabled)
+                    .font(.system(size: 14)) // And here
             }
         }
         .background(HighlighterConstants.color)

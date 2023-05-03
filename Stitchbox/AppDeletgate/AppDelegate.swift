@@ -229,7 +229,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.messageCellTheme.userMessageRightTextColor = UIColor.white
         SBUTheme.messageCellTheme.userMessageLeftEditTextColor = UIColor.white
         SBUTheme.messageCellTheme.userMessageRightEditTextColor = UIColor.white
-        SBUTheme.messageInputTheme.backgroundColor = UIColor.black
+        SBUTheme.messageInputTheme.backgroundColor = UIColor.background
         SBUTheme.messageInputTheme.buttonTintColor = UIColor.white
         
         
@@ -270,6 +270,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         SBUTheme.componentTheme.emptyViewBackgroundColor = .background
         SBUTheme.componentTheme.backgroundColor = .background
+        
+        //SBUFontSet.body1 = UIFont.systemFont(ofSize: 20)
        
     }
 
