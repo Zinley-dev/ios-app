@@ -1526,7 +1526,62 @@ extension SupportedRegionApi: EndPointType {
 }
 
 
-
+public enum GptHistoryApi {
+  case createConversation(params: [String: Any])
+  case updateConversation(params: [String: Any])
+  case getConversation(gameId: String)
+  case clearConversation(gameId: String)
+}
+extension GptHistoryApi: EndPointType {
+  var path: String {
+    switch self {
+      case .createConversation:
+        return "/history"
+      case .updateConversation:
+        return "/history"
+      case .getConversation(let gameId):
+        return "/history/\(gameId)"
+      case .clearConversation(let gameId):
+        return "/history/\(gameId)"
+    }
+  }
+  
+  var module: String {
+    return "/gpt"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getConversation:
+        return .get
+      case .createConversation:
+        return .post
+      case .updateConversation:
+        return .patch
+      case .clearConversation:
+        return .delete
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getConversation:
+        return .request
+      case .createConversation(let params):
+        return .requestParameters(parameters: params)
+      case .updateConversation(let params):
+        return .requestParameters(parameters: params)
+      case .clearConversation:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+  
+}
 
 
 

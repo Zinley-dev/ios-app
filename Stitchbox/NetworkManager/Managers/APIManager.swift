@@ -45,8 +45,9 @@ struct APIManager {
     let reportManager = Manager<ReportApi>()
     let viewManager = Manager<ViewApi>()
     let riotManager = Manager<RiotApi>()
-  let supportedGameManager = Manager<SupportedGameApi>()
-  let supportedRegionManager = Manager<SupportedRegionApi>()
+    let supportedGameManager = Manager<SupportedGameApi>()
+    let supportedRegionManager = Manager<SupportedRegionApi>()
+    let gptHistoryManager = Manager<GptHistoryApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -834,3 +835,25 @@ extension APIManager {
   }
 }
 
+extension APIManager {
+  func getGptConversation(gameId: String, completion: @escaping APICompletion) {
+    gptHistoryManager.request(.getConversation(gameId: gameId)) { result in
+      completion(result)
+    }
+  }
+  func createGptConversation(params: [String: Any], completion: @escaping APICompletion) {
+    gptHistoryManager.request(.createConversation(params: params)) { result in
+      completion(result)
+    }
+  }
+  func updateGptConversation(params: [String: Any], completion: @escaping APICompletion) {
+    gptHistoryManager.request(.updateConversation(params: params)) { result in
+      completion(result)
+    }
+  }
+  func clearGptConversation(gameId: String, completion: @escaping APICompletion) {
+    gptHistoryManager.request(.clearConversation(gameId: gameId)) { result in
+      completion(result)
+    }
+  }
+}
