@@ -8,26 +8,41 @@
 import UIKit
 import SafariServices
 import AsyncDisplayKit
+import ZSWTappableLabel
+import ZSWTaggedString
 
-class IntroTacticsVC: UIViewController {
+class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
 
+    @IBOutlet weak var termOfUsedLbl: ZSWTappableLabel!
     @IBOutlet weak var contentView: UIView!
     var gameList = [TacticsGameModel]()
     var collectionNode: ASCollectionNode!
+    
+    static let URLAttributeName = NSAttributedString.Key(rawValue: "URL")
+    enum LinkType: String {
+      case Privacy = "Privacy"
+      case TermsOfUse = "TOU"
+         
+      var URL: Foundation.URL {
+          switch self {
+          case .Privacy:
+              return Foundation.URL(string: "https://stitchbox.gg/")!
+          case .TermsOfUse:
+              return Foundation.URL(string: "https://stitchbox.gg/")!
+             
+          }
+      }
+          
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
         navigationItem.title = "SB-Tactics"
         setupCollectionNode()
+        navigationControllerDelegate()
         
         self.getsupportGame { (newGames) in
             
@@ -36,12 +51,31 @@ class IntroTacticsVC: UIViewController {
         }
         
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        termOfUsedLbl.tapDelegate = self
+          
+          let options = ZSWTaggedStringOptions()
+          options["link"] = .dynamic({ tagName, tagAttributes, stringAttributes in
+              guard let typeString = tagAttributes["type"] as? String,
+                  let type = LinkType(rawValue: typeString) else {
+                      return [NSAttributedString.Key: AnyObject]()
+              }
+              
+              return [
+                  .tappableRegion: true,
+                  .tappableHighlightedBackgroundColor: UIColor.lightGray,
+                  .tappableHighlightedForegroundColor: UIColor.black,
+                  .foregroundColor: UIColor.white,
+                  .underlineStyle: NSUnderlineStyle.single.rawValue,
+                  StartViewController.URLAttributeName: type.URL
+              ]
+          })
         
-        showMiddleBtn(vc: self)
+     
+          
+        let string = NSLocalizedString("*We currently provide service for selected games. More games will be added soon. Tap to learn more about our <link type='TOU'>Terms of use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
+          
+        termOfUsedLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
+        
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -49,9 +83,46 @@ class IntroTacticsVC: UIViewController {
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
 
+        if let navigationController = self.navigationController {
+            navigationController.navigationBar.prefersLargeTitles = false
+            navigationController.navigationBar.standardAppearance = navigationBarAppearance
+            navigationController.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+            navigationController.navigationBar.isTranslucent = false
+        }
 
+        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        showMiddleBtn(vc: self)
+        
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        if let navigationController = self.navigationController {
+            navigationController.navigationBar.prefersLargeTitles = false
+            navigationController.navigationBar.standardAppearance = navigationBarAppearance
+            navigationController.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+            navigationController.navigationBar.isTranslucent = false
+        }
+       
+    }
+    
+    func tappableLabel(_ tappableLabel: ZSWTappableLabel, tappedAt idx: Int, withAttributes attributes: [NSAttributedString.Key : Any] = [:]) {
+        guard let URL = attributes[IntroTacticsVC.URLAttributeName] as? URL else {
+            return
+        }
+        
+        let SF = SFSafariViewController(url: URL)
+        SF.modalPresentationStyle = .fullScreen
+        self.present(SF, animated: true)
+    }
   
     func getsupportGame(block: @escaping ([[String: Any]]) -> Void) {
         
@@ -220,8 +291,9 @@ extension IntroTacticsVC: ASCollectionDataSource, ASCollectionDelegate {
 extension IntroTacticsVC {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let min = CGSize(width: self.view.layer.frame.width / 3, height: self.view.layer.frame.width / 3 * 1.5);
-        let max = CGSize(width: self.view.layer.frame.width / 3, height: self.view.layer.frame.width / 3 * 1.5);
+        let size = self.collectionNode.view.layer.frame.width / 3 - 10
+        let min = CGSize(width: size, height: size * 1.5);
+        let max = CGSize(width: size, height: size * 1.5);
         
         return ASSizeRangeMake(min, max);
     }
@@ -243,13 +315,44 @@ extension IntroTacticsVC {
             if let data = _AppCoreData.userDataSource.value {
                 
                 // check for if already linked or null then process search and sync
-                //RiotSyncVC
+
                 
-                if let RSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "RiotSyncVC") as? RiotSyncVC {
-                   
-                    RSVC.hidesBottomBarWhenPushed = true
-                    hideMiddleBtn(vc: self)
-                    self.navigationController?.pushViewController(RSVC, animated: true)
+                if game.name == "League of Legends" {
+                    
+                    if data.riotLOLAccount?.riotPuuid != "", data.riotLOLAccount?.riotAccountId != "" {
+                        
+                        
+                        if let SBPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ProfileVC") as? SB_ProfileVC {
+                           
+                            SBPVC.hidesBottomBarWhenPushed = true
+                            hideMiddleBtn(vc: self)
+                            self.navigationController?.pushViewController(SBPVC, animated: true)
+                        }
+                        
+                        
+                        
+                    } else {
+                        
+                        if let RSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "RiotSyncVC") as? RiotSyncVC {
+                           
+                            RSVC.hidesBottomBarWhenPushed = true
+                            hideMiddleBtn(vc: self)
+                            self.navigationController?.pushViewController(RSVC, animated: true)
+                        }
+                        
+                    }
+                    
+                } else {
+                    
+                    
+                    if let SBCB = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ChatBot") as? SB_ChatBot {
+                        
+                       
+                        SBCB.hidesBottomBarWhenPushed = true
+                        hideMiddleBtn(vc: self)
+                        self.navigationController?.pushViewController(SBCB, animated: true)
+                    }
+                    
                 }
                 
                 
@@ -278,5 +381,13 @@ extension IntroTacticsVC {
         
     }
     
+    
+}
+
+extension IntroTacticsVC: UINavigationBarDelegate, UINavigationControllerDelegate {
+    
+    func navigationControllerDelegate() {
+        self.navigationController?.delegate = self
+    }
     
 }

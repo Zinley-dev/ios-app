@@ -398,6 +398,7 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
                         
                     } else if mode == "Update" {
                         print("Updating new game")
+                        updateGame(link: text)
                     } else {
                         showErrorAlert("Oops", msg: "Unable to save now, please go back to the previous view and try again")
                     }
@@ -445,9 +446,9 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
             }
         }
         
-        
-        
+    
     }
+    
     
     func updateGame(link: String) {
         
@@ -462,6 +463,7 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
                 DispatchQueue.main {
                     SwiftLoader.hide()
                     showNote(text: "Game updated successfully")
+                    reloadAddedGame = true
                     NotificationCenter.default.post(name:  (NSNotification.Name(rawValue: "refreshGameList")), object: nil)
                     self.navigationController?.popViewController(animated: true)
                 }

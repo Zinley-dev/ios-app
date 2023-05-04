@@ -24,10 +24,11 @@ class SettingVC: UIViewController {
     @IBOutlet weak var pushNotificationBtn: UIButton!
     @IBOutlet weak var findFriendsBtn: UIButton!
     @IBOutlet weak var referralBtn: UIButton!
+    @IBOutlet weak var riotLOLBtn: UIButton!
     
     @IBOutlet weak var SoundSwitch: UISwitch!
     @IBOutlet weak var StreamingLinkSwitch: UISwitch!
-    @IBOutlet weak var PrivateAccountSwitch: UISwitch!
+    
     
     var isStreamLink = false
     var isSound = false
@@ -202,37 +203,16 @@ class SettingVC: UIViewController {
         
     }
     
-    @IBAction func PrivateSwitchPressed(_ sender: Any) {
+    @IBAction func riotAccountBtnPressed(_ sender: Any) {
         
-        var params = ["privateAccount": false]
-        
-        if isPrivate {
-            
-            params = ["privateAccount": false]
-            isPrivate = false
-            
-        } else {
-            
-            params = ["privateAccount": true]
-            isPrivate = true
+        if let RSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "RiotSyncVC") as? RiotSyncVC {
+           
+            self.navigationController?.pushViewController(RSVC, animated: true)
             
         }
 
-        
-        APIManager().updateSettings(params: params) {
-                        result in switch result {
-                        case .success(_):
-                            print("Setting API update success")
-                            reloadGlobalSettings()
-                            
-                        case.failure(let error):
-                            DispatchQueue.main.async {
-                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                        }
-                }
-            }
-        
     }
+    
     
 }
 
@@ -291,6 +271,7 @@ extension SettingVC {
         accountActivityBtn.setTitle("", for: .normal)
         securityBtn.setTitle("", for: .normal)
         pushNotificationBtn.setTitle("", for: .normal)
+        riotLOLBtn.setTitle("", for: .normal)
         
         findFriendsBtn.setTitle("", for: .normal)
         referralBtn.setTitle("", for: .normal)
@@ -328,14 +309,6 @@ extension SettingVC {
             } else {
                 self.StreamingLinkSwitch.setOn(false, animated: true)
                 isStreamLink = false
-            }
-            
-            if globalSetting.PrivateAccount == true {
-                self.PrivateAccountSwitch.setOn(true, animated: true)
-                isPrivate = true
-            } else {
-                self.PrivateAccountSwitch.setOn(false, animated: true)
-                isPrivate = false
             }
             
         }

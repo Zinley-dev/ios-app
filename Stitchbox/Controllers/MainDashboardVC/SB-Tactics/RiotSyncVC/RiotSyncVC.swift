@@ -11,14 +11,6 @@ import FLAnimatedImage
 
 class RiotSyncVC: UIViewController, UINavigationControllerDelegate, UISearchBarDelegate, UITextFieldDelegate {
     
-    struct SearchRecord {
-        let keyWord: String
-        let timeStamp: Double
-        let items: [RiotAccountModel]
-    }
-    
-    let EXPIRE_TIME = 20.0 //s
-    var searchHist = [SearchRecord]()
     var regionList = [RegionModel]()
     var searchRegion = ""
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
@@ -30,6 +22,7 @@ class RiotSyncVC: UIViewController, UINavigationControllerDelegate, UISearchBarD
     @IBOutlet weak var contentview: UIView!
     let backButton: UIButton = UIButton(type: .custom)
     var dayPicker = UIPickerView()
+    var regionName = "NA"
     
     
     @IBOutlet weak var regionTxtField: UITextField! {
@@ -240,7 +233,80 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
+        let account = searchList[indexPath.row]
+        self.view.endEditing(true)
+        self.searchController?.searchBar.endEditing(true)
+        syncRiotAccount(account: account)
+        
+        
+    }
 
+    
+    func syncRiotAccount(account: RiotAccountModel) {
+        
+        if let username = _AppCoreData.userDataSource.value?.userName, let name = account.name {
+            
+            let alert = UIAlertController(title: "Hey \(username)!", message: "Please confirm if \(name) is your account. We will sync this account with SB-Tactics by default. You can change this anytime in the settings.", preferredStyle: UIAlertController.Style.actionSheet)
+
+                            // add the actions (buttons)
+            alert.addAction(UIAlertAction(title: "Confirm to sync", style: UIAlertAction.Style.default, handler: { action in
+                                
+                self.finalSyncAccount(account: account)
+                                
+            }))
+
+            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+
+            self.present(alert, animated: true, completion: nil)
+            
+        }
+        
+       
+    }
+    
+    func finalSyncAccount(account: RiotAccountModel) {
+        
+        presentSwiftLoader()
+        
+        let data = ["riotUsername": account.name!, "riotAccountId": account.acct_id!, "riotId": String(account.id ?? 0), "riotPuuid": account.puuid!, "riotLevel": account.level!, "riotSummonerId": account.summoner_id!, "riotProfileImage": account.profile_image_url!, "tier": account.tier!, "division": String(account.division ?? 0), "tierImage": account.tier_image_url!, "region": regionName, "lp": account.lp ?? 0] as [String : Any]
+        
+    
+        APIManager().confirmRiot(params: data) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard apiResponse.body?["message"] as? String == "success" else {
+                        return
+                }
+                
+                
+                DispatchQueue.main {
+                    
+                    
+                    reloadGlobalUserInformation()
+                    
+                    if let SBPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ProfileVC") as? SB_ProfileVC {
+                       
+                        delay(1.5) {
+                            SwiftLoader.hide()
+                            self.navigationController?.pushViewController(SBPVC, animated: true)
+                            self.navigationController?.viewControllers.remove(at: 1)
+                        }
+   
+                    }
+                    
+                }
+                
+            case .failure(let error):
+                
+                DispatchQueue.main {
+                    print(error)
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                }
+              
+            }
+        }
         
     }
     
@@ -266,11 +332,6 @@ extension RiotSyncVC {
 
     func search(for searchText: String) {
         
-        //check local result first
-        if checkLocalRecords(searchText: searchText){
-            return
-        }
-        
         APIManager().searchUserRiot(region: searchRegion, username: searchText) { result in
             switch result {
             case .success(let apiResponse):
@@ -287,9 +348,6 @@ extension RiotSyncVC {
                         newSearchList.append(RiotAccountModel(riotAccountModel: item))
                     }
                     
-                    let newSearchRecord = SearchRecord(keyWord: searchText, timeStamp: Date().timeIntervalSince1970, items: newSearchList)
-                    self.searchHist.append(newSearchRecord)
-                    
                     self.searchList = newSearchList
                     DispatchQueue.main.async {
                         self.searchTableNode.reloadData()
@@ -304,31 +362,6 @@ extension RiotSyncVC {
             }
         }
         
-    }
-    
-    func checkLocalRecords(searchText: String) -> Bool {
-       
-        for (i, record) in searchHist.enumerated() {
-            if record.keyWord == searchText {
-                print("time: \(Date().timeIntervalSince1970 - record.timeStamp)")
-                if Date().timeIntervalSince1970 - record.timeStamp <= EXPIRE_TIME {
-                    let retrievedSearchList = record.items
-                    
-                    if self.searchList != retrievedSearchList {
-                        self.searchList = retrievedSearchList
-                        DispatchQueue.main.async {
-                            self.searchTableNode.reloadData(completion: nil)
-                        }
-                    }
-                    return true
-                } else {
-
-                    searchHist.remove(at: i)
-                }
-            }
-        }
-
-        return false
     }
     
  
@@ -441,12 +474,22 @@ extension RiotSyncVC: UIPickerViewDelegate, UIPickerViewDataSource {
                   
             regionTxtField.text = regionList[row].name
             searchRegion = regionList[row].shortName
-            
+            regionName = regionList[row].name
         }
     
         
     }
     
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 }
 

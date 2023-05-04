@@ -49,6 +49,7 @@ class EditBioVC: UIViewController {
                   
                 case .failure(let error):
                     DispatchQueue.main.async {
+                        SwiftLoader.hide()
                         self.showErrorAlert("Oops!", msg: error.localizedDescription)
                     }
                     

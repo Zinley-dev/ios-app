@@ -18,6 +18,18 @@ class AddVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(AddVC.switchvc), name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(AddVC.switchvcToIndex), name: (NSNotification.Name(rawValue: "switchvcToIndex")), object: nil)
     
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        if let navigationController = self.navigationController {
+                    navigationController.navigationBar.prefersLargeTitles = false
+                    navigationController.navigationBar.isTranslucent = false
+                }
+        
     }
 
 

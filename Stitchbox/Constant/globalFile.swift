@@ -1055,7 +1055,9 @@ func unmuteVideoIfNeed() {
                         
                         if cell.videoNode.isPlaying() {
                             
-                            cell.soundProcess()
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                            cell.animateUnmute()
                             
                         }
                         
@@ -1197,8 +1199,11 @@ func muteVideoIfNeed() {
                         
                         if cell.videoNode.isPlaying() {
                             
-                            cell.soundProcess()
+                            cell.videoNode.muted = true
+                            shouldMute = true
+                            cell.animateMute()
                             
+                         
                         }
                         
                     }

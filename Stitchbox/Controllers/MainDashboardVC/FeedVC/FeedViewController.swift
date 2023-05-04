@@ -95,6 +95,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
             }
         }
 
+        
+        if let navigationController = self.navigationController {
+                    navigationController.navigationBar.prefersLargeTitles = false
+                    navigationController.navigationBar.isTranslucent = false
+                }
     
     }
     
@@ -812,9 +817,6 @@ extension FeedViewController {
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
-        //flowLayout.minimumInteritemSpacing = 5.0
-        //flowLayout.minimumLineSpacing = 5.0
-        //flowLayout.estimatedItemSize = .zero
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
@@ -833,7 +835,6 @@ extension FeedViewController {
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
         self.applyStyle()
-        self.wireDelegates()
         
         // Reload the data on the collection node
         self.collectionNode.reloadData()
@@ -852,12 +853,6 @@ extension FeedViewController {
         
     }
     
-    func wireDelegates() {
-        
-        self.collectionNode.delegate = self
-        self.collectionNode.dataSource = self
-        
-    }
     
 }
 
@@ -985,12 +980,9 @@ extension FeedViewController {
 extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDelegate {
     
     func navigationControllerDelegate() {
-        self.navigationController?.navigationBar.delegate = self
+        self.navigationController?.delegate = self
     }
     
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
 }
 
 extension FeedViewController {

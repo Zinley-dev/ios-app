@@ -82,7 +82,7 @@ extension EKColor {
     }
 
     static var headerBackground: EKColor {
-        return EKColor(light: Color.BlueGray.c50.with(alpha: 0.95).light,
+        return EKColor(light: newColor.BlueGray.c50.with(alpha: 0.95).light,
                        dark: .darkHeaderBackground)
     }
     
@@ -161,7 +161,7 @@ extension EKColor {
     }
 }
 
-struct Color {
+struct newColor {
     struct BlueGray {
         static let c50 = EKColor(rgb: 0xeceff1)
         static let c100 = EKColor(rgb: 0xcfd8dc)

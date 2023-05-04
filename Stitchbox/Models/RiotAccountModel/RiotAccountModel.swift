@@ -11,7 +11,7 @@ import Foundation
 class RiotAccountModel {
   
     fileprivate var _acct_id: String!
-    fileprivate var _id: String!
+    fileprivate var _id: Int64!
     fileprivate var _internal_name: String!
     fileprivate var _summoner_id: String!
     fileprivate var _solo_tier_info: String!
@@ -118,10 +118,10 @@ class RiotAccountModel {
         }
     }
     
-    var id: String! {
+    var id: Int64! {
         get {
             if _id == nil {
-                _id = ""
+                _id = 0
             }
             
             return _id
@@ -172,7 +172,7 @@ class RiotAccountModel {
  
     init(riotAccountModel: Dictionary<String, Any>) {
         
-        if let id = riotAccountModel["id"] as? String {
+        if let id = riotAccountModel["id"] as? Int64 {
             self._id = id
         }
         
@@ -227,6 +227,10 @@ class RiotAccountModel {
                 self._border_image_url = border_image_url
             }
             
+            if let lp = solo_tier_info["lp"] as? Int {
+                self._lp = lp
+            }
+          
         }
     
     }

@@ -149,6 +149,14 @@ class ProfileViewController: UIViewController {
         delay(2) {
             self.hasLoaded = true
         }
+        
+        
+        if let navigationController = self.navigationController {
+                    navigationController.navigationBar.prefersLargeTitles = false
+                    navigationController.navigationBar.isTranslucent = false
+                }
+        
+        
        
     }
     
@@ -218,8 +226,8 @@ class ProfileViewController: UIViewController {
                 }
                 
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
-                    let url = URL(string: avatarUrl)
-                    cell.avatarImage.load(url: url!, str: avatarUrl)
+                                    let url = URL(string: avatarUrl)
+                                    cell.avatarImage.load(url: url!, str: avatarUrl)
                     selectAvatarImage.load(url: url!, str: avatarUrl)
                 } else {
                     cell.avatarImage.image = UIImage.init(named: "defaultuser")
@@ -1269,12 +1277,9 @@ extension ProfileViewController {
 extension ProfileViewController: UINavigationBarDelegate, UINavigationControllerDelegate {
     
     func wireDelegate() {
-        self.navigationController?.navigationBar.delegate = self
+        self.navigationController?.delegate = self
     }
     
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
 }
 
 extension ProfileViewController {

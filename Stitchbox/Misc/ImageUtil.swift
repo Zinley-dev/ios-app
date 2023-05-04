@@ -130,10 +130,7 @@ extension UIImageView {
                 
             }
         }
-        
-        
-
-        
+  
     }
 }
 

@@ -1,0 +1,43 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "GPTEncoder",
+        "repositoryURL": "https://github.com/alfianlosari/GPTEncoder",
+        "state": {
+          "branch": "main",
+          "revision": "a86968867ab4380e36b904a14c42215f71efe8b4",
+          "version": null
+        }
+      },
+      {
+        "package": "Highlighter",
+        "repositoryURL": "https://github.com/alfianlosari/HighlighterSwift",
+        "state": {
+          "branch": "main",
+          "revision": "c15eea4e5e8f18b0a2d2173830fcaa250f742bc0",
+          "version": null
+        }
+      },
+      {
+        "package": "cmark-gfm",
+        "repositoryURL": "https://github.com/apple/swift-cmark.git",
+        "state": {
+          "branch": "gfm",
+          "revision": "b6dedd15eb661c778d6a24d729cb9b3ab4b8af2b",
+          "version": null
+        }
+      },
+      {
+        "package": "swift-markdown",
+        "repositoryURL": "https://github.com/apple/swift-markdown",
+        "state": {
+          "branch": "main",
+          "revision": "40f7f858e01a6ca512d96088087ffa861861eee5",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
