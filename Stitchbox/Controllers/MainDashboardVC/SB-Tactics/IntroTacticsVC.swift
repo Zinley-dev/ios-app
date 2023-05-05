@@ -312,50 +312,14 @@ extension IntroTacticsVC {
         
         if game.status == true {
             
-            if let data = _AppCoreData.userDataSource.value {
+            if let SBCB = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ChatBot") as? SB_ChatBot {
                 
-                // check for if already linked or null then process search and sync
-
-                
-                if game.name == "League of Legends" {
-                    
-                    if data.riotLOLAccount?.riotPuuid != "", data.riotLOLAccount?.riotAccountId != "" {
-                        
-                        
-                        if let SBPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ProfileVC") as? SB_ProfileVC {
-                           
-                            SBPVC.hidesBottomBarWhenPushed = true
-                            hideMiddleBtn(vc: self)
-                            self.navigationController?.pushViewController(SBPVC, animated: true)
-                        }
-                        
-                        
-                        
-                    } else {
-                        
-                        if let RSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "RiotSyncVC") as? RiotSyncVC {
-                           
-                            RSVC.hidesBottomBarWhenPushed = true
-                            hideMiddleBtn(vc: self)
-                            self.navigationController?.pushViewController(RSVC, animated: true)
-                        }
-                        
-                    }
-                    
-                } else {
-                    
-                    
-                    if let SBCB = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ChatBot") as? SB_ChatBot {
-                        
-                       
-                        SBCB.hidesBottomBarWhenPushed = true
-                        hideMiddleBtn(vc: self)
-                        self.navigationController?.pushViewController(SBCB, animated: true)
-                    }
-                    
-                }
-                
-                
+                SBCB.name = game.name
+                SBCB.short_name = game.shortName
+                SBCB.gameId = game.id
+                SBCB.hidesBottomBarWhenPushed = true
+                hideMiddleBtn(vc: self)
+                self.navigationController?.pushViewController(SBCB, animated: true)
             }
             
             

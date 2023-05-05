@@ -19,6 +19,8 @@ var general_room: Room!
 var gereral_group_chanel_url: String!
 var startTime = Date()
 
+var global_gameId = ""
+var global_gameName = ""
 var global_presetingRate = 0.0
 var global_cornerRadius = 0.0
 var global_percentComplete = 0.0

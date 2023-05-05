@@ -16,51 +16,55 @@ struct ContentView: View {
     @FocusState var isTextFieldFocused: Bool
     @State private var scrollOffset: CGFloat = .zero
     @State private var contentSize: CGSize = .zero
+    @Binding var scrollToLastMessage: Bool
     
     var body: some View {
         chatListView
-           
     }
-    
     var chatListView: some View {
-            ScrollViewReader { proxy in
-                VStack(spacing: 0) {
-                    ScrollView {
-                        LazyVStack(spacing: 0) {
-                            ForEach(vm.messages) { message in
-                                MessageRowView(message: message) { message in
-                                    Task { @MainActor in
-                                        await vm.retry(message: message)
-                                    }
+        ScrollViewReader { proxy in
+            VStack(spacing: 0) {
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(vm.messages) { message in
+                            MessageRowView(message: message) { message in
+                                Task { @MainActor in
+                                    await vm.retry(message: message)
                                 }
                             }
                         }
-                        .background(GeometryReader {
-                            Color.clear.preference(key: ViewOffsetKey.self,
-                                                   value: -$0.frame(in: .named("scrollView")).origin.y)
-                        })
-                        .background(GeometryReader {
-                            Color.clear.preference(key: ContentSizeKey.self, value: $0.size)
-                        })
-                        .onTapGesture {
-                            isTextFieldFocused = false
-                        }
                     }
-                    .coordinateSpace(name: "scrollView")
-                    .onPreferenceChange(ViewOffsetKey.self) { scrollOffset in
-                        self.scrollOffset = scrollOffset
+                    .background(GeometryReader {
+                        Color.clear.preference(key: ViewOffsetKey.self,
+                                               value: -$0.frame(in: .named("scrollView")).origin.y)
+                    })
+                    .background(GeometryReader {
+                        Color.clear.preference(key: ContentSizeKey.self, value: $0.size)
+                    })
+                    .onTapGesture {
+                        isTextFieldFocused = false
                     }
-                    .onPreferenceChange(ContentSizeKey.self) { contentSize in
-                        self.contentSize = contentSize
-                    }
-                #if os(iOS) || os(macOS)
+                }
+                .coordinateSpace(name: "scrollView")
+                .onPreferenceChange(ViewOffsetKey.self) { scrollOffset in
+                    self.scrollOffset = scrollOffset
+                }
+                .onPreferenceChange(ContentSizeKey.self) { contentSize in
+                    self.contentSize = contentSize
+                }
+            #if os(iOS) || os(macOS)
                 Divider()
                 bottomView(image: _AppCoreData.userDataSource.value?.avatarURL ?? "defaultuser", proxy: proxy)
                 Spacer()
-                #endif
+            #endif
             }
             .onChange(of: vm.messages.last?.responseText) { _ in
                 if isUserNearBottom() {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onChange(of: scrollToLastMessage) { value in
+                if value {
                     scrollToBottom(proxy: proxy)
                 }
             }
@@ -68,6 +72,7 @@ struct ContentView: View {
             .background(Color(red: 58/255, green: 60/255, blue: 64/255, opacity: 1.0))
         }
     }
+
     
     private func isUserNearBottom() -> Bool {
         let scrollableContentHeight = contentSize.height - UIScreen.main.bounds.height
@@ -121,7 +126,16 @@ struct ContentView: View {
                     Task { @MainActor in
                         isTextFieldFocused = false
                         scrollToBottom(proxy: proxy)
-                        await vm.sendTapped()
+                        do {
+                            
+                            try await Task.sleep(nanoseconds: 550_000_000) // 550 million nanoseconds = 0.55 seconds
+                            await vm.sendTapped()
+                            
+                        } catch {
+                            
+                            await vm.sendTapped()
+                        }
+                        
                     }
                 } label: {
                     Image.init("send2")
@@ -141,21 +155,26 @@ struct ContentView: View {
        
     }
 
-
-    
     private func scrollToBottom(proxy: ScrollViewProxy) {
         guard let id = vm.messages.last?.id else { return }
-        proxy.scrollTo(id, anchor: .bottomTrailing)
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0)) {
+            proxy.scrollTo(id, anchor: .bottomTrailing)
+        }
     }
+
+
 }
 
 struct ContentView_Previews: PreviewProvider {
+    @State static private var dummyScrollToLastMessage = false
+    
     static var previews: some View {
         NavigationStack {
-            ContentView(vm: ViewModel(api: ChatGPTAPI(apiKey: "PROVIDE_API_KEY")))
+            ContentView(vm: ViewModel(api: ChatGPTAPI(apiKey: "PROVIDE_API_KEY")), scrollToLastMessage: $dummyScrollToLastMessage)
         }
     }
 }
+
 
 struct ViewOffsetKey: PreferenceKey {
     typealias Value = CGFloat

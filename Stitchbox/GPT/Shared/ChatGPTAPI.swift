@@ -68,8 +68,49 @@ class ChatGPTAPI: @unchecked Sendable {
     }
     
     private func appendToHistoryList(userText: String, responseText: String) {
+        
+        let conversation = ["conversationId": "null", "prompt": userText, "response": responseText, "gameCategory": global_gameId]
+        
+        if historyList.isEmpty {
+            
+            APIManager().createGptConversation(params: conversation) { result in
+                
+                switch result {
+                case .success(let apiResponse):
+                    
+                   print(apiResponse)
+
+
+                case .failure(let error):
+                    print(error)
+                }
+                
+                
+            }
+            
+        } else {
+            
+            APIManager().updateGptConversation(params: conversation) { result in
+                
+                switch result {
+                case .success(let apiResponse):
+                    
+                   print(apiResponse)
+
+
+                case .failure(let error):
+                    print(error)
+                }
+                
+                
+            }
+            
+        }
+        
         self.historyList.append(.init(role: "user", content: userText))
         self.historyList.append(.init(role: "assistant", content: responseText))
+        
+    
     }
     
     func addWelcomeMessage(userText: String, responseText: String) {
@@ -80,7 +121,12 @@ class ChatGPTAPI: @unchecked Sendable {
     
     func sendMessageStream(text: String) async throws -> AsyncThrowingStream<String, Error> {
         var urlRequest = self.urlRequest
-        urlRequest.httpBody = try jsonBody(text: text)
+    
+        if global_gameName != "SB Chatbot" {
+            urlRequest.httpBody = try jsonBody(text: "Focus on \(global_gameName) game topic" + text)
+        } else {
+            urlRequest.httpBody = try jsonBody(text: text)
+        }
         
         let (result, response) = try await urlSession.bytes(for: urlRequest)
         
@@ -154,7 +200,28 @@ class ChatGPTAPI: @unchecked Sendable {
     
     func deleteHistoryList() {
         self.historyList.removeAll()
+        
+        APIManager().clearGptConversation(gameId: global_gameId) { result in
+            
+            switch result {
+            case .success(let apiResponse):
+                
+               print(apiResponse)
+
+
+            case .failure(let error):
+                print(error)
+            }
+            
+            
+        }
+        
     }
+    
+    func setHistoryList(messages: [Message]) {
+        self.historyList = messages
+    }
+    
 }
 
 extension String: CustomNSError {
@@ -165,5 +232,3 @@ extension String: CustomNSError {
         ]
     }
 }
-
-

@@ -14,12 +14,17 @@ class SB_ChatBot: UIViewController {
 
     let backButton: UIButton = UIButton(type: .custom)
     let toolbarActions = ToolbarActions()
+    var name = ""
+    var short_name = ""
+    var gameId = ""
     var subscriptions = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupButtons()
+        global_gameId = gameId
+        global_gameName = name
         
         // Create SwiftUI view
         let chatBotView = ChatBotView(toolbarActions: toolbarActions)
@@ -86,7 +91,7 @@ extension SB_ChatBot {
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-        navigationItem.title = "SB ChatBot"
+        navigationItem.title = name
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
 
