@@ -123,7 +123,7 @@ class ChatGPTAPI: @unchecked Sendable {
         var urlRequest = self.urlRequest
     
         if global_gameName != "SB Chatbot" {
-            urlRequest.httpBody = try jsonBody(text: "Focus on \(global_gameName) game topic" + text)
+            urlRequest.httpBody = try jsonBody(text: "Focus on \(global_gameName) game." + text)
         } else {
             urlRequest.httpBody = try jsonBody(text: text)
         }
@@ -161,6 +161,13 @@ class ChatGPTAPI: @unchecked Sendable {
                             continuation.yield(text)
                         }
                     }
+                    
+                    if global_gameName != "SB Chatbot" {
+                        self.appendToHistoryList(userText: "Focus on \(global_gameName) game." + text, responseText: responseText)
+                    } else {
+                        self.appendToHistoryList(userText: text, responseText: responseText)
+                    }
+                    
                     self.appendToHistoryList(userText: text, responseText: responseText)
                     continuation.finish()
                 } catch {

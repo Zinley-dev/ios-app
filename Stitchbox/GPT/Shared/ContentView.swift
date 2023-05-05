@@ -76,7 +76,7 @@ struct ContentView: View {
     
     private func isUserNearBottom() -> Bool {
         let scrollableContentHeight = contentSize.height - UIScreen.main.bounds.height
-        let threshold: CGFloat = 35.0
+        let threshold: CGFloat = 45.0
         return (scrollableContentHeight - abs(scrollOffset)) < threshold
     }
 

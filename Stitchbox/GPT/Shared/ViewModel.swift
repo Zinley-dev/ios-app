@@ -234,7 +234,7 @@ class ViewModel: ObservableObject {
                         let userMessage = MessageRow(
                             isInteractingWithChatGPT: false,
                             sendImage: "profile",
-                            send: .rawText(prompt),
+                            send: .rawText(removeFocusSentence(prompt)),
                             responseImage: "openai",
                             response: nil
                         )
@@ -320,6 +320,19 @@ class ViewModel: ObservableObject {
             }
         }
     }
+
+    func removeFocusSentence(_ input: String) -> String {
+        let components = input.components(separatedBy: ".")
+        if let firstSentence = components.first?.trimmingCharacters(in: .whitespacesAndNewlines), firstSentence.lowercased().hasPrefix("focus on ") {
+            let startIndex = firstSentence.index(firstSentence.startIndex, offsetBy: "focus on ".count)
+            let topic = String(firstSentence[startIndex...])
+            let remainingText = input.replacingOccurrences(of: firstSentence + ".", with: "")
+            return remainingText.trimmingCharacters(in: .whitespacesAndNewlines)
+        } else {
+            return input.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+    }
+
 
     
 }
