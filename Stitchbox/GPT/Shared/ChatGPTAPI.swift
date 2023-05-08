@@ -113,9 +113,9 @@ class ChatGPTAPI: @unchecked Sendable {
         var urlRequest = self.urlRequest
     
         if global_gameName != "SB Chatbot" {
-            urlRequest.httpBody = try jsonBody(text: "Respond rule: Focus on \(global_gameName) game, keep it focused into \(global_gameName) strategy, follows a logical order, keep it short but still meaningful, focus on play guide if need, and assume you are writing to everyone from age 10 to 25 to understand easily" + text)
+            urlRequest.httpBody = try jsonBody(text: "Focus on \(global_gameName) game, Prioritize accurate and relevant information, Ensure logical order and layout, Keep responses short, concise, and clear, Understand game context and tailor responses accordingly" + text)
         } else {
-            urlRequest.httpBody = try jsonBody(text: "Respond rule: Keep it focused, follows a logical order, and assume you are writing from age 10 to 25 to everyone to understand easily" + text)
+            urlRequest.httpBody = try jsonBody(text: "Ensure logical order and layout, Prioritize accurate and relevant information, Keep responses short, concise, and clear." + text)
         }
         
         let (result, response) = try await urlSession.bytes(for: urlRequest)
@@ -150,12 +150,6 @@ class ChatGPTAPI: @unchecked Sendable {
                             responseText += text
                             continuation.yield(text)
                         }
-                    }
-                    
-                    if global_gameName != "SB Chatbot" {
-                        self.appendToHistoryList(userText: "Focus on \(global_gameName) game." + text, responseText: responseText)
-                    } else {
-                        self.appendToHistoryList(userText: text, responseText: responseText)
                     }
                     
                     self.appendToHistoryList(userText: text, responseText: responseText)

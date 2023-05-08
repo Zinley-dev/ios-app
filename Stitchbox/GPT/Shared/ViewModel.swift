@@ -13,6 +13,7 @@ class ViewModel: ObservableObject {
     
     @Published var isInteractingWithChatGPT = false
     @Published var messages: [MessageRow] = []
+    @Published var history: [Message] = []
     @Published var inputMessage: String = ""
     
     #if !os(watchOS)
@@ -227,98 +228,70 @@ class ViewModel: ObservableObject {
                     let jsonData = try? JSONSerialization.data(withJSONObject: data, options: []),
                     let conversationHistory = try? JSONDecoder().decode(ConversationData.self, from: jsonData) {
 
-                    var newMessages: [MessageRow] = []
-                    var newHistory: [Message] = []
-                        
                     for (prompt, response) in zip(conversationHistory.prompts, conversationHistory.responses) {
-                        let userMessage = MessageRow(
-                            isInteractingWithChatGPT: false,
-                            sendImage: "profile",
-                            send: .rawText(removeFocusSentence(prompt)),
-                            responseImage: "openai",
-                            response: nil
-                        )
-                        let assistantMessage = MessageRow(
-                            isInteractingWithChatGPT: false,
-                            sendImage: nil,
-                            send: nil,
-                            responseImage: "openai",
-                            response: .rawText(response)
-                        )
-                        
-                        let userHistory = Message(role: "user", content: prompt)
-                        let assistantHistory = Message(role: "assistant", content: response)
+                        Task {
+                            let userAttributedText = await ResponseParsingTask().parse(text: self.removeFocusSentence(prompt))
+                            let assistantAttributedText = await ResponseParsingTask().parse(text: response)
 
-                        newMessages.append(userMessage)
-                        newMessages.append(assistantMessage)
-                        
-                        newHistory.append(userHistory)
-                        newHistory.append(assistantHistory)
-                   
-                    }
+                            let userMessage = MessageRow(
+                                isInteractingWithChatGPT: false,
+                                sendImage: "profile",
+                                send: .attributed(userAttributedText),
+                                responseImage: "openai",
+                                response: nil
+                            )
+                            let assistantMessage = MessageRow(
+                                isInteractingWithChatGPT: false,
+                                sendImage: nil,
+                                send: nil,
+                                responseImage: "openai",
+                                response: .attributed(assistantAttributedText)
+                            )
 
-                    // Update the ViewModel's messages property with the history list
-                    DispatchQueue.main.async {
-                        self.messages = newMessages
-                        self.setConversationHistory(messages: newHistory)
-                        completion()
-                    }
-                        
-                    } else {
-                        DispatchQueue.main.async {
-                            if global_gameName == "SB Chatbot" {
-                                let welcomeMessage = MessageRow(
-                                    isInteractingWithChatGPT: false,
-                                    sendImage: nil,
-                                    send: nil,
-                                    responseImage: "openai",
-                                    response: .rawText("Welcome to SB-ChatBot! How can I help you today?")
-                                )
-                                self.messages.append(welcomeMessage)
-                            } else {
-                                let welcomeMessage = MessageRow(
-                                    isInteractingWithChatGPT: false,
-                                    sendImage: nil,
-                                    send: nil,
-                                    responseImage: "openai",
-                                    response: .rawText("Welcome to SB-ChatBot for \(global_gameName)! How can I help you today?")
-                                )
-                                self.messages.append(welcomeMessage)
-                                
+                            let userHistory = Message(role: "user", content: prompt)
+                            let assistantHistory = Message(role: "assistant", content: response)
+
+                            DispatchQueue.main.async {
+                                self.messages.append(userMessage)
+                                self.messages.append(assistantMessage)
+                                self.history.append(userHistory)
+                                self.history.append(assistantHistory)
+                                self.setConversationHistory(messages: self.history)
+                                completion()
                             }
-                            completion()
                         }
                     }
+                } else {
+                    DispatchQueue.main.async {
+                        self.displayWelcomeMessage(completion: completion)
+                    }
+                }
 
             case .failure(let error):
                 print(error)
-                
+
                 DispatchQueue.main.async {
-                    if global_gameName == "SB Chatbot" {
-                        let welcomeMessage = MessageRow(
-                            isInteractingWithChatGPT: false,
-                            sendImage: nil,
-                            send: nil,
-                            responseImage: "openai",
-                            response: .rawText("Welcome to SB-ChatBot! How can I help you today?")
-                        )
-                        self.messages.append(welcomeMessage)
-                    } else {
-                        let welcomeMessage = MessageRow(
-                            isInteractingWithChatGPT: false,
-                            sendImage: nil,
-                            send: nil,
-                            responseImage: "openai",
-                            response: .rawText("Welcome to SB-ChatBot for \(global_gameName)! How can I help you today?")
-                        )
-                        self.messages.append(welcomeMessage)
-                        
-                    }
-                    completion()
+                    self.displayWelcomeMessage(completion: completion)
                 }
-                
+
             }
         }
+    }
+
+
+    
+    func displayWelcomeMessage(completion: @escaping () -> Void)  {
+        let welcomeText = global_gameName == "SB Chatbot" ? "Welcome to SB-ChatBot! How can I help you today?" : "Welcome to SB-ChatBot for \(global_gameName)! How can I help you today?"
+
+        let welcomeMessage = MessageRow(
+            isInteractingWithChatGPT: false,
+            sendImage: nil,
+            send: nil,
+            responseImage: "openai",
+            response: .rawText(welcomeText)
+        )
+        self.messages.append(welcomeMessage)
+        completion()
     }
 
     func removeFocusSentence(_ input: String) -> String {

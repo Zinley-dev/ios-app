@@ -35,15 +35,21 @@ class ChatGPTTokenManager {
         
         let userMessage = Message(role: "user", content: userText)
         let responseMessage = Message(role: "assistant", content: responseText)
-        
+                
         historyList.append(userMessage)
         historyList.append(responseMessage)
-        
+                
+        // Remove messages until the token count is under the maximum limit
         while countTokens(messages: historyList) > maxTokenCount {
-            if historyList.first?.role == "user" {
-                historyList.removeFirst() // Remove user message
+            if let firstMessage = historyList.first {
+                // Remove only the first user message and its corresponding assistant message
+                if firstMessage.role == "user" {
+                    historyList.removeFirst(2)
+                } else {
+                    // If the first message is an assistant message, remove it
+                    historyList.removeFirst()
+                }
             }
-            historyList.removeFirst() // Remove assistant message
         }
     }
     
@@ -61,11 +67,16 @@ class ChatGPTTokenManager {
         
         historyList = messages
         while countTokens(messages: historyList) > maxTokenCount {
-            if historyList.first?.role == "user" {
-                historyList.removeFirst() // Remove user message
-            }
-            historyList.removeFirst() // Remove assistant message
-        }
+                    if let firstMessage = historyList.first {
+                        // Remove only the first user message and its corresponding assistant message
+                        if firstMessage.role == "user" {
+                            historyList.removeFirst(2)
+                        } else {
+                            // If the first message is an assistant message, remove it
+                            historyList.removeFirst()
+                        }
+                    }
+                }
     }
 }
 
