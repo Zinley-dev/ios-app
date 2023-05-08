@@ -42,4 +42,20 @@ struct ChatBotView: View {
                 toolbarActions.isClearActionDisabled = newValue
             }
     }
+    
+    //1024x
+}
+
+struct ImageButton: View {
+    let imageName: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Image(imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
+        }
+    }
 }

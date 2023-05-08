@@ -19,6 +19,7 @@ var general_room: Room!
 var gereral_group_chanel_url: String!
 var startTime = Date()
 
+var global_gpt = "gpt-3.5-turbo"
 var global_gameId = ""
 var global_gameName = ""
 var global_presetingRate = 0.0

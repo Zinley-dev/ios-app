@@ -41,6 +41,7 @@ class AddGameDetailVC: UIViewController, UITextFieldDelegate {
     var mode = ""
     var index = 0
     var selectedGame: Game!
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()

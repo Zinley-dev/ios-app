@@ -6,15 +6,15 @@
 //
 
 import Foundation
+import GPTEncoder
 
 class ChatGPTAPI: @unchecked Sendable {
     
     private let systemMessage: Message
     private let temperature: Double
-    private let model: String
-    
+    private let tokenManager: ChatGPTTokenManager
     private let apiKey: String
-    private var historyList = [Message]()
+    //private var historyList = [Message]()
     private let urlSession = URLSession.shared
     private var urlRequest: URLRequest {
         let url = URL(string: "https://api.openai.com/v1/chat/completions")!
@@ -44,25 +44,21 @@ class ChatGPTAPI: @unchecked Sendable {
     }
     
 
-    init(apiKey: String, model: String = "gpt-3.5-turbo", systemPrompt: String = "You are a helpful assistant", temperature: Double = 0.5) {
+    init(apiKey: String, systemPrompt: String = "You are a helpful assistant", temperature: Double = 0.5) {
         self.apiKey = apiKey
-        self.model = model
         self.systemMessage = .init(role: "system", content: systemPrompt)
         self.temperature = temperature
+        self.tokenManager = ChatGPTTokenManager(tokenizer: GPTEncoder())
     }
     
     private func generateMessages(from text: String) -> [Message] {
-        var messages = [systemMessage] + historyList + [Message(role: "user", content: text)]
-        
-        if messages.contentCount > (4000 * 4) {
-            _ = historyList.removeFirst()
-            messages = generateMessages(from: text)
-        }
+        let messages = [systemMessage] + tokenManager.historyList + [Message(role: "user", content: text)]
         return messages
     }
+
     
     private func jsonBody(text: String, stream: Bool = true) throws -> Data {
-        let request = Request(model: model, temperature: temperature,
+        let request = Request(model: global_gpt, temperature: temperature,
                               messages: generateMessages(from: text), stream: stream)
         return try JSONEncoder().encode(request)
     }
@@ -71,7 +67,7 @@ class ChatGPTAPI: @unchecked Sendable {
         
         let conversation = ["conversationId": "null", "prompt": userText, "response": responseText, "gameCategory": global_gameId]
         
-        if historyList.isEmpty {
+        if tokenManager.historyList.isEmpty {
             
             APIManager().createGptConversation(params: conversation) { result in
                 
@@ -107,18 +103,12 @@ class ChatGPTAPI: @unchecked Sendable {
             
         }
         
-        self.historyList.append(.init(role: "user", content: userText))
-        self.historyList.append(.init(role: "assistant", content: responseText))
+        tokenManager.appendMessageToHistory(userText: userText, responseText: responseText)
         
     
     }
     
-    func addWelcomeMessage(userText: String, responseText: String) {
-        self.historyList.append(.init(role: "user", content: userText))
-        self.historyList.append(.init(role: "assistant", content: responseText))
-    }
 
-    
     func sendMessageStream(text: String) async throws -> AsyncThrowingStream<String, Error> {
         var urlRequest = self.urlRequest
     
@@ -206,7 +196,7 @@ class ChatGPTAPI: @unchecked Sendable {
     }
     
     func deleteHistoryList() {
-        self.historyList.removeAll()
+        tokenManager.clearHistory()
         
         APIManager().clearGptConversation(gameId: global_gameId) { result in
             
@@ -226,7 +216,7 @@ class ChatGPTAPI: @unchecked Sendable {
     }
     
     func setHistoryList(messages: [Message]) {
-        self.historyList = messages
+        tokenManager.setHistory(messages: messages)
     }
     
 }
