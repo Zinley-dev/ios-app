@@ -40,6 +40,8 @@ class UserProfileVC: UIViewController {
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
+    var get_username = ""
+    var get_bio = ""
     
     var ChallengeView = ChallengeCard()
     var pullControl = UIRefreshControl()
@@ -169,6 +171,7 @@ class UserProfileVC: UIViewController {
                     if let username = data.userName, username != "" {
                         cell.usernameLbl.text = username
                         navigationItem.title = username
+                        get_username = username
                     }
                     
                     if data.avatarURL != "" {
@@ -203,6 +206,12 @@ class UserProfileVC: UIViewController {
                     
                     if data.about != "" {
                         cell.descriptionLbl.text = data.about
+                        get_bio = data.about
+                        
+                        // add target using gesture recognizer for image
+                        let descriptionTap = UITapGestureRecognizer(target: self, action: #selector(UserProfileVC.descTapped))
+                        cell.descriptionLbl.isUserInteractionEnabled = true
+                        cell.descriptionLbl.addGestureRecognizer(descriptionTap)
                     }
                     
 
@@ -873,6 +882,21 @@ extension UserProfileVC {
 // selector for challengeCard
 extension UserProfileVC {
 
+    
+    @objc func descTapped(_ sender: UIButton) {
+        
+        if let IDVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "InfoDetailVC") as? InfoDetailVC {
+           
+            IDVC.bio = get_bio
+            IDVC.userame = get_username
+            
+            hideMiddleBtn(vc: self)
+            IDVC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(IDVC, animated: true)
+              
+        }
+        
+    }
     
     @objc func game1Tapped(_ sender: UIButton) {
         // make sure to check if any game is added unless peform adding game for +

@@ -12,12 +12,13 @@ class ChatGPTTokenManager {
     
     private let tokenizer: GPTEncoder
     private(set) var historyList: [Message]
-    private let maxTokenCount: Int
+    private var maxTokenCount: Int = 4096
     
-    init(tokenizer: GPTEncoder, maxTokenCount: Int = 4096) {
+    init(tokenizer: GPTEncoder) {
+ 
         self.tokenizer = tokenizer
         self.historyList = []
-        self.maxTokenCount = maxTokenCount
+         
     }
     
     private func countTokens(messages: [Message]) -> Int {
@@ -25,6 +26,13 @@ class ChatGPTTokenManager {
     }
     
     func appendMessageToHistory(userText: String, responseText: String) {
+        
+        if global_gpt == "gpt-4" {
+            self.maxTokenCount = 8192
+        } else {
+            self.maxTokenCount = 4096
+        }
+        
         let userMessage = Message(role: "user", content: userText)
         let responseMessage = Message(role: "assistant", content: responseText)
         
@@ -44,6 +52,13 @@ class ChatGPTTokenManager {
     }
     
     func setHistory(messages: [Message]) {
+        
+        if global_gpt == "gpt-4" {
+            self.maxTokenCount = 8192
+        } else {
+            self.maxTokenCount = 4096
+        }
+        
         historyList = messages
         while countTokens(messages: historyList) > maxTokenCount {
             if historyList.first?.role == "user" {

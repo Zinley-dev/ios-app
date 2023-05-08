@@ -249,6 +249,12 @@ class ProfileViewController: UIViewController {
                 
                 if let about = _AppCoreData.userDataSource.value?.about {
                     cell.descriptionLbl.text = about
+                    
+                    // add target using gesture recognizer for image
+                    let descriptionTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.descTapped))
+                    cell.descriptionLbl.isUserInteractionEnabled = true
+                    cell.descriptionLbl.addGestureRecognizer(descriptionTap)
+                    
                 }
                 
 
@@ -642,6 +648,7 @@ extension ProfileViewController {
     @objc func fistBumpedlistTapped(_ sender: UIButton) {
      
         if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
+            
             MFBVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(MFBVC, animated: true)
@@ -653,6 +660,7 @@ extension ProfileViewController {
     @objc func followersTapped(_ sender: UIButton) {
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            
             MFVC.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = true
             MFVC.followerCount = followerCount
@@ -665,10 +673,26 @@ extension ProfileViewController {
         
     }
     
+    @objc func descTapped(_ sender: UIButton) {
+        
+        if let IDVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "InfoDetailVC") as? InfoDetailVC {
+           
+            IDVC.bio = _AppCoreData.userDataSource.value?.about ?? ""
+            IDVC.userame = _AppCoreData.userDataSource.value?.userName ?? ""
+            
+            hideMiddleBtn(vc: self)
+            IDVC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(IDVC, animated: true)
+              
+        }
+        
+    }
+    
     
     @objc func followingTapped(_ sender: UIButton) {
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+            
             MFVC.hidesBottomBarWhenPushed = true
             MFVC.showFollowerFirst = false
             MFVC.followerCount = followerCount
@@ -685,6 +709,7 @@ extension ProfileViewController {
     @objc func editProfileTapped(_ sender: UIButton) {
         
         if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
+            
             EPVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(EPVC, animated: true)

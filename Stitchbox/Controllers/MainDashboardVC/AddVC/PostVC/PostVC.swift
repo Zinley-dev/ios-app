@@ -63,7 +63,6 @@ class PostVC: UIViewController {
         container.editControllerDelegate = self
         global_fullLink = ""
         global_host = ""
-        wireDelegate()
         setupButtons()
         setupDefaultView()
         setupScrollView()
@@ -965,20 +964,6 @@ extension PostVC {
     }
     
 }
-
-//setting up navigationCollection Bar
-extension PostVC: UINavigationBarDelegate, UINavigationControllerDelegate {
-    
-    func wireDelegate() {
-        self.navigationController?.navigationBar.delegate = self
-    }
-    
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
-    
-}
-
 
 extension PostVC: EditControllerDelegate {
     

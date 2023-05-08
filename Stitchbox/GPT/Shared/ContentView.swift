@@ -76,7 +76,7 @@ struct ContentView: View {
     
     private func isUserNearBottom() -> Bool {
         let scrollableContentHeight = contentSize.height - UIScreen.main.bounds.height
-        let threshold: CGFloat = 45.0
+        let threshold: CGFloat = 55
         return (scrollableContentHeight - abs(scrollOffset)) < threshold
     }
 
@@ -128,7 +128,7 @@ struct ContentView: View {
                         scrollToBottom(proxy: proxy)
                         do {
                             
-                            try await Task.sleep(nanoseconds: 550_000_000) // 550 million nanoseconds = 0.55 seconds
+                            try await Task.sleep(nanoseconds: 350_000_000) // 550 million nanoseconds = 0.55 seconds
                             await vm.sendTapped()
                             
                         } catch {
@@ -157,7 +157,7 @@ struct ContentView: View {
 
     private func scrollToBottom(proxy: ScrollViewProxy) {
         guard let id = vm.messages.last?.id else { return }
-        withAnimation(.spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0)) {
+        withAnimation(.spring(response: 0.25, dampingFraction: 0.7, blendDuration: 0)) {
             proxy.scrollTo(id, anchor: .bottomTrailing)
         }
     }

@@ -154,8 +154,25 @@ extension SB_ChatBot: UIPickerViewDelegate, UIPickerViewDataSource {
 
     // MARK: - UIPickerViewDelegate
 
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var pickerLabel: UILabel? = (view as? UILabel)
+        if pickerLabel == nil {
+            pickerLabel = UILabel()
+            pickerLabel?.backgroundColor = UIColor.darkGray
+            pickerLabel?.font = UIFont.systemFont(ofSize: 15)
+            pickerLabel?.textAlignment = .center
+        }
+        if pickerData[row] != "" {
+            pickerLabel?.text = pickerData[row]
+        } else {
+            pickerLabel?.text = "Error loading"
+        }
+        
+       
+     
+        pickerLabel?.textColor = UIColor.white
+
+        return pickerLabel!
     }
 
     
@@ -181,7 +198,7 @@ extension SB_ChatBot {
         pickerView.backgroundColor = .white
 
         toolbar.sizeToFit()
-        toolbar.barTintColor = .background
+        toolbar.barTintColor = .black
         toolbar.tintColor = .white
 
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelPicker))
@@ -197,6 +214,7 @@ extension SB_ChatBot {
         // Add constraints for pickerView and toolbar
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         toolbar.translatesAutoresizingMaskIntoConstraints = false
+        pickerView.backgroundColor = .background
 
         NSLayoutConstraint.activate([
             pickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
