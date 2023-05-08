@@ -19,6 +19,7 @@ class SB_ChatBot: UIViewController {
     var short_name = ""
     var gameId = ""
     var subscriptions = Set<AnyCancellable>()
+    var selectedGpt = ""
     let toolbar = UIToolbar()
     
     private var pickerView: UIPickerView!
@@ -34,6 +35,8 @@ class SB_ChatBot: UIViewController {
         global_gameId = gameId
         global_gameName = name
         global_gpt = "gpt-3.5-turbo"
+        selectedGpt = "GPT 3.5"
+        
         // Create SwiftUI view
         let chatBotView = ChatBotView(toolbarActions: toolbarActions)
         
@@ -120,7 +123,7 @@ extension SB_ChatBot {
                     clearButton.isEnabled = !isDisabled
                     clearButton.tintColor = .white
                     
-                    self?.gptButton.setTitle("GPT 3.5", for: .normal) // Change to "4" if you want to represent GPT-4
+                    self?.gptButton.setTitle(self?.selectedGpt, for: .normal) // Change to "4" if you want to represent GPT-4
                     self?.gptButton.addTarget(self, action: #selector(self?.gptTapped), for: .touchUpInside)
                     self?.gptButton.tintColor = .white
                     self?.gptButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -238,8 +241,10 @@ extension SB_ChatBot {
         
         if title == "GPT 4" {
             global_gpt = "gpt-4"
+            selectedGpt = title
         } else {
             global_gpt = "gpt-3.5-turbo"
+            selectedGpt = title
         }
         
         gptButton.setTitle(title, for: .normal)
