@@ -30,11 +30,7 @@ class InfoDetailVC: UIViewController {
         }
         
         
-        if userame != "" {
-            bioInfoLbl.text = "\(userame)'s bio"
-        } else {
-            bioInfoLbl.text = "bio"
-        }
+        bioInfoLbl.text = ""
         
         setupButtons()
         
