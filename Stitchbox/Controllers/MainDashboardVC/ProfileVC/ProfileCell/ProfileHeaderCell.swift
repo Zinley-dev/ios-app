@@ -57,8 +57,8 @@ class ProfileHeaderCell: UICollectionViewCell {
         
         avatarImage.layer.cornerRadius = avatarImage.bounds.height/2
         
-        editProfileBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        fistBumpedListBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        //editProfileBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        //fistBumpedListBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
     }
     
     /*

@@ -254,8 +254,10 @@ class UserProfileVC: UIViewController {
                     
                     if self.isFistBump {
                         cell.fistBumpImage.image = fistBumpedImg
+                        cell.fistBumpImage.removeAnimation()
                     } else {
                         cell.fistBumpImage.image = fistBumpImg
+                        cell.fistBumpImage.fistBump()
                     }
                     
                 }

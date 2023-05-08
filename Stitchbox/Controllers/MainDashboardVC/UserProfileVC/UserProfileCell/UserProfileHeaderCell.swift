@@ -43,39 +43,19 @@ class UserProfileHeaderCell: UICollectionViewCell {
         followersBtn.setTitleColor(.white, for: .normal)
         messageBtn.setTitleColor(.primary, for: .normal)
         
-        messageBtn.tintColor = .white
+        messageBtn.tintColor = .primary
         followersBtn.tintColor = .white
-    }
-    
-    /*
-    override func prepareForReuse() {
-        super.prepareForReuse()
         
-        // Reset any specific state or content that might be different for each cell instance
-        descriptionLbl.text = nil
-        moreBtn.setTitle("", for: .normal)
-        fistBumpedView.isHidden = true
-        discordView.isHidden = true
-        FistBumpedBtn.setTitle("", for: .normal)
-        followersBtn.setTitle("", for: .normal)
-        numberOfFollowing.text = nil
-        numberOfFollowers.text = nil
-        numberOfFistBumps.text = nil
-        avatarImage.image = nil
-        coverImage.image = nil
-        fistBumpImage.image = nil
-        discordLbl.text = nil
-        discordChecked.image = nil
-    }*/
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         avatarImage.layer.cornerRadius = avatarImage.bounds.height/2
         
-        followersBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        messageBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-    
+        //followersBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        //messageBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        
         
     }
     

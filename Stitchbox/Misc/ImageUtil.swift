@@ -306,3 +306,52 @@ class ProfileImageView: UIView {
     }
     
 }
+
+extension UIImageView {
+    
+    func beat() {
+        
+        let pulse = CASpringAnimation(keyPath: "transform.scale")
+        pulse.duration = 0.4
+        pulse.fromValue = 1.0
+        pulse.toValue = 1.12
+        pulse.autoreverses = true
+        pulse.repeatCount = .infinity
+        pulse.initialVelocity = 0.5
+        pulse.damping = 0.8
+        layer.add(pulse, forKey: nil)
+    
+    
+    }
+    
+    func shake() {
+        let animation = CAKeyframeAnimation(keyPath: "transform.translation.y")
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
+        animation.duration = 0.9
+        animation.values = [-5.0, 5.0, -5.0, 5.0, -5.0, 2.0, -1.0, 1.0, 0.0 ]
+        animation.repeatCount = .infinity
+        layer.add(animation, forKey: "shake")
+    }
+    
+
+    func removeAnimation() {
+        
+        layer.removeAllAnimations()
+        
+    }
+
+    func fistBump() {
+        let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation.fromValue = 1.0
+        scaleAnimation.toValue = 1.1
+        scaleAnimation.duration = 0.25
+        scaleAnimation.autoreverses = true
+        scaleAnimation.repeatCount = .infinity
+        scaleAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+
+        layer.add(scaleAnimation, forKey: "fistBump")
+    }
+
+
+    
+}
