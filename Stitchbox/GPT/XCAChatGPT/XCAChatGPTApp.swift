@@ -23,7 +23,7 @@ struct ChatBotView: View {
         ContentView(vm: vm, scrollToLastMessage: $scrollToLastMessage)
             .onAppear {
                 vm.getConversationHistory {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                         withAnimation {
                             scrollToLastMessage = true
                         }

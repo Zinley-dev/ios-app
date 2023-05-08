@@ -296,9 +296,8 @@ class ViewModel: ObservableObject {
 
     func removeFocusSentence(_ input: String) -> String {
         let components = input.components(separatedBy: ".")
-        if let firstSentence = components.first?.trimmingCharacters(in: .whitespacesAndNewlines), firstSentence.lowercased().hasPrefix("focus on ") {
-            let startIndex = firstSentence.index(firstSentence.startIndex, offsetBy: "focus on ".count)
-            let topic = String(firstSentence[startIndex...])
+        if !components.isEmpty {
+            let firstSentence = components.first!.trimmingCharacters(in: .whitespacesAndNewlines)
             let remainingText = input.replacingOccurrences(of: firstSentence + ".", with: "")
             return remainingText.trimmingCharacters(in: .whitespacesAndNewlines)
         } else {
@@ -306,8 +305,7 @@ class ViewModel: ObservableObject {
         }
     }
 
-
-    
+  
 }
 
 struct ConversationHistory: Codable {

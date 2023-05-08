@@ -10369,7 +10369,7 @@
                                                                 <color key="textColor" name="Tertiary"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="No info!" translatesAutoresizingMaskIntoConstraints="NO" id="bFV-TP-lmH">
+                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="No info!" translatesAutoresizingMaskIntoConstraints="NO" id="bFV-TP-lmH">
                                                                 <rect key="frame" x="0.0" y="23" width="303" height="625"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
