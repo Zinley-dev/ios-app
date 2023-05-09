@@ -1584,6 +1584,41 @@ extension GptHistoryApi: EndPointType {
 }
 
 
+public enum GamePatchApi {
+  case getGamePatch(gameId: String)
+}
+extension GamePatchApi: EndPointType {
+  var path: String {
+    switch self {
+      case .getGamePatch(let gameId):
+        return "/\(gameId)"
+    }
+  }
+  
+  var module: String {
+    return "/game-patch"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getGamePatch:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getGamePatch:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? ""]
+  }
+  
+}
 
 
 
