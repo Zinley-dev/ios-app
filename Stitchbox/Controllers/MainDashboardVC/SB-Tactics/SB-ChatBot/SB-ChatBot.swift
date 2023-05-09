@@ -34,7 +34,7 @@ class SB_ChatBot: UIViewController {
         setupButtons()
         global_gameId = gameId
         global_gameName = name
-        global_gpt = "gpt-3.5-turbo"
+        global_gpt = "gpt-3.5-turbo-0301"
         selectedGpt = "GPT 3.5"
         
         // Create SwiftUI view
@@ -228,11 +228,35 @@ extension SB_ChatBot {
             toolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             toolbar.bottomAnchor.constraint(equalTo: pickerView.topAnchor)
         ])
+        
+        self.pickerView.alpha = 1
+        self.toolbar.alpha = 1
     }
 
     @objc private func cancelPicker() {
-        pickerView.removeFromSuperview()
-        toolbar.removeFromSuperview()
+        
+        
+        UIView.animate(withDuration: 0.5) {
+            
+            self.pickerView.alpha = 0
+            self.toolbar.alpha = 0
+            
+        }
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            
+            if self.pickerView.alpha == 0 {
+                
+                self.pickerView.removeFromSuperview()
+                self.toolbar.removeFromSuperview()
+                
+            }
+            
+        }
+        
+        
+        
     }
 
     @objc private func donePicker() {
@@ -240,7 +264,7 @@ extension SB_ChatBot {
         let title = pickerData[selectedIndex]
         
         if title == "GPT 4" {
-            global_gpt = "gpt-4"
+            global_gpt = "gpt-4-0314"
             selectedGpt = title
         } else {
             global_gpt = "gpt-3.5-turbo"
