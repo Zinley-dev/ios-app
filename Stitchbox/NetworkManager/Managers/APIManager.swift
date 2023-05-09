@@ -48,6 +48,7 @@ struct APIManager {
     let supportedGameManager = Manager<SupportedGameApi>()
     let supportedRegionManager = Manager<SupportedRegionApi>()
     let gptHistoryManager = Manager<GptHistoryApi>()
+    let gamePatchManager = Manager<GamePatchApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -853,6 +854,11 @@ extension APIManager {
   }
   func clearGptConversation(gameId: String, completion: @escaping APICompletion) {
     gptHistoryManager.request(.clearConversation(gameId: gameId)) { result in
+      completion(result)
+    }
+  }
+  func getGamePatch(gameId: String, completion: @escaping APICompletion) {
+    gamePatchManager.request(.getGamePatch(gameId: gameId)) { result in
       completion(result)
     }
   }
