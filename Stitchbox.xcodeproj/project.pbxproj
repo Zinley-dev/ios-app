@@ -203,6 +203,8 @@
 		6A7ED4A52A0895C900C8204E /* InfoDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4A42A0895C900C8204E /* InfoDetailVC.swift */; };
 		6A7ED4A82A08EF0300C8204E /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4A72A08EF0300C8204E /* Markdown */; };
 		6A7ED4AB2A08F7FC00C8204E /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4AA2A08F7FC00C8204E /* GPTEncoder */; };
+		6A7ED4AD2A0B48AF00C8204E /* MetaDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4AC2A0B48AF00C8204E /* MetaDisplay.swift */; };
+		6A7ED4B02A0B519800C8204E /* SB-MetaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4AF2A0B519800C8204E /* SB-MetaVC.swift */; };
 		6A802CC529E22D7200099F53 /* IntroTacticsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */; };
 		6A80F1A129B6921D0047595A /* UserSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A029B6921D0047595A /* UserSearchNode.swift */; };
 		6A80F1A429B6934C0047595A /* HashtagSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A329B6934C0047595A /* HashtagSearchNode.swift */; };
@@ -653,6 +655,8 @@
 		6A78486B29862931008B2263 /* StreamingDomainModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamingDomainModel.swift; sourceTree = "<group>"; };
 		6A78486E29862C32008B2263 /* streamingListNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = streamingListNode.swift; sourceTree = "<group>"; };
 		6A7ED4A42A0895C900C8204E /* InfoDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDetailVC.swift; sourceTree = "<group>"; };
+		6A7ED4AC2A0B48AF00C8204E /* MetaDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDisplay.swift; sourceTree = "<group>"; };
+		6A7ED4AF2A0B519800C8204E /* SB-MetaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SB-MetaVC.swift"; sourceTree = "<group>"; };
 		6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroTacticsVC.swift; sourceTree = "<group>"; };
 		6A80F1A029B6921D0047595A /* UserSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchNode.swift; sourceTree = "<group>"; };
 		6A80F1A329B6934C0047595A /* HashtagSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagSearchNode.swift; sourceTree = "<group>"; };
@@ -2148,9 +2152,18 @@
 			path = InfoDetailVC;
 			sourceTree = "<group>";
 		};
+		6A7ED4AE2A0B518700C8204E /* SB-MetaVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A7ED4AF2A0B519800C8204E /* SB-MetaVC.swift */,
+			);
+			path = "SB-MetaVC";
+			sourceTree = "<group>";
+		};
 		6A802CC329E22D5000099F53 /* SB-Tactics */ = {
 			isa = PBXGroup;
 			children = (
+				6A7ED4AE2A0B518700C8204E /* SB-MetaVC */,
 				6A9E3AF829E9F19B002B36D7 /* SB-ProfileVC */,
 				6A9E3AF529E9D2BB002B36D7 /* SB-ChatBot */,
 				6A9E3AF229E91780002B36D7 /* RiotSearchNode */,
@@ -2717,6 +2730,7 @@
 				6ABDDCAF2A01024300CDAD39 /* ResponseParsingTask.swift */,
 				6ABDDCB02A01024300CDAD39 /* ViewModel.swift */,
 				6A58E1842A087B0F0002E5C8 /* ChatGPTTokenManager.swift */,
+				6A7ED4AC2A0B48AF00C8204E /* MetaDisplay.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -3905,6 +3919,7 @@
 				6A5C556529E8AC82006F51DD /* TacticsGameNode.swift in Sources */,
 				6A9E4C742977AF2700B59176 /* BlockedListVC.swift in Sources */,
 				6AAD7A65294C699E003E3AB6 /* PresentationController.swift in Sources */,
+				6A7ED4AD2A0B48AF00C8204E /* MetaDisplay.swift in Sources */,
 				6AEA33F4298CE4AB005A4C5D /* ButtonsHeader.swift in Sources */,
 				6A839B4B29A048B300BD0A9A /* domainListNode.swift in Sources */,
 				390FD78629093EA00068B883 /* FeedViewController.swift in Sources */,
@@ -3938,6 +3953,7 @@
 				6AAD7A63294C699E003E3AB6 /* DispatchQueue+Extensions.swift in Sources */,
 				6AF97345297B5A2A00C76814 /* BadgesHeaderView.swift in Sources */,
 				6AF9734A297B5A7500C76814 /* ProfilePostsHeaderView.swift in Sources */,
+				6A7ED4B02A0B519800C8204E /* SB-MetaVC.swift in Sources */,
 				6A0D545529750F8E0059530C /* PostModel.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
 				6A66277D2965772200A4488B /* HTTPMethod.swift in Sources */,

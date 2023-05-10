@@ -26,6 +26,12 @@ class SB_ChatBot: UIViewController {
     private var pickerViewBottomConstraint: NSLayoutConstraint?
     private var toolbarBottomConstraint: NSLayoutConstraint?
     private let pickerData: [String] = ["GPT 3.5", "GPT 4"]
+    
+    let metaToolbar: UIToolbar = {
+        let tb = UIToolbar()
+        tb.translatesAutoresizingMaskIntoConstraints = false
+        return tb
+    }()
 
     
     override func viewDidLoad() {
@@ -43,20 +49,65 @@ class SB_ChatBot: UIViewController {
         // Create Hosting Controller
         let hostingController = UIHostingController(rootView: chatBotView)
         
-        // Add as child view controller
-        addChild(hostingController)
-        view.addSubview(hostingController.view)
         
-        // Configure constraints
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        print(gameId)
         
-        hostingController.didMove(toParent: self)
+        if gameId == "643829425282b1e3eb3ec6e0" || gameId == "6453fda66931a496aa26981d" {
+            
+            // Add the toolbar to the view
+            view.addSubview(metaToolbar)
+            metaToolbar.barTintColor = .darkGray
+
+                // Define constraints
+            NSLayoutConstraint.activate([
+                metaToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                metaToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                metaToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                metaToolbar.heightAnchor.constraint(equalToConstant: 44) // Or whatever height you want
+            ])
+            
+            let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+            let metaButton = UIBarButtonItem(title: "View current patch", style: .plain, target: self, action: #selector(metaButtonTapped))
+            metaButton.tintColor = .white
+
+            metaToolbar.setItems([flexibleSpace, metaButton], animated: false)
+            
+            // Add as child view controller
+            addChild(hostingController)
+            view.addSubview(hostingController.view)
+            
+            // Configure constraints
+            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                    hostingController.view.topAnchor.constraint(equalTo: metaToolbar.bottomAnchor),
+                    hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                    hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                    hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+                ])
+            
+            hostingController.didMove(toParent: self)
+            
+        } else {
+            
+            // Add as child view controller
+            addChild(hostingController)
+            view.addSubview(hostingController.view)
+                   
+            // Configure constraints
+            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+                hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
+                   
+            hostingController.didMove(toParent: self)
+            
+        }
+        
+        
+       
         
         setupClearAndGptButtons()
     }
@@ -126,7 +177,7 @@ extension SB_ChatBot {
                     self?.gptButton.setTitle(self?.selectedGpt, for: .normal) // Change to "4" if you want to represent GPT-4
                     self?.gptButton.addTarget(self, action: #selector(self?.gptTapped), for: .touchUpInside)
                     self?.gptButton.tintColor = .white
-                    self?.gptButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+                    self?.gptButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
                     
                     let stackView = UIStackView(arrangedSubviews: [self!.gptButton, clearButton])
                     stackView.axis = .horizontal
@@ -276,4 +327,18 @@ extension SB_ChatBot {
         toolbar.removeFromSuperview()
     }
     
+    @objc func metaButtonTapped() {
+        // Code for button 1
+        
+        if let SBMVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_MetaVC") as? SB_MetaVC {
+            
+            SBMVC.gameId = self.gameId
+            SBMVC.gameName = self.name
+            self.navigationController?.pushViewController(SBMVC, animated: true)
+            
+        }
+       
+    }
+
+  
 }

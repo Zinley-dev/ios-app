@@ -1433,6 +1433,47 @@
             </objects>
             <point key="canvasLocation" x="-6836" y="2347"/>
         </scene>
+        <!--MetaVC-->
+        <scene sceneID="1SV-43-WAk">
+            <objects>
+                <viewController storyboardIdentifier="SB_MetaVC" id="vZ4-xQ-v53" customClass="SB_MetaVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="onN-7i-Clj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="7m0-0A-e5y">
+                                <rect key="frame" x="16" y="103" width="343" height="675"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Patch: 13.9" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RY0-r3-FYK">
+                                <rect key="frame" x="16" y="66" width="95.666666666666671" height="21"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="syn-cR-nNJ"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="RY0-r3-FYK" firstAttribute="leading" secondItem="syn-cR-nNJ" secondAttribute="leading" constant="16" id="43L-Ed-1za"/>
+                            <constraint firstItem="7m0-0A-e5y" firstAttribute="leading" secondItem="syn-cR-nNJ" secondAttribute="leading" constant="16" id="5Fs-Uq-EIY"/>
+                            <constraint firstItem="RY0-r3-FYK" firstAttribute="top" secondItem="syn-cR-nNJ" secondAttribute="top" constant="16" id="KCY-FQ-Hkq"/>
+                            <constraint firstItem="syn-cR-nNJ" firstAttribute="bottom" secondItem="7m0-0A-e5y" secondAttribute="bottom" id="bfB-By-3fo"/>
+                            <constraint firstItem="syn-cR-nNJ" firstAttribute="trailing" secondItem="7m0-0A-e5y" secondAttribute="trailing" constant="16" id="nRV-p8-R5f"/>
+                            <constraint firstItem="7m0-0A-e5y" firstAttribute="top" secondItem="RY0-r3-FYK" secondAttribute="bottom" constant="16" id="ukS-vS-lnt"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="metaTxtView" destination="7m0-0A-e5y" id="dm6-qN-w2G"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bAY-j0-6Vr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5871.1999999999998" y="2346.7980295566504"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="9GJ-aD-yj4">
             <objects>
