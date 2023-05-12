@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "Qonversion",
+        "repositoryURL": "https://github.com/qonversion/qonversion-ios-sdk",
+        "state": {
+          "branch": null,
+          "revision": "e81e5994aaf9121435f47ab20db115f071d8fa43",
+          "version": "3.4.0"
+        }
+      },
+      {
         "package": "cmark-gfm",
         "repositoryURL": "https://github.com/apple/swift-cmark.git",
         "state": {

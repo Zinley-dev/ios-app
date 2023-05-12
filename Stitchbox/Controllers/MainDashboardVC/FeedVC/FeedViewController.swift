@@ -100,6 +100,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     navigationController.navigationBar.prefersLargeTitles = false
                     navigationController.navigationBar.isTranslucent = false
                 }
+        
+        
+        IAPManager.shared.checkPermissions()
+        IAPManager.shared.displayProduct()
+        IAPManager.shared.checkTrialIntroEligibility()
     
     }
     
