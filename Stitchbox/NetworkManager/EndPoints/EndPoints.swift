@@ -1620,5 +1620,51 @@ extension GamePatchApi: EndPointType {
   
 }
 
+public enum UsedTokenApi {
+  case getUsedToken
+  case updateUsedToken(body: [String: Any])
+}
+extension UsedTokenApi: EndPointType {
+  var path: String {
+    switch self {
+      case .getUsedToken:
+        return "/"
+      case .updateUsedToken:
+        return "/"
+    }
+  }
+  
+  var module: String {
+    return "/used-token"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getUsedToken:
+        return .get
+      case .updateUsedToken:
+        return .post
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getUsedToken:
+        return .request
+      case .updateUsedToken(let params):
+        return .requestParameters(parameters: params)
+    }
+  }
+  
+  var headers: [String : String]? {
+    var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-Client-Timezone": "\(secondsFromGMT)"]
+  }
+  
+}
+
 
 

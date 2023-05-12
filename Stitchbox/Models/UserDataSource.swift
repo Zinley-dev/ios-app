@@ -200,6 +200,11 @@ class UserDataSource: Mappable {
       return false;
     }
   }
+  private var _passEligible: Bool = false
+  var passEligible: Bool {
+    set(newValue) { _passEligible = newValue }
+    get { return _passEligible }
+  }
     private(set) var facebook: ThirdPartyCredential?
     private(set) var google: ThirdPartyCredential?
     private(set) var twitter: ThirdPartyCredential?
