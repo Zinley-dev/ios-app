@@ -134,17 +134,17 @@ Lich Bane:
 
 Overall Meta Prediction:
 
-* Top Lane: With Aatrox's buffs increasing his durability and chase potential, we might see a rise in sustain-oriented top laners. Champions with healing reduction or high burst could be more prevalent to counter this. Players may want to adjust their champion pool and item builds accordingly.
+* Top Lane: The buffs to Aatrox's passive and ultimate should make him a solid pick in the top lane, encouraging longer trades with his sustain. Champions such as Darius, Garen, and Maokai, who can either cut down his healing or out-sustain him, could become more popular. Players might want to focus on champions that have built-in healing reduction or high burst to counter such sustain-oriented top laners.
 
-* Jungle: With the changes to Neeko, Trundle, Volibear, and Amumu, we might see more diversity in jungle picks. Junglers that can leverage deception and crowd control, as well as those who can clear camps quickly and sustain in the jungle, could rise in popularity. Players should practice these types of champions and be ready for potentially more aggressive jungle invasions.
+* Jungle: Neeko's rework should bring a fresh style of jungle play, focusing more on deception and unique interactions. This might encourage players to pick junglers like Evelynn and Shaco that also rely on trickery. Trundle and Volibear's buffs will likely make them more viable, potentially shifting the meta towards tanky, CC-heavy junglers. Players should look to improve their jungle tracking and map awareness to anticipate and counter invasions.
 
-* Mid Lane: Swain's buffs and Kayle's adjustments could lead to a meta favoring champions with reliable crowd control and wave clear. Champions with early lane pressure and roam potential could also be viable picks. Players should focus on improving their map awareness and roam timings.
+* Mid Lane: Swain's buff and Kayle's adjustments might lead to a rise in control mages in the mid lane. Champions such as Orianna, Viktor, or Azir who can maintain a safe distance while providing solid crowd control and wave clear could be strong picks. Roam-heavy champions like Talon and Qiyana might also see more play. Improving map awareness and roam timings will be crucial for mid laners.
 
-* Bot Lane: With Jinx's nerfs, the bot lane might shift away from traditional ADCs to more versatile and mobile champions. This could also increase the importance of supports that can provide protection or engage opportunities. Players might want to experiment with unconventional bot lane picks and adapt their playstyle to a more aggressive or protective role depending on their pick.
+* Bot Lane: With the nerf to Jinx, there might be a shift towards more versatile ADCs like Kai’Sa, Ezreal, or even mages like Swain or Heimerdinger. Supports that can provide protection and engage, like Thresh, Nautilus, or Lulu, will be very valuable. Experimenting with unconventional bot lane picks could lead to surprising success.
 
-* Support: If the bot lane meta shifts as expected, supports that can peel for their ADCs or engage effectively might become more critical. Thresh, Nautilus, or Lulu could be strong picks. Players should work on their positioning and map awareness to protect their ADCs and set up successful plays.
+*Support: The potential shift in bot lane meta could increase the demand for versatile supports that can provide crowd control, engage, and peel. Champions like Thresh, Nautilus, and Lulu could be strong picks. Focus on peeling for your ADC, setting up engages, and maintaining vision control will be key.
 
-* Final Suggestion: As always, while adapting to the meta is important, players should also prioritize their comfort picks and personal skill set. A well-played 'off-meta' champion can often outperform a poorly played 'meta' champion. Always be ready to adapt, but don't forget to play what you enjoy and are good at.
+* Final Suggestion: Considering the changes, if you have been mastering Neeko, now might be the perfect time to bring her into your ranked games, especially with her increased jungle viability. If you're an ADC player who primarily plays Jinx, it might be time to broaden your pool to other marksmen or even mages bot. For top laners, practicing healing reduction champions or high burst champions to counter a possible rise in Aatrox could be beneficial. And lastly, Swain mid laners could find more success due to the buffs. But above all, remember, the key to climbing is not only adapting to the meta but also mastering the champions you enjoy playing.
 
 ARAM Adjustments:
 
@@ -393,7 +393,7 @@ extension SB_MetaVC {
     }
 
     func displayMeta(content: String) {
-            
+        
         let firstLevelKeyAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.boldSystemFont(ofSize: 16),
             .foregroundColor: UIColor.cyan,
@@ -404,58 +404,53 @@ extension SB_MetaVC {
             .foregroundColor: UIColor.secondary,
             .kern: 1
         ]
-        let topKeyAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.boldSystemFont(ofSize: 18),
-            .foregroundColor: UIColor.red,
-            .kern: 1
-        ]
+
         let valueAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 14),
             .foregroundColor: UIColor.white,
             .kern: 1
         ]
-            
+        
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-                
+            
             let lines = content.components(separatedBy: "\n")
             var newLines: [Line] = []
-                
+            
             for line in lines {
                 var lineContent: [NSAttributedString] = []
-                    
+                
                 if line.contains(":") {
                     let components = line.components(separatedBy: ":")
                     let key = components[0].trimmingCharacters(in: .whitespacesAndNewlines)
                     let value = components[1].trimmingCharacters(in: .whitespacesAndNewlines)
-                        
+                    
                     var keyAttributes: [NSAttributedString.Key: Any]
-                    if line.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("*") {
-                        keyAttributes = secondLevelKeyAttributes
-                    } else {
-                        keyAttributes = firstLevelKeyAttributes
-                    }
+                    keyAttributes = line.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("*") ? secondLevelKeyAttributes : firstLevelKeyAttributes
                     let attributedKey = NSAttributedString(string: "\(key): ", attributes: keyAttributes)
                     let attributedValue = NSAttributedString(string: value, attributes: valueAttributes)
 
                     lineContent.append(attributedKey)
                     lineContent.append(attributedValue)
-                } else if !line.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    let attributes: [NSAttributedString.Key: Any] = topKeyAttributes
+                } else {
+                    let attributes: [NSAttributedString.Key: Any] = [
+                        .font: UIFont.systemFont(ofSize: 14),
+                        .foregroundColor: UIColor.white,
+                        .kern: 1
+                    ]
                     let attributedString = NSAttributedString(string: line, attributes: attributes)
                     lineContent.append(attributedString)
                 }
-                    
+                
                 newLines.append(Line(content: lineContent))
             }
-                
+            
             DispatchQueue.main.async {
                 self.lines = newLines
                 self.tableView.reloadData()
             }
         }
     }
-
 
 
 }
