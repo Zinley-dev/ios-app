@@ -11,6 +11,7 @@ import AlamofireImage
 import Alamofire
 import FLAnimatedImage
 
+
 class FeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
 
     @IBOutlet weak var progressBar: ProgressBar!
@@ -47,9 +48,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     private var pullControl = UIRefreshControl()
     
+   
     override func viewDidLoad() {
         super.viewDidLoad()
 
+   
         // Do any additional setup after loading the view
         
         navigationControllerHeight = self.navigationController!.navigationBar.frame.height
@@ -101,10 +104,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     navigationController.navigationBar.isTranslucent = false
                 }
         
-        
-        IAPManager.shared.checkPermissions()
-        IAPManager.shared.displayProduct()
-        IAPManager.shared.checkTrialIntroEligibility()
     
     }
     

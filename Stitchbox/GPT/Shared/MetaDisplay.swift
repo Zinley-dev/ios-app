@@ -8,103 +8,90 @@
 import UIKit
 
 class MetaDisplay {
+    
     private let inputDict: [String: [String: [String: String]]]
 
-    init(inputDict: [String: [String: [String: String]]]) {
-        self.inputDict = inputDict
+    init(jsonString: String) {
+        self.inputDict = MetaDisplay.processInput(input: jsonString)
     }
 
     func processText() -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: "")
-
-        let level1Attributes: [NSAttributedString.Key: Any] = [
+        
+        let championAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.orange,
             .font: UIFont.boldSystemFont(ofSize: 17)
         ]
-
-        let level2Attributes: [NSAttributedString.Key: Any] = [
+        
+        let categoryAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.cyan,
             .font: UIFont.boldSystemFont(ofSize: 15)
         ]
-
-        let increaseAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.green,
-            .font: UIFont.systemFont(ofSize: 13)
-        ]
-
-        let decreaseAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.red,
-            .font: UIFont.systemFont(ofSize: 13)
-        ]
-
-        let neutralAttributes: [NSAttributedString.Key: Any] = [
+        
+        let valueAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.white,
             .font: UIFont.systemFont(ofSize: 13)
         ]
-
-        for (category, updates) in inputDict {
-               let categoryString = "\n\n\(category):\n\n"
-               let categoryAttributedString = NSMutableAttributedString(string: categoryString, attributes: level1Attributes)
-               attributedString.append(categoryAttributedString)
-               
-               for (updateTitle, updateContents) in updates {
-                   let updateString = "\n  \(updateTitle):\n"
-                   let updateAttributedString = NSMutableAttributedString(string: updateString, attributes: level2Attributes)
-                   attributedString.append(updateAttributedString)
-                   
-                   for (updateKey, updateValue) in updateContents {
-                       if updateValue.contains("⇒") {
-                           let parts = updateValue.split(separator: "⇒").map { String($0.trimmingCharacters(in: .whitespaces)) }
-                           if parts.count == 2 {
-                               let beforeParts = parts[0].split(separator: " ").map { String($0) }
-                               let afterParts = parts[1].split(separator: " ").map { String($0) }
-
-                               let updateLine = "\n    \(updateKey): "
-                               let updateLineAttributedString = NSMutableAttributedString(string: updateLine, attributes: neutralAttributes)
-                               attributedString.append(updateLineAttributedString)
-
-                               for i in 0..<beforeParts.count {
-                                   if i < afterParts.count {
-                                       let beforeStripped = beforeParts[i].trimmingCharacters(in: CharacterSet(charactersIn: "()%"))
-                                       let afterStripped = afterParts[i].trimmingCharacters(in: CharacterSet(charactersIn: "()%"))
-                                       
-                                       if let beforeValue = Float(beforeStripped), let afterValue = Float(afterStripped) {
-                                           let partAttributes = beforeValue < afterValue ? increaseAttributes : decreaseAttributes
-                                           let partString = "\(beforeParts[i]) ⇒ \(afterParts[i]) "
-                                           let partAttributedString = NSMutableAttributedString(string: partString, attributes: partAttributes)
-                                           attributedString.append(partAttributedString)
-                                       } else {
-                                           let partString = "\(beforeParts[i]) ⇒ \(afterParts[i]) "
-                                           let partAttributedString = NSMutableAttributedString(string: partString, attributes: neutralAttributes)
-                                           attributedString.append(partAttributedString)
-                                       }
-                                   } else {
-                                       let partString = "\(beforeParts[i]) "
-                                       let partAttributedString = NSMutableAttributedString(string: partString, attributes: neutralAttributes)
-                                       attributedString.append(partAttributedString)
-                                   }
-                               }
-                               attributedString.append(NSMutableAttributedString(string: "\n"))
-                           }
-                       } else if updateValue.starts(with: "REMOVED") {
-                           let updateLine = "\n    \(updateKey): "
-                           let updateLineAttributedString = NSMutableAttributedString(string: updateLine, attributes: decreaseAttributes)
-                           attributedString.append(updateLineAttributedString)
-                           
-                           let updateValueString = "\(updateValue)\n"
-                           let updateValueAttributedString = NSMutableAttributedString(string: updateValueString, attributes: decreaseAttributes)
-                           attributedString.append(updateValueAttributedString)
-                       } else {
-                           let updateLine = "\n    \(updateKey): \(updateValue)\n"
-                           let updateLineAttributedString = NSMutableAttributedString(string: updateLine, attributes: neutralAttributes)
-                           attributedString.append(updateLineAttributedString)
-                       }
-                   }
-               }
-           }
-
-           return attributedString
+        
+        print(inputDict)
+        
+        for (champion, categories) in inputDict {
+            let championString = "\n\n\(champion):\n\n"
+            let championAttributedString = NSMutableAttributedString(string: championString, attributes: championAttributes)
+            attributedString.append(championAttributedString)
+            
+            for (category, details) in categories {
+                let categoryString = "\n  \(category):\n"
+                let categoryAttributedString = NSMutableAttributedString(string: categoryString, attributes: categoryAttributes)
+                attributedString.append(categoryAttributedString)
+                
+                for (detailTitle, detailValue) in details {
+                    let detailString = "\n    \(detailTitle): \(detailValue)\n"
+                    let detailAttributedString = NSMutableAttributedString(string: detailString, attributes: valueAttributes)
+                    attributedString.append(detailAttributedString)
+                }
+            }
+        }
+        
+        return attributedString
     }
+    
+    
+    static func processInput(input: String) -> [String: [String: [String: String]]] {
+        let lines = input.components(separatedBy: "\n")
+        
+        var result = [String: [String: [String: String]]]()
+        var currentSection = ""
+        var currentSubSection = ""
+        
+        for line in lines {
+            let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            if trimmedLine.isEmpty {
+                continue
+            }
+            
+            if trimmedLine.hasPrefix("*") {
+                let updateTypeAndDetails = trimmedLine.components(separatedBy: ": ")
+                
+                if updateTypeAndDetails.count == 2 {
+                    let updateType = updateTypeAndDetails[0].trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: CharacterSet(charactersIn: "* "))
+                    let updateDetails = updateTypeAndDetails[1]
+                    
+                    if var currentUpdates = result[currentSection] {
+                        currentUpdates[updateType] = ["Details": updateDetails]
+                        result[currentSection] = currentUpdates
+                    }
+                }
+            } else if !trimmedLine.hasPrefix("*") {
+                currentSection = trimmedLine
+                result[currentSection] = [String: [String: String]]()
+            }
+        }
+        
+        return result
+    }
+
 }
 
 

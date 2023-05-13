@@ -219,13 +219,12 @@ class ViewModel: ObservableObject {
     
     func getConversationHistory(completion: @escaping () -> Void) {
         
-        print(global_gameId)
-        
         APIManager().getGamePatch(gameId: global_gameId) { result in
             switch result {
             case .success(let apiResponse):
                 
-                print(apiResponse)
+                print("Done")
+                //print(apiResponse)
               
             case .failure(let error):
                 print(error)

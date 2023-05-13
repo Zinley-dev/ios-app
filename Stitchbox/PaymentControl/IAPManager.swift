@@ -26,48 +26,42 @@ class IAPManager {
         Qonversion.shared().setProperty(.userID, value: userUID)
     }
     
-    func checkPermissions() {
+    func checkPermissions(completion: @escaping (Bool) -> Void) {
+    
         Qonversion.shared().checkEntitlements { (entitlements, error) in
           if let error = error {
             // handle error
-              print(error.localizedDescription)
+            print(error.localizedDescription)
+            completion(false)
             return
           }
-          
-          if let premium: Qonversion.Entitlement = entitlements["Stitchbox_Pro"], premium.isActive {
-            switch premium.renewState {
-              case .willRenew, .nonRenewable:
-                print("willRenew")
-                // .willRenew is the state of an auto-renewable subscription
-                // .nonRenewable is the state of consumable/non-consumable IAPs that could unlock lifetime access
-                break
-              case .billingIssue:
-                print("billingIssue")
-                // Grace period: entitlement is active, but there was some billing issue.
-                // Prompt the user to update the payment method.
-                break
-              case .cancelled:
-                print("cancelled")
-                // The user has turned off auto-renewal for the subscription, but the subscription has not expired yet.
-                // Prompt the user to resubscribe with a special offer.
-                break
-              default: break
-            }
-          }
-        }
-    }
-    
-    func purchase(product: Qonversion.Product) {
-        
-        Qonversion.shared().purchaseProduct(product) { (entitlements, error, isCancelled) in
-        
-            if error != nil {
-                print(error?.localizedDescription)
+            
+            if entitlements.isEmpty {
+                completion(false)
             } else {
-                print(entitlements)
+                
+                if let premium: Qonversion.Entitlement = entitlements["Stitchbox_Pro"], premium.isActive {
+                    completion(false)
+                 
+                } else {
+                    completion(false)
+                }
+                
             }
             
-          
+        }
+        
+    }
+    
+    func purchase(product: Qonversion.Product, completion: @escaping (Bool) -> Void) {
+        
+        Qonversion.shared().purchaseProduct(product) { (entitlements, error, isCancelled) in
+          if let premium: Qonversion.Entitlement = entitlements["Stitchbox_Pro"], premium.isActive {
+            // Flow for success state
+              completion(true)
+          } else {
+              completion(false)
+          }
         }
     
     }
@@ -76,14 +70,12 @@ class IAPManager {
         
     }
     
-    func displayProduct() {
+    func displayProduct(completion: @escaping ([Qonversion.Product]) -> Void) {
         Qonversion.shared().offerings { (offerings, error) in
           if let products = offerings?.main?.products {
               
-              for item in products {
-                  print(item.storeID, item.duration, item.trialDuration)
-              }
-    
+              completion(products)
+            
           }
         }
     }
@@ -91,7 +83,7 @@ class IAPManager {
     
     func checkTrialIntroEligibility() {
     
-        Qonversion.shared().checkTrialIntroEligibility(["Silver"]) { (result, error) in
+        Qonversion.shared().checkTrialIntroEligibility(["anually", "pro_6months", "pro_monthly"]) { (result, error) in
             if error != nil {
                 print(error?.localizedDescription)
             }
