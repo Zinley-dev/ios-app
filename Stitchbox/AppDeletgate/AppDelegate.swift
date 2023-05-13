@@ -55,6 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         getGameList()
         activeSpeaker()
         setupVolumeObserver()
+        IAPManager.shared.configure()
         //listenVolumeButton()
         
         GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")

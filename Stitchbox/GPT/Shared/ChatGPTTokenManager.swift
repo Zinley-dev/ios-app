@@ -55,6 +55,12 @@ class ChatGPTTokenManager {
     
     func clearHistory() {
         historyList.removeAll()
+        
+        let guideUserHistory = Message(role: "user", content: "Please prioritize accurate and relevant information, ensure logical order and layout, keep responses short, concise, and clear, understand context and tailor responses accordingly")
+        let guideAssistantHistory = Message(role: "assistant", content: "Yes I will repsond based on prioritize accurate and relevant information, ensure logical order and layout, keep responses short, concise, and clear, understand context and tailor responses accordingly")
+        
+        historyList.append(guideUserHistory)
+        historyList.append(guideAssistantHistory)
     }
     
     func setHistory(messages: [Message]) {
@@ -67,16 +73,20 @@ class ChatGPTTokenManager {
         
         historyList = messages
         while countTokens(messages: historyList) > maxTokenCount {
-                    if let firstMessage = historyList.first {
-                        // Remove only the first user message and its corresponding assistant message
-                        if firstMessage.role == "user" {
-                            historyList.removeFirst(2)
-                        } else {
-                            // If the first message is an assistant message, remove it
-                            historyList.removeFirst()
-                        }
+            if historyList.count > 2 {
+                // Remove the third message and its corresponding assistant message
+                if historyList[2].role == "user" {
+                    historyList.remove(at: 2)
+                    if historyList.count > 3 { // Make sure there is another message to remove after this
+                        historyList.remove(at: 2) // Now remove the corresponding assistant message
                     }
+                } else {
+                    // If the third message is an assistant message, remove it
+                    historyList.remove(at: 2)
                 }
+            }
+        }
     }
+
 }
 

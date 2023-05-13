@@ -97,7 +97,7 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         super.viewWillAppear(animated)
         
         showMiddleBtn(vc: self)
-        
+        checkPlan()
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -112,6 +112,19 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
             navigationController.navigationBar.isTranslucent = false
         }
        
+    }
+    
+    func checkPlan() {
+        
+        IAPManager.shared.checkPermissions { result in
+            if result == false {
+                self.navigationItem.title = "SB-Tactics"
+            } else {
+                self.navigationItem.title = "SB-Tactics - Pro"
+            }
+        }
+        
+        
     }
     
     func tappableLabel(_ tappableLabel: ZSWTappableLabel, tappedAt idx: Int, withAttributes attributes: [NSAttributedString.Key : Any] = [:]) {
@@ -206,6 +219,22 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         SF.modalPresentationStyle = .fullScreen
         self.present(SF, animated: true)
         
+        
+    }
+    @IBAction func getProBtnPressed(_ sender: Any) {
+        
+        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SubcriptionVC") as? SubcriptionVC {
+            
+            let nav = UINavigationController(rootViewController: SVC)
+
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        }
         
     }
     

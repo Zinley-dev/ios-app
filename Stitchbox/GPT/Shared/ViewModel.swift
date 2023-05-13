@@ -218,6 +218,20 @@ class ViewModel: ObservableObject {
 
     
     func getConversationHistory(completion: @escaping () -> Void) {
+        
+        APIManager().getGamePatch(gameId: global_gameId) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print("Done")
+                //print(apiResponse)
+              
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
+        
         APIManager().getGptConversation(gameId: global_gameId) { [weak self] result in
             guard let self = self else { return }
 
@@ -250,10 +264,15 @@ class ViewModel: ObservableObject {
 
                             let userHistory = Message(role: "user", content: prompt)
                             let assistantHistory = Message(role: "assistant", content: response)
+                            
+                            let guideUserHistory = Message(role: "user", content: "Please Prioritize accurate and relevant information, Ensure logical order and layout, Keep responses short, concise, and clear, Understand game context and tailor responses accordingly.")
+                            let guideAssistantHistory = Message(role: "assistant", content: "Yes I will repsond based on prioritize accurate and relevant information, Ensure logical order and layout, Keep responses short, concise, and clear, Understand game context and tailor responses accordingly.")
 
                             DispatchQueue.main.async {
                                 self.messages.append(userMessage)
                                 self.messages.append(assistantMessage)
+                                self.history.append(guideUserHistory)
+                                self.history.append(guideAssistantHistory)
                                 self.history.append(userHistory)
                                 self.history.append(assistantHistory)
                                 self.setConversationHistory(messages: self.history)
@@ -291,18 +310,35 @@ class ViewModel: ObservableObject {
             response: .rawText(welcomeText)
         )
         self.messages.append(welcomeMessage)
+        
+        let userHistory = Message(role: "user", content: "Please Prioritize accurate and relevant information, Ensure logical order and layout, Keep responses short, concise, and clear, Understand game context and tailor responses accordingly.")
+        let assistantHistory = Message(role: "assistant", content: "Yes I will repsond based on prioritize accurate and relevant information, Ensure logical order and layout, Keep responses short, concise, and clear, Understand game context and tailor responses accordingly.")
+        
+        self.history.append(userHistory)
+        self.history.append(assistantHistory)
+        self.setConversationHistory(messages: self.history)
+        
         completion()
     }
 
     func removeFocusSentence(_ input: String) -> String {
-        let components = input.components(separatedBy: ".")
-        if !components.isEmpty {
-            let firstSentence = components.first!.trimmingCharacters(in: .whitespacesAndNewlines)
-            let remainingText = input.replacingOccurrences(of: firstSentence + ".", with: "")
-            return remainingText.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if global_gameName == "SB Chatbot" {
+            return input
         } else {
-            return input.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            let components = input.components(separatedBy: ".")
+            if !components.isEmpty {
+                let firstSentence = components.first!.trimmingCharacters(in: .whitespacesAndNewlines)
+                let remainingText = input.replacingOccurrences(of: firstSentence + ".", with: "")
+                return remainingText.trimmingCharacters(in: .whitespacesAndNewlines)
+            } else {
+                return input.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+            
         }
+        
+        
     }
 
   
