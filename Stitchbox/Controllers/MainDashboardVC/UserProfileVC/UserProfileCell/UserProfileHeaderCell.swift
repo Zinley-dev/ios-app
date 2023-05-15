@@ -26,6 +26,7 @@ class UserProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var fistBumpImage: UIImageView!
     @IBOutlet weak var discordLbl: UILabel!
     @IBOutlet weak var discordChecked: UIImageView!
+    //@IBOutlet weak var proImg: UIImageView!
     
     let kCONTENT_XIB_NAME = "ProfileView"
     
@@ -58,5 +59,7 @@ class UserProfileHeaderCell: UICollectionViewCell {
         
         
     }
+    
+    
     
 }

@@ -40,13 +40,35 @@ class SB_ChatBot: UIViewController {
         setupButtons()
         global_gameId = gameId
         global_gameName = name
-        global_gpt = "gpt-3.5-turbo-0301"
+        global_gpt = "gpt-3.5-turbo"
         selectedGpt = "GPT 3.5"
         
     
         checkforMeta()
         setupClearAndGptButtons()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
+            
+            if passEligible {
+                
+                isPro = true
+                
+            } else {
+                
+                checkPlanForToken()
+                
+            }
+            
+        } else {
+            
+            checkPlanForToken()
+            
+        }
     }
     
     func checkforMeta() {
@@ -433,6 +455,25 @@ extension SB_ChatBot {
     }
     
     
+    func checkPlanForToken() {
+        
+        IAPManager.shared.checkPermissions { result in
+            if result == false {
+                
+                isPro = false
+                self.checkTokenLimit()
+                
+            } else {
+             
+                isPro = true
+  
+            }
+        }
+        
+        
+    }
+    
+    
     @objc func metaButtonTapped() {
         // Code for button 1
         
@@ -444,6 +485,35 @@ extension SB_ChatBot {
             
         }
        
+    }
+    
+    
+    func checkTokenLimit() {
+        
+        APIManager().getUsedToken { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                if let data = apiResponse.body, let remainToken = data["remainToken"] as? Int {
+                    
+                    if remainToken > 0 {
+                        isTokenLimit = false
+                    } else {
+                        isTokenLimit = true
+                    }
+                    
+                } else {
+                    isTokenLimit = true
+                }
+              
+            case .failure(let error):
+                
+                isTokenLimit = true
+                print(error)
+                
+            }
+        }
+        
     }
 
   

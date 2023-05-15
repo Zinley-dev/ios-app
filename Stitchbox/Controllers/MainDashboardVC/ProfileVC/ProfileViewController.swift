@@ -257,6 +257,9 @@ class ProfileViewController: UIViewController {
                     
                 }
                 
+                
+                cell.checkProImg()
+                
 
                 cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
                 cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
@@ -1058,6 +1061,7 @@ extension ProfileViewController {
             return self.sectionFor(index: index, environment: env)
         }
     }
+    
 }
 
 extension ProfileViewController {

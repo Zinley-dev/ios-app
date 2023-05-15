@@ -166,8 +166,6 @@ extension SubcriptionVC {
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
 
-
-        
     }
 
     

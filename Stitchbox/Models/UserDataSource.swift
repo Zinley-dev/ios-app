@@ -273,6 +273,5 @@ class UserDataSource: Mappable {
         challengeCard   <- map["challengeCard"]
         riotLOLAccount  <- map["riotAccount"]
         passEligible  <- map["passEligible"]
-       
     }
 }

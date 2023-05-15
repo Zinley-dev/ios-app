@@ -1646,6 +1646,7 @@
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" name="Background"/>
+                                <color key="tintColor" name="Background"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="3Ir-Dq-FxX" secondAttribute="bottom" constant="45" id="C9P-fL-wYq"/>
                                     <constraint firstAttribute="height" constant="120" id="ax9-TE-YV6"/>
@@ -5281,6 +5282,13 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Pro" translatesAutoresizingMaskIntoConstraints="NO" id="G1x-mD-iFp">
+                                                    <rect key="frame" x="21" y="251" width="25" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="Pax-45-z55"/>
+                                                        <constraint firstAttribute="width" constant="25" id="Vvf-jN-21d"/>
+                                                    </constraints>
+                                                </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="u1E-ZP-71K">
                                                     <rect key="frame" x="10" y="279" width="392" height="70"/>
                                                     <subviews>
@@ -5505,7 +5513,9 @@
                                                 <constraint firstItem="qsm-2v-h3J" firstAttribute="top" secondItem="dWT-4K-F5x" secondAttribute="top" id="9UC-sr-15v"/>
                                                 <constraint firstAttribute="trailing" secondItem="4WR-jf-Ptn" secondAttribute="trailing" constant="16" id="HzK-WC-oX8"/>
                                                 <constraint firstItem="u1E-ZP-71K" firstAttribute="leading" secondItem="dWT-4K-F5x" secondAttribute="leading" constant="10" id="JDb-0j-Inh"/>
+                                                <constraint firstItem="G1x-mD-iFp" firstAttribute="centerY" secondItem="vnK-Bb-OAW" secondAttribute="centerY" id="O3k-n5-4Fa"/>
                                                 <constraint firstItem="u1E-ZP-71K" firstAttribute="top" secondItem="vnK-Bb-OAW" secondAttribute="bottom" constant="8" id="OXY-K4-WJW"/>
+                                                <constraint firstItem="G1x-mD-iFp" firstAttribute="leading" secondItem="vnK-Bb-OAW" secondAttribute="trailing" constant="5" id="Ocn-pU-vZC"/>
                                                 <constraint firstItem="GZO-oM-4zS" firstAttribute="leading" secondItem="dWT-4K-F5x" secondAttribute="leading" constant="16" id="Pdz-of-BJL"/>
                                                 <constraint firstAttribute="trailing" secondItem="THi-3n-7ng" secondAttribute="trailing" constant="16" id="PyY-79-aza"/>
                                                 <constraint firstItem="tVe-bG-06c" firstAttribute="top" secondItem="qsm-2v-h3J" secondAttribute="bottom" constant="16" id="RBn-Dd-mcc"/>
@@ -5540,6 +5550,7 @@
                                             <outlet property="numberOfFistBumps" destination="4he-CQ-DCA" id="sH3-mS-BvY"/>
                                             <outlet property="numberOfFollowers" destination="va1-A6-Mok" id="iFe-6g-LgB"/>
                                             <outlet property="numberOfFollowing" destination="fiL-Ja-IPg" id="mAk-Gb-i61"/>
+                                            <outlet property="proImg" destination="G1x-mD-iFp" id="vBn-7V-hoW"/>
                                             <outlet property="usernameLbl" destination="vnK-Bb-OAW" id="LWN-br-Yds"/>
                                         </connections>
                                     </collectionViewCell>
@@ -6744,17 +6755,17 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="311" height="40"/>
                                                                 <subviews>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Hvp-vF-yG1">
-                                                                        <rect key="frame" x="16" y="5" width="167.66666666666666" height="30"/>
+                                                                        <rect key="frame" x="16" y="5" width="106" height="30"/>
                                                                         <subviews>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gpt_bot" translatesAutoresizingMaskIntoConstraints="NO" id="Vrm-Ph-3RK">
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Pro" translatesAutoresizingMaskIntoConstraints="NO" id="Vrm-Ph-3RK">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="height" constant="30" id="AjL-Bd-472"/>
                                                                                     <constraint firstAttribute="width" constant="30" id="B5F-rD-y3C"/>
                                                                                 </constraints>
                                                                             </imageView>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Riot LOL account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntP-18-T89">
-                                                                                <rect key="frame" x="50.000000000000007" y="0.0" width="117.66666666666669" height="30"/>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Go Pro+" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntP-18-T89">
+                                                                                <rect key="frame" x="50" y="0.0" width="56" height="30"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <nil key="highlightedColor"/>
@@ -6773,7 +6784,7 @@
                                                                         <state key="normal" title="Button"/>
                                                                         <buttonConfiguration key="configuration" style="plain"/>
                                                                         <connections>
-                                                                            <action selector="riotAccountBtnPressed:" destination="a9W-Jf-Y3W" eventType="touchUpInside" id="srh-Kc-byy"/>
+                                                                            <action selector="proAccountBtnPressed:" destination="a9W-Jf-Y3W" eventType="touchUpInside" id="C2M-ba-WzR"/>
                                                                         </connections>
                                                                     </button>
                                                                 </subviews>
@@ -7205,13 +7216,16 @@
                         <outlet property="StreamingLinkSwitch" destination="TlV-he-pQO" id="0Cb-Cg-xRy"/>
                         <outlet property="TermOfServiceBtn" destination="54n-58-fr9" id="fiG-Za-Iv3"/>
                         <outlet property="accountActivityBtn" destination="xdI-eG-Moa" id="JdS-rA-3oK"/>
+                        <outlet property="accountViewHeight" destination="kUK-zO-NYK" id="qa5-2X-oDU"/>
                         <outlet property="blockAccountBtn" destination="iPq-pF-Jf4" id="d5D-ht-csT"/>
                         <outlet property="contactUsBtn" destination="Y4h-4B-ImZ" id="9eE-co-6fW"/>
                         <outlet property="findFriendsBtn" destination="hqL-2f-7zU" id="MwZ-mM-ug2"/>
                         <outlet property="logOutBtn" destination="p9L-yY-DzC" id="PfT-Px-9oa"/>
+                        <outlet property="mainViewHeight" destination="fKG-Di-kYA" id="gR8-AW-w1K"/>
+                        <outlet property="proBtn" destination="wXf-Eh-kT1" id="ugV-cx-W2B"/>
+                        <outlet property="proView" destination="wAG-2y-ooX" id="23e-HO-bES"/>
                         <outlet property="pushNotificationBtn" destination="q5d-pS-siR" id="Ud4-XP-sZt"/>
                         <outlet property="referralBtn" destination="1AQ-p2-6Qf" id="jRr-BL-UrB"/>
-                        <outlet property="riotLOLBtn" destination="wXf-Eh-kT1" id="XP2-xr-PpE"/>
                         <outlet property="securityBtn" destination="dB6-2h-gy4" id="mOq-R2-JYz"/>
                     </connections>
                 </viewController>

@@ -24,11 +24,15 @@ class SettingVC: UIViewController {
     @IBOutlet weak var pushNotificationBtn: UIButton!
     @IBOutlet weak var findFriendsBtn: UIButton!
     @IBOutlet weak var referralBtn: UIButton!
-    @IBOutlet weak var riotLOLBtn: UIButton!
+    @IBOutlet weak var proBtn: UIButton!
     
     @IBOutlet weak var SoundSwitch: UISwitch!
     @IBOutlet weak var StreamingLinkSwitch: UISwitch!
+    @IBOutlet weak var proView: UIView!
     
+    
+    @IBOutlet weak var mainViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var accountViewHeight: NSLayoutConstraint!
     
     var isStreamLink = false
     var isSound = false
@@ -44,6 +48,7 @@ class SettingVC: UIViewController {
         super.viewWillAppear(animated)
         
         loadSettings()
+        checkAccountStatus()
         
     }
     
@@ -203,12 +208,19 @@ class SettingVC: UIViewController {
         
     }
     
-    @IBAction func riotAccountBtnPressed(_ sender: Any) {
+    @IBAction func proAccountBtnPressed(_ sender: Any) {
         
-        if let RSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "RiotSyncVC") as? RiotSyncVC {
-           
-            self.navigationController?.pushViewController(RSVC, animated: true)
+        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SubcriptionVC") as? SubcriptionVC {
             
+            let nav = UINavigationController(rootViewController: SVC)
+
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
         }
 
     }
@@ -271,7 +283,7 @@ extension SettingVC {
         accountActivityBtn.setTitle("", for: .normal)
         securityBtn.setTitle("", for: .normal)
         pushNotificationBtn.setTitle("", for: .normal)
-        riotLOLBtn.setTitle("", for: .normal)
+        proBtn.setTitle("", for: .normal)
         
         findFriendsBtn.setTitle("", for: .normal)
         referralBtn.setTitle("", for: .normal)
@@ -323,6 +335,73 @@ extension SettingVC {
         
         
         present(alert, animated: true, completion: nil)
+        
+    }
+    
+}
+
+extension SettingVC {
+    
+    func checkAccountStatus() {
+        
+        if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
+            
+            if passEligible {
+                
+                self.setupLayoutForPro()
+                
+            } else {
+                
+                checkPlan()
+                
+            }
+            
+        } else {
+            
+            checkPlan()
+            
+        }
+        
+    }
+    
+    func checkPlan() {
+        
+        IAPManager.shared.checkPermissions { result in
+            if result == false {
+                
+                Dispatch.main.async {
+                    
+                    self.setupLayoutForNonPro()
+                    
+                    
+                }
+                
+            } else {
+             
+                Dispatch.main.async {
+                
+                    self.setupLayoutForPro()
+                    
+                }
+  
+            }
+        }
+        
+    }
+
+    func setupLayoutForPro() {
+        
+        mainViewHeight.constant = 400
+        accountViewHeight.constant = 950
+        proView.isHidden = true
+        
+    }
+    
+    func setupLayoutForNonPro() {
+        
+        mainViewHeight.constant = 1000
+        accountViewHeight.constant = 450
+        proView.isHidden = false
         
     }
     

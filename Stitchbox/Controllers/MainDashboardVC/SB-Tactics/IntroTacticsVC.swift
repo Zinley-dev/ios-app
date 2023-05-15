@@ -99,7 +99,6 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         super.viewWillAppear(animated)
         
         showMiddleBtn(vc: self)
-        checkPlan()
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
