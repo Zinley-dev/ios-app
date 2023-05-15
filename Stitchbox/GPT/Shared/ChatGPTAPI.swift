@@ -14,7 +14,6 @@ class ChatGPTAPI: @unchecked Sendable {
     private let temperature: Double
     private let tokenManager: ChatGPTTokenManager
     private let apiKey: String
-    //private var historyList = [Message]()
     private let urlSession = URLSession.shared
     private var urlRequest: URLRequest {
         let url = URL(string: "https://api.openai.com/v1/chat/completions")!
@@ -43,7 +42,6 @@ class ChatGPTAPI: @unchecked Sendable {
         ]
     }
     
-
     init(apiKey: String, systemPrompt: String = "You are a helpful assistant", temperature: Double = 0.5) {
         self.apiKey = apiKey
         self.systemMessage = .init(role: "system", content: systemPrompt)
@@ -66,8 +64,8 @@ class ChatGPTAPI: @unchecked Sendable {
     private func appendToHistoryList(userText: String, responseText: String) {
         
         let conversation = ["conversationId": "null", "prompt": userText, "response": responseText, "gameCategory": global_gameId]
-        
-        if tokenManager.historyList.isEmpty {
+    
+        if tokenManager.historyList.count <= 2 {
             
             APIManager().createGptConversation(params: conversation) { result in
                 
@@ -105,7 +103,6 @@ class ChatGPTAPI: @unchecked Sendable {
         
         tokenManager.appendMessageToHistory(userText: userText, responseText: responseText)
         
-    
     }
     
 

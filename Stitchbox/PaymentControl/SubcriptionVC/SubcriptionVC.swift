@@ -162,7 +162,7 @@ extension SubcriptionVC {
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-        navigationItem.title = "SB Pro"
+        navigationItem.title = "SB Pro+"
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
 

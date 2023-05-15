@@ -30,7 +30,7 @@ struct MessageRowView: View {
     var body: some View {
         VStack(spacing: 0) {
             
-            let sendImage = _AppCoreData.userDataSource.value?.avatarURL
+            let sendImage = _AppCoreData.userDataSource.value?.gptAvatarURL
             let responseImage = "defaultuser"
             
             

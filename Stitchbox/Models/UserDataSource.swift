@@ -133,6 +133,13 @@ class UserDataSource: Mappable {
     private(set) var userID: String?
     
     private var _userName :  String? = ""
+    private var _passEligible :  Bool? = false
+    
+    var passEligible: Bool? {
+      set(newValue) { _passEligible = newValue }
+      get { return _passEligible}
+    }
+  
     var userName: String? {
       set(newValue) { _userName = newValue }
       get { return _userName}
@@ -152,9 +159,15 @@ class UserDataSource: Mappable {
   
     private(set) var gender :    UserGender = .male
     private var _avatarURL : String  = ""
+    private var _gptAvatarURL : String  = "defaultuser"
     var avatarURL: String {
       set(newValue) { _avatarURL = newValue}
       get { return _avatarURL }
+    }
+    
+    var gptAvatarURL: String {
+      set(newValue) { _gptAvatarURL = newValue}
+      get { return _gptAvatarURL }
     }
   
     private(set) var signinMethod : String = ""
@@ -209,6 +222,9 @@ class UserDataSource: Mappable {
     private(set) var location: String = ""
     private(set) var createdAt: Date?
     private(set) var deletedAt: Date?
+    
+    
+    
     private(set) var status: Int = 0
     
     private(set) var ageRange: AgeRange?
@@ -230,6 +246,7 @@ class UserDataSource: Mappable {
         phone           <- map["phone"]
         gender          <- map["gender"]
         avatarURL       <- map["avatar"]
+        gptAvatarURL    <- map["avatar"]
         signinMethod    <- map["signinMethod"]
         socialId        <- map["socialId"]
         password        <- map["password"]
@@ -254,5 +271,7 @@ class UserDataSource: Mappable {
         discordUrl      <- map["discordLink"]
         challengeCard   <- map["challengeCard"]
         riotLOLAccount  <- map["riotAccount"]
+        passEligible  <- map["passEligible"]
+       
     }
 }

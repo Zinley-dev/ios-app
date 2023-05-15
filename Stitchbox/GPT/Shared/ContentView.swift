@@ -54,7 +54,7 @@ struct ContentView: View {
                 }
             #if os(iOS) || os(macOS)
                 Divider()
-                bottomView(image: _AppCoreData.userDataSource.value?.avatarURL ?? "defaultuser", proxy: proxy)
+                bottomView(image: _AppCoreData.userDataSource.value?.gptAvatarURL ?? "defaultuser", proxy: proxy)
                 Spacer()
             #endif
             }
@@ -81,6 +81,7 @@ struct ContentView: View {
     }
 
     func bottomView(image: String, proxy: ScrollViewProxy) -> some View {
+        
         HStack(alignment: .center, spacing: 8) {
             if image.hasPrefix("http"), let url = URL(string: image) {
                 AsyncImage(url: url) { image in
