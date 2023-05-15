@@ -868,8 +868,8 @@ extension APIManager {
       completion(result)
     }
   }
-  func updateUsedToken(params: [String: Any], completion: @escaping APICompletion) {
-    usedTokenManager.request(.updateUsedToken(body: params)) { result in
+  func updateUsedToken(usedToken: Int, completion: @escaping APICompletion) {
+    usedTokenManager.request(.updateUsedToken(body: ["usage": usedToken])) { result in
       completion(result)
     }
   }
