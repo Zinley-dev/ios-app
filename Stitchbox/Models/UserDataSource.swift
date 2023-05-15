@@ -213,6 +213,7 @@ class UserDataSource: Mappable {
       return false;
     }
   }
+
     private(set) var facebook: ThirdPartyCredential?
     private(set) var google: ThirdPartyCredential?
     private(set) var twitter: ThirdPartyCredential?

@@ -49,6 +49,7 @@ struct APIManager {
     let supportedRegionManager = Manager<SupportedRegionApi>()
     let gptHistoryManager = Manager<GptHistoryApi>()
     let gamePatchManager = Manager<GamePatchApi>()
+    let usedTokenManager = Manager<UsedTokenApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -859,6 +860,16 @@ extension APIManager {
   }
   func getGamePatch(gameId: String, completion: @escaping APICompletion) {
     gamePatchManager.request(.getGamePatch(gameId: gameId)) { result in
+      completion(result)
+    }
+  }
+  func getUsedToken(completion: @escaping APICompletion) {
+    usedTokenManager.request(.getUsedToken) { result in
+      completion(result)
+    }
+  }
+  func updateUsedToken(params: [String: Any], completion: @escaping APICompletion) {
+    usedTokenManager.request(.updateUsedToken(body: params)) { result in
       completion(result)
     }
   }
