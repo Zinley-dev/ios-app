@@ -151,6 +151,7 @@ class UserSearchNode: ASCellNode {
             
             if let gameInfo = global_suppport_game_list.first(where: { $0._id == game[i]["gameId"] as! String }) {
                 gameViews[i]!.load(url: URL(string: gameInfo.cover) ?? empty, str: gameInfo.cover)
+                gameViews[i]?.contentMode = .scaleAspectFit
             }
         }
         

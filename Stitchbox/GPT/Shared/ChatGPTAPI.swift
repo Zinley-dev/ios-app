@@ -165,7 +165,7 @@ class ChatGPTAPI: @unchecked Sendable {
             var urlRequest = self.urlRequest
         
             if global_gameName != "SB Chatbot" {
-                urlRequest.httpBody = try jsonBody(text: "Focus on \(global_gameName) game topic" + text)
+                urlRequest.httpBody = try jsonBody(text: "Focus and answer only relates to \(global_gameName) game topic" + text)
             } else {
                 urlRequest.httpBody = try jsonBody(text: text)
             }
@@ -218,7 +218,7 @@ class ChatGPTAPI: @unchecked Sendable {
             if isTokenLimit {
                 
                 var errorText = ""
-                errorText = "\n\("Maximize your creativity with unlimited tokens! Upgrade to SB Pro today for uninterrupted, limitless experiences.")"
+                errorText = "\n\("Your token limit may be reached soon! To enjoy uninterrupted and limitless experiences, please consider upgrading to SB Pro today.")"
                 
                 throw "Bad Response: \(errorText)"
                 
@@ -228,7 +228,7 @@ class ChatGPTAPI: @unchecked Sendable {
                 var urlRequest = self.urlRequest
             
                 if global_gameName != "SB Chatbot" {
-                    urlRequest.httpBody = try jsonBody(text: "Focus on \(global_gameName) game topic" + text)
+                    urlRequest.httpBody = try jsonBody(text: "Focus and answer only relates to \(global_gameName) game topic" + text)
                 } else {
                     urlRequest.httpBody = try jsonBody(text: text)
                 }

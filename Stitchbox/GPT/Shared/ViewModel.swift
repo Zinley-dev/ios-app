@@ -271,10 +271,10 @@ class ViewModel: ObservableObject {
                             DispatchQueue.main.async {
                                 self.messages.append(userMessage)
                                 self.messages.append(assistantMessage)
-                                self.history.append(guideUserHistory)
-                                self.history.append(guideAssistantHistory)
                                 self.history.append(userHistory)
                                 self.history.append(assistantHistory)
+                                self.history.append(guideUserHistory)
+                                self.history.append(guideAssistantHistory)
                                 self.setConversationHistory(messages: self.history)
                                 completion()
                             }

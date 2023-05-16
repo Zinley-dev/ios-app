@@ -494,6 +494,8 @@ extension SB_ChatBot {
             switch result {
             case .success(let apiResponse):
                 
+                print(apiResponse)
+                
                 if let data = apiResponse.body, let remainToken = data["remainToken"] as? Int {
                     
                     if remainToken > 0 {
