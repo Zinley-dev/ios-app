@@ -14,6 +14,7 @@ class PostNavVC: UINavigationController {
 
         // Do any additional setup after loading the view.
         
+        /*
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backgroundColor = .background
@@ -24,6 +25,8 @@ class PostNavVC: UINavigationController {
                     navigationController.navigationBar.prefersLargeTitles = false
                     navigationController.navigationBar.isTranslucent = false
                 }
+        
+        */
         
     }
     

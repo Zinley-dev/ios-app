@@ -1363,22 +1363,28 @@ extension ProfileViewController {
         }
     }
     func getFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "") {
-       
+
         APIManager().getFistBumperCount(userID: userID){
             result in
             switch result {
             case .success(let response):
                 
                 guard response.body?["message"] as? String == "success",
-                      let data = response.body?["paging"] as? [String: Any] else {
+                      let data = response.body?["count"] as? [[String: Any]] else {
                     self.fistBumpedCount = 0
-       
                     return
                 }
-            
-                if let fistBumpedGet = data["total"] as? Int {
-                    self.fistBumpedCount = fistBumpedGet
-                } else {
+                
+                var foundCount = false
+                for item in data {
+                    if let fistBumpedGet = item["count"] as? Int {
+                        self.fistBumpedCount = fistBumpedGet
+                        foundCount = true
+                        break
+                    }
+                }
+                
+                if !foundCount {
                     self.fistBumpedCount = 0
                 }
                 
@@ -1389,6 +1395,7 @@ extension ProfileViewController {
                 self.fistBumpedCount = 0
             }
         }
+        
     }
     
     func applyHeaderChange() {

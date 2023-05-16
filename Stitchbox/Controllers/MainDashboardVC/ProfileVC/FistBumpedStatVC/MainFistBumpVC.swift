@@ -450,70 +450,75 @@ extension MainFistBumpVC {
 
 extension MainFistBumpVC {
     
-    
     func countFistBumpers(completed: @escaping DownloadComplete) {
-        
-        
         APIManager().getFistBumperCount { result in
             switch result {
             case .success(let response):
-                
-                print(response)
-                
+                  
                 guard response.body?["message"] as? String == "success",
-                      let data = response.body?["count"] as? [String: Any] else {
+                      let data = response.body?["count"] as? [[String: Any]] else {
+                        self.fistBumperCount = 0
                         completed()
                         return
                 }
             
-                    if let fistBumpersGet = data["total"] as? Int {
+                var foundTotal = false
+                for item in data {
+                    if let fistBumpersGet = item["count"] as? Int {
                         self.fistBumperCount = fistBumpersGet
-                    } else {
-                        self.fistBumperCount = 0
+                        foundTotal = true
+                        break
                     }
-                    
-                    completed()
+                }
                 
+                if !foundTotal {
+                    self.fistBumperCount = 0
+                }
+                
+                completed()
+            
             case .failure(let error):
                 print("Error loading follower: ", error)
+                self.fistBumperCount = 0
                 completed()
-               
             }
         }
-        
-       
     }
-    
-    
+
+
     func countFistBumpees(completed: @escaping DownloadComplete) {
-        
         APIManager().getFistBumpeeCount { result in
             switch result {
             case .success(let response):
-                
-                print(response)
-                
-                guard response.body?["message"] as? String == "success",
-                      let data = response.body?["count"] as? [String: Any] else {
+                 guard response.body?["message"] as? String == "success",
+                      let data = response.body?["count"] as? [[String: Any]] else {
+                        self.fistBumpeeCount = 0
                         completed()
                         return
                 }
             
-                    if let fistBumpeesGet = data["total"] as? Int {
+                var foundTotal = false
+                for item in data {
+                    if let fistBumpeesGet = item["count"] as? Int {
                         self.fistBumpeeCount = fistBumpeesGet
-                    } else {
-                        self.fistBumpeeCount = 0
+                        foundTotal = true
+                        break
                     }
-                    
-                    completed()
+                }
                 
+                if !foundTotal {
+                    self.fistBumpeeCount = 0
+                }
+                
+                completed()
+            
             case .failure(let error):
                 print("Error loading follower: ", error)
+                self.fistBumpeeCount = 0
                 completed()
-               
             }
         }
-        
     }
+
     
 }

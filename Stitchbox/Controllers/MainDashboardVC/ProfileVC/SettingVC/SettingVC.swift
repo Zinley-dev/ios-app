@@ -391,8 +391,8 @@ extension SettingVC {
 
     func setupLayoutForPro() {
         
-        mainViewHeight.constant = 400
-        accountViewHeight.constant = 950
+        mainViewHeight.constant = 950
+        accountViewHeight.constant = 400
         proView.isHidden = true
         
     }
