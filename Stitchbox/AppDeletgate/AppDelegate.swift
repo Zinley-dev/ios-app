@@ -95,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         // Initialize OneSignal
         OneSignal.initWithLaunchOptions(launchOptions)
-        OneSignal.setAppId("YOUR_APP_ID")
+        OneSignal.setAppId("209c3011-21c8-43ba-aff2-b2865e03aee5")
         
         // Prompt the user to allow push notifications
         OneSignal.promptForPushNotifications(userResponse: { accepted in
