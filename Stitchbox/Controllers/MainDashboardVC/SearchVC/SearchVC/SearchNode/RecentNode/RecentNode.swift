@@ -49,7 +49,7 @@ class RecentNode: ASCellNode {
         
         if item.type == "game" {
             
-            imageNode.cornerRadius = OrganizerImageSize/2
+            //imageNode.cornerRadius = OrganizerImageSize/2
             imageNode.clipsToBounds = true
             imageNode.shouldRenderProgressImages = true
             imageNode.isLayerBacked = true
@@ -74,7 +74,7 @@ class RecentNode: ASCellNode {
                 
                 
                 self.imageNode.contentMode = .scaleAspectFit
-                self.imageNode.backgroundColor = .lightGray
+                self.imageNode.backgroundColor = .clear
                 
             }
         } else if item.type == "user" {

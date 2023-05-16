@@ -18,7 +18,8 @@ import ObjectMapper
 var general_room: Room!
 var gereral_group_chanel_url: String!
 var startTime = Date()
-
+var isPro = false
+var isTokenLimit = false
 var global_gpt = "gpt-3.5-turbo"
 var global_gameId = ""
 var global_gameName = ""

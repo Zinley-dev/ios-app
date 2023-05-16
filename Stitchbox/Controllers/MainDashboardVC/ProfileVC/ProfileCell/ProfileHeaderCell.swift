@@ -31,7 +31,7 @@ class ProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var discordChecked: UIImageView!
     @IBOutlet weak var followerStack: UIStackView!
     @IBOutlet weak var followingStack: UIStackView!
-    
+    @IBOutlet weak var proImg: UIImageView!
     let kCONTENT_XIB_NAME = "ProfileView"
     
     
@@ -56,26 +56,56 @@ class ProfileHeaderCell: UICollectionViewCell {
         super.layoutSubviews()
         
         avatarImage.layer.cornerRadius = avatarImage.bounds.height/2
-        
-        //editProfileBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        //fistBumpedListBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+       
     }
     
-    /*
-    override func prepareForReuse() {
-            super.prepareForReuse()
+    func checkProImg() {
+        
+        if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
             
-            // Reset any configurations or content before reuse
-            descriptionLbl.text = nil
-            usernameLbl.text = nil
-            numberOfFollowing.text = nil
-            numberOfFollowers.text = nil
-            numberOfFistBumps.text = nil
-            avatarImage.image = nil
-            coverImage.image = nil
-            discordLbl.text = nil
-            discordChecked.image = nil
-        }*/
+            if passEligible {
+                
+                proImg.isHidden = false
+                
+            } else {
+                
+                checkPlan()
+                
+            }
+            
+        } else {
+            
+            checkPlan()
+            
+        }
+        
+    }
+
+    
+    func checkPlan() {
+        
+        IAPManager.shared.checkPermissions { result in
+            if result == false {
+                
+                Dispatch.main.async {
+                    
+                    self.proImg.isHidden = true
+                    
+                }
+                
+            } else {
+             
+                Dispatch.main.async {
+                
+                    self.proImg.isHidden = false
+                    
+                }
+  
+            }
+        }
+        
+        
+    }
 
     
 }

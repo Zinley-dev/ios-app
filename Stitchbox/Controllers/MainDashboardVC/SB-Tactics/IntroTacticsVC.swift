@@ -19,6 +19,8 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
     var collectionNode: ASCollectionNode!
     
     static let URLAttributeName = NSAttributedString.Key(rawValue: "URL")
+    let proButton: UIButton = UIButton(type: .custom)
+    
     enum LinkType: String {
       case Privacy = "Privacy"
       case TermsOfUse = "TOU"
@@ -97,7 +99,6 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         super.viewWillAppear(animated)
         
         showMiddleBtn(vc: self)
-        checkPlan()
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -111,7 +112,32 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
             navigationController.navigationBar.scrollEdgeAppearance = navigationBarAppearance
             navigationController.navigationBar.isTranslucent = false
         }
+        
+        checkAccountStatus()
        
+    }
+    
+    func checkAccountStatus() {
+        
+        if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
+            
+            if passEligible {
+                
+                self.navigationItem.title = "SB-Tactics - Pro"
+                self.navigationItem.rightBarButtonItem = nil
+                
+            } else {
+                
+                checkPlan()
+                
+            }
+            
+        } else {
+            
+            checkPlan()
+            
+        }
+        
     }
     
     func checkPlan() {
@@ -119,8 +145,10 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         IAPManager.shared.checkPermissions { result in
             if result == false {
                 self.navigationItem.title = "SB-Tactics"
+                self.setupProButton()
             } else {
                 self.navigationItem.title = "SB-Tactics - Pro"
+                self.navigationItem.rightBarButtonItem = nil
             }
         }
         
@@ -221,7 +249,9 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         
         
     }
-    @IBAction func getProBtnPressed(_ sender: Any) {
+    
+    
+    @objc func getProBtnPressed(_ sender: AnyObject) {
         
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SubcriptionVC") as? SubcriptionVC {
             
@@ -238,11 +268,28 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         
     }
     
+
+    
 }
 
 
 
 extension IntroTacticsVC {
+    
+    func setupProButton() {
+    
+        proButton.frame = back_frame
+        proButton.contentMode = .center
+
+
+        proButton.addTarget(self, action: #selector(getProBtnPressed(_:)), for: .touchUpInside)
+        proButton.setTitleColor(UIColor.white, for: .normal)
+        proButton.setTitle("Go Pro+", for: .normal)
+        let originalButtonBarButton = UIBarButtonItem(customView: proButton)
+
+        self.navigationItem.rightBarButtonItem = originalButtonBarButton
+        
+    }
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()

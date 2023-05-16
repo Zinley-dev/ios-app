@@ -40,8 +40,66 @@ class SB_ChatBot: UIViewController {
         setupButtons()
         global_gameId = gameId
         global_gameName = name
-        global_gpt = "gpt-3.5-turbo-0301"
+        global_gpt = "gpt-3.5-turbo"
         selectedGpt = "GPT 3.5"
+        
+    
+        checkforMeta()
+        setupClearAndGptButtons()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
+            
+            if passEligible {
+                
+                isPro = true
+                
+            } else {
+                
+                checkPlanForToken()
+                
+            }
+            
+        } else {
+            
+            checkPlanForToken()
+            
+        }
+    }
+    
+    func checkforMeta() {
+        
+        APIManager().getGamePatch(gameId: global_gameId) { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [String: Any],
+                     let _ = data["content"] as? String, let _ = data["originPatch"] as? String, let _ = data["patch"] as? String else {
+                    Dispatch.main.async {
+                        self.setupWithoutMeta()
+                    }
+                    return
+                }
+                
+                Dispatch.main.async {
+                    self.setupForMeta()
+                }
+            case .failure(let error):
+                print(error)
+                Dispatch.main.async {
+                    self.setupWithoutMeta()
+                }
+            }
+        }
+        
+    }
+    
+    func setupForMeta() {
+        
         
         // Create SwiftUI view
         let chatBotView = ChatBotView(toolbarActions: toolbarActions)
@@ -49,68 +107,66 @@ class SB_ChatBot: UIViewController {
         // Create Hosting Controller
         let hostingController = UIHostingController(rootView: chatBotView)
         
-        
-        print(gameId)
-        
-        if gameId == "643829425282b1e3eb3ec6e0" || gameId == "6453fda66931a496aa26981d" {
-            
-            // Add the toolbar to the view
-            view.addSubview(metaToolbar)
-            metaToolbar.barTintColor = .darkGray
+        // Add the toolbar to the view
+        view.addSubview(metaToolbar)
+        metaToolbar.barTintColor = .darkGray
 
-                // Define constraints
-            NSLayoutConstraint.activate([
-                metaToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                metaToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                metaToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                metaToolbar.heightAnchor.constraint(equalToConstant: 44) // Or whatever height you want
-            ])
-            
-            let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-            let metaButton = UIBarButtonItem(title: "View current patch", style: .plain, target: self, action: #selector(metaButtonTapped))
-            metaButton.tintColor = .white
+            // Define constraints
+        NSLayoutConstraint.activate([
+            metaToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            metaToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            metaToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            metaToolbar.heightAnchor.constraint(equalToConstant: 44) // Or whatever height you want
+        ])
+        
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let metaButton = UIBarButtonItem(title: "View current patch", style: .plain, target: self, action: #selector(metaButtonTapped))
+        metaButton.tintColor = .white
 
-            metaToolbar.setItems([flexibleSpace, metaButton], animated: false)
-            
-            // Add as child view controller
-            addChild(hostingController)
-            view.addSubview(hostingController.view)
-            
-            // Configure constraints
-            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                    hostingController.view.topAnchor.constraint(equalTo: metaToolbar.bottomAnchor),
-                    hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                    hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                    hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-                ])
-            
-            hostingController.didMove(toParent: self)
-            
-        } else {
-            
-            // Add as child view controller
-            addChild(hostingController)
-            view.addSubview(hostingController.view)
-                   
-            // Configure constraints
-            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+        metaToolbar.setItems([flexibleSpace, metaButton], animated: false)
+        
+        // Add as child view controller
+        addChild(hostingController)
+        view.addSubview(hostingController.view)
+        
+        // Configure constraints
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+                hostingController.view.topAnchor.constraint(equalTo: metaToolbar.bottomAnchor),
                 hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
-                   
-            hostingController.didMove(toParent: self)
-            
-        }
         
+        hostingController.didMove(toParent: self)
         
-       
-        
-        setupClearAndGptButtons()
     }
+    
+    func setupWithoutMeta() {
+        
+        // Create SwiftUI view
+        let chatBotView = ChatBotView(toolbarActions: toolbarActions)
+        
+        // Create Hosting Controller
+        let hostingController = UIHostingController(rootView: chatBotView)
+        
+        // Add as child view controller
+        addChild(hostingController)
+        view.addSubview(hostingController.view)
+               
+        // Configure constraints
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+               
+        hostingController.didMove(toParent: self)
+        
+    }
+    
 
 }
 
@@ -315,17 +371,108 @@ extension SB_ChatBot {
         let title = pickerData[selectedIndex]
         
         if title == "GPT 4" {
-            global_gpt = "gpt-4-0314"
-            selectedGpt = title
+            checkAccountStatus()
         } else {
             global_gpt = "gpt-3.5-turbo"
             selectedGpt = title
+            
+            gptButton.setTitle(title, for: .normal)
+            cancelPicker()
+            toolbar.removeFromSuperview()
         }
         
-        gptButton.setTitle(title, for: .normal)
-        cancelPicker()
-        toolbar.removeFromSuperview()
+       
     }
+    
+    
+    
+    func checkAccountStatus() {
+        
+        if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
+            
+            if passEligible {
+                
+                global_gpt = "gpt-4"
+                selectedGpt = "GPT 4"
+                
+                gptButton.setTitle("GPT 4", for: .normal)
+                cancelPicker()
+                toolbar.removeFromSuperview()
+                
+            } else {
+                
+                checkPlan()
+                
+            }
+            
+        } else {
+            
+            checkPlan()
+            
+        }
+        
+    }
+    
+    func checkPlan() {
+        
+        IAPManager.shared.checkPermissions { result in
+            if result == false {
+                
+                Dispatch.main.async {
+                    
+                    if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SubcriptionVC") as? SubcriptionVC {
+                        
+                        let nav = UINavigationController(rootViewController: SVC)
+
+                        // Customize the navigation bar appearance
+                        nav.navigationBar.barTintColor = .background
+                        nav.navigationBar.tintColor = .white
+                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                        nav.modalPresentationStyle = .fullScreen
+                        self.present(nav, animated: true, completion: nil)
+                    }
+                    
+                }
+                
+            } else {
+             
+                Dispatch.main.async {
+                
+                    global_gpt = "gpt-4"
+                    self.selectedGpt = "GPT 4"
+                    
+                    self.gptButton.setTitle("GPT 4", for: .normal)
+                    self.cancelPicker()
+                    self.toolbar.removeFromSuperview()
+                    
+                }
+  
+            }
+        }
+        
+        
+    }
+    
+    
+    func checkPlanForToken() {
+        
+        IAPManager.shared.checkPermissions { result in
+            if result == false {
+                
+                isPro = false
+                self.checkTokenLimit()
+                
+            } else {
+             
+                isPro = true
+  
+            }
+        }
+        
+        
+    }
+    
     
     @objc func metaButtonTapped() {
         // Code for button 1
@@ -338,6 +485,37 @@ extension SB_ChatBot {
             
         }
        
+    }
+    
+    
+    func checkTokenLimit() {
+        
+        APIManager().getUsedToken { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+                if let data = apiResponse.body, let remainToken = data["remainToken"] as? Int {
+                    
+                    if remainToken > 0 {
+                        isTokenLimit = false
+                    } else {
+                        isTokenLimit = true
+                    }
+                    
+                } else {
+                    isTokenLimit = true
+                }
+              
+            case .failure(let error):
+                
+                isTokenLimit = true
+                print(error)
+                
+            }
+        }
+        
     }
 
   

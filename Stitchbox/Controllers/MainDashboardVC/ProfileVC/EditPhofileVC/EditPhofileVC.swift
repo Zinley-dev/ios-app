@@ -12,7 +12,7 @@ import Photos
 
 class EditPhofileVC: UIViewController {
     
-
+    let proButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var morePersonalInfoBtn: UIButton!
     @IBOutlet weak var changeCoverPhotoBtn: UIButton!
     @IBOutlet weak var changeProfilePhotoBtn: UIButton!
@@ -44,6 +44,7 @@ class EditPhofileVC: UIViewController {
         super.viewWillAppear(animated)
         
         setupDefaultInfo()
+        checkAccountStatus()
  
     }
     
@@ -422,5 +423,79 @@ extension EditPhofileVC: EditControllerDelegate {
         present(alert, animated: true, completion: nil)
         
     }
+    
+}
+
+
+extension EditPhofileVC {
+    
+    func checkAccountStatus() {
+        
+        if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
+            
+            if passEligible {
+                
+                self.navigationItem.rightBarButtonItem = nil
+                
+            } else {
+                
+                checkPlan()
+                
+            }
+            
+        } else {
+            
+            checkPlan()
+            
+        }
+        
+    }
+    
+    func checkPlan() {
+        
+        IAPManager.shared.checkPermissions { result in
+            if result == false {
+                self.setupProButton()
+            } else {
+                self.navigationItem.rightBarButtonItem = nil
+            }
+        }
+        
+        
+    }
+    
+    
+    func setupProButton() {
+    
+        proButton.frame = back_frame
+        proButton.contentMode = .center
+
+
+        proButton.addTarget(self, action: #selector(getProBtnPressed(_:)), for: .touchUpInside)
+        proButton.setTitleColor(UIColor.white, for: .normal)
+        proButton.setTitle("Go Pro+", for: .normal)
+        let originalButtonBarButton = UIBarButtonItem(customView: proButton)
+
+        self.navigationItem.rightBarButtonItem = originalButtonBarButton
+        
+    }
+    
+    @objc func getProBtnPressed(_ sender: AnyObject) {
+        
+        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SubcriptionVC") as? SubcriptionVC {
+            
+            let nav = UINavigationController(rootViewController: SVC)
+
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        }
+        
+    }
+    
     
 }

@@ -85,18 +85,7 @@ class PostVC: UIViewController {
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        if let navigationController = self.navigationController {
-                    navigationController.navigationBar.prefersLargeTitles = false
-                    navigationController.navigationBar.isTranslucent = false
-                }
+    
         
     }
     
