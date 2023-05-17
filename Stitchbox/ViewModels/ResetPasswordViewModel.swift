@@ -55,14 +55,14 @@ class ResetPasswordViewModel: ViewModelProtocol {
     sendOTPDidTapSubject.asObservable()
       .subscribe (onNext: { (phone, countryCode) in
           // call api toward login api of backend
-          let phoneNumber = "\(countryCode)\(phone)"
+        let phoneNumber = "\(countryCode)\(phone.formatPhoneNumber())"
           print("PHONE NUMBER \(phoneNumber)")
           if let phoneResetVc = self.vc as? PhoneResetVC {
               Dispatch.main.async {
                   presentSwiftLoader()
               }
           }
-          APIManager().forgotPasswordByPhone(params: ["phone": phoneNumber]) { result in
+        APIManager().forgotPasswordByPhone(params: ["phone": phoneNumber]) { result in
               switch result {
                 case .success(let response):
                   print(response)
