@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import ObjectMapper
+import OneSignal
 
 class StartViewModel: ViewModelProtocol {
     
@@ -85,6 +86,16 @@ class StartViewModel: ViewModelProtocol {
                 // write usr data
                 if let newUserData = Mapper<UserDataSource>().map(JSON: data?["user"] as! [String: Any]) {
                     _AppCoreData.userDataSource.accept(newUserData)
+                  
+                  if newUserData.userID != ""{
+                    let externalUserId = newUserData.userID!
+                    
+                    OneSignal.setExternalUserId(externalUserId, withSuccess: { results in
+                      print("External user id update complete with results: ", results!.description)
+                    }, withFailure: {error in
+                      print("Set external user id done with error: " + error.debugDescription)
+                    })
+                  }
                 }
                 
                 Dispatch.main.async {
