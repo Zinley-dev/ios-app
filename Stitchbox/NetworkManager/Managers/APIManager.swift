@@ -50,6 +50,7 @@ struct APIManager {
     let gptHistoryManager = Manager<GptHistoryApi>()
     let gamePatchManager = Manager<GamePatchApi>()
     let usedTokenManager = Manager<UsedTokenApi>()
+    let promotionManager = Manager<PromotionApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -870,6 +871,18 @@ extension APIManager {
   }
   func updateUsedToken(usedToken: Int, completion: @escaping APICompletion) {
     usedTokenManager.request(.updateUsedToken(body: ["usage": usedToken])) { result in
+      completion(result)
+    }
+  }
+  
+  func getPromotion(completion: @escaping APICompletion) {
+    promotionManager.request(.getPromotion) { result in
+      completion(result)
+    }
+  }
+  
+  func applyPromotion(id: String, completion: @escaping APICompletion) {
+    promotionManager.request(.applyPromotion(id: id)) { result in
       completion(result)
     }
   }
