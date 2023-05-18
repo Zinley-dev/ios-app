@@ -213,7 +213,8 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
         }
         else if (self.output.type == "phone") {
           self.loadingSubject.onNext(true)
-          APIManager().phoneVerify(phone: countryCode + phone.formatPhoneNumber(), OTP: code) { result in switch result {
+          print("VERIFY OTP \("+" + phone.formatPhoneNumber()) --- CODE \(code)")
+          APIManager().phoneVerify(phone: "+" + phone.formatPhoneNumber(), OTP: code) { result in switch result {
             case .success(let apiResponse):
               // get and process data
               if (apiResponse.body?["message"] as! String == "success") {
