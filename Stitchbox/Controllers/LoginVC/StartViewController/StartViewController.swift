@@ -52,9 +52,9 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     var URL: Foundation.URL {
         switch self {
         case .Privacy:
-            return Foundation.URL(string: "https://stitchbox.gg/")!
+            return Foundation.URL(string: "https://stitchbox.gg/public-policy")!
         case .TermsOfUse:
-            return Foundation.URL(string: "https://stitchbox.gg/")!
+            return Foundation.URL(string: "https://stitchbox.gg/term-of-use")!
            
         }
     }
@@ -332,7 +332,7 @@ extension StartViewController {
         APIManager().getSettings { result in
             switch result {
             case .success(let apiResponse):
-                
+            
                 guard let data = apiResponse.body else {
                     completed()
                         return

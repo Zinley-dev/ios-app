@@ -35,9 +35,9 @@ class SubcriptionVC: UIViewController, ZSWTappableLabelTapDelegate {
       var URL: Foundation.URL {
           switch self {
           case .Privacy:
-              return Foundation.URL(string: "https://stitchbox.gg/")!
+              return Foundation.URL(string: "https://stitchbox.gg/public-policy")!
           case .TermsOfUse:
-              return Foundation.URL(string: "https://stitchbox.gg/")!
+              return Foundation.URL(string: "https://stitchbox.gg/term-of-use")!
              
           }
       }

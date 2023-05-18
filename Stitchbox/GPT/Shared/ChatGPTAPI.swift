@@ -163,13 +163,12 @@ class ChatGPTAPI: @unchecked Sendable {
         if isPro {
             
             var urlRequest = self.urlRequest
-        
-            if global_gameName != "SB Chatbot" {
-                urlRequest.httpBody = try jsonBody(text: "Focus and answer only relates to \(global_gameName) game topic" + text)
-            } else {
-                urlRequest.httpBody = try jsonBody(text: text)
-            }
+
+            let requestBodyText = global_gameName != "SB Chatbot" ? "Focus strictly on the \(global_gameName) game topic. Disregard unrelated questions. Query: \(text)" : text
+            urlRequest.httpBody = try jsonBody(text: requestBodyText)
             
+            print(requestBodyText)
+
             let (result, response) = try await urlSession.bytes(for: urlRequest)
             
             guard let httpResponse = response as? HTTPURLResponse else {

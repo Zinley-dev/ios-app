@@ -10,6 +10,7 @@ import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
 import FLAnimatedImage
+import ObjectMapper
 
 
 class FeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
@@ -104,6 +105,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     navigationController.navigationBar.isTranslucent = false
                 }
         
+        self.loadNewestCoreData {
+            self.loadSettings {
+                print("Oke!")
+            }
+        }
     
     }
     
@@ -1235,5 +1241,76 @@ extension FeedViewController {
         }
         
     }
+    
+}
+
+
+extension FeedViewController {
+    
+    
+    func loadSettings(completed: @escaping DownloadComplete) {
+        
+        APIManager().getSettings { result in
+            switch result {
+            case .success(let apiResponse):
+            
+                guard let data = apiResponse.body else {
+                    completed()
+                        return
+                }
+
+                let settings =  Mapper<SettingModel>().map(JSONObject: data)
+                globalSetting = settings
+                globalIsSound = settings?.AutoPlaySound ?? false
+                
+                completed()
+                
+            case .failure(_):
+            
+                completed()
+               
+            }
+        }
+        
+    }
+    
+    
+    func loadNewestCoreData(completed: @escaping DownloadComplete) {
+        
+        APIManager().getme { result in
+            switch result {
+            case .success(let response):
+                
+                if let data = response.body {
+                    
+                    if !data.isEmpty {
+                    
+                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                            _AppCoreData.reset()
+                            _AppCoreData.userDataSource.accept(newUserData)
+                            completed()
+                        } else {
+                            completed()
+                        }
+                        
+                      
+                    } else {
+                        completed()
+                    }
+                    
+                } else {
+                    completed()
+                }
+                
+                
+            case .failure(let error):
+                print("Error loading profile: ", error)
+                completed()
+            }
+        }
+        
+        
+    }
+    
     
 }

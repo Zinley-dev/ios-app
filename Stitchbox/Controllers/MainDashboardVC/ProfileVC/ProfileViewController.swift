@@ -328,8 +328,8 @@ class ProfileViewController: UIViewController {
                         cell.infoLbl.text = card.quote
                         ChallengeView.infoLbl.text = card.quote
                     } else {
-                        cell.infoLbl.text = "Stitchboxer"
-                        ChallengeView.infoLbl.text = "Stitchboxer"
+                        cell.infoLbl.text = "Stitchbox User"
+                        ChallengeView.infoLbl.text = "Stitchbox User"
                     }
                    
                     if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
