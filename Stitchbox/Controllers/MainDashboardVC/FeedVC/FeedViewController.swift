@@ -438,9 +438,11 @@ extension FeedViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let apiResponse):
+                    print(apiResponse.body)
                     if let dataDict = apiResponse.body,
                        let data = dataDict["data"] as? [[String: Any]],
                        !data.isEmpty {
+                        self.promotionList = []
                         if let promotionData = data.first, let promotionModel = PromoteModel(data: promotionData) {
                             self.promotionList.append(promotionModel)
                             let promotionBarButton = self.createPromotionButton()

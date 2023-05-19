@@ -9,6 +9,7 @@ import Foundation
 
 class PromoteModel {
     let id: String
+    let description: String
     let createdAt: Date
     let endDate: Date
     let imageUrl: URL
@@ -18,10 +19,12 @@ class PromoteModel {
     let startDate: Date
     let updatedAt: Date
     
+    
     init?(data: [String: Any]) {
         let dateFormatter = ISO8601DateFormatter()
         
         guard let id = data["_id"] as? String,
+              let description = data["description"] as? String,
               let createdAtString = data["createdAt"] as? String,
               let createdAt = dateFormatter.date(from: createdAtString),
               let endDateString = data["endDate"] as? String,
@@ -40,6 +43,7 @@ class PromoteModel {
         }
         
         self.id = id
+        self.description = description
         self.createdAt = createdAt
         self.endDate = endDate
         self.imageUrl = imageUrl

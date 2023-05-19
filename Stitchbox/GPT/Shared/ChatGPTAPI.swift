@@ -217,7 +217,7 @@ class ChatGPTAPI: @unchecked Sendable {
             if isTokenLimit {
                 
                 var errorText = ""
-                errorText = "\n\("Your token limit may be reached soon! To enjoy uninterrupted and limitless experiences, please consider upgrading to SB Pro today.")"
+                errorText = "\n\("Your token limit has been reached. It will reset at 12am. To enjoy unlimited access, consider upgrading to SB Pro today.")"
                 
                 throw "Bad Response: \(errorText)"
                 
