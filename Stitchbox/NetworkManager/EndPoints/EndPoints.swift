@@ -1666,5 +1666,52 @@ extension UsedTokenApi: EndPointType {
   
 }
 
+public enum PromotionApi {
+  case getPromotion
+  case applyPromotion(id: String)
+}
+extension PromotionApi: EndPointType {
+  var path: String {
+    switch self {
+      case .getPromotion:
+        return "/"
+      case .applyPromotion(let id):
+        return "/\(id)/apply"
+    }
+  }
+  
+  var module: String {
+    return "/promotion"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getPromotion:
+        return .get
+      case .applyPromotion:
+        return .post
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getPromotion:
+        return .request
+      case .applyPromotion:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+    
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-Client-Timezone": "\(secondsFromGMT)"]
+  }
+  
+}
+
+
 
 
