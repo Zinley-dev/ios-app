@@ -655,7 +655,38 @@ extension UIButton {
         layer.add(animation, forKey: "shake")
     }
     
-    
+    func promote() {
+        // Scale animation to make button pulse
+        let scaleAnimation = CASpringAnimation(keyPath: "transform.scale")
+        scaleAnimation.duration = 0.6
+        scaleAnimation.fromValue = 1.0
+        scaleAnimation.toValue = 1.08
+        scaleAnimation.autoreverses = true
+        scaleAnimation.repeatCount = .infinity
+        scaleAnimation.initialVelocity = 0.5
+        scaleAnimation.damping = 0.8
+
+        // Create a glow effect around the button using shadow properties
+        let glowAnimation = CABasicAnimation(keyPath: "shadowRadius")
+        glowAnimation.fromValue = 0
+        glowAnimation.toValue = 10
+        glowAnimation.beginTime = 0.1
+        glowAnimation.duration = 0.8
+        glowAnimation.repeatCount = .infinity
+        glowAnimation.autoreverses = true
+        glowAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        
+        // Apply a colored shadow for the glow effect
+        layer.shadowColor = UIColor.red.cgColor // Change the color to your preferred glow color
+        layer.shadowOpacity = 1
+        layer.shadowOffset = CGSize.zero
+        layer.shadowRadius = 10
+
+        // Add animations to the layer
+        layer.add(scaleAnimation, forKey: "scale")
+        layer.add(glowAnimation, forKey: "glow")
+    }
+
     
     
     func removeAnimation() {

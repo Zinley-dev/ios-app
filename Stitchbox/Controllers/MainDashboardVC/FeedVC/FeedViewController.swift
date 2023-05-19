@@ -22,8 +22,9 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
   
+    let promotionButton = UIButton(type: .custom)
     let homeButton: UIButton = UIButton(type: .custom)
-
+    var promotionList = [PromoteModel]()
     var currentIndex: Int?
     var isfirstLoad = true
     var didScroll = false
@@ -44,6 +45,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     lazy var delayItem3 = workItem()
     var firstAnimated = true
     var lastLoadTime: Date?
+    var isPromote = false
     
     @IBOutlet weak var playTimeBar: UIProgressView!
     
@@ -156,7 +158,12 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
           
         }
         
+        
+        //checkPromotion()
+        
     }
+    
+
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -186,9 +193,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
     }
 
-
-
-    
     @objc func clearAllData() {
         
         refresh_request = true
@@ -398,7 +402,7 @@ extension FeedViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        setupPromotionButton(notiBarButton: notiBarButton, searchBarButton: searchBarButton)
         
     }
     
@@ -420,10 +424,58 @@ extension FeedViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        setupPromotionButton(notiBarButton: notiBarButton, searchBarButton: searchBarButton)
         
     }
     
+    func setupPromotionButton(notiBarButton: UIBarButtonItem, searchBarButton: UIBarButtonItem) {
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+
+        APIManager().getPromotion { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let apiResponse):
+                    if let dataDict = apiResponse.body,
+                       let data = dataDict["data"] as? [[String: Any]],
+                       !data.isEmpty {
+                        if let promotionData = data.first, let promotionModel = PromoteModel(data: promotionData) {
+                            self.promotionList.append(promotionModel)
+                            let promotionBarButton = self.createPromotionButton()
+                            self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
+                        } else {
+                            self.promotionList = []
+                            self.isPromote = false
+                            self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+                        }
+                    } else {
+                        self.promotionList = []
+                        self.isPromote = false
+                        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+                    }
+                case .failure(let error):
+                    print("Error while getting promotion: \(error.localizedDescription)")
+                    self.promotionList = []
+                    self.isPromote = false
+                    self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+                }
+            }
+        }
+    }
+
+    func createPromotionButton() -> UIBarButtonItem {
+        self.isPromote = true
+        
+        self.promotionButton.setImage(UIImage(named: "promotion icon"), for: [])
+        self.promotionButton.addTarget(self, action: #selector(self.onClickPromote(_:)), for: .touchUpInside)
+        self.promotionButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        self.promotionButton.promote()
+
+        return UIBarButtonItem(customView: self.promotionButton)
+    }
+
 }
 
 extension FeedViewController {
@@ -451,6 +503,18 @@ extension FeedViewController {
             self.navigationController?.pushViewController(SVC, animated: true)
             
         }
+    }
+    
+    @objc func onClickPromote(_ sender: AnyObject) {
+
+        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PromoteVC") as? PromoteVC {
+            PVC.promotionList = self.promotionList
+            PVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(PVC, animated: true)
+            
+        }
+        
     }
     
 }
@@ -597,7 +661,7 @@ extension FeedViewController {
                 }
 
             
-                        // Reset the current playing index.
+                // Reset the current playing index.
                 currentIndex = nil
                 
             }
@@ -613,8 +677,7 @@ extension FeedViewController {
                     }
                 }
             }
-
-
+            
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
                 pauseVideoIfNeed(pauseIndex: currentIndex!)
@@ -644,7 +707,11 @@ extension FeedViewController {
                 changeTabBar(hidden: false, animated: false)
                 self.tabBarController?.tabBar.isTranslucent = false
                 showMiddleBtn(vc: self)
-               
+                if isPromote {
+                    promotionButton.promote()
+                } else {
+                    promotionButton.removeAnimation()
+                }
                 bottomConstraint.constant = 0
             }
             

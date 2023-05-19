@@ -210,6 +210,8 @@
 		6A7ED4BA2A0DBA0E00C8204E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A7ED4B92A0DBA0E00C8204E /* StoreKit.framework */; };
 		6A7ED4BD2A0E067D00C8204E /* SubcriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4BC2A0E067D00C8204E /* SubcriptionVC.swift */; };
 		6A7ED4C02A0F791D00C8204E /* LineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4BF2A0F791D00C8204E /* LineCell.swift */; };
+		6A7ED4C32A1707C800C8204E /* PromoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4C22A1707C800C8204E /* PromoteModel.swift */; };
+		6A7ED4C62A170F3700C8204E /* PromoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4C52A170F3700C8204E /* PromoteVC.swift */; };
 		6A802CC529E22D7200099F53 /* IntroTacticsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */; };
 		6A80F1A129B6921D0047595A /* UserSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A029B6921D0047595A /* UserSearchNode.swift */; };
 		6A80F1A429B6934C0047595A /* HashtagSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A329B6934C0047595A /* HashtagSearchNode.swift */; };
@@ -666,6 +668,8 @@
 		6A7ED4B92A0DBA0E00C8204E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		6A7ED4BC2A0E067D00C8204E /* SubcriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubcriptionVC.swift; sourceTree = "<group>"; };
 		6A7ED4BF2A0F791D00C8204E /* LineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineCell.swift; sourceTree = "<group>"; };
+		6A7ED4C22A1707C800C8204E /* PromoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteModel.swift; sourceTree = "<group>"; };
+		6A7ED4C52A170F3700C8204E /* PromoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteVC.swift; sourceTree = "<group>"; };
 		6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroTacticsVC.swift; sourceTree = "<group>"; };
 		6A80F1A029B6921D0047595A /* UserSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchNode.swift; sourceTree = "<group>"; };
 		6A80F1A329B6934C0047595A /* HashtagSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagSearchNode.swift; sourceTree = "<group>"; };
@@ -922,6 +926,7 @@
 		143684302918C5B800FA87D7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6A7ED4C12A1707B800C8204E /* PromoteModel */,
 				6ABDDC7D29F8948300CDAD39 /* CurrentChampionStatsModel */,
 				6AB9F82229F5C79A007370FF /* InGameModel */,
 				6A9E3AEF29E913C3002B36D7 /* RiotAccountModel */,
@@ -2198,6 +2203,22 @@
 			path = LineCell;
 			sourceTree = "<group>";
 		};
+		6A7ED4C12A1707B800C8204E /* PromoteModel */ = {
+			isa = PBXGroup;
+			children = (
+				6A7ED4C22A1707C800C8204E /* PromoteModel.swift */,
+			);
+			path = PromoteModel;
+			sourceTree = "<group>";
+		};
+		6A7ED4C42A170F2500C8204E /* PromoteVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A7ED4C52A170F3700C8204E /* PromoteVC.swift */,
+			);
+			path = PromoteVC;
+			sourceTree = "<group>";
+		};
 		6A802CC329E22D5000099F53 /* SB-Tactics */ = {
 			isa = PBXGroup;
 			children = (
@@ -2408,6 +2429,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A7ED4C42A170F2500C8204E /* PromoteVC */,
 				6A7ED4A32A08959C00C8204E /* InfoDetailVC */,
 				6A802CC329E22D5000099F53 /* SB-Tactics */,
 				6A6FB09829DBBC00003FCF6E /* StreamingIntroVC */,
@@ -3735,6 +3757,7 @@
 				6ABDDCB42A01024400CDAD39 /* ContentView.swift in Sources */,
 				6AAD7A43294C6642003E3AB6 /* UserDefaults+QuickStart.swift in Sources */,
 				6A6C310329641D4F0070167A /* UnbanUserModView.swift in Sources */,
+				6A7ED4C62A170F3700C8204E /* PromoteVC.swift in Sources */,
 				A540A8D4294726300085CC45 /* StartViewModel.swift in Sources */,
 				6A6FB08929DA01B9003FCF6E /* OneSignalNotiModel.swift in Sources */,
 				6A307CD129B6807300A89529 /* MainSearchVC.swift in Sources */,
@@ -3931,6 +3954,7 @@
 				6A0D54442974E8A00059530C /* ProfileHeaderCell.swift in Sources */,
 				6A0D541B296E4E840059530C /* ChallengeCard.swift in Sources */,
 				6A839B4329A0424700BD0A9A /* GameStatsDomainModel.swift in Sources */,
+				6A7ED4C32A1707C800C8204E /* PromoteModel.swift in Sources */,
 				390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */,
 				6A286B5D29C90E1800C72718 /* LoginActivityNode.swift in Sources */,
 				1457CCD72945898F003C742F /* CardStackView.swift in Sources */,

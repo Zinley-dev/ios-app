@@ -1463,6 +1463,36 @@
             </objects>
             <point key="canvasLocation" x="-5871.1999999999998" y="2346.7980295566504"/>
         </scene>
+        <!--PromoteVC-->
+        <scene sceneID="iQI-hu-ogp">
+            <objects>
+                <viewController storyboardIdentifier="PromoteVC" id="2jl-tv-IM8" customClass="PromoteVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1gy-Nu-WTw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="14x-R3-OCf">
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
+                                <color key="backgroundColor" name="Background"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="XRO-G6-QHQ"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="XRO-G6-QHQ" firstAttribute="bottom" secondItem="14x-R3-OCf" secondAttribute="bottom" id="Omq-Vv-Zl0"/>
+                            <constraint firstItem="14x-R3-OCf" firstAttribute="leading" secondItem="XRO-G6-QHQ" secondAttribute="leading" id="RXB-HO-03c"/>
+                            <constraint firstItem="14x-R3-OCf" firstAttribute="top" secondItem="XRO-G6-QHQ" secondAttribute="top" id="mGW-5X-fSm"/>
+                            <constraint firstItem="XRO-G6-QHQ" firstAttribute="trailing" secondItem="14x-R3-OCf" secondAttribute="trailing" id="nlP-Wy-04J"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="14x-R3-OCf" id="zPt-xw-uwB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uhw-lB-IR8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4890.3999999999996" y="2346.7980295566504"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="9GJ-aD-yj4">
             <objects>
