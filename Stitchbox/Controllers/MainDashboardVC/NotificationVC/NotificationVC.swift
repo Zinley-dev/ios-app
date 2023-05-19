@@ -128,6 +128,9 @@ extension NotificationVC {
         self.retrieveNextPageWithCompletion { (newNotis) in
                 
             if newNotis.count > 0 {
+                
+                self.UserNotificationList.removeAll()
+                self.tableNode.reloadData()
                         
                 self.insertNewRowsInTableNode(newNotis: newNotis)
                 
@@ -522,8 +525,7 @@ extension NotificationVC {
             hideAnimation()
             return
         }
-        
-        print(newNotis)
+    
         
         let section = 0
         var items = [UserNotificationModel]()
