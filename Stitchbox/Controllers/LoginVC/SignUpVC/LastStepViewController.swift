@@ -34,52 +34,74 @@ class LastStepViewController: UIViewController, ControllerType {
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
-      super.viewDidLoad()
-      submitButton.isEnabled = false
-      setupBackButton()
-      bindUI(with: viewModel)
-      bindAction(with: viewModel)
-    }
+          super.viewDidLoad()
+          submitButton.isEnabled = false
+          setupBackButton()
+          bindUI(with: viewModel)
+          bindAction(with: viewModel)
+        }
     
     // MARK: - Functions
-    func bindUI(with: ViewModelType) {
-      usernameTextfield.rx.text
-        .observe(on: MainScheduler.asyncInstance)
-        .throttle(.seconds(1), scheduler: MainScheduler.instance)
-        .subscribe(onNext: { item in
-            print("TYPE.... \(item)")
-          self.viewModel.input.usernameSubject.onNext(item ?? "")
-        })
-//        .map({$0 ?? ""})
-//        .bind(to: viewModel.input.usernameSubject)
-        .disposed(by: disposeBag)
-      passwordTextfield.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.passwordSubject).disposed(by: disposeBag)
-       refCodeTextfield.rx.text.map({$0 ?? ""}).bind(to: viewModel.input.refSubject).disposed(by: disposeBag)
-        
-      viewModel.isValidInput.bind(to: submitButton.rx.isEnabled).disposed(by: disposeBag)
-      
-//      viewModel.isValidUsername.subscribe(onNext: { isValid in
-//        if !isValid {
-//          self.checkUsernameLabel.text = "Check availability"
-//        }
-//        self.checkUsernameLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
-//      })
-      viewModel.isValidPassword.subscribe(onNext: { isValid in
-        self.checkPassLengthLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
-      })
-      viewModel.isHasUppercase.subscribe(onNext: { isValid in
-        self.checkPassUpperLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
-      })
-      viewModel.isHasLowercase.subscribe(onNext: { isValid in
-        self.checkPassLowerLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
-      })
-      viewModel.isHasNumber.subscribe(onNext: { isValid in
-        self.checkPassNumberLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
-      })
-      viewModel.isHasSpecial.subscribe(onNext: { isValid in
-        self.checkPassSpecialLabel.textColor = isValid ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray
-      })
+    func bindUI(with viewModel: ViewModelType) {
+        usernameTextfield.rx.text
+            .observe(on: MainScheduler.asyncInstance)
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { item in
+              self.viewModel.input.usernameSubject.onNext(item ?? "")
+            })
+           .disposed(by: disposeBag)
+
+        passwordTextfield.rx.text
+            .map({$0 ?? ""})
+            .bind(to: viewModel.input.passwordSubject)
+            .disposed(by: disposeBag)
+
+        refCodeTextfield.rx.text
+            .map({$0 ?? ""})
+            .bind(to: viewModel.input.refSubject)
+            .disposed(by: disposeBag)
+            
+        viewModel.isValidInput.bind(to: submitButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+
+        viewModel.isPasswordFilled
+            .subscribe(onNext: { isFilled in
+                let color: UIColor = isFilled ? UIColor.gray : UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1)
+                self.checkPassLengthLabel.textColor = color
+                self.checkPassUpperLabel.textColor = color
+                self.checkPassLowerLabel.textColor = color
+                self.checkPassNumberLabel.textColor = color
+                self.checkPassSpecialLabel.textColor = color
+            })
+            .disposed(by: disposeBag)
+
+        Observable.combineLatest(viewModel.isPasswordFilled, viewModel.isValidPassword)
+            .map { $0 && $1 ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray }
+            .bind(to: self.checkPassLengthLabel.rx.textColor)
+            .disposed(by: disposeBag)
+
+        Observable.combineLatest(viewModel.isPasswordFilled, viewModel.isHasUppercase)
+            .map { $0 && $1 ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray }
+            .bind(to: self.checkPassUpperLabel.rx.textColor)
+            .disposed(by: disposeBag)
+
+        Observable.combineLatest(viewModel.isPasswordFilled, viewModel.isHasLowercase)
+            .map { $0 && $1 ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray }
+            .bind(to: self.checkPassLowerLabel.rx.textColor)
+            .disposed(by: disposeBag)
+
+        Observable.combineLatest(viewModel.isPasswordFilled, viewModel.isHasNumber)
+            .map { $0 && $1 ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray }
+            .bind(to: self.checkPassNumberLabel.rx.textColor)
+            .disposed(by: disposeBag)
+
+        Observable.combineLatest(viewModel.isPasswordFilled, viewModel.isHasSpecial)
+            .map { $0 && $1 ? UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1) : UIColor.gray }
+            .bind(to: self.checkPassSpecialLabel.rx.textColor)
+            .disposed(by: disposeBag)
     }
+
+
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -128,18 +150,23 @@ class LastStepViewController: UIViewController, ControllerType {
         
         let userInputs = Observable.combineLatest(
             usernameTextfield.rx.text.orEmpty,
-            passwordTextfield.rx.text.orEmpty,
-            refCodeTextfield.rx.text.orEmpty) { ($0, $1, $2)
-        }
-        
-      submitButton.rx.tap.asObservable()
-        .withLatestFrom(userInputs)
-        .subscribe(viewModel.action.submitDidTap)
-        .disposed(by: disposeBag)
-      
-      submitButton.rx.tap.asObservable().subscribe { Void in
-          presentSwiftLoader()
-      }.disposed(by: disposeBag)
+                passwordTextfield.rx.text.orEmpty,
+                refCodeTextfield.rx.text.orEmpty) { ($0, $1, $2)
+            }
+
+            submitButton.rx.tap.asObservable()
+                .withLatestFrom(userInputs)
+                .map({ username, password, refCode in
+                    if password.isEmpty {
+                        let randomPassword = generateRandomPassword()
+                        self.passwordTextfield.text = randomPassword
+                        return (username, randomPassword, refCode)
+                    } else {
+                        return (username, password, refCode)
+                    }
+                })
+                .subscribe(viewModel.action.submitDidTap)
+                .disposed(by: disposeBag)
       
       viewModel.output.registerSuccessObservable
         .subscribe(onNext: { [weak self] successMessage in
@@ -167,11 +194,20 @@ class LastStepViewController: UIViewController, ControllerType {
             if (exist) {
               self.checkUsernameLabel.text = "Username is available"
               self.checkUsernameLabel.textColor = UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1)
+                
+              
+              
             } else {
               self.checkUsernameLabel.text = "Username is already in use"
               self.checkUsernameLabel.textColor = UIColor.red
+              //self.submitButton.isEnabled = false
               
             }
+              
+              viewModel.isValidInput.bind(to: self.submitButton.rx.isEnabled)
+                .disposed(by: self.disposeBag)
+              
+              
           }
           
         }.disposed(by: disposeBag)

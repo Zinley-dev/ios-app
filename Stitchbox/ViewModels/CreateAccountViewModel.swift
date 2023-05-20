@@ -11,73 +11,84 @@ import ObjectMapper
 class CreateAccountViewModel: ViewModelProtocol {
     // MARK: Struct Declaration
     struct Input {
-        let usernameSubject: BehaviorSubject<String>
-        let passwordSubject: BehaviorSubject<String>
-        let refSubject: BehaviorSubject<String>
-    }
-    
-    struct Action {
-        let submitDidTap: AnyObserver<(String, String, String)>
-    }
-    
-    struct Output {
-        let usernameExistObservable: Observable<Bool>
-        let registerSuccessObservable: Observable<Bool>
-        let errorsObservable: Observable<Error>
-    }
-    
-    // MARK: Variable Declaration
-    let input: Input
-    let action: Action
-    let output: Output
-    var prevText = ""
-    var usernameExist = true
-    
-    // MARK: Subject Instantiation
-    private let submitDidTapSubject = PublishSubject<(String, String, String)>()
-    private let registerResultSubject = PublishSubject<Bool>()
-    private let usernameExistSubject = PublishSubject<Bool>()
-    private let errorsSubject = PublishSubject<Error>()
-    private let disposeBag = DisposeBag()
-    
-    init() {
-        input = Input(
-            usernameSubject: BehaviorSubject<String>(value: ""),
-            passwordSubject: BehaviorSubject<String>(value: ""),
-            refSubject: BehaviorSubject<String>(value: "")
-        )
-        action = Action(submitDidTap: submitDidTapSubject.asObserver())
-        output = Output(usernameExistObservable: usernameExistSubject.asObservable(), registerSuccessObservable: registerResultSubject.asObserver(), errorsObservable: errorsSubject.asObserver())
-        logic()
-    }
-    
-    var isValidInput:Observable<Bool> {
+            let usernameSubject: BehaviorSubject<String>
+            let passwordSubject: BehaviorSubject<String>
+            let refSubject: BehaviorSubject<String>
+        }
         
-        return Observable.combineLatest(isValidUsername, isValidPassword, isHasUppercase, isHasLowercase, isHasNumber, isHasSpecial).map({ $0 && $1 && $2 && $3 && $4 && $5 && self.usernameExist})
-    }
-    
-    var isValidUsername:Observable<Bool>
-    {
-       input.usernameSubject.map { $0.count >= 3 }
-    }
+        struct Action {
+            let submitDidTap: AnyObserver<(String, String, String)>
+        }
+        
+        struct Output {
+            let usernameExistObservable: Observable<Bool>
+            let registerSuccessObservable: Observable<Bool>
+            let errorsObservable: Observable<Error>
+        }
+        
+        // MARK: Variable Declaration
+        let input: Input
+        let action: Action
+        let output: Output
+        var prevText = ""
+        var usernameExist = true
+        
+        // MARK: Subject Instantiation
+        private let submitDidTapSubject = PublishSubject<(String, String, String)>()
+        private let registerResultSubject = PublishSubject<Bool>()
+        private let usernameExistSubject = PublishSubject<Bool>()
+        private let errorsSubject = PublishSubject<Error>()
+        private let disposeBag = DisposeBag()
+        
+        var isUsernameFilled: Observable<Bool>
+        var isPasswordFilled: Observable<Bool>
 
-    var isValidPassword:Observable<Bool> {
-        input.passwordSubject.map { $0.count > 8 }
-    }
-    
-    var isHasUppercase:Observable<Bool> {
-        let regex = try! NSRegularExpression(pattern: ".*[A-Z]+.*")
-        return input.passwordSubject.map { regex.firstMatch(in: $0, range: NSRange(location: 0, length: $0.count)) != nil }
-    }
-    var isHasLowercase:Observable<Bool> {
-        input.passwordSubject.map { $0 ~= ".*[a-z]+.*" }
-    }
-    var isHasNumber:Observable<Bool> {
-        input.passwordSubject.map { $0 ~= ".*[0-9]+.*" }
-    }
-    var isHasSpecial:Observable<Bool> {
-        input.passwordSubject.map { $0 ~= ".*[@!#$%^&*~]+.*" }
-    }
+        init() {
+            input = Input(
+                usernameSubject: BehaviorSubject<String>(value: ""),
+                passwordSubject: BehaviorSubject<String>(value: ""),
+                refSubject: BehaviorSubject<String>(value: "")
+            )
+            action = Action(submitDidTap: submitDidTapSubject.asObserver())
+            output = Output(usernameExistObservable: usernameExistSubject.asObservable(), registerSuccessObservable: registerResultSubject.asObserver(), errorsObservable: errorsSubject.asObserver())
+            
+            isUsernameFilled = input.usernameSubject.map { !$0.isEmpty }
+            isPasswordFilled = input.passwordSubject.map { !$0.isEmpty }
+            
+            logic()
+        }
+        
+        var isValidInput:Observable<Bool> {
+            return Observable.combineLatest(isUsernameFilled, isValidUsername, isPasswordFilled, isValidPassword, isHasUppercase, isHasLowercase, isHasNumber, isHasSpecial)
+                .map({ (usernameFilled, validUsername, passwordFilled, validPassword, hasUppercase, hasLowercase, hasNumber, hasSpecial) -> Bool in
+                    // Check if password is either not filled (in which case a random password will be created server-side) or if it is filled and valid
+                    let isPasswordOk = !passwordFilled || (passwordFilled && validPassword && hasUppercase && hasLowercase && hasNumber && hasSpecial)
+                    return usernameFilled && validUsername && isPasswordOk && self.usernameExist
+                })
+        }
+
+        
+        var isValidUsername:Observable<Bool> {
+           return input.usernameSubject.map { $0.count >= 3 }
+        }
+
+        var isValidPassword:Observable<Bool> {
+            return input.passwordSubject.map { $0.count > 8 }
+        }
+        
+        var isHasUppercase:Observable<Bool> {
+            let regex = try! NSRegularExpression(pattern: ".*[A-Z]+.*")
+            return input.passwordSubject.map { regex.firstMatch(in: $0, range: NSRange(location: 0, length: $0.count)) != nil }
+        }
+        var isHasLowercase:Observable<Bool> {
+            return input.passwordSubject.map { $0 ~= ".*[a-z]+.*" }
+        }
+        var isHasNumber:Observable<Bool> {
+            return input.passwordSubject.map { $0 ~= ".*[0-9]+.*" }
+        }
+        var isHasSpecial:Observable<Bool> {
+            return input.passwordSubject.map { $0 ~= ".*[@!#$%^&*~]+.*" }
+        }
     
     func logic() {
     

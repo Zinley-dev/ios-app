@@ -1347,3 +1347,30 @@ class DelayedPanGestureRecognizer: UIPanGestureRecognizer {
         }
     }
 }
+
+func generateRandomPassword() -> String {
+    let numbers = Array("0123456789")
+    let upperCaseLetters = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    let lowerCaseLetters = Array("abcdefghijklmnopqrstuvwxyz")
+    let specialCharacters = Array("!@#$%^&*()_+-=[]{}|;:,.<>?/`~")
+    
+    var passwordCharacters = [Character]()
+    
+    // Ensure password has at least one number, one uppercase letter, one lowercase letter, and one special character
+    passwordCharacters.append(numbers.randomElement()!)
+    passwordCharacters.append(upperCaseLetters.randomElement()!)
+    passwordCharacters.append(lowerCaseLetters.randomElement()!)
+    passwordCharacters.append(specialCharacters.randomElement()!)
+    
+    // Generate the rest of the password
+    for _ in 4...8 {
+        let allCharacters = numbers + upperCaseLetters + lowerCaseLetters + specialCharacters
+        passwordCharacters.append(allCharacters.randomElement()!)
+    }
+    
+    passwordCharacters.shuffle()
+    
+    let password = String(passwordCharacters)
+    
+    return password
+}
