@@ -13,6 +13,7 @@ class PromoteModel {
     let createdAt: Date
     let endDate: Date
     let imageUrl: URL
+    let originalLink: URL
     let isActive: Bool
     let maxMember: Int
     let name: String
@@ -24,6 +25,8 @@ class PromoteModel {
         let dateFormatter = ISO8601DateFormatter()
         
         guard let id = data["_id"] as? String,
+              let originalUrlString = data["originalLink"] as? String,
+              let originalLink = URL(string: originalUrlString),
               let description = data["description"] as? String,
               let createdAtString = data["createdAt"] as? String,
               let createdAt = dateFormatter.date(from: createdAtString),
@@ -47,6 +50,7 @@ class PromoteModel {
         self.createdAt = createdAt
         self.endDate = endDate
         self.imageUrl = imageUrl
+        self.originalLink = originalLink
         self.isActive = isActive == 1
         self.maxMember = maxMember
         self.name = name

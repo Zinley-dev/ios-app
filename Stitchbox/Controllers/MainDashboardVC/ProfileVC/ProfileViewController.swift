@@ -1402,7 +1402,7 @@ extension ProfileViewController {
         
         Dispatch.main.async {
             var updatedSnapshot = self.datasource.snapshot()
-            updatedSnapshot.reloadSections([.header])
+            updatedSnapshot.reloadSections([.header, .challengeCard])
             self.datasource.apply(updatedSnapshot, animatingDifferences: false)
             
             

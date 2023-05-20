@@ -656,38 +656,38 @@ extension UIButton {
     }
     
     func promote() {
-        // Scale animation to make button pulse
+        // Scale animation for a subtle pulse effect
         let scaleAnimation = CASpringAnimation(keyPath: "transform.scale")
-        scaleAnimation.duration = 0.6
+        scaleAnimation.duration = 0.8 // quicker pulse
         scaleAnimation.fromValue = 1.0
-        scaleAnimation.toValue = 1.08
+        scaleAnimation.toValue = 1.05 // subtle scale change
         scaleAnimation.autoreverses = true
         scaleAnimation.repeatCount = .infinity
         scaleAnimation.initialVelocity = 0.5
         scaleAnimation.damping = 0.8
 
-        // Create a glow effect around the button using shadow properties
-        let glowAnimation = CABasicAnimation(keyPath: "shadowRadius")
-        glowAnimation.fromValue = 0
-        glowAnimation.toValue = 10
-        glowAnimation.beginTime = 0.1
-        glowAnimation.duration = 0.8
-        glowAnimation.repeatCount = .infinity
-        glowAnimation.autoreverses = true
-        glowAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-        
-        // Apply a colored shadow for the glow effect
-        layer.shadowColor = UIColor.red.cgColor // Change the color to your preferred glow color
-        layer.shadowOpacity = 1
+        // Gentle shadow radius animation for a soft glow
+        let shadowRadiusAnimation = CABasicAnimation(keyPath: "shadowRadius")
+        shadowRadiusAnimation.fromValue = 10
+        shadowRadiusAnimation.toValue = 12 // subtle change in shadow radius
+        shadowRadiusAnimation.duration = 0.8 // quicker transition
+        shadowRadiusAnimation.autoreverses = true
+        shadowRadiusAnimation.repeatCount = .infinity
+        shadowRadiusAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+
+        // Apply a soft shadow
+        layer.shadowColor = UIColor.gray.cgColor
+        layer.shadowOpacity = 0.5 // increase opacity for a more noticeable effect
         layer.shadowOffset = CGSize.zero
         layer.shadowRadius = 10
 
         // Add animations to the layer
-        layer.add(scaleAnimation, forKey: "scale")
-        layer.add(glowAnimation, forKey: "glow")
+        layer.add(scaleAnimation, forKey: "pulse")
+        layer.add(shadowRadiusAnimation, forKey: "shadowPulse")
     }
 
-    
+
+
     
     func removeAnimation() {
         

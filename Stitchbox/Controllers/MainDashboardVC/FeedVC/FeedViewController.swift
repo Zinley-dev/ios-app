@@ -438,7 +438,7 @@ extension FeedViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let apiResponse):
-                    print(apiResponse.body)
+
                     if let dataDict = apiResponse.body,
                        let data = dataDict["data"] as? [[String: Any]],
                        !data.isEmpty {
@@ -1211,9 +1211,6 @@ extension FeedViewController {
             APIManager().resetBadge { result in
                 switch result {
                 case .success(let apiResponse):
-                    
-                    
-                    print(apiResponse)
                     
                     Dispatch.main.async {
                         self.setupEmptyNotiButton()

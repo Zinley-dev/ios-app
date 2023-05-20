@@ -147,6 +147,28 @@
 		6A467E5C29AD951600214108 /* NewsFeedSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A467E5B29AD951600214108 /* NewsFeedSettingVC.xib */; };
 		6A47AA7A2A17138200E3E1FF /* PromoteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA792A17138200E3E1FF /* PromoteNode.swift */; };
 		6A47AA7D2A17679300E3E1FF /* PromoteDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA7C2A17679300E3E1FF /* PromoteDetailVC.swift */; };
+		6A47AA8C2A1867C900E3E1FF /* ClassicFireworkAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA872A1867C900E3E1FF /* ClassicFireworkAnimator.swift */; };
+		6A47AA8D2A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA882A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift */; };
+		6A47AA8E2A1867C900E3E1FF /* ClassicFireworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA892A1867C900E3E1FF /* ClassicFireworkController.swift */; };
+		6A47AA8F2A1867C900E3E1FF /* ClassicFirework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA8A2A1867C900E3E1FF /* ClassicFirework.swift */; };
+		6A47AA902A1867C900E3E1FF /* ClassicSparkTrajectoryFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA8B2A1867C900E3E1FF /* ClassicSparkTrajectoryFactory.swift */; };
+		6A47AA952A1867D200E3E1FF /* FountainSparkTrajectoryFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA912A1867D100E3E1FF /* FountainSparkTrajectoryFactory.swift */; };
+		6A47AA962A1867D200E3E1FF /* FountainFirework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA922A1867D100E3E1FF /* FountainFirework.swift */; };
+		6A47AA972A1867D200E3E1FF /* FountainFireworkAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA932A1867D100E3E1FF /* FountainFireworkAnimator.swift */; };
+		6A47AA982A1867D200E3E1FF /* FountainFireworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA942A1867D200E3E1FF /* FountainFireworkController.swift */; };
+		6A47AAA12A1867DC00E3E1FF /* FireworkSparkScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA992A1867DC00E3E1FF /* FireworkSparkScheduler.swift */; };
+		6A47AAA22A1867DC00E3E1FF /* SparkTrajectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA9A2A1867DC00E3E1FF /* SparkTrajectory.swift */; };
+		6A47AAA32A1867DC00E3E1FF /* SparkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA9B2A1867DC00E3E1FF /* SparkView.swift */; };
+		6A47AAA42A1867DC00E3E1FF /* FireworkSpark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA9C2A1867DC00E3E1FF /* FireworkSpark.swift */; };
+		6A47AAA52A1867DC00E3E1FF /* SparkViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA9D2A1867DC00E3E1FF /* SparkViewFactory.swift */; };
+		6A47AAA62A1867DC00E3E1FF /* Firework.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA9E2A1867DC00E3E1FF /* Firework.swift */; };
+		6A47AAA72A1867DC00E3E1FF /* SparkTrajectoryFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA9F2A1867DC00E3E1FF /* SparkTrajectoryFactory.swift */; };
+		6A47AAA82A1867DC00E3E1FF /* SparkViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAA02A1867DC00E3E1FF /* SparkViewAnimator.swift */; };
+		6A47AAAD2A1867E600E3E1FF /* ImageSparkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAA92A1867E600E3E1FF /* ImageSparkView.swift */; };
+		6A47AAAE2A1867E600E3E1FF /* ImageSparkViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAAA2A1867E600E3E1FF /* ImageSparkViewFactory.swift */; };
+		6A47AAAF2A1867E600E3E1FF /* CircleColorSparkViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAAB2A1867E600E3E1FF /* CircleColorSparkViewFactory.swift */; };
+		6A47AAB02A1867E600E3E1FF /* CircleColorSparkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAAC2A1867E600E3E1FF /* CircleColorSparkView.swift */; };
+		6A47AAB22A1867ED00E3E1FF /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAB12A1867ED00E3E1FF /* CGPoint+Extensions.swift */; };
 		6A495E3D297666EA001895C3 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A495E3C297666EA001895C3 /* SettingVC.swift */; };
 		6A58E1852A087B0F0002E5C8 /* ChatGPTTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58E1842A087B0F0002E5C8 /* ChatGPTTokenManager.swift */; };
 		6A58EA46294E997A005FA3CD /* GroupChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */; };
@@ -608,6 +630,28 @@
 		6A467E5B29AD951600214108 /* NewsFeedSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsFeedSettingVC.xib; sourceTree = "<group>"; };
 		6A47AA792A17138200E3E1FF /* PromoteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteNode.swift; sourceTree = "<group>"; };
 		6A47AA7C2A17679300E3E1FF /* PromoteDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteDetailVC.swift; sourceTree = "<group>"; };
+		6A47AA872A1867C900E3E1FF /* ClassicFireworkAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassicFireworkAnimator.swift; sourceTree = "<group>"; };
+		6A47AA882A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassicSparkTrajectoryFactoryProtocol.swift; sourceTree = "<group>"; };
+		6A47AA892A1867C900E3E1FF /* ClassicFireworkController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassicFireworkController.swift; sourceTree = "<group>"; };
+		6A47AA8A2A1867C900E3E1FF /* ClassicFirework.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassicFirework.swift; sourceTree = "<group>"; };
+		6A47AA8B2A1867C900E3E1FF /* ClassicSparkTrajectoryFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassicSparkTrajectoryFactory.swift; sourceTree = "<group>"; };
+		6A47AA912A1867D100E3E1FF /* FountainSparkTrajectoryFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FountainSparkTrajectoryFactory.swift; sourceTree = "<group>"; };
+		6A47AA922A1867D100E3E1FF /* FountainFirework.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FountainFirework.swift; sourceTree = "<group>"; };
+		6A47AA932A1867D100E3E1FF /* FountainFireworkAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FountainFireworkAnimator.swift; sourceTree = "<group>"; };
+		6A47AA942A1867D200E3E1FF /* FountainFireworkController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FountainFireworkController.swift; sourceTree = "<group>"; };
+		6A47AA992A1867DC00E3E1FF /* FireworkSparkScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireworkSparkScheduler.swift; sourceTree = "<group>"; };
+		6A47AA9A2A1867DC00E3E1FF /* SparkTrajectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkTrajectory.swift; sourceTree = "<group>"; };
+		6A47AA9B2A1867DC00E3E1FF /* SparkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkView.swift; sourceTree = "<group>"; };
+		6A47AA9C2A1867DC00E3E1FF /* FireworkSpark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireworkSpark.swift; sourceTree = "<group>"; };
+		6A47AA9D2A1867DC00E3E1FF /* SparkViewFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkViewFactory.swift; sourceTree = "<group>"; };
+		6A47AA9E2A1867DC00E3E1FF /* Firework.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Firework.swift; sourceTree = "<group>"; };
+		6A47AA9F2A1867DC00E3E1FF /* SparkTrajectoryFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkTrajectoryFactory.swift; sourceTree = "<group>"; };
+		6A47AAA02A1867DC00E3E1FF /* SparkViewAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkViewAnimator.swift; sourceTree = "<group>"; };
+		6A47AAA92A1867E600E3E1FF /* ImageSparkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSparkView.swift; sourceTree = "<group>"; };
+		6A47AAAA2A1867E600E3E1FF /* ImageSparkViewFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSparkViewFactory.swift; sourceTree = "<group>"; };
+		6A47AAAB2A1867E600E3E1FF /* CircleColorSparkViewFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleColorSparkViewFactory.swift; sourceTree = "<group>"; };
+		6A47AAAC2A1867E600E3E1FF /* CircleColorSparkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleColorSparkView.swift; sourceTree = "<group>"; };
+		6A47AAB12A1867ED00E3E1FF /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
 		6A495E3C297666EA001895C3 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6A58E1842A087B0F0002E5C8 /* ChatGPTTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTTokenManager.swift; sourceTree = "<group>"; };
 		6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChannelTableViewCell.swift; sourceTree = "<group>"; };
@@ -1078,6 +1122,7 @@
 		390FD7362909264D0068B883 /* Stitchbox */ = {
 			isa = PBXGroup;
 			children = (
+				6A47AA802A18678700E3E1FF /* fireworks */,
 				6A7ED4B62A0D9A4400C8204E /* PaymentControl */,
 				6ABDDCA72A01022A00CDAD39 /* GPT */,
 				396F51FE29DB25BF00BF78BE /* DeeplinkHandler */,
@@ -1857,6 +1902,83 @@
 				6A47AA7C2A17679300E3E1FF /* PromoteDetailVC.swift */,
 			);
 			name = PromoteDetailVC;
+			sourceTree = "<group>";
+		};
+		6A47AA802A18678700E3E1FF /* fireworks */ = {
+			isa = PBXGroup;
+			children = (
+				6A47AA812A18679400E3E1FF /* Fireworks */,
+			);
+			path = fireworks;
+			sourceTree = "<group>";
+		};
+		6A47AA812A18679400E3E1FF /* Fireworks */ = {
+			isa = PBXGroup;
+			children = (
+				6A47AA862A1867BE00E3E1FF /* Classic Firework */,
+				6A47AA852A1867B600E3E1FF /* Fountain Firework */,
+				6A47AA842A1867AE00E3E1FF /* Model */,
+				6A47AA832A1867A700E3E1FF /* Spark Views */,
+				6A47AA822A18679D00E3E1FF /* System Extensions */,
+			);
+			path = Fireworks;
+			sourceTree = "<group>";
+		};
+		6A47AA822A18679D00E3E1FF /* System Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6A47AAB12A1867ED00E3E1FF /* CGPoint+Extensions.swift */,
+			);
+			path = "System Extensions";
+			sourceTree = "<group>";
+		};
+		6A47AA832A1867A700E3E1FF /* Spark Views */ = {
+			isa = PBXGroup;
+			children = (
+				6A47AAAC2A1867E600E3E1FF /* CircleColorSparkView.swift */,
+				6A47AAAB2A1867E600E3E1FF /* CircleColorSparkViewFactory.swift */,
+				6A47AAA92A1867E600E3E1FF /* ImageSparkView.swift */,
+				6A47AAAA2A1867E600E3E1FF /* ImageSparkViewFactory.swift */,
+			);
+			path = "Spark Views";
+			sourceTree = "<group>";
+		};
+		6A47AA842A1867AE00E3E1FF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6A47AA9E2A1867DC00E3E1FF /* Firework.swift */,
+				6A47AA9C2A1867DC00E3E1FF /* FireworkSpark.swift */,
+				6A47AA992A1867DC00E3E1FF /* FireworkSparkScheduler.swift */,
+				6A47AA9A2A1867DC00E3E1FF /* SparkTrajectory.swift */,
+				6A47AA9F2A1867DC00E3E1FF /* SparkTrajectoryFactory.swift */,
+				6A47AA9B2A1867DC00E3E1FF /* SparkView.swift */,
+				6A47AAA02A1867DC00E3E1FF /* SparkViewAnimator.swift */,
+				6A47AA9D2A1867DC00E3E1FF /* SparkViewFactory.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6A47AA852A1867B600E3E1FF /* Fountain Firework */ = {
+			isa = PBXGroup;
+			children = (
+				6A47AA922A1867D100E3E1FF /* FountainFirework.swift */,
+				6A47AA932A1867D100E3E1FF /* FountainFireworkAnimator.swift */,
+				6A47AA942A1867D200E3E1FF /* FountainFireworkController.swift */,
+				6A47AA912A1867D100E3E1FF /* FountainSparkTrajectoryFactory.swift */,
+			);
+			path = "Fountain Firework";
+			sourceTree = "<group>";
+		};
+		6A47AA862A1867BE00E3E1FF /* Classic Firework */ = {
+			isa = PBXGroup;
+			children = (
+				6A47AA8A2A1867C900E3E1FF /* ClassicFirework.swift */,
+				6A47AA872A1867C900E3E1FF /* ClassicFireworkAnimator.swift */,
+				6A47AA892A1867C900E3E1FF /* ClassicFireworkController.swift */,
+				6A47AA8B2A1867C900E3E1FF /* ClassicSparkTrajectoryFactory.swift */,
+				6A47AA882A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift */,
+			);
+			path = "Classic Firework";
 			sourceTree = "<group>";
 		};
 		6A495E392976596E001895C3 /* SettingVC */ = {
@@ -3806,6 +3928,7 @@
 				6ABDDCBA2A01024400CDAD39 /* ResponseParsingTask.swift in Sources */,
 				6A6C30D629626D3C0070167A /* LeaveView.swift in Sources */,
 				6ABDDCB62A01024400CDAD39 /* DotLoadingView.swift in Sources */,
+				6A47AAA12A1867DC00E3E1FF /* FireworkSparkScheduler.swift in Sources */,
 				6AC6DA0029A5CA1800B18139 /* CustomSearchCell.swift in Sources */,
 				14FADBC8297A420800E0A741 /* UIImageViewExtension.swift in Sources */,
 				390FD782290931900068B883 /* NormalLoginViewController.swift in Sources */,
@@ -3817,20 +3940,25 @@
 				147187EB2920AF6E0039B89E /* ViewModelProtocol.swift in Sources */,
 				6A78486C29862931008B2263 /* StreamingDomainModel.swift in Sources */,
 				395477BD294D6BCA008EED97 /* LoginByPhoneVerifyController.swift in Sources */,
+				6A47AAA52A1867DC00E3E1FF /* SparkViewFactory.swift in Sources */,
 				395477BF294D714F008EED97 /* CreateAccountViewModel.swift in Sources */,
 				6A9E4C7A2977AF5400B59176 /* SecurityVC.swift in Sources */,
 				6AAD7A4A294C664D003E3AB6 /* StartCallConvertible.swift in Sources */,
 				6ABA611E2977CB29003BFB5B /* PhotoVC.swift in Sources */,
+				6A47AAAF2A1867E600E3E1FF /* CircleColorSparkViewFactory.swift in Sources */,
 				6A0D543E297242140059530C /* JokeProtocol.swift in Sources */,
 				6A6627802965772B00A4488B /* APIResponse.swift in Sources */,
 				6A0D543B297241D30059530C /* InstantiatesFromNib.swift in Sources */,
 				14131D80293B9D8F001F7631 /* SLoading.swift in Sources */,
+				6A47AAA42A1867DC00E3E1FF /* FireworkSpark.swift in Sources */,
 				6A6627772965771400A4488B /* APIManager.swift in Sources */,
+				6A47AA982A1867D200E3E1FF /* FountainFireworkController.swift in Sources */,
 				6A495E3D297666EA001895C3 /* SettingVC.swift in Sources */,
 				1440252B2991C32D008438C2 /* FistBumperVC.swift in Sources */,
 				6AAD7A1A294C65DD003E3AB6 /* UIImage+QuickStart.swift in Sources */,
 				6A1235AA295034FF004B612E /* GroupCallViewController.swift in Sources */,
 				6AAD7A4F294C6995003E3AB6 /* Utils.swift in Sources */,
+				6A47AAB02A1867E600E3E1FF /* CircleColorSparkView.swift in Sources */,
 				6AF6C49B2997057D00DD8D37 /* EditPhoneVC.swift in Sources */,
 				6A6C30E62964033A0070167A /* BannedMemberVC.swift in Sources */,
 				6AAD7A1B294C65DD003E3AB6 /* UIViewController+QuickStart.swift in Sources */,
@@ -3857,6 +3985,7 @@
 				6A839B4629A0476E00BD0A9A /* GameDomainListVC.swift in Sources */,
 				6AAD7A49294C664D003E3AB6 /* NSUserActivity+QuickStart.swift in Sources */,
 				6A58EA50294EB280005FA3CD /* String+SendBird.swift in Sources */,
+				6A47AA8D2A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift in Sources */,
 				6A9E4C7D2977B2E100B59176 /* BlockUserModel.swift in Sources */,
 				6A251CEE29EA003A00F6AC0D /* LOLProfileHeaderCell.swift in Sources */,
 				6A6C30EB296408B20070167A /* AddOperatorMemberVC.swift in Sources */,
@@ -3865,8 +3994,10 @@
 				6ABA61232977D938003BFB5B /* LoginActivityVC.swift in Sources */,
 				6AAD7A08294C5DBB003E3AB6 /* RequestVC.swift in Sources */,
 				A5746D0329BB350000EA143E /* UABuilder.swift in Sources */,
+				6A47AA902A1867C900E3E1FF /* ClassicSparkTrajectoryFactory.swift in Sources */,
 				6A9E3AF729E9D2D0002B36D7 /* SB-ChatBot.swift in Sources */,
 				6A58EA53294EB301005FA3CD /* CacheConfig.swift in Sources */,
+				6A47AAB22A1867ED00E3E1FF /* CGPoint+Extensions.swift in Sources */,
 				396F520229DB25EF00BF78BE /* DeeplinkHandlerProtocol.swift in Sources */,
 				6A3F0A802980BF8500366665 /* FollowNode.swift in Sources */,
 				6A66277E2965772200A4488B /* HTTPTask.swift in Sources */,
@@ -3877,11 +4008,13 @@
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				A540A8D6294730C40085CC45 /* FacebookSignInService.swift in Sources */,
 				6A6C30E42964032C0070167A /* MutedMemberVC.swift in Sources */,
+				6A47AAA82A1867DC00E3E1FF /* SparkViewAnimator.swift in Sources */,
 				A5DF81F7295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift in Sources */,
 				6A0D544A2974F3F10059530C /* ChallengeCardHeaderData.swift in Sources */,
 				6A6C30FE2964156E0070167A /* UnmutedUserModView.swift in Sources */,
 				6A3F0A7B2980BE3400366665 /* FollowingVC.swift in Sources */,
 				6AAD7A2D294C6624003E3AB6 /* SendBirdCall+QuickStart.swift in Sources */,
+				6A47AA8E2A1867C900E3E1FF /* ClassicFireworkController.swift in Sources */,
 				6AEA33FD298DCAC0005A4C5D /* HashtagCell.swift in Sources */,
 				6ABDDCB72A01024400CDAD39 /* MarkdownAttributedStringParser.swift in Sources */,
 				6A839B3D29A035DE00BD0A9A /* AddGameDetailVC.swift in Sources */,
@@ -3893,11 +4026,14 @@
 				6A66277429655D2400A4488B /* Session+TypeAlias.swift in Sources */,
 				6A286B6729CD5EB200C72718 /* UserSettingVC.swift in Sources */,
 				6AC6DA1329AD317600B18139 /* SideButton.swift in Sources */,
+				6A47AA952A1867D200E3E1FF /* FountainSparkTrajectoryFactory.swift in Sources */,
 				6A5C556229E89FC0006F51DD /* TacticsGameModel.swift in Sources */,
 				390FD73C2909264D0068B883 /* StartViewController.swift in Sources */,
+				6A47AAA32A1867DC00E3E1FF /* SparkView.swift in Sources */,
 				6A2B9A8129D26ACE00C2D9CD /* ViewVC.swift in Sources */,
 				6A3F0A56297B6A9000366665 /* MainFollowVC.swift in Sources */,
 				6A307CD929B6850800A89529 /* PostSearchVC.swift in Sources */,
+				6A47AAA72A1867DC00E3E1FF /* SparkTrajectoryFactory.swift in Sources */,
 				6AEA33E6298AA152005A4C5D /* VideoPostModel.swift in Sources */,
 				6AAD7A36294C6637003E3AB6 /* DialError.swift in Sources */,
 				6AE1CE6B294D698300B1C435 /* CreateChannelVC.swift in Sources */,
@@ -3908,6 +4044,7 @@
 				A540A8DA294731320085CC45 /* AppleSignInService.swift in Sources */,
 				6ABDDCCD2A0107F200CDAD39 /* TokenizerViewModel.swift in Sources */,
 				6A802CC529E22D7200099F53 /* IntroTacticsVC.swift in Sources */,
+				6A47AAAE2A1867E600E3E1FF /* ImageSparkViewFactory.swift in Sources */,
 				6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */,
 				6A286B5A29C90D4B00C72718 /* UserLoginActivityModel.swift in Sources */,
 				6A3F0A8C2982331F00366665 /* UserProfileVC.swift in Sources */,
@@ -3920,6 +4057,7 @@
 				6A58E1852A087B0F0002E5C8 /* ChatGPTTokenManager.swift in Sources */,
 				6A839B3A29A0332600BD0A9A /* addNewGameCell.swift in Sources */,
 				6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */,
+				6A47AA962A1867D200E3E1FF /* FountainFirework.swift in Sources */,
 				14FADBCD297B072100E0A741 /* ChangePasswordViewModel.swift in Sources */,
 				141BB195293BA4F0004F4ED7 /* CountryPicker.swift in Sources */,
 				6A58EA51294EB280005FA3CD /* ImageUtil.swift in Sources */,
@@ -3928,6 +4066,7 @@
 				6AAD7A45294C6642003E3AB6 /* Bundle+QuickStart.swift in Sources */,
 				A5F2510729A76AB600373554 /* OwnerModel.swift in Sources */,
 				A5346488294B09B300FB6A94 /* ProfileViewController.swift in Sources */,
+				6A47AA8C2A1867C900E3E1FF /* ClassicFireworkAnimator.swift in Sources */,
 				6A2B9A8429D26AE500C2D9CD /* ViewCell.swift in Sources */,
 				6AF973352978E4E900C76814 /* MorePersonalInfoVC.swift in Sources */,
 				6AAD7A3F294C6642003E3AB6 /* Int64+QuickStart.swift in Sources */,
@@ -3947,8 +4086,10 @@
 				6AAD7A30294C6630003E3AB6 /* CXProvider+QuickStart.swift in Sources */,
 				6AAD7A40294C6642003E3AB6 /* String+QuickStart.swift in Sources */,
 				6AAD7A6C294C69B1003E3AB6 /* Hashids.swift in Sources */,
+				6A47AA972A1867D200E3E1FF /* FountainFireworkAnimator.swift in Sources */,
 				6A136365299C6A6D00E70507 /* AddGameVC.swift in Sources */,
 				6A3F0A5F297CBA5600366665 /* PostVC.swift in Sources */,
+				6A47AAA22A1867DC00E3E1FF /* SparkTrajectory.swift in Sources */,
 				6AE1CE70294D6A4A00B1C435 /* SelectedUserCollectionViewCell.swift in Sources */,
 				6AF6C49D2997058F00DD8D37 /* VerifyCodeVC.swift in Sources */,
 				6ABDDC7F29F8948E00CDAD39 /* CurrentChampionStatsModel.swift in Sources */,
@@ -4047,11 +4188,13 @@
 				6A7ED4B02A0B519800C8204E /* SB-MetaVC.swift in Sources */,
 				6A0D545529750F8E0059530C /* PostModel.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
+				6A47AA8F2A1867C900E3E1FF /* ClassicFirework.swift in Sources */,
 				6A66277D2965772200A4488B /* HTTPMethod.swift in Sources */,
 				395477B829425318008EED97 /* AuthResult.swift in Sources */,
 				1440252E2991C445008438C2 /* FistBumpNode.swift in Sources */,
 				6AAD7A31294C6630003E3AB6 /* CXCallManager.swift in Sources */,
 				6A3F0A69297F900900366665 /* PostNavVC.swift in Sources */,
+				6A47AAAD2A1867E600E3E1FF /* ImageSparkView.swift in Sources */,
 				6AAD7A1C294C65DD003E3AB6 /* AppDelegate+SendBirdCallsDelegates.swift in Sources */,
 				390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */,
 				A5A5E40729375FF3004E9207 /* SButton.swift in Sources */,
@@ -4084,6 +4227,7 @@
 				6A0CF64E296E2F0200155889 /* ProfileView.swift in Sources */,
 				6A9E4C6E29768BE100B59176 /* FindFriendsNode.swift in Sources */,
 				6ABDDCBB2A01024400CDAD39 /* ViewModel.swift in Sources */,
+				6A47AAA62A1867DC00E3E1FF /* Firework.swift in Sources */,
 				396F520029DB25DE00BF78BE /* DeeplinkCoordinator.swift in Sources */,
 				6A9E4C762977AF3700B59176 /* AccountActivityVC.swift in Sources */,
 				6AAD7A18294C65DD003E3AB6 /* AppDelegate+SoundEffects.swift in Sources */,
@@ -4365,7 +4509,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -4409,7 +4553,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

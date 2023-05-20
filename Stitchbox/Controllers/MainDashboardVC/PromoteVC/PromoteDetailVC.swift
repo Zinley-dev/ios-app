@@ -8,35 +8,46 @@
 import UIKit
 import SafariServices
 
-class PromoteDetailVC: UIViewController {
+
+class PromoteDetailVC: UIViewController, UIScrollViewDelegate {
     
     var promote: PromoteModel!
     
+    private let fireworkController = FountainFireworkController()
+    private let fireworkController2 = ClassicFireworkController()
+    
+    let backButton: UIButton = UIButton(type: .custom)
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
+    
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
     let imageView = UIImageView()
+    let statusLabel = UILabel()
+    let datesLabel = UILabel()
+    let maxMembersLabel = UILabel()
+    
     let claimButton = UIButton(type: .system)
     let readMoreButton = UIButton(type: .system)
-    let activeStatusView = ActiveStatusView()
-   
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .background
+        setupButtons()
         setupView()
         populateView()
     }
     
     private func setupView() {
+        scrollView.delegate = self
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 22)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 0
         
@@ -44,26 +55,35 @@ class PromoteDetailVC: UIViewController {
         descriptionLabel.textColor = .white
         descriptionLabel.numberOfLines = 0
         
-        imageView.contentMode = .scaleAspectFit
-        imageView.frame.size = CGSize(width: self.view.bounds.width, height: 250)
+        statusLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        statusLabel.textColor = .green
+        
+        datesLabel.font = UIFont.systemFont(ofSize: 14)
+        datesLabel.textColor = .white
+        
+        maxMembersLabel.font = UIFont.systemFont(ofSize: 14)
+        maxMembersLabel.textColor = .white
+        
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 10.0
         
         claimButton.setTitle("Claim Reward", for: .normal)
         claimButton.addTarget(self, action: #selector(claimReward), for: .touchUpInside)
         claimButton.setTitleColor(.black, for: .normal)
-        claimButton.backgroundColor = .systemBlue
-        claimButton.layer.cornerRadius = 10.0
-        
+        //claimButton.backgroundColor = .secondary
+        claimButton.layer.cornerRadius = 10
+        claimButton.clipsToBounds = true
+                
         readMoreButton.setTitle("Read More", for: .normal)
         readMoreButton.addTarget(self, action: #selector(readMore), for: .touchUpInside)
         readMoreButton.setTitleColor(.black, for: .normal)
-        readMoreButton.backgroundColor = .systemGreen
-        readMoreButton.layer.cornerRadius = 10.0
+        readMoreButton.backgroundColor = .tertiary
+        readMoreButton.layer.cornerRadius = 10
+        readMoreButton.clipsToBounds = true
         
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, activeStatusView, imageView, descriptionLabel, claimButton, readMoreButton])
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, imageView, statusLabel, datesLabel, maxMembersLabel, descriptionLabel, claimButton, readMoreButton])
         stackView.axis = .vertical
-        stackView.spacing = 20
+        stackView.spacing = 16
         stackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(stackView)
         
@@ -83,56 +103,117 @@ class PromoteDetailVC: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             stackView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 16),
             stackView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
+            imageView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
     
     private func populateView() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+
         titleLabel.text = promote.name
-        descriptionLabel.text = promote.description
-        activeStatusView.setActive(promote.isActive)
+        descriptionLabel.text = "Description: \(promote.description)"
         imageView.load(url: promote.imageUrl, str: promote.imageUrl.absoluteString)
+        statusLabel.text = "Status: " + (promote.isActive ? "Active" : "Inactive")
+        datesLabel.text = "Start Date: \(dateFormatter.string(from: promote.startDate)) - End Date: \(dateFormatter.string(from: promote.endDate))"
+        maxMembersLabel.text = "Max Members: \(promote.maxMember)"
+
+        claimButton.isEnabled = promote.isActive
+        claimButton.backgroundColor = promote.isActive ? .systemGreen : .systemGray
     }
 
     
     @objc func claimReward() {
         // Logic for claiming reward
+        self.fireworkController.addFirework(sparks: 10, above: self.claimButton)
+        self.fireworkController2.addFireworks(count: 10, sparks: 8, around: self.claimButton)
     }
     
     @objc func readMore() {
-        if let url = URL(string: "http://your-website.com") {
-            let safariVC = SFSafariViewController(url: url)
-            present(safariVC, animated: true, completion: nil)
+        let safariVC = SFSafariViewController(url: promote.originalLink)
+        present(safariVC, animated: true, completion: nil)
+    }
+}
+
+
+
+extension PromoteDetailVC {
+    
+    func setupButtons() {
+        
+        setupBackButton()
+    
+    }
+    
+    
+    func setupBackButton() {
+    
+        backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        backButton.setTitle("", for: .normal)
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.title = "SB-Promotion"
+
+        self.navigationItem.leftBarButtonItem = backButtonBarButton
+
+
+        
+    }
+
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default)
+        
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+        
+    }
+
+    
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        
+        if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
+           navigationController?.setNavigationBarHidden(true, animated: true)
+            
+             self.tabBarController?.tabBar.isTranslucent = true
+            
+            
+
+        } else {
+           navigationController?.setNavigationBarHidden(false, animated: true)
+
+            self.tabBarController?.tabBar.isTranslucent = false
+           
+        }
+       
+    }
+    
+}
+
+
+extension PromoteDetailVC {
+    
+    @objc func onClickBack(_ sender: AnyObject) {
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
         }
     }
+    
 }
-
-class ActiveStatusView: UIView {
-    private let statusLabel = UILabel()
-    
-    init() {
-        super.init(frame: .zero)
-        setupView()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupView()
-    }
-    
-    private func setupView() {
-        layer.cornerRadius = 10
-        addSubview(statusLabel)
-        statusLabel.textAlignment = .center
-        statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            statusLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            statusLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
-    }
-    
-    func setActive(_ isActive: Bool) {
-        backgroundColor = isActive ? .green : .red
-        statusLabel.text = isActive ? "Active" : "Inactive"
-    }
-}
-
