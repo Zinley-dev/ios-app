@@ -43,9 +43,9 @@ extension UIButton {
                 
                
                 DispatchQueue.main.async {
-                    let resize = image.resize(targetSize: CGSize(width: self.bounds.width - 12, height: self.bounds.height - 12))
+                    let resize = image.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
                     self.setImage(resize, for: .normal)
-                    self.imageView?.backgroundColor = .lightGray
+                    self.imageView?.backgroundColor = .clear
                     self.imageView?.contentMode = .scaleAspectFit
                     self.layer.cornerRadius = self.bounds.size.width / 2
                     self.clipsToBounds = true
@@ -60,9 +60,9 @@ extension UIButton {
                        
                       
                        DispatchQueue.main.async {
-                           let resize = value.resize(targetSize: CGSize(width: self.bounds.width - 12, height: self.bounds.height - 12))
+                           let resize = value.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
                            self.setImage(resize, for: .normal)
-                           self.imageView?.backgroundColor = .lightGray
+                           self.imageView?.backgroundColor = .clear
                            self.imageView?.contentMode = .scaleAspectFit
                            self.layer.cornerRadius = self.bounds.size.width / 2
                            self.clipsToBounds = true
@@ -132,6 +132,54 @@ extension UIImageView {
         }
   
     }
+    
+    func loadGame(url: URL) {
+        
+        let cacheKey = url.absoluteString
+        
+        imageStorage.async.object(forKey: cacheKey) { result in
+            if case .value(let image) = result {
+                
+               
+                DispatchQueue.main.async {
+                    let resize = image.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
+                    self.image = resize
+                    self.backgroundColor = .clear
+                    self.contentMode = .scaleAspectFit
+                    self.layer.cornerRadius = self.bounds.size.width / 2
+                    self.clipsToBounds = true
+                }
+               
+            } else {
+                
+                AF.request(url).responseImage { response in
+                                      
+                   switch response.result {
+                    case let .success(value):
+                       
+                      
+                       DispatchQueue.main.async {
+                           let resize = value.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
+                           self.image = resize
+                           self.backgroundColor = .clear
+                           self.contentMode = .scaleAspectFit
+                           self.layer.cornerRadius = self.bounds.size.width / 2
+                           self.clipsToBounds = true
+                       }
+                       
+                       try? imageStorage.setObject(value, forKey: cacheKey, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+                                          
+                           case let .failure(error):
+                               print(error)
+                        }
+                                      
+                  }
+                
+            }
+        }
+  
+    }
+    
 }
 
 class ProfileImageView: UIView {
