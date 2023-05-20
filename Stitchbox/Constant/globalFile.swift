@@ -16,8 +16,8 @@ import AVFAudio
 import ObjectMapper
 
 
-let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 30, height: 23))
-let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 30, height: 23))
+let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 50, height: 50))
+let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 50, height: 50))
 let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 90, height: 65))
 
 var general_room: Room!
@@ -1371,6 +1371,21 @@ func generateRandomPassword() -> String {
     passwordCharacters.shuffle()
     
     let password = String(passwordCharacters)
+    let modifiedPassword = "sbrpwdfnu-" + password  // Add "sbrpwdfnu-" prefix to the generated password
     
-    return password
+    return modifiedPassword
+}
+
+func requestAppleReview() {
+    
+    
+    if _AppCoreData.userDataSource.value != nil {
+        
+        let creationTime = _AppCoreData.userDataSource.value?.createdAt //Date?
+        
+        AppStoreReviewManager.requestReviewIfAppropriate()
+        
+    }
+
+    
 }

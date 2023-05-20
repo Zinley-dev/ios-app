@@ -148,11 +148,13 @@ class LastStepViewController: UIViewController, ControllerType {
     
     func bindAction(with viewModel: CreateAccountViewModel) {
         
+        //presentSwiftLoader()
+        
         let userInputs = Observable.combineLatest(
             usernameTextfield.rx.text.orEmpty,
                 passwordTextfield.rx.text.orEmpty,
                 refCodeTextfield.rx.text.orEmpty) { ($0, $1, $2)
-            }
+                }
 
             submitButton.rx.tap.asObservable()
                 .withLatestFrom(userInputs)

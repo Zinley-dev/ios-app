@@ -130,10 +130,18 @@ class CreateAccountViewModel: ViewModelProtocol {
                 
                 let params = ["username": username, "password": password, "phone": phone, "referralCode": ref]
                 
+                Dispatch.main.async {
+                    presentSwiftLoader()
+                }
+                
                 APIManager().register(params: params) { result in
                     switch result {
                     case .success(let response):
                         print(response)
+                        
+                        Dispatch.main.async {
+                            SwiftLoader.hide()
+                        }
                         
                         let data = response.body?["data"] as! [String: Any]?
                         let account = Account(JSON: data ?? [:])
