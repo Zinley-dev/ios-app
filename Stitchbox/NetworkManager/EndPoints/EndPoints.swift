@@ -928,6 +928,7 @@ extension FistBumpAPI: EndPointType {
 }
 public enum CommentApi {
   case getComment(postId: String, page: Int, limit: Int)
+  case getInitComment(postId: String, page: Int, limit: Int)
   case getCommentDetail(cid: String)
   case count(postId: String)
   case create(params: [String: Any])
@@ -948,6 +949,8 @@ extension CommentApi: EndPointType {
     switch self {
       case .getComment(let postId, let page, let limit):
         return "/\(postId)?page=\(page)&limit=\(limit)"
+      case .getInitComment(let postId, let page, let limit):
+        return "/\(postId)/init?page=\(page)&limit=\(limit)"
       case .count(let postId):
         return "/\(postId)/count"
       case .create:
@@ -987,6 +990,8 @@ extension CommentApi: EndPointType {
     switch self {
       case .getComment:
         return .get
+      case .getInitComment:
+        return .get
       case .count:
         return .get
       case .create:
@@ -1021,6 +1026,8 @@ extension CommentApi: EndPointType {
   var task: HTTPTask {
     switch self {
       case .getComment:
+        return .request
+      case .getInitComment:
         return .request
       case .count:
         return .request
