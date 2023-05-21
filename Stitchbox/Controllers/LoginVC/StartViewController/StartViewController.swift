@@ -107,7 +107,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             ]
         })
         
-      let string = NSLocalizedString("By using any of these login option above.               You agree to our <link type='TOU'>Terms of use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
+      let string = NSLocalizedString("By using any of these login option above.               You agree to our <link type='TOU'>Terms of Use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
         
       termOfUseLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         
@@ -280,6 +280,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             let userEmail = appleIDCredential.email
             
             let data = AuthResult(idToken: userIdentifier, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(userFirstName ?? "") \(userLastName ?? "")", email: userEmail, phone: nil, avatar: "")
+
             self.vm.completeSignIn(with: data)
         }
     }

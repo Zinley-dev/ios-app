@@ -38,15 +38,20 @@ class MyReferralCodeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("DEBUG")
-      print(_AppCoreData.userDataSource.value?.toJSON())
+        print(_AppCoreData.userDataSource.value?.toJSON())
         // Do any additional setup after loading the view.
         setupButtons()
         setupPolicyLabel()
         getDefaultCode()
         referralCode?.titleLabel?.text = _AppCoreData.userDataSource.value?.referralCode
-        if let avatarURL = _AppCoreData.userDataSource.value?.avatarURL {
+        
+        if let avatarURL =  _AppCoreData.userDataSource.value?.avatarURL, avatarURL != "" {
             avatarImage?.load(url: URL(string: avatarURL)!, str: avatarURL)
+        } else {
+            avatarImage.image = UIImage.init(named: "defaultuser")
         }
+        
+        
         
     }
     

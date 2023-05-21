@@ -897,7 +897,7 @@ extension CommentVC {
                     }
                     
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         
                         if self.loadingView.alpha == 0 {
                             
