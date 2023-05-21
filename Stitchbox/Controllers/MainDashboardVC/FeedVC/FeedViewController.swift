@@ -158,9 +158,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
           
         }
         
-        
-        //checkPromotion()
-        
+ 
     }
     
 
@@ -402,8 +400,11 @@ extension FeedViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
-        setupPromotionButton(notiBarButton: notiBarButton, searchBarButton: searchBarButton)
         
+        let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
+        
+       
     }
     
     
@@ -424,56 +425,18 @@ extension FeedViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
-        setupPromotionButton(notiBarButton: notiBarButton, searchBarButton: searchBarButton)
+        let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
         
-    }
-    
-    func setupPromotionButton(notiBarButton: UIBarButtonItem, searchBarButton: UIBarButtonItem) {
-        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        fixedSpace.width = 2
-
-        APIManager().getPromotion { [weak self] result in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let apiResponse):
-
-                    if let dataDict = apiResponse.body,
-                       let data = dataDict["data"] as? [[String: Any]],
-                       !data.isEmpty {
-                        self.promotionList = []
-                        if let promotionData = data.first, let promotionModel = PromoteModel(data: promotionData) {
-                            self.promotionList.append(promotionModel)
-                            let promotionBarButton = self.createPromotionButton()
-                            self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
-                        } else {
-                            self.promotionList = []
-                            self.isPromote = false
-                            self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
-                        }
-                    } else {
-                        self.promotionList = []
-                        self.isPromote = false
-                        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
-                    }
-                case .failure(let error):
-                    print("Error while getting promotion: \(error.localizedDescription)")
-                    self.promotionList = []
-                    self.isPromote = false
-                    self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
-                }
-            }
-        }
     }
 
     func createPromotionButton() -> UIBarButtonItem {
         self.isPromote = true
         
-        self.promotionButton.setImage(UIImage(named: "promotion icon"), for: [])
+        self.promotionButton.setImage(UIImage(named: "promotion icon")!.resize(targetSize: CGSize(width: 23, height: 23)), for: [])
         self.promotionButton.addTarget(self, action: #selector(self.onClickPromote(_:)), for: .touchUpInside)
         self.promotionButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        self.promotionButton.promote()
+        //self.promotionButton.promote()
 
         return UIBarButtonItem(customView: self.promotionButton)
     }
@@ -709,11 +672,7 @@ extension FeedViewController {
                 changeTabBar(hidden: false, animated: false)
                 self.tabBarController?.tabBar.isTranslucent = false
                 showMiddleBtn(vc: self)
-                if isPromote {
-                    promotionButton.promote()
-                } else {
-                    promotionButton.removeAnimation()
-                }
+                
                 bottomConstraint.constant = 0
             }
             

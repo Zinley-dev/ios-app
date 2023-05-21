@@ -127,8 +127,45 @@ class PromoteDetailVC: UIViewController, UIScrollViewDelegate {
     
     @objc func claimReward() {
         // Logic for claiming reward
+        
+            presentSwiftLoader()
+        
+            APIManager().applyPromotion(id: promote.id) { result in
+                switch result {
+                case .success(let apiResponse):
+                    
+                    print(apiResponse)
+                    
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                        self.fireWorkAnimation()
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                    
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops", msg: "Claim unsuccessful. Please check promotion details or ensure all requirements have been met")
+                        
+                    }
+                    
+            }
+        }
+        
+    }
+    
+    func fireWorkAnimation() {
+        
+        claimButton.isEnabled = false
+        claimButton.backgroundColor = .darkGray
+        claimButton.setTitle("Reward claimed", for: .normal)
+        claimButton.setTitleColor(.white, for: .normal)
+        
         self.fireworkController.addFirework(sparks: 10, above: self.claimButton)
         self.fireworkController2.addFireworks(count: 10, sparks: 8, around: self.claimButton)
+        showNote(text: "Congratulations! Your claim was successful. Enjoy your reward!")
+        
     }
     
     @objc func readMore() {

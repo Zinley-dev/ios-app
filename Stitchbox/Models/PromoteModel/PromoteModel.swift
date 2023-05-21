@@ -34,8 +34,8 @@ class PromoteModel {
               let endDate = dateFormatter.date(from: endDateString),
               let imageUrlString = data["img"] as? String,
               let imageUrl = URL(string: imageUrlString),
-              let isActive = data["isActive"] as? Int,
-              let maxMember = data["maxMeber"] as? Int, // Note: Typo in key "maxMeber", is it correct?
+              let isActive = data["isActive"] as? Bool,
+              let maxMember = data["maxMember"] as? Int,
               let name = data["name"] as? String,
               let startDateString = data["startDate"] as? String,
               let startDate = dateFormatter.date(from: startDateString),
@@ -51,11 +51,12 @@ class PromoteModel {
         self.endDate = endDate
         self.imageUrl = imageUrl
         self.originalLink = originalLink
-        self.isActive = isActive == 1
+        self.isActive = isActive
         self.maxMember = maxMember
         self.name = name
         self.startDate = startDate
         self.updatedAt = updatedAt
     }
 }
+
 

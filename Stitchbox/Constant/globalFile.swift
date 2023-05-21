@@ -16,8 +16,8 @@ import AVFAudio
 import ObjectMapper
 
 
-let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 50, height: 50))
-let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 50, height: 50))
+let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 30, height: 23))
+let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 30, height: 23))
 let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 90, height: 65))
 
 var general_room: Room!
@@ -1377,15 +1377,45 @@ func generateRandomPassword() -> String {
 }
 
 func requestAppleReview() {
-    
-    
-    if _AppCoreData.userDataSource.value != nil {
-        
-        let creationTime = _AppCoreData.userDataSource.value?.createdAt //Date?
-        
-        AppStoreReviewManager.requestReviewIfAppropriate()
-        
+
+    // Retrieve the date when the user was created
+    guard let userCreationDate = _AppCoreData.userDataSource.value?.createdAt else {
+        return
     }
 
-    
+    // Get the current date
+    let currentDate = Date()
+
+    // Create a Calendar instance
+    let calendar = Calendar.current
+
+    // Calculate the difference in days between the current date and the user creation date
+    let daysSinceCreation = calendar.dateComponents([.day], from: userCreationDate, to: currentDate).day ?? 0
+
+    // Check if the user was created more than 2 days ago
+    if daysSinceCreation >= 2 {
+
+        // Retrieve the date of the last review request from UserDefaults
+        if let lastReviewRequestDate = UserDefaults.standard.object(forKey: "lastReviewRequestDate") as? Date {
+
+            // Calculate the difference in months between the current date and the last review request date
+            let monthsSinceLastRequest = calendar.dateComponents([.month], from: lastReviewRequestDate, to: currentDate).month ?? 0
+
+            // Check if at least a month has passed since the last review request
+            if monthsSinceLastRequest >= 1 {
+                // Request the review
+                AppStoreReviewManager.requestReviewIfAppropriate()
+                
+                // Update the date of the last review request
+                UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
+            }
+        } else {
+            // If there's no date of the last review request, it means it's the first time the review is being requested
+            AppStoreReviewManager.requestReviewIfAppropriate()
+            
+            // Store the date of this review request
+            UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
+        }
+    }
 }
+

@@ -7,12 +7,16 @@
 
 import UIKit
 import AsyncDisplayKit
+import FLAnimatedImage
 
 class PromoteVC: UIViewController {
     
     var promotionList = [PromoteModel]()
     let backButton: UIButton = UIButton(type: .custom)
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var loadingView: UIView!
+    var firstAnimated = true
     var tableNode: ASTableNode!
     
     required init?(coder aDecoder: NSCoder) {
@@ -42,12 +46,74 @@ class PromoteVC: UIViewController {
         self.tableNode.leadingScreensForBatching = 5
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
-        
+        getPromotion()
     }
     
     
+    func getPromotion() {
+        
+        APIManager().getPromotion { [weak self] result in
+            guard let self = self else { return }
+
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let apiResponse):
+
+                    if let dataDict = apiResponse.body,
+                       let data = dataDict["data"] as? [[String: Any]],
+                       !data.isEmpty {
+                        self.promotionList = []
+                        for promotionData in data {
+                            if let promotionModel = PromoteModel(data: promotionData) {
+                                self.promotionList.append(promotionModel)
+                            } else {
+                                print("Couldn't cast")
+                            }
+                        }
+                        
+                        if !self.promotionList.isEmpty {
+                            self.tableNode.reloadData()
+                            self.hideAnimation()
+                        }
+                    } else {
+                        self.promotionList = []
+                        self.hideAnimation()
+                    }
+                case .failure(let error):
+                    print("Error while getting promotion: \(error.localizedDescription)")
+                    self.promotionList = []
+                    self.hideAnimation()
+                  
+                }
+            }
+        }
+        
+        
+    }
+    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        
+        if firstAnimated {
+                    
+                    do {
+                        
+                        let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                        let gifData = try NSData(contentsOfFile: path) as Data
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+                        
+                        
+                        self.loadingImage.animatedImage = image
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                    
+                    loadingView.backgroundColor = self.view.backgroundColor
+         
+                }
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -193,7 +259,7 @@ extension PromoteVC: ASTableDataSource {
         
         if self.promotionList.count == 0 {
             
-            tableNode.view.setEmptyMessage("No active promotion")
+            tableNode.view.setEmptyMessage("No promotion found")
             
         } else {
             tableNode.view.restore()
@@ -218,5 +284,35 @@ extension PromoteVC: ASTableDataSource {
         
     }
 
+    
+    func hideAnimation() {
+        
+        if firstAnimated {
+                    
+                    firstAnimated = false
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        
+                        Dispatch.main.async {
+                            self.loadingView.alpha = 0
+                        }
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        
+                        if self.loadingView.alpha == 0 {
+                            
+                            self.loadingView.isHidden = true
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
+        
+    }
     
 }
