@@ -1142,27 +1142,17 @@ extension CommentVC {
                 let item = CommentModel(postKey: id, Comment_model: data)
                 let start: Int
                 
-                if let index = self.index {
-                    start = index + 1
-                    self.CommentList.insert(item, at: start)
-                    
-                    DispatchQueue.main.async {
-                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
-                        self.tableNode.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
-                    }
+                if self.CommentList.isEmpty || !self.CommentList[0].is_title {
+                    start = 0
                 } else {
-                    if self.CommentList.isEmpty || !self.CommentList[0].is_title {
-                        start = 0
-                    } else {
-                        start = 1
-                    }
-                    
-                    self.CommentList.insert(item, at: start)
-                    
-                    DispatchQueue.main.async {
-                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
-                        self.tableNode.scrollToRow(at: IndexPath(row: start, section: 0), at: .top, animated: true)
-                    }
+                    start = self.CommentList.count
+                }
+                
+                self.CommentList.append(item)
+                
+                DispatchQueue.main.async {
+                    self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
+                    self.tableNode.scrollToRow(at: IndexPath(row: start, section: 0), at: .top, animated: true)
                 }
                 
                 // Update UI elements
