@@ -13,6 +13,12 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let backButton: UIButton = UIButton(type: .custom)
     var selected_item: PostModel!
     
+    var stats: Stats? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+
     struct setting {
        let name : String
        var items : [String]
@@ -30,9 +36,36 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.allowsSelection = false
-        self.tableView.reloadData()
+      
         
+        loadPostStats()
     }
+    
+    func loadPostStats() {
+        APIManager().getPostStats(postId: selected_item.id) { result in
+            switch result {
+            case .success(let apiResponse):
+                guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
+                    print("Couldn't cast")
+                    return
+                }
+                do {
+                    let data = try JSONSerialization.data(withJSONObject: dataDictionary, options: .fragmentsAllowed)
+                    let decoder = JSONDecoder()
+                    let stats = try decoder.decode(Stats.self, from: data)
+                    DispatchQueue.main.async {
+                        self.stats = stats
+                    }
+                } catch {
+                    print("Error decoding JSON: \(error)")
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
+
     
     func numberOfSections(in tableView: UITableView) -> Int {
          return self.sections.count
@@ -66,36 +99,46 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let i = self.sections[indexPath.section].items
         let item = i[indexPath.row]
-        
-        
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "ViewCell") as? ViewCell {
-            
-            if indexPath.row != 0 {
-                
-                let lineFrame = CGRect(x:0, y:-10, width: self.view.frame.width, height: 11)
-                let line = UIView(frame: lineFrame)
-                line.backgroundColor = UIColor.darkGray
-                cell.addSubview(line)
-                
-            }
-            
-    
-            //cell.configureCell(item, category: highlight.category, length: highlight.length, videos: highlight.videos, videoswhashtag: highlight.videoswhashtag)
-    
-            cell.configureCell(item, item: selected_item)
-            
-            return cell
-            
-        } else {
-            
-            return ViewCell()
-            
-        }
 
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "ViewCell") as? ViewCell {
+            var stat: Int?
+            switch indexPath.section {
+            case 0: // "Views"
+                switch indexPath.row {
+                case 0:
+                    stat = stats?.view.total
+                case 1:
+                    stat = stats?.view.totalInHour
+                case 2:
+                    stat = stats?.view.totalInDay
+                default:
+                    break
+                }
+            case 1: // "GG!"
+                switch indexPath.row {
+                case 0:
+                    stat = stats?.like.total
+                case 1:
+                    stat = stats?.like.totalInHour
+                case 2:
+                    stat = stats?.like.totalInDay
+                default:
+                    break
+                }
+            default:
+                break
+            }
+            cell.configureCell(item, item: selected_item, stat: stat)
+            return cell
+        } else {
+            return ViewCell()
+        }
     }
+
+
+
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
@@ -147,21 +190,34 @@ extension ViewVC {
     func setupButtons() {
         
         setupBackButton()
+    
     }
     
+    
     func setupBackButton() {
-        
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+    
         backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Post Statistic", for: .normal)
-        backButton.sizeToFit()
+        backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-        
+        navigationItem.title = "Post Statistics"
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
+
+
         
     }
 

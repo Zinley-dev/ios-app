@@ -169,6 +169,7 @@
 		6A47AAAF2A1867E600E3E1FF /* CircleColorSparkViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAAB2A1867E600E3E1FF /* CircleColorSparkViewFactory.swift */; };
 		6A47AAB02A1867E600E3E1FF /* CircleColorSparkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAAC2A1867E600E3E1FF /* CircleColorSparkView.swift */; };
 		6A47AAB22A1867ED00E3E1FF /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAB12A1867ED00E3E1FF /* CGPoint+Extensions.swift */; };
+		6A47AAB52A19EB3A00E3E1FF /* StatsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AAB42A19EB3A00E3E1FF /* StatsModel.swift */; };
 		6A495E3D297666EA001895C3 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A495E3C297666EA001895C3 /* SettingVC.swift */; };
 		6A58E1852A087B0F0002E5C8 /* ChatGPTTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58E1842A087B0F0002E5C8 /* ChatGPTTokenManager.swift */; };
 		6A58EA46294E997A005FA3CD /* GroupChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */; };
@@ -652,6 +653,7 @@
 		6A47AAAB2A1867E600E3E1FF /* CircleColorSparkViewFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleColorSparkViewFactory.swift; sourceTree = "<group>"; };
 		6A47AAAC2A1867E600E3E1FF /* CircleColorSparkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleColorSparkView.swift; sourceTree = "<group>"; };
 		6A47AAB12A1867ED00E3E1FF /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
+		6A47AAB42A19EB3A00E3E1FF /* StatsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsModel.swift; sourceTree = "<group>"; };
 		6A495E3C297666EA001895C3 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		6A58E1842A087B0F0002E5C8 /* ChatGPTTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTTokenManager.swift; sourceTree = "<group>"; };
 		6A58EA45294E997A005FA3CD /* GroupChannelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChannelTableViewCell.swift; sourceTree = "<group>"; };
@@ -974,6 +976,7 @@
 		143684302918C5B800FA87D7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6A47AAB32A19EB2F00E3E1FF /* StatsModel */,
 				6A7ED4C12A1707B800C8204E /* PromoteModel */,
 				6ABDDC7D29F8948300CDAD39 /* CurrentChampionStatsModel */,
 				6AB9F82229F5C79A007370FF /* InGameModel */,
@@ -1979,6 +1982,14 @@
 				6A47AA882A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift */,
 			);
 			path = "Classic Firework";
+			sourceTree = "<group>";
+		};
+		6A47AAB32A19EB2F00E3E1FF /* StatsModel */ = {
+			isa = PBXGroup;
+			children = (
+				6A47AAB42A19EB3A00E3E1FF /* StatsModel.swift */,
+			);
+			path = StatsModel;
 			sourceTree = "<group>";
 		};
 		6A495E392976596E001895C3 /* SettingVC */ = {
@@ -4091,6 +4102,7 @@
 				6A3F0A5F297CBA5600366665 /* PostVC.swift in Sources */,
 				6A47AAA22A1867DC00E3E1FF /* SparkTrajectory.swift in Sources */,
 				6AE1CE70294D6A4A00B1C435 /* SelectedUserCollectionViewCell.swift in Sources */,
+				6A47AAB52A19EB3A00E3E1FF /* StatsModel.swift in Sources */,
 				6AF6C49D2997058F00DD8D37 /* VerifyCodeVC.swift in Sources */,
 				6ABDDC7F29F8948E00CDAD39 /* CurrentChampionStatsModel.swift in Sources */,
 				3962E496299FE50700047977 /* NewPasswordViewModel.swift in Sources */,
