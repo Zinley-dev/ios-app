@@ -111,22 +111,61 @@ class StartViewModel: ViewModelProtocol {
                     SwiftLoader.hide()
                 }
                 
-                print("**** ERROR ****")
-                print(error)
+
+                switch error {
+                case .noInternet:
+                    self.showAlert(title: "Error", message: "No Internet Connection")
+                case .authRequired(let body):
+                    self.showAlert(title: "Error", message: "Authentication Required: \(body ?? [:])")
+                case .badRequest:
+                    self.showAlert(title: "Error", message: "Bad Request")
+                case .outdatedRequest:
+                    self.showAlert(title: "Error", message: "Outdated Request")
+                case .requestFailed(let body):
+                    if let message = body?["message"] as? String, message == "User is not exist!" {
+                        self.createNewAccount(with: authResult, params: params)
+                    } else {
+                        self.showAlert(title: "Error", message: "Request Failed: \(body ?? [:])")
+                    }
+                case .invalidResponse:
+                    self.showAlert(title: "Error", message: "Invalid Response")
+                case .noData:
+                    self.showAlert(title: "Error", message: "No Data Received")
+                }
+
+
                 
-                // save datasource signinMethod for first time login
-                    let initMap = ["signinMethod": params["provider"], "socialId": authResult.idToken!,
-                                   "avatar": authResult.avatar ?? "", "name": authResult.name ?? "", "email": authResult.email ?? ""]
-                    
-                    
-                let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
-                _AppCoreData.userDataSource.accept(newUserData)
-                
-                self.errorsSubject.onNext(NSError(domain: "Login fail", code: 401))
             }
         }
         
     }
+    
+    func createNewAccount(with authResult: AuthResult, params: [String:Any]) {
+        
+        
+        // save datasource signinMethod for first time login
+        let initMap = ["signinMethod": params["provider"]!, "socialId": authResult.idToken!,
+                       "avatar": authResult.avatar ?? "", "name": authResult.name ?? "", "email": authResult.email ?? ""] as [String : Any]
+            
+            
+        let newUserData = Mapper<UserDataSource>().map(JSON: initMap)
+        _AppCoreData.userDataSource.accept(newUserData)
+         
+        
+        self.errorsSubject.onNext(NSError(domain: "Login fail", code: 401))
+        
+    }
+    
+    func showAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            // Using 'vc' to present the UIAlertController
+            self.vc.present(alert, animated: true, completion: nil)
+        }
+    }
+
+
     
     /// Trigger this method (from related provider's button action) to start process.
     open func startSignInProcess(with method: SocialLoginType) {

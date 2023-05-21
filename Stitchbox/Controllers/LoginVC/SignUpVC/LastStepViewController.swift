@@ -101,6 +101,15 @@ class LastStepViewController: UIViewController, ControllerType {
             .disposed(by: disposeBag)
     }
 
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        usernameTextfield.addUnderLine()
+        passwordTextfield.addUnderLine()
+        refCodeTextfield.addUnderLine()
+        
+    }
 
     
     override func viewWillLayoutSubviews() {
@@ -222,6 +231,41 @@ class LastStepViewController: UIViewController, ControllerType {
         self.view.endEditing(true)
         
     }
+    
+    @IBAction func referralBtnPressed(_ sender: Any) {
+    
+        self.view.endEditing(true)
+        getReferralCode()
+        
+    }
+    
+    
+    func getReferralCode() {
+        
+        
+        if let code = self.refCodeTextfield.text {
+            
+            showRefInputDialog(subtitle: "You can modify referral code here",
+                               refCode: code, actionTitle: "Modify",
+                            cancelTitle: "Cancel",
+                            inputPlaceholder: "Referral Code",
+                            inputKeyboardType: .default, actionHandler:
+                                    { (input:String?) in
+                                        
+                                        
+                    if let referralCode = input {
+                        
+                        self.refCodeTextfield.text = referralCode
+                        
+                    }
+                                            
+            })
+            
+        }
+        
+        
+    }
+    
 }
 extension LastStepViewController {
   static func create() -> UIViewController {

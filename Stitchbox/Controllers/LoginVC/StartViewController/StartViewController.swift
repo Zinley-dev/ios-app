@@ -65,7 +65,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     super.viewDidLoad()
     
     if _AppCoreData.userSession.value == nil {
-        
+        _AppCoreData.signOut()
         
         UIView.animate(withDuration: 0.5) {
             

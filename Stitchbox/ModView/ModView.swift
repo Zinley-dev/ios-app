@@ -874,7 +874,7 @@ extension UIViewController {
         // Accessing buttons tintcolor :
         alert.view.tintColor = UIColor.white
         
-        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name: "Avenir-Light", size: 13)!, NSAttributedString.Key.foregroundColor: UIColor.white]
+        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.white]
         
         let subtitleString = NSMutableAttributedString(string: subtitle!, attributes: custom)
         
@@ -883,11 +883,59 @@ extension UIViewController {
         
         
         alert.addTextField { (textField:UITextField) in
-            textField.placeHolderColor = UIColor.darkText
-            textField.textColor = UIColor.white
+            //textField.placeHolderColor = UIColor.darkText
+            //textField.textColor = UIColor.black
             textField.maxLength = 15
             textField.placeholder = inputPlaceholder
             textField.keyboardType = inputKeyboardType
+        }
+        alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: { (action:UIAlertAction) in
+            guard let textField =  alert.textFields?.first else {
+                actionHandler?(nil)
+                return
+            }
+            actionHandler?(textField.text)
+        }))
+        
+        alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: cancelHandler))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    func showRefInputDialog(title:String? = nil,
+                         subtitle:String? = nil,
+                         refCode:String? = nil,
+                         actionTitle:String? = "Add",
+                         cancelTitle:String? = "Cancel",
+                         inputPlaceholder:String? = nil,
+                         inputKeyboardType:UIKeyboardType = UIKeyboardType.default,
+                         cancelHandler: ((UIAlertAction) -> Swift.Void)? = nil,
+                         actionHandler: ((_ text: String?) -> Void)? = nil) {
+        
+        let alert = UIAlertController(title: title, message: subtitle, preferredStyle: .alert)
+        alert.view.subviews.first?.subviews.first?.subviews.first?.backgroundColor = UIColor.background
+
+        // Accessing buttons tintcolor :
+        alert.view.tintColor = UIColor.white
+        
+        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.white]
+        
+        let subtitleString = NSMutableAttributedString(string: subtitle!, attributes: custom)
+        
+        
+        alert.setValue(subtitleString, forKey: "attributedMessage")
+        
+        
+        alert.addTextField { (textField:UITextField) in
+            //textField.placeHolderColor = UIColor.darkText
+            //textField.textColor = UIColor.black
+            textField.maxLength = 15
+            textField.placeholder = inputPlaceholder
+            textField.keyboardType = inputKeyboardType
+            if refCode != "" {
+                textField.text = refCode
+            }
         }
         alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: { (action:UIAlertAction) in
             guard let textField =  alert.textFields?.first else {
