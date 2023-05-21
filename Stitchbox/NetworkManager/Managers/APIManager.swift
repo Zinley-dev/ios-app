@@ -583,6 +583,11 @@ extension APIManager {
       completion(result)
     }
   }
+  func getInitComment(postId: String, page: Int = 1, completion: @escaping APICompletion) {
+    commentManager.request(.getInitComment(postId: postId, page: page, limit: 5)) { result in
+      completion(result)
+    }
+  }
   func createComment(params: [String: Any], completion: @escaping APICompletion) {
     commentManager.request(.create(params: params)) { result in
       completion(result)
