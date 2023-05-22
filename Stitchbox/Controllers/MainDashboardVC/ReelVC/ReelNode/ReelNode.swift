@@ -535,13 +535,14 @@ extension ReelNode {
     
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
+       
         currentTimeStamp = timeInterval
-        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.asset.duration.seconds)!))
+        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!))
     
         
-        if (videoNode.currentItem?.asset.duration.seconds)! <= 15 {
+        if (videoNode.currentItem?.duration.seconds)! <= 15 {
             
-            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.8 {
+            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.8 {
                 
                 if shouldCountView {
                     shouldCountView = false
@@ -550,45 +551,45 @@ extension ReelNode {
                
             }
             
-        } else if (videoNode.currentItem?.asset.duration.seconds)! > 15, (videoNode.currentItem?.asset.duration.seconds)! <= 30 {
+        } else if (videoNode.currentItem?.duration.seconds)! > 15, (videoNode.currentItem?.duration.seconds)! <= 30 {
             
-            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.7 {
+            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.7 {
                 if shouldCountView {
                     shouldCountView = false
                     endVideo(watchTime: Double(timeInterval))
                 }
             }
             
-        } else if (videoNode.currentItem?.asset.duration.seconds)! > 30, (videoNode.currentItem?.asset.duration.seconds)! <= 60 {
+        } else if (videoNode.currentItem?.duration.seconds)! > 30, (videoNode.currentItem?.duration.seconds)! <= 60 {
             
-            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.6 {
+            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.6 {
                 if shouldCountView {
                     shouldCountView = false
                     endVideo(watchTime: Double(timeInterval))
                 }
             }
             
-        } else if (videoNode.currentItem?.asset.duration.seconds)! > 60 , (videoNode.currentItem?.asset.duration.seconds)! <= 90 {
+        } else if (videoNode.currentItem?.duration.seconds)! > 60 , (videoNode.currentItem?.duration.seconds)! <= 90 {
             
-            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.5 {
+            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.5 {
                 if shouldCountView {
                     shouldCountView = false
                     endVideo(watchTime: Double(timeInterval))
                 }
             }
             
-        } else if (videoNode.currentItem?.asset.duration.seconds)! > 90, (videoNode.currentItem?.asset.duration.seconds)! <= 120 {
+        } else if (videoNode.currentItem?.duration.seconds)! > 90, (videoNode.currentItem?.duration.seconds)! <= 120 {
             
-            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.4 {
+            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.4 {
                 if shouldCountView {
                     shouldCountView = false
                     endVideo(watchTime: Double(timeInterval))
                 }
             }
             
-        } else if (videoNode.currentItem?.asset.duration.seconds)! > 120 {
+        } else if (videoNode.currentItem?.duration.seconds)! > 120 {
             
-            if timeInterval/(videoNode.currentItem?.asset.duration.seconds)! >= 0.5 {
+            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.5 {
                 if shouldCountView {
                     shouldCountView = false
                     endVideo(watchTime: Double(timeInterval))
@@ -828,7 +829,7 @@ extension ReelNode {
         
         
         let imgView = UIImageView()
-        imgView.image = UIImage(named: "likePopUp")
+        imgView.image = popupLikeImage
         imgView.frame.size = CGSize(width: 120, height: 120)
        
         if let vc = UIViewController.currentViewController() {
@@ -999,11 +1000,11 @@ extension ReelNode {
                 self.isLike = checkIsLike
                 if self.isLike {
                     DispatchQueue.main.async {
-                        self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+                        self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+                        self.buttonsView.likeBtn.setImage(emptyLikeImage!, for: .normal)
                     }
                 }
                 
@@ -1058,7 +1059,7 @@ extension ReelNode {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+            self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {
@@ -1072,7 +1073,7 @@ extension ReelNode {
         
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal).resize(targetSize: CGSize(width: 40, height: 40)), for: .normal)
+            self.buttonsView.likeBtn.setImage(emptyLikeImage!, for: .normal)
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {

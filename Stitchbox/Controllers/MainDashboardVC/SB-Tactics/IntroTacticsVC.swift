@@ -28,9 +28,9 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
       var URL: Foundation.URL {
           switch self {
           case .Privacy:
-              return Foundation.URL(string: "https://stitchbox.gg/")!
+              return Foundation.URL(string: "https://stitchbox.gg/public-policy")!
           case .TermsOfUse:
-              return Foundation.URL(string: "https://stitchbox.gg/")!
+              return Foundation.URL(string: "https://stitchbox.gg/term-of-use")!
              
           }
       }
@@ -74,7 +74,7 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         
      
           
-        let string = NSLocalizedString("*We currently provide service for selected games. More games will be added soon. Tap to learn more about our <link type='TOU'>Terms of use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
+        let string = NSLocalizedString("*We currently provide service for selected games. More games will be added soon. Tap to learn more about our <link type='TOU'>Terms of Use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
           
         termOfUsedLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         

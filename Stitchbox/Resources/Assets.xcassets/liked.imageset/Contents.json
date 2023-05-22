@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "ggCOLOR2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "gg_orange.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

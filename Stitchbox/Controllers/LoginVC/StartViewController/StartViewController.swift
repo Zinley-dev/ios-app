@@ -52,9 +52,9 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     var URL: Foundation.URL {
         switch self {
         case .Privacy:
-            return Foundation.URL(string: "https://stitchbox.gg/")!
+            return Foundation.URL(string: "https://stitchbox.gg/public-policy")!
         case .TermsOfUse:
-            return Foundation.URL(string: "https://stitchbox.gg/")!
+            return Foundation.URL(string: "https://stitchbox.gg/term-of-use")!
            
         }
     }
@@ -65,7 +65,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     super.viewDidLoad()
     
     if _AppCoreData.userSession.value == nil {
-        
+        _AppCoreData.signOut()
         
         UIView.animate(withDuration: 0.5) {
             
@@ -107,7 +107,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             ]
         })
         
-      let string = NSLocalizedString("By using any of these login option above.               You agree to our <link type='TOU'>Terms of use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
+      let string = NSLocalizedString("By using any of these login option above.               You agree to our <link type='TOU'>Terms of Use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
         
       termOfUseLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         
@@ -280,6 +280,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             let userEmail = appleIDCredential.email
             
             let data = AuthResult(idToken: userIdentifier, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(userFirstName ?? "") \(userLastName ?? "")", email: userEmail, phone: nil, avatar: "")
+
             self.vm.completeSignIn(with: data)
         }
     }
@@ -332,7 +333,7 @@ extension StartViewController {
         APIManager().getSettings { result in
             switch result {
             case .success(let apiResponse):
-                
+            
                 guard let data = apiResponse.body else {
                     completed()
                         return

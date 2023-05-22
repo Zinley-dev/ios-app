@@ -666,6 +666,21 @@
             </objects>
             <point key="canvasLocation" x="-6836" y="1588.6699507389162"/>
         </scene>
+        <!--Promote DetailVC-->
+        <scene sceneID="TyI-w6-dvE">
+            <objects>
+                <viewController storyboardIdentifier="PromoteDetailVC" id="EY8-6Q-TLQ" customClass="PromoteDetailVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="r3T-kM-mRB">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="8Ir-q0-lmb"/>
+                        <color key="backgroundColor" name="Background"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Tr7-Kr-FvL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5871" y="1603"/>
+        </scene>
         <!--Chat Bot-->
         <scene sceneID="LoE-Bi-tTa">
             <objects>
@@ -1463,6 +1478,60 @@
             </objects>
             <point key="canvasLocation" x="-5871.1999999999998" y="2346.7980295566504"/>
         </scene>
+        <!--PromoteVC-->
+        <scene sceneID="iQI-hu-ogp">
+            <objects>
+                <viewController storyboardIdentifier="PromoteVC" id="2jl-tv-IM8" customClass="PromoteVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1gy-Nu-WTw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="14x-R3-OCf">
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
+                                <color key="backgroundColor" name="Background"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ido-Hu-cw1">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2bI-97-SMI" customClass="FLAnimatedImageView">
+                                        <rect key="frame" x="150" y="351.66666666666669" width="75" height="75"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="75" id="6Sc-Gk-Ec0"/>
+                                            <constraint firstAttribute="height" constant="75" id="ccp-1E-UeG"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="2bI-97-SMI" firstAttribute="centerY" secondItem="ido-Hu-cw1" secondAttribute="centerY" id="6ln-Od-f7X"/>
+                                    <constraint firstItem="2bI-97-SMI" firstAttribute="centerX" secondItem="ido-Hu-cw1" secondAttribute="centerX" id="vLs-tf-kYy"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="XRO-G6-QHQ"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="ido-Hu-cw1" firstAttribute="top" secondItem="1gy-Nu-WTw" secondAttribute="top" id="C9k-de-WRG"/>
+                            <constraint firstItem="ido-Hu-cw1" firstAttribute="trailing" secondItem="XRO-G6-QHQ" secondAttribute="trailing" id="DHF-Qj-oTn"/>
+                            <constraint firstItem="XRO-G6-QHQ" firstAttribute="bottom" secondItem="14x-R3-OCf" secondAttribute="bottom" id="Omq-Vv-Zl0"/>
+                            <constraint firstItem="XRO-G6-QHQ" firstAttribute="bottom" secondItem="ido-Hu-cw1" secondAttribute="bottom" id="PwT-sg-fg7"/>
+                            <constraint firstItem="14x-R3-OCf" firstAttribute="leading" secondItem="XRO-G6-QHQ" secondAttribute="leading" id="RXB-HO-03c"/>
+                            <constraint firstItem="ido-Hu-cw1" firstAttribute="leading" secondItem="XRO-G6-QHQ" secondAttribute="leading" id="bpu-PT-WIC"/>
+                            <constraint firstItem="14x-R3-OCf" firstAttribute="top" secondItem="XRO-G6-QHQ" secondAttribute="top" id="mGW-5X-fSm"/>
+                            <constraint firstItem="XRO-G6-QHQ" firstAttribute="trailing" secondItem="14x-R3-OCf" secondAttribute="trailing" id="nlP-Wy-04J"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="14x-R3-OCf" id="zPt-xw-uwB"/>
+                        <outlet property="loadingImage" destination="2bI-97-SMI" id="tgi-46-EOp"/>
+                        <outlet property="loadingView" destination="ido-Hu-cw1" id="vh4-r0-Wdf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uhw-lB-IR8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4890.3999999999996" y="2346.7980295566504"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="9GJ-aD-yj4">
             <objects>
@@ -2039,14 +2108,14 @@
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10% Discount. Cancel anytime" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fb7-f9-rcY">
-                                                                        <rect key="frame" x="10" y="38" width="176" height="14.333333333333336"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$4.99/month. Cancel anytime" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fb7-f9-rcY">
+                                                                        <rect key="frame" x="10" y="38" width="171.33333333333334" height="14.333333333333336"/>
                                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$32.99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WbI-YE-fQX">
-                                                                        <rect key="frame" x="245" y="10" width="52" height="18"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$29.99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WbI-YE-fQX">
+                                                                        <rect key="frame" x="245.33333333333329" y="10" width="51.666666666666657" height="18"/>
                                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
@@ -2073,8 +2142,8 @@
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20% Discount. Cancel anytime" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nwv-Ij-S02">
-                                                                        <rect key="frame" x="10" y="38" width="177.66666666666666" height="14.333333333333336"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$4.83/month. Cancel anytime" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nwv-Ij-S02">
+                                                                        <rect key="frame" x="10" y="38" width="171.33333333333334" height="14.333333333333336"/>
                                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
@@ -6396,16 +6465,16 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Save">
-                                    <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                         <real key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="size">
                                         <integer key="value" value="2"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </button>
                         </subviews>

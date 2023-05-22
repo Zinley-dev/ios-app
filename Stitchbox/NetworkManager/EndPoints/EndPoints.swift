@@ -688,7 +688,11 @@ extension PostAPI: EndPointType {
     }
     
     var headers: [String: String]? {
-        return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+        if _AppCoreData.userSession.value != nil {
+            return ["Authorization": _AppCoreData.userSession.value!.accessToken]
+        } else {
+            return ["Authorization": "null"]
+        }
     }
 }
 
@@ -700,8 +704,8 @@ public enum FollowApi {
   case insertFollows (params: [String:Any])
   case deleteFollows (params: [String:Any])
   case deleteFollower (params: [String:Any])
-    case isFollower (userId: String)
-    case isFollowing (userId: String)
+  case isFollower (userId: String)
+  case isFollowing (userId: String)
 }
 extension FollowApi: EndPointType {
   var module: String {

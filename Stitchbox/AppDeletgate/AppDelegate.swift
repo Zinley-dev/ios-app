@@ -150,6 +150,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             }
                         case "NEW_POST":
                             self.openPost(post: metaDataOneSignal.post)
+                        
+                        case "LIKE_COMMENT":
+                            if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                                self.openUser(userId: userId, username: username)
+                            }
+                        case "LIKE_POST":
+                            if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                                self.openUser(userId: userId, username: username)
+                            }
                         default:
                             print("None")
                         
@@ -729,7 +738,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         UIApplication.shared.applicationIconBadgeNumber = 0
-        
+        requestAppleReview()
     }
     
 }

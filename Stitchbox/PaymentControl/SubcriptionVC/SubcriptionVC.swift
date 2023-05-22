@@ -35,9 +35,9 @@ class SubcriptionVC: UIViewController, ZSWTappableLabelTapDelegate {
       var URL: Foundation.URL {
           switch self {
           case .Privacy:
-              return Foundation.URL(string: "https://stitchbox.gg/")!
+              return Foundation.URL(string: "https://stitchbox.gg/public-policy")!
           case .TermsOfUse:
-              return Foundation.URL(string: "https://stitchbox.gg/")!
+              return Foundation.URL(string: "https://stitchbox.gg/term-of-use")!
              
           }
       }
@@ -68,7 +68,7 @@ class SubcriptionVC: UIViewController, ZSWTappableLabelTapDelegate {
               ]
           })
           
-        let string = NSLocalizedString("By using any of these plans option above. You agree to our <link type='TOU'>Terms of use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
+        let string = NSLocalizedString("By using any of these plans option above. You agree to our <link type='TOU'>Terms of Use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
           
         termOfUseLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         

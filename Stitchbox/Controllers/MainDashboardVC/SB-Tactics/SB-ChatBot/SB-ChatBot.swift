@@ -109,7 +109,7 @@ class SB_ChatBot: UIViewController {
         
         // Add the toolbar to the view
         view.addSubview(metaToolbar)
-        metaToolbar.barTintColor = .darkGray
+        metaToolbar.barTintColor = .secondary
 
             // Define constraints
         NSLayoutConstraint.activate([
@@ -121,7 +121,7 @@ class SB_ChatBot: UIViewController {
         
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let metaButton = UIBarButtonItem(title: "View current patch", style: .plain, target: self, action: #selector(metaButtonTapped))
-        metaButton.tintColor = .white
+        metaButton.tintColor = .black
 
         metaToolbar.setItems([flexibleSpace, metaButton], animated: false)
         

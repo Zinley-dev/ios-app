@@ -220,7 +220,7 @@ class CommentNode: ASCellNode {
         userNameNode.backgroundColor = UIColor.clear
         
         imageView.contentMode = .scaleAspectFit
-        imageView.frame = CGRect(x: 5.2, y: 2, width: 25, height: 25)
+        imageView.frame = CGRect(x: 0.0, y: 2, width: 32, height: 25)
     
     
         textNode.isLayerBacked = true

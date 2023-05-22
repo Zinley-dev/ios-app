@@ -128,6 +128,9 @@ extension NotificationVC {
         self.retrieveNextPageWithCompletion { (newNotis) in
                 
             if newNotis.count > 0 {
+                
+                self.UserNotificationList.removeAll()
+                self.tableNode.reloadData()
                         
                 self.insertNewRowsInTableNode(newNotis: newNotis)
                 
@@ -308,8 +311,20 @@ extension NotificationVC {
                     }
                 case "NEW_POST":
                     openPost(post: notification.post)
+                case "LIKE_COMMENT":
+                    if let userId = notification.userId, let username = notification.username {
+                        openUser(userId: userId, username: username)
+                    } else {
+                        showErrorAlert("Oops!", msg: "Can't open this notification content")
+                    }
+                case "LIKE_POST":
+                    if let userId = notification.userId, let username = notification.username {
+                        openUser(userId: userId, username: username)
+                    } else {
+                        showErrorAlert("Oops!", msg: "Can't open this notification content")
+                    }
                 default:
-                    print("None")
+                    print(notification.template)
                 
             }
                
@@ -522,8 +537,7 @@ extension NotificationVC {
             hideAnimation()
             return
         }
-        
-        print(newNotis)
+    
         
         let section = 0
         var items = [UserNotificationModel]()

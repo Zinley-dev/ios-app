@@ -26,73 +26,19 @@ class ViewCell: UITableViewCell {
     }
     
     
-    func configureCell(_ Information: String, item: PostModel) {
-        
-        self.info = Information
+    func configureCell(_ information: String, item: PostModel, stat: Int?) {
+        self.info = information
         name.text = self.info
-        
-        if self.info == "Total views" {
-            loadTotalViews(item: item)
-        } else if self.info == "Views in 60 mins" {
-            loadTotalViewsIn60Mins(item: item)
-        } else if self.info == "Views in 24 hours" {
-            loadTotalViewsIn24Hours(item: item)
-        } else if self.info == "Total GG!" {
-            loadTotalLikes(item: item)
-        } else if self.info == "GG! in 60 mins" {
-           loadTotalLikesIn60Mins(item: item)
-        } else if self.info == "GG! in 24 hours" {
-           loadTotalLikesIn24Hours(item: item)
+
+        if let stat = stat {
+            descLbl.text = String(stat)
+        } else if stat == nil {
+            descLbl.text = "Loading data..."
+        } else {
+            descLbl.text = "Data not available"
         }
-        
-        
     }
-    
-    func loadTotalViews(item: PostModel) {
-        
-       
-        
-        
-    }
-    
-    func loadTotalViewsIn60Mins(item: PostModel) {
-        
-    
-        
-        
-    }
-    
-    
-    func loadTotalViewsIn24Hours(item: PostModel) {
-        
 
-        
-        
-    }
-    
-    func loadTotalLikes(item: PostModel) {
-        
-
-        
-        
-    }
-    
-    func loadTotalLikesIn60Mins(item: PostModel) {
-        
-
-        
-        
-    }
-    
-    
-    func loadTotalLikesIn24Hours(item: PostModel) {
-        
-
-        
-        
-    }
-    
-    
     
 
 }

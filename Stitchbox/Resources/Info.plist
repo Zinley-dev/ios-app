@@ -86,7 +86,6 @@
 	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>bluetooth-central</string>
 		<string>remote-notification</string>
 		<string>voip</string>
 	</array>

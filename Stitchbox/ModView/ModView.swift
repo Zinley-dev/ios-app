@@ -655,8 +655,39 @@ extension UIButton {
         layer.add(animation, forKey: "shake")
     }
     
-    
-    
+    func promote() {
+        // Scale animation for a subtle pulse effect
+        let scaleAnimation = CASpringAnimation(keyPath: "transform.scale")
+        scaleAnimation.duration = 0.8 // quicker pulse
+        scaleAnimation.fromValue = 1.0
+        scaleAnimation.toValue = 1.05 // subtle scale change
+        scaleAnimation.autoreverses = true
+        scaleAnimation.repeatCount = .infinity
+        scaleAnimation.initialVelocity = 0.5
+        scaleAnimation.damping = 0.8
+
+        // Gentle shadow radius animation for a soft glow
+        let shadowRadiusAnimation = CABasicAnimation(keyPath: "shadowRadius")
+        shadowRadiusAnimation.fromValue = 10
+        shadowRadiusAnimation.toValue = 12 // subtle change in shadow radius
+        shadowRadiusAnimation.duration = 0.8 // quicker transition
+        shadowRadiusAnimation.autoreverses = true
+        shadowRadiusAnimation.repeatCount = .infinity
+        shadowRadiusAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+
+        // Apply a soft shadow
+        layer.shadowColor = UIColor.gray.cgColor
+        layer.shadowOpacity = 0.5 // increase opacity for a more noticeable effect
+        layer.shadowOffset = CGSize.zero
+        layer.shadowRadius = 10
+
+        // Add animations to the layer
+        layer.add(scaleAnimation, forKey: "pulse")
+        layer.add(shadowRadiusAnimation, forKey: "shadowPulse")
+    }
+
+
+
     
     func removeAnimation() {
         
@@ -843,7 +874,7 @@ extension UIViewController {
         // Accessing buttons tintcolor :
         alert.view.tintColor = UIColor.white
         
-        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name: "Avenir-Light", size: 13)!, NSAttributedString.Key.foregroundColor: UIColor.white]
+        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.white]
         
         let subtitleString = NSMutableAttributedString(string: subtitle!, attributes: custom)
         
@@ -852,11 +883,59 @@ extension UIViewController {
         
         
         alert.addTextField { (textField:UITextField) in
-            textField.placeHolderColor = UIColor.darkText
-            textField.textColor = UIColor.white
+            //textField.placeHolderColor = UIColor.darkText
+            //textField.textColor = UIColor.black
             textField.maxLength = 15
             textField.placeholder = inputPlaceholder
             textField.keyboardType = inputKeyboardType
+        }
+        alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: { (action:UIAlertAction) in
+            guard let textField =  alert.textFields?.first else {
+                actionHandler?(nil)
+                return
+            }
+            actionHandler?(textField.text)
+        }))
+        
+        alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: cancelHandler))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    func showRefInputDialog(title:String? = nil,
+                         subtitle:String? = nil,
+                         refCode:String? = nil,
+                         actionTitle:String? = "Add",
+                         cancelTitle:String? = "Cancel",
+                         inputPlaceholder:String? = nil,
+                         inputKeyboardType:UIKeyboardType = UIKeyboardType.default,
+                         cancelHandler: ((UIAlertAction) -> Swift.Void)? = nil,
+                         actionHandler: ((_ text: String?) -> Void)? = nil) {
+        
+        let alert = UIAlertController(title: title, message: subtitle, preferredStyle: .alert)
+        alert.view.subviews.first?.subviews.first?.subviews.first?.backgroundColor = UIColor.background
+
+        // Accessing buttons tintcolor :
+        alert.view.tintColor = UIColor.white
+        
+        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.white]
+        
+        let subtitleString = NSMutableAttributedString(string: subtitle!, attributes: custom)
+        
+        
+        alert.setValue(subtitleString, forKey: "attributedMessage")
+        
+        
+        alert.addTextField { (textField:UITextField) in
+            //textField.placeHolderColor = UIColor.darkText
+            //textField.textColor = UIColor.black
+            textField.maxLength = 15
+            textField.placeholder = inputPlaceholder
+            textField.keyboardType = inputKeyboardType
+            if refCode != "" {
+                textField.text = refCode
+            }
         }
         alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: { (action:UIAlertAction) in
             guard let textField =  alert.textFields?.first else {

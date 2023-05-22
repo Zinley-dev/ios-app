@@ -10,6 +10,7 @@ import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
 import FLAnimatedImage
+import ObjectMapper
 
 
 class FeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
@@ -21,8 +22,9 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
   
+    let promotionButton = UIButton(type: .custom)
     let homeButton: UIButton = UIButton(type: .custom)
-
+    var promotionList = [PromoteModel]()
     var currentIndex: Int?
     var isfirstLoad = true
     var didScroll = false
@@ -43,6 +45,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     lazy var delayItem3 = workItem()
     var firstAnimated = true
     var lastLoadTime: Date?
+    var isPromote = false
     
     @IBOutlet weak var playTimeBar: UIProgressView!
     
@@ -104,6 +107,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     navigationController.navigationBar.isTranslucent = false
                 }
         
+        self.loadNewestCoreData {
+            self.loadSettings {
+                print("Oke!")
+            }
+        }
     
     }
     
@@ -150,7 +158,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
           
         }
         
+ 
     }
+    
+
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -180,9 +191,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
     }
 
-
-
-    
     @objc func clearAllData() {
         
         refresh_request = true
@@ -392,8 +400,11 @@ extension FeedViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
         
+        let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
+        
+       
     }
     
     
@@ -414,10 +425,22 @@ extension FeedViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
         
     }
-    
+
+    func createPromotionButton() -> UIBarButtonItem {
+        self.isPromote = true
+        
+        self.promotionButton.setImage(UIImage(named: "promotion icon")!.resize(targetSize: CGSize(width: 23, height: 23)), for: [])
+        self.promotionButton.addTarget(self, action: #selector(self.onClickPromote(_:)), for: .touchUpInside)
+        self.promotionButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        //self.promotionButton.promote()
+
+        return UIBarButtonItem(customView: self.promotionButton)
+    }
+
 }
 
 extension FeedViewController {
@@ -445,6 +468,18 @@ extension FeedViewController {
             self.navigationController?.pushViewController(SVC, animated: true)
             
         }
+    }
+    
+    @objc func onClickPromote(_ sender: AnyObject) {
+
+        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PromoteVC") as? PromoteVC {
+            PVC.promotionList = self.promotionList
+            PVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(PVC, animated: true)
+            
+        }
+        
     }
     
 }
@@ -591,7 +626,7 @@ extension FeedViewController {
                 }
 
             
-                        // Reset the current playing index.
+                // Reset the current playing index.
                 currentIndex = nil
                 
             }
@@ -607,8 +642,7 @@ extension FeedViewController {
                     }
                 }
             }
-
-
+            
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
                 pauseVideoIfNeed(pauseIndex: currentIndex!)
@@ -638,7 +672,7 @@ extension FeedViewController {
                 changeTabBar(hidden: false, animated: false)
                 self.tabBarController?.tabBar.isTranslucent = false
                 showMiddleBtn(vc: self)
-               
+                
                 bottomConstraint.constant = 0
             }
             
@@ -1137,9 +1171,6 @@ extension FeedViewController {
                 switch result {
                 case .success(let apiResponse):
                     
-                    
-                    print(apiResponse)
-                    
                     Dispatch.main.async {
                         self.setupEmptyNotiButton()
                     }
@@ -1235,5 +1266,76 @@ extension FeedViewController {
         }
         
     }
+    
+}
+
+
+extension FeedViewController {
+    
+    
+    func loadSettings(completed: @escaping DownloadComplete) {
+        
+        APIManager().getSettings { result in
+            switch result {
+            case .success(let apiResponse):
+            
+                guard let data = apiResponse.body else {
+                    completed()
+                        return
+                }
+
+                let settings =  Mapper<SettingModel>().map(JSONObject: data)
+                globalSetting = settings
+                globalIsSound = settings?.AutoPlaySound ?? false
+                
+                completed()
+                
+            case .failure(_):
+            
+                completed()
+               
+            }
+        }
+        
+    }
+    
+    
+    func loadNewestCoreData(completed: @escaping DownloadComplete) {
+        
+        APIManager().getme { result in
+            switch result {
+            case .success(let response):
+                
+                if let data = response.body {
+                    
+                    if !data.isEmpty {
+                    
+                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                            _AppCoreData.reset()
+                            _AppCoreData.userDataSource.accept(newUserData)
+                            completed()
+                        } else {
+                            completed()
+                        }
+                        
+                      
+                    } else {
+                        completed()
+                    }
+                    
+                } else {
+                    completed()
+                }
+                
+                
+            case .failure(let error):
+                print("Error loading profile: ", error)
+                completed()
+            }
+        }
+        
+        
+    }
+    
     
 }

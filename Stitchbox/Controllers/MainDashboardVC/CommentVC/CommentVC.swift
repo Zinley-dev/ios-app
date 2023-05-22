@@ -25,21 +25,20 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     var mention_dict = [[String: Any]]()
     var total = 0
     var isTitle = false
-    var cmtPage = 1
+    var cmtPage = 2
     @IBOutlet weak var totalCmtCount: UILabel!
     @IBOutlet weak var bView: UIView!
-    //var currentItem: HighlightsModel!
+
     var hasSetPointOrigin = false
     var pointOrigin: CGPoint?
     var editedComment: CommentModel?
     var editedIndexpath: IndexPath?
-    //var lastDocumentSnapshot: DocumentSnapshot!
-    //var query: Query!
+
     var reply_to_uid: String!
     var reply_to_cid: String!
     var reply_to_username: String!
     var firstAnimated = true
-    //var CmtQuery: Query!
+
     var prev_id: String!
     
     var root_id: String!
@@ -143,12 +142,12 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         setupTableNode()
         setupSearchController()
         setupPlaceholder()
-        calculateToTalCmt()
+
         setupLongPressGesture()
         loadAvatar()
-        loadCommentTitle()
+      
         commentBtn.setTitle("", for: .normal)
-        
+        getInitCmt()
         
         //
         
@@ -164,6 +163,77 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     
         
     }
+    
+    func getInitCmt() {
+        APIManager().getInitComment(postId: post.id) { result in
+            switch result {
+            case .success(let apiResponse):
+                guard let data = apiResponse.body?["data"] as? [String: Any] else {
+                    print("Couldn't cast")
+                    return
+                }
+
+                if let count = data["count"] as? Int {
+                    
+                    DispatchQueue.main.async {
+                        self.totalCmtCount.text = "\(count) Comments"
+                    }
+                    
+                }
+
+                if let title = data["title"] as? [[String: Any]] {
+                    for titleItem in title {
+                        let item = CommentModel(postKey: titleItem["_id"] as! String, Comment_model: titleItem)
+                        self.CommentList.insert(item, at: 0)
+                    }
+                } else {
+                    print("Title is null or couldn't be cast")
+                }
+
+                if let pin = data["pin"] as? [[String: Any]] {
+                    for pinItem in pin {
+                        let item = CommentModel(postKey: pinItem["_id"] as! String, Comment_model: pinItem)
+                        self.CommentList.append(item)
+                    }
+                } else {
+                    print("Pin is null or couldn't be cast")
+                }
+
+                if let commentsContainer = data["comments"] as? [String: Any],
+                   let comments = commentsContainer["data"] as? [[String: Any]] {
+                    for comment in comments {
+                        let item = CommentModel(postKey: comment["_id"] as! String, Comment_model: comment)
+                        self.CommentList.append(item)
+                    }
+                } else {
+                    print("Couldn't cast comments")
+                }
+                
+                
+                Dispatch.main.async {
+                    
+                    if !self.CommentList.isEmpty {
+                        self.tableNode.reloadData()
+                        self.hideAnimation()
+                        self.wireDelegates()
+                    } else {
+                        self.hideAnimation()
+                        self.wireDelegates()
+                    }
+                    
+                }
+                
+                print("Done loading")
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
+
+
+    
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -810,7 +880,6 @@ extension CommentVC {
                     }
                     if !data.isEmpty {
                         print("Successfully retrieved \(data.count) comments.")
-                        print(data)
                         let items = data
                         self.cmtPage += 1
                     
@@ -886,29 +955,49 @@ extension CommentVC {
         
         if firstAnimated {
                     
-                    firstAnimated = false
+            firstAnimated = false
                     
-                    UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.25) {
                         
-                        Dispatch.main.async {
-                            self.loadingView.alpha = 0
-                        }
+                Dispatch.main.async {
+                    self.loadingView.alpha = 0
+                }
+                        
+            }
+                    
+            
+            if !CommentList.isEmpty {
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    
+                    if self.loadingView.alpha == 0 {
+                        
+                        self.loadingView.isHidden = true
                         
                     }
-                    
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        
-                        if self.loadingView.alpha == 0 {
-                            
-                            self.loadingView.isHidden = true
-                            
-                        }
-                        
-                    }
-                    
                     
                 }
+                
+            } else {
+                
+                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                    
+                    if self.loadingView.alpha == 0 {
+                        
+                        self.loadingView.isHidden = true
+                        
+                    }
+                    
+                }
+                
+                
+                
+            }
+                    
+                    
+                    
+                    
+        }
         
     }
    
