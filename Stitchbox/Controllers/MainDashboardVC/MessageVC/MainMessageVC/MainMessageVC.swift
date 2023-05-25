@@ -14,7 +14,7 @@ var oldTabbarFr: CGRect = .zero
 
 class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, UISearchBarDelegate {
 
-    @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
+   // @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var requestBtn: UIButton!
@@ -123,7 +123,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     @objc func searchBarSetting(_ sender: AnyObject) {
         if searchController?.searchBar.isHidden == true {
-            buttonStackView.isHidden = true
+            //buttonStackView.isHidden = true
             navigationItem.searchController = searchController
             searchController?.searchBar.isHidden = false
             
@@ -132,7 +132,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
             }
             
         } else {
-            buttonStackView.isHidden = false
+            //buttonStackView.isHidden = false
             navigationItem.searchController = nil
             searchController?.searchBar.isHidden = true
         }
@@ -348,9 +348,9 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         
-        contentViewTopConstant.constant = 10
+        //contentViewTopConstant.constant = 10
         
-        buttonStackView.isHidden = false
+        //buttonStackView.isHidden = false
         navigationItem.searchController = nil
         searchController?.searchBar.isHidden = true
        
@@ -382,7 +382,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
     
-        contentViewTopConstant.constant = -50
+        //contentViewTopConstant.constant = -50
         
         if InboxVC.view.isHidden == false {
             
