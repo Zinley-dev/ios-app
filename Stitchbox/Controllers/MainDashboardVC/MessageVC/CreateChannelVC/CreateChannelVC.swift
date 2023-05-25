@@ -401,6 +401,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, !selectedUsers.isEmpty else { return }
         
         let channelParams = SBDGroupChannelParams()
+
         
         channelParams.addUserIds(selectedUsers.map { $0.userId })
         if selectedUsers.count > 1 {

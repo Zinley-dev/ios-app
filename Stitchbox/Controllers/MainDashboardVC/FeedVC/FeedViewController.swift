@@ -57,7 +57,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
 
    
         // Do any additional setup after loading the view
-        
+        syncSendbirdAccount()
         navigationControllerHeight = self.navigationController!.navigationBar.frame.height
         tabBarControllerHeight = (self.tabBarController?.tabBar.frame.height)!
         

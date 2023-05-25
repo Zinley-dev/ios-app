@@ -531,17 +531,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 } else if let InviteUserVC = currentVC as? InviteUserVC, InviteUserVC.channel?.channelUrl == channelUrl {
                     nav.popBack(4)
                 } else {
-                    self.presentChatWithNav(nav: nav, channelUrl: channelUrl)
+                    
+                    if currentVC is FeedViewController || currentVC is IntroTacticsVC || currentVC is ProfileViewController || currentVC is MainMessageVC {
+                        self.presentChatWithNavAndHideBar(nav: nav, channelUrl: channelUrl)
+                    } else {
+                        self.presentChatWithNav(nav: nav, channelUrl: channelUrl)
+                    }
+    
                 }
                 
             } else {
                 self.presentChatWithoutNav(vc: currentVC, channelUrl: channelUrl)
             }
-
-            
-            
+  
         }
         
+        
+    }
+    
+    func presentChatWithNavAndHideBar(nav: UINavigationController, channelUrl: String) {
+        
+        let mlsp = SBDMessageListParams()
+        let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
+        channelVC.shouldUnhide = true
+        nav.pushViewController(channelVC, animated: true)
         
     }
     

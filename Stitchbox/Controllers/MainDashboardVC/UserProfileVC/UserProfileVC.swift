@@ -659,7 +659,7 @@ extension UserProfileVC {
                 return
             }
 
-            checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
+            //checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
             

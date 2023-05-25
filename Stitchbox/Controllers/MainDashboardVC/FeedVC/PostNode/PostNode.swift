@@ -1221,7 +1221,7 @@ extension PostNode {
     }
 
     private func createHeaderInsetSpec() -> ASInsetLayoutSpec {
-        let headerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        let headerInset = UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
         return ASInsetLayoutSpec(insets: headerInset, child: headerNode)
     }
 
@@ -1253,7 +1253,7 @@ extension PostNode {
     }
 
     private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
-        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 75)
+        buttonsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 95)
         let buttonsInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonsNode)
     }

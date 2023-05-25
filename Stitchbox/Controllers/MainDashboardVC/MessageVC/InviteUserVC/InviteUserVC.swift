@@ -475,12 +475,12 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                return
            }
 
-           /*
+           
            // Check if the channelUrl property is not nil
            if let url = self.channelUrl {
                // Call checkForChannelInvitation function
-               checkForChannelInvitation(channelUrl: url, user_ids: userIds)
-           } */
+               //checkForChannelInvitation(channelUrl: url, user_ids: userIds)
+           }
 
            // Pop back to the fourth view controller in the navigation stack
            self.navigationController?.popBack(4)

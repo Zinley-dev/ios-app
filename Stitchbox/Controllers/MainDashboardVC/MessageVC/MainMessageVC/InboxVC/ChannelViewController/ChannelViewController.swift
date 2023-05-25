@@ -259,8 +259,6 @@ class ChannelViewController: SBUChannelViewController {
             voiceCallButton.setTitle("Join", for: .normal)
             voiceCallButton.setTitleColor(.white, for: .normal)
             voiceCallButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-            voiceCallButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
-            voiceCallButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
             voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
             voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
             voiceCallButton.frame = CGRect(x: 0, y: 0, width: 70, height: 30)
