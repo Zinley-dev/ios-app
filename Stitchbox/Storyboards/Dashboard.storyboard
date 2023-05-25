@@ -4180,22 +4180,8 @@
                                                     <action selector="didTapAudioOption:" destination="m7q-To-Va9" eventType="touchUpInside" id="mXI-ZW-OJg"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" alpha="0.85000002384185791" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wyu-dq-nHy">
-                                                <rect key="frame" x="55" y="0.0" width="35" height="35"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="35" id="Iw4-9l-mPg"/>
-                                                    <constraint firstAttribute="width" constant="35" id="ugP-wR-oaK"/>
-                                                </constraints>
-                                                <state key="normal" backgroundImage="btnCallEnd">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="didTapEnd" destination="m7q-To-Va9" eventType="touchUpInside" id="cRk-cc-JkN"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MGP-X7-uk5">
-                                                <rect key="frame" x="110" y="0.0" width="35" height="35"/>
+                                                <rect key="frame" x="55" y="0.0" width="35" height="35"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="K8R-2L-vbc"/>
@@ -4207,6 +4193,20 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="didTapSpeakerBtn:" destination="m7q-To-Va9" eventType="touchUpInside" id="mfT-sA-9xX"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" alpha="0.85000002384185791" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wyu-dq-nHy">
+                                                <rect key="frame" x="110" y="0.0" width="35" height="35"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="35" id="Iw4-9l-mPg"/>
+                                                    <constraint firstAttribute="width" constant="35" id="ugP-wR-oaK"/>
+                                                </constraints>
+                                                <state key="normal" backgroundImage="btnCallEnd">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapEnd" destination="m7q-To-Va9" eventType="touchUpInside" id="cRk-cc-JkN"/>
                                                 </connections>
                                             </button>
                                         </subviews>
