@@ -364,10 +364,14 @@ extension PostSearchVC {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       
-        return posts[collectionView.tag].hashtags.count
-        
+        if collectionView.tag < posts.count {
+            return posts[collectionView.tag].hashtags.count
+        } else {
+            // Handle the condition when there are no posts at the given index
+            return 0
+        }
     }
+
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         

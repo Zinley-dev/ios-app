@@ -286,10 +286,14 @@ extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       
-        return posts[collectionView.tag].hashtags.count
-        
+        if collectionView.tag < posts.count {
+            return posts[collectionView.tag].hashtags.count
+        } else {
+            // Handle the condition when there are no posts at the given index
+            return 0
+        }
     }
+
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
             return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
@@ -563,22 +567,28 @@ extension SelectedPostVC {
     @objc func onClickDelete(_ sender: AnyObject) {
         
       
+        presentSwiftLoader()
+        
         if let id = editeddPost?.id, id != "" {
-            
-            Dispatch.main.async {
-                
-                self.removePost()
-                
-            }
             
             APIManager().deleteMyPost(pid: id) { result in
                 switch result {
                 case .success(_):
                     needReloadPost = true
                     
+                    SwiftLoader.hide()
+                    
+                    Dispatch.main.async {
+                        
+                        self.removePost()
+                        
+                    }
+                    
                     
                   case .failure(let error):
                     print(error)
+                    SwiftLoader.hide()
+                    
                     delay(0.1) {
                         Dispatch.main.async {
                             self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
@@ -592,6 +602,7 @@ extension SelectedPostVC {
         } else {
         
             delay(0.1) {
+                SwiftLoader.hide()
                 self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
             }
             
@@ -866,16 +877,25 @@ extension SelectedPostVC {
             if let indexPath = posts.firstIndex(of: deletingPost) {
                 
                 posts.removeObject(deletingPost)
-                collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                reloadAllCurrentHashtag()
+
+                // check if there are no more posts
+                if posts.isEmpty {
+                    if onPresent {
+                        self.dismiss(animated: true)
+                    } else {
+                        navigationController?.popViewController(animated: true)
+                    }
+                } else {
+                    collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                    reloadAllCurrentHashtag()
+                }
             }
             
         }
         
-       
     }
-    
 
+    
     
     func reloadAllCurrentHashtag() {
         if !posts.isEmpty {

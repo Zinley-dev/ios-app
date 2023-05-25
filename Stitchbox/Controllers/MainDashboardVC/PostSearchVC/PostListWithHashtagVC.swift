@@ -519,10 +519,14 @@ extension PostListWithHashtagVC {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       
-        return posts[collectionView.tag].hashtags.count
-        
+        if collectionView.tag < posts.count {
+            return posts[collectionView.tag].hashtags.count
+        } else {
+            // Handle the condition when there are no posts at the given index
+            return 0
+        }
     }
+
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -861,14 +865,24 @@ extension PostListWithHashtagVC {
             if let indexPath = posts.firstIndex(of: deletingPost) {
                 
                 posts.removeObject(deletingPost)
-                collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                reloadAllCurrentHashtag()
+
+                // check if there are no more posts
+                if posts.isEmpty {
+                    if onPresent {
+                        self.dismiss(animated: true)
+                    } else {
+                        navigationController?.popViewController(animated: true)
+                    }
+                } else {
+                    collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                    reloadAllCurrentHashtag()
+                }
             }
             
         }
         
-       
     }
+
     
     func reloadAllCurrentHashtag() {
         if !posts.isEmpty {
