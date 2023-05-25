@@ -307,8 +307,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
       -> Bool {
         
         if let scheme = url.scheme,
-           scheme.localizedCaseInsensitiveCompare("stitchbox") == .orderedSame,
-           let view = url.host {
+           scheme.localizedCaseInsensitiveCompare("stitchbox") == .orderedSame {
           
             var parameters: [String: String] = [:]
             URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.forEach {

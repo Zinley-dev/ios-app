@@ -114,14 +114,37 @@ class PromoteDetailVC: UIViewController, UIScrollViewDelegate {
         dateFormatter.timeStyle = .none
 
         titleLabel.text = promote.name
-        descriptionLabel.text = "Description: \(promote.description)"
         imageView.load(url: promote.imageUrl, str: promote.imageUrl.absoluteString)
-        statusLabel.text = "Status: " + (promote.isActive ? "Active" : "Inactive")
-        datesLabel.text = "Start Date: \(dateFormatter.string(from: promote.startDate)) - End Date: \(dateFormatter.string(from: promote.endDate))"
-        maxMembersLabel.text = "Max Members: \(promote.maxMember)"
+        
 
         claimButton.isEnabled = promote.isActive
         claimButton.backgroundColor = promote.isActive ? .systemGreen : .systemGray
+        
+        let boldAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.boldSystemFont(ofSize: 16)
+        ]
+
+        let descriptionText = "Description: \(promote.description)"
+        let attributedDescriptionText = NSMutableAttributedString(string: descriptionText)
+        attributedDescriptionText.addAttributes(boldAttributes, range: NSRange(location: 0, length: 12)) // Assuming "Description:" has 12 characters
+
+        descriptionLabel.attributedText = attributedDescriptionText
+        
+        statusLabel.text = "Status: " + (promote.isActive ? "Active" : "Inactive")
+        let attributedStatusLabel = NSMutableAttributedString(string: statusLabel.text!)
+        attributedStatusLabel.addAttributes(boldAttributes, range: NSRange(location: 0, length: 7)) // Assuming "Status:" has 7 characters
+        statusLabel.attributedText = attributedStatusLabel
+
+        datesLabel.text = "Start Date: \(dateFormatter.string(from: promote.startDate)) - End Date: \(dateFormatter.string(from: promote.endDate))"
+        let attributedDatesLabel = NSMutableAttributedString(string: datesLabel.text!)
+        attributedDatesLabel.addAttributes(boldAttributes, range: NSRange(location: 0, length: 11)) // Assuming "Start Date:" has 11 characters
+        datesLabel.attributedText = attributedDatesLabel
+
+        maxMembersLabel.text = "Max Members: \(promote.maxMember)"
+        let attributedMaxMembersLabel = NSMutableAttributedString(string: maxMembersLabel.text!)
+        attributedMaxMembersLabel.addAttributes(boldAttributes, range: NSRange(location: 0, length: 12)) // Assuming "Max Members:" has 12 characters
+        maxMembersLabel.attributedText = attributedMaxMembersLabel
+
     }
 
     
@@ -146,7 +169,7 @@ class PromoteDetailVC: UIViewController, UIScrollViewDelegate {
                     
                     Dispatch.main.async {
                         SwiftLoader.hide()
-                        self.showErrorAlert("Oops", msg: "Claim unsuccessful. Please check promotion details or ensure all requirements have been met")
+                        self.showErrorAlert("Oops!", msg: "Claim unsuccessful. Please check promotion details or ensure all requirements have been met")
                         
                     }
                     
@@ -156,6 +179,9 @@ class PromoteDetailVC: UIViewController, UIScrollViewDelegate {
     }
     
     func fireWorkAnimation() {
+        
+        // Update pass eligible
+        reloadGlobalUserInformation()
         
         claimButton.isEnabled = false
         claimButton.backgroundColor = .darkGray
@@ -204,7 +230,7 @@ extension PromoteDetailVC {
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-        navigationItem.title = "SB-Promotion"
+        navigationItem.title = "SB Promotion"
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
 

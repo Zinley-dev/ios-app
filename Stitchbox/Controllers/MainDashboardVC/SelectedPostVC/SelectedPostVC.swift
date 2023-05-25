@@ -358,6 +358,7 @@ extension SelectedPostVC: ASCollectionDataSource {
         
         if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
             
+            navigationController?.setNavigationBarHidden(false, animated: true)
             PLWHVC.searchHashtag = selectedHashtag
             self.navigationController?.pushViewController(PLWHVC, animated: true)
             
@@ -608,7 +609,7 @@ extension SelectedPostVC {
         print("Edit requested")
         if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC {
             
-            //pauseVideoIfNeed(pauseIndex: selectedIndex)
+            navigationController?.setNavigationBarHidden(false, animated: true)
             EPVC.selectedPost = editeddPost
             self.navigationController?.pushViewController(EPVC, animated: true)
             
@@ -655,6 +656,7 @@ extension SelectedPostVC {
             
             VVC.selected_item = editeddPost
             delay(0.1) {
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
                 self.navigationController?.pushViewController(VVC, animated: true)
             }
             

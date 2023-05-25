@@ -102,6 +102,24 @@ class LastStepViewController: UIViewController, ControllerType {
     }
 
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        usernameTextfield.addUnderLine()
+        passwordTextfield.addUnderLine()
+        refCodeTextfield.addUnderLine()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        usernameTextfield.addUnderLine()
+        passwordTextfield.addUnderLine()
+        refCodeTextfield.addUnderLine()
+        
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         

@@ -25,7 +25,7 @@ extension UIColor{
   }
   
   class var tertiary: UIColor{
-    return UIColor(red: (233.0/255.0), green: (230.0/255.0), blue: 1.0, alpha: 1.0)
+      return white
   }
     
     class var disableButtonBackground: UIColor{

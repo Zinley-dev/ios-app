@@ -380,7 +380,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.9098039269" green="0.90196073060000004" blue="0.99215686319999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="y7q-jr-YaA" secondAttribute="bottom" id="B0t-U4-4qg"/>
                                             <constraint firstAttribute="height" constant="40" id="EOi-3V-V8y"/>
@@ -431,7 +431,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.9098039269" green="0.90196073060000004" blue="0.99215686319999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="6KU-JC-mHJ" secondAttribute="bottom" id="0Eg-T2-zlX"/>
                                             <constraint firstAttribute="bottom" secondItem="C4B-9A-WS5" secondAttribute="bottom" id="1c5-Kk-eIk"/>
@@ -485,7 +485,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.9098039269" green="0.90196073060000004" blue="0.99215686319999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="BPX-uy-gKi" secondAttribute="trailing" constant="10" id="7hq-ea-QHl"/>
                                             <constraint firstAttribute="trailing" secondItem="iOX-Z9-n0q" secondAttribute="trailing" constant="45" id="95F-Vg-d04"/>
@@ -538,7 +538,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.9098039269" green="0.90196073060000004" blue="0.99215686319999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="9NR-aa-zhm" firstAttribute="leading" secondItem="vel-Mc-0Kk" secondAttribute="leading" constant="10" id="2lR-xe-wKO"/>
                                             <constraint firstItem="KaU-2q-9iC" firstAttribute="leading" secondItem="vel-Mc-0Kk" secondAttribute="leading" constant="45" id="4Tm-ib-udX"/>
@@ -585,7 +585,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.9098039269" green="0.90196073060000004" blue="0.99215686319999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="lH5-Po-ANK" firstAttribute="leading" secondItem="IOi-73-j9r" secondAttribute="leading" constant="45" id="8i7-YO-LCn"/>
                                             <constraint firstItem="Uau-Mh-PHt" firstAttribute="centerY" secondItem="IOi-73-j9r" secondAttribute="centerY" id="Dye-AT-etz"/>
@@ -632,7 +632,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.9098039269" green="0.90196073060000004" blue="0.99215686319999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="1fU-7G-ufC" secondAttribute="trailing" constant="45" id="1Md-KS-0il"/>
                                             <constraint firstItem="egd-KC-C1C" firstAttribute="centerY" secondItem="G4S-jL-af4" secondAttribute="centerY" id="Gh4-Pt-yJm"/>
@@ -657,7 +657,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's start" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lIp-Vg-1Vq">
                                                 <rect key="frame" x="0.0" y="0.0" width="325" height="40"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <color key="textColor" red="0.9098039269" green="0.90196073060000004" blue="0.99215686319999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTP-qI-DtS">

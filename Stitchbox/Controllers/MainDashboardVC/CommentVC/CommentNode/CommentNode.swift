@@ -77,6 +77,7 @@ class CommentNode: ASCellNode {
         
         let timeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         
+        
         if self.post.reply_to != "" {
            
             if let username = self.post.reply_to_username {
@@ -97,13 +98,14 @@ class CommentNode: ASCellNode {
                     
                     if self.post.is_title == true {
                     
-                        if self.post.createdAt == self.post.last_modified {
+                        if self.post.updatedAt != Date() {
                             
-                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
+                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.updatedAt, numericDates: true))", attributes: timeAttributes)
                             
                         } else {
                             
-                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
+                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
+                            
                         }
                         
                     } else {
@@ -120,7 +122,7 @@ class CommentNode: ASCellNode {
                     self.cmtNode.attributedText = user
                     
                     
-                } else {
+                }  else {
                                                
                     
                     let user = NSMutableAttributedString()
@@ -160,15 +162,14 @@ class CommentNode: ASCellNode {
                 
                 if self.post.is_title == true {
                     
-                    
-                    if self.post.createdAt == self.post.last_modified {
+                    if self.post.updatedAt != Date() {
                         
-                
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
+                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.updatedAt, numericDates: true))", attributes: timeAttributes)
                         
                     } else {
                         
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
+                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
+                        
                     }
                     
                 } else {
@@ -428,13 +429,8 @@ class CommentNode: ASCellNode {
         
     }
     
-
-    
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        
-        
         let headerSubStack = ASStackLayoutSpec.vertical()
-        
         
         avatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
         infoNode.style.preferredSize = CGSize(width: 30.0, height: 60.0)
@@ -447,40 +443,25 @@ class CommentNode: ASCellNode {
         horizontalSubStack.spacing = 10
         horizontalSubStack.justifyContent = ASStackLayoutJustifyContent.start
         horizontalSubStack.children = [timeNode, replyBtnNode]
-  
-        if self.post.has_reply == true {
-            
+
+        if self.post.has_reply == true && loadReplyBtnNode.isHidden == false {
             headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack, loadReplyBtnNode]
-            
-            
         } else {
-            
             headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack]
-            
         }
-      
-  
+
         let headerStack = ASStackLayoutSpec.horizontal()
-      
-        
         headerStack.spacing = 10
         headerStack.justifyContent = ASStackLayoutJustifyContent.start
-        
         headerStack.children = [avatarNode, headerSubStack, infoNode]
         
-        
         if self.post.isReply == true {
-            
             return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 40, bottom: 16, right: 20), child: headerStack)
-            
         } else {
-            
             return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 20), child: headerStack)
-            
         }
-        
-    
     }
+
     
     func addReplyUIDBtn(label: ActiveLabel) {
         
@@ -959,6 +940,12 @@ extension CommentNode {
         
         
     }
+    
+    func addReplyNodes(_ nodes: [CommentNode]) {
+            for node in nodes {
+                addSubnode(node) // assuming that CommentNode is a subclass of ASDisplayNode
+            }
+        }
     
   
     

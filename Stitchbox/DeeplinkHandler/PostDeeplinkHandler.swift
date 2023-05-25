@@ -51,7 +51,7 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
                     if !data.isEmpty {
                         Dispatch.main.async {
                             SwiftLoader.hide()
-                            
+                            print(data)
                             if let post = PostModel(JSON: data) {
                                 
                                 if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {

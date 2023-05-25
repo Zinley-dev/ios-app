@@ -102,7 +102,7 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                         if card.quote != "" {
                             cell.infoLbl.text = card.quote
                         } else {
-                            cell.infoLbl.text = "Stitchboxer"
+                            cell.infoLbl.text = "Stitchbox User"
                         }
                         
                     }
