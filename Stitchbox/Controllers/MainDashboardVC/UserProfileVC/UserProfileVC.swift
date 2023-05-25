@@ -311,7 +311,7 @@ class UserProfileVC: UIViewController {
                         ChallengeView.infoLbl.text = "Stitchbox User"
                     }
                    
-                    if let createAt = _AppCoreData.userDataSource.value?.createdAt  {
+                    if let createAt = userData?.createdAt  {
                         let DateFormatter = DateFormatter()
                         DateFormatter.dateStyle = .medium
                         DateFormatter.timeStyle = .none

@@ -220,6 +220,7 @@ extension FistBumpeeVC {
                     guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         let item = [[String: Any]]()
                         DispatchQueue.main.async {
+                          
                             block(item)
                         }
                         return
@@ -230,6 +231,7 @@ extension FistBumpeeVC {
                         print("Successfully retrieved \(data.count) fistBumpees.")
                         let items = data
                         DispatchQueue.main.async {
+                          
                             block(items)
                         }
                     } else {

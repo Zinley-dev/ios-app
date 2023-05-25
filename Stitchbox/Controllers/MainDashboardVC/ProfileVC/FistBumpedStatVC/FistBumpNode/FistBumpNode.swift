@@ -34,6 +34,8 @@ class FistBumpNode: ASCellNode {
    
     init(with user: FistBumpUserModel) {
         
+        print(user.avatar, user.name, user.userName, user.userID)
+        
         self.user = user
         self.userNameNode = ASTextNode()
         self.avatarNode = ASNetworkImageNode()

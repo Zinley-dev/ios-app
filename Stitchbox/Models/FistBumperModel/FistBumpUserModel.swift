@@ -10,7 +10,7 @@ import ObjectMapper
 
 class FistBumpUserModel: Mappable {
     private(set) var avatar: String = ""
-    private(set) var name: String?
+    private(set) var name: String? = "@"
     private(set) var userID: String = ""
     private(set) var userName: String = ""
     private(set) var isFollowing: Bool = false
@@ -24,8 +24,8 @@ class FistBumpUserModel: Mappable {
         userName <- map ["username"]
         isFollowing <- map ["isFollowing"]
         userID <- map["userId"]
-        name <- map ["isFollowing"]
+        name <- map ["name"]
     }
-    
-    
 }
+
+
