@@ -304,7 +304,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             
             cell.frozenImageView.isHidden = !channel.isFrozen
 
-            
             DispatchQueue.main.async {
                 if let members = channel.members {
                     let filteredMembers = members.compactMap { $0 as? SBDMember }.filter { $0.userId != SBDMain.getCurrentUser()?.userId }

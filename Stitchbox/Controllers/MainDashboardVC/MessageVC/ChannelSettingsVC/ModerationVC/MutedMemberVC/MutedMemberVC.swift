@@ -22,7 +22,7 @@ class MutedMemberVC: UIViewController, UINavigationControllerDelegate, UITableVi
     var userList: [SBUUser] = []
 
     let addButton: UIButton = UIButton(type: .custom)
-   
+    
     var selectedIndexpath = 0
     
     

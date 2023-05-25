@@ -299,27 +299,37 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     }
 
     func setAvatarImage(for imageView: UIImageView, withProfileUrl profileUrl: String?) {
-        if let coverUrl = profileUrl {
-            imageStorage.async.object(forKey: coverUrl) { result in
-                if case .value(let image) = result {
-                    DispatchQueue.main.async {
-                        imageView.image = image
-                    }
-                } else {
-                    AF.request(coverUrl).responseImage { response in
-                        switch response.result {
-                        case let .success(value):
-                            imageView.image = value
-                            try? imageStorage.setObject(value, forKey: coverUrl)
-                        case let .failure(error):
-                            print(error)
+        
+        if profileUrl != "" {
+            
+            if let coverUrl = profileUrl {
+                imageStorage.async.object(forKey: coverUrl) { result in
+                    if case .value(let image) = result {
+                        DispatchQueue.main.async {
+                            imageView.image = image
+                        }
+                    } else {
+                        AF.request(coverUrl).responseImage { response in
+                            switch response.result {
+                            case let .success(value):
+                                imageView.image = value
+                                try? imageStorage.setObject(value, forKey: coverUrl)
+                            case let .failure(error):
+                                print(error)
+                            }
                         }
                     }
                 }
+            } else {
+                imageView.image = UIImage(named: "defaultuser")
             }
+            
         } else {
+            
             imageView.image = UIImage(named: "defaultuser")
+            
         }
+        
     }
 
     
