@@ -1846,7 +1846,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Hi0-Fv-K1G">
+                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Hi0-Fv-K1G">
                                 <rect key="frame" x="8" y="102" width="359" height="34"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ieR-vM-MVA">
@@ -1883,7 +1883,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lwv-Om-luR">
-                                <rect key="frame" x="0.0" y="146" width="375" height="583"/>
+                                <rect key="frame" x="0.0" y="104" width="375" height="625"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
@@ -1894,24 +1894,23 @@
                             <constraint firstItem="Hi0-Fv-K1G" firstAttribute="leading" secondItem="5qK-U3-Zgn" secondAttribute="leading" constant="8" id="GeX-Kb-HdQ"/>
                             <constraint firstItem="5qK-U3-Zgn" firstAttribute="trailing" secondItem="Lwv-Om-luR" secondAttribute="trailing" id="Ho6-5O-etC"/>
                             <constraint firstItem="5qK-U3-Zgn" firstAttribute="trailing" secondItem="Hi0-Fv-K1G" secondAttribute="trailing" constant="8" id="RyV-Zr-Rxd"/>
-                            <constraint firstItem="Lwv-Om-luR" firstAttribute="top" secondItem="Hi0-Fv-K1G" secondAttribute="bottom" constant="10" id="fL1-WZ-1EX"/>
                             <constraint firstItem="Lwv-Om-luR" firstAttribute="leading" secondItem="5qK-U3-Zgn" secondAttribute="leading" id="g1J-cB-9xs"/>
                             <constraint firstItem="Hi0-Fv-K1G" firstAttribute="centerX" secondItem="Ya0-LT-VIE" secondAttribute="centerX" id="gQ2-dh-pLQ"/>
                             <constraint firstItem="5qK-U3-Zgn" firstAttribute="bottom" secondItem="Lwv-Om-luR" secondAttribute="bottom" id="ih1-fA-O2I"/>
+                            <constraint firstItem="Lwv-Om-luR" firstAttribute="top" secondItem="5qK-U3-Zgn" secondAttribute="top" constant="10" id="u3J-ae-Zlm"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="apd-X9-DOM"/>
                     <connections>
                         <outlet property="buttonStackView" destination="Hi0-Fv-K1G" id="TQv-we-UJ9"/>
                         <outlet property="contentView" destination="Lwv-Om-luR" id="2FY-9e-lEO"/>
-                        <outlet property="contentViewTopConstant" destination="fL1-WZ-1EX" id="FMe-bh-GHI"/>
                         <outlet property="inboxBtn" destination="ieR-vM-MVA" id="Uh3-Op-jXX"/>
                         <outlet property="requestBtn" destination="B0N-XC-xs7" id="fqn-kL-YLH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ocr-DP-Msa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="496" y="1616"/>
+            <point key="canvasLocation" x="495.19999999999999" y="1615.2709359605913"/>
         </scene>
         <!--SubcriptionVC-->
         <scene sceneID="KXV-x7-kgQ">

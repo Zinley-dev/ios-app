@@ -417,8 +417,8 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
                 return
             }
 
-            let userIDs = self.selectedUsers.map { $0.userId }
-            checkForChannelInvitation(channelUrl: channelUrl, user_ids: userIDs)
+            //let userIDs = self.selectedUsers.map { $0.userId }
+            //checkForChannelInvitation(channelUrl: channelUrl, user_ids: userIDs)
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
             self.navigationController?.pushViewController(channelVC, animated: true)

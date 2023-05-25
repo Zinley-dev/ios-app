@@ -334,10 +334,7 @@
 		6ABDDCBD2A01024400CDAD39 /* MessageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDDCB22A01024300CDAD39 /* MessageRow.swift */; };
 		6ABDDCBE2A01024400CDAD39 /* CodeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDDCB32A01024300CDAD39 /* CodeBlockView.swift */; };
 		6ABDDCC42A0102D700CDAD39 /* Highlighter in Frameworks */ = {isa = PBXBuildFile; productRef = 6ABDDCC32A0102D700CDAD39 /* Highlighter */; };
-		6ABDDCCA2A0107F200CDAD39 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDDCC62A0107F100CDAD39 /* TextView.swift */; };
-		6ABDDCCB2A0107F200CDAD39 /* TokenizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDDCC72A0107F200CDAD39 /* TokenizerView.swift */; };
 		6ABDDCCC2A0107F200CDAD39 /* XCAChatGPTApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDDCC82A0107F200CDAD39 /* XCAChatGPTApp.swift */; };
-		6ABDDCCD2A0107F200CDAD39 /* TokenizerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDDCC92A0107F200CDAD39 /* TokenizerViewModel.swift */; };
 		6AC6D9F129A5C78C00B18139 /* load3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9E929A5C78A00B18139 /* load3.gif */; };
 		6AC6D9F229A5C78C00B18139 /* fox3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9EA29A5C78A00B18139 /* fox3.gif */; };
 		6AC6D9F329A5C78C00B18139 /* load.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9EB29A5C78B00B18139 /* load.gif */; };
@@ -816,10 +813,7 @@
 		6ABDDCB12A01024300CDAD39 /* ChatGPTAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGPTAPI.swift; sourceTree = "<group>"; };
 		6ABDDCB22A01024300CDAD39 /* MessageRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageRow.swift; sourceTree = "<group>"; };
 		6ABDDCB32A01024300CDAD39 /* CodeBlockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeBlockView.swift; sourceTree = "<group>"; };
-		6ABDDCC62A0107F100CDAD39 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
-		6ABDDCC72A0107F200CDAD39 /* TokenizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenizerView.swift; sourceTree = "<group>"; };
 		6ABDDCC82A0107F200CDAD39 /* XCAChatGPTApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCAChatGPTApp.swift; sourceTree = "<group>"; };
-		6ABDDCC92A0107F200CDAD39 /* TokenizerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenizerViewModel.swift; sourceTree = "<group>"; };
 		6AC6D9E929A5C78A00B18139 /* load3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = load3.gif; sourceTree = "<group>"; };
 		6AC6D9EA29A5C78A00B18139 /* fox3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fox3.gif; sourceTree = "<group>"; };
 		6AC6D9EB29A5C78B00B18139 /* load.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = load.gif; sourceTree = "<group>"; };
@@ -2953,9 +2947,6 @@
 		6ABDDCC52A0107E900CDAD39 /* XCAChatGPT */ = {
 			isa = PBXGroup;
 			children = (
-				6ABDDCC62A0107F100CDAD39 /* TextView.swift */,
-				6ABDDCC72A0107F200CDAD39 /* TokenizerView.swift */,
-				6ABDDCC92A0107F200CDAD39 /* TokenizerViewModel.swift */,
 				6ABDDCC82A0107F200CDAD39 /* XCAChatGPTApp.swift */,
 			);
 			path = XCAChatGPT;
@@ -3929,7 +3920,6 @@
 				6A3F0A852981FF0900366665 /* circleView.swift in Sources */,
 				6A6627782965771400A4488B /* NetworkManager.swift in Sources */,
 				6ABDDCBC2A01024400CDAD39 /* ChatGPTAPI.swift in Sources */,
-				6ABDDCCA2A0107F200CDAD39 /* TextView.swift in Sources */,
 				148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */,
 				6A3F0A8F2982454400366665 /* UserProfileHeaderCell.swift in Sources */,
 				6A307CCB29B6765600A89529 /* SearchNode.swift in Sources */,
@@ -4053,7 +4043,6 @@
 				6A6C3108296426F80070167A /* EditChannelDataModView.swift in Sources */,
 				6A0CF63B296AAC1D00155889 /* PhoneResetVC.swift in Sources */,
 				A540A8DA294731320085CC45 /* AppleSignInService.swift in Sources */,
-				6ABDDCCD2A0107F200CDAD39 /* TokenizerViewModel.swift in Sources */,
 				6A802CC529E22D7200099F53 /* IntroTacticsVC.swift in Sources */,
 				6A47AAAE2A1867E600E3E1FF /* ImageSparkViewFactory.swift in Sources */,
 				6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */,
@@ -4147,7 +4136,6 @@
 				6AEA340D298F0B84005A4C5D /* CommentVC.swift in Sources */,
 				6A251CF129EA3DB200F6AC0D /* ChatCell.swift in Sources */,
 				6A9E3AFA29E9F1B2002B36D7 /* SB-ProfileVC.swift in Sources */,
-				6ABDDCCB2A0107F200CDAD39 /* TokenizerView.swift in Sources */,
 				6AF9733B2978FDAC00C76814 /* EditBioVC.swift in Sources */,
 				6A123598294EFB7A004B612E /* RequestChannelVC.swift in Sources */,
 				A540A8DC294731750085CC45 /* TiktokSignInService.swift in Sources */,
@@ -4516,7 +4504,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4560,7 +4548,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -62,7 +62,7 @@ func syncSendbirdAccount() {
             // No pending push token.
         }
 
-        SBDMain.setChannelInvitationPreferenceAutoAccept(false) { error in
+        SBDMain.setChannelInvitationPreferenceAutoAccept(true) { error in
             guard error == nil else {
                 print("Senbird Invites:", error!.localizedDescription)
                 return

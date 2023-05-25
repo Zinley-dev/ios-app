@@ -471,14 +471,16 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
            // Check if the invitation was successful
            if let error = error {
                print(error.localizedDescription)
+               showErrorAlert("Oops!", msg: error.localizedDescription)
                return
            }
 
+           /*
            // Check if the channelUrl property is not nil
            if let url = self.channelUrl {
                // Call checkForChannelInvitation function
                checkForChannelInvitation(channelUrl: url, user_ids: userIds)
-           }
+           } */
 
            // Pop back to the fourth view controller in the navigation stack
            self.navigationController?.popBack(4)
