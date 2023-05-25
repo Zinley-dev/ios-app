@@ -121,7 +121,7 @@ extension UIImageView {
                                           
                            case let .failure(error):
                                print(error)
-                                self.image = UIImage.init(named: "empty")
+                                self.image = UIImage.init(named: "defaultuser")
                         }
                     
                     
@@ -322,7 +322,7 @@ class ProfileImageView: UIView {
                         try? imageStorage.setObject(value, forKey: coverUrl)
                     case let .failure(error):
                         print(error)
-                        imageView.image = UIImage.init(named: "empty")
+                        imageView.image = UIImage.init(named: "defaultuser")
                     }
                  
                     

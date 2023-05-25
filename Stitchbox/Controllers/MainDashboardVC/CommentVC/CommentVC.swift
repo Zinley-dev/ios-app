@@ -773,15 +773,23 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
                     return
                 }
                 
-                // Set 'has_reply' attribute of the last reply to true
-                replyData[replyData.count - 1]["hasReply"] = true
-                replyData[replyData.count - 1]["hasLoadedReplied"] = true
+                // Remove duplicates
+                replyData = replyData.filter { reply in
+                    let replyModel = CommentModel(postKey: reply["_id"] as! String, Comment_model: reply)
+                    return !self.checkDuplicateLoading(post: replyModel)
+                }
+
+                // Now, replyData should contain only unique items
+                if !replyData.isEmpty {
+                    // Set 'has_reply' attribute of the last unique reply to true
+                    replyData[replyData.count - 1]["hasReply"] = true
+                    replyData[replyData.count - 1]["hasLoadedReplied"] = true
+                }
                 
                 let newCommentModels = replyData.map { CommentModel(postKey: $0["_id"] as! String, Comment_model: $0) }
 
                 // Find the current index of the item
                 if let currentIndex = self.CommentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
-                    
                     
                     self.CommentList.insert(contentsOf: newCommentModels, at: currentIndex + 1)
 
@@ -793,7 +801,6 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
                         let lastNewRowIndex = currentIndex + newCommentModels.count
                         self.tableNode.scrollToRow(at: IndexPath(row: lastNewRowIndex, section: 0), at: .bottom, animated: true)
                     }
-
 
                     comment.lastCmtSnapshot += 1
                 }
