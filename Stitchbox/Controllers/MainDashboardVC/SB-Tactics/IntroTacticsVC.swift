@@ -123,7 +123,7 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
             
             if passEligible {
                 
-                self.navigationItem.title = "SB-Tactics - Pro"
+                self.navigationItem.title = "SB Tactics - Pro"
                 self.navigationItem.rightBarButtonItem = nil
                 
             } else {
@@ -144,10 +144,10 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         
         IAPManager.shared.checkPermissions { result in
             if result == false {
-                self.navigationItem.title = "SB-Tactics"
+                self.navigationItem.title = "SB Tactics"
                 self.setupProButton()
             } else {
-                self.navigationItem.title = "SB-Tactics - Pro"
+                self.navigationItem.title = "SB Tactics - Pro"
                 self.navigationItem.rightBarButtonItem = nil
             }
         }

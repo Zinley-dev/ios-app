@@ -41,7 +41,7 @@ class IAPManager {
             } else {
                 
                 if let premium: Qonversion.Entitlement = entitlements["Stitchbox_Pro"], premium.isActive {
-                    completion(false)
+                    completion(true)
                  
                 } else {
                     completion(false)

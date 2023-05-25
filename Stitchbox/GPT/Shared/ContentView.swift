@@ -101,8 +101,7 @@ struct ContentView: View {
                     .frame(width: 30, height: 30)
                     .cornerRadius(15)
             }
-            
-
+        
             
             if #available(iOS 16.0, *) {
                 TextField("", text: $vm.inputMessage, prompt: Text("Ask us anything!").foregroundColor(.gray))
@@ -115,7 +114,7 @@ struct ContentView: View {
                     .focused($isTextFieldFocused)
                     .disabled(vm.isInteractingWithChatGPT)
             } else {
-                VStack(alignment: .leading) {
+                ZStack(alignment: .leading) {
                     if vm.inputMessage.isEmpty && !isTextFieldFocused {
                         Text("Ask us anything!")
                             .foregroundColor(.gray)
@@ -131,7 +130,7 @@ struct ContentView: View {
                 }
             }
 
-            
+
             if vm.isInteractingWithChatGPT {
                 DotLoadingView().frame(width: 40, height: 30)
             } else {
