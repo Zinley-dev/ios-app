@@ -762,6 +762,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
             case .failure(let error):
                 print(error)
+                self.isSending = false
                 DispatchQueue.main.async {
                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
