@@ -314,7 +314,6 @@ class ProfileImageView: UIView {
                 
              AF.request(coverUrl).responseImage { response in
                     
-                    
                     switch response.result {
                     case let .success(value):
                         imageView.image = value

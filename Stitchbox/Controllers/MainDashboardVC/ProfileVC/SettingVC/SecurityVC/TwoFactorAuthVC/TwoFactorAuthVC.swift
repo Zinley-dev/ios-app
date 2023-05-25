@@ -49,7 +49,9 @@ class TwoFactorAuthVC: UIViewController {
                 case .failure(let error):
                     print(error)
                     DispatchQueue.main.async {
+                        self.showErrorAlert("Oops!", msg: "Cannot turn off your 2fa and this time, please try again")
                         SwiftLoader.hide()
+                        self.PhoneSwitch.setOn(true, animated: true)
                     }
                 }
             }
@@ -66,7 +68,8 @@ class TwoFactorAuthVC: UIViewController {
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
-                            self.showErrorAlert("Oops!", msg: "This phone may has been registered")
+                            self.showErrorAlert("Oops!", msg: "This phone may has already been registered")
+                            self.PhoneSwitch.setOn(false, animated: true)
                             
                         }
                         
@@ -82,7 +85,8 @@ class TwoFactorAuthVC: UIViewController {
                     self.isPhone = false
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
-                        self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please try again")
+                        self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please make sure you have your phone ready and try again.")
+                        self.PhoneSwitch.setOn(false, animated: true)
                     }
                   
                     print(error)
@@ -112,6 +116,9 @@ class TwoFactorAuthVC: UIViewController {
                     print(error)
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "Cannot turn off your 2fa and this time, please make sure you have your email ready and try again.")
+                        self.EmailSwitch.setOn(true, animated: true)
+                        
                     }
                 }
             }
@@ -128,7 +135,8 @@ class TwoFactorAuthVC: UIViewController {
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
-                            self.showErrorAlert("Oops!", msg: "This email may has been registered")
+                            self.showErrorAlert("Oops!", msg: "This email may has already been registered")
+                            self.EmailSwitch.setOn(false, animated: true)
                         }
                         
                         return
@@ -144,6 +152,7 @@ class TwoFactorAuthVC: UIViewController {
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
                         self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please make sure you have your email ready and try again.")
+                        self.EmailSwitch.setOn(false, animated: true)
                     }
                   
                     print(error)
@@ -180,17 +189,27 @@ extension TwoFactorAuthVC {
     }
     
     func setupBackButton() {
-        
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        //Two-Factor Authentication
+
         backButton.frame = back_frame
+        backButton.contentMode = .center
+
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Two-Factor Authentication", for: .normal)
-        backButton.sizeToFit()
+        navigationItem.title = "Two-Factor Authentication"
+       
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+
         self.navigationItem.leftBarButtonItem = backButtonBarButton
        
     }

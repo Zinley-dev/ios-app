@@ -285,6 +285,8 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
         
         if let code = HidenTxtView.text, code.count == 6 {
             
+            presentSwiftLoader()
+            
             if type == "phone" {
                 verifyPhone(code: code)
             } else if type == "email" {
@@ -454,6 +456,8 @@ extension VerifyCodeVC {
     
     func verify2FA(code: String) {
         
+        
+        
         var typeMethod = ""
         
         if type == "2FA - phone" {
@@ -483,6 +487,7 @@ extension VerifyCodeVC {
             case .failure(let error):
                 
                 DispatchQueue.main.async {
+                    print(error)
                     SwiftLoader.hide()
                     self.showErrorAlert("Oops!", msg: "Unable to verify your code, please try again \(error.localizedDescription)")
                     

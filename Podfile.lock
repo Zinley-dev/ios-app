@@ -164,6 +164,12 @@ PODS:
   - SendBirdUIKit (2.2.14):
     - SendBirdSDK (>= 3.1.39)
   - SendBirdWebRTC (1.6.1)
+  - Sentry (8.7.2):
+    - Sentry/Core (= 8.7.2)
+    - SentryPrivate (= 8.7.2)
+  - Sentry/Core (8.7.2):
+    - SentryPrivate (= 8.7.2)
+  - SentryPrivate (8.7.2)
   - swift-vibrant (1.0.0)
   - SwiftEntryKit (1.2.6):
     - QuickLayout (= 3.0.0)
@@ -219,6 +225,7 @@ DEPENDENCIES:
   - SendBirdCalls (~> 1.9.7)
   - SendBirdSDK (~> 3.1.37)
   - SendBirdUIKit (~> 2.2.11)
+  - Sentry
   - swift-vibrant
   - SwiftEntryKit (= 1.2.6)
   - Swifter (from `https://github.com/mattdonnelly/Swifter.git`)
@@ -273,6 +280,8 @@ SPEC REPOS:
     - SendBirdSDK
     - SendBirdUIKit
     - SendBirdWebRTC
+    - Sentry
+    - SentryPrivate
     - swift-vibrant
     - SwiftEntryKit
     - SwiftLint
@@ -334,6 +343,8 @@ SPEC CHECKSUMS:
   SendBirdSDK: 8021d9afea643cf7a9768b50c1a36ef51297b28a
   SendBirdUIKit: 0f3d085f0aa42fc1be87140eb33d0d6d5dd844ee
   SendBirdWebRTC: d848df17569ecb607d0c5503b726bae3ce3dcf68
+  Sentry: c43b6d1d51bf96edbaeac7772c4178aa54f4f450
+  SentryPrivate: 760a9fd5d134c4d926c4c0afe9c4deceadbf4557
   swift-vibrant: 3def73c5c281db74f420ec386590d9c1c5b0995c
   SwiftEntryKit: 96a2fa90b2631bbbfac50d18449e9ca3d0635f13
   Swifter: 4c2f8cf320c2f751c10128f841d8e9bd8609d988
@@ -343,6 +354,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 5e4abf8b4973f04f8949aa514767973f36330eae
+PODFILE CHECKSUM: 0af4e318453f56d9129fa1979c9b99665a55af7e
 
 COCOAPODS: 1.12.1

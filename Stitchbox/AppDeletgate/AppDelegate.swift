@@ -20,6 +20,7 @@ import TikTokOpenSDK
 import OneSignal
 import GooglePlaces
 import GoogleMaps
+import Sentry
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -56,6 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         activeSpeaker()
         setupVolumeObserver()
         IAPManager.shared.configure()
+        sentrySetup()
         //listenVolumeButton()
         
         GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
@@ -63,6 +65,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
      
         return true
+    }
+    
+    
+    func sentrySetup() {
+        
+        SentrySDK.start { options in
+                options.dsn = "https://3406dbc29f884019aa59d9319a12b765@o4505243020689408.ingest.sentry.io/4505243021606912"
+                options.debug = true // Enabled debug when first installing is always helpful
+
+                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                // We recommend adjusting this value in production.
+                options.tracesSampleRate = 1.0
+            }
+        
     }
     
     private func setupVolumeObserver() {

@@ -120,6 +120,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        showTabbar()
         checkNotification()
         showMiddleBtn(vc: self)
         loadFeed()
@@ -166,6 +167,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        
         delay(0.25) {
             NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         }
@@ -180,6 +182,13 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
             //newPlayingIndex
             pauseVideo(index: currentIndex!)
         }
+        
+    }
+    
+    func showTabbar() {
+        
+        changeTabBar(hidden: false, animated: false)
+        self.tabBarController?.tabBar.isTranslucent = false
         
     }
     
@@ -473,6 +482,7 @@ extension FeedViewController {
     @objc func onClickPromote(_ sender: AnyObject) {
 
         if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PromoteVC") as? PromoteVC {
+           
             PVC.promotionList = self.promotionList
             PVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)

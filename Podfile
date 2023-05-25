@@ -56,6 +56,8 @@ target 'Stitchbox' do
   pod 'GooglePlaces'
   pod 'swift-vibrant'
   
+  pod 'Sentry'
+  
   target 'StitchboxTests' do
     inherit! :search_paths
     # Pods for testing
