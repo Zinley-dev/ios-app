@@ -21,6 +21,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
+    
+    var hasViewAppeared = false
   
     let promotionButton = UIButton(type: .custom)
     let homeButton: UIButton = UIButton(type: .custom)
@@ -125,6 +127,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         showMiddleBtn(vc: self)
         loadFeed()
         
+        hasViewAppeared = true
+        
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backgroundColor = .background
@@ -166,8 +170,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        
+
         delay(0.25) {
             NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         }
@@ -175,6 +178,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        hasViewAppeared = false
         
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         

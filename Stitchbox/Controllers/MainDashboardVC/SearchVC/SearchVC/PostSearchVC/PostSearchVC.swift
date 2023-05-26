@@ -75,7 +75,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         if currentIndex != nil {
             //newPlayingIndex
-            pauseVideoIfNeed(pauseIndex: currentIndex!)
+            pauseVideo(index: currentIndex!)
         }
     
     }
@@ -85,7 +85,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         if currentIndex != nil {
             //newPlayingIndex
-            playVideoIfNeed(playIndex: currentIndex!)
+            playVideo(index: currentIndex!)
         }
         
     }
@@ -220,7 +220,7 @@ extension PostSearchVC {
             if !post.muxPlaybackId.isEmpty {
                 currentIndex = 0
                 newPlayingIndex = 0
-                playVideoIfNeed(playIndex: currentIndex!)
+                playVideo(index: currentIndex!)
                 isVideoPlaying = true
             }
             
@@ -870,5 +870,6 @@ extension PostSearchVC {
         }
         
     }
+    
     
 }

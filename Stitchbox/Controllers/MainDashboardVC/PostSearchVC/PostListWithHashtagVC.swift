@@ -15,7 +15,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
 
     
     var searchHashtag: String?
-    
+    var hasViewAppeared = false
     let backButton: UIButton = UIButton(type: .custom)
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
@@ -97,6 +97,8 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
 
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_hashtag")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_hashtag")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_hashtag")), object: nil)
@@ -108,6 +110,8 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
+        hasViewAppeared = false
         
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile_hashtag")), object: nil)
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post_hashtag")), object: nil)
@@ -136,6 +140,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         
         loadingView.backgroundColor = self.view.backgroundColor
         navigationController?.setNavigationBarHidden(false, animated: true)
+        hasViewAppeared = true
         
         delay(1.25) {
             

@@ -265,6 +265,48 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "notification_copy_cmt")), object: nil)
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "notification_delete_cmt")), object: nil)
         
+        
+        delay(0.01) {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                if let update1 = vc as? FeedViewController {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                   
+                    
+                } else if let update1 = vc as? PostListWithHashtagVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                } else if let update1 = vc as? MainSearchVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.PostSearchVC.viewWillAppear(true)
+                    }
+                    
+                } else if let update1 = vc as? ReelVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                } else if let update1 = vc as? SelectedPostVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
     }
     
     func loadAvatar() {

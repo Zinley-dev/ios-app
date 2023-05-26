@@ -28,7 +28,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     var cmtPage = 2
     @IBOutlet weak var totalCmtCount: UILabel!
     @IBOutlet weak var bView: UIView!
-
+    var isMovingForward = false
     var hasSetPointOrigin = false
     var pointOrigin: CGPoint?
     var editedComment: CommentModel?
@@ -206,7 +206,6 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                 if let commentsContainer = data["comments"] as? [String: Any],
                    let comments = commentsContainer["data"] as? [[String: Any]] {
                     for comment in comments {
-                        print(comment)
                         let item = CommentModel(postKey: comment["_id"] as! String, Comment_model: comment)
                         self.CommentList.append(item)
                     }
@@ -236,11 +235,6 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     }
 
 
-
-    
-    
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -283,6 +277,54 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_cmt")), object: nil)
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "delete_cmt")), object: nil)
         
+        
+        delay(0.01) {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                if let update1 = vc as? FeedViewController {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                   
+                    
+                } else if let update1 = vc as? PostListWithHashtagVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                } else if let update1 = vc as? MainSearchVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.PostSearchVC.viewWillAppear(true)
+                    }
+                    
+                } else if let update1 = vc as? ReelVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                } else if let update1 = vc as? SelectedPostVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    override func willMove(toParent parent: UIViewController?) {
+        super.willMove(toParent: parent)
+        print(parent)
+      
     }
     
     override func viewWillLayoutSubviews() {

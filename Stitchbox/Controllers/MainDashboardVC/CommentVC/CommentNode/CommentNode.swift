@@ -616,37 +616,23 @@ class CommentNode: ASCellNode {
                     
                 }
                 
-                label.handleURLTap { string in
+                label.handleURLTap { [weak self] string in
                     
                     
                     let url = string.absoluteString
                     
                     if url.contains("https://stitchbox.gg/app/account/") {
                         
-                        
-                        let id = string.lastPathComponent
-                        
-                        if id != "" {
-                            self.moveToUserProfileVC(id: id)
+                        if let id = self?.getUIDParameter(from: url) {
+                            self?.moveToUserProfileVC(id: id)
                         }
-                              
-                        
-                        
-                        
-                        
+            
                     } else if url.contains("https://stitchbox.gg/app/post/") {
-                        
-                        
-                        let id = string.lastPathComponent
-                        
-                        if id != "" {
-                            self.openPost(id: id)
+                    
+                        if let id = self?.getUIDParameter(from: url) {
+                            self?.openPost(id: id)
                         }
-                              
-                        
-                        
-                        
-                        
+
                     } else {
                         
                         guard let requestUrl = URL(string: url) else {
@@ -674,6 +660,13 @@ class CommentNode: ASCellNode {
         if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
             
             if let vc = UIViewController.currentViewController() {
+                
+
+                if general_vc != nil {
+                    general_vc.viewWillDisappear(true)
+                }
+                
+              
                 
                 let nav = UINavigationController(rootViewController: UPVC)
 
@@ -719,6 +712,11 @@ class CommentNode: ASCellNode {
                             if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
                                 
                                 if let vc = UIViewController.currentViewController() {
+                                
+
+                                    if general_vc != nil {
+                                        general_vc.viewWillDisappear(true)
+                                    }
                                     
                                     let nav = UINavigationController(rootViewController: RVC)
 
@@ -793,8 +791,6 @@ class CommentNode: ASCellNode {
         
         
         if self.post.comment_uid == self.post.owner_uid {
-            
-            print(self.post.comment_uid, self.post.owner_uid)
             
             if self.post.is_pinned == true {
                 
@@ -950,5 +946,16 @@ extension CommentNode {
         }
     
   
+    
+    func getUIDParameter(from urlString: String) -> String? {
+        if let url = URL(string: urlString) {
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            return components?.queryItems?.first(where: { $0.name == "uid" })?.value
+        } else {
+            return nil
+        }
+    }
+
+
     
 }

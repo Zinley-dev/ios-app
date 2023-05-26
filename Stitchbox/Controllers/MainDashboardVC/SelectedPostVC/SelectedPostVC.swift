@@ -25,7 +25,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     var currentIndex: Int!
     var imageIndex: Int?
     var imageTimerWorkItem: DispatchWorkItem?
-    
+    var hasViewAppeared = false
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -64,10 +64,12 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        hasViewAppeared = true
+        
         if currentIndex != nil {
             
             if posts[currentIndex].muxPlaybackId != "" {
-                playVideoIfNeed(playIndex: currentIndex)
+                playVideo(index: currentIndex)
             }
             
         }
@@ -78,10 +80,12 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        hasViewAppeared = false
+        
         if currentIndex != nil {
             
             if posts[currentIndex].muxPlaybackId != "" {
-                pauseVideoIfNeed(pauseIndex: currentIndex)
+                pauseVideo(index: currentIndex)
             }
             
         }
@@ -950,6 +954,89 @@ extension SelectedPostVC {
             self.present(ac, animated: true, completion: nil)
         }
       
+    }
+    
+    
+    
+    func pauseVideo(index: Int) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if cell.sideButtonView != nil {
+                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.stopSpin()
+                    
+                }
+            }
+            
+            cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    
+    func playVideo(index: Int) {
+        
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if !cell.videoNode.isPlaying() {
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.spin()
+                    
+                }
+                
+                if let muteStatus = shouldMute {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if muteStatus {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        }
+                    }
+                   
+                    if muteStatus {
+                        cell.videoNode.muted = true
+                    } else {
+                        cell.videoNode.muted = false
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                } else {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if globalIsSound {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                    }
+                   
+                    if globalIsSound {
+                        cell.videoNode.muted = false
+                    } else {
+                        cell.videoNode.muted = true
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                }
+ 
+              
+            }
+            
+        }
+        
     }
     
 }

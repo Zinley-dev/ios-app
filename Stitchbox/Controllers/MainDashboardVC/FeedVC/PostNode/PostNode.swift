@@ -852,10 +852,12 @@ extension PostNode {
     
     @objc func cmtTapped() {
         
-        
         if let vc = UIViewController.currentViewController() {
             
+            general_vc = vc
+            
             if vc is SelectedPostVC {
+                
                 
                 if let update1 = vc as? SelectedPostVC {
                     

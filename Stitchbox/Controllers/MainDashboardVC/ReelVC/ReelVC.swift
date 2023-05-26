@@ -32,7 +32,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     var page = 1
     var searchHashtag: String!
     var keyword: String!
-    
+    var hasViewAppeared = false
 
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -91,6 +91,8 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        hasViewAppeared = true
+        
         if currentIndex != nil, currentIndex != nil {
             //newPlayingIndex
             playVideo(index: currentIndex!)
@@ -114,6 +116,8 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
+        hasViewAppeared = false
         
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile_reel")), object: nil)
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post_reel")), object: nil)

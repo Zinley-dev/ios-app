@@ -32,6 +32,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
     var currentSearchText = ""
     let backButton: UIButton = UIButton(type: .custom)
     var searchController: UISearchController?
+    var hasViewAppeared = false
     
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var contentView: UIView!
@@ -158,6 +159,15 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+        hasViewAppeared = true
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        hasViewAppeared = false
         
     }
 
@@ -634,5 +644,7 @@ extension MainSearchVC {
         }
         
     }
+    
+    
     
 }
