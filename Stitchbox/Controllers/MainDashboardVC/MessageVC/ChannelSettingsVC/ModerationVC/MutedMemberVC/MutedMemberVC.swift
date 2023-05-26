@@ -158,6 +158,37 @@ class MutedMemberVC: UIViewController, UINavigationControllerDelegate, UITableVi
 
         return cell
     }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = userList[indexPath.row]
+        if user.userId != _AppCoreData.userDataSource.value?.userID {
+            presentUsers(userId: user.userId, username: user.nickname ?? "")
+        }
+    }
+    
+    
+    func presentUsers(userId: String, username: String) {
+        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            
+            let nav = UINavigationController(rootViewController: UPVC)
+
+            // Set the user ID, nickname, and onPresent properties of UPVC
+            UPVC.userId = userId
+            UPVC.nickname = username
+            UPVC.onPresent = true
+
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        }
+        
+    }
 
     
     @objc func actionButtonPressed(sender: UIButton) {

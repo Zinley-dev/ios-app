@@ -34,9 +34,10 @@ class ChannelViewController: SBUChannelViewController {
         // Do any additional setup after loading the view.
         navigationItem.rightBarButtonItem = nil
         self.callLayout()
+        self.setupProfileButtons()
+        
         
     }
-
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -46,14 +47,14 @@ class ChannelViewController: SBUChannelViewController {
         hideMiddleBtn(vc: self)
     
         let navigationBarAppearance = UINavigationBarAppearance()
-                navigationBarAppearance.configureWithOpaqueBackground()
-                navigationBarAppearance.backgroundColor = .background
-                navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-                navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
 
-                self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-                self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-                navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        navigationController?.setNavigationBarHidden(false, animated: false)
         
     }
     
@@ -69,6 +70,8 @@ class ChannelViewController: SBUChannelViewController {
         }
     }
     
+    
+    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil, shouldUnhide {
             
@@ -77,6 +80,17 @@ class ChannelViewController: SBUChannelViewController {
             
         }
       
+    }
+    
+    func setupProfileButtons() {
+        
+        let button = UIButton()
+        button.frame = CGRect(x: 50, y: 6, width: 170, height: 40)
+        button.setTitle("", for: .normal)
+        button.backgroundColor = UIColor.clear
+        button.addTarget(self, action: #selector(ChannelViewController.profileBtnPressed), for: .touchUpInside)
+        self.navigationController?.navigationBar.addSubview(button)
+        
     }
     
     func changeTabBar(hidden: Bool) {
@@ -405,6 +419,46 @@ class ChannelViewController: SBUChannelViewController {
         } else {
             presentErrorAlert(message: "Can't authenticate your account right now, please try to logout and login again.")
         }
+    }
+    
+    
+    @objc func profileBtnPressed() {
+        guard self.navigationController?.visibleViewController is ChannelViewController,
+              let members = channel?.members,
+              members.count == 2 else {
+            print("Wrong")
+            return
+        }
+        
+        for user in (members as NSArray as! [SBDMember]) {
+            if user.userId != _AppCoreData.userDataSource.value?.userID {
+                presentUsers(userId: user.userId, username: user.nickname ?? "")
+                return
+            }
+        }
+    }
+
+    
+    func presentUsers(userId: String, username: String) {
+        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            
+            let nav = UINavigationController(rootViewController: UPVC)
+
+            // Set the user ID, nickname, and onPresent properties of UPVC
+            UPVC.userId = userId
+            UPVC.nickname = username
+            UPVC.onPresent = true
+
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        }
+        
     }
     
 }
