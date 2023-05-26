@@ -102,7 +102,7 @@ class CreateAccountViewModel: ViewModelProtocol {
             print("SUBCRIBE>...")
             if uname.count >= 3 {
 
-                APIManager().checkUsernameExist(username: uname) { result in
+                APIManager.shared.checkUsernameExist(username: uname) { result in
                   switch result {
                     case .success(let response):
                       if let data = response.body?["data"] as? String, data != "" {
@@ -134,7 +134,7 @@ class CreateAccountViewModel: ViewModelProtocol {
                     presentSwiftLoader()
                 }
                 
-                APIManager().register(params: params) { result in
+                APIManager.shared.register(params: params) { result in
                     switch result {
                     case .success(let response):
                         print(response)
@@ -172,7 +172,7 @@ class CreateAccountViewModel: ViewModelProtocol {
                 if let socialId = _AppCoreData.userDataSource.value?.socialId, socialId != "" {
                     let params = ["username": username, "password": password, "provider": signinMethod, "socialId": socialId, "name": _AppCoreData.userDataSource.value?.name ?? "", "avatar": _AppCoreData.userDataSource.value?.avatarURL ?? "", "email": _AppCoreData.userDataSource.value?.email ?? ""]
                     print("VAO IF..................... \(_AppCoreData.userDataSource.value?.toJSON())")
-                    APIManager().socialRegister(params: params) { result in
+                    APIManager.shared.socialRegister(params: params) { result in
                         switch result {
                             case .success(let response):
                                 let data = response.body?["data"] as! [String: Any]?

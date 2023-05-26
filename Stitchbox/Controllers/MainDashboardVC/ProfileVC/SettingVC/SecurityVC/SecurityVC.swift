@@ -116,7 +116,7 @@ class SecurityVC: UIViewController {
         
         presentSwiftLoader()
         
-        APIManager().undoDeleteMe { result in
+        APIManager.shared.undoDeleteMe { result in
             switch result {
             case .success(_):
                 
@@ -146,7 +146,7 @@ class SecurityVC: UIViewController {
         
         presentSwiftLoader()
         
-        APIManager().deleteMe { result in
+        APIManager.shared.deleteMe { result in
             switch result {
             case .success(_):
                 

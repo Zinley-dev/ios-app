@@ -191,7 +191,7 @@ extension EditBioVC: UITextViewDelegate {
         if let bio = bioTextView.text {
     
             presentSwiftLoader()
-            APIManager().updateme(params: ["about": bio]) { result in
+            APIManager.shared.updateme(params: ["about": bio]) { result in
                 switch result {
                 case .success(let apiResponse):
                     

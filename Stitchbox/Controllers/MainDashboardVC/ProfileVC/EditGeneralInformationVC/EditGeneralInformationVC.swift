@@ -107,7 +107,7 @@ extension EditGeneralInformationVC {
 
                         self.view.endEditing(true)
                         presentSwiftLoader()
-                        APIManager().updateme(params: ["discordLink": urlString]) { result in
+                        APIManager.shared.updateme(params: ["discordLink": urlString]) { result in
                             switch result {
                             case .success(let apiResponse):
                                 
@@ -157,7 +157,7 @@ extension EditGeneralInformationVC {
     
             self.view.endEditing(true)
             presentSwiftLoader()
-            APIManager().updateme(params: ["name": name]) { result in
+            APIManager.shared.updateme(params: ["name": name]) { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -195,7 +195,7 @@ extension EditGeneralInformationVC {
             
             presentSwiftLoader()
             view.endEditing(true)
-            APIManager().checkUsernameExist(username: username) { result in
+            APIManager.shared.checkUsernameExist(username: username) { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -243,7 +243,7 @@ extension EditGeneralInformationVC {
     
     func saveUserName(username: String) {
         
-        APIManager().updateme(params: ["username": username]) { result in
+        APIManager.shared.updateme(params: ["username": username]) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -439,7 +439,7 @@ extension EditGeneralInformationVC {
     
     func checkAvailaleName(searchText: String) {
         
-        APIManager().checkUsernameExist(username: searchText) { result in
+        APIManager.shared.checkUsernameExist(username: searchText) { result in
             switch result {
             case .success(let apiResponse):
                 

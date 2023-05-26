@@ -47,7 +47,7 @@ class EditEmailVC: UIViewController {
         let lowercaseEmail = email.lowercased().stringByRemovingWhitespaces
         presentSwiftLoader()
    
-        APIManager().updateEmail(email: lowercaseEmail) { result in
+        APIManager.shared.updateEmail(email: lowercaseEmail) { result in
             switch result {
             case .success(let apiResponse):
                 

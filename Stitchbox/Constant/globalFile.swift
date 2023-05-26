@@ -210,7 +210,7 @@ extension UILabel {
 func processUpdateAvatar(channel: SBDGroupChannel, image: UIImage) {
     
     
-    APIManager().uploadImage(image: image) { result in
+    APIManager.shared.uploadImage(image: image) { result in
         
         switch result {
         case .success(let apiResponse):
@@ -892,7 +892,7 @@ extension Collection {
 
 func reloadGlobalUserInformation() {
 
-    APIManager().getme { result in
+    APIManager.shared.getme { result in
         switch result {
         case .success(let response):
             
@@ -922,7 +922,7 @@ func reloadGlobalUserInformation() {
 
 func reloadGlobalSettings() {
     
-    APIManager().getSettings { result in
+    APIManager.shared.getSettings { result in
         switch result {
         case .success(let apiResponse):
             

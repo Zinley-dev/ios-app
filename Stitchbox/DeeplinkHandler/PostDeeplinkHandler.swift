@@ -37,7 +37,7 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
         
             presentSwiftLoader()
             
-            APIManager().getPostDetail(postId: id) { result in
+        APIManager.shared.getPostDetail(postId: id) { result in
                 switch result {
                 case .success(let apiResponse):
                     

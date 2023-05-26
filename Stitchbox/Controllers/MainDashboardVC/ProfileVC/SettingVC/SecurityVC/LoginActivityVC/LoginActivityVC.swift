@@ -325,7 +325,7 @@ extension LoginActivityVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getLoginActivity(page: page) { result in
+        APIManager.shared.getLoginActivity(page: page) { result in
                 switch result {
                 case .success(let apiResponse):
                     

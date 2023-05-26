@@ -130,7 +130,7 @@ class BlockNode: ASCellNode {
            
         }
         
-        APIManager().deleteBlocks(params: ["blockId": user.blockId]) { result in
+        APIManager.shared.deleteBlocks(params: ["blockId": user.blockId]) { result in
             switch result {
             case .success(_):
               
@@ -175,7 +175,7 @@ class BlockNode: ASCellNode {
         }
 
         
-        APIManager().insertFollows(params: ["FollowId": user.blockId]) { result in
+        APIManager.shared.insertFollows(params: ["FollowId": user.blockId]) { result in
             switch result {
             case .success(_):
               
@@ -225,7 +225,7 @@ class BlockNode: ASCellNode {
             
         }
         
-        APIManager().unFollow(params: ["FollowId": user.blockId]) { result in
+        APIManager.shared.unFollow(params: ["FollowId": user.blockId]) { result in
             switch result {
             case .success(_):
                 self.isFollowingUser = false

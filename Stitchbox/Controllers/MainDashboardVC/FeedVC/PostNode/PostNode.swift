@@ -645,7 +645,7 @@ extension PostNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
-                APIManager().createView(post: post.id, watchTime: watchTime) { result in
+                APIManager.shared.createView(post: post.id, watchTime: watchTime) { result in
                     
                     switch result {
                     case .success(let apiResponse):
@@ -675,7 +675,7 @@ extension PostNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
-                APIManager().createView(post: id, watchTime: 0) { result in
+                APIManager.shared.createView(post: id, watchTime: 0) { result in
                     
                     switch result {
                     case .success(let apiResponse):
@@ -1018,7 +1018,7 @@ extension PostNode {
     }
     
     func checkIfLike() {
-        APIManager().hasLikedPost(id: post.id) { [weak self] result in
+        APIManager.shared.hasLikedPost(id: post.id) { [weak self] result in
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success",
@@ -1051,7 +1051,7 @@ extension PostNode {
             self.isLike = true
         }
         
-        APIManager().likePost(id: post.id) { result in
+        APIManager.shared.likePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
                 print(apiResponse)
@@ -1074,7 +1074,7 @@ extension PostNode {
             self.isLike = false
         }
         
-        APIManager().unlikePost(id: post.id) { result in
+        APIManager.shared.unlikePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
                 print(apiResponse)
@@ -1134,7 +1134,7 @@ extension PostNode {
     
     func totalLikeCount() {
         
-        APIManager().countLikedPost(id: post.id) { [weak self] result in
+        APIManager.shared.countLikedPost(id: post.id) { [weak self] result in
             switch result {
             case .success(let apiResponse):
     
@@ -1158,7 +1158,7 @@ extension PostNode {
     
     func totalCmtCount() {
         
-        APIManager().countComment(post: post.id) { [weak self] result in
+        APIManager.shared.countComment(post: post.id) { [weak self] result in
             switch result {
             case .success(let apiResponse):
              

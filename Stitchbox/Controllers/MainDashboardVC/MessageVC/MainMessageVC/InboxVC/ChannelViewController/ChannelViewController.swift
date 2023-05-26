@@ -186,7 +186,7 @@ class ChannelViewController: SBUChannelViewController {
         
         if self.getRoom == nil {
             
-            APIManager().roomIDRequest(channelUrl: chanelUrls) { result in
+            APIManager.shared.roomIDRequest(channelUrl: chanelUrls) { result in
                 switch result {
                 case .success(let apiResponse):
                     // Check if the request was successful

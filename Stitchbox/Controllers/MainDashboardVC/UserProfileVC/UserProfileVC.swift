@@ -564,7 +564,7 @@ extension UserProfileVC {
             followerCount += 1
             self.applyHeaderChange()
             
-            APIManager().insertFollows(params: ["FollowId": userId ?? ""]) { result in
+            APIManager.shared.insertFollows(params: ["FollowId": userId ?? ""]) { result in
                 switch result {
                 case .success(_):
                   
@@ -609,7 +609,7 @@ extension UserProfileVC {
             followerCount -= 1
             self.applyHeaderChange()
         
-                APIManager().unFollow(params: ["FollowId": userId ?? ""]) { result in
+            APIManager.shared.unFollow(params: ["FollowId": userId ?? ""]) { result in
                     switch result {
                     case .success(_):
                         
@@ -781,7 +781,7 @@ extension UserProfileVC {
             fistBumpedCount += 1
             self.applyUIChange()
             
-            APIManager().addFistBump(userID: self.userId!) { result in
+            APIManager.shared.addFistBump(userID: self.userId!) { result in
                 switch result {
                 case .success(_):
                     
@@ -818,7 +818,7 @@ extension UserProfileVC {
             fistBumpedCount -= 1
             self.applyUIChange()
             
-            APIManager().deleteFistBump(userID: self.userId!) { result in
+            APIManager.shared.deleteFistBump(userID: self.userId!) { result in
                 switch result {
                 case .success(_):
                     
@@ -1444,7 +1444,7 @@ extension UserProfileVC {
     
     func loadUserData() {
   
-        APIManager().getUserInfo(userId: self.userId!) { result in
+        APIManager.shared.getUserInfo(userId: self.userId!) { result in
           switch result {
             case .success(let response):
               guard let data = response.body else {
@@ -1480,7 +1480,7 @@ extension UserProfileVC {
     
     func countFollowers() {
         
-        APIManager().getFollowers(userId: userId, page: 1) { result in
+        APIManager.shared.getFollowers(userId: userId, page: 1) { result in
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -1505,7 +1505,7 @@ extension UserProfileVC {
     
     func countFollowings() {
         
-        APIManager().getFollows(userId: userId, page:1) { result in
+        APIManager.shared.getFollows(userId: userId, page:1) { result in
             switch result {
             case .success(let response):
                 
@@ -1533,7 +1533,7 @@ extension UserProfileVC {
     
     func countFistBumped() {
         
-        APIManager().getFistBumperCount(userID: userId ?? ""){
+        APIManager.shared.getFistBumperCount(userID: userId ?? ""){
             result in
             switch result {
             case .success(let response):
@@ -1570,7 +1570,7 @@ extension UserProfileVC {
     
     func getUserPost(block: @escaping ([[String: Any]]) -> Void) {
 
-        APIManager().getUserPost(userId: self.userId ?? "", page: currpage) { result in
+        APIManager.shared.getUserPost(userId: self.userId ?? "", page: currpage) { result in
                 switch result {
                 case .success(let apiResponse):
                      
@@ -1608,7 +1608,7 @@ extension UserProfileVC {
     
     func checkIfFollow() {
         
-        APIManager().isFollowing(uid: userId ?? "") { result in
+        APIManager.shared.isFollowing(uid: userId ?? "") { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -1630,7 +1630,7 @@ extension UserProfileVC {
     func checkIfFistBump() {
         
         
-        APIManager().isFistBumpee(userID: userId ?? "") { result in
+        APIManager.shared.isFistBumpee(userID: userId ?? "") { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -1699,7 +1699,7 @@ extension UserProfileVC {
     
     func reloadUserInformation(completed: @escaping DownloadComplete) {
 
-        APIManager().getUserInfo(userId: self.userId!) { result in
+        APIManager.shared.getUserInfo(userId: self.userId!) { result in
           switch result {
             case .success(let response):
               guard let data = response.body else {
@@ -1721,7 +1721,7 @@ extension UserProfileVC {
     
     func reloadGetFollowing(completed: @escaping DownloadComplete) {
       
-        APIManager().getFollows(userId: userId, page:1) { result in
+        APIManager.shared.getFollows(userId: userId, page:1) { result in
             switch result {
             case .success(let response):
                 
@@ -1749,7 +1749,7 @@ extension UserProfileVC {
     }
     func reloadGetFollowers(completed: @escaping DownloadComplete) {
       
-        APIManager().getFollowers(userId: userId, page: 1) { result in
+        APIManager.shared.getFollowers(userId: userId, page: 1) { result in
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -1774,7 +1774,7 @@ extension UserProfileVC {
     }
     func reloadGetFistBumperCount(completed: @escaping DownloadComplete) {
        
-        APIManager().getFistBumperCount(userID: userId ?? ""){
+        APIManager.shared.getFistBumperCount(userID: userId ?? ""){
             result in
             switch result {
             case .success(let response):
@@ -1885,7 +1885,7 @@ extension UserProfileVC {
                 
             } else {
                 
-                APIManager().insertBlocks(params: ["blockId": uid]) { result in
+                APIManager.shared.insertBlocks(params: ["blockId": uid]) { result in
                     switch result {
                     case .success(_):
                        

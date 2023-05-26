@@ -151,7 +151,7 @@ extension SB_MetaVC {
 extension SB_MetaVC {
     func loadMeta() {
         
-        APIManager().getGamePatch(gameId: global_gameId) { result in
+        APIManager.shared.getGamePatch(gameId: global_gameId) { result in
             switch result {
             case .success(let apiResponse):
                 

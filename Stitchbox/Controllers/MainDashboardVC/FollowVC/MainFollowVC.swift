@@ -163,7 +163,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     func countFollowers(userId: String, completed: @escaping DownloadComplete) {
         
         
-        APIManager().getFollowers(userId: userId, page: 1) { result in
+        APIManager.shared.getFollowers(userId: userId, page: 1) { result in
             switch result {
             case .success(let response):
                 
@@ -193,7 +193,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     
     func countFollowings(userId: String, completed: @escaping DownloadComplete) {
         
-        APIManager().getFollows(userId: userId, page: 1) { result in
+        APIManager.shared.getFollows(userId: userId, page: 1) { result in
             switch result {
             case .success(let response):
              
@@ -517,7 +517,7 @@ extension MainFollowVC {
         
         if let userUID = _AppCoreData.userDataSource.value?.userID {
             
-            APIManager().searchFollows(query: searchText, userid: userUID, page: 1) { result in
+            APIManager.shared.searchFollows(query: searchText, userid: userUID, page: 1) { result in
                 switch result {
                 case .success(let apiResponse):
 
@@ -551,7 +551,7 @@ extension MainFollowVC {
         
         if let userUID = _AppCoreData.userDataSource.value?.userID {
             
-            APIManager().searchFollowing(query: searchText, userid: userUID, page: 1) { result in
+            APIManager.shared.searchFollowing(query: searchText, userid: userUID, page: 1) { result in
                 switch result {
                 case .success(let apiResponse):
                     

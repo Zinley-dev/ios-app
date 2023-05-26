@@ -176,7 +176,7 @@ class FollowNode: ASCellNode {
         
         if let userId = user.userId {
             
-                APIManager().isFollowing(uid: userId) { result in
+            APIManager.shared.isFollowing(uid: userId) { result in
                     switch result {
                     case .success(let apiResponse):
                         
@@ -274,7 +274,7 @@ class FollowNode: ASCellNode {
             
             updateTotal(isIncreased: true)
             
-            APIManager().insertFollows(params: ["FollowId": userId]) { result in
+            APIManager.shared.insertFollows(params: ["FollowId": userId]) { result in
                 switch result {
                 case .success(_):
                   
@@ -364,7 +364,7 @@ class FollowNode: ASCellNode {
             
             updateTotal(isIncreased: false)
             
-            APIManager().unFollow(params: ["FollowId":userId]) { result in
+            APIManager.shared.unFollow(params: ["FollowId":userId]) { result in
                 switch result {
                 case .success(_):
                     self.isFollowingUser = false

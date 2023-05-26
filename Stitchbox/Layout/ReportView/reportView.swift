@@ -184,7 +184,7 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             
           
             
-            APIManager().report(type: type, reason: reason, note: "", reportId: reportId) { result in
+            APIManager.shared.report(type: type, reason: reason, note: "", reportId: reportId) { result in
                 switch result {
                 case .success(_):
                    
@@ -241,7 +241,7 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 
                 presentSwiftLoader()
                 
-                APIManager().report(type: type, reason: reason, note: text, reportId: reportId) { result in
+                APIManager.shared.report(type: type, reason: reason, note: text, reportId: reportId) { result in
                     switch result {
                     case .success(_):
                        

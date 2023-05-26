@@ -62,7 +62,7 @@ class ResetPasswordViewModel: ViewModelProtocol {
                   presentSwiftLoader()
               }
           }
-        APIManager().forgotPasswordByPhone(params: ["phone": phoneNumber]) { result in
+          APIManager.shared.forgotPasswordByPhone(params: ["phone": phoneNumber]) { result in
               switch result {
                 case .success(let response):
                   print(response)
@@ -90,7 +90,7 @@ class ResetPasswordViewModel: ViewModelProtocol {
             }
         }
         
-        APIManager().forgotPasswordByEmail(params: ["email": email]) { result in
+          APIManager.shared.forgotPasswordByEmail(params: ["email": email]) { result in
           switch result {
             case .success(let response):
               print(response)

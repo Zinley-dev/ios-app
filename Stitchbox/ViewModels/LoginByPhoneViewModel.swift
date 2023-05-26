@@ -56,7 +56,7 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
         print(phone, countryCode)
         print(phone.formatPhoneNumber())
         // call api toward login api of backend
-          APIManager().phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { result in
+          APIManager.shared.phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { result in
           switch result {
             case .success(let apiResponse):
               // get and process data
@@ -169,7 +169,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
         
         if (self.output.type == "email") {
           self.loadingSubject.onNext(true)
-          APIManager().emailVerify(email: phone, OTP: code) { result in switch result {
+            APIManager.shared.emailVerify(email: phone, OTP: code) { result in switch result {
             case .success(let apiResponse):
               // get and process data
               if (apiResponse.body?["message"] as! String == "success") {
@@ -214,7 +214,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
         else if (self.output.type == "phone") {
           self.loadingSubject.onNext(true)
           print("VERIFY OTP \("+" + phone.formatPhoneNumber()) --- CODE \(code)")
-          APIManager().phoneVerify(phone: "+" + phone.formatPhoneNumber(), OTP: code) { result in switch result {
+            APIManager.shared.phoneVerify(phone: "+" + phone.formatPhoneNumber(), OTP: code) { result in switch result {
             case .success(let apiResponse):
               // get and process data
               if (apiResponse.body?["message"] as! String == "success") {
@@ -266,7 +266,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
           }
           // call api toward login api of backend
           self.loadingSubject.onNext(true)
-          APIManager().phoneVerify(phone: countryCode + phone.formatPhoneNumber(), OTP: code) { result in switch result {
+            APIManager.shared.phoneVerify(phone: countryCode + phone.formatPhoneNumber(), OTP: code) { result in switch result {
             case .success(let apiResponse):
               // get and process data
               if (apiResponse.body?["message"] as! String == "success") {
@@ -319,7 +319,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
         }
         self.loadingSubject.onNext(true)
         // call api toward login api of backend
-        APIManager().phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { result in switch result {
+          APIManager.shared.phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { result in switch result {
           case .success(let apiResponse):
             // get and process data
             _ = apiResponse.body?["data"] as! [String: Any]?

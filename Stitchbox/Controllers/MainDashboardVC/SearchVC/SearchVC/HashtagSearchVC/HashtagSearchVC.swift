@@ -95,7 +95,7 @@ extension HashtagSearchVC {
                 return
             }
             
-            APIManager().searchHashtag(query: searchText) { result in
+            APIManager.shared.searchHashtag(query: searchText) { result in
                 switch result {
                 case .success(let apiResponse):
                     

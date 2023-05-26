@@ -70,7 +70,7 @@ class ChatGPTAPI: @unchecked Sendable {
     
         if tokenManager.historyList.count <= 2 {
             
-            APIManager().createGptConversation(params: conversation) { result in
+            APIManager.shared.createGptConversation(params: conversation) { result in
                 
                 switch result {
                 case .success(let apiResponse):
@@ -87,7 +87,7 @@ class ChatGPTAPI: @unchecked Sendable {
             
         } else {
             
-            APIManager().updateGptConversation(params: conversation) { result in
+            APIManager.shared.updateGptConversation(params: conversation) { result in
                 
                 switch result {
                 case .success(let apiResponse):
@@ -111,7 +111,7 @@ class ChatGPTAPI: @unchecked Sendable {
     
     func checkTokenLimit() {
         
-        APIManager().getUsedToken { result in
+        APIManager.shared.getUsedToken { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -139,7 +139,7 @@ class ChatGPTAPI: @unchecked Sendable {
     
     func updateToken(tokens: Int) {
         
-        APIManager().updateUsedToken(usedToken: tokens) { result in
+        APIManager.shared.updateUsedToken(usedToken: tokens) { result in
             switch result {
             case .success(let apiResponse):
                 print(apiResponse)
@@ -286,7 +286,7 @@ class ChatGPTAPI: @unchecked Sendable {
     func deleteHistoryList() {
         tokenManager.clearHistory()
         
-        APIManager().clearGptConversation(gameId: global_gameId) { result in
+        APIManager.shared.clearGptConversation(gameId: global_gameId) { result in
             
             switch result {
             case .success(let apiResponse):

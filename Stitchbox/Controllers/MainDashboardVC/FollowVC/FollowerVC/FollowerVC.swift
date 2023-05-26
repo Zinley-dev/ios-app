@@ -89,7 +89,7 @@ class FollowerVC: UIViewController {
 
         if userUID != "" {
             
-            APIManager().deleteFollower(params: ["FollowId": userUID]) { result in
+            APIManager.shared.deleteFollower(params: ["FollowId": userUID]) { result in
                 switch result {
                 case .success(_):
                     DispatchQueue.main.async {
@@ -248,7 +248,7 @@ extension FollowerVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager().getFollowers(userId: userId, page: currPage) { result in
+        APIManager.shared.getFollowers(userId: userId, page: currPage) { result in
                 switch result {
                 case .success(let apiResponse):
                     

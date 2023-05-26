@@ -153,7 +153,7 @@ class PromoteDetailVC: UIViewController, UIScrollViewDelegate {
         
             presentSwiftLoader()
         
-            APIManager().applyPromotion(id: promote.id) { result in
+            APIManager.shared.applyPromotion(id: promote.id) { result in
                 switch result {
                 case .success(let apiResponse):
                     

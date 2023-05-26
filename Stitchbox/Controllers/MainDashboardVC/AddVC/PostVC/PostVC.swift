@@ -256,7 +256,7 @@ extension PostVC {
     
     func loadPreviousSetting() {
         
-        APIManager().getLastSettingPost { result in
+        APIManager.shared.getLastSettingPost { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -507,7 +507,7 @@ extension PostVC {
     
     func uploadImageToDB(image: UIImage) {
         
-        APIManager().uploadImage(image: image) { result in
+        APIManager.shared.uploadImage(image: image) { result in
             
             switch result {
             case .success(let apiResponse):
@@ -567,7 +567,7 @@ extension PostVC {
     
         let data = try! Data(contentsOf: url)
         
-        APIManager().uploadVideo(video: data) { result in
+        APIManager.shared.uploadVideo(video: data) { result in
             
             switch result {
             case .success(let apiResponse):
@@ -635,7 +635,7 @@ extension PostVC {
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
         contentPost["metadata"] = ["width": origin_width!, "height": origin_height!, "length": length!, "contentMode": 0]
         print(contentPost)
-        APIManager().createPost(params: contentPost) { result in
+        APIManager.shared.createPost(params: contentPost) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -691,7 +691,7 @@ extension PostVC {
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
         contentPost["metadata"] = ["width": origin_width!, "height": origin_height!, "length": length!, "contentMode": 0]
         
-        APIManager().createPost(params: contentPost) { result in
+        APIManager.shared.createPost(params: contentPost) { result in
             switch result {
             case .success(let apiResponse):
                 

@@ -131,7 +131,7 @@ extension UserSearchVC: ASTableDataSource {
                     return
                 }
                 
-                APIManager().searchUser(query: searchText) { result in
+            APIManager.shared.searchUser(query: searchText) { result in
                     switch result {
                     case .success(let apiResponse):
                         
@@ -203,7 +203,7 @@ extension UserSearchVC {
     
     func saveRecentUser(userId: String) {
         
-        APIManager().addRecent(query: userId, type: "user") { result in
+        APIManager.shared.addRecent(query: userId, type: "user") { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -221,7 +221,7 @@ extension UserSearchVC {
     
     func saveRecentText(text: String) {
         
-        APIManager().addRecent(query: text, type: "text") { result in
+        APIManager.shared.addRecent(query: text, type: "text") { result in
             switch result {
             case .success(let apiResponse):
                 

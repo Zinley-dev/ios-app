@@ -704,7 +704,7 @@ extension PostListWithHashtagVC {
             
             let finalTag = hashtag.dropFirst()
             print(finalTag)
-            APIManager().getHashtagPost(tag: String(finalTag), page: page) { result in
+            APIManager.shared.getHashtagPost(tag: String(finalTag), page: page) { result in
                     switch result {
                     case .success(let apiResponse):
                         

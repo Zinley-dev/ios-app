@@ -161,7 +161,7 @@ class SettingVC: UIViewController {
             shouldMute = false
         }
 
-        APIManager().updateSettings(params: params) {
+        APIManager.shared.updateSettings(params: params) {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
@@ -192,7 +192,7 @@ class SettingVC: UIViewController {
             isStreamLink = true
         }
         
-        APIManager().updateSettings(params: params) {
+        APIManager.shared.updateSettings(params: params) {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")

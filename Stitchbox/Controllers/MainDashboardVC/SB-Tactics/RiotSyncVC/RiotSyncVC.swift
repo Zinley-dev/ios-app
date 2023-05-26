@@ -271,7 +271,7 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
         let data = ["riotUsername": account.name!, "riotAccountId": account.acct_id!, "riotId": String(account.id ?? 0), "riotPuuid": account.puuid!, "riotLevel": account.level!, "riotSummonerId": account.summoner_id!, "riotProfileImage": account.profile_image_url!, "tier": account.tier!, "division": String(account.division ?? 0), "tierImage": account.tier_image_url!, "region": regionName, "lp": account.lp ?? 0] as [String : Any]
         
     
-        APIManager().confirmRiot(params: data) { result in
+        APIManager.shared.confirmRiot(params: data) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -332,7 +332,7 @@ extension RiotSyncVC {
 
     func search(for searchText: String) {
         
-        APIManager().searchUserRiot(region: searchRegion, username: searchText) { result in
+        APIManager.shared.searchUserRiot(region: searchRegion, username: searchText) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -371,7 +371,7 @@ extension RiotSyncVC {
     
     func loadRegion(block: @escaping ([[String: Any]]) -> Void) {
     
-            APIManager().getSupportedRegion { result in
+        APIManager.shared.getSupportedRegion { result in
                 switch result {
                 case .success(let apiResponse):
                     

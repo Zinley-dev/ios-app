@@ -559,7 +559,7 @@ extension EditPostVC {
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment]
        
         presentSwiftLoader()
-        APIManager().updatePost(params: contentPost) { result in
+        APIManager.shared.updatePost(params: contentPost) { result in
             switch result {
             case .success(_):
                 needReloadPost = true

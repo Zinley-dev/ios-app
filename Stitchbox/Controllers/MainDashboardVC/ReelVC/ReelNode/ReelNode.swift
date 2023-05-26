@@ -618,7 +618,7 @@ extension ReelNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
-                APIManager().createView(post: post.id, watchTime: watchTime) { result in
+                APIManager.shared.createView(post: post.id, watchTime: watchTime) { result in
                     
                     switch result {
                     case .success(let apiResponse):
@@ -649,7 +649,7 @@ extension ReelNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
-                APIManager().createView(post: id, watchTime: 0) { result in
+                APIManager.shared.createView(post: id, watchTime: 0) { result in
                     
                     switch result {
                     case .success(let apiResponse):
@@ -987,7 +987,7 @@ extension ReelNode {
     
     func checkIfLike() {
         
-        APIManager().hasLikedPost(id: post.id) { result in
+        APIManager.shared.hasLikedPost(id: post.id) { result in
             
             switch result {
             case .success(let apiResponse):
@@ -1024,7 +1024,7 @@ extension ReelNode {
             self.isLike = true
         }
         
-        APIManager().likePost(id: post.id) { result in
+        APIManager.shared.likePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
                print(apiResponse)
@@ -1045,7 +1045,7 @@ extension ReelNode {
             self.isLike = false
         }
         
-        APIManager().unlikePost(id: post.id) { result in
+        APIManager.shared.unlikePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
                 print(apiResponse)
@@ -1105,7 +1105,7 @@ extension ReelNode {
     
     func totalLikeCount() {
         
-        APIManager().countLikedPost(id: post.id) { result in
+        APIManager.shared.countLikedPost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
     
@@ -1129,7 +1129,7 @@ extension ReelNode {
     
     func totalCmtCount() {
         
-        APIManager().countComment(post: post.id) { result in
+        APIManager.shared.countComment(post: post.id) { result in
             switch result {
             case .success(let apiResponse):
              

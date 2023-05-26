@@ -318,7 +318,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
 
     
     func searchUsers(keyword: String) {
-        APIManager().searchUsersForChat(keyword: keyword) { result in
+        APIManager.shared.searchUsersForChat(keyword: keyword) { result in
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
@@ -347,7 +347,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     
     
     func loadDefaultUsers() {
-        APIManager().searchUsersForChat(keyword: "") { result in
+        APIManager.shared.searchUsersForChat(keyword: "") { result in
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {

@@ -148,7 +148,7 @@ class OneSignalNotiModel {
                 
                 if let getPostId = self._postId, getPostId != "" {
                     
-                    APIManager().getPostDetail(postId: getPostId) { result in
+                    APIManager.shared.getPostDetail(postId: getPostId) { result in
                         switch result {
                             
                           case .success(let response):

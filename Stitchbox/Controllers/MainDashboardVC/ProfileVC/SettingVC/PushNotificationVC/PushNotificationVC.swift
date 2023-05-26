@@ -118,7 +118,7 @@ class PushNotificationVC: UIViewController {
             isPostNoti = true
         }
         
-        APIManager().updateSettings(params: params) {
+        APIManager.shared.updateSettings(params: params) {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
@@ -148,7 +148,7 @@ class PushNotificationVC: UIViewController {
             isCommentNoti = true
         }
         
-        APIManager().updateSettings(params: params) {
+        APIManager.shared.updateSettings(params: params) {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
@@ -177,7 +177,7 @@ class PushNotificationVC: UIViewController {
             isMentionNoti = true
         }
         
-        APIManager().updateSettings(params: params) {
+        APIManager.shared.updateSettings(params: params) {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
@@ -206,7 +206,7 @@ class PushNotificationVC: UIViewController {
             isFollowNoti = true
         }
         
-        APIManager().updateSettings(params: params) {
+        APIManager.shared.updateSettings(params: params) {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")
@@ -236,7 +236,7 @@ class PushNotificationVC: UIViewController {
             
         }
         
-        APIManager().updateSettings(params: params) {
+        APIManager.shared.updateSettings(params: params) {
                         result in switch result {
                         case .success(_):
                             print("Setting API update success")

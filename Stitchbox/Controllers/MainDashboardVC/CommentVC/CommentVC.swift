@@ -166,7 +166,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     }
     
     func getInitCmt() {
-        APIManager().getInitComment(postId: post.id) { result in
+        APIManager.shared.getInitComment(postId: post.id) { result in
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [String: Any] else {
@@ -434,7 +434,7 @@ extension CommentVC {
     
     func loadCommentTitle() {
         
-        APIManager().getTitleComment(postId: post.id) { result in
+        APIManager.shared.getTitleComment(postId: post.id) { result in
             switch result {
             case .success(let apiResponse):
               
@@ -463,7 +463,7 @@ extension CommentVC {
     
     func loadPinnedPost() {
         
-        APIManager().getPinComment(postId: post.id) { result in
+        APIManager.shared.getPinComment(postId: post.id) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -763,7 +763,7 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
             
         }
         
-        APIManager().getReply(for: commentId, page: comment.lastCmtSnapshot) { result in
+        APIManager.shared.getReply(for: commentId, page: comment.lastCmtSnapshot) { result in
             switch result {
             case .success(let apiResponse):
 
@@ -827,7 +827,7 @@ extension CommentVC {
     
     func retrieveNextPageWithCompletion( block: @escaping ([[String: Any]]) -> Void) {
        
-        APIManager().getComment(postId: post.id, page: cmtPage) { result in
+        APIManager.shared.getComment(postId: post.id, page: cmtPage) { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -1089,7 +1089,7 @@ extension CommentVC {
         }
 
         // Call the API to create a comment
-        APIManager().createComment(params: data) { [weak self] result in
+        APIManager.shared.createComment(params: data) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
@@ -1280,7 +1280,7 @@ extension CommentVC {
     
     @objc func calculateToTalCmt() {
         
-        APIManager().countComment(post: post.id) { result in
+        APIManager.shared.countComment(post: post.id) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -1339,7 +1339,7 @@ extension CommentVC {
     
     func pinCmt(items: CommentModel, indexPath: Int) {
         
-        APIManager().pinComment(commentId: items.comment_id) { result in
+        APIManager.shared.pinComment(commentId: items.comment_id) { result in
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success" else {
@@ -1373,7 +1373,7 @@ extension CommentVC {
     
     func unPinCmt(items: CommentModel, indexPath: Int) {
         
-        APIManager().unpinComment(commentId: items.comment_id) { result in
+        APIManager.shared.unpinComment(commentId: items.comment_id) { result in
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success" else {
@@ -1407,7 +1407,7 @@ extension CommentVC {
     
     func removeComment(items: CommentModel, indexPath: Int) {
         
-        APIManager().deleteComment(commentId: items.comment_id) { result in
+        APIManager.shared.deleteComment(commentId: items.comment_id) { result in
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success" else {

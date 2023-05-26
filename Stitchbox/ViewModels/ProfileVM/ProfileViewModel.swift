@@ -61,7 +61,7 @@ class ProfileViewModel: ViewModelProtocol {
         
     }
     func getMyPost(page: Int = 1) {
-        APIManager().getMyPost(page: page) { result in
+        APIManager.shared.getMyPost(page: page) { result in
             switch result {
                 case .success(let response):
                     print("================ooooOOOoooo=================================")
@@ -82,7 +82,7 @@ class ProfileViewModel: ViewModelProtocol {
     }
     func getFollowing(page: Int = 1) {
         print("LOAD PAGE \(page)")
-        APIManager().getFollows(page:page) { result in
+        APIManager.shared.getFollows(page:page) { result in
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -102,7 +102,7 @@ class ProfileViewModel: ViewModelProtocol {
     }
     func getFollowers(page: Int = 1) {
         print("LOAD PAGE \(page)")
-        APIManager().getFollowers(page: page) { result in
+        APIManager.shared.getFollowers(page: page) { result in
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -121,7 +121,7 @@ class ProfileViewModel: ViewModelProtocol {
         }
     }
     func getFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping (Int) -> Void = {_ in}) -> Void  {
-        APIManager().getFistBumperCount(userID: userID){
+        APIManager.shared.getFistBumperCount(userID: userID){
             result in
             switch result {
             case .success(let response):
@@ -144,7 +144,7 @@ class ProfileViewModel: ViewModelProtocol {
         }
     }
     func unfollow(userId: String = "") {
-        APIManager().unFollow(params: ["FollowId": userId]) { result in
+        APIManager.shared.unFollow(params: ["FollowId": userId]) { result in
             switch result {
             case .success(_):
                 showNote(text: "Unfollowed!")
@@ -158,7 +158,7 @@ class ProfileViewModel: ViewModelProtocol {
     
     
     func insertfollow(userId: String = "") {
-        APIManager().insertFollows(params: ["FollowId": userId]) { result in
+        APIManager.shared.insertFollows(params: ["FollowId": userId]) { result in
             switch result {
             case .success(_):
                 showNote(text: "Followed!")

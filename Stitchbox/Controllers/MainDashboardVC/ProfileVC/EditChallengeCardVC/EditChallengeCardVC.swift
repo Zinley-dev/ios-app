@@ -577,7 +577,7 @@ extension EditChallengeCardVC {
         if let badgeID = bID {
             
             presentSwiftLoader()
-            APIManager().updateChallengeCard(params: ["badge": "b\(badgeID+1)"]) { result in
+            APIManager.shared.updateChallengeCard(params: ["badge": "b\(badgeID+1)"]) { result in
                 switch result {
                 case .success(let apiResponse):
                     

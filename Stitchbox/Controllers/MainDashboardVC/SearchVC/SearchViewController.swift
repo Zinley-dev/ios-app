@@ -154,7 +154,7 @@ extension SearchViewController {
     
     func loadRecentSearch() {
         
-        APIManager().getRecent { result in
+        APIManager.shared.getRecent { result in
             switch result {
             case .success(let apiResponse):
 
@@ -530,7 +530,7 @@ extension SearchViewController {
             return
         }
         
-        APIManager().getAutoComplete(query: searchText) { result in
+        APIManager.shared.getAutoComplete(query: searchText) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -600,7 +600,7 @@ extension SearchViewController {
     
     func saveRecentUser(userId: String) {
         
-        APIManager().addRecent(query: userId, type: "user") { result in
+        APIManager.shared.addRecent(query: userId, type: "user") { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -618,7 +618,7 @@ extension SearchViewController {
     
     func saveRecentText(text: String) {
         
-        APIManager().addRecent(query: text, type: "text") { result in
+        APIManager.shared.addRecent(query: text, type: "text") { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -637,7 +637,7 @@ extension SearchViewController {
 
         if objectId != "" {
         
-            APIManager().deleteRecent(id: objectId) { result in
+            APIManager.shared.deleteRecent(id: objectId) { result in
                 switch result {
                 case .success(_):
                     DispatchQueue.main.async {

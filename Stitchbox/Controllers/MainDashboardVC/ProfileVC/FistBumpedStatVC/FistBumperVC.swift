@@ -211,7 +211,7 @@ extension FistBumperVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getFistBumper(page: currPage) { result in
+        APIManager.shared.getFistBumper(page: currPage) { result in
                 switch result {
                 case .success(let apiResponse):
                     

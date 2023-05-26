@@ -601,7 +601,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         global_suppport_game_list.removeAll()
         
-        APIManager().getGames { result in
+        APIManager.shared.getGames { result in
             switch result {
             case .success(let apiResponse):
                 

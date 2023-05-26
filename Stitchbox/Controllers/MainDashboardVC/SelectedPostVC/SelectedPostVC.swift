@@ -571,7 +571,7 @@ extension SelectedPostVC {
         
         if let id = editeddPost?.id, id != "" {
             
-            APIManager().deleteMyPost(pid: id) { result in
+            APIManager.shared.deleteMyPost(pid: id) { result in
                 switch result {
                 case .success(_):
                     needReloadPost = true

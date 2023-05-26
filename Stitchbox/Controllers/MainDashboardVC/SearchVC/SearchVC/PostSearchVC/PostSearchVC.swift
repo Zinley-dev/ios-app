@@ -563,7 +563,7 @@ extension PostSearchVC {
             
             print("Post search: \(keyword)")
 
-                APIManager().searchPost(query: keyword, page: page) { result in
+            APIManager.shared.searchPost(query: keyword, page: page) { result in
                     switch result {
                     case .success(let apiResponse):
                         print(apiResponse)

@@ -672,7 +672,7 @@ extension ReelVC {
     
     func retrieveNextPageForReelsWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
             
-            APIManager().getUserFeed { result in
+        APIManager.shared.getUserFeed { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -714,7 +714,7 @@ extension ReelVC {
             
         if keyword != "" {
             
-                APIManager().searchPost(query: keyword, page: page) { result in
+            APIManager.shared.searchPost(query: keyword, page: page) { result in
                     switch result {
                     case .success(let apiResponse):
                         print(apiResponse)
@@ -762,9 +762,9 @@ extension ReelVC {
             
         if let hashtag = searchHashtag, hashtag != "" {
             
-                let finalTag = hashtag.dropFirst()
+            let finalTag = hashtag.dropFirst()
             
-            APIManager().getHashtagPost(tag: String(finalTag), page: page) { result in
+            APIManager.shared.getHashtagPost(tag: String(finalTag), page: page) { result in
                     switch result {
                     case .success(let apiResponse):
                         

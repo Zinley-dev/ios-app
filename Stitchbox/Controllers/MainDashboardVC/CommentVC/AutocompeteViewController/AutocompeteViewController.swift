@@ -56,7 +56,7 @@ class AutocompeteViewController: UIViewController, UITableViewDelegate {
         delayItem.perform(after: 0.35) {
             
             
-            APIManager().searchUser(query: searchText) { result in
+            APIManager.shared.searchUser(query: searchText) { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -98,7 +98,7 @@ class AutocompeteViewController: UIViewController, UITableViewDelegate {
         
         delayItem.perform(after: 0.35) {
             
-             APIManager().searchHashtag(query: searchText) { result in
+            APIManager.shared.searchHashtag(query: searchText) { result in
                  switch result {
                  case .success(let apiResponse):
 

@@ -60,7 +60,7 @@ class BlockAccountsViewModel: ViewModelProtocol {
     }
     
     func getBlocks(page: Int, completion: @escaping () -> Void = {}) -> Void  {
-        APIManager().getBlocks(page: page){
+        APIManager.shared.getBlocks(page: page){
             result in
             switch result {
             case .success(let response):
@@ -84,7 +84,7 @@ class BlockAccountsViewModel: ViewModelProtocol {
     
     func unblock(blockId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().deleteBlocks(params: ["blockId": blockId]){
+        APIManager.shared.deleteBlocks(params: ["blockId": blockId]){
             result in switch result {
             case .success(_):
                 self.successSubject.onNext(.unblock())
@@ -98,7 +98,7 @@ class BlockAccountsViewModel: ViewModelProtocol {
     
     func follow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().insertFollows(params: ["FollowId": userId]){
+        APIManager.shared.insertFollows(params: ["FollowId": userId]){
             result in switch result {
             case .success(_):
                 self.successSubject.onNext(.follow())
@@ -111,7 +111,7 @@ class BlockAccountsViewModel: ViewModelProtocol {
     
     func unfollow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().unFollow(params: ["FollowId": userId]){
+        APIManager.shared.unFollow(params: ["FollowId": userId]){
             result in switch result {
             case .success(_):
                 self.successSubject.onNext(.unfollow())

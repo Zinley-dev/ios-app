@@ -335,7 +335,7 @@ extension StartViewController {
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
-        APIManager().getSettings { result in
+        APIManager.shared.getSettings { result in
             switch result {
             case .success(let apiResponse):
             
@@ -362,7 +362,7 @@ extension StartViewController {
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
         
-        APIManager().getme { result in
+        APIManager.shared.getme { result in
             switch result {
             case .success(let response):
                 

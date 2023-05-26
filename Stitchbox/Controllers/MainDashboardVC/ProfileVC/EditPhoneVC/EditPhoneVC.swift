@@ -88,7 +88,7 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
             
             self.view.endEditing(true)
             
-            APIManager().updatePhone(phone: countryCode + phone) { result in
+            APIManager.shared.updatePhone(phone: countryCode + phone) { result in
                 switch result {
                 case .success(let apiResponse):
                     

@@ -199,7 +199,7 @@ extension FollowingVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager().getFollows(userId: userId, page: currPage) { result in
+        APIManager.shared.getFollows(userId: userId, page: currPage) { result in
                 switch result {
                 case .success(let apiResponse):
                     

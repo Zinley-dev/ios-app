@@ -24,6 +24,11 @@ enum Result {
 }
 
 struct APIManager {
+    
+    static let shared = APIManager()
+    private init() {}
+    
+    
     let authManager = Manager<AuthApi>()
     let SBmanager = Manager<ChatApi>()
     let searchManager = Manager<SearchApi>()
@@ -739,9 +744,6 @@ extension APIManager {
     }
 }
 extension APIManager {
-  /**
-      type: String = POST | COMMENT | USER
-   */
   func report(type: String, reason: String, note: String, reportId: String, completion: @escaping APICompletion) {
     var params = ["type": type, "reason": reason, "note": note]
       switch type {
@@ -775,19 +777,7 @@ extension APIManager {
 
 
 extension APIManager {
-  
-  /*
-   params = {
-   "riotUsername": "",
-   "riotAccountId": "",
-   "riotId": "",
-   "riotPuuid": "",
-   "riotLevel": "",
-   "riotSummonerId": "",
-   "riotProfileImage": "",
-   "region": "",
-   }
-  */
+
   func confirmRiot(params: [String: Any], completion: @escaping APICompletion) {
     userManager.request(.riotUpdate(params: params)) { result in
       completion(result)

@@ -59,7 +59,7 @@ class ProfileViewController: UIViewController {
     
     func getMyPost(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getMyPost(page: currpage) { result in
+        APIManager.shared.getMyPost(page: currpage) { result in
                 switch result {
                 case .success(let apiResponse):
                      
@@ -1315,7 +1315,7 @@ extension ProfileViewController {
     
     func getFollowing() {
       
-        APIManager().getFollows(page:1) { result in
+        APIManager.shared.getFollows(page:1) { result in
             switch result {
             case .success(let response):
                 
@@ -1341,7 +1341,7 @@ extension ProfileViewController {
     }
     func getFollowers() {
       
-        APIManager().getFollowers(page: 1) { result in
+        APIManager.shared.getFollowers(page: 1) { result in
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -1364,7 +1364,7 @@ extension ProfileViewController {
     }
     func getFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "") {
 
-        APIManager().getFistBumperCount(userID: userID){
+        APIManager.shared.getFistBumperCount(userID: userID){
             result in
             switch result {
             case .success(let response):
@@ -1434,7 +1434,7 @@ extension ProfileViewController {
     
     func reloadUserInformation(completed: @escaping DownloadComplete) {
 
-        APIManager().getme { result in
+        APIManager.shared.getme { result in
             switch result {
             case .success(let response):
                 
@@ -1471,7 +1471,7 @@ extension ProfileViewController {
     
     func reloadGetFollowing(completed: @escaping DownloadComplete) {
       
-        APIManager().getFollows(page:1) { result in
+        APIManager.shared.getFollows(page:1) { result in
             switch result {
             case .success(let response):
                 
@@ -1499,7 +1499,7 @@ extension ProfileViewController {
     }
     func reloadGetFollowers(completed: @escaping DownloadComplete) {
       
-        APIManager().getFollowers(page: 1) { result in
+        APIManager.shared.getFollowers(page: 1) { result in
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -1524,7 +1524,7 @@ extension ProfileViewController {
     }
     func reloadGetFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "", completed: @escaping DownloadComplete) {
        
-        APIManager().getFistBumperCount(userID: userID){
+        APIManager.shared.getFistBumperCount(userID: userID){
             result in
             switch result {
             case .success(let response):

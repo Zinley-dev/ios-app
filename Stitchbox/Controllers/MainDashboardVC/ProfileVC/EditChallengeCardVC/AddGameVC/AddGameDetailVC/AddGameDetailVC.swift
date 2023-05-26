@@ -152,7 +152,7 @@ extension AddGameDetailVC {
     
     func loadGameList() {
             
-        APIManager().getGames { result in
+        APIManager.shared.getGames { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -425,7 +425,7 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
         
         presentSwiftLoader()
         
-        APIManager().addGameForCard(params: params) { result in
+        APIManager.shared.addGameForCard(params: params) { result in
             switch result {
             case .success(_):
                 
@@ -457,7 +457,7 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
         
         presentSwiftLoader()
         
-        APIManager().updateGameForCard(params: params) { result in
+        APIManager.shared.updateGameForCard(params: params) { result in
             switch result {
             case .success(_):
                 

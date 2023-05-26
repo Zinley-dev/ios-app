@@ -77,7 +77,7 @@ class NewPasswordViewModel : ViewModelProtocol {
       if pwd != rePwd {
         self.errorsSubject.onNext(NSError(domain: "Password not match", code: 400))
       } else {
-        APIManager().updatePassword(params: ["newPassword": pwd]) { result in
+          APIManager.shared.updatePassword(params: ["newPassword": pwd]) { result in
           print(result)
           switch result {
             case .success(let response):

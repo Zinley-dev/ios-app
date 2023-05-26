@@ -53,7 +53,7 @@ class EditSloganVC: UIViewController, UITextFieldDelegate {
         if let text = sloganTextField.text, text != "" {
             
             presentSwiftLoader()
-            APIManager().updateChallengeCard(params: ["quote": text]) { result in
+            APIManager.shared.updateChallengeCard(params: ["quote": text]) { result in
                 switch result {
                 case .success(let apiResponse):
                     

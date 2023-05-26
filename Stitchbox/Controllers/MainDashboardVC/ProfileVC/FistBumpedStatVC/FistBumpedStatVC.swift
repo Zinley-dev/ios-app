@@ -81,7 +81,7 @@ extension FistBumpedStatVC {
     
     func loadInsightData() {
       
-      APIManager().getInsightOverview(userID: _AppCoreData.userDataSource.value?.userID ?? "") { result in
+        APIManager.shared.getInsightOverview(userID: _AppCoreData.userDataSource.value?.userID ?? "") { result in
         
         switch result {
           case .success(let apiResponse):

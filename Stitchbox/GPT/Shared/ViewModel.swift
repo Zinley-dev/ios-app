@@ -225,7 +225,7 @@ class ViewModel: ObservableObject {
             
         } else {
             
-            APIManager().getGamePatch(gameId: global_gameId) { result in
+            APIManager.shared.getGamePatch(gameId: global_gameId) { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -266,7 +266,7 @@ class ViewModel: ObservableObject {
     func processFinalPreConversation(completion: @escaping () -> Void) {
         
         
-        APIManager().getGptConversation(gameId: global_gameId) { [weak self] result in
+        APIManager.shared.getGptConversation(gameId: global_gameId) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
@@ -338,7 +338,7 @@ class ViewModel: ObservableObject {
     func processFinalPreConversationWithMeta(conversationContent: String, completion: @escaping () -> Void) {
         
         
-        APIManager().getGptConversation(gameId: global_gameId) { [weak self] result in
+        APIManager.shared.getGptConversation(gameId: global_gameId) { [weak self] result in
             guard let self = self else { return }
 
             switch result {

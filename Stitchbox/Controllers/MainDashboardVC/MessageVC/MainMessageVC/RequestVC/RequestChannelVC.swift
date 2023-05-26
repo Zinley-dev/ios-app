@@ -74,7 +74,7 @@ class RequestChannelVC: SBUChannelViewController {
     
     func performAcceptAPIRequest(channel: String, inviterUID: String, userUID: String, messageParams: SBDUserMessageParams?, isText: Bool, fileData: Data?, fileName: String?, mimeType: String?) {
         
-        APIManager().acceptSBInvitationRequest(user_id: inviterUID, channelUrl: channel) { result in
+        APIManager.shared.acceptSBInvitationRequest(user_id: inviterUID, channelUrl: channel) { result in
             switch result {
             case .success(let apiResponse):
                 // Check if the request was successful

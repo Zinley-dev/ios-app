@@ -31,7 +31,7 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         if reloadAddedGame {
             reloadAddedGame = false
-            APIManager().getme { result in
+            APIManager.shared.getme { result in
                 switch result {
                 case .success(let response):
                     
@@ -193,7 +193,7 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     title: ""
                 ) { action, view, actionHandler in
                     
-                    APIManager().deleteGameForCard(gameId: self.gameList[indexPath.row].gameId) { result in
+                    APIManager.shared.deleteGameForCard(gameId: self.gameList[indexPath.row].gameId) { result in
                         switch result {
                         case .success(_):
                             DispatchQueue.main.async {

@@ -107,7 +107,7 @@ class FistBumpNode: ASCellNode {
     func checkIfFollow() {
         
         
-         APIManager().isFollowing(uid: user.userID) { result in
+        APIManager.shared.isFollowing(uid: user.userID) { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -190,7 +190,7 @@ class FistBumpNode: ASCellNode {
         }
 
         
-        APIManager().insertFollows(params: ["FollowId": user.userID]) { result in
+        APIManager.shared.insertFollows(params: ["FollowId": user.userID]) { result in
             switch result {
             case .success(_):
               
@@ -239,7 +239,7 @@ class FistBumpNode: ASCellNode {
             
         }
         
-        APIManager().unFollow(params: ["FollowId": user.userID]) { result in
+        APIManager.shared.unFollow(params: ["FollowId": user.userID]) { result in
             switch result {
             case .success(_):
                 self.isFollowingUser = false

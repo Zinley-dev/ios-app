@@ -349,7 +349,7 @@ class CommentNode: ASCellNode {
     
     func checkLikeCmt() {
         
-        APIManager().islike(comment: post.comment_id) { result in
+        APIManager.shared.islike(comment: post.comment_id) { result in
             
             switch result {
             case .success(let apiResponse):
@@ -393,7 +393,7 @@ class CommentNode: ASCellNode {
     
     func cmtCount() {
         
-        APIManager().countLike(comment: post.comment_id) { result in
+        APIManager.shared.countLike(comment: post.comment_id) { result in
             
             switch result {
             case .success(let apiResponse):
@@ -699,7 +699,7 @@ class CommentNode: ASCellNode {
       
         presentSwiftLoader()
         
-        APIManager().getPostDetail(postId: id) { result in
+        APIManager.shared.getPostDetail(postId: id) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -856,7 +856,7 @@ extension CommentNode {
             self.textNode.attributedText = like
         }
         
-        APIManager().likeComment(comment: post.comment_id) { result in
+        APIManager.shared.likeComment(comment: post.comment_id) { result in
             switch result {
             case .success(let apiResponse):
             
@@ -908,7 +908,7 @@ extension CommentNode {
             self.textNode.attributedText = like
         }
         
-        APIManager().unlike(comment: post.comment_id) { result in
+        APIManager.shared.unlike(comment: post.comment_id) { result in
             switch result {
             case .success(let apiResponse):
                 

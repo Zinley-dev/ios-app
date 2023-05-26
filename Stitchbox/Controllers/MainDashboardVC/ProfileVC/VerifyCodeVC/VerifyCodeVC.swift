@@ -311,7 +311,7 @@ extension VerifyCodeVC {
         
         presentSwiftLoader()
         
-        APIManager().verifyUpdateEmail(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "email": email, "otp": code]) { result in
+        APIManager.shared.verifyUpdateEmail(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "email": email, "otp": code]) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -385,7 +385,7 @@ extension VerifyCodeVC {
         
         presentSwiftLoader()
         
-        APIManager().verifyUpdatePhone(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "phone": phone, "otp": code]) { result in
+        APIManager.shared.verifyUpdatePhone(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "phone": phone, "otp": code]) { result in
             switch result {
             case .success(let apiResponse):
             
@@ -467,7 +467,7 @@ extension VerifyCodeVC {
         }
         
         
-        APIManager().verify2fa(otp: code, method: typeMethod) { result in
+        APIManager.shared.verify2fa(otp: code, method: typeMethod) { result in
             switch result {
             case .success(_):
            
@@ -516,7 +516,7 @@ extension VerifyCodeVC {
     func resendCodeForEmail() {
         
         presentSwiftLoader()
-        APIManager().updateEmail(email: email) { result in
+        APIManager.shared.updateEmail(email: email) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -552,7 +552,7 @@ extension VerifyCodeVC {
     func resendCodeForPhone() {
         
         presentSwiftLoader()
-        APIManager().updatePhone(phone: phone) { result in
+        APIManager.shared.updatePhone(phone: phone) { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -587,7 +587,7 @@ extension VerifyCodeVC {
     
     func resendCodeFor2FAEmail() {
         
-        APIManager().turnOn2fa(method: "email") { result in
+        APIManager.shared.turnOn2fa(method: "email") { result in
             switch result {
             case .success(let apiResponse):
                 
@@ -621,7 +621,7 @@ extension VerifyCodeVC {
     
     func resendCodeFor2FAPhone() {
         
-        APIManager().turnOn2fa(method: "phone") { result in
+        APIManager.shared.turnOn2fa(method: "phone") { result in
             switch result {
             case .success(let apiResponse):
                 

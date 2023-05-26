@@ -64,7 +64,7 @@ class EditBirthdayVC: UIViewController, UITextFieldDelegate {
     
             self.view.endEditing(true)
             presentSwiftLoader()
-            APIManager().updateme(params: ["birthday": birthday]) { result in
+            APIManager.shared.updateme(params: ["birthday": birthday]) { result in
                 switch result {
                 case .success(let apiResponse):
                     

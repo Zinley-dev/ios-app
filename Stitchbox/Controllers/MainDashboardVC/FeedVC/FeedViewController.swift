@@ -320,7 +320,7 @@ extension FeedViewController {
     
     func checkNotification() {
         
-        APIManager().getBadge { [weak self] result in
+        APIManager.shared.getBadge { [weak self] result in
             switch result {
             case .success(let apiResponse):
                 
@@ -909,7 +909,7 @@ extension FeedViewController {
 
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager().getUserFeed { [weak self] result in
+        APIManager.shared.getUserFeed { [weak self] result in
             switch result {
             case .success(let apiResponse):
                 
@@ -1177,7 +1177,7 @@ extension FeedViewController {
     
     func resetNoti() {
         
-            APIManager().resetBadge { [weak self] result in
+        APIManager.shared.resetBadge { [weak self] result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -1285,7 +1285,7 @@ extension FeedViewController {
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
-        APIManager().getSettings { [weak self] result in
+        APIManager.shared.getSettings { [weak self] result in
             switch result {
             case .success(let apiResponse):
             
@@ -1312,7 +1312,7 @@ extension FeedViewController {
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
         
-        APIManager().getme { [weak self] result in
+        APIManager.shared.getme { [weak self] result in
             switch result {
             case .success(let response):
                 

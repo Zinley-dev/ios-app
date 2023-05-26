@@ -425,7 +425,7 @@ extension NotificationVC {
     func setRead(notiId: String) {
         
 
-        APIManager().readNotification(noti: notiId) { result in
+        APIManager.shared.readNotification(noti: notiId) { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -492,7 +492,7 @@ extension NotificationVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getNotifications(page: page) { result in
+        APIManager.shared.getNotifications(page: page) { result in
                 switch result {
                 case .success(let apiResponse):
                     

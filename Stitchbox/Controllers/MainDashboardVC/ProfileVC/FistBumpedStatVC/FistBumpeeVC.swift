@@ -213,7 +213,7 @@ extension FistBumpeeVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getFistBumpee(page: currPage) { result in
+        APIManager.shared.getFistBumpee(page: currPage) { result in
                 switch result {
                 case .success(let apiResponse):
                     

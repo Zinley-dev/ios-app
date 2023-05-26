@@ -36,7 +36,7 @@ class TwoFactorAuthVC: UIViewController {
         if isPhone {
             isPhone = false
             presentSwiftLoader()
-            APIManager().turnOff2fa(method: "phone") { result in
+            APIManager.shared.turnOff2fa(method: "phone") { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -60,7 +60,7 @@ class TwoFactorAuthVC: UIViewController {
         } else {
             isPhone = true
             presentSwiftLoader()
-            APIManager().turnOn2fa(method: "phone") { result in
+            APIManager.shared.turnOn2fa(method: "phone") { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -105,7 +105,7 @@ class TwoFactorAuthVC: UIViewController {
         if isEmail {
             isEmail = false
             presentSwiftLoader()
-            APIManager().turnOff2fa(method: "email") { result in
+            APIManager.shared.turnOff2fa(method: "email") { result in
                 switch result {
                 case .success(let apiResponse):
                     
@@ -127,7 +127,7 @@ class TwoFactorAuthVC: UIViewController {
         } else {
             isEmail = true
             presentSwiftLoader()
-            APIManager().turnOn2fa(method: "email") { result in
+            APIManager.shared.turnOn2fa(method: "email") { result in
                 switch result {
                 case .success(let apiResponse):
                     

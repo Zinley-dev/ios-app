@@ -71,7 +71,7 @@ class FistBumpViewModel: ViewModelProtocol {
     }
     
     func getFistBumper(page: Int, completion: @escaping () -> Void = {}) -> Void  {
-        APIManager().getFistBumper(userID: input.userID, page: page){
+        APIManager.shared.getFistBumper(userID: input.userID, page: page){
             result in
             switch result {
             case .success(let response):
@@ -95,7 +95,7 @@ class FistBumpViewModel: ViewModelProtocol {
         }
     }
     func getFistBumpee(page: Int, completion: @escaping () -> Void = {}) -> Void  {
-        APIManager().getFistBumpee(userID: input.userID, page: page){
+        APIManager.shared.getFistBumpee(userID: input.userID, page: page){
             result in
             switch result {
             case .success(let response):
@@ -119,7 +119,7 @@ class FistBumpViewModel: ViewModelProtocol {
         }
     }
     func getFistBumpeeCount(completion: @escaping (Int) -> Void = {_ in}) -> Void  {
-        APIManager().getFistBumpeeCount(userID: input.userID){
+        APIManager.shared.getFistBumpeeCount(userID: input.userID){
             result in
             switch result {
             case .success(let response):
@@ -143,7 +143,7 @@ class FistBumpViewModel: ViewModelProtocol {
     }
     
     func getFistBumperCount(completion: @escaping (Int) -> Void = {_ in}) -> Void  {
-        APIManager().getFistBumperCount(userID: input.userID){
+        APIManager.shared.getFistBumperCount(userID: input.userID){
             result in
             switch result {
             case .success(let response):
@@ -168,7 +168,7 @@ class FistBumpViewModel: ViewModelProtocol {
     
     func deleteFistBump(fistBumpId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().deleteFistBump(userID: fistBumpId){
+        APIManager.shared.deleteFistBump(userID: fistBumpId){
             result in switch result {
             case .success(_):
                 self.successSubject.onNext(.unfistbump())
@@ -182,7 +182,7 @@ class FistBumpViewModel: ViewModelProtocol {
     
     func addFistBump(fistBumpId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().addFistBump(userID: fistBumpId){
+        APIManager.shared.addFistBump(userID: fistBumpId){
             result in switch result {
             case .success(_):
                 self.successSubject.onNext(.fistbump())
@@ -196,7 +196,7 @@ class FistBumpViewModel: ViewModelProtocol {
     
     func follow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().insertFollows(params: ["FollowId": userId]){
+        APIManager.shared.insertFollows(params: ["FollowId": userId]){
             result in switch result {
             case .success(_):
                 self.successSubject.onNext(.follow())
@@ -209,7 +209,7 @@ class FistBumpViewModel: ViewModelProtocol {
     
     func unfollow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().unFollow(params: ["FollowId": userId]){
+        APIManager.shared.unFollow(params: ["FollowId": userId]){
             result in switch result {
             case .success(_):
                 self.successSubject.onNext(.unfollow())

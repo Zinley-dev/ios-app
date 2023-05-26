@@ -42,7 +42,7 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func loadPostStats() {
-        APIManager().getPostStats(postId: selected_item.id) { result in
+        APIManager.shared.getPostStats(postId: selected_item.id) { result in
             switch result {
             case .success(let apiResponse):
                 guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {

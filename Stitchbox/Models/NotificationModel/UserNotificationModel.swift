@@ -248,7 +248,7 @@ class UserNotificationModel {
                             
                             print(getPostId)
                                 
-                            APIManager().getPostDetail(postId: getPostId) { result in
+                            APIManager.shared.getPostDetail(postId: getPostId) { result in
                                 switch result {
                                     
                                   case .success(let response):

@@ -308,7 +308,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     
     func loadRootCmt(rootComment: String, completed: @escaping DownloadComplete) {
         
-      APIManager().getCommentDetail(commentId: rootComment) { result in
+        APIManager.shared.getCommentDetail(commentId: rootComment) { result in
             switch result {
             case .success(let apiResponse):
               
@@ -338,7 +338,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     
     func loadComment(comment_id: String) {
         
-      APIManager().getCommentDetail(commentId: comment_id) { result in
+        APIManager.shared.getCommentDetail(commentId: comment_id) { result in
             switch result {
             case .success(let apiResponse):
                
@@ -437,7 +437,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     
     func loadReplyToComment(replyToCmt: String, completed: @escaping DownloadComplete) {
         
-        APIManager().getCommentDetail(commentId: replyToCmt) { result in
+        APIManager.shared.getCommentDetail(commentId: replyToCmt) { result in
             switch result {
             case .success(let apiResponse):
               
@@ -683,7 +683,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         }
 
         // Call the API to create a comment
-        APIManager().createComment(params: data) { [weak self] result in
+        APIManager.shared.createComment(params: data) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -1043,7 +1043,7 @@ extension CommentNotificationVC: ASTableDataSource {
             
         }
         
-        APIManager().getReply(for: commentId, page: comment.lastCmtSnapshot) { result in
+        APIManager.shared.getReply(for: commentId, page: comment.lastCmtSnapshot) { result in
             switch result {
             case .success(let apiResponse):
 
@@ -1235,7 +1235,7 @@ extension CommentNotificationVC {
     
     func removeComment(items: CommentModel, indexPath: Int) {
         
-        APIManager().deleteComment(commentId: items.comment_id) { result in
+        APIManager.shared.deleteComment(commentId: items.comment_id) { result in
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success" else {

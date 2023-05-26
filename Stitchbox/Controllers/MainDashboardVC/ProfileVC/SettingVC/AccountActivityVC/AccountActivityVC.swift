@@ -306,7 +306,7 @@ extension AccountActivityVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
 
-         APIManager().getAccountActivity(page: page) { result in
+        APIManager.shared.getAccountActivity(page: page) { result in
                 switch result {
                 case .success(let apiResponse):
                     

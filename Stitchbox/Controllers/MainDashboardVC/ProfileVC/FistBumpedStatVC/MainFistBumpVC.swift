@@ -451,7 +451,7 @@ extension MainFistBumpVC {
 extension MainFistBumpVC {
     
     func countFistBumpers(completed: @escaping DownloadComplete) {
-        APIManager().getFistBumperCount { result in
+        APIManager.shared.getFistBumperCount { result in
             switch result {
             case .success(let response):
                   
@@ -487,7 +487,7 @@ extension MainFistBumpVC {
 
 
     func countFistBumpees(completed: @escaping DownloadComplete) {
-        APIManager().getFistBumpeeCount { result in
+        APIManager.shared.getFistBumpeeCount { result in
             switch result {
             case .success(let response):
                  guard response.body?["message"] as? String == "success",

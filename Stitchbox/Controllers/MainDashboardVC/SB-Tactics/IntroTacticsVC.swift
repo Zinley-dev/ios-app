@@ -169,7 +169,7 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
         
            gameList.removeAll()
         
-            APIManager().getSupportedGame { result in
+        APIManager.shared.getSupportedGame { result in
                 switch result {
                 case .success(let apiResponse):
                     

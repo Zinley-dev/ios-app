@@ -249,7 +249,7 @@ extension BlockedListVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getBlocks(page: currentPage) { result in
+        APIManager.shared.getBlocks(page: currentPage) { result in
                 switch result {
                 case .success(let apiResponse):
                     

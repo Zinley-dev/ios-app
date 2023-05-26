@@ -324,7 +324,7 @@ extension EditPhofileVC: EditControllerDelegate {
             
             Dispatch.background {
                 
-                APIManager().uploadavatar(image: self.renderedImage) { result in
+                APIManager.shared.uploadavatar(image: self.renderedImage) { result in
                     switch result {
                     case .success(let apiResponse):
                         
@@ -358,7 +358,7 @@ extension EditPhofileVC: EditControllerDelegate {
             
             Dispatch.background {
                 
-                APIManager().uploadcover(image: self.renderedImage) { result in
+                APIManager.shared.uploadcover(image: self.renderedImage) { result in
                     switch result {
                     case .success(let apiResponse):
                         
