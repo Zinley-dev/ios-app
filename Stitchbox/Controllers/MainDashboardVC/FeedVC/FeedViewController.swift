@@ -320,7 +320,7 @@ extension FeedViewController {
     
     func checkNotification() {
         
-        APIManager().getBadge { result in
+        APIManager().getBadge { [weak self] result in
             switch result {
             case .success(let apiResponse):
                 
@@ -331,19 +331,19 @@ extension FeedViewController {
                         if badge == 0 {
                             
                             Dispatch.main.async {
-                                self.setupEmptyNotiButton()
+                                self?.setupEmptyNotiButton()
                             }
                             
                         } else {
                             Dispatch.main.async {
-                                self.setupHasNotiButton()
+                                self?.setupHasNotiButton()
                             }
                         }
                         
                     } else {
                         
                         Dispatch.main.async {
-                            self.setupEmptyNotiButton()
+                            self?.setupEmptyNotiButton()
                         }
                         
                     }
@@ -352,7 +352,7 @@ extension FeedViewController {
                 
             case .failure(let error):
                 Dispatch.main.async {
-                    self.setupEmptyNotiButton()
+                    self?.setupEmptyNotiButton()
                 }
                 print(error)
                 
@@ -909,7 +909,7 @@ extension FeedViewController {
 
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager().getUserFeed { result in
+        APIManager().getUserFeed { [weak self] result in
             switch result {
             case .success(let apiResponse):
                 
@@ -921,7 +921,7 @@ extension FeedViewController {
                     return
                 }
                 if !data.isEmpty {
-                    self.lastLoadTime = Date()
+                    self?.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data
                   
@@ -1177,12 +1177,12 @@ extension FeedViewController {
     
     func resetNoti() {
         
-            APIManager().resetBadge { result in
+            APIManager().resetBadge { [weak self] result in
                 switch result {
                 case .success(let apiResponse):
                     
                     Dispatch.main.async {
-                        self.setupEmptyNotiButton()
+                        self?.setupEmptyNotiButton()
                     }
 
                 case .failure(let error):
@@ -1285,7 +1285,7 @@ extension FeedViewController {
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
-        APIManager().getSettings { result in
+        APIManager().getSettings { [weak self] result in
             switch result {
             case .success(let apiResponse):
             
@@ -1312,7 +1312,7 @@ extension FeedViewController {
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
         
-        APIManager().getme { result in
+        APIManager().getme { [weak self] result in
             switch result {
             case .success(let response):
                 

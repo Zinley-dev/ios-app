@@ -1018,34 +1018,29 @@ extension PostNode {
     }
     
     func checkIfLike() {
-        
-        APIManager().hasLikedPost(id: post.id) { result in
-            
+        APIManager().hasLikedPost(id: post.id) { [weak self] result in
             switch result {
             case .success(let apiResponse):
-    
                 guard apiResponse.body?["message"] as? String == "success",
                       let checkIsLike = apiResponse.body?["islike"] as? Bool  else {
                         return
                 }
                 
-                self.isLike = checkIsLike
-                if self.isLike {
-                    DispatchQueue.main.async {
-                        self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.buttonsView.likeBtn.setImage(emptyLikeImage!, for: .normal)
+                self?.isLike = checkIsLike
+                DispatchQueue.main.async {
+                    if self?.isLike == true {
+                        self?.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
+                    } else {
+                        self?.buttonsView.likeBtn.setImage(emptyLikeImage!, for: .normal)
                     }
                 }
                 
             case .failure(let error):
                 print(error)
             }
-        
         }
     }
+
     
     func performLike() {
 
@@ -1059,11 +1054,13 @@ extension PostNode {
         APIManager().likePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
-               print(apiResponse)
+                print(apiResponse)
+                // If you need to reference self here in the future, use self?
             case .failure(let error):
                 print(error)
             }
         }
+
         
     }
     
@@ -1137,7 +1134,7 @@ extension PostNode {
     
     func totalLikeCount() {
         
-        APIManager().countLikedPost(id: post.id) { result in
+        APIManager().countLikedPost(id: post.id) { [weak self] result in
             switch result {
             case .success(let apiResponse):
     
@@ -1146,10 +1143,10 @@ extension PostNode {
                         return
                 }
                 
-                self.likeCount = likeCountFromQuery
+                self?.likeCount = likeCountFromQuery
                 
                 DispatchQueue.main.async {
-                    self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(likeCountFromQuery)))"
+                    self?.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(likeCountFromQuery)))"
                 }
                
             case .failure(let error):
@@ -1161,7 +1158,7 @@ extension PostNode {
     
     func totalCmtCount() {
         
-        APIManager().countComment(post: post.id) { result in
+        APIManager().countComment(post: post.id) { [weak self] result in
             switch result {
             case .success(let apiResponse):
              
@@ -1171,7 +1168,7 @@ extension PostNode {
                 }
                 
                 DispatchQueue.main.async {
-                    self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(commentsCountFromQuery)))"
+                    self?.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(commentsCountFromQuery)))"
                 }
                 
             case .failure(let error):
