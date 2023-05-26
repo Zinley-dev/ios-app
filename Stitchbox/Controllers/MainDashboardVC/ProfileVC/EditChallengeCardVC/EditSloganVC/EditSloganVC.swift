@@ -53,7 +53,9 @@ class EditSloganVC: UIViewController, UITextFieldDelegate {
         if let text = sloganTextField.text, text != "" {
             
             presentSwiftLoader()
-            APIManager.shared.updateChallengeCard(params: ["quote": text]) { result in
+            APIManager.shared.updateChallengeCard(params: ["quote": text]) { [weak self] result in
+                guard let self = self else { return }
+
                 switch result {
                 case .success(let apiResponse):
                     

@@ -9,8 +9,8 @@ import UIKit
 import AsyncDisplayKit
 
 class HashtagVC: UIViewController {
-
-
+    
+    
     @IBOutlet weak var hashtagTxtField: UITextField!
     @IBOutlet weak var contentView: UIView!
     
@@ -39,12 +39,12 @@ class HashtagVC: UIViewController {
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
-  
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         setupView()
@@ -59,9 +59,9 @@ class HashtagVC: UIViewController {
         
         super.viewWillLayoutSubviews()
         self.tableNode.frame = contentView.bounds
-       
+        
     }
-  
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -77,14 +77,14 @@ extension HashtagVC {
         
         setupBackButton()
         createDisableAddBtn()
-    
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -94,16 +94,16 @@ extension HashtagVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Add Hashtags"
         
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
     
@@ -127,12 +127,12 @@ extension HashtagVC {
         customView.addSubview(createButton)
         createButton.center = customView.center
         let createBarButton = UIBarButtonItem(customView: customView)
-
+        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
-      
+        
         self.navigationItem.rightBarButtonItem = createBarButton
-         
+        
     }
     
     func createAddAddBtn() {
@@ -154,12 +154,12 @@ extension HashtagVC {
         customView.addSubview(createButton)
         createButton.center = customView.center
         let createBarButton = UIBarButtonItem(customView: customView)
-
+        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
-      
+        
         self.navigationItem.rightBarButtonItem = createBarButton
-         
+        
     }
     
     func setupView() {
@@ -180,12 +180,12 @@ extension HashtagVC {
         //self.tableNode.leadingScreensForBatching = 5
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
-                
+        
         //improve later
         
         self.contentView.addSubview(tableNode.view)
-      
-       
+        
+        
         
         
         hashtagTxtField.delegate = self
@@ -194,13 +194,13 @@ extension HashtagVC {
         
     }
     
-   
-
+    
+    
     
 }
 
 extension HashtagVC {
-        
+    
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
@@ -268,7 +268,7 @@ extension HashtagVC: UITextFieldDelegate {
             delayItem.perform(after: 0.35) {
                 self.searchHashTags(searchText: searchText)
             }
-           
+            
         } else {
             searchHashtagList = []
             tableNode.reloadData(completion: nil)
@@ -280,21 +280,21 @@ extension HashtagVC: UITextFieldDelegate {
             createAddAddBtn()
         }
     }
-
+    
 }
 
 
 extension HashtagVC: ASTableDelegate {
-
+    
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
         
         let width = tableNode.view.bounds.size.width;
-
+        
         
         let min = CGSize(width: width, height: 30);
         let max = CGSize(width: width, height: 1000);
         return ASSizeRangeMake(min, max);
-           
+        
     }
     
     
@@ -312,13 +312,13 @@ extension HashtagVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
         
         return self.searchHashtagList.count
-
+        
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
         let hashtag = self.searchHashtagList[indexPath.row]
-       
+        
         return {
             let node = HashTagSearchNode(with: hashtag)
             node.neverShowPlaceholders = true
@@ -342,7 +342,7 @@ extension HashtagVC: ASTableDataSource {
         self.tableNode.reloadData(completion: nil)
     }
     
-        
+    
 }
 
 extension HashtagVC {
@@ -368,7 +368,7 @@ extension HashtagVC {
     }
     
     func checkLocalRecords(searchText: String) -> Bool {
-       
+        
         for (i, record) in searchHist.enumerated() {
             if record.keyWord == searchText {
                 print("time: \(Date().timeIntervalSince1970 - record.timeStamp)")
@@ -383,12 +383,12 @@ extension HashtagVC {
                     }
                     return true
                 } else {
-
+                    
                     searchHist.remove(at: i)
                 }
             }
         }
-
+        
         return false
     }
     
@@ -401,7 +401,9 @@ extension HashtagVC {
             return
         }
         
-        APIManager.shared.searchHashtag(query: searchText) { result in
+        APIManager.shared.searchHashtag(query: searchText) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -434,7 +436,7 @@ extension HashtagVC {
             case .failure(let error):
                 
                 print(error)
-               
+                
             }
         }
         

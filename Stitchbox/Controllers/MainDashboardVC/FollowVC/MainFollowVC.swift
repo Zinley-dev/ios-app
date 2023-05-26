@@ -43,13 +43,13 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
             
             controller.userId = self.userId ?? ""
             self.addVCAsChildVC(childViewController: controller)
-
+            
             return controller
             
         } else {
             return UIViewController() as! FollowerVC
         }
-       
+        
         
     }()
     
@@ -67,13 +67,13 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         } else {
             return UIViewController() as! FollowingVC
         }
-                
+        
         
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         
@@ -91,7 +91,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
             
             countFollowers(userId: user) {
                 Dispatch.main.async {
-           
+                    
                     self.followerBtn.setTitle("\(formatPoints(num: Double(self.followerCount))) Followers", for: .normal)
                 }
             }
@@ -103,8 +103,8 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
             }
             
             
-        } 
-            
+        }
+        
     }
     
     
@@ -154,7 +154,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         navigationBarAppearance.backgroundColor = .background
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+        
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
@@ -163,28 +163,30 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     func countFollowers(userId: String, completed: @escaping DownloadComplete) {
         
         
-        APIManager.shared.getFollowers(userId: userId, page: 1) { result in
+        APIManager.shared.getFollowers(userId: userId, page: 1) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 
                 guard response.body?["message"] as? String == "success",
                       let data = response.body?["paging"] as? [String: Any] else {
-                        completed()
-                        return
-                }
-            
-                    if let followersGet = data["total"] as? Int {
-                        self.followerCount = followersGet
-                    } else {
-                        self.followerCount = 0
-                    }
-                    
                     completed()
+                    return
+                }
+                
+                if let followersGet = data["total"] as? Int {
+                    self.followerCount = followersGet
+                } else {
+                    self.followerCount = 0
+                }
+                
+                completed()
                 
             case .failure(let error):
                 print("Error loading follower: ", error)
                 completed()
-               
+                
             }
         }
         
@@ -193,33 +195,35 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     
     func countFollowings(userId: String, completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getFollows(userId: userId, page: 1) { result in
+        APIManager.shared.getFollows(userId: userId, page: 1) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
-             
+                
                 guard response.body?["message"] as? String == "success",
                       let data = response.body?["paging"] as? [String: Any] else {
-                        completed()
-                        return
-                }
-            
-                    if let followingsGet = data["total"] as? Int {
-                        self.followingCount = followingsGet
-                    } else {
-                        self.followingCount = 0
-                    }
-                    
                     completed()
+                    return
+                }
+                
+                if let followingsGet = data["total"] as? Int {
+                    self.followingCount = followingsGet
+                } else {
+                    self.followingCount = 0
+                }
+                
+                completed()
                 
             case .failure(let error):
                 print("Error loading follower: ", error)
                 completed()
-               
+                
             }
         }
         
     }
-     
+    
     
     @IBAction func followerBtn(_ sender: Any) {
         
@@ -247,10 +251,10 @@ extension MainFollowVC {
     
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -260,21 +264,21 @@ extension MainFollowVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
     
     func setupTitle() {
-    
+        
         
         guard let userDataSource = _AppCoreData.userDataSource.value else {
             print("Can't get userDataSource")
@@ -295,17 +299,17 @@ extension MainFollowVC {
             self.navigationItem.title = self.username ?? "Follow"
             
         }
-
         
-       
-       
-       
+        
+        
+        
+        
     }
     
     func setupSearchBar() {
         
         let searchButton: UIButton = UIButton(type: .custom)
-
+        
         searchButton.setImage(UIImage(named: "search"), for: [])
         searchButton.addTarget(self, action: #selector(searchBarSetting(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
@@ -314,7 +318,7 @@ extension MainFollowVC {
         
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
-
+        
         self.navigationItem.rightBarButtonItem = searchBarButton
         
         
@@ -350,7 +354,7 @@ extension MainFollowVC {
         FollowerVC.view.isHidden = true
         FollowingVC.view.isHidden = false
         
-    
+        
         self.searchController?.searchBar.text = ""
         
     }
@@ -370,8 +374,8 @@ extension MainFollowVC {
         self.navigationItem.searchController = nil
         self.searchController?.searchBar.isHidden = true
     }
-
- 
+    
+    
 }
 
 extension MainFollowVC {
@@ -383,7 +387,7 @@ extension MainFollowVC {
         buttonStackView.isHidden = false
         navigationItem.searchController = nil
         searchController?.searchBar.isHidden = true
-       
+        
         if FollowerVC.view.isHidden == false {
             
             FollowerVC.searchUserList.removeAll()
@@ -411,7 +415,7 @@ extension MainFollowVC {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
-    
+        
         contentViewTopConstant.constant = -50
         
         if FollowerVC.view.isHidden == false {
@@ -437,7 +441,7 @@ extension MainFollowVC {
             return
             
         }
- 
+        
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -447,12 +451,12 @@ extension MainFollowVC {
             searchUsers(for: searchText)
         }
     }
-
+    
     func clearSearchResults() {
         // Clear the search results for both view controllers
         FollowerVC.searchUserList.removeAll()
         FollowingVC.searchUserList.removeAll()
-
+        
         // Check which view controller is currently visible
         if !FollowerVC.view.isHidden {
             // Set the searchUserList variable of the FollowerVC to the full list of users and reload the table view
@@ -464,8 +468,8 @@ extension MainFollowVC {
             FollowingVC.tableNode.reloadData()
         }
     }
-
-
+    
+    
     func searchUsers(for searchText: String) {
         
         let follows = !FollowerVC.view.isHidden ? FollowerVC.userList : FollowingVC.userList
@@ -494,14 +498,14 @@ extension MainFollowVC {
         } else {
             
             if !FollowerVC.view.isHidden {
-               
+                
                 delayItem.perform(after: 0.35) {
                     print("Search followers using api")
                     self.searchFollowers(for: searchText)
                 }
-               
+                
             } else {
-              
+                
                 delayItem.perform(after: 0.35) {
                     print("Search following using api")
                     self.searchFollowings(for: searchText)
@@ -510,17 +514,19 @@ extension MainFollowVC {
             
         }
         
-
+        
     }
     
     func searchFollowers(for searchText: String) {
         
         if let userUID = _AppCoreData.userDataSource.value?.userID {
             
-            APIManager.shared.searchFollows(query: searchText, userid: userUID, page: 1) { result in
+            APIManager.shared.searchFollows(query: searchText, userid: userUID, page: 1) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
-
+                    
                     guard apiResponse.body?["message"] as? String == "success",
                           let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         return
@@ -534,8 +540,8 @@ extension MainFollowVC {
                         self.FollowerVC.searchUserList = list
                         self.FollowerVC.tableNode.reloadData()
                     }
-                   
-        
+                    
+                    
                 case .failure(let error):
                     print(error)
                 }
@@ -551,11 +557,13 @@ extension MainFollowVC {
         
         if let userUID = _AppCoreData.userDataSource.value?.userID {
             
-            APIManager.shared.searchFollowing(query: searchText, userid: userUID, page: 1) { result in
+            APIManager.shared.searchFollowing(query: searchText, userid: userUID, page: 1) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
-    
+                    
                     guard apiResponse.body?["message"] as? String == "success",
                           let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         return
@@ -569,7 +577,7 @@ extension MainFollowVC {
                         self.FollowingVC.searchUserList = list
                         self.FollowingVC.tableNode.reloadData()
                     }
-
+                    
                 case .failure(let error):
                     print(error)
                 }
@@ -608,7 +616,7 @@ extension MainFollowVC {
                 navigationController.popViewController(animated: true)
             }
         }
-       
+        
     }
     
     

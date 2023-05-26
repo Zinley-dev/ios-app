@@ -8,14 +8,14 @@
 import UIKit
 
 class EditEmailVC: UIViewController {
-
+    
     let backButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var emailTxtField: UITextField!
     
     @IBOutlet weak var nextBtn: SButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         setupDefaultInfo()
@@ -27,11 +27,11 @@ class EditEmailVC: UIViewController {
         emailTxtField.addUnderLine()
     }
     
-
+    
     @IBAction func nextBtnPressed(_ sender: Any) {
         
         if let email = emailTxtField.text, email != "", email.contains("@") == true, email.contains(".") == true {
-                
+            
             checkEmail(email: email)
             
         } else {
@@ -46,8 +46,10 @@ class EditEmailVC: UIViewController {
         
         let lowercaseEmail = email.lowercased().stringByRemovingWhitespaces
         presentSwiftLoader()
-   
-        APIManager.shared.updateEmail(email: lowercaseEmail) { result in
+        
+        APIManager.shared.updateEmail(email: lowercaseEmail) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -67,9 +69,9 @@ class EditEmailVC: UIViewController {
                     SwiftLoader.hide()
                     self.moveToVerifyVC(email: lowercaseEmail)
                 }
-              
+                
             case .failure(let error):
-            
+                
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     print(error)
@@ -94,7 +96,7 @@ class EditEmailVC: UIViewController {
         
     }
     
-
+    
     
 }
 
@@ -110,19 +112,19 @@ extension EditEmailVC {
         }
         
     }
-
+    
     
     func setupButtons() {
         
         setupBackButton()
-    
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -132,16 +134,16 @@ extension EditEmailVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Edit Email"
-       
+        
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
     

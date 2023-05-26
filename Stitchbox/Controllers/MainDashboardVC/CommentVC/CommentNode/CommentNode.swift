@@ -349,7 +349,8 @@ class CommentNode: ASCellNode {
     
     func checkLikeCmt() {
         
-        APIManager.shared.islike(comment: post.comment_id) { result in
+        APIManager.shared.islike(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
             
             switch result {
             case .success(let apiResponse):
@@ -393,8 +394,9 @@ class CommentNode: ASCellNode {
     
     func cmtCount() {
         
-        APIManager.shared.countLike(comment: post.comment_id) { result in
-            
+        APIManager.shared.countLike(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
     
@@ -699,7 +701,9 @@ class CommentNode: ASCellNode {
       
         presentSwiftLoader()
         
-        APIManager.shared.getPostDetail(postId: id) { result in
+        APIManager.shared.getPostDetail(postId: id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -856,7 +860,9 @@ extension CommentNode {
             self.textNode.attributedText = like
         }
         
-        APIManager.shared.likeComment(comment: post.comment_id) { result in
+        APIManager.shared.likeComment(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
             
@@ -908,7 +914,9 @@ extension CommentNode {
             self.textNode.attributedText = like
         }
         
-        APIManager.shared.unlike(comment: post.comment_id) { result in
+        APIManager.shared.unlike(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 

@@ -10,7 +10,7 @@ import FLAnimatedImage
 import AsyncDisplayKit
 
 class NotificationVC: UIViewController {
-
+    
     let backButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var contentView: UIView!
@@ -30,12 +30,12 @@ class NotificationVC: UIViewController {
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
-  
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         
@@ -47,7 +47,7 @@ class NotificationVC: UIViewController {
         self.tableNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.tableNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
-    
+        
         
         self.applyStyle()
         self.tableNode.leadingScreensForBatching = 5
@@ -74,30 +74,30 @@ class NotificationVC: UIViewController {
         super.viewWillAppear(animated)
         
         if firstAnimated {
-                    
-                    do {
-                        
-                        let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                        let gifData = try NSData(contentsOfFile: path) as Data
-                        let image = FLAnimatedImage(animatedGIFData: gifData)
-                        
-                        
-                        self.loadingImage.animatedImage = image
-                        
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                    
-                    loadingView.backgroundColor = self.view.backgroundColor
-         
-                }
+            
+            do {
+                
+                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                let gifData = try NSData(contentsOfFile: path) as Data
+                let image = FLAnimatedImage(animatedGIFData: gifData)
+                
+                
+                self.loadingImage.animatedImage = image
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            loadingView.backgroundColor = self.view.backgroundColor
+            
+        }
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backgroundColor = .background
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+        
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
@@ -108,11 +108,11 @@ class NotificationVC: UIViewController {
 extension NotificationVC {
     
     @objc private func refreshListData(_ sender: Any) {
-       // self.pullControl.endRefreshing() // You can stop after API Call
+        // self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
-  
+        
         clearAllData()
-   
+        
     }
     
     @objc func clearAllData() {
@@ -120,22 +120,22 @@ extension NotificationVC {
         refresh_request = true
         page = 1
         updateData()
-               
+        
     }
     
     
     func updateData() {
         self.retrieveNextPageWithCompletion { (newNotis) in
-                
+            
             if newNotis.count > 0 {
                 
                 self.UserNotificationList.removeAll()
                 self.tableNode.reloadData()
-                        
+                
                 self.insertNewRowsInTableNode(newNotis: newNotis)
                 
             } else {
-              
+                
                 self.refresh_request = false
                 self.UserNotificationList.removeAll()
                 self.tableNode.reloadData()
@@ -159,10 +159,10 @@ extension NotificationVC {
             self.delayItem.perform(after: 0.75) {
                 
                 self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                    
+                
             }
-              
-          
+            
+            
         }
         
         
@@ -176,15 +176,15 @@ extension NotificationVC {
     func setupButtons() {
         
         setupBackButton()
-    
+        
     }
     
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -194,22 +194,22 @@ extension NotificationVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
         navigationItem.title = "Notifications"
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default)
         
@@ -217,7 +217,7 @@ extension NotificationVC {
         present(alert, animated: true, completion: nil)
         
     }
-
+    
     
 }
 
@@ -247,7 +247,7 @@ extension NotificationVC {
         
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
-    
+        
     }
     
     
@@ -257,7 +257,7 @@ extension NotificationVC {
     
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-          
+        
         let notification = UserNotificationList[indexPath.row]
         
         if notification._isRead == false {
@@ -271,65 +271,65 @@ extension NotificationVC {
             
             switch template {
                 
-                case "NEW_COMMENT":
-                    if let post = notification.post {
-                        openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
-                    } else {
-                        self.showErrorAlert("Oops!", msg: "This content is not available")
-                    }
-                   
-                case "REPLY_COMMENT":
-                    if let post = notification.post {
-                        openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
-                    } else {
-                        self.showErrorAlert("Oops!", msg: "This content is not available")
-                    }
-                 
-                case "NEW_FISTBUMP_1":
-                    if let userId = notification.userId, let username = notification.username {
-                        openUser(userId: userId, username: username)
-                    } else {
-                        showErrorAlert("Oops!", msg: "Can't open this notification content")
-                    }
-                case "NEW_FISTBUMP_2":
-                    openFistBumpList()
-                case "NEW_FOLLOW_1":
-                   
-                    if let userId = notification.userId, let username = notification.username {
-                        openUser(userId: userId, username: username)
-                    } else {
-                        showErrorAlert("Oops!", msg: "Can't open this notification content")
-                    }
+            case "NEW_COMMENT":
+                if let post = notification.post {
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
+                } else {
+                    self.showErrorAlert("Oops!", msg: "This content is not available")
+                }
                 
-                case "NEW_FOLLOW_2":
-                    openFollow()
-                case "NEW_TAG":
-                    if let post = notification.post {
-                        openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
-                    } else {
-                        self.showErrorAlert("Oops!", msg: "This content is not available")
-                    }
-                case "NEW_POST":
-                    openPost(post: notification.post)
-                case "LIKE_COMMENT":
-                    if let userId = notification.userId, let username = notification.username {
-                        openUser(userId: userId, username: username)
-                    } else {
-                        showErrorAlert("Oops!", msg: "Can't open this notification content")
-                    }
-                case "LIKE_POST":
-                    if let userId = notification.userId, let username = notification.username {
-                        openUser(userId: userId, username: username)
-                    } else {
-                        showErrorAlert("Oops!", msg: "Can't open this notification content")
-                    }
-                default:
-                    print(notification.template)
+            case "REPLY_COMMENT":
+                if let post = notification.post {
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
+                } else {
+                    self.showErrorAlert("Oops!", msg: "This content is not available")
+                }
+                
+            case "NEW_FISTBUMP_1":
+                if let userId = notification.userId, let username = notification.username {
+                    openUser(userId: userId, username: username)
+                } else {
+                    showErrorAlert("Oops!", msg: "Can't open this notification content")
+                }
+            case "NEW_FISTBUMP_2":
+                openFistBumpList()
+            case "NEW_FOLLOW_1":
+                
+                if let userId = notification.userId, let username = notification.username {
+                    openUser(userId: userId, username: username)
+                } else {
+                    showErrorAlert("Oops!", msg: "Can't open this notification content")
+                }
+                
+            case "NEW_FOLLOW_2":
+                openFollow()
+            case "NEW_TAG":
+                if let post = notification.post {
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
+                } else {
+                    self.showErrorAlert("Oops!", msg: "This content is not available")
+                }
+            case "NEW_POST":
+                openPost(post: notification.post)
+            case "LIKE_COMMENT":
+                if let userId = notification.userId, let username = notification.username {
+                    openUser(userId: userId, username: username)
+                } else {
+                    showErrorAlert("Oops!", msg: "Can't open this notification content")
+                }
+            case "LIKE_POST":
+                if let userId = notification.userId, let username = notification.username {
+                    openUser(userId: userId, username: username)
+                } else {
+                    showErrorAlert("Oops!", msg: "Can't open this notification content")
+                }
+            default:
+                print(notification.template)
                 
             }
-               
+            
         }
-               
+        
     }
     
 }
@@ -340,7 +340,7 @@ extension NotificationVC {
     func openFistBumpList() {
         
         if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
-        
+            
             self.navigationController?.pushViewController(MFBVC, animated: true)
             
         }
@@ -353,15 +353,15 @@ extension NotificationVC {
         if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
             
             let nav = UINavigationController(rootViewController: RVC)
-
+            
             // Set the user ID, nickname, and onPresent properties of UPVC
             RVC.posts = [post]
-           
+            
             // Customize the navigation bar appearance
             nav.navigationBar.barTintColor = .background
             nav.navigationBar.tintColor = .white
             nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
+            
             nav.modalPresentationStyle = .fullScreen
             self.present(nav, animated: true, completion: nil)
             
@@ -381,7 +381,7 @@ extension NotificationVC {
         slideVC.root_id = rootComment
         slideVC.type = type
         slideVC.post = post
-       
+        
         global_presetingRate = Double(0.75)
         global_cornerRadius = 35
         
@@ -396,7 +396,7 @@ extension NotificationVC {
     func openUser(userId: String, username: String) {
         
         if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-           
+            
             UPVC.userId = userId
             UPVC.nickname = username
             self.navigationController?.pushViewController(UPVC, animated: true)
@@ -413,7 +413,7 @@ extension NotificationVC {
             MFVC.userId = _AppCoreData.userDataSource.value?.userID ?? ""
             MFVC.followerCount = 0
             MFVC.followingCount = 0
-           
+            
             self.navigationController?.pushViewController(MFVC, animated: true)
             
         }
@@ -421,31 +421,33 @@ extension NotificationVC {
         
     }
     
-
+    
     func setRead(notiId: String) {
         
-
-        APIManager.shared.readNotification(noti: notiId) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    print(apiResponse)
-                   
-                    
-                case .failure(let error):
-                    print(error)
-                    
+        
+        APIManager.shared.readNotification(noti: notiId) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+                
+            case .failure(let error):
+                print(error)
+                
             }
         }
         
     }
     
-
+    
 }
 
 
 extension NotificationVC: ASTableDelegate {
-
+    
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
         
         let width = UIScreen.main.bounds.size.width;
@@ -453,7 +455,7 @@ extension NotificationVC: ASTableDelegate {
         let min = CGSize(width: width, height: 30);
         let max = CGSize(width: width, height: 1000);
         return ASSizeRangeMake(min, max);
-           
+        
     }
     
     
@@ -480,10 +482,10 @@ extension NotificationVC: ASTableDelegate {
             context.completeBatchFetching(true)
             
         }
-    
+        
         
     }
-       
+    
     
 }
 
@@ -492,38 +494,40 @@ extension NotificationVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getNotifications(page: page) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    
-                    if !data.isEmpty {
-                        self.page += 1
-                        print("Successfully retrieved \(data.count) notifications.")
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                    
-                case .failure(let error):
-                    print(error)
+        APIManager.shared.getNotifications(page: page) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                    return
+                }
+                
+                if !data.isEmpty {
+                    self.page += 1
+                    print("Successfully retrieved \(data.count) notifications.")
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
@@ -537,7 +541,7 @@ extension NotificationVC {
             hideAnimation()
             return
         }
-    
+        
         
         let section = 0
         var items = [UserNotificationModel]()
@@ -550,13 +554,13 @@ extension NotificationVC {
         }
         
         for i in newNotis {
-
+            
             let item = UserNotificationModel(UserNotificationModel: i)
             items.append(item)
-          
+            
         }
         
-    
+        
         self.UserNotificationList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
         hideAnimation()
@@ -585,7 +589,7 @@ extension NotificationVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
         let notification = self.UserNotificationList[indexPath.row]
-       
+        
         return {
             
             let node = NotificationNode(with: notification)
@@ -600,30 +604,30 @@ extension NotificationVC: ASTableDataSource {
     func hideAnimation() {
         
         if firstAnimated {
+            
+            firstAnimated = false
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                Dispatch.main.async {
+                    self.loadingView.alpha = 0
+                }
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
                     
-                    firstAnimated = false
-                    
-                    UIView.animate(withDuration: 0.5) {
-                        
-                        Dispatch.main.async {
-                            self.loadingView.alpha = 0
-                        }
-                        
-                    }
-                    
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        
-                        if self.loadingView.alpha == 0 {
-                            
-                            self.loadingView.isHidden = true
-                            
-                        }
-                        
-                    }
-                    
+                    self.loadingView.isHidden = true
                     
                 }
+                
+            }
+            
+            
+        }
         
     }
     

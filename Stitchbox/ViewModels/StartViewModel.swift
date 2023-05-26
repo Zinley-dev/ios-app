@@ -68,7 +68,9 @@ class StartViewModel: ViewModelProtocol {
         
         presentSwiftLoader()
         
-        APIManager.shared.socialLogin(params: params) { result in
+        APIManager.shared.socialLogin(params: params) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let response):
                 let data = response.body?["data"] as! [String: Any]?

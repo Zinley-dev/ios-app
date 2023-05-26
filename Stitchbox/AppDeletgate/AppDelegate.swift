@@ -599,7 +599,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         global_suppport_game_list.removeAll()
         
-        APIManager.shared.getGames { result in
+        APIManager.shared.getGames { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 

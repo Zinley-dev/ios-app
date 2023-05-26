@@ -8,7 +8,7 @@
 import UIKit
 
 class EditPostVC: UIViewController {
-
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     
@@ -48,7 +48,7 @@ class EditPostVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         global_host = ""
         global_fullLink = ""
@@ -91,13 +91,13 @@ class EditPostVC: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         
-       
+        
     }
     
     @IBAction func allowCmtSwitchPressed(_ sender: Any) {
         
         if isAllowComment == true {
-                  
+            
             isAllowComment =  false
             allowCmtSwitch.setOn(false, animated: true)
             
@@ -211,8 +211,8 @@ class EditPostVC: UIViewController {
         
     }
     
-
-
+    
+    
 }
 
 extension EditPostVC {
@@ -233,7 +233,7 @@ extension EditPostVC {
         setupBackButton()
         createPostBtn()
         emptyBtnLbl()
-    
+        
     }
     
     
@@ -258,9 +258,9 @@ extension EditPostVC {
         backButton.setTitle("     Edit Post", for: .normal)
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+        
     }
     
     func setupGesture() {
@@ -278,7 +278,7 @@ extension EditPostVC {
     }
     
     func setDefaultStreamingLink() {
-    
+        
         if selectedPost.streamLink != "" {
             
             let streamUrl = selectedPost.streamLink
@@ -294,7 +294,7 @@ extension EditPostVC {
                         DispatchQueue.main.async {
                             self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
                         }
-
+                        
                     }
                     
                 }
@@ -305,7 +305,7 @@ extension EditPostVC {
     }
     
     func setDefaultComment() {
-    
+        
         
         if selectedPost.setting?.allowComment == true {
             
@@ -349,7 +349,7 @@ extension EditPostVC {
                 self.hashtagLbl.text = "Hashtag #"
             }
             
-         
+            
             self.collectionView.reloadData()
             
         }
@@ -421,12 +421,12 @@ extension EditPostVC {
             
         }
         
-    
+        
     }
-
-   
+    
+    
     func createDisablePostBtn() {
-       
+        
         let createButton = UIButton(type: .custom)
         //createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
@@ -442,16 +442,16 @@ extension EditPostVC {
         customView.addSubview(createButton)
         createButton.center = customView.center
         let createBarButton = UIBarButtonItem(customView: customView)
-
+        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
-      
+        
         self.navigationItem.rightBarButtonItem = createBarButton
-         
+        
     }
     
     func createPostBtn() {
-      
+        
         let createButton = UIButton(type: .custom)
         createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
@@ -467,19 +467,19 @@ extension EditPostVC {
         customView.addSubview(createButton)
         createButton.center = customView.center
         let createBarButton = UIBarButtonItem(customView: customView)
-
+        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
-      
+        
         self.navigationItem.rightBarButtonItem = createBarButton
-         
+        
     }
     
-
+    
     
     func emptyBtnLbl() {
         
-       
+        
         globalBtn.setTitle("", for: .normal)
         privateBtn.setTitle("", for: .normal)
         followingBtn.setTitle("", for: .normal)
@@ -487,7 +487,7 @@ extension EditPostVC {
         streamingLinkBtn.setTitle("", for: .normal)
         
     }
-
+    
     func setupScrollView() {
         collectionView.contentInset = UIEdgeInsets.init(top: 0, left: 14, bottom: 0, right: 14)
         collectionView.delegate = self
@@ -505,7 +505,7 @@ extension EditPostVC {
         }
     }
     
-
+    
 }
 
 
@@ -557,9 +557,11 @@ extension EditPostVC {
         
         contentPost = ["id": selectedPost.id, "content": updateText, "streamLink": global_fullLink, "hashtags": update_hashtaglist]
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment]
-       
+        
         presentSwiftLoader()
-        APIManager.shared.updatePost(params: contentPost) { result in
+        APIManager.shared.updatePost(params: contentPost) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(_):
                 needReloadPost = true
@@ -576,12 +578,12 @@ extension EditPostVC {
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     self.showErrorAlert("Oops", msg: "Unable to update \(error.localizedDescription)")
+                }
             }
         }
-    }
         
-
-      
+        
+        
     }
     
     @objc func handleKeyboardShow(notification: Notification) {
@@ -594,13 +596,13 @@ extension EditPostVC {
     }
     
     @objc func dismissKeyboardOnTap(sender: AnyObject!) {
-  
+        
         if isKeyboardShow {
             self.view.endEditing(true)
         } else {
             descTxtView.becomeFirstResponder()
         }
-  
+        
     }
     
 }
@@ -610,9 +612,9 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return hashtagList.count
     }
-     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: SelectedHashtagCollectionViewCell.cellReuseIdentifier(), for: indexPath)) as! SelectedHashtagCollectionViewCell
         
         cell.hashtag.text = hashtagList[indexPath.row]
@@ -638,11 +640,11 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
             } else {
                 
                 self.hiddenHashTagTxtField.text = self.hashtagList.joined(separator: "")
-            
+                
             }
             
             collectionView.reloadData()
-           
+            
         }
         
     }
@@ -652,7 +654,7 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
 
 extension EditPostVC: UITextViewDelegate {
     
-
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         
         if textView == descTxtView {
@@ -698,12 +700,12 @@ extension EditPostVC {
     // func show error alert
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                    
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }

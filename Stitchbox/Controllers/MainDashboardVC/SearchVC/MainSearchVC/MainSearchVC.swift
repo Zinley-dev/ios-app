@@ -531,7 +531,9 @@ extension MainSearchVC {
             return
         }
         
-        APIManager.shared.getAutoComplete(query: searchText) { result in
+        APIManager.shared.getAutoComplete(query: searchText) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -602,7 +604,9 @@ extension MainSearchVC {
     
     func saveRecentUser(userId: String) {
         
-        APIManager.shared.addRecent(query: userId, type: "user") { result in
+        APIManager.shared.addRecent(query: userId, type: "user") { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -620,7 +624,9 @@ extension MainSearchVC {
     
     func saveRecentText(text: String) {
         
-        APIManager.shared.addRecent(query: text, type: "text") { result in
+        APIManager.shared.addRecent(query: text, type: "text") { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 

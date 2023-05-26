@@ -12,13 +12,13 @@ import FLAnimatedImage
 import SendBirdUIKit
 
 class UserProfileVC: UIViewController {
-
+    
     enum Section: Hashable {
         case header
         case challengeCard
         case posts
     }
-
+    
     enum Item: Hashable {
         case header(ProfileHeaderData)
         case challengeCard(ChallengeCardHeaderData)
@@ -54,7 +54,7 @@ class UserProfileVC: UIViewController {
     var firstAnimated = true
     var isFollow = false
     var isFistBump = false
-
+    
     var demoProfileData: ProfileHeaderData {
         return ProfileHeaderData(name: "", username: "", accountType: "", postCount: 0)
     }
@@ -75,11 +75,11 @@ class UserProfileVC: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.setupButtons()
-  
+        
         if userId != nil {
             
             collectionView.delegate = self
-           
+            
             
             pullControl.tintColor = UIColor.secondary
             pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
@@ -95,15 +95,15 @@ class UserProfileVC: UIViewController {
             collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
             
             configureDatasource()
-           
+            
             
             self.setupChallengeView()
-        
+            
             self.loadUserData()
-           
+            
             self.setupChallengeView()
             
-           
+            
             
             NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.report), name: (NSNotification.Name(rawValue: "report_user")), object: nil)
@@ -111,7 +111,7 @@ class UserProfileVC: UIViewController {
             
             
         }
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -137,7 +137,7 @@ class UserProfileVC: UIViewController {
             
         }
         
-
+        
         
         
         let navigationBarAppearance = UINavigationBarAppearance()
@@ -145,12 +145,12 @@ class UserProfileVC: UIViewController {
         navigationBarAppearance.backgroundColor = .background
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+        
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
     }
-
+    
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -162,7 +162,7 @@ class UserProfileVC: UIViewController {
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell {
         switch item {
         case .header(_):
-                
+            
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileHeaderCell.reuseIdentifier, for: indexPath) as? UserProfileHeaderCell {
                 
                 if let data = userData {
@@ -214,7 +214,7 @@ class UserProfileVC: UIViewController {
                         cell.descriptionLbl.addGestureRecognizer(descriptionTap)
                     }
                     
-
+                    
                     cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
                     cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
                     cell.numberOfFistBumps.text = "\(formatPoints(num: Double(fistBumpedCount)))"
@@ -226,7 +226,7 @@ class UserProfileVC: UIViewController {
                     cell.moreBtn.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
                     cell.followersBtn.addTarget(self, action: #selector(followAction), for: .touchUpInside)
                     cell.messageBtn.addTarget(self, action: #selector(messageTapped), for: .touchUpInside)
-                   
+                    
                     
                     // add target using gesture recognizer for image
                     let avatarTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.avatarTapped))
@@ -267,7 +267,7 @@ class UserProfileVC: UIViewController {
                 
             } else {
                 
-            
+                
                 return UserProfileHeaderCell()
                 
             }
@@ -310,7 +310,7 @@ class UserProfileVC: UIViewController {
                         cell.infoLbl.text = "Stitchbox User"
                         ChallengeView.infoLbl.text = "Stitchbox User"
                     }
-                   
+                    
                     if let createAt = userData?.createdAt  {
                         let DateFormatter = DateFormatter()
                         DateFormatter.dateStyle = .medium
@@ -325,136 +325,136 @@ class UserProfileVC: UIViewController {
                     cell.badgeImgView.image = UIImage.init(named: card.badge)
                     ChallengeView.badgeImgView.image = UIImage.init(named: card.badge)
                     
-    
-                        if card.games.isEmpty == true {
-                            cell.game1.isHidden = true
-                            cell.game2.isHidden = true
+                    
+                    if card.games.isEmpty == true {
+                        cell.game1.isHidden = true
+                        cell.game2.isHidden = true
+                        cell.game3.isHidden = true
+                        cell.game4.isHidden = true
+                        
+                        //
+                        
+                        ChallengeView.game1.isHidden = true
+                        ChallengeView.game2.isHidden = true
+                        ChallengeView.game3.isHidden = true
+                        ChallengeView.game4.isHidden = true
+                        
+                        
+                    } else {
+                        
+                        if card.games.count == 1 {
+                            
+                            cell.game1.isHidden = false
+                            cell.game2.isHidden = false
                             cell.game3.isHidden = true
                             cell.game4.isHidden = true
                             
                             //
                             
-                            ChallengeView.game1.isHidden = true
-                            ChallengeView.game2.isHidden = true
+                            ChallengeView.game1.isHidden = false
+                            ChallengeView.game2.isHidden = false
                             ChallengeView.game3.isHidden = true
                             ChallengeView.game4.isHidden = true
                             
-                        
-                        } else {
-                            
-                            if card.games.count == 1 {
+                            if let empty = URL(string: emptyimage) {
                                 
-                                cell.game1.isHidden = false
-                                cell.game2.isHidden = false
-                                cell.game3.isHidden = true
-                                cell.game4.isHidden = true
-                              
-                                //
+                                let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
                                 
-                                ChallengeView.game1.isHidden = false
-                                ChallengeView.game2.isHidden = false
-                                ChallengeView.game3.isHidden = true
-                                ChallengeView.game4.isHidden = true
+                                cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                cell.game2.isHidden = true
                                 
-                                if let empty = URL(string: emptyimage) {
-                                    
-                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
-                                  
-                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
-                                    cell.game2.isHidden = true
-                                    
-                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
-                                    ChallengeView.game2.isHidden = true
-                                }
-                               
-                                
-                                
-                            } else if card.games.count == 2 {
-                                
-                                cell.game1.isHidden = false
-                                cell.game2.isHidden = false
-                                cell.game3.isHidden = false
-                                cell.game4.isHidden = true
-                               
-                                
-                                
-                                ChallengeView.game1.isHidden = false
-                                ChallengeView.game2.isHidden = false
-                                ChallengeView.game3.isHidden = false
-                                ChallengeView.game4.isHidden = true
-                                
-                                if let empty = URL(string: emptyimage) {
-                                    
-                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
-                                    let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
-                                    
-                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
-                                    cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
-                                    cell.game3.isHidden = true
-                                    
-                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
-                                    ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
-                                    ChallengeView.isHidden = true
-                                }
-                                
-                                
-                            } else if card.games.count == 3 {
-                                
-                                cell.game1.isHidden = false
-                                cell.game2.isHidden = false
-                                cell.game3.isHidden = false
-                                cell.game4.isHidden = false
-                                
-                                ChallengeView.game1.isHidden = false
-                                ChallengeView.game2.isHidden = false
-                                ChallengeView.game3.isHidden = false
-                                ChallengeView.game4.isHidden = false
-                                
-                                
-                                if let empty = URL(string: emptyimage) {
-                                    
-                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
-                                    let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
-                                    let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
-                                    
-                                    
-                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
-                                    cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
-                                    cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
-                                    cell.game4.isHidden = true
-                                    
-                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
-                                    ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
-                                    ChallengeView.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
-                                    ChallengeView.game4.isHidden = true
-                                }
-                                
-                                
-                            } else if card.games.count == 4 {
-                                
-                               
-                                if let empty = URL(string: emptyimage) {
-                                    
-                                    let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
-                                    let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
-                                    let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
-                                    let game4 = global_suppport_game_list.first(where: { $0._id == card.games[3].gameId })
-                                
-                                    cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
-                                    cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
-                                    cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
-                                    cell.game4.setImageWithCache(from: URL(string: game4?.cover ?? "") ?? empty)
-                                    
-                                    ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
-                                    ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
-                                    ChallengeView.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
-                                    ChallengeView.game4.setImageWithCache(from: URL(string: game4?.cover ?? "") ?? empty)
-                                }
-                                
+                                ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                ChallengeView.game2.isHidden = true
                             }
+                            
+                            
+                            
+                        } else if card.games.count == 2 {
+                            
+                            cell.game1.isHidden = false
+                            cell.game2.isHidden = false
+                            cell.game3.isHidden = false
+                            cell.game4.isHidden = true
+                            
+                            
+                            
+                            ChallengeView.game1.isHidden = false
+                            ChallengeView.game2.isHidden = false
+                            ChallengeView.game3.isHidden = false
+                            ChallengeView.game4.isHidden = true
+                            
+                            if let empty = URL(string: emptyimage) {
+                                
+                                let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                
+                                cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                cell.game3.isHidden = true
+                                
+                                ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                ChallengeView.isHidden = true
+                            }
+                            
+                            
+                        } else if card.games.count == 3 {
+                            
+                            cell.game1.isHidden = false
+                            cell.game2.isHidden = false
+                            cell.game3.isHidden = false
+                            cell.game4.isHidden = false
+                            
+                            ChallengeView.game1.isHidden = false
+                            ChallengeView.game2.isHidden = false
+                            ChallengeView.game3.isHidden = false
+                            ChallengeView.game4.isHidden = false
+                            
+                            
+                            if let empty = URL(string: emptyimage) {
+                                
+                                let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
+                                
+                                
+                                cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                cell.game4.isHidden = true
+                                
+                                ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                ChallengeView.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                ChallengeView.game4.isHidden = true
+                            }
+                            
+                            
+                        } else if card.games.count == 4 {
+                            
+                            
+                            if let empty = URL(string: emptyimage) {
+                                
+                                let game1 = global_suppport_game_list.first(where: { $0._id == card.games[0].gameId })
+                                let game2 = global_suppport_game_list.first(where: { $0._id == card.games[1].gameId })
+                                let game3 = global_suppport_game_list.first(where: { $0._id == card.games[2].gameId })
+                                let game4 = global_suppport_game_list.first(where: { $0._id == card.games[3].gameId })
+                                
+                                cell.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                cell.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                cell.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                cell.game4.setImageWithCache(from: URL(string: game4?.cover ?? "") ?? empty)
+                                
+                                ChallengeView.game1.setImageWithCache(from: URL(string: game1?.cover ?? "") ?? empty)
+                                ChallengeView.game2.setImageWithCache(from: URL(string: game2?.cover ?? "") ?? empty)
+                                ChallengeView.game3.setImageWithCache(from: URL(string: game3?.cover ?? "") ?? empty)
+                                ChallengeView.game4.setImageWithCache(from: URL(string: game4?.cover ?? "") ?? empty)
+                            }
+                            
+                        }
                         
                     }
-                  
+                    
                     
                 }
                 
@@ -470,7 +470,7 @@ class UserProfileVC: UIViewController {
                 fullString.append(NSAttributedString(string: "  \(formatPoints(num: Double(fistBumpedCount)))"))
                 cell.fistBumpedLbl.attributedText = fullString
                 ChallengeView.fistBumpedLbl.attributedText = fullString
-
+                
                 
                 cell.game1.addTarget(self, action: #selector(game1Tapped), for: .touchUpInside)
                 cell.game2.addTarget(self, action: #selector(game2Tapped), for: .touchUpInside)
@@ -487,7 +487,7 @@ class UserProfileVC: UIViewController {
                 
             } else {
                 
-            
+                
                 return UserChallengerCardProfileHeaderCell()
                 
             }
@@ -517,7 +517,7 @@ class UserProfileVC: UIViewController {
     
     
     func setupChallengeView() {
-    
+        
         self.challengeCardView.addSubview(ChallengeView)
         
         
@@ -527,15 +527,15 @@ class UserProfileVC: UIViewController {
         ChallengeView.gameWidth.constant = size
         ChallengeView.gameHeight.constant = size
         
-      
+        
         ChallengeView.game1.layer.cornerRadius = cornerRadius
         ChallengeView.game2.layer.cornerRadius = cornerRadius
         ChallengeView.game3.layer.cornerRadius = cornerRadius
         ChallengeView.game4.layer.cornerRadius = cornerRadius
-    
+        
     }
     
-
+    
     
 }
 
@@ -564,18 +564,20 @@ extension UserProfileVC {
             followerCount += 1
             self.applyHeaderChange()
             
-            APIManager.shared.insertFollows(params: ["FollowId": userId ?? ""]) { result in
+            APIManager.shared.insertFollows(params: ["FollowId": userId ?? ""]) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(_):
-                  
+                    
                     self.allowProcess = true
                     self.isFollow = true
                     needRecount = true
                     Dispatch.main.async {
                         self.reloadPost()
                     }
-                  
-                  
+                    
+                    
                 case .failure(let error):
                     
                     print(error)
@@ -596,7 +598,7 @@ extension UserProfileVC {
         }
         
         
-           
+        
     }
     
     
@@ -608,41 +610,43 @@ extension UserProfileVC {
             self.isFollow = false
             followerCount -= 1
             self.applyHeaderChange()
-        
-            APIManager.shared.unFollow(params: ["FollowId": userId ?? ""]) { result in
-                    switch result {
-                    case .success(_):
-                        
-                        self.isFollow = false
-                        needRecount = true
-                        self.allowProcess = true
-                        
-                        Dispatch.main.async {
-                            self.reloadPost()
-                        }
-                        
-                    case .failure(let error):
-                        
-                        print(error)
-                        
-                        DispatchQueue.main.async {
-                            self.allowProcess = true
-                            self.isFollow = true
-                            self.followerCount -= 1
-                            showNote(text: "Something happened!")
-                            self.applyHeaderChange()
-                        }
-                        
-                        
+            
+            APIManager.shared.unFollow(params: ["FollowId": userId ?? ""]) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(_):
+                    
+                    self.isFollow = false
+                    needRecount = true
+                    self.allowProcess = true
+                    
+                    Dispatch.main.async {
+                        self.reloadPost()
                     }
+                    
+                case .failure(let error):
+                    
+                    print(error)
+                    
+                    DispatchQueue.main.async {
+                        self.allowProcess = true
+                        self.isFollow = true
+                        self.followerCount -= 1
+                        showNote(text: "Something happened!")
+                        self.applyHeaderChange()
+                    }
+                    
+                    
                 }
+            }
             
         }
         
         
-            
-    }
         
+    }
+    
     
     @objc func messageTapped(_ sender: UIButton) {
         
@@ -652,15 +656,15 @@ extension UserProfileVC {
         channelParams.isDistinct = true
         channelParams.addUserIds([self.userId ?? "", userUID])
         
-
+        
         SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
             guard error == nil, let channelUrl = groupChannel?.channelUrl else {
                 self.showErrorAlert("Oops!", msg: error?.localizedDescription ?? "Failed to create message")
                 return
             }
-
+            
             checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
-
+            
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
             
             self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -682,13 +686,13 @@ extension UserProfileVC {
         global_cornerRadius = 45
         
         self.present(userSettingVC, animated: true, completion: nil)
-
+        
     }
     
     @objc func followersTapped(_ sender: UIButton) {
         
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
-
+            
             MFVC.showFollowerFirst = true
             MFVC.followerCount = followerCount
             MFVC.followingCount = followingCount
@@ -704,7 +708,7 @@ extension UserProfileVC {
     @objc func followingTapped(_ sender: UIButton) {
         //MainFollowVC
         if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
-           
+            
             MFVC.showFollowerFirst = false
             MFVC.followerCount = followerCount
             MFVC.followingCount = followingCount
@@ -725,20 +729,20 @@ extension UserProfileVC {
             if let username = _AppCoreData.userDataSource.value?.userName {
                 
                 let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-
-                                // add the actions (buttons)
+                
+                // add the actions (buttons)
                 alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                                    
-                                
+                    
+                    
                     self.openLink(link: discord)
-                                    
+                    
                 }))
-
+                
                 alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
             }
-           
+            
         }
         
     }
@@ -758,17 +762,17 @@ extension UserProfileVC {
     }
     
     @objc func avatarTapped(sender: AnyObject!) {
-  
+        
         print("avatarTapped")
         showFullScreenAvatar()
-  
+        
     }
     
     @objc func coverImageTapped(sender: AnyObject!) {
-  
+        
         print("coverImageTapped")
         showFullScreenCover()
-  
+        
     }
     
     func giveFistBump() {
@@ -781,13 +785,15 @@ extension UserProfileVC {
             fistBumpedCount += 1
             self.applyUIChange()
             
-            APIManager.shared.addFistBump(userID: self.userId!) { result in
+            APIManager.shared.addFistBump(userID: self.userId!) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(_):
                     
                     self.isFistBump = true
                     self.allowFistBumped = true
-                   
+                    
                 case .failure(_):
                     DispatchQueue.main.async {
                         self.isFistBump = false
@@ -818,13 +824,15 @@ extension UserProfileVC {
             fistBumpedCount -= 1
             self.applyUIChange()
             
-            APIManager.shared.deleteFistBump(userID: self.userId!) { result in
+            APIManager.shared.deleteFistBump(userID: self.userId!) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(_):
                     
                     self.isFistBump = false
                     self.allowFistBumped = true
-                   
+                    
                 case .failure(_):
                     DispatchQueue.main.async {
                         self.allowFistBumped = true
@@ -850,7 +858,7 @@ extension UserProfileVC {
         let imgView = UIImageView()
         imgView.image = UIImage(named: "fistBumpedStats")
         imgView.frame.size = CGSize(width: 170, height: 120)
-       
+        
         imgView.center = self.view.center
         self.view.addSubview(imgView)
         
@@ -875,37 +883,37 @@ extension UserProfileVC {
         }
         
     }
-
+    
     
 }
 
 // selector for challengeCard
 extension UserProfileVC {
-
+    
     
     @objc func descTapped(_ sender: UIButton) {
         
         if let IDVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "InfoDetailVC") as? InfoDetailVC {
-           
+            
             IDVC.bio = get_bio
             IDVC.userame = get_username
             
             hideMiddleBtn(vc: self)
             IDVC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(IDVC, animated: true)
-              
+            
         }
         
     }
     
     @objc func game1Tapped(_ sender: UIButton) {
         // make sure to check if any game is added unless peform adding game for +
-
+        
         if let card = userData?.challengeCard
         {
             
             if card.games.isEmpty == true {
-               
+                
             } else {
                 
                 let game = card.games[0]
@@ -913,20 +921,20 @@ extension UserProfileVC {
                 if let username = _AppCoreData.userDataSource.value?.userName {
                     
                     let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-
-                                    // add the actions (buttons)
+                    
+                    // add the actions (buttons)
                     alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                                        
-                                    
+                        
+                        
                         self.openLink(link: game.link)
-                                        
+                        
                     }))
-
+                    
                     alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                     
                 }
-     
+                
             }
             
             
@@ -946,15 +954,15 @@ extension UserProfileVC {
                 if let username = _AppCoreData.userDataSource.value?.userName {
                     
                     let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-
-                                    // add the actions (buttons)
+                    
+                    // add the actions (buttons)
                     alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                                        
-                                    
+                        
+                        
                         self.openLink(link: game.link)
-                                        
+                        
                     }))
-
+                    
                     alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                     
@@ -979,15 +987,15 @@ extension UserProfileVC {
                 if let username = _AppCoreData.userDataSource.value?.userName {
                     
                     let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-
-                                    // add the actions (buttons)
+                    
+                    // add the actions (buttons)
                     alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                                        
-                                    
+                        
+                        
                         self.openLink(link: game.link)
-                                        
+                        
                     }))
-
+                    
                     alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                     
@@ -1012,15 +1020,15 @@ extension UserProfileVC {
                 if let username = _AppCoreData.userDataSource.value?.userName {
                     
                     let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-
-                                    // add the actions (buttons)
+                    
+                    // add the actions (buttons)
                     alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                                        
-                                    
+                        
+                        
                         self.openLink(link: game.link)
-                                        
+                        
                     }))
-
+                    
                     alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                     
@@ -1040,9 +1048,9 @@ extension UserProfileVC {
             guard let requestUrl = URL(string: link) else {
                 return
             }
-
+            
             if UIApplication.shared.canOpenURL(requestUrl) {
-                 UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
             } else {
                 showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(link)")
             }
@@ -1069,7 +1077,7 @@ extension UserProfileVC {
         
         return section
     }
-
+    
     func createChallengeCardSection() -> NSCollectionLayoutSection {
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
         let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(236)), subitems: [headerItem])
@@ -1129,14 +1137,14 @@ extension UserProfileVC {
     
     func snapshot() -> Snapshot {
         var snapshot = Snapshot()
-
+        
         snapshot.appendSections([.header, .challengeCard, .posts])
         snapshot.appendItems([.header(demoProfileData)], toSection: .header)
         snapshot.appendItems([.challengeCard(demoChallengeData)], toSection: .challengeCard)
         return snapshot
     }
     
-
+    
 }
 
 extension UserProfileVC: UICollectionViewDelegate {
@@ -1148,36 +1156,36 @@ extension UserProfileVC: UICollectionViewDelegate {
         let item = datasource.itemIdentifier(for: indexPath)
         
         switch item {
-            case .header(_):
-                print("header")
-                
-            case .challengeCard(_):
-                
-                print("challengeCard")
-                showFullScreenChallengeCard()
-                
-            case .posts(_):
-                
-                print("posts")
-                let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
-                                .compactMap { item -> PostModel? in
-                                    if case .posts(let post) = item {
-                                        return post
-                                    }
-                                    return nil
-                                }
-                
-
-                if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
-                    SPVC.selectedPost = selectedPost
-                    SPVC.startIndex = indexPath.row
-                    SPVC.hidesBottomBarWhenPushed = true
-                    self.navigationController?.setNavigationBarHidden(false, animated: true)
-                    self.navigationController?.pushViewController(SPVC, animated: true)
+        case .header(_):
+            print("header")
+            
+        case .challengeCard(_):
+            
+            print("challengeCard")
+            showFullScreenChallengeCard()
+            
+        case .posts(_):
+            
+            print("posts")
+            let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
+                .compactMap { item -> PostModel? in
+                    if case .posts(let post) = item {
+                        return post
+                    }
+                    return nil
                 }
-
-            case .none:
-                print("None")
+            
+            
+            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                SPVC.selectedPost = selectedPost
+                SPVC.startIndex = indexPath.row
+                SPVC.hidesBottomBarWhenPushed = true
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+                self.navigationController?.pushViewController(SPVC, animated: true)
+            }
+            
+        case .none:
+            print("None")
         }
         
         
@@ -1185,7 +1193,7 @@ extension UserProfileVC: UICollectionViewDelegate {
     
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-    
+        
         // Infinite scrolling logic
         let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
         if indexPath.row == snap.count - 5 {
@@ -1194,7 +1202,7 @@ extension UserProfileVC: UICollectionViewDelegate {
             }
         }
     }
-
+    
 }
 
 // handle challenge card was tapped
@@ -1203,7 +1211,7 @@ extension UserProfileVC {
     func showFullScreenChallengeCard() {
         
         if challengeCardView.isHidden {
-        
+            
             self.backgroundView.isHidden = false
             self.challengeCardView.alpha = 1.0
             
@@ -1220,7 +1228,7 @@ extension UserProfileVC {
     func showFullScreenAvatar() {
         
         if selectAvatarImage.isHidden, selectAvatarImage != nil {
-        
+            
             self.backgroundView.isHidden = false
             self.selectAvatarImage.alpha = 1.0
             
@@ -1238,7 +1246,7 @@ extension UserProfileVC {
     func showFullScreenCover() {
         
         if selectCoverImage.isHidden, selectCoverImage.image != nil {
-        
+            
             self.backgroundView.isHidden = false
             self.selectCoverImage.alpha = 1.0
             
@@ -1255,7 +1263,7 @@ extension UserProfileVC {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-
+        
         if challengeCardView.isHidden == false {
             
             let touch = touches.first
@@ -1269,9 +1277,9 @@ extension UserProfileVC {
                     self.challengeCardView.isHidden = finished
                     self.backgroundView.isHidden = true
                 }
-              
-            }
                 
+            }
+            
         } else if selectAvatarImage.isHidden == false {
             
             let touch = touches.first
@@ -1285,9 +1293,9 @@ extension UserProfileVC {
                     self.selectAvatarImage.isHidden = finished
                     self.backgroundView.isHidden = true
                 }
-              
-            }
                 
+            }
+            
         } else if selectCoverImage.isHidden == false {
             
             let touch = touches.first
@@ -1301,9 +1309,9 @@ extension UserProfileVC {
                     self.selectCoverImage.isHidden = finished
                     self.backgroundView.isHidden = true
                 }
-              
-            }
                 
+            }
+            
         }
         
     }
@@ -1324,10 +1332,10 @@ extension UserProfileVC {
     
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -1337,18 +1345,18 @@ extension UserProfileVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
     func setupTitle() {
         
         navigationItem.title = nickname
@@ -1370,7 +1378,7 @@ extension UserProfileVC {
                 navigationController.popViewController(animated: true)
             }
         }
-       
+        
     }
     
     
@@ -1379,11 +1387,11 @@ extension UserProfileVC {
 extension UserProfileVC {
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-       if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-          navigationController?.setNavigationBarHidden(true, animated: true)
-       } else {
-          navigationController?.setNavigationBarHidden(false, animated: true)
-       }
+        if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
+            navigationController?.setNavigationBarHidden(true, animated: true)
+        } else {
+            navigationController?.setNavigationBarHidden(false, animated: true)
+        }
     }
     
     
@@ -1392,20 +1400,20 @@ extension UserProfileVC {
 extension UserProfileVC {
     
     @objc private func refreshListData(_ sender: Any) {
-       // self.pullControl.endRefreshing() // You can stop after API Call
+        // self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
-  
+        
         clearAllData()
-   
+        
     }
     
     @objc func clearAllData() {
         
         reloadPost()
-
+        
         checkIfFollow()
         checkIfFistBump()
-    
+        
         reloadUserInformation {
             self.reloadGetFollowers {
                 self.reloadUserInformation {
@@ -1419,7 +1427,7 @@ extension UserProfileVC {
             }
         }
         
-               
+        
     }
     
     func reloadPost() {
@@ -1443,51 +1451,55 @@ extension UserProfileVC {
 extension UserProfileVC {
     
     func loadUserData() {
-  
-        APIManager.shared.getUserInfo(userId: self.userId!) { result in
-          switch result {
-            case .success(let response):
-              guard let data = response.body else {
-                return
-              }
-              
-              self.userData = Mapper<UserDataSource>().map(JSONObject: data)
-              self.applyUIChange()
-              self.hideAnimation()
-              
-              self.countFistBumped()
-              self.countFollowings()
-              self.countFollowers()
-              self.checkIfFollow()
-              self.checkIfFistBump()
+        
+        APIManager.shared.getUserInfo(userId: self.userId!) {[weak self] result in
+            guard let self = self else { return }
             
-              self.getUserPost { (newPosts) in
-                  
-                  self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                  
-              }
-              
+            switch result {
+            case .success(let response):
+                guard let data = response.body else {
+                    return
+                }
+                
+                self.userData = Mapper<UserDataSource>().map(JSONObject: data)
+                self.applyUIChange()
+                self.hideAnimation()
+                
+                self.countFistBumped()
+                self.countFollowings()
+                self.countFollowers()
+                self.checkIfFollow()
+                self.checkIfFistBump()
+                
+                self.getUserPost { (newPosts) in
+                    
+                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    
+                }
+                
             case .failure(_):
-              
-              Dispatch.main.async {
-                  self.hideAnimation()
-                  self.NoticeBlockAndDismiss()
-              }
-           
-          }
+                
+                Dispatch.main.async {
+                    self.hideAnimation()
+                    self.NoticeBlockAndDismiss()
+                }
+                
+            }
         }
-      }
+    }
     
     func countFollowers() {
         
-        APIManager.shared.getFollowers(userId: userId, page: 1) { result in
+        APIManager.shared.getFollowers(userId: userId, page: 1) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
                       let data = response.body?["paging"] as? [String: Any] else {
                     return
                 }
-            
+                
                 if let followersGet = data["total"] as? Int {
                     self.followerCount = followersGet
                 } else {
@@ -1505,7 +1517,9 @@ extension UserProfileVC {
     
     func countFollowings() {
         
-        APIManager.shared.getFollows(userId: userId, page:1) { result in
+        APIManager.shared.getFollows(userId: userId, page:1) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 
@@ -1514,7 +1528,7 @@ extension UserProfileVC {
                     self.followingCount = 0
                     return
                 }
-            
+                
                 if let followingsGet = data["total"] as? Int {
                     self.followingCount = followingsGet
                 } else {
@@ -1522,10 +1536,10 @@ extension UserProfileVC {
                 }
                 
                 self.applyUIChange()
-               
+                
             case .failure(let error):
                 print("Error loading following: ", error)
-        
+                
             }
         }
         
@@ -1533,8 +1547,9 @@ extension UserProfileVC {
     
     func countFistBumped() {
         
-        APIManager.shared.getFistBumperCount(userID: userId ?? ""){
-            result in
+        APIManager.shared.getFistBumperCount(userID: userId ?? ""){ [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 
@@ -1565,63 +1580,67 @@ extension UserProfileVC {
             }
         }
     }
-
-
+    
+    
     
     func getUserPost(block: @escaping ([[String: Any]]) -> Void) {
-
-        APIManager.shared.getUserPost(userId: self.userId ?? "", page: currpage) { result in
-                switch result {
-                case .success(let apiResponse):
-                     
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    if !data.isEmpty {
-                        print("Successfully retrieved \(data.count) posts.")
-                        self.currpage += 1
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                case .failure(let error):
-                    print(error)
+        
+        APIManager.shared.getUserPost(userId: self.userId ?? "", page: currpage) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                    return
+                }
+                if !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
+                    self.currpage += 1
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
-
+        
     }
     
     func checkIfFollow() {
         
-        APIManager.shared.isFollowing(uid: userId ?? "") { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let isFollowing = apiResponse.body?["data"] as? Bool else {
-                        return
-                    }
-                    
-                    self.isFollow = isFollowing
-                    self.applyHeaderChange()
-                   
-                case .failure(let error):
-                    print(error)
-                   
+        APIManager.shared.isFollowing(uid: userId ?? "") { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let isFollowing = apiResponse.body?["data"] as? Bool else {
+                    return
+                }
+                
+                self.isFollow = isFollowing
+                self.applyHeaderChange()
+                
+            case .failure(let error):
+                print(error)
+                
             }
         }
         
@@ -1630,20 +1649,22 @@ extension UserProfileVC {
     func checkIfFistBump() {
         
         
-        APIManager.shared.isFistBumpee(userID: userId ?? "") { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let isFistBump = apiResponse.body?["data"] as? Bool else {
-                        return
-                    }
-                    
-                    self.isFistBump = isFistBump
-                    self.applyHeaderChange()
-                    
-                case .failure(let error):
-                    print(error)
-                   
+        APIManager.shared.isFistBumpee(userID: userId ?? "") { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let isFistBump = apiResponse.body?["data"] as? Bool else {
+                    return
+                }
+                
+                self.isFistBump = isFistBump
+                self.applyHeaderChange()
+                
+            case .failure(let error):
+                print(error)
+                
             }
         }
         
@@ -1655,13 +1676,13 @@ extension UserProfileVC {
         guard !newPosts.isEmpty else { return }
         let newItems = newPosts.compactMap { PostModel(JSON: $0) }
         var snapshot = self.datasource.snapshot()
-       
+        
         snapshot.appendItems(newItems.map({Item.posts($0)}), toSection: .posts)
         self.datasource.apply(snapshot, animatingDifferences: true)
         
     }
     
-
+    
     
     func applyHeaderChange() {
         
@@ -1671,7 +1692,7 @@ extension UserProfileVC {
             self.datasource.apply(updatedSnapshot, animatingDifferences: false)
         }
         
-   
+        
     }
     
     func applyAllChange() {
@@ -1680,7 +1701,7 @@ extension UserProfileVC {
             updatedSnapshot.reloadSections([.header, .challengeCard, .posts])
             self.datasource.apply(updatedSnapshot, animatingDifferences: false)
         }
-    
+        
     }
     
     func applyUIChange() {
@@ -1698,30 +1719,34 @@ extension UserProfileVC {
 extension UserProfileVC {
     
     func reloadUserInformation(completed: @escaping DownloadComplete) {
-
-        APIManager.shared.getUserInfo(userId: self.userId!) { result in
-          switch result {
-            case .success(let response):
-              guard let data = response.body else {
-                completed()
-                return
-              }
-              
-              self.userData = Mapper<UserDataSource>().map(JSONObject: data)
-              completed()
+        
+        APIManager.shared.getUserInfo(userId: self.userId!) { [weak self] result in
+            guard let self = self else { return }
             
+            switch result {
+            case .success(let response):
+                guard let data = response.body else {
+                    completed()
+                    return
+                }
+                
+                self.userData = Mapper<UserDataSource>().map(JSONObject: data)
+                completed()
+                
             case .failure(let error):
-              print(error)
-              completed()
-          }
+                print(error)
+                completed()
+            }
         }
         
     }
     
     
     func reloadGetFollowing(completed: @escaping DownloadComplete) {
-      
-        APIManager.shared.getFollows(userId: userId, page:1) { result in
+        
+        APIManager.shared.getFollows(userId: userId, page:1) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 
@@ -1731,7 +1756,7 @@ extension UserProfileVC {
                     completed()
                     return
                 }
-            
+                
                 if let followingsGet = data["total"] as? Int {
                     self.followingCount = followingsGet
                 } else {
@@ -1739,17 +1764,19 @@ extension UserProfileVC {
                 }
                 
                 completed()
-               
+                
             case .failure(let error):
                 print("Error loading following: ", error)
                 completed()
-        
+                
             }
         }
     }
     func reloadGetFollowers(completed: @escaping DownloadComplete) {
-      
-        APIManager.shared.getFollowers(userId: userId, page: 1) { result in
+        
+        APIManager.shared.getFollowers(userId: userId, page: 1) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -1757,7 +1784,7 @@ extension UserProfileVC {
                     completed()
                     return
                 }
-            
+                
                 if let followersGet = data["total"] as? Int {
                     self.followerCount = followersGet
                 } else {
@@ -1773,9 +1800,10 @@ extension UserProfileVC {
         }
     }
     func reloadGetFistBumperCount(completed: @escaping DownloadComplete) {
-       
-        APIManager.shared.getFistBumperCount(userID: userId ?? ""){
-            result in
+        
+        APIManager.shared.getFistBumperCount(userID: userId ?? ""){ [weak self]result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 
@@ -1785,7 +1813,7 @@ extension UserProfileVC {
                     completed()
                     return
                 }
-            
+                
                 if let fistBumpedGet = data["total"] as? Int {
                     self.fistBumpedCount = fistBumpedGet
                 } else {
@@ -1803,12 +1831,12 @@ extension UserProfileVC {
     }
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
@@ -1820,7 +1848,7 @@ extension UserProfileVC {
     
     
     @objc func copyProfile() {
-
+        
         if let id = self.userId {
             
             let link = "https://stitchbox.gg/app/account/?uid=\(id)"
@@ -1854,16 +1882,16 @@ extension UserProfileVC {
     @objc func block() {
         
         let alert = UIAlertController(title: "Are you sure to block \(userData?.userName ?? "")!", message: "Blocking someone means you can't see each other's content or messages, except in a group chat. It's important to only block someone if you feel it's necessary for your safety or well-being, and to report any concerning behavior to the Stitchbox moderators or authorities.", preferredStyle: UIAlertController.Style.actionSheet)
-
+        
         // add the actions (buttons)
         alert.addAction(UIAlertAction(title: "Block", style: UIAlertAction.Style.destructive, handler: { action in
             
             self.initBlock(uid: self.userId ?? "")
-    
+            
         }))
-
+        
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-
+        
         // show the alert
         delay(0.1) {
             self.present(alert, animated: true, completion: nil)
@@ -1885,23 +1913,25 @@ extension UserProfileVC {
                 
             } else {
                 
-                APIManager.shared.insertBlocks(params: ["blockId": uid]) { result in
+                APIManager.shared.insertBlocks(params: ["blockId": uid]) { [weak self] result in
+                    guard let self = self else { return }
+                    
                     switch result {
                     case .success(_):
-                       
+                        
                         Dispatch.main.async {
                             SwiftLoader.hide()
                             self.NoticeBlockAndDismiss()
                         }
                         
-                      case .failure(let error):
+                    case .failure(let error):
                         Dispatch.main.async {
                             SwiftLoader.hide()
                             self.showErrorAlert("Oops!", msg: "\(error.localizedDescription)")
                         }
                     }
                 }
-             
+                
             }
             
         }
@@ -1933,7 +1963,7 @@ extension UserProfileVC {
         }
         
         sheet.addAction(ok)
-
+        
         
         self.present(sheet, animated: true, completion: nil)
         
@@ -1943,9 +1973,9 @@ extension UserProfileVC {
     func hideAnimation() {
         
         if firstAnimated {
-                    
-                    firstAnimated = false
-                    
+            
+            firstAnimated = false
+            
             delay(1) {
                 
                 UIView.animate(withDuration: 0.5) {
@@ -1953,7 +1983,7 @@ extension UserProfileVC {
                     Dispatch.main.async {
                         self.loadingView.alpha = 0
                     }
-                 
+                    
                 }
                 
                 

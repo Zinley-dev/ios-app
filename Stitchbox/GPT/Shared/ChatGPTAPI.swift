@@ -70,8 +70,9 @@ class ChatGPTAPI: @unchecked Sendable {
     
         if tokenManager.historyList.count <= 2 {
             
-            APIManager.shared.createGptConversation(params: conversation) { result in
-                
+            APIManager.shared.createGptConversation(params: conversation) { [weak self] result in
+                guard let self = self else { return }
+
                 switch result {
                 case .success(let apiResponse):
                     
@@ -87,7 +88,8 @@ class ChatGPTAPI: @unchecked Sendable {
             
         } else {
             
-            APIManager.shared.updateGptConversation(params: conversation) { result in
+            APIManager.shared.updateGptConversation(params: conversation) { [weak self] result in
+                guard let self = self else { return }
                 
                 switch result {
                 case .success(let apiResponse):
@@ -111,7 +113,9 @@ class ChatGPTAPI: @unchecked Sendable {
     
     func checkTokenLimit() {
         
-        APIManager.shared.getUsedToken { result in
+        APIManager.shared.getUsedToken { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -139,7 +143,9 @@ class ChatGPTAPI: @unchecked Sendable {
     
     func updateToken(tokens: Int) {
         
-        APIManager.shared.updateUsedToken(usedToken: tokens) { result in
+        APIManager.shared.updateUsedToken(usedToken: tokens) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 print(apiResponse)
@@ -286,7 +292,8 @@ class ChatGPTAPI: @unchecked Sendable {
     func deleteHistoryList() {
         tokenManager.clearHistory()
         
-        APIManager.shared.clearGptConversation(gameId: global_gameId) { result in
+        APIManager.shared.clearGptConversation(gameId: global_gameId) { [weak self] result in
+            guard let self = self else { return }
             
             switch result {
             case .success(let apiResponse):

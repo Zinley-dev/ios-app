@@ -73,7 +73,9 @@ class SB_ChatBot: UIViewController {
     
     func checkforMeta() {
         
-        APIManager.shared.getGamePatch(gameId: global_gameId) { result in
+        APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -490,7 +492,9 @@ extension SB_ChatBot {
     
     func checkTokenLimit() {
         
-        APIManager.shared.getUsedToken { result in
+        APIManager.shared.getUsedToken { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
    

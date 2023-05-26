@@ -11,7 +11,7 @@ import AlamofireImage
 import Alamofire
 
 class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
-
+    
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var playTimeBar: UIProgressView!
@@ -38,7 +38,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         setupCollectionNode()
@@ -58,7 +58,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
         
-       
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,12 +95,12 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
 extension SelectedPostVC {
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
@@ -125,7 +125,7 @@ extension SelectedPostVC {
         
         SwiftLoader.show(title: progress, animated: true)
         
- 
+        
     }
     
 }
@@ -133,24 +133,24 @@ extension SelectedPostVC {
 
 extension SelectedPostVC {
     
-
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if !posts.isEmpty, scrollView == collectionNode.view {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-
+            
             // Calculate the visible cells.
             let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
-
+            
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
             
             var foundVisibleVideo = false
             
             for cell in visibleCells {
-            
+                
                 let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
                 let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
                 let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
@@ -160,7 +160,7 @@ extension SelectedPostVC {
                 }
             }
             
-
+            
             if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                 
                 foundVisibleVideo = true
@@ -198,7 +198,7 @@ extension SelectedPostVC {
                 if let currentIndex = currentIndex {
                     pauseVideoIfNeed(pauseIndex: currentIndex)
                 }
-
+                
                 imageTimerWorkItem?.cancel()
                 imageTimerWorkItem = DispatchWorkItem { [weak self] in
                     guard let self = self else { return }
@@ -211,17 +211,17 @@ extension SelectedPostVC {
                         }
                     }
                 }
-
+                
                 if let imageTimerWorkItem = imageTimerWorkItem {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
                 }
-
-            
-                        // Reset the current playing index.
+                
+                
+                // Reset the current playing index.
                 currentIndex = nil
                 
             }
-
+            
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
             if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
@@ -233,8 +233,8 @@ extension SelectedPostVC {
                     }
                 }
             }
-
-
+            
+            
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
                 pauseVideoIfNeed(pauseIndex: currentIndex!)
@@ -243,7 +243,7 @@ extension SelectedPostVC {
             
         }
         
-    
+        
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
@@ -251,17 +251,17 @@ extension SelectedPostVC {
         if scrollView == collectionNode.view, posts.count > 3 {
             
             if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-               navigationController?.setNavigationBarHidden(true, animated: true)
-
+                navigationController?.setNavigationBarHidden(true, animated: true)
+                
             } else {
-               navigationController?.setNavigationBarHidden(false, animated: true)
+                navigationController?.setNavigationBarHidden(false, animated: true)
             }
             
         }
-       
+        
     }
-
-
+    
+    
     
 }
 
@@ -272,7 +272,7 @@ extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         let item = posts[collectionView.tag]
         
-     
+        
         cell.hashTagLabel.text = item.hashtags[indexPath.row]
         
         return cell
@@ -293,10 +293,10 @@ extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
             return 0
         }
     }
-
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
+        return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
     }
     
 }
@@ -339,9 +339,9 @@ extension SelectedPostVC: ASCollectionDataSource {
             node.isSelectedPost = true
             
             node.settingBtn = { (node) in
-            
+                
                 self.settingPost(item: post)
-                  
+                
             }
             
             delay(0.3) {
@@ -438,9 +438,9 @@ extension SelectedPostVC {
             }
         }
     }
-
-
-
+    
+    
+    
     
 }
 
@@ -496,14 +496,14 @@ extension SelectedPostVC {
         
         setupBackButton()
         setupTitle()
-      
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -513,23 +513,23 @@ extension SelectedPostVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
     func setupTitle() {
         
         self.navigationItem.title = "Posts"
-       
-       
+        
+        
     }
     
 }
@@ -566,12 +566,14 @@ extension SelectedPostVC {
     
     @objc func onClickDelete(_ sender: AnyObject) {
         
-      
+        
         presentSwiftLoader()
         
         if let id = editeddPost?.id, id != "" {
             
-            APIManager.shared.deleteMyPost(pid: id) { result in
+            APIManager.shared.deleteMyPost(pid: id) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(_):
                     needReloadPost = true
@@ -585,7 +587,7 @@ extension SelectedPostVC {
                     }
                     
                     
-                  case .failure(let error):
+                case .failure(let error):
                     print(error)
                     SwiftLoader.hide()
                     
@@ -593,14 +595,14 @@ extension SelectedPostVC {
                         Dispatch.main.async {
                             self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
                         }
-
+                        
                     }
                     
                 }
-              }
+            }
             
         } else {
-        
+            
             delay(0.1) {
                 SwiftLoader.hide()
                 self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
@@ -611,7 +613,7 @@ extension SelectedPostVC {
         
         
         
-       
+        
         
     }
     
@@ -643,19 +645,19 @@ extension SelectedPostVC {
             let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
             
             ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
-                           
+                
                 
             }
-           
+            
             delay(0.1) {
                 self.present(ac, animated: true, completion: nil)
             }
-           
+            
             
         } else {
             print("Can't get postID")
         }
-    
+        
         
     }
     
@@ -687,7 +689,7 @@ extension SelectedPostVC {
         } else {
             print("Can't get postID")
         }
-       
+        
         
     }
     
@@ -698,7 +700,7 @@ extension SelectedPostVC {
             if post.muxPlaybackId != "" {
                 
                 let url = "https://stream.mux.com/\(post.muxPlaybackId)/high.mp4"
-               
+                
                 downloadVideo(url: url, id: post.muxAssetId)
                 
             } else {
@@ -713,20 +715,20 @@ extension SelectedPostVC {
             
         }
         
-       
+        
     }
     
     func downloadVideo(url: String, id: String) {
         
         
         AF.request(url).downloadProgress(closure : { (progress) in
-       
+            
             self.swiftLoader(progress: "\(String(format:"%.2f", Float(progress.fractionCompleted) * 100))%")
             
         }).responseData{ (response) in
             
             switch response.result {
-            
+                
             case let .success(value):
                 
                 
@@ -738,7 +740,7 @@ extension SelectedPostVC {
                 } catch {
                     print("Something went wrong!")
                 }
-          
+                
                 PHPhotoLibrary.shared().performChanges({
                     PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
                 }) { saved, error in
@@ -760,13 +762,13 @@ extension SelectedPostVC {
                         
                         
                         DispatchQueue.main.async {
-                        
+                            
                             let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
                             let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                             alertController.addAction(defaultAction)
                             self.present(alertController, animated: true, completion: nil)
                         }
-     
+                        
                         
                     }
                 }
@@ -774,9 +776,9 @@ extension SelectedPostVC {
             case let .failure(error):
                 print(error)
                 
-        }
-           
-           
+            }
+            
+            
         }
         
     }
@@ -790,11 +792,11 @@ extension SelectedPostVC {
     
     
     func writeToPhotoAlbum(image: UIImage) {
-            UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
-        }
-
-        @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-            print("Save finished!")
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
+    }
+    
+    @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        print("Save finished!")
     }
     
     
@@ -841,9 +843,9 @@ extension SelectedPostVC {
     
     
     @objc func copyPost() {
-    
+        
         if let id = self.editeddPost?.id {
-           
+            
             let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
@@ -873,11 +875,11 @@ extension SelectedPostVC {
     @objc func removePost() {
         
         if let deletingPost = editeddPost {
-           
+            
             if let indexPath = posts.firstIndex(of: deletingPost) {
                 
                 posts.removeObject(deletingPost)
-
+                
                 // check if there are no more posts
                 if posts.isEmpty {
                     if onPresent {
@@ -894,7 +896,7 @@ extension SelectedPostVC {
         }
         
     }
-
+    
     
     
     func reloadAllCurrentHashtag() {
@@ -949,7 +951,7 @@ extension SelectedPostVC {
         delay(0.1) {
             self.present(ac, animated: true, completion: nil)
         }
-      
+        
     }
     
 }

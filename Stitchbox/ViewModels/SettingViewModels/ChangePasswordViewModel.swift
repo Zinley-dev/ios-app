@@ -109,8 +109,10 @@ class ChangePasswordViewModel: ViewModelProtocol {
                 let params = [
                     "currentPassword": currentPassword,
                     "newPassword": newPassword]
-                APIManager.shared.changepassword(params: params) {
-                    result in switch result {
+                APIManager.shared.changepassword(params: params) { [weak self] result in
+                    guard let self = self else { return }
+
+                    switch result {
                     case .success(_):
                         self.resetResultSubject.onNext(true)
                     case .failure(let error):

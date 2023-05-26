@@ -41,7 +41,7 @@ class SettingVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
-       
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -160,19 +160,21 @@ class SettingVC: UIViewController {
             globalIsSound = true
             shouldMute = false
         }
-
-        APIManager.shared.updateSettings(params: params) {
-                        result in switch result {
-                        case .success(_):
-                            print("Setting API update success")
-                            reloadGlobalSettings()
-                            
-                        case.failure(let error):
-                            DispatchQueue.main.async {
-                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                            }
-                        }
-                    }
+        
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+                
+            case.failure(let error):
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
         
         
     }
@@ -192,18 +194,20 @@ class SettingVC: UIViewController {
             isStreamLink = true
         }
         
-        APIManager.shared.updateSettings(params: params) {
-                        result in switch result {
-                        case .success(_):
-                            print("Setting API update success")
-                            reloadGlobalSettings()
-                            
-                        case.failure(let error):
-                            DispatchQueue.main.async {
-                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                            }
-                        }
-                    }
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+                
+            case.failure(let error):
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
         
         
     }
@@ -213,16 +217,16 @@ class SettingVC: UIViewController {
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SubcriptionVC") as? SubcriptionVC {
             
             let nav = UINavigationController(rootViewController: SVC)
-
+            
             // Customize the navigation bar appearance
             nav.navigationBar.barTintColor = .background
             nav.navigationBar.tintColor = .white
             nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
+            
             nav.modalPresentationStyle = .fullScreen
             self.present(nav, animated: true, completion: nil)
         }
-
+        
     }
     
     
@@ -240,10 +244,10 @@ extension SettingVC {
     
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -253,18 +257,18 @@ extension SettingVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Settings"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
     
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
@@ -289,7 +293,7 @@ extension SettingVC {
         referralBtn.setTitle("", for: .normal)
         
     }
-      
+    
     
 }
 
@@ -326,7 +330,7 @@ extension SettingVC {
         }
         
     }
-
+    
     func showErrorAlert(_ title: String, msg: String) {
         
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
@@ -377,18 +381,18 @@ extension SettingVC {
                 }
                 
             } else {
-             
-                Dispatch.main.async {
                 
+                Dispatch.main.async {
+                    
                     self.setupLayoutForPro()
                     
                 }
-  
+                
             }
         }
         
     }
-
+    
     func setupLayoutForPro() {
         
         mainViewHeight.constant = 950

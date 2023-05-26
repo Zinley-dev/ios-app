@@ -30,12 +30,12 @@ class LoginActivityVC: UIViewController {
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
-  
+        
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         
@@ -47,7 +47,7 @@ class LoginActivityVC: UIViewController {
         self.tableNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.tableNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
-    
+        
         
         self.applyStyle()
         self.tableNode.leadingScreensForBatching = 5
@@ -113,7 +113,7 @@ class LoginActivityVC: UIViewController {
         
     }
     
-
+    
 }
 
 extension LoginActivityVC {
@@ -121,14 +121,14 @@ extension LoginActivityVC {
     func setupButtons() {
         
         setupBackButton()
-       
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -138,19 +138,19 @@ extension LoginActivityVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Login Activity"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
-
+    
+    
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
@@ -158,7 +158,7 @@ extension LoginActivityVC {
     }
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default)
         
@@ -175,11 +175,11 @@ extension LoginActivityVC {
 extension LoginActivityVC {
     
     @objc private func refreshListData(_ sender: Any) {
-       // self.pullControl.endRefreshing() // You can stop after API Call
+        // self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
-  
+        
         clearAllData()
-   
+        
     }
     
     @objc func clearAllData() {
@@ -187,19 +187,19 @@ extension LoginActivityVC {
         refresh_request = true
         page = 1
         updateData()
-               
+        
     }
     
     
     func updateData() {
         self.retrieveNextPageWithCompletion { (newActivities) in
-                
+            
             if newActivities.count > 0 {
-                        
+                
                 self.insertNewRowsInTableNode(newActivities: newActivities)
                 
             } else {
-              
+                
                 self.refresh_request = false
                 self.userLoginActivityList.removeAll()
                 self.tableNode.reloadData()
@@ -223,16 +223,16 @@ extension LoginActivityVC {
             self.delayItem.perform(after: 0.75) {
                 
                 self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                    
+                
             }
-              
-          
+            
+            
         }
         
         
     }
     
-
+    
 }
 
 extension LoginActivityVC {
@@ -251,7 +251,7 @@ extension LoginActivityVC {
         
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
-    
+        
     }
     
     
@@ -261,24 +261,24 @@ extension LoginActivityVC {
     
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-          
+        
         let item = userLoginActivityList[indexPath.row]
         
         if let LIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "LogInfomationVC") as? LogInfomationVC {
-        
+            
             LIVC.item = item
             self.navigationController?.pushViewController(LIVC, animated: true)
             
         }
         
-               
+        
     }
     
 }
 
 
 extension LoginActivityVC: ASTableDelegate {
-
+    
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
         
         let width = UIScreen.main.bounds.size.width;
@@ -286,7 +286,7 @@ extension LoginActivityVC: ASTableDelegate {
         let min = CGSize(width: width, height: 30);
         let max = CGSize(width: width, height: 1000);
         return ASSizeRangeMake(min, max);
-           
+        
     }
     
     
@@ -313,10 +313,10 @@ extension LoginActivityVC: ASTableDelegate {
             context.completeBatchFetching(true)
             
         }
-    
+        
         
     }
-       
+    
     
 }
 
@@ -325,38 +325,40 @@ extension LoginActivityVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getLoginActivity(page: page) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-          
-                    if !data.isEmpty {
-                        self.page += 1
-                        print("Successfully retrieved \(data.count) activities.")
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                    
-                case .failure(let error):
-                    print(error)
+        APIManager.shared.getLoginActivity(page: page) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                    return
+                }
+                
+                if !data.isEmpty {
+                    self.page += 1
+                    print("Successfully retrieved \(data.count) activities.")
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
@@ -381,13 +383,13 @@ extension LoginActivityVC {
         }
         
         for i in newActivities {
-
+            
             let item = UserLoginActivityModel(userLoginActivity: i)
             items.append(item)
-          
+            
         }
         
-    
+        
         self.userLoginActivityList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
         
@@ -415,7 +417,7 @@ extension LoginActivityVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
         let activity = self.userLoginActivityList[indexPath.row]
-       
+        
         return {
             
             let node = LoginActivityNode(with: activity)
