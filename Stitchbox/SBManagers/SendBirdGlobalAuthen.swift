@@ -33,6 +33,8 @@ func syncSendbirdAccount() {
         let sbuUser = SBUUser(userId: userUID, nickname: loadUsername, profileUrl: emptySB)
         SBUGlobals.CurrentUser = sbuUser
     }
+    
+    print(SBUGlobals.CurrentUser?.userId, SBUGlobals.CurrentUser?.nickname, SBUGlobals.CurrentUser?.profileUrl)
   
     SBUMain.connectIfNeeded { user, error in
         if let error = error {
@@ -96,7 +98,6 @@ func sendbirdLogout() {
         print("Sendbird: Stitchbox authentication failed")
         return
     }
-
     SBUMain.connect { user, error in
         if let error = error {
             print("Sendbird: \(error.localizedDescription)")
@@ -136,6 +137,11 @@ func sendbirdLogout() {
         SBDMain.removeAllUserEventDelegates()
         SBDMain.removeSessionDelegate()
         SBDMain.removeAllUserEventDelegates()
+        
+        SBUMain.disconnect {
+            
+        }
+        
     }
 }
 

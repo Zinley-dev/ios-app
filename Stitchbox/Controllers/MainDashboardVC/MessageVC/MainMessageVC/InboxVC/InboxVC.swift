@@ -26,7 +26,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     var limit: UInt = 20
     var refreshControl: UIRefreshControl?
     var trypingIndicatorTimer: [String : Timer] = [:]
-    
+    var lastRefreshDate: Date? // Stores the date of the last refresh
     var channelListQuery: SBDGroupChannelListQuery?
     
     var channels: [SBDGroupChannel] = []
@@ -83,6 +83,16 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         }
         // Update the active status of the channels
         updateActiveStatus()
+        
+        
+        // Compare the current date with the last refresh date
+          let timeInterval = Date().timeIntervalSince(self.lastRefreshDate ?? Date())
+
+          // Check if it has been more than 30 minutes (1800 seconds) since the last refresh
+          if timeInterval > 1800 {
+              refreshChannelList()
+          }
+        
     }
     
     
@@ -535,6 +545,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     // MARK: - Load channels
     @objc func refreshChannelList() {
+        self.lastRefreshDate = Date()
         self.loadChannelListNextPage(true)
     }
     
@@ -629,6 +640,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 self.groupChannelsTableView.reloadSections([0], with: .automatic)
             }
         }
+        
+        self.lastRefreshDate = Date()
     }
 
     
@@ -773,6 +786,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             }
         }
 
+        self.lastRefreshDate = Date()
         getMyGroupChannelChangeLogs(token, channelLogsParams)
     }
 

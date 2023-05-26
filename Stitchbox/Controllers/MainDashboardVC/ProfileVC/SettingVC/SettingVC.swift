@@ -130,13 +130,18 @@ class SettingVC: UIViewController {
     
     @IBAction func logOutBtnPressed(_ sender: Any) {
         
-        _AppCoreData.signOut()
+        presentSwiftLoader()
         sendbirdLogout()
         
-        if let SNVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartNavVC") as? StartNavVC {
+        delay(1) {
             
-            SNVC.modalPresentationStyle = .fullScreen
-            self.present(SNVC, animated: true)
+            _AppCoreData.signOut()
+            if let SNVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartNavVC") as? StartNavVC {
+                
+                SNVC.modalPresentationStyle = .fullScreen
+                SwiftLoader.hide()
+                self.present(SNVC, animated: true)
+            }
         }
         
         
