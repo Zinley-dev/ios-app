@@ -80,7 +80,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if newPlayingIndex != nil {
+        if newPlayingIndex != nil, currentIndex != nil {
             
             pauseVideo(index: currentIndex!)
             
@@ -91,7 +91,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if currentIndex != nil {
+        if currentIndex != nil, currentIndex != nil {
             //newPlayingIndex
             playVideo(index: currentIndex!)
           

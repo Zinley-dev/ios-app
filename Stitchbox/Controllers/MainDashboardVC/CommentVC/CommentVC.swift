@@ -161,6 +161,8 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         
         //
+        
+        
     
         
     }
@@ -204,6 +206,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                 if let commentsContainer = data["comments"] as? [String: Any],
                    let comments = commentsContainer["data"] as? [[String: Any]] {
                     for comment in comments {
+                        print(comment)
                         let item = CommentModel(postKey: comment["_id"] as! String, Comment_model: comment)
                         self.CommentList.append(item)
                     }
@@ -775,6 +778,7 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
                 
                 // Remove duplicates
                 replyData = replyData.filter { reply in
+                    print(reply)
                     let replyModel = CommentModel(postKey: reply["_id"] as! String, Comment_model: reply)
                     return !self.checkDuplicateLoading(post: replyModel)
                 }

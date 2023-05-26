@@ -461,7 +461,7 @@ extension SB_ChatBot {
             if result == false {
                 
                 isPro = false
-                self.checkTokenLimit()
+
                 
             } else {
              
@@ -487,34 +487,7 @@ extension SB_ChatBot {
        
     }
     
-    
-    func checkTokenLimit() {
-        
-        APIManager.shared.getUsedToken { result in
-            switch result {
-            case .success(let apiResponse):
-   
-                if let data = apiResponse.body, let remainToken = data["remainToken"] as? Int {
-                    
-                    if remainToken > 0 {
-                        isTokenLimit = false
-                    } else {
-                        isTokenLimit = true
-                    }
-                    
-                } else {
-                    isTokenLimit = true
-                }
-              
-            case .failure(let error):
-                
-                isTokenLimit = true
-                print(error)
-                
-            }
-        }
-        
-    }
+
 
   
 }

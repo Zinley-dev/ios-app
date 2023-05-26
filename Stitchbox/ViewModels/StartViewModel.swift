@@ -176,6 +176,7 @@ class StartViewModel: ViewModelProtocol {
         case .twitter: selectedSignInMethod = .twitter
         case .tiktok: selectedSignInMethod = .tiktok
         }
+        
         currentSignInService.triggerSignIn()
     }
     

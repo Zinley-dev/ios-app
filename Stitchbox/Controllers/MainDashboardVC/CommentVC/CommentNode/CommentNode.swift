@@ -794,6 +794,8 @@ class CommentNode: ASCellNode {
         
         if self.post.comment_uid == self.post.owner_uid {
             
+            print(self.post.comment_uid, self.post.owner_uid)
+            
             if self.post.is_pinned == true {
                 
                 UIFont.systemFont(ofSize: FontSize + 1, weight: .medium)
