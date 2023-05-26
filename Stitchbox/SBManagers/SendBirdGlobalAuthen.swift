@@ -17,17 +17,23 @@ func syncSendbirdAccount() {
         print("Sendbird: Stitchbox authentication failed")
         return
     }
-
+    
     guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
         print("Sendbird: Can't get userUID")
         return
     }
-
+    
     let loadUsername = userDataSource.userName ?? "default"
     let avatarUrl = userDataSource.avatarURL
-    let sbuUser = SBUUser(userId: userUID, nickname: loadUsername, profileUrl: avatarUrl)
-    SBUGlobals.CurrentUser = sbuUser
-
+    
+    if avatarUrl != "" {
+        let sbuUser = SBUUser(userId: userUID, nickname: loadUsername, profileUrl: avatarUrl)
+        SBUGlobals.CurrentUser = sbuUser
+    } else {
+        let sbuUser = SBUUser(userId: userUID, nickname: loadUsername, profileUrl: emptySB)
+        SBUGlobals.CurrentUser = sbuUser
+    }
+  
     SBUMain.connectIfNeeded { user, error in
         if let error = error {
             print("SBUMain.connect:", error.localizedDescription)

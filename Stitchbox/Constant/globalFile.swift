@@ -57,7 +57,7 @@ let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company":
 let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
 
 var emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-with-concrete-floor_53876-70804.jpg?w=1380"
-
+var emptySB = "https://stitchbox-app-images.s3.us-east-1.amazonaws.com/adf94fba-69a1-4dc3-b934-003a04265c39.png"
 let xBtn = UIImage(named: "1024x")?.resize(targetSize: CGSize(width: 12, height: 12))
 
 var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]

@@ -44,6 +44,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
+        
+        UNUserNotificationCenter.current().delegate = self
+        setupPixelSDK()
+        sendbird_authentication()
+
         TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         UNUserNotificationCenter.current().delegate = self
         
@@ -426,7 +431,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert, .sound])
+        completionHandler([.badge, .sound])
     }
     
     
