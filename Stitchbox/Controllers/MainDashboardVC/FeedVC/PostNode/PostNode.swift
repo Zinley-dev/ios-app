@@ -701,15 +701,32 @@ extension PostNode {
 extension PostNode {
     
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
-    
+        
         hashtagView.collectionView.delegate = dataSourceDelegate
         hashtagView.collectionView.dataSource = dataSourceDelegate
         hashtagView.collectionView.tag = row
-        hashtagView.collectionView.setContentOffset(hashtagView.collectionView.contentOffset, animated:true) // Stops collection view if it was scrolling.
+
+        // Retrieve the current contentOffset
+        let contentOffset = hashtagView.collectionView.contentOffset
+
+        // Check if the contentSize is greater than the collectionView's frame size
+        if hashtagView.collectionView.contentSize.height > hashtagView.collectionView.frame.size.height {
+            // Check whether the desired contentOffset.y is within valid range
+            if contentOffset.y >= 0 && contentOffset.y <= hashtagView.collectionView.contentSize.height - hashtagView.collectionView.frame.size.height {
+                // If yes, stop the collectionView if it was scrolling
+                hashtagView.collectionView.setContentOffset(contentOffset, animated:true)
+            } else {
+                print("Invalid content offset: \(contentOffset.y). It should be between 0 and \(hashtagView.collectionView.contentSize.height - hashtagView.collectionView.frame.size.height).")
+                // You can replace this with your own error handling code
+            }
+        }
+
         hashtagView.collectionView.register(HashtagCell.nib(), forCellWithReuseIdentifier: HashtagCell.cellReuseIdentifier())
         hashtagView.collectionView.reloadData()
         
     }
+
+
 
 }
 

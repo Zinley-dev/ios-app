@@ -48,10 +48,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         setupPixelSDK()
         sendbird_authentication()
-
-        TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        UNUserNotificationCenter.current().delegate = self
         
+       
         setupPixelSDK()
         sendbird_authentication()
         syncSendbirdAccount()
@@ -63,7 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupVolumeObserver()
         IAPManager.shared.configure()
         sentrySetup()
-        //listenVolumeButton()
+        
         
         GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")

@@ -36,6 +36,7 @@ class FistBumpedStatVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupButtons()
+        fistBumpListBtn.tintColor = .white
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -83,30 +84,30 @@ extension FistBumpedStatVC {
       
         APIManager.shared.getInsightOverview(userID: _AppCoreData.userDataSource.value?.userID ?? "") { result in
         
-        switch result {
-          case .success(let apiResponse):
-            
-            guard let data = apiResponse.body else {
-              return
+            switch result {
+              case .success(let apiResponse):
+                
+                guard let data = apiResponse.body else {
+                  return
+                }
+                
+                self.insightData =  Mapper<InsightModel>().map(JSONObject: data)
+                
+                DispatchQueue.main {
+                  self.processDefaultData()
+                  self.hideView()
+                }
+                
+              case .failure(let error):
+                
+             
+                
+                DispatchQueue.main {
+                  self.hideView()
+                  self.showErrorAlert("Oops!", msg: "Unable to retrieve your setting \(error.localizedDescription)")
+                }
+                
             }
-            
-            self.insightData =  Mapper<InsightModel>().map(JSONObject: data)
-            
-            DispatchQueue.main {
-              self.processDefaultData()
-              self.hideView()
-            }
-            
-          case .failure(let error):
-            
-         
-            
-            DispatchQueue.main {
-              self.hideView()
-              self.showErrorAlert("Oops!", msg: "Unable to retrieve your setting \(error.localizedDescription)")
-            }
-            
-        }
       }
     }
     
@@ -135,18 +136,19 @@ extension FistBumpedStatVC {
     
   
     func processDefaultData() {
-      if self.insightData != nil {
-        self.totalDayLbl.text = String(self.insightData.totalDay)
-        self.total3DayLbl.text = String(self.insightData.total3Day)
-        self.totalWeekLbl.text = String(self.insightData.totalWeek)
-        self.avgLbl.text = String(self.insightData.avg)
+      if let insightData = self.insightData {
+        self.totalDayLbl.text = String(insightData.day?.total ?? 0)
+        self.total3DayLbl.text = String(insightData.threeDay?.total ?? 0)
+        self.totalWeekLbl.text = String(insightData.week?.total ?? 0)
+        self.avgLbl.text = String(insightData.avg?.total ?? 0)
         
-        self.percentDay.text = self.insightData.percentDay
-        self.percent3DayLbl.text = self.insightData.percent3Day
-        self.percentWeekLbl.text = self.insightData.percentWeek
-        self.percentAvgLbl.text = self.insightData.percentAvg
+        self.percentDay.text = insightData.day?.percent ?? ""
+        self.percent3DayLbl.text = insightData.threeDay?.percent ?? ""
+        self.percentWeekLbl.text = insightData.week?.percent ?? ""
+        self.percentAvgLbl.text = insightData.avg?.percent ?? ""
       }
     }
+
     
     func setupBackButton() {
     
