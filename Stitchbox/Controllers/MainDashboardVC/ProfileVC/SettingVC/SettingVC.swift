@@ -132,6 +132,7 @@ class SettingVC: UIViewController {
         
         presentSwiftLoader()
         sendbirdLogout()
+        IAPManager.shared.signout()
         
         delay(1) {
             

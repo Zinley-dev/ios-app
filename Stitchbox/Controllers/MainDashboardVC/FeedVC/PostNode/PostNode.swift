@@ -474,7 +474,24 @@ extension PostNode {
                     nav.navigationBar.isTranslucent = true
 
                     nav.modalPresentationStyle = .fullScreen
+                    
+                    /*
+                    if vc is FeedViewController {
+                        
+                        if let feed = vc as? FeedViewController {
+                            
+                            feed.showTabbar()
+                            feed.present(nav, animated: true, completion: nil)
+                
+                        }
+                        
+                    } else {
+                        vc.present(nav, animated: true, completion: nil)
+                    }*/
+                    
+                    
                     vc.present(nav, animated: true, completion: nil)
+                    
                     
                 } else {
                    

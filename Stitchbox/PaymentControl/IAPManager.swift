@@ -96,6 +96,9 @@ class IAPManager {
         
     }
     
+    func signout() {
+        Qonversion.shared().logout()
+    }
 
 }
 

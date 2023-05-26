@@ -60,6 +60,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
    
         // Do any additional setup after loading the view
         syncSendbirdAccount()
+        IAPManager.shared.configure()
         navigationControllerHeight = self.navigationController!.navigationBar.frame.height
         tabBarControllerHeight = (self.tabBarController?.tabBar.frame.height)!
         
@@ -122,7 +123,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        showTabbar()
+        //showTabbar()
         checkNotification()
         showMiddleBtn(vc: self)
         loadFeed()
@@ -147,7 +148,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 let image = FLAnimatedImage(animatedGIFData: gifData)
                 
                 
-                self.loadingImage.animatedImage = image
+                loadingImage.animatedImage = image
                 
             } catch {
                 print(error.localizedDescription)
@@ -155,6 +156,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
             
             loadingView.backgroundColor = self.view.backgroundColor
  
+        } else {
+            showTabbar()
         }
         
         if currentIndex != nil {
@@ -192,8 +195,12 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func showTabbar() {
         
+        navigationController?.setNavigationBarHidden(false, animated: true)
         changeTabBar(hidden: false, animated: false)
         self.tabBarController?.tabBar.isTranslucent = false
+        showMiddleBtn(vc: self)
+        
+        bottomConstraint.constant = 0
         
     }
     
@@ -678,12 +685,11 @@ extension FeedViewController {
                navigationController?.setNavigationBarHidden(true, animated: true)
                  changeTabBar(hidden: true, animated: true)
                  self.tabBarController?.tabBar.isTranslucent = true
-                 hideMiddleBtn(vc: self)
                  bottomConstraint.constant = 20
-                
-
+                 hideMiddleBtn(vc: self)
+                 
             } else {
-               navigationController?.setNavigationBarHidden(false, animated: true)
+                navigationController?.setNavigationBarHidden(false, animated: true)
                 changeTabBar(hidden: false, animated: false)
                 self.tabBarController?.tabBar.isTranslucent = false
                 showMiddleBtn(vc: self)
