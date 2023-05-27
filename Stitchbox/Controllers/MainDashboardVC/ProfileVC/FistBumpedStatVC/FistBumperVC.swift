@@ -10,7 +10,7 @@ import Alamofire
 import AsyncDisplayKit
 
 class FistBumperVC: UIViewController {
-   
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     @IBOutlet weak var contentView: UIView!
@@ -18,7 +18,7 @@ class FistBumperVC: UIViewController {
     var tableNode: ASTableNode!
     
     var currPage = 1
-
+    
     var inSearchMode = false
     var searchUserList = [FistBumpUserModel]()
     
@@ -37,7 +37,7 @@ class FistBumperVC: UIViewController {
         setupTableNode()
         
     }
-
+    
     
 }
 
@@ -50,10 +50,10 @@ extension FistBumperVC {
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -63,15 +63,15 @@ extension FistBumperVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "FistBumped List"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
     
@@ -156,7 +156,7 @@ extension FistBumperVC: ASTableDelegate {
         }
         
     }
-
+    
 }
 
 extension FistBumperVC: ASTableDataSource {
@@ -211,44 +211,46 @@ extension FistBumperVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getFistBumper(page: currPage) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
+        APIManager.shared.getFistBumper(page: currPage) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
                         
-                            block(item)
-                        }
-                        return
+                        block(item)
                     }
-                    
-                    if !data.isEmpty {
-                        self.currPage += 1
-                        print("Successfully retrieved \(data.count) fistBumpers.")
-                        let items = data
-                        DispatchQueue.main.async {
-                          
-                            block(items)
-                        }
-                    } else {
+                    return
+                }
+                
+                if !data.isEmpty {
+                    self.currPage += 1
+                    print("Successfully retrieved \(data.count) fistBumpers.")
+                    let items = data
+                    DispatchQueue.main.async {
                         
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
+                        block(items)
                     }
+                } else {
                     
-                case .failure(let error):
-                    print(error)
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
-    
+        
     }
     
     
@@ -269,13 +271,13 @@ extension FistBumperVC {
         }
         
         for i in newFistBumpers {
-
+            
             let item = FistBumpUserModel(JSON: i)
             items.append(item!)
-          
+            
         }
         
-    
+        
         self.fistBumpList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
         

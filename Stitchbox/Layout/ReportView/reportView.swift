@@ -184,7 +184,9 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             
           
             
-            APIManager.shared.report(type: type, reason: reason, note: "", reportId: reportId) { result in
+            APIManager.shared.report(type: type, reason: reason, note: "", reportId: reportId) { [weak self] result in
+                guard let self = self else { return }
+
                 switch result {
                 case .success(_):
                    
@@ -241,7 +243,9 @@ class reportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 
                 presentSwiftLoader()
                 
-                APIManager.shared.report(type: type, reason: reason, note: text, reportId: reportId) { result in
+                APIManager.shared.report(type: type, reason: reason, note: text, reportId: reportId) { [weak self] result in
+                    guard let self = self else { return }
+
                     switch result {
                     case .success(_):
                        

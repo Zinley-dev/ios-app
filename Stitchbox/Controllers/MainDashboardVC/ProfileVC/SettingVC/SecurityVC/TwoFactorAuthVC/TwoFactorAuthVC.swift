@@ -8,9 +8,9 @@
 import UIKit
 
 class TwoFactorAuthVC: UIViewController {
-
+    
     let backButton: UIButton = UIButton(type: .custom)
-   
+    
     
     
     var isPhone = false
@@ -23,7 +23,7 @@ class TwoFactorAuthVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         processDefaultData()
@@ -36,7 +36,9 @@ class TwoFactorAuthVC: UIViewController {
         if isPhone {
             isPhone = false
             presentSwiftLoader()
-            APIManager.shared.turnOff2fa(method: "phone") { result in
+            APIManager.shared.turnOff2fa(method: "phone") { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
@@ -45,7 +47,7 @@ class TwoFactorAuthVC: UIViewController {
                         SwiftLoader.hide()
                     }
                     reloadGlobalSettings()
-
+                    
                 case .failure(let error):
                     print(error)
                     DispatchQueue.main.async {
@@ -60,7 +62,9 @@ class TwoFactorAuthVC: UIViewController {
         } else {
             isPhone = true
             presentSwiftLoader()
-            APIManager.shared.turnOn2fa(method: "phone") { result in
+            APIManager.shared.turnOn2fa(method: "phone") { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
@@ -80,7 +84,7 @@ class TwoFactorAuthVC: UIViewController {
                         SwiftLoader.hide()
                         self.moveToVerifyVC(selectedType: "2FA - phone")
                     }
-
+                    
                 case .failure(let error):
                     self.isPhone = false
                     DispatchQueue.main.async {
@@ -88,7 +92,7 @@ class TwoFactorAuthVC: UIViewController {
                         self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please make sure you have your phone ready and try again.")
                         self.PhoneSwitch.setOn(false, animated: true)
                     }
-                  
+                    
                     print(error)
                 }
             }
@@ -105,13 +109,15 @@ class TwoFactorAuthVC: UIViewController {
         if isEmail {
             isEmail = false
             presentSwiftLoader()
-            APIManager.shared.turnOff2fa(method: "email") { result in
+            APIManager.shared.turnOff2fa(method: "email") { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
                     print(apiResponse)
                     reloadGlobalSettings()
-
+                    
                 case .failure(let error):
                     print(error)
                     DispatchQueue.main.async {
@@ -122,12 +128,14 @@ class TwoFactorAuthVC: UIViewController {
                     }
                 }
             }
-    
+            
             
         } else {
             isEmail = true
             presentSwiftLoader()
-            APIManager.shared.turnOn2fa(method: "email") { result in
+            APIManager.shared.turnOn2fa(method: "email") { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
@@ -146,7 +154,7 @@ class TwoFactorAuthVC: UIViewController {
                         SwiftLoader.hide()
                         self.moveToVerifyVC(selectedType: "2FA - email")
                     }
-
+                    
                 case .failure(let error):
                     self.isEmail = false
                     DispatchQueue.main.async {
@@ -154,7 +162,7 @@ class TwoFactorAuthVC: UIViewController {
                         self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please make sure you have your email ready and try again.")
                         self.EmailSwitch.setOn(false, animated: true)
                     }
-                  
+                    
                     print(error)
                 }
             }
@@ -176,8 +184,8 @@ class TwoFactorAuthVC: UIViewController {
         }
         
     }
-
-
+    
+    
 }
 
 extension TwoFactorAuthVC {
@@ -185,15 +193,15 @@ extension TwoFactorAuthVC {
     func setupButtons() {
         
         setupBackButton()
-       
+        
     }
     
     func setupBackButton() {
         //Two-Factor Authentication
-
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -203,18 +211,18 @@ extension TwoFactorAuthVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Two-Factor Authentication"
-       
+        
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+        
     }
-  
-
+    
+    
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
@@ -244,7 +252,7 @@ extension TwoFactorAuthVC {
                 self.PhoneSwitch.setOn(false, animated: true)
                 isPhone = false
             }
-           
+            
             
         }
         

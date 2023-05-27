@@ -256,7 +256,9 @@ extension PostVC {
     
     func loadPreviousSetting() {
         
-        APIManager.shared.getLastSettingPost { result in
+        APIManager.shared.getLastSettingPost { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -507,8 +509,9 @@ extension PostVC {
     
     func uploadImageToDB(image: UIImage) {
         
-        APIManager.shared.uploadImage(image: image) { result in
-            
+        APIManager.shared.uploadImage(image: image) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -567,8 +570,9 @@ extension PostVC {
     
         let data = try! Data(contentsOf: url)
         
-        APIManager.shared.uploadVideo(video: data) { result in
-            
+        APIManager.shared.uploadVideo(video: data) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
             
@@ -635,7 +639,9 @@ extension PostVC {
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
         contentPost["metadata"] = ["width": origin_width!, "height": origin_height!, "length": length!, "contentMode": 0]
         print(contentPost)
-        APIManager.shared.createPost(params: contentPost) { result in
+        APIManager.shared.createPost(params: contentPost) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -691,7 +697,9 @@ extension PostVC {
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
         contentPost["metadata"] = ["width": origin_width!, "height": origin_height!, "length": length!, "contentMode": 0]
         
-        APIManager.shared.createPost(params: contentPost) { result in
+        APIManager.shared.createPost(params: contentPost) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 

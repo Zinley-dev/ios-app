@@ -303,7 +303,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
 
     
     func loadDefaultUsers(needChecked: Bool) {
-        APIManager.shared.searchUsersForChat(keyword: "") { result in
+        APIManager.shared.searchUsersForChat(keyword: "") { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
@@ -348,7 +350,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     }
 
     func searchUsers(keyword: String) {
-        APIManager.shared.searchUsersForChat(keyword: keyword) { result in
+        APIManager.shared.searchUsersForChat(keyword: keyword) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {

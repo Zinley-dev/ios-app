@@ -10,9 +10,9 @@ import AsyncDisplayKit
 import FLAnimatedImage
 
 class AccountActivityVC: UIViewController {
-
+    
     let backButton: UIButton = UIButton(type: .custom)
-
+    
     var UserActivityList = [UserActivityModel]()
     
     
@@ -34,12 +34,12 @@ class AccountActivityVC: UIViewController {
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
         self.wireDelegates()
-  
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         setupTableNode()
@@ -102,7 +102,7 @@ class AccountActivityVC: UIViewController {
         
     }
     
-
+    
 }
 
 extension AccountActivityVC {
@@ -134,7 +134,7 @@ extension AccountActivityVC {
         self.tableNode.view.showsVerticalScrollIndicator = false
         
         //
-     
+        
         
     }
     
@@ -153,11 +153,11 @@ extension AccountActivityVC {
 extension AccountActivityVC {
     
     @objc private func refreshListData(_ sender: Any) {
-       // self.pullControl.endRefreshing() // You can stop after API Call
+        // self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
-  
+        
         clearAllData()
-   
+        
     }
     
     @objc func clearAllData() {
@@ -165,19 +165,19 @@ extension AccountActivityVC {
         refresh_request = true
         page = 1
         updateData()
-               
+        
     }
     
     
     func updateData() {
         self.retrieveNextPageWithCompletion { (newActivities) in
-                
+            
             if newActivities.count > 0 {
-                        
+                
                 self.insertNewRowsInTableNode(newActivities: newActivities)
                 
             } else {
-              
+                
                 self.refresh_request = false
                 self.userLoginActivityList.removeAll()
                 self.tableNode.reloadData()
@@ -201,16 +201,16 @@ extension AccountActivityVC {
             self.delayItem.perform(after: 0.75) {
                 
                 self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                    
+                
             }
-              
-          
+            
+            
         }
         
         
     }
     
-
+    
 }
 
 extension AccountActivityVC {
@@ -218,15 +218,15 @@ extension AccountActivityVC {
     func setupButtons() {
         
         setupBackButton()
-       
+        
         
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -236,18 +236,18 @@ extension AccountActivityVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Account Activity"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
     
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
@@ -259,7 +259,7 @@ extension AccountActivityVC {
 }
 
 extension AccountActivityVC: ASTableDelegate {
-
+    
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
         
         let width = UIScreen.main.bounds.size.width;
@@ -267,7 +267,7 @@ extension AccountActivityVC: ASTableDelegate {
         let min = CGSize(width: width, height: 30);
         let max = CGSize(width: width, height: 120);
         return ASSizeRangeMake(min, max);
-           
+        
     }
     
     
@@ -294,10 +294,10 @@ extension AccountActivityVC: ASTableDelegate {
             context.completeBatchFetching(true)
             
         }
-    
+        
         
     }
-       
+    
     
 }
 
@@ -305,43 +305,45 @@ extension AccountActivityVC: ASTableDelegate {
 extension AccountActivityVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-
-        APIManager.shared.getAccountActivity(page: page) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-          
-                    if !data.isEmpty {
-                        self.page += 1
-                        print("Successfully retrieved \(data.count) activities.")
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                    
-                case .failure(let error):
-                    print(error)
+        
+        APIManager.shared.getAccountActivity(page: page) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                    return
+                }
+                
+                if !data.isEmpty {
+                    self.page += 1
+                    print("Successfully retrieved \(data.count) activities.")
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
-  
+        
     }
     
     func insertNewRowsInTableNode(newActivities: [[String: Any]]) {
@@ -361,18 +363,18 @@ extension AccountActivityVC {
         }
         
         for i in newActivities {
-
+            
             let item = UserActivityModel(userActivityModel: i)
             items.append(item)
-          
+            
         }
         
-    
+        
         self.UserActivityList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
         
     }
-
+    
 }
 
 
@@ -395,7 +397,7 @@ extension AccountActivityVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
         let activity = self.UserActivityList[indexPath.row]
-       
+        
         return {
             
             let node = AccountActivityNode(with: activity)

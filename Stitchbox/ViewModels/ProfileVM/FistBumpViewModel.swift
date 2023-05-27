@@ -71,8 +71,9 @@ class FistBumpViewModel: ViewModelProtocol {
     }
     
     func getFistBumper(page: Int, completion: @escaping () -> Void = {}) -> Void  {
-        APIManager.shared.getFistBumper(userID: input.userID, page: page){
-            result in
+        APIManager.shared.getFistBumper(userID: input.userID, page: page){ [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let response):
                 print("page number \(page)")
@@ -95,8 +96,9 @@ class FistBumpViewModel: ViewModelProtocol {
         }
     }
     func getFistBumpee(page: Int, completion: @escaping () -> Void = {}) -> Void  {
-        APIManager.shared.getFistBumpee(userID: input.userID, page: page){
-            result in
+        APIManager.shared.getFistBumpee(userID: input.userID, page: page){ [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 print("page number \(page)")
@@ -119,8 +121,9 @@ class FistBumpViewModel: ViewModelProtocol {
         }
     }
     func getFistBumpeeCount(completion: @escaping (Int) -> Void = {_ in}) -> Void  {
-        APIManager.shared.getFistBumpeeCount(userID: input.userID){
-            result in
+        APIManager.shared.getFistBumpeeCount(userID: input.userID){ [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let response):
                 if let data = response.body {
@@ -143,8 +146,9 @@ class FistBumpViewModel: ViewModelProtocol {
     }
     
     func getFistBumperCount(completion: @escaping (Int) -> Void = {_ in}) -> Void  {
-        APIManager.shared.getFistBumperCount(userID: input.userID){
-            result in
+        APIManager.shared.getFistBumperCount(userID: input.userID){ [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let response):
                 if let data = response.body {
@@ -168,8 +172,10 @@ class FistBumpViewModel: ViewModelProtocol {
     
     func deleteFistBump(fistBumpId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager.shared.deleteFistBump(userID: fistBumpId){
-            result in switch result {
+        APIManager.shared.deleteFistBump(userID: fistBumpId){ [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
             case .success(_):
                 self.successSubject.onNext(.unfistbump())
                 completion()
@@ -182,8 +188,10 @@ class FistBumpViewModel: ViewModelProtocol {
     
     func addFistBump(fistBumpId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager.shared.addFistBump(userID: fistBumpId){
-            result in switch result {
+        APIManager.shared.addFistBump(userID: fistBumpId){ [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
             case .success(_):
                 self.successSubject.onNext(.fistbump())
                 completion()
@@ -196,8 +204,10 @@ class FistBumpViewModel: ViewModelProtocol {
     
     func follow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager.shared.insertFollows(params: ["FollowId": userId]){
-            result in switch result {
+        APIManager.shared.insertFollows(params: ["FollowId": userId]){ [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
             case .success(_):
                 self.successSubject.onNext(.follow())
                 completion()
@@ -209,8 +219,10 @@ class FistBumpViewModel: ViewModelProtocol {
     
     func unfollow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager.shared.unFollow(params: ["FollowId": userId]){
-            result in switch result {
+        APIManager.shared.unFollow(params: ["FollowId": userId]){ [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
             case .success(_):
                 self.successSubject.onNext(.unfollow())
                 completion()

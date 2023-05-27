@@ -153,7 +153,9 @@ class PromoteDetailVC: UIViewController, UIScrollViewDelegate {
         
             presentSwiftLoader()
         
-            APIManager.shared.applyPromotion(id: promote.id) { result in
+            APIManager.shared.applyPromotion(id: promote.id) { [weak self] result in
+                guard let self = self else { return }
+
                 switch result {
                 case .success(let apiResponse):
                     

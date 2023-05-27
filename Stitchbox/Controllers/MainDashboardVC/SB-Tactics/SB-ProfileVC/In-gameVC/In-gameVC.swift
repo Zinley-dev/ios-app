@@ -176,7 +176,9 @@ extension In_gameVC {
     
     func loadGameInfo() {
         presentSwiftLoader()
-        APIManager.shared.userInGame { result in
+        APIManager.shared.userInGame { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -273,7 +275,9 @@ extension In_gameVC {
         
         print(matchId)
         
-        APIManager.shared.getMatchDetect(match: "matchId") { result in
+        APIManager.shared.getMatchDetect(match: "matchId") { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                
@@ -293,7 +297,9 @@ extension In_gameVC {
     
     func getPlayerStats(championName: String, queue: String, summonerName: String, region: String, completion: @escaping (CurrentChampionStatsModel?) -> Void) {
         
-        APIManager.shared.getSummonerStat(region: region, name: summonerName, queue: queue) { result in
+        APIManager.shared.getSummonerStat(region: region, name: summonerName, queue: queue) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [String: Any],

@@ -8,7 +8,7 @@
 import UIKit
 
 class EditBirthdayVC: UIViewController, UITextFieldDelegate {
-
+    
     let backButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var birthdayTxtField: UITextField! {
@@ -25,7 +25,7 @@ class EditBirthdayVC: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         
@@ -40,7 +40,7 @@ class EditBirthdayVC: UIViewController, UITextFieldDelegate {
         delay(0.1) {
             self.birthdayTxtField.addUnderLine()
         }
-      
+        
     }
     
     @IBAction func birthdayBtnPressed(_ sender: Any) {
@@ -61,15 +61,17 @@ class EditBirthdayVC: UIViewController, UITextFieldDelegate {
         
         
         if let birthday = birthdayTxtField.text, birthday != "" {
-    
+            
             self.view.endEditing(true)
             presentSwiftLoader()
-            APIManager.shared.updateme(params: ["birthday": birthday]) { result in
+            APIManager.shared.updateme(params: ["birthday": birthday]) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
                     guard apiResponse.body?["message"] as? String == "success" else {
-                            return
+                        return
                     }
                     
                     
@@ -77,7 +79,7 @@ class EditBirthdayVC: UIViewController, UITextFieldDelegate {
                         
                         SwiftLoader.hide()
                         showNote(text: "Updated successfully")
-                
+                        
                         self.birthdayTxtField.placeholder = birthday
                         self.birthdayTxtField.text = ""
                         reloadGlobalUserInformation()
@@ -90,7 +92,7 @@ class EditBirthdayVC: UIViewController, UITextFieldDelegate {
                     DispatchQueue.main {
                         self.showErrorAlert("Oops!", msg: error.localizedDescription)
                     }
-                  
+                    
                 }
             }
             
@@ -126,14 +128,14 @@ extension EditBirthdayVC {
     func setupButtons() {
         
         setupBackButton()
-    
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -143,19 +145,19 @@ extension EditBirthdayVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Edit Birthday"
-
+        
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
 }
 
 
@@ -167,7 +169,7 @@ extension EditBirthdayVC {
             navigationController.popViewController(animated: true)
         }
     }
-
+    
     @objc func datePickerValueChanged(_ sender: UIDatePicker) {
         
         let dateFormatter = DateFormatter()
@@ -176,23 +178,23 @@ extension EditBirthdayVC {
         dateFormatter.timeStyle = DateFormatter.Style.none
         dateFormatter.dateFormat = "MM-dd-yyyy"
         birthdayTxtField.text = dateFormatter.string(from: sender.date)
-
+        
     }
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
     
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-
+        
         if let text = birthdayTxtField.text, text != "" {
             
             saveBtn.backgroundColor = .primary

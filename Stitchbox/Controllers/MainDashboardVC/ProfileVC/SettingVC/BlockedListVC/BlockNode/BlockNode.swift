@@ -18,16 +18,16 @@ fileprivate let FontSize: CGFloat = 12
 class BlockNode: ASCellNode {
     
     weak var user: BlockUserModel!
-
+    
     var userNameNode: ASTextNode!
     var nameNode: ASTextNode!
     var avatarNode: ASNetworkImageNode!
     var actionBtnNode: ASButtonNode!
     var allowProcess = true
-   
+    
     
     lazy var delayItem = workItem()
-  
+    
     var isBlock = true
     var isFollowingUser = false
     
@@ -68,7 +68,7 @@ class BlockNode: ASCellNode {
         //
         
         automaticallyManagesSubnodes = true
-    
+        
         
         loadInfo(uid: user.blockId)
         
@@ -113,8 +113,8 @@ class BlockNode: ASCellNode {
             
         }
         
-       
-       
+        
+        
     }
     
     func unblock() {
@@ -127,13 +127,15 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
             self.actionBtnNode.setTitle("+ follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
-           
+            
         }
         
-        APIManager.shared.deleteBlocks(params: ["blockId": user.blockId]) { result in
+        APIManager.shared.deleteBlocks(params: ["blockId": user.blockId]) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(_):
-              
+                
                 self.isBlock = false
                 self.allowProcess = true
                 
@@ -173,12 +175,14 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.clipsToBounds = true
             self.actionBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.white, for: .normal)
         }
-
         
-        APIManager.shared.insertFollows(params: ["FollowId": user.blockId]) { result in
+        
+        APIManager.shared.insertFollows(params: ["FollowId": user.blockId]) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(_):
-              
+                
                 
                 self.isFollowingUser = true
                 needRecount = true
@@ -201,7 +205,7 @@ class BlockNode: ASCellNode {
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
                     self.actionBtnNode.setTitle("+ follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
-                   
+                    
                 }
             }
             
@@ -215,7 +219,7 @@ class BlockNode: ASCellNode {
     func unfollowUser() {
         
         DispatchQueue.main.async {
-          
+            
             self.actionBtnNode.backgroundColor = .white
             self.actionBtnNode.layer.borderWidth = 1.0
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
@@ -225,7 +229,9 @@ class BlockNode: ASCellNode {
             
         }
         
-        APIManager.shared.unFollow(params: ["FollowId": user.blockId]) { result in
+        APIManager.shared.unFollow(params: ["FollowId": user.blockId]) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(_):
                 self.isFollowingUser = false
@@ -245,15 +251,15 @@ class BlockNode: ASCellNode {
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
                     self.actionBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.white, for: .normal)
-                  
+                    
                 }
-                  
+                
             }
         }
         
         
     }
-  
+    
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
@@ -263,17 +269,17 @@ class BlockNode: ASCellNode {
         
         avatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
         actionBtnNode.style.preferredSize = CGSize(width: 120.0, height: 25.0)
-       
+        
         
         headerSubStack.style.flexShrink = 16.0
         headerSubStack.style.flexGrow = 16.0
         headerSubStack.spacing = 8.0
         
         headerSubStack.children = [userNameNode, nameNode]
-      
-  
+        
+        
         let headerStack = ASStackLayoutSpec.horizontal()
-      
+        
         
         headerStack.spacing = 10
         headerStack.justifyContent = ASStackLayoutJustifyContent.start
@@ -281,7 +287,7 @@ class BlockNode: ASCellNode {
         headerStack.children = [avatarNode, headerSubStack, actionBtnNode]
         
         return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16), child: headerStack)
-            
+        
     }
     
     func loadInfo(uid: String ) {

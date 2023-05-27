@@ -8,11 +8,11 @@
 import UIKit
 
 class VerifyCodeVC: UIViewController, UITextFieldDelegate {
-
+    
     @IBOutlet weak var verifyButton: UIButton!
     @IBOutlet weak var sendCodeButton: UIButton!
     @IBOutlet weak var openKeyBoardBtn: UIButton!
-   
+    
     
     var border1 = CALayer()
     var border2 = CALayer()
@@ -37,7 +37,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
     
     let backButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var HidenTxtView: UITextField!
-
+    
     
     @IBOutlet weak var sentAddressLbl: UILabel!
     var type = ""
@@ -46,7 +46,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         if type == "phone" {
@@ -71,7 +71,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-    
+        
         
         self.view.endEditing(true)
         
@@ -144,7 +144,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
             border5.backgroundColor = emptyColor.cgColor
             border6.backgroundColor = emptyColor.cgColor
             
-           
+            
             label2.text = getTextInPosition(text: HidenTxtView.text!, position: 1)
             label3.text = ""
             label4.text = ""
@@ -160,7 +160,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
             border5.backgroundColor = emptyColor.cgColor
             border6.backgroundColor = emptyColor.cgColor
             
-           
+            
             label3.text = getTextInPosition(text: HidenTxtView.text!, position: 2)
             label4.text = ""
             label5.text = ""
@@ -175,7 +175,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
             border5.backgroundColor = emptyColor.cgColor
             border6.backgroundColor = emptyColor.cgColor
             
-           
+            
             
             label4.text = getTextInPosition(text: HidenTxtView.text!, position: 3)
             label5.text = ""
@@ -191,7 +191,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
             border5.backgroundColor = selectedColor.cgColor
             border6.backgroundColor = emptyColor.cgColor
             
-           
+            
             label5.text = getTextInPosition(text: HidenTxtView.text!, position: 4)
             label6.text = ""
             
@@ -205,7 +205,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
             border5.backgroundColor = selectedColor.cgColor
             border6.backgroundColor = selectedColor.cgColor
             
-           
+            
             label6.text = getTextInPosition(text: HidenTxtView.text!, position: 5)
             
             if let code = HidenTxtView.text, code.count == 6 {
@@ -258,7 +258,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
     @IBAction func saveBtnPressed(_ sender: Any) {
         
         saveProcess()
-
+        
     }
     
     @IBAction func resendBtnPressed(_ sender: Any) {
@@ -311,7 +311,9 @@ extension VerifyCodeVC {
         
         presentSwiftLoader()
         
-        APIManager.shared.verifyUpdateEmail(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "email": email, "otp": code]) { result in
+        APIManager.shared.verifyUpdateEmail(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "email": email, "otp": code]) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -375,7 +377,7 @@ extension VerifyCodeVC {
                     self.HidenTxtView.text = ""
                     
                 }
-               
+                
             }
         }
         
@@ -385,10 +387,12 @@ extension VerifyCodeVC {
         
         presentSwiftLoader()
         
-        APIManager.shared.verifyUpdatePhone(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "phone": phone, "otp": code]) { result in
+        APIManager.shared.verifyUpdatePhone(params: ["device": UIDevice.current.name, "os": UIDevice.current.systemVersion, "phone": phone, "otp": code]) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
-            
+                
                 guard apiResponse.body?["message"] as? String == "Phone Updated successfully" else {
                     
                     DispatchQueue.main.async {
@@ -448,7 +452,7 @@ extension VerifyCodeVC {
                     
                     self.HidenTxtView.text = ""
                 }
-               
+                
             }
         }
         
@@ -467,10 +471,12 @@ extension VerifyCodeVC {
         }
         
         
-        APIManager.shared.verify2fa(otp: code, method: typeMethod) { result in
+        APIManager.shared.verify2fa(otp: code, method: typeMethod) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(_):
-           
+                
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     self.navigationController?.popBack(2)
@@ -507,7 +513,7 @@ extension VerifyCodeVC {
                     
                     self.HidenTxtView.text = ""
                 }
-               
+                
             }
         }
         
@@ -516,18 +522,20 @@ extension VerifyCodeVC {
     func resendCodeForEmail() {
         
         presentSwiftLoader()
-        APIManager.shared.updateEmail(email: email) { result in
+        APIManager.shared.updateEmail(email: email) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
-            
+                
                 guard apiResponse.body?["message"] as? String == "OTP sent" else {
                     
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
                         self.showErrorAlert("Oops!", msg: "Unable to retrieve if OTP is sent, please try again")
                     }
-                
+                    
                     return
                 }
                 
@@ -535,9 +543,9 @@ extension VerifyCodeVC {
                     SwiftLoader.hide()
                     showNote(text: "A new code has been sent to \(self.email)")
                 }
-              
+                
             case .failure(let error):
-            
+                
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     print(error)
@@ -552,18 +560,20 @@ extension VerifyCodeVC {
     func resendCodeForPhone() {
         
         presentSwiftLoader()
-        APIManager.shared.updatePhone(phone: phone) { result in
+        APIManager.shared.updatePhone(phone: phone) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
-            
+                
                 guard apiResponse.body?["message"] as? String == "OTP sent" else {
                     
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
                         self.showErrorAlert("Oops!", msg: "Unable to retrieve if OTP is sent, please try again")
                     }
-                
+                    
                     return
                 }
                 
@@ -571,9 +581,9 @@ extension VerifyCodeVC {
                     SwiftLoader.hide()
                     showNote(text: "A new code has been sent to \(self.phone)")
                 }
-              
+                
             case .failure(let error):
-            
+                
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     print(error)
@@ -587,7 +597,9 @@ extension VerifyCodeVC {
     
     func resendCodeFor2FAEmail() {
         
-        APIManager.shared.turnOn2fa(method: "email") { result in
+        APIManager.shared.turnOn2fa(method: "email") { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -606,13 +618,13 @@ extension VerifyCodeVC {
                     showNote(text: "A new code has been sent to \(self.type) method")
                     SwiftLoader.hide()
                 }
-
+                
             case .failure(let error):
-
+                
                 DispatchQueue.main.async {
                     self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please try again")
                 }
-              
+                
                 print(error)
             }
         }
@@ -621,7 +633,9 @@ extension VerifyCodeVC {
     
     func resendCodeFor2FAPhone() {
         
-        APIManager.shared.turnOn2fa(method: "phone") { result in
+        APIManager.shared.turnOn2fa(method: "phone") { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -640,13 +654,13 @@ extension VerifyCodeVC {
                     showNote(text: "A new code has been sent to \(self.type) method")
                     SwiftLoader.hide()
                 }
-
+                
             case .failure(let error):
-
+                
                 DispatchQueue.main.async {
                     self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please try again")
                 }
-              
+                
                 print(error)
             }
         }
@@ -661,14 +675,14 @@ extension VerifyCodeVC {
     func setupButtons() {
         
         setupBackButton()
-    
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -678,19 +692,19 @@ extension VerifyCodeVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Verify Code"
-       
+        
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
 }
 
 extension VerifyCodeVC {
@@ -709,7 +723,7 @@ extension VerifyCodeVC {
     }
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)

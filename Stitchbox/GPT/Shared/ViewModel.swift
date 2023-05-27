@@ -225,7 +225,9 @@ class ViewModel: ObservableObject {
             
         } else {
             
-            APIManager.shared.getGamePatch(gameId: global_gameId) { result in
+            APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     

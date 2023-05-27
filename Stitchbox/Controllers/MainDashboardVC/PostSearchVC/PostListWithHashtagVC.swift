@@ -12,7 +12,7 @@ import AlamofireImage
 import Alamofire
 
 class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
-
+    
     
     var searchHashtag: String?
     var hasViewAppeared = false
@@ -28,12 +28,12 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
     var onPresent = false
     //====================================
     
-  
+    
     var currentIndex: Int?
     var imageIndex: Int?
     var isfirstLoad = true
     var didScroll = false
-
+    
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var page = 1
@@ -50,13 +50,13 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
     
     
     private var pullControl = UIRefreshControl()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
-    
+        
         
         if let hashtag = searchHashtag {
             
@@ -92,9 +92,9 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
             //newPlayingIndex
             pauseVideo(index: currentIndex!)
         }
-    
+        
     }
-
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -166,7 +166,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         if currentIndex != nil {
             //newPlayingIndex
             playVideo(index: currentIndex!)
-          
+            
         }
         
         
@@ -175,19 +175,19 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         navigationBarAppearance.backgroundColor = .background
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+        
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-    
+        
     }
     
     
     @objc private func refreshListData(_ sender: Any) {
-       // self.pullControl.endRefreshing() // You can stop after API Call
+        // self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
-  
+        
         clearAllData()
-   
+        
     }
     
     
@@ -200,20 +200,20 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         shouldMute = nil
         page = 1
         updateData()
-               
+        
     }
     
     
     func updateData() {
         self.retrieveNextPageWithCompletion { (newPosts) in
-                
+            
             if newPosts.count > 0 {
-                        
+                
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 
-                                 
+                
             } else {
-              
+                
                 
                 self.refresh_request = false
                 self.posts.removeAll()
@@ -223,7 +223,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
                     
                     self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
                     
-                 
+                    
                 } else {
                     
                     self.collectionNode.view.restore()
@@ -241,18 +241,18 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
                 
                 self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
                 
-             
-                    
+                
+                
             }
-              
-          
+            
+            
         }
         
         
     }
-
-   
-
+    
+    
+    
 }
 
 
@@ -261,15 +261,15 @@ extension PostListWithHashtagVC {
     func setupButtons() {
         
         setupBackButton()
-    
+        
     }
     
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -279,17 +279,17 @@ extension PostListWithHashtagVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
         
     }
     
-   
+    
     @objc func onClickBack(_ sender: AnyObject) {
         
         if onPresent {
@@ -309,7 +309,7 @@ extension PostListWithHashtagVC {
         }
         
     }
-
+    
     
 }
 
@@ -317,12 +317,12 @@ extension PostListWithHashtagVC {
 extension PostListWithHashtagVC {
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
@@ -347,7 +347,7 @@ extension PostListWithHashtagVC {
         
         SwiftLoader.show(title: progress, animated: true)
         
- 
+        
     }
     
 }
@@ -357,7 +357,7 @@ extension PostListWithHashtagVC {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         // Check if this is the first visible cell and it contains a video.
-    
+        
         if isfirstLoad {
             isfirstLoad = false
             let post = posts[0]
@@ -370,7 +370,7 @@ extension PostListWithHashtagVC {
             
         }
     }
-
+    
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -379,17 +379,17 @@ extension PostListWithHashtagVC {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-
+            
             // Calculate the visible cells.
             let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
-
+            
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
             
             var foundVisibleVideo = false
             
             for cell in visibleCells {
-            
+                
                 let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
                 let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
                 let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
@@ -399,7 +399,7 @@ extension PostListWithHashtagVC {
                 }
             }
             
-
+            
             if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                 
                 foundVisibleVideo = true
@@ -437,7 +437,7 @@ extension PostListWithHashtagVC {
                 if let currentIndex = currentIndex {
                     pauseVideoIfNeed(pauseIndex: currentIndex)
                 }
-
+                
                 imageTimerWorkItem?.cancel()
                 imageTimerWorkItem = DispatchWorkItem { [weak self] in
                     guard let self = self else { return }
@@ -450,17 +450,17 @@ extension PostListWithHashtagVC {
                         }
                     }
                 }
-
+                
                 if let imageTimerWorkItem = imageTimerWorkItem {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
                 }
-
-            
-                        // Reset the current playing index.
+                
+                
+                // Reset the current playing index.
                 currentIndex = nil
                 
             }
-
+            
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
             if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
@@ -472,8 +472,8 @@ extension PostListWithHashtagVC {
                     }
                 }
             }
-
-
+            
+            
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
                 pauseVideoIfNeed(pauseIndex: currentIndex!)
@@ -482,7 +482,7 @@ extension PostListWithHashtagVC {
             
         }
         
-    
+        
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
@@ -490,16 +490,16 @@ extension PostListWithHashtagVC {
         if scrollView == collectionNode.view, posts.count > 3 {
             
             if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-               navigationController?.setNavigationBarHidden(true, animated: true)
-
+                navigationController?.setNavigationBarHidden(true, animated: true)
+                
             } else {
-               navigationController?.setNavigationBarHidden(false, animated: true)
+                navigationController?.setNavigationBarHidden(false, animated: true)
             }
             
         }
-      
+        
     }
-
+    
     
 }
 
@@ -510,7 +510,7 @@ extension PostListWithHashtagVC {
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         let item = posts[collectionView.tag]
         
-     
+        
         cell.hashTagLabel.text = item.hashtags[indexPath.row]
         
         return cell
@@ -531,7 +531,7 @@ extension PostListWithHashtagVC {
             return 0
         }
     }
-
+    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -545,11 +545,11 @@ extension PostListWithHashtagVC {
             self.navigationController?.pushViewController(PLWHVC, animated: true)
             
         }
-    
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
+        return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
     }
     
 }
@@ -593,9 +593,9 @@ extension PostListWithHashtagVC: ASCollectionDataSource {
             
             
             node.settingBtn = { (node) in
-            
+                
                 self.settingPost(item: post)
-                  
+                
             }
             
             delay(0.3) {
@@ -624,7 +624,7 @@ extension PostListWithHashtagVC: ASCollectionDataSource {
                     
                     self.insertNewRowsInCollectionNode(newPosts: newPosts)
                     
-
+                    
                     context.completeBatchFetching(true)
                     
                     
@@ -638,7 +638,7 @@ extension PostListWithHashtagVC: ASCollectionDataSource {
         }
     }
     
-
+    
     
 }
 
@@ -674,7 +674,7 @@ extension PostListWithHashtagVC {
         // Reload the data on the collection node
         self.collectionNode.reloadData()
     }
-
+    
     
     
     func applyStyle() {
@@ -701,7 +701,7 @@ extension PostListWithHashtagVC {
 
 extension PostListWithHashtagVC {
     
-
+    
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
         
@@ -709,36 +709,38 @@ extension PostListWithHashtagVC {
             
             let finalTag = hashtag.dropFirst()
             print(finalTag)
-            APIManager.shared.getHashtagPost(tag: String(finalTag), page: page) { result in
-                    switch result {
-                    case .success(let apiResponse):
-                        
-                        guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                            return
-                        }
-                        if !data.isEmpty {
-                            print("Successfully retrieved \(data.count) posts.")
-                            self.page += 1
-                            let items = data
-                            DispatchQueue.main.async {
-                                block(items)
-                            }
-                        } else {
-                            
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                        }
-                    case .failure(let error):
-                        print(error)
+            APIManager.shared.getHashtagPost(tag: String(finalTag), page: page) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         let item = [[String: Any]]()
                         DispatchQueue.main.async {
                             block(item)
+                        }
+                        return
+                    }
+                    if !data.isEmpty {
+                        print("Successfully retrieved \(data.count) posts.")
+                        self.page += 1
+                        let items = data
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
                     }
                 }
             }
@@ -767,20 +769,20 @@ extension PostListWithHashtagVC {
             
             refresh_request = false
             
-
+            
             if !self.posts.isEmpty {
                 
-               
+                
                 var delete_indexPaths: [IndexPath] = []
                 
                 for row in 0..<self.posts.count {
                     let path = IndexPath(row: row, section: 0) // single indexpath
                     delete_indexPaths.append(path) // app
                 }
-            
+                
                 self.posts.removeAll()
                 self.collectionNode.deleteItems(at: delete_indexPaths)
-                   
+                
             }
             
         }
@@ -801,10 +803,10 @@ extension PostListWithHashtagVC {
         let startIndex = self.posts.count - items.count
         let endIndex = startIndex + items.count - 1
         let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-
+        
         // Insert new items at index paths
         self.collectionNode.insertItems(at: indexPaths)
-      
+        
     }
     
 }
@@ -834,9 +836,9 @@ extension PostListWithHashtagVC {
     }
     
     @objc func copyPost() {
-    
+        
         if let id = self.editeddPost?.id {
-           
+            
             let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
@@ -866,11 +868,11 @@ extension PostListWithHashtagVC {
     @objc func removePost() {
         
         if let deletingPost = editeddPost {
-           
+            
             if let indexPath = posts.firstIndex(of: deletingPost) {
                 
                 posts.removeObject(deletingPost)
-
+                
                 // check if there are no more posts
                 if posts.isEmpty {
                     if onPresent {
@@ -887,7 +889,7 @@ extension PostListWithHashtagVC {
         }
         
     }
-
+    
     
     func reloadAllCurrentHashtag() {
         if !posts.isEmpty {
@@ -942,7 +944,7 @@ extension PostListWithHashtagVC {
         delay(0.1) {
             self.present(ac, animated: true, completion: nil)
         }
-      
+        
     }
     
     func pauseVideo(index: Int) {
@@ -989,7 +991,7 @@ extension PostListWithHashtagVC {
                             cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
                         }
                     }
-                   
+                    
                     if muteStatus {
                         cell.videoNode.muted = true
                     } else {
@@ -1008,7 +1010,7 @@ extension PostListWithHashtagVC {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                     }
-                   
+                    
                     if globalIsSound {
                         cell.videoNode.muted = false
                     } else {
@@ -1018,8 +1020,8 @@ extension PostListWithHashtagVC {
                     cell.videoNode.play()
                     
                 }
- 
-              
+                
+                
             }
             
         }
