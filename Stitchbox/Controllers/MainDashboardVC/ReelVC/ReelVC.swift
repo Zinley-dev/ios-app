@@ -11,9 +11,9 @@ import AlamofireImage
 import Alamofire
 
 class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
-
+    
     @IBOutlet weak var contentView: UIView!
-
+    
     let backButton: UIButton = UIButton(type: .custom)
     var currentIndex: Int?
     var isfirstLoad = true
@@ -33,7 +33,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     var searchHashtag: String!
     var keyword: String!
     var hasViewAppeared = false
-
+    
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
     lazy var delayItem3 = workItem()
@@ -52,12 +52,12 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view
-
+        
         setupButtons()
         setupCollectionNode()
-       
+        
         
         pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
@@ -73,8 +73,8 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             collectionNode.view.addSubview(pullControl)
         }
         
-      
- 
+        
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -85,7 +85,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             pauseVideo(index: currentIndex!)
             
         }
-    
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,10 +96,10 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         if currentIndex != nil, currentIndex != nil {
             //newPlayingIndex
             playVideo(index: currentIndex!)
-          
+            
         }
         
-     
+        
     }
     
     
@@ -111,7 +111,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_reel")), object: nil)
-    
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -130,12 +130,12 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
     @objc private func refreshListData(_ sender: Any) {
         // Call API
-
+        
         self.clearAllData()
         
     }
     
-
+    
 }
 
 
@@ -145,14 +145,14 @@ extension ReelVC {
         
         setupBackButton()
         
-
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -162,25 +162,25 @@ extension ReelVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
     
     @objc func onClickBack(_ sender: AnyObject) {
         
-     
+        
         self.dismiss(animated: true)
-       
+        
     }
-
+    
     
 }
 
@@ -188,12 +188,12 @@ extension ReelVC {
 extension ReelVC {
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
@@ -218,7 +218,7 @@ extension ReelVC {
         
         SwiftLoader.show(title: progress, animated: true)
         
- 
+        
     }
     
 }
@@ -229,7 +229,7 @@ extension ReelVC {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         // Check if this is the first visible cell and it contains a video.
-    
+        
         if isfirstLoad {
             isfirstLoad = false
             let post = posts[0]
@@ -242,7 +242,7 @@ extension ReelVC {
             
         }
     }
-
+    
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
@@ -250,17 +250,17 @@ extension ReelVC {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-
+            
             // Calculate the visible cells.
             let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? ReelNode }
-
+            
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
             
             var foundVisibleVideo = false
             
             for cell in visibleCells {
-            
+                
                 let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
                 let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
                 let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
@@ -270,7 +270,7 @@ extension ReelVC {
                 }
             }
             
-
+            
             if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                 
                 foundVisibleVideo = true
@@ -282,9 +282,9 @@ extension ReelVC {
                 playTimeBar.isHidden = true
                 imageIndex = newPlayingIndex
                 
-              
+                
             }
-
+            
             
             if foundVisibleVideo {
                 
@@ -301,7 +301,7 @@ extension ReelVC {
                                 node.imageNode.view.transform = CGAffineTransform.identity
                             }
                             
-    
+                            
                         }
                         
                         pauseVideoIfNeed(pauseIndex: currentIndex)
@@ -333,7 +333,7 @@ extension ReelVC {
                         }
                         
                     }
-
+                    
                     pauseVideoIfNeed(pauseIndex: currentIndex)
                     
                 }
@@ -364,17 +364,17 @@ extension ReelVC {
                         }
                     }
                 }
-
+                
                 if let imageTimerWorkItem = imageTimerWorkItem {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
                 }
-
-            
-                        // Reset the current playing index.
+                
+                
+                // Reset the current playing index.
                 currentIndex = nil
                 
             }
-
+            
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
             if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
@@ -386,8 +386,8 @@ extension ReelVC {
                     }
                 }
             }
-
-
+            
+            
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
                 pauseVideoIfNeed(pauseIndex: currentIndex!)
@@ -396,10 +396,10 @@ extension ReelVC {
             
         }
         
-    
+        
     }
-
-
+    
+    
 }
 
 extension ReelVC {
@@ -408,7 +408,7 @@ extension ReelVC {
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         let item = posts[collectionView.tag]
         
-     
+        
         cell.hashTagLabel.text = item.hashtags[indexPath.row]
         
         return cell
@@ -422,7 +422,7 @@ extension ReelVC {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       
+        
         return posts[collectionView.tag].hashtags.count
         
     }
@@ -443,7 +443,7 @@ extension ReelVC {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
+        return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
     }
     
     
@@ -465,7 +465,7 @@ extension ReelVC: ASCollectionDelegate {
         } else {
             return false
         }
-     
+        
     }
     
 }
@@ -494,9 +494,9 @@ extension ReelVC: ASCollectionDataSource {
             
             
             node.settingBtn = { (node) in
-            
+                
                 self.settingPost(item: post)
-                  
+                
             }
             
             delay(0.3) {
@@ -529,7 +529,7 @@ extension ReelVC: ASCollectionDataSource {
                         
                         self.insertNewRowsInCollectionNode(newPosts: newPosts)
                         
-
+                        
                         context.completeBatchFetching(true)
                         
                         
@@ -547,7 +547,7 @@ extension ReelVC: ASCollectionDataSource {
                                 
                                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                                 
-
+                                
                                 context.completeBatchFetching(true)
                                 
                                 
@@ -558,7 +558,7 @@ extension ReelVC: ASCollectionDataSource {
                             
                             self.insertNewRowsInCollectionNode(newPosts: newPosts)
                             
-
+                            
                             context.completeBatchFetching(true)
                             
                         }
@@ -580,7 +580,7 @@ extension ReelVC: ASCollectionDataSource {
                                 
                                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                                 
-
+                                
                                 context.completeBatchFetching(true)
                                 
                                 
@@ -591,7 +591,7 @@ extension ReelVC: ASCollectionDataSource {
                             
                             self.insertNewRowsInCollectionNode(newPosts: newPosts)
                             
-
+                            
                             context.completeBatchFetching(true)
                             
                         }
@@ -612,7 +612,7 @@ extension ReelVC: ASCollectionDataSource {
         }
     }
     
-
+    
     
 }
 
@@ -649,7 +649,7 @@ extension ReelVC {
         // Reload the data on the collection node
         self.collectionNode.reloadData()
     }
-
+    
     
     
     func applyStyle() {
@@ -675,11 +675,57 @@ extension ReelVC {
 extension ReelVC {
     
     func retrieveNextPageForReelsWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        
+        APIManager.shared.getUserFeed { [weak self] result in
+            guard let self = self else { return }
             
-        APIManager.shared.getUserFeed { result in
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                    return
+                }
+                if !data.isEmpty {
+                    self.lastLoadTime = Date()
+                    print("Successfully retrieved \(data.count) posts.")
+                    let items = data
+                    
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
+                }
+            }
+        }
+        
+    }
+    
+    
+    func retrieveNextPageForSearchWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        
+        if keyword != "" {
+            
+            APIManager.shared.searchPost(query: keyword, page: page) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
-                    
+                    print(apiResponse)
                     guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         let item = [[String: Any]]()
                         DispatchQueue.main.async {
@@ -688,10 +734,9 @@ extension ReelVC {
                         return
                     }
                     if !data.isEmpty {
-                        self.lastLoadTime = Date()
                         print("Successfully retrieved \(data.count) posts.")
                         let items = data
-                      
+                        self.page += 1
                         DispatchQueue.main.async {
                             block(items)
                         }
@@ -707,47 +752,6 @@ extension ReelVC {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
-                }
-            }
-        }
-        
-    }
-    
-    
-    func retrieveNextPageForSearchWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-            
-        if keyword != "" {
-            
-            APIManager.shared.searchPost(query: keyword, page: page) { result in
-                    switch result {
-                    case .success(let apiResponse):
-                        print(apiResponse)
-                        guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                            return
-                        }
-                        if !data.isEmpty {
-                            print("Successfully retrieved \(data.count) posts.")
-                            let items = data
-                            self.page += 1
-                            DispatchQueue.main.async {
-                                block(items)
-                            }
-                        } else {
-                            
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                        }
-                    case .failure(let error):
-                        print(error)
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
                     }
                 }
             }
@@ -763,41 +767,43 @@ extension ReelVC {
     }
     
     func retrieveNextPageForHashtagWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-            
+        
         if let hashtag = searchHashtag, hashtag != "" {
             
             let finalTag = hashtag.dropFirst()
             
-            APIManager.shared.getHashtagPost(tag: String(finalTag), page: page) { result in
-                    switch result {
-                    case .success(let apiResponse):
-                        
-                        guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                            return
-                        }
-                        if !data.isEmpty {
-                            print("Successfully retrieved \(data.count) posts.")
-                            self.page += 1
-                            let items = data
-                            DispatchQueue.main.async {
-                                block(items)
-                            }
-                        } else {
-                            
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                        }
-                    case .failure(let error):
-                        print(error)
+            APIManager.shared.getHashtagPost(tag: String(finalTag), page: page) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let apiResponse):
+                    
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         let item = [[String: Any]]()
                         DispatchQueue.main.async {
                             block(item)
+                        }
+                        return
+                    }
+                    if !data.isEmpty {
+                        print("Successfully retrieved \(data.count) posts.")
+                        self.page += 1
+                        let items = data
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
                     }
                 }
             }
@@ -827,20 +833,20 @@ extension ReelVC {
             
             refresh_request = false
             
-
+            
             if !self.posts.isEmpty {
                 
-               
+                
                 var delete_indexPaths: [IndexPath] = []
                 
                 for row in 0..<self.posts.count {
                     let path = IndexPath(row: row, section: 0) // single indexpath
                     delete_indexPaths.append(path) // app
                 }
-            
+                
                 self.posts.removeAll()
                 self.collectionNode.deleteItems(at: delete_indexPaths)
-                   
+                
             }
             
         }
@@ -855,18 +861,18 @@ extension ReelVC {
                 }
             }
         }
-
+        
         if !items.isEmpty {
             // Construct index paths for the new rows
             let startIndex = self.posts.count - items.count
             let endIndex = startIndex + items.count - 1
             let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-
+            
             // Insert new items at index paths
             self.collectionNode.insertItems(at: indexPaths)
         }
-
-      
+        
+        
     }
     
 }
@@ -888,7 +894,7 @@ extension ReelVC {
         } else {
             newsFeedSettingVC.isOwner = false
         }
- 
+        
         newsFeedSettingVC.isReels = true
         editeddPost = item
         self.present(newsFeedSettingVC, animated: true, completion: nil)
@@ -896,9 +902,9 @@ extension ReelVC {
     }
     
     @objc func copyPost() {
-    
+        
         if let id = self.editeddPost?.id {
-           
+            
             let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
@@ -928,7 +934,7 @@ extension ReelVC {
     @objc func removePost() {
         
         if let deletingPost = editeddPost {
-           
+            
             if let indexPath = posts.firstIndex(of: deletingPost) {
                 
                 posts.removeObject(deletingPost)
@@ -938,7 +944,7 @@ extension ReelVC {
             
         }
         
-       
+        
     }
     
     func reloadAllCurrentHashtag() {
@@ -993,9 +999,9 @@ extension ReelVC {
         delay(0.1) {
             self.present(ac, animated: true, completion: nil)
         }
-      
+        
     }
-
+    
     
 }
 
@@ -1010,24 +1016,24 @@ extension ReelVC {
         shouldMute = nil
         imageIndex = nil
         updateData()
-               
+        
     }
     
     
     func updateData() {
         
-
+        
         if isReel {
             
             self.retrieveNextPageForReelsWithCompletion { (newPosts) in
-                    
+                
                 if newPosts.count > 0 {
-                            
+                    
                     self.insertNewRowsInCollectionNode(newPosts: newPosts)
                     
-                                     
+                    
                 } else {
-                  
+                    
                     self.refresh_request = false
                     self.posts.removeAll()
                     self.collectionNode.reloadData()
@@ -1035,7 +1041,7 @@ extension ReelVC {
                     if self.posts.isEmpty == true {
                         
                         self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
-                     
+                        
                     } else {
                         
                         self.collectionNode.view.restore()
@@ -1053,21 +1059,21 @@ extension ReelVC {
                     self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
                     
                 }
-                  
-              
+                
+                
             }
             
         } else if isSearch {
             
             self.retrieveNextPageForSearchWithCompletion { (newPosts) in
-                    
+                
                 if newPosts.count > 0 {
-                            
+                    
                     self.insertNewRowsInCollectionNode(newPosts: newPosts)
                     
-                                     
+                    
                 } else {
-                  
+                    
                     self.refresh_request = false
                     self.posts.removeAll()
                     self.collectionNode.reloadData()
@@ -1075,7 +1081,7 @@ extension ReelVC {
                     if self.posts.isEmpty == true {
                         
                         self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
-                     
+                        
                     } else {
                         
                         self.collectionNode.view.restore()
@@ -1093,22 +1099,22 @@ extension ReelVC {
                     self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
                     
                 }
-                  
-              
+                
+                
             }
             
             
         } else if isHashtag {
             
             self.retrieveNextPageForHashtagWithCompletion { (newPosts) in
-                    
+                
                 if newPosts.count > 0 {
-                            
+                    
                     self.insertNewRowsInCollectionNode(newPosts: newPosts)
                     
-                                     
+                    
                 } else {
-                  
+                    
                     self.refresh_request = false
                     self.posts.removeAll()
                     self.collectionNode.reloadData()
@@ -1116,7 +1122,7 @@ extension ReelVC {
                     if self.posts.isEmpty == true {
                         
                         self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
-                     
+                        
                     } else {
                         
                         self.collectionNode.view.restore()
@@ -1134,8 +1140,8 @@ extension ReelVC {
                     self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
                     
                 }
-                  
-              
+                
+                
             }
             
             
@@ -1188,7 +1194,7 @@ extension ReelVC {
                             cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
                         }
                     }
-                   
+                    
                     if muteStatus {
                         cell.videoNode.muted = true
                     } else {
@@ -1207,7 +1213,7 @@ extension ReelVC {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                     }
-                   
+                    
                     if globalIsSound {
                         cell.videoNode.muted = false
                     } else {
@@ -1217,8 +1223,8 @@ extension ReelVC {
                     cell.videoNode.play()
                     
                 }
- 
-              
+                
+                
             }
             
         }
