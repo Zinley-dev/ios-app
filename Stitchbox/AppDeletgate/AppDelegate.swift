@@ -191,6 +191,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
+        /*
         // Update badge number
         if let aps = userInfo["aps"] as? [String: AnyObject], let badgeCount = aps["badge"] as? Int {
             UIApplication.shared.applicationIconBadgeNumber = badgeCount
@@ -206,6 +207,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         // Call completion handler
         completionHandler(.newData)
+        
+        */
     }
 
 

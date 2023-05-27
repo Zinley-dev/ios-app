@@ -37,6 +37,7 @@ class FistBumpedStatVC: UIViewController {
         // Do any additional setup after loading the view.
         setupButtons()
         fistBumpListBtn.tintColor = .white
+        fistBumpListBtn.setTitleColor(.white, for: .normal)
         
     }
     override func viewWillAppear(_ animated: Bool) {

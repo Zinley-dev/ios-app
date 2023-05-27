@@ -345,19 +345,19 @@ extension FeedViewController {
                         if badge == 0 {
                             
                             Dispatch.main.async {
-                                self?.setupEmptyNotiButton()
+                                self.setupEmptyNotiButton()
                             }
                             
                         } else {
                             Dispatch.main.async {
-                                self?.setupHasNotiButton()
+                                self.setupHasNotiButton()
                             }
                         }
                         
                     } else {
                         
                         Dispatch.main.async {
-                            self?.setupEmptyNotiButton()
+                            self.setupEmptyNotiButton()
                         }
                         
                     }
@@ -366,7 +366,7 @@ extension FeedViewController {
                 
             case .failure(let error):
                 Dispatch.main.async {
-                    self?.setupEmptyNotiButton()
+                    self.setupEmptyNotiButton()
                 }
                 print(error)
                 
@@ -936,7 +936,7 @@ extension FeedViewController {
                     return
                 }
                 if !data.isEmpty {
-                    self?.lastLoadTime = Date()
+                    self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data
                     
@@ -1199,7 +1199,7 @@ extension FeedViewController {
             case .success(let apiResponse):
                 
                 Dispatch.main.async {
-                    self?.setupEmptyNotiButton()
+                    self.setupEmptyNotiButton()
                 }
                 
             case .failure(let error):

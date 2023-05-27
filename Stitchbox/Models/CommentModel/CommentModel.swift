@@ -327,6 +327,14 @@ class CommentModel {
             }
         }
         
+        if let post = Comment_model["post"] as? [String: Any] {
+            
+            if let owner_uid = post["userId"] as? String {
+                self._owner_uid = owner_uid
+            }
+            
+        }
+        
         if let replyTo = Comment_model["replyTo"] as? [String: Any] {
             
             if !replyTo.isEmpty {
@@ -402,9 +410,6 @@ class CommentModel {
             self._is_title = is_title
         }
         
-        if let owner_uid = Comment_model["ownerId"] as? String {
-            self._owner_uid = owner_uid
-        }
         
         if let createdAt = Comment_model["createdAt"] as? Date {
             self._createdAt = createdAt
