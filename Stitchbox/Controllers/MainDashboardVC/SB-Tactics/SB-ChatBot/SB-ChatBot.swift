@@ -49,28 +49,6 @@ class SB_ChatBot: UIViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
-            
-            if passEligible {
-                
-                isPro = true
-                
-            } else {
-                
-                checkPlanForToken()
-                
-            }
-            
-        } else {
-            
-            checkPlanForToken()
-            
-        }
-    }
-    
     func checkforMeta() {
         
         APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in

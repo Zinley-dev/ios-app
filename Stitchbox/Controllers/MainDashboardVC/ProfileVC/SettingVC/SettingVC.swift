@@ -354,6 +354,10 @@ extension SettingVC {
     
     func checkAccountStatus() {
         
+        
+        self.setupLayoutForPro()
+        
+        /*
         if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
             
             if passEligible {
@@ -370,7 +374,7 @@ extension SettingVC {
             
             checkPlan()
             
-        }
+        }*/
         
     }
     
