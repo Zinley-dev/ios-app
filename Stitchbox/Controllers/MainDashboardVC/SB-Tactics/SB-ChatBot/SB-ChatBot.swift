@@ -43,7 +43,7 @@ class SB_ChatBot: UIViewController {
         global_gpt = "gpt-3.5-turbo"
         selectedGpt = "GPT 3.5"
         
-    
+        presentSwiftLoader()
         checkforMeta()
         setupClearAndGptButtons()
         

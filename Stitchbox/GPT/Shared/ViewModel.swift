@@ -216,57 +216,192 @@ class ViewModel: ObservableObject {
         api.setHistoryList(messages: messages)
     }
 
-    
+    /*
     func getConversationHistory(completion: @escaping () -> Void) {
-        
         if global_gameName == "SB Chatbot" {
-            
             self.processFinalPreConversation(completion: completion)
-            
         } else {
-            
-            APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [String: Any],
-                          let conversationContent = data["conversationContent"] as? String else {
-                        
-                        DispatchQueue.main.async {
-                            self.processFinalPreConversation(completion: completion)
-                        }
-                  
-                        return
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.processFinalPreConversationWithMeta(conversationContent: conversationContent,completion: completion)
-                    }
+            self.processFinalPreConversation { [weak self] in
+                self?.getGamePatchAndUpdateHistory(completion: completion)
+            }
+        }
+    }
 
-                  
-                  
-                case .failure(let error):
-                    print(error)
-                    
-                    
+    func getGamePatchAndUpdateHistory(completion: @escaping () -> Void) {
+        APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                guard let data = apiResponse.body?["data"] as? [String: Any],
+                      let conversationContent = data["conversationContent"] as? String else {
+                    return
+                }
+
+                DispatchQueue.global(qos: .background).async {
+                    self.processFinalPreConversationWithMeta(conversationContent: conversationContent, completion: {})
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
+    func processFinalPreConversation(completion: @escaping () -> Void) {
+        APIManager.shared.getGptConversation(gameId: global_gameId) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                guard let body = apiResponse.body,
+                      let data = body["data"] as? [String: Any],
+                      let jsonData = try? JSONSerialization.data(withJSONObject: data, options: []),
+                      let conversationHistory = try? JSONDecoder().decode(ConversationData.self, from: jsonData) else {
                     DispatchQueue.main.async {
-                        self.processFinalPreConversation(completion: completion)
+                        self.displayWelcomeMessage(completion: completion)
                     }
-                   
-                    
+                    return
+                }
+
+                DispatchQueue.global(qos: .default).async {
+                    for (prompt, response) in zip(conversationHistory.prompts, conversationHistory.responses) {
+                        Task {
+                            let userAttributedText = await ResponseParsingTask().parse(text: self.removeFocusSentence(prompt))
+                            let assistantAttributedText = await ResponseParsingTask().parse(text: response)
+
+                            let userMessage = MessageRow(
+                                isInteractingWithChatGPT: false,
+                                sendImage: "profile",
+                                send: .attributed(userAttributedText),
+                                responseImage: "openai",
+                                response: nil
+                            )
+                            let assistantMessage = MessageRow(
+                                isInteractingWithChatGPT: false,
+                                sendImage: nil,
+                                send: nil,
+                                responseImage: "openai",
+                                response: .attributed(assistantAttributedText)
+                            )
+
+                            let userHistory = Message(role: "user", content: prompt)
+                            let assistantHistory = Message(role: "assistant", content: response)
+
+                            let guideUserHistory = Message(role: "user", content: "Prioritize truth, relevance, and brevity. Ensure logical layout. Understand context.")
+                            let guideAssistantHistory = Message(role: "assistant", content: "Understood. I'll prioritize truth, relevance, brevity, logical layout, and context understanding.")
+
+                            DispatchQueue.main.async {
+                                self.messages.append(userMessage)
+                                self.messages.append(assistantMessage)
+                                self.history.append(userHistory)
+                                self.history.append(assistantHistory)
+                                self.history.append(guideUserHistory)
+                                self.history.append(guideAssistantHistory)
+                                self.setConversationHistory(messages: self.history)
+                                completion()
+                            }
+                        }
+                    }
+                }
+
+            case .failure(let error):
+                print(error)
+                DispatchQueue.main.async {
+                    self.displayWelcomeMessage(completion: completion)
                 }
             }
-            
-            
         }
-        
-    
     }
+
+    func processFinalPreConversationWithMeta(conversationContent: String, completion: @escaping () -> Void) {
+        let changes = conversationContent.split(separator: ".").map(String.init)
+
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self else { return }
+            for change in changes {
+                let trimmedChange = change.trimmingCharacters(in: .whitespacesAndNewlines)
+                if trimmedChange.isEmpty { continue }
+
+                Task {
+                    let attributedText = await ResponseParsingTask().parse(text: trimmedChange)
+
+                    let message = MessageRow(
+                        isInteractingWithChatGPT: false,
+                        sendImage: nil,
+                        send: nil,
+                        responseImage: "openai",
+                        response: .attributed(attributedText)
+                    )
+
+                    let history = Message(role: "assistant", content: trimmedChange)
+
+                    DispatchQueue.main.async { [weak self] in
+                        self?.messages.append(message)
+                        self?.history.append(history)
+                    }
+                }
+            }
+
+            DispatchQueue.main.async {
+                completion()
+            }
+        }
+    }
+
+*/
+
     
+    
+     
+     func getConversationHistory(completion: @escaping () -> Void) {
+         
+         if global_gameName == "SB Chatbot" {
+             
+             self.processFinalPreConversation(completion: completion)
+             
+         } else {
+             
+             APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
+                 guard let self = self else { return }
+                 
+                 switch result {
+                 case .success(let apiResponse):
+                     
+                     guard let data = apiResponse.body?["data"] as? [String: Any],
+                           let conversationContent = data["conversationContent"] as? String else {
+                         
+                         DispatchQueue.main.async {
+                             self.processFinalPreConversation(completion: completion)
+                         }
+                   
+                         return
+                     }
+                     
+                     DispatchQueue.main.async {
+                         self.processFinalPreConversationWithMeta(conversationContent: conversationContent,completion: completion)
+                     }
+
+                   
+                   
+                 case .failure(let error):
+                     print(error)
+                     
+                     
+                     DispatchQueue.main.async {
+                         self.processFinalPreConversation(completion: completion)
+                     }
+                    
+                     
+                 }
+             }
+             
+             
+         }
+         
+     
+     }
+     
     func processFinalPreConversation(completion: @escaping () -> Void) {
-        
         
         APIManager.shared.getGptConversation(gameId: global_gameId) { [weak self] result in
             guard let self = self else { return }
@@ -313,6 +448,9 @@ class ViewModel: ObservableObject {
                                 self.history.append(guideUserHistory)
                                 self.history.append(guideAssistantHistory)
                                 self.setConversationHistory(messages: self.history)
+                                
+                                SwiftLoader.hide()
+                                
                                 completion()
                             }
                         }
@@ -386,6 +524,9 @@ class ViewModel: ObservableObject {
                                 self.history.append(guideUserHistory)
                                 self.history.append(guideAssistantHistory)
                                 self.setConversationHistory(messages: self.history)
+                                
+                                SwiftLoader.hide()
+                                
                                 completion()
                             }
                         }
@@ -428,6 +569,10 @@ class ViewModel: ObservableObject {
         self.history.append(userHistory)
         self.history.append(assistantHistory)
         self.setConversationHistory(messages: self.history)
+        
+        Dispatch.main.async {
+            SwiftLoader.hide()
+        }
         
         completion()
     }

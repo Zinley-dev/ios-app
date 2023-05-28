@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "sbchatbot.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "sb_tactics_unselected.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },

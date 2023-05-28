@@ -104,20 +104,24 @@ struct ContentView: View {
         
             
             if #available(iOS 16.0, *) {
-                TextField("", text: $vm.inputMessage, prompt: Text("Ask us anything!").foregroundColor(.gray))
-                    .textFieldStyle(.plain)
-                    .preferredColorScheme(.dark)
-                    .background(Color.clear)
-                    .foregroundColor(.white)
-                    .accentColor(Color(red: 194.0 / 255.0, green: 169.0 / 255.0, blue: 250.0 / 255.0, opacity: 1.0))
-                    .font(.system(size: 15))
-                    .focused($isTextFieldFocused)
-                    .disabled(vm.isInteractingWithChatGPT)
+                TextField("", text: $vm.inputMessage, prompt: Text("Ask us anything!").foregroundColor(.gray), axis: .vertical)
+                               #if os(iOS) || os(macOS)
+                               .textFieldStyle(.plain)
+                               .preferredColorScheme(.dark)
+                               .background(.clear) // To see this
+                               .foregroundColor(.white)
+                               .accentColor(Color(red: 194.0 / 255.0, green: 169.0 / 255.0, blue: 250.0 / 255.0, opacity: 1.0)) // Set the color of the placeholder
+                               .font(.system(size: 15)) // And here
+                           
+                               #endif
+                               .focused($isTextFieldFocused)
+                               .disabled(vm.isInteractingWithChatGPT)
             } else {
                 ZStack(alignment: .leading) {
                     if vm.inputMessage.isEmpty && !isTextFieldFocused {
                         Text("Ask us anything!")
                             .foregroundColor(.gray)
+                            .font(.system(size: 15))
                     }
                     TextField("", text: $vm.inputMessage)
                         .textFieldStyle(PlainTextFieldStyle())
@@ -129,6 +133,7 @@ struct ContentView: View {
                         .disabled(vm.isInteractingWithChatGPT)
                 }
             }
+
 
 
             if vm.isInteractingWithChatGPT {
