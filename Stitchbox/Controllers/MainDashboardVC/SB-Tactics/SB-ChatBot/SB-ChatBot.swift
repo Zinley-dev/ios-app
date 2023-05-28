@@ -40,8 +40,8 @@ class SB_ChatBot: UIViewController {
         setupButtons()
         global_gameId = gameId
         global_gameName = name
-        global_gpt = "gpt-3.5-turbo"
-        selectedGpt = "GPT 3.5"
+        global_gpt = "gpt-4"
+        selectedGpt = "GPT 4"
         
         presentSwiftLoader()
         checkforMeta()
@@ -351,7 +351,12 @@ extension SB_ChatBot {
         let title = pickerData[selectedIndex]
         
         if title == "GPT 4" {
-            checkAccountStatus()
+            global_gpt = "gpt-4"
+            selectedGpt = title
+            
+            gptButton.setTitle(title, for: .normal)
+            cancelPicker()
+            toolbar.removeFromSuperview()
         } else {
             global_gpt = "gpt-3.5-turbo"
             selectedGpt = title
@@ -365,7 +370,7 @@ extension SB_ChatBot {
     }
     
     
-    
+    /*
     func checkAccountStatus() {
         
         if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
@@ -451,7 +456,7 @@ extension SB_ChatBot {
         }
         
         
-    }
+    }*/
     
     
     @objc func metaButtonTapped() {
