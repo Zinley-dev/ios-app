@@ -34,8 +34,6 @@ class FistBumpNode: ASCellNode {
     
     init(with user: FistBumpUserModel) {
         
-        print(user.avatar, user.name, user.userName, user.userID)
-        
         self.user = user
         self.userNameNode = ASTextNode()
         self.avatarNode = ASNetworkImageNode()
@@ -84,7 +82,7 @@ class FistBumpNode: ASCellNode {
                 self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                 self.actionBtnNode.layer.cornerRadius = 10.0
                 self.actionBtnNode.clipsToBounds = true
-                self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.white, for: .normal)
+                self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium, with: UIColor.white, for: .normal)
             }
             
         } else {
@@ -96,7 +94,7 @@ class FistBumpNode: ASCellNode {
                 self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                 self.actionBtnNode.layer.cornerRadius = 10.0
                 self.actionBtnNode.clipsToBounds = true
-                self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
+                self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium, with: UIColor.primary, for: .normal)
             }
             
         }
@@ -126,7 +124,7 @@ class FistBumpNode: ASCellNode {
                         self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                         self.actionBtnNode.layer.cornerRadius = 10.0
                         self.actionBtnNode.clipsToBounds = true
-                        self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.white, for: .normal)
+                        self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.white, for: .normal)
                     }
                     
                 } else {
@@ -138,7 +136,7 @@ class FistBumpNode: ASCellNode {
                         self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                         self.actionBtnNode.layer.cornerRadius = 10.0
                         self.actionBtnNode.clipsToBounds = true
-                        self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
+                        self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
                     }
                     
                     
@@ -188,7 +186,7 @@ class FistBumpNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.white, for: .normal)
+            self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.white, for: .normal)
         }
         
         
@@ -219,7 +217,7 @@ class FistBumpNode: ASCellNode {
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
+                    self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
                     
                 }
             }
@@ -239,7 +237,7 @@ class FistBumpNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
+            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
             
         }
         
@@ -264,7 +262,7 @@ class FistBumpNode: ASCellNode {
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.white, for: .normal)
+                    self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.white, for: .normal)
                     
                 }
                 
