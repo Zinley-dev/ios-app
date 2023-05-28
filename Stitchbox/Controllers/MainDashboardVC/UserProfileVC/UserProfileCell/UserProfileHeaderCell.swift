@@ -33,6 +33,9 @@ class UserProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var followerStack: UIStackView!
     @IBOutlet weak var followingStack: UIStackView!
     
+    var lastAvatarImgUrl: URL?
+    var lastcoverImgUrl: URL?
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

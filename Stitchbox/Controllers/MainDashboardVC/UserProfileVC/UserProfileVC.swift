@@ -173,36 +173,28 @@ class UserProfileVC: UIViewController {
                         navigationItem.title = username
                         get_username = username
                     }
-                    
-                    if data.avatarURL != "" {
-                        
-                        let url = URL(string: data.avatarURL)
-                        cell.avatarImage.load(url: url!, str: data.avatarURL)
-                        selectAvatarImage.load(url: url!, str: data.avatarURL)
-                        
+
+                    // Avatar Image
+                    if data.avatarURL != "", let url = URL(string: data.avatarURL) {
+                        if cell.lastAvatarImgUrl != url {
+                            cell.lastAvatarImgUrl = url
+                            cell.avatarImage.load(url: url, str: data.avatarURL)
+                            selectAvatarImage.load(url: url, str: data.avatarURL)
+                        }
                     } else {
-                        
                         cell.avatarImage.image = UIImage.init(named: "defaultuser")
                         selectAvatarImage.image = UIImage.init(named: "defaultuser")
-                        
                     }
-                    
-                    if data.cover != "" {
-                        let url = URL(string: data.cover)
-                        cell.coverImage.load(url: url!, str: data.cover)
-                        selectCoverImage.load(url: url!, str: data.cover)
+
+                    // Cover Image
+                    if data.cover != "", let url = URL(string: data.cover) {
+                        if cell.lastcoverImgUrl != url {
+                            cell.lastcoverImgUrl = url
+                            cell.coverImage.load(url: url, str: data.cover)
+                            selectCoverImage.load(url: url, str: data.cover)
+                        }
                     }
-                    
-                    if data.discordUrl != "" {
-                        
-                        cell.discordLbl.isHidden = true
-                        cell.discordChecked.isHidden = false
-                        
-                    } else {
-                        
-                        cell.discordLbl.text = "None"
-                        
-                    }
+
                     
                     if data.about != "" {
                         cell.descriptionLbl.text = data.about
@@ -286,16 +278,18 @@ class UserProfileVC: UIViewController {
                         print("userData is null")
                     }
                     
-                    if data.avatarURL != "" {
-                        
-                        let url = URL(string: data.avatarURL)
-                        cell.userImgView.load(url: url!, str: data.avatarURL)
-                        ChallengeView.userImgView.load(url: url!, str: data.avatarURL)
-                        
+                    // User Image
+                    if data.avatarURL != "", let url = URL(string: data.avatarURL) {
+                        if cell.lastAvatarImgUrl != url {
+                            cell.lastAvatarImgUrl = url
+                            cell.userImgView.load(url: url, str: data.avatarURL)
+                            ChallengeView.userImgView.load(url: url, str: data.avatarURL)
+                        }
                     } else {
                         cell.userImgView.image = UIImage.init(named: "defaultuser")
                         ChallengeView.userImgView.image = UIImage.init(named: "defaultuser")
                     }
+
                     
                 }
                 

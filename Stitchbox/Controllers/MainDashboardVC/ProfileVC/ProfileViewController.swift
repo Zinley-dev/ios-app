@@ -227,21 +227,28 @@ class ProfileViewController: UIViewController {
                     cell.usernameLbl.text = username
                 }
                 
-                if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
-                    let url = URL(string: avatarUrl)
-                    cell.avatarImage.load(url: url!, str: avatarUrl)
-                    selectAvatarImage.load(url: url!, str: avatarUrl)
+                if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "", let url = URL(string: avatarUrl) {
+                    if cell.lastAvatarImgUrl != url {
+                        cell.lastAvatarImgUrl = url
+                        cell.avatarImage.load(url: url, str: avatarUrl)
+                        selectAvatarImage.load(url: url, str: avatarUrl)
+                    }
                 } else {
                     cell.avatarImage.image = UIImage.init(named: "defaultuser")
                     selectAvatarImage.image = UIImage.init(named: "defaultuser")
                 }
                 
-                if let coverUrl = _AppCoreData.userDataSource.value?.cover, coverUrl != "" {
-                    let url = URL(string: coverUrl)
-                    cell.coverImage.load(url: url!, str: coverUrl)
-                    selectCoverImage.load(url: url!, str: coverUrl)
+                if let coverUrl = _AppCoreData.userDataSource.value?.cover, coverUrl != "", let url = URL(string: coverUrl) {
+                    if cell.lastcoverImgUrl != url {
+                        cell.lastcoverImgUrl = url
+                        cell.coverImage.load(url: url, str: coverUrl)
+                        selectCoverImage.load(url: url, str: coverUrl)
+                    }
+                } else {
+                    cell.avatarImage.image = UIImage.init(named: "defaultuser")
+                    selectAvatarImage.image = UIImage.init(named: "defaultuser")
                 }
-                
+
                 if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
                     cell.discordLbl.isHidden = true
                     cell.discordChecked.isHidden = false
@@ -312,15 +319,18 @@ class ProfileViewController: UIViewController {
                     ChallengeView.username.text = username
                 }
                 
-                if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
-                    let url = URL(string: avatarUrl)
-                    cell.userImgView.load(url: url!, str: avatarUrl)
-                    ChallengeView.userImgView.load(url: url!, str: avatarUrl)
+                // User Image
+                if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "", let url = URL(string: avatarUrl) {
+                    if cell.lastAvatarImgUrl != url {
+                        cell.lastAvatarImgUrl = url
+                        cell.userImgView.load(url: url, str: avatarUrl)
+                        ChallengeView.userImgView.load(url: url, str: avatarUrl)
+                    }
                 } else {
                     cell.userImgView.image = UIImage.init(named: "defaultuser")
                     ChallengeView.userImgView.image = UIImage.init(named: "defaultuser")
-                    
                 }
+
                 
                 ChallengeView.badgeWidth.constant = cell.badgeWidth.constant
                 

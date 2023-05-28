@@ -81,7 +81,7 @@ class FollowNode: ASCellNode {
                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                 self.followBtnNode.layer.cornerRadius = 10.0
                 self.followBtnNode.clipsToBounds = true
-                self.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.white, for: .normal)
+                self.followBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.white, for: .normal)
             }
             
             
@@ -98,7 +98,7 @@ class FollowNode: ASCellNode {
                         self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                         self.followBtnNode.layer.cornerRadius = 10.0
                         self.followBtnNode.clipsToBounds = true
-                        self.followBtnNode.setTitle("You", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                        self.followBtnNode.setTitle("You", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
                     }
                     
                 } else {
@@ -112,7 +112,7 @@ class FollowNode: ASCellNode {
                             self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                             self.followBtnNode.layer.cornerRadius = 10.0
                             self.followBtnNode.clipsToBounds = true
-                            self.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.white, for: .normal)
+                            self.followBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.white, for: .normal)
                         }
                         
                         
@@ -127,7 +127,7 @@ class FollowNode: ASCellNode {
                                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                                 self.followBtnNode.layer.cornerRadius = 10.0
                                 self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("+ follow back", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                                self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
                             }
                             
                         } else {
@@ -139,7 +139,7 @@ class FollowNode: ASCellNode {
                                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                                 self.followBtnNode.layer.cornerRadius = 10.0
                                 self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("+ follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                                self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
                             }
                             
                         }
@@ -209,7 +209,7 @@ class FollowNode: ASCellNode {
                                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                                 self.followBtnNode.layer.cornerRadius = 10.0
                                 self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("+ follow back", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                                self.followBtnNode.setTitle("Follow back", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
                             }
                             
                         } else {
@@ -221,7 +221,7 @@ class FollowNode: ASCellNode {
                                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                                 self.followBtnNode.layer.cornerRadius = 10.0
                                 self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("+ follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                                self.followBtnNode.setTitle("Follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
                             }
                             
                         }
@@ -305,7 +305,7 @@ class FollowNode: ASCellNode {
                             self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                             self.followBtnNode.layer.cornerRadius = 10.0
                             self.followBtnNode.clipsToBounds = true
-                            self.followBtnNode.setTitle("+ follow back", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                            self.followBtnNode.setTitle("Follow back", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
                             self.updateTotal(isIncreased: false)
                         }
                         
@@ -318,7 +318,7 @@ class FollowNode: ASCellNode {
                             self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                             self.followBtnNode.layer.cornerRadius = 10.0
                             self.followBtnNode.clipsToBounds = true
-                            self.followBtnNode.setTitle("+ follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                            self.followBtnNode.setTitle("Follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
                             self.updateTotal(isIncreased: false)
                         }
                         
@@ -347,7 +347,8 @@ class FollowNode: ASCellNode {
                     self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.followBtnNode.layer.cornerRadius = 10.0
                     self.followBtnNode.clipsToBounds = true
-                    self.followBtnNode.setTitle("+ follow back", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                    self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
+                    self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
                     
                 }
                 
@@ -360,7 +361,7 @@ class FollowNode: ASCellNode {
                     self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.followBtnNode.layer.cornerRadius = 10.0
                     self.followBtnNode.clipsToBounds = true
-                    self.followBtnNode.setTitle("+ follow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.primary, for: .normal)
+                    self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.primary, for: .normal)
                     
                 }
                 
@@ -388,7 +389,7 @@ class FollowNode: ASCellNode {
                         self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                         self.followBtnNode.layer.cornerRadius = 10.0
                         self.followBtnNode.clipsToBounds = true
-                        self.followBtnNode.setTitle("Unfollow", with: UIFont(name: "Avenir-Medium", size: FontSize)!, with: UIColor.white, for: .normal)
+                        self.followBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.white, for: .normal)
                         self.updateTotal(isIncreased: true)
                     }
                     

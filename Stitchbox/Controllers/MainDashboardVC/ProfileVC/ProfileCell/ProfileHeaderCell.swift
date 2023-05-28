@@ -34,6 +34,9 @@ class ProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var proImg: UIImageView!
     let kCONTENT_XIB_NAME = "ProfileView"
     
+    var lastAvatarImgUrl: URL?
+    var lastcoverImgUrl: URL?
+   
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -49,8 +52,6 @@ class ProfileHeaderCell: UICollectionViewCell {
         fistBumpedListBtn.tintColor = .white
     
     }
-    
-
     
     override func layoutSubviews() {
         super.layoutSubviews()

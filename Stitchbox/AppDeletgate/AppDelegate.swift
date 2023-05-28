@@ -101,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else if currentVolume < previousVolume {
             consecutiveVolumeDownPresses += 1
             if consecutiveVolumeDownPresses >= 2 {
-                muteVideoIfNeed()
+               // muteVideoIfNeed()
                 consecutiveVolumeDownPresses = 0
             }
         }

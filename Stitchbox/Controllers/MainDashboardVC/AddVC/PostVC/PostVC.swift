@@ -1011,7 +1011,7 @@ extension PostVC: UITextViewDelegate {
         
         if textView == descTxtView {
             
-            if textView.text == "Hi, what's on your thought?" {
+            if textView.text == "Hi, let's unleash your gameplay" {
                 
                 textView.text = ""
                 
@@ -1026,7 +1026,7 @@ extension PostVC: UITextViewDelegate {
             
             if textView.text == "" {
                 
-                textView.text = "Hi, what's on your thought?"
+                textView.text = "Hi, let's unleash your gameplay"
                 
             } else {
                 selectedDescTxtView = textView.text

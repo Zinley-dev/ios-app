@@ -97,6 +97,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         
         
+        
         if let tabBarController = self.tabBarController {
             let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
             for viewController in viewControllersToPreload {
@@ -105,10 +106,13 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         }
         
         
+        
         if let navigationController = self.navigationController {
             navigationController.navigationBar.prefersLargeTitles = false
             navigationController.navigationBar.isTranslucent = false
         }
+        
+        
         
         self.loadNewestCoreData {
             self.loadSettings {

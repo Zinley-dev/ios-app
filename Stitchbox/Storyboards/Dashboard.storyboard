@@ -8054,7 +8054,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Hi, what's on your thought?" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="vAk-wt-wq6">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Hi, let's unleash your gameplay" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="vAk-wt-wq6">
                                         <rect key="frame" x="8" y="76" width="359" height="297"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -9748,7 +9748,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Hi, what's on your thought?" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cRi-4B-kHC">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Hi, let's unleash your gameplay" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cRi-4B-kHC">
                                         <rect key="frame" x="8" y="76" width="359" height="351"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -11687,11 +11687,21 @@
                                     <action selector="viewAvailableDomainBtnPressed:" destination="6q8-6s-Yjd" eventType="touchUpInside" id="jAO-c5-ocj"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CSQ-V7-DTm">
+                                <rect key="frame" x="16" y="683.66666666666663" width="343" height="62.333333333333371"/>
+                                <string key="text">Stitchbox is not affiliated with, endorsed by, or representative of any views associated with the available domain options listed above or any game on the available game list.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fjF-Gb-XGM"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstItem="fjF-Gb-XGM" firstAttribute="trailing" secondItem="CSQ-V7-DTm" secondAttribute="trailing" constant="16" id="3sa-ge-zyD"/>
+                            <constraint firstItem="CSQ-V7-DTm" firstAttribute="leading" secondItem="fjF-Gb-XGM" secondAttribute="leading" constant="16" id="Bch-1M-KyU"/>
                             <constraint firstItem="yRV-eh-DGm" firstAttribute="top" secondItem="vhC-PG-BSW" secondAttribute="bottom" constant="16" id="HJF-4H-jSU"/>
+                            <constraint firstItem="fjF-Gb-XGM" firstAttribute="bottom" secondItem="CSQ-V7-DTm" secondAttribute="bottom" constant="32" id="bmX-Ue-KP1"/>
                             <constraint firstItem="vhC-PG-BSW" firstAttribute="top" secondItem="fjF-Gb-XGM" secondAttribute="top" constant="32" id="h0Q-vw-80B"/>
                             <constraint firstItem="fjF-Gb-XGM" firstAttribute="trailing" secondItem="vhC-PG-BSW" secondAttribute="trailing" constant="32" id="lgx-hQ-DmN"/>
                             <constraint firstItem="vhC-PG-BSW" firstAttribute="leading" secondItem="fjF-Gb-XGM" secondAttribute="leading" constant="32" id="pgc-YG-CkM"/>
@@ -12074,7 +12084,7 @@
         <image name="fistBumpedStats" width="66.666664123535156" height="32.666667938232422"/>
         <image name="following" width="30" height="30"/>
         <image name="game_add" width="30" height="30.5"/>
-        <image name="gpt_bot" width="34" height="34"/>
+        <image name="gpt_bot" width="30" height="30"/>
         <image name="gpt_bot_filled" width="34" height="34"/>
         <image name="home" width="34" height="35"/>
         <image name="home.filled" width="24" height="26"/>
