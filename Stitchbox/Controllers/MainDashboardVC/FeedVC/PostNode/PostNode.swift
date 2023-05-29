@@ -467,31 +467,52 @@ extension PostNode {
                         }
                     }
                     
-                    
-                    // Customize the navigation bar appearance
-                    nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                    nav.navigationBar.shadowImage = UIImage()
-                    nav.navigationBar.isTranslucent = true
-                    
-                    nav.modalPresentationStyle = .fullScreen
-                    
-                    /*
-                    if vc is FeedViewController {
+                    if let navVC = vc.navigationController {
                         
-                        if let feed = vc as? FeedViewController {
+                        
+                        let snapshotdc = vc.view.snapshotView(afterScreenUpdates: false)
+                                
+                        // Store the snapshot
+                        viewSnapshot = snapshotdc
+                        vc.view.window?.insertSubview(viewSnapshot!, at: 0)
+                        
+                        if vc is FeedViewController {
+
+                          
+                            RVC.hidesBottomBarWhenPushed = true
+                            hideMiddleBtn(vc: vc.self)
                             
-                            feed.showTabbar()
-                            feed.present(nav, animated: true, completion: nil)
-                
                         }
                         
+                        
+                        let navigationBarAppearance = UINavigationBarAppearance()
+                        navigationBarAppearance.configureWithDefaultBackground()
+                        navigationBarAppearance.backgroundColor = .clear
+                        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+                        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+                        navigationBarAppearance.backgroundImage = UIImage()
+                        navigationBarAppearance.shadowImage = UIImage()
+                        navigationBarAppearance.backgroundEffect = nil  // Ensure no background effect interferes
+
+                        RVC.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+                        RVC.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+                        RVC.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+                        RVC.navigationController?.navigationBar.isTranslucent = true
+                        
+                        navVC.pushViewController(RVC, animated: true)
+                        
                     } else {
+                        
+                        nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                        nav.navigationBar.shadowImage = UIImage()
+                        nav.navigationBar.isTranslucent = true
+
+                        nav.modalPresentationStyle = .fullScreen
                         vc.present(nav, animated: true, completion: nil)
-                    }*/
+                        
+                    }
                     
-                    
-                    vc.present(nav, animated: true, completion: nil)
-                    
+                  
                     
                 } else {
                     
@@ -513,13 +534,41 @@ extension PostNode {
                                     }
                                 }
                                 
-                                // Customize the navigation bar appearance
-                                nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                                nav.navigationBar.shadowImage = UIImage()
-                                nav.navigationBar.isTranslucent = true
+                                if let navVC = vc.navigationController {
+                                    
+                                    let snapshotdc = vc.view.snapshotView(afterScreenUpdates: false)
+                                            
+                                    // Store the snapshot
+                                    viewSnapshot = snapshotdc
+                                    vc.view.window?.insertSubview(viewSnapshot!, at: 0)
+                                    
+                                    let navigationBarAppearance = UINavigationBarAppearance()
+                                    navigationBarAppearance.configureWithDefaultBackground()
+                                    navigationBarAppearance.backgroundColor = .clear
+                                    navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+                                    navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+                                    navigationBarAppearance.backgroundImage = UIImage()
+                                    navigationBarAppearance.shadowImage = UIImage()
+                                    navigationBarAppearance.backgroundEffect = nil  // Ensure no background effect interferes
+
+                                    RVC.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+                                    RVC.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+                                    RVC.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+                                    RVC.navigationController?.navigationBar.isTranslucent = true
+                                    
+                                    navVC.pushViewController(RVC, animated: true)
+                                } else {
+                                    
+                                    nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                                    nav.navigationBar.shadowImage = UIImage()
+                                    nav.navigationBar.isTranslucent = true
+
+                                    nav.modalPresentationStyle = .fullScreen
+                                    vc.present(nav, animated: true, completion: nil)
+                                    
+                                }
                                 
-                                nav.modalPresentationStyle = .fullScreen
-                                vc.present(nav, animated: true, completion: nil)
+                               
                                 
                             } else {
                                 

@@ -1136,6 +1136,14 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             
             if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                
+                let snapshotdc = view.snapshotView(afterScreenUpdates: false)
+                        
+                // Store the snapshot
+                viewSnapshot = snapshotdc
+                view.window?.insertSubview(viewSnapshot!, at: 0)
+                
+                
                 SPVC.selectedPost = selectedPost
                 SPVC.startIndex = indexPath.row
                 SPVC.hidesBottomBarWhenPushed = true

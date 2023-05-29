@@ -47,9 +47,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     @IBOutlet weak var playTimeBar: UIProgressView!
     
     private var pullControl = UIRefreshControl()
-    
-    
-    
+      
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,6 +61,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         
+    
         if UIDevice.current.hasNotch {
             pullControl.bounds = CGRect(x: pullControl.bounds.origin.x, y: -50, width: pullControl.bounds.size.width, height: pullControl.bounds.size.height)
         }
@@ -73,10 +72,61 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             collectionNode.view.addSubview(pullControl)
         }
         
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .clear
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundImage = UIImage()
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.backgroundEffect = nil  // Ensure no background effect interferes
+
+        navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        navigationController?.navigationBar.isTranslucent = true
+
+
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        self.view.addGestureRecognizer(panGesture)
         
+        navigationController?.setNavigationBarHidden(false, animated: true)
         
     }
     
+    
+    @objc func onPan(_ panGesture: UIPanGestureRecognizer) {
+        guard let navigationController = navigationController else { return }
+        let transition = panGesture.translation(in: view)
+
+        switch panGesture.state {
+        case .began, .changed:
+            // Only make view follow the gesture if user swipes from left to right
+            if transition.x > 0 {
+                view.transform = CGAffineTransform(translationX: transition.x, y: 0)
+                // Reduce the opacity of the view as it moves further to the right
+                view.alpha = 1 - abs(transition.x / view.frame.width)
+            }
+        case .ended, .cancelled:
+            // If the view is moved more than a third of its width to the right, pop the view controller
+            if transition.x > view.frame.width / 3 {
+                navigationController.popViewController(animated: true)
+                // Remove the snapshot
+                viewSnapshot?.removeFromSuperview()
+            } else {
+                // If the view is moved less than a third of its width to the right, animate it back to its original position
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.view.transform = .identity
+                    self.view.alpha = 1
+                })
+            }
+        default:
+            break
+        }
+    }
+
+
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -98,8 +148,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             playVideo(index: currentIndex!)
             
         }
-        
-        
+       
     }
     
     
@@ -177,7 +226,9 @@ extension ReelVC {
     @objc func onClickBack(_ sender: AnyObject) {
         
         
-        self.dismiss(animated: true)
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
+        }
         
     }
     
