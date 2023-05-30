@@ -322,12 +322,6 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        super.willMove(toParent: parent)
-        print(parent)
-        
-    }
-    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         

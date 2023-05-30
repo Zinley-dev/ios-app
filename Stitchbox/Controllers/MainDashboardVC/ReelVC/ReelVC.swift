@@ -483,16 +483,7 @@ extension ReelVC {
         let selectedHashtag = posts[collectionView.tag].hashtags[indexPath.row]
         
         if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-            
-            let snapshotdc = view.snapshotView(afterScreenUpdates: false)
-                    
-            // Store the snapshot
-            viewSnapshot?.removeFromSuperview()
-            viewSnapshot = snapshotdc
-            view.window?.insertSubview(viewSnapshot!, at: 0)
-            
-            
-            
+    
             PLWHVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
             PLWHVC.searchHashtag = selectedHashtag
@@ -505,7 +496,6 @@ extension ReelVC {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
     }
-    
     
     
 }
@@ -568,6 +558,7 @@ extension ReelVC: ASCollectionDataSource {
             //
             return node
         }
+        
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {

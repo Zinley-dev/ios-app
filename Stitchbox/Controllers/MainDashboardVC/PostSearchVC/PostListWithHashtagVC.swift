@@ -79,46 +79,13 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
             }
             
         }
-        
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
-        self.view.addGestureRecognizer(panGesture)
-        
+      
         setupButtons()
         
         
     }
     
-    @objc func onPan(_ panGesture: UIPanGestureRecognizer) {
-        guard let navigationController = navigationController else { return }
-        let transition = panGesture.translation(in: view)
 
-        switch panGesture.state {
-        case .began, .changed:
-            // Only make view follow the gesture if user swipes from left to right
-            if transition.x > 0 {
-                view.transform = CGAffineTransform(translationX: transition.x, y: 0)
-                // Reduce the opacity of the view as it moves further to the right
-                view.alpha = 1 - abs(transition.x / view.frame.width)
-            }
-        case .ended, .cancelled:
-            // If the view is moved more than a third of its width to the right, pop the view controller
-            if transition.x > view.frame.width / 3 {
-                pop()
-                // Remove the snapshot
-                viewSnapshot?.removeFromSuperview()
-            } else {
-                // If the view is moved less than a third of its width to the right, animate it back to its original position
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.view.transform = .identity
-                    self.view.alpha = 1
-                })
-            }
-        default:
-            break
-        }
-    }
-
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         

@@ -1200,7 +1200,7 @@ extension FeedViewController {
             guard let self = self else { return }
             
             switch result {
-            case .success(let apiResponse):
+            case .success(_):
                 
                 Dispatch.main.async {
                     self.setupEmptyNotiButton()
