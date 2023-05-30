@@ -484,6 +484,15 @@ extension ReelVC {
         
         if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
             
+            let snapshotdc = view.snapshotView(afterScreenUpdates: false)
+                    
+            // Store the snapshot
+            viewSnapshot?.removeFromSuperview()
+            viewSnapshot = snapshotdc
+            view.window?.insertSubview(viewSnapshot!, at: 0)
+            
+            
+            
             PLWHVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
             PLWHVC.searchHashtag = selectedHashtag
