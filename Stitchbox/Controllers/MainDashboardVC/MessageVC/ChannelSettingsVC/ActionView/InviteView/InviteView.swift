@@ -19,7 +19,6 @@ class InviteView: UIViewController{
 
         emptyLbl()
         
-     
     }
     
     

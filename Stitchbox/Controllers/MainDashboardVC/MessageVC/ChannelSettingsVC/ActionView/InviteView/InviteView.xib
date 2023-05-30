@@ -13,6 +13,7 @@
                 <outlet property="cancelBtn" destination="xsd-tc-ENb" id="dIX-um-geb"/>
                 <outlet property="createBtn" destination="6F1-nb-zMc" id="z1j-kx-ilA"/>
                 <outlet property="inviteBtn" destination="R3q-j0-ea6" id="na1-Ny-tQg"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="psL-me-Ios"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

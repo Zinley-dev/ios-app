@@ -711,28 +711,29 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     func checkIfShouldPushNoti(pushChannel: SBDGroupChannel) {
         // Check if push notifications are enabled for the group channel
-        if pushChannel.myPushTriggerOption != .off {
+        if pushChannel.myPushTriggerOption != .off, let lastMessage = pushChannel.lastMessage?.message {
             // Get the current view controller
             if let vc = UIViewController.currentViewController() {
                 // Check the type of the current view controller
                 switch vc {
-                case is ChannelViewController:
+                case let channelVC as ChannelViewController:
                     // Check if the channelUrl property of the view controller is the same as the channelUrl property of the group channel
-                    if let channelVC = vc as? ChannelViewController, channelVC.channelUrl != pushChannel.channelUrl {
-                        createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    if channelVC.channelUrl != pushChannel.channelUrl {
+                        createLocalNotificationForActiveSendbirdUsers(title: "", body: lastMessage, channel: pushChannel)
                     }
-                case is MainMessageVC:
+                case let mainMessageVC as MainMessageVC:
                     // Check if the InboxVC view is hidden
-                    if let mainMessageVC = vc as? MainMessageVC, mainMessageVC.InboxVC.view.isHidden {
-                        createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    if mainMessageVC.InboxVC.view.isHidden {
+                        createLocalNotificationForActiveSendbirdUsers(title: "", body: lastMessage, channel: pushChannel)
                     }
                 default:
                     // If the current view controller is neither a ChannelViewController nor a MainMessageVC, create a local notification
-                    createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    createLocalNotificationForActiveSendbirdUsers(title: "", body: lastMessage, channel: pushChannel)
                 }
             }
         }
     }
+
     
     
     func channelDidUpdateTypingStatus(_ sender: SBDGroupChannel) {

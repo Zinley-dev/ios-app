@@ -253,16 +253,22 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 if searchUserList.contains(user) {
                     searchUserList.removeObject(user)
                 }
-                rightBarButton?.isEnabled = false
-                selectedUserListHeight.constant = 0
-                selectedUserListView.isHidden = true
             } else {
                 selectedUsers.append(user)
                 cell.selectUser(true)
+            }
+
+            // Update button and view based on number of selected users
+            if selectedUsers.count > 0 {
                 rightBarButton?.isEnabled = true
                 selectedUserListHeight.constant = 40
                 selectedUserListView.isHidden = false
+            } else {
+                rightBarButton?.isEnabled = false
+                selectedUserListHeight.constant = 0
+                selectedUserListView.isHidden = true
             }
+
             setupStyles()
             selectedUserListView.reloadData()
         }
@@ -352,7 +358,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
 
             switch result {
             case .success(let apiResponse):
-                print(apiResponse)
+     
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     return
                 }
@@ -391,7 +397,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
            
            slideVC.modalPresentationStyle = .custom
            slideVC.transitioningDelegate = self
-           global_presetingRate = Double(0.75)
+           global_presetingRate = Double(0.35)
            global_cornerRadius = 35
            self.present(slideVC, animated: true, completion: nil)
            
@@ -464,25 +470,12 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     
     func inviteUsers(userIds: [String]) {
         // Get a reference to the group channel
-        guard let channel = self.channel, let userId = _AppCoreData.userDataSource.value?.userID else { return }
+        guard let channel = self.channel else { return }
         
         // Check if the channelUrl property is not nil
         guard let url = self.channelUrl else { return }
         
-        // When channel has only two members, add current user as operator before inviting new users
-        if channel.memberCount == 2 {
-            channel.addOperators(withUserIds: [userId]) { [weak self] error in
-                if let error = error {
-                    self?.showErrorAlert("Oops!", msg: error.localizedDescription)
-                    return
-                }
-                // Invite users to the group channel
-                self?.inviteUsersToChannel(userIds: userIds, channel: channel, url: url)
-            }
-        } else {
-            // Invite users to the group channel
-            inviteUsersToChannel(userIds: userIds, channel: channel, url: url)
-        }
+        inviteUsersToChannel(userIds: userIds, channel: channel, url: url)
     }
 
     func inviteUsersToChannel(userIds: [String], channel: SBDGroupChannel, url: String) {

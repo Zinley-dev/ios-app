@@ -409,13 +409,14 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
         channelParams.addUserIds(selectedUsers.map { $0.userId })
         if selectedUsers.count > 1 {
-            channelParams.operatorUserIds = [userUID]
             channelParams.isDistinct = false
         } else {
             channelParams.isDistinct = true
-            channelParams.addUserId(userUID)
         }
-
+        
+        channelParams.addUserId(userUID)
+        channelParams.operatorUserIds = [userUID]
+        
         SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
             guard error == nil, let channelUrl = groupChannel?.channelUrl else {
                 self.showErrorAlert("Oops!", msg: error?.localizedDescription ?? "Failed to create channel")
