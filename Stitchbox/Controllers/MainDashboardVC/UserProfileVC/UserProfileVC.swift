@@ -851,7 +851,7 @@ extension UserProfileVC {
         
         let imgView = UIImageView()
         imgView.image = UIImage(named: "fistBumpedStats")
-        imgView.frame.size = CGSize(width: 170, height: 120)
+        imgView.frame.size = CGSize(width: 200, height: 120)
         
         imgView.center = self.view.center
         self.view.addSubview(imgView)

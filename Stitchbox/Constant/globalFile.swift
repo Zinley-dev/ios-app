@@ -16,9 +16,9 @@ import AVFAudio
 import ObjectMapper
 
 
-let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 30, height: 23))
-let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 30, height: 23))
-let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 90, height: 65))
+let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 23))
+let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 23))
+let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 100, height: 65))
 
 var viewSnapshot: UIView?
 var general_vc: UIViewController!

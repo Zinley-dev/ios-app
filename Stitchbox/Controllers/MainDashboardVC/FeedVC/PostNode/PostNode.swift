@@ -796,13 +796,10 @@ extension PostNode {
         
     }
     
-    
-    
 }
 
 
 extension PostNode {
-    
     
     @objc func userTapped() {
         
@@ -849,17 +846,13 @@ extension PostNode {
                     
                 }
                 
-                
             }
             
-            
         }
-        
         
     }
     
     @objc func shareTapped() {
-        
         
         guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
             print("Sendbird: Can't get userUID")
@@ -873,9 +866,7 @@ extension PostNode {
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
             
-            
         }
-        
         
         if let vc = UIViewController.currentViewController() {
             
@@ -913,9 +904,7 @@ extension PostNode {
                 
             }
             
-            
         }
-        
         
     }
     
@@ -972,7 +961,6 @@ extension PostNode {
                     
                 }
                 
-                
             } else if vc is MainSearchVC {
                 
                 if let update1 = vc as? MainSearchVC {
@@ -987,7 +975,6 @@ extension PostNode {
                     update1.PostSearchVC.present(slideVC, animated: true, completion: nil)
                     
                 }
-                
                 
             }
             
@@ -1019,21 +1006,22 @@ extension PostNode {
     }
     
     @objc func streamingLinkTapped() {
+        
         guard let url = URL(string: post.streamLink), !post.streamLink.isEmpty else {
             presentStreamingIntro()
             return
             
         }
+        
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
     
     
     @objc func likeHandle() {
         
-        
         let imgView = UIImageView()
         imgView.image = popupLikeImage
-        imgView.frame.size = CGSize(width: 120, height: 120)
+        imgView.frame.size = CGSize(width: 150, height: 120)
         
         if let vc = UIViewController.currentViewController() {
             
@@ -1075,11 +1063,7 @@ extension PostNode {
                 
             }
             
-            
-            
-            
         }
-        
         
         imgView.transform = CGAffineTransform.identity
         
@@ -1088,7 +1072,6 @@ extension PostNode {
             imgView.alpha = 0
             
         }
-        
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             

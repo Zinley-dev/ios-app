@@ -49,21 +49,6 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     private lazy var leftBarButton: UIBarButtonItem? = _leftBarButton
     private lazy var rightBarButton: UIBarButtonItem? = _rightBarButton
    
-    /*
-    private lazy var _titleView: SBUNavigationTitleView = {
-        var titleView: SBUNavigationTitleView
-        if #available(iOS 11, *) {
-            titleView = SBUNavigationTitleView()
-        } else {
-            titleView = SBUNavigationTitleView(
-                frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50)
-            )
-        }
-        titleView.text = "Add members"
-        titleView.textAlignment = .center
-        return titleView
-    }() */
-    
     private lazy var _leftBarButton: UIBarButtonItem = {
         
         let leftButton = UIButton(type: .custom)
@@ -134,6 +119,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         }
         
         
+        NotificationCenter.default.addObserver(self, selector: #selector(InviteUserVC.InviteToChannel), name: (NSNotification.Name(rawValue: "invite")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(InviteUserVC.createChannel), name: (NSNotification.Name(rawValue: "create")), object: nil)
+        
        
     }
     
@@ -149,6 +137,15 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "invite")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "create")), object: nil)
+        
         
     }
     
@@ -355,6 +352,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
 
             switch result {
             case .success(let apiResponse):
+                print(apiResponse)
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     return
                 }
@@ -389,15 +387,15 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                return
            }
 
-           // Check if the joinedUserIds array has exactly 2 elements
-           if joinedUserIds.count == 2 {
-               createNewChannel()
-           } else {
-               // Get an array of user IDs from the selectedUsers array
-               let userIds = Array(self.selectedUsers).sbu_getUserIds()
-               // Invite users to the group channel
-               inviteUsers(userIds: userIds)
-           }
+           let slideVC = InviteView()
+           
+           slideVC.modalPresentationStyle = .custom
+           slideVC.transitioningDelegate = self
+           global_presetingRate = Double(0.75)
+           global_cornerRadius = 35
+           self.present(slideVC, animated: true, completion: nil)
+           
+        
        }
     }
 
@@ -465,31 +463,48 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     
     
     func inviteUsers(userIds: [String]) {
-       // Get a reference to the group channel
-       guard let channel = self.channel else { return }
-
-       // Invite users to the group channel
-       channel.inviteUserIds(userIds) { [weak self] error in
-           guard let self = self else { return }
-
-           // Check if the invitation was successful
-           if let error = error {
-               print(error.localizedDescription)
-               showErrorAlert("Oops!", msg: error.localizedDescription)
-               return
-           }
-
-           
-           // Check if the channelUrl property is not nil
-           if let url = self.channelUrl {
-               // Call checkForChannelInvitation function
-               checkForChannelInvitation(channelUrl: url, user_ids: userIds)
-           }
-
-           // Pop back to the fourth view controller in the navigation stack
-           self.navigationController?.popBack(4)
-       }
+        // Get a reference to the group channel
+        guard let channel = self.channel, let userId = _AppCoreData.userDataSource.value?.userID else { return }
+        
+        // Check if the channelUrl property is not nil
+        guard let url = self.channelUrl else { return }
+        
+        // When channel has only two members, add current user as operator before inviting new users
+        if channel.memberCount == 2 {
+            channel.addOperators(withUserIds: [userId]) { [weak self] error in
+                if let error = error {
+                    self?.showErrorAlert("Oops!", msg: error.localizedDescription)
+                    return
+                }
+                // Invite users to the group channel
+                self?.inviteUsersToChannel(userIds: userIds, channel: channel, url: url)
+            }
+        } else {
+            // Invite users to the group channel
+            inviteUsersToChannel(userIds: userIds, channel: channel, url: url)
+        }
     }
+
+    func inviteUsersToChannel(userIds: [String], channel: SBDGroupChannel, url: String) {
+        channel.inviteUserIds(userIds) { [weak self] error in
+            guard let self = self else { return }
+            
+            // Check if the invitation was successful
+            if let error = error {
+                print(error.localizedDescription)
+                showErrorAlert("Oops!", msg: error.localizedDescription)
+                return
+            }
+            
+            // Call checkForChannelInvitation function
+            checkForChannelInvitation(channelUrl: url, user_ids: userIds)
+
+            // Pop back to the fourth view controller in the navigation stack
+            // Assuming you have a custom implementation for popBack function
+            self.navigationController?.popBack(4)
+        }
+    }
+
 
     
     
@@ -502,6 +517,24 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         SBULoading.stop()
     }
 
+    
+    @objc func createChannel() {
+        
+        createNewChannel()
+        
+        
+    }
+    
+    
+    
+    
+    @objc func InviteToChannel() {
+        
+        let userIds = Array(self.selectedUsers).sbu_getUserIds()
+        // Invite users to the group channel
+        inviteUsers(userIds: userIds)
+        
+    }
     
   
 

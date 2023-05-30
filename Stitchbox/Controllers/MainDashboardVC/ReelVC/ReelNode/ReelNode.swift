@@ -847,7 +847,7 @@ extension ReelNode {
         
         let imgView = UIImageView()
         imgView.image = popupLikeImage
-        imgView.frame.size = CGSize(width: 120, height: 120)
+        imgView.frame.size = CGSize(width: 150, height: 120)
        
         if let vc = UIViewController.currentViewController() {
              

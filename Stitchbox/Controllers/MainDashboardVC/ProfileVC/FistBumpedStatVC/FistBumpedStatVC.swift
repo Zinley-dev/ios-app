@@ -103,6 +103,7 @@ extension FistBumpedStatVC {
                 
               case .failure(let error):
                 
+                print(error)
              
                 
                 DispatchQueue.main {

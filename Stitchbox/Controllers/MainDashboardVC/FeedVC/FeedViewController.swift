@@ -24,7 +24,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     var hasViewAppeared = false
     
-    let promotionButton = UIButton(type: .custom)
+    //let promotionButton = UIButton(type: .custom)
     let homeButton: UIButton = UIButton(type: .custom)
     var promotionList = [PromoteModel]()
     var currentIndex: Int?
@@ -428,8 +428,8 @@ extension FeedViewController {
         fixedSpace.width = 2
         
         
-        let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
+        //let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
         
         
     }
@@ -452,21 +452,12 @@ extension FeedViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
-        let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
+        //let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
         
     }
     
-    func createPromotionButton() -> UIBarButtonItem {
-        self.isPromote = true
-        
-        self.promotionButton.setImage(UIImage(named: "promotion icon")!.resize(targetSize: CGSize(width: 23, height: 23)), for: [])
-        self.promotionButton.addTarget(self, action: #selector(self.onClickPromote(_:)), for: .touchUpInside)
-        self.promotionButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        //self.promotionButton.promote()
-        
-        return UIBarButtonItem(customView: self.promotionButton)
-    }
+
     
 }
 
