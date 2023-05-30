@@ -427,6 +427,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
             checkForChannelInvitation(channelUrl: channelUrl, user_ids: userIDs)
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+            channelVC.shouldUnhide = true
             self.navigationController?.pushViewController(channelVC, animated: true)
             self.navigationController?.viewControllers.remove(at: 1)
         }

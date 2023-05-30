@@ -448,6 +448,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                // Create an instance of ChannelViewController
                let channelVC = ChannelViewController(channelUrl: channelUrl!, messageListParams: nil)
                // Push ChannelViewController onto the navigation stack
+               channelVC.shouldUnhide = true
                self.navigationController?.pushViewController(channelVC, animated: true)
                // Remove view controllers in the stack after it
                self.navigationController?.viewControllers.removeSubrange(1...4)

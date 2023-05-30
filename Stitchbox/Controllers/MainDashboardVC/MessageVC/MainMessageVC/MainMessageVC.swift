@@ -91,6 +91,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         // tabbar
         showMiddleBtn(vc: self)
         checkCallForLayout()
+        
     
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -101,6 +102,11 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
+        guard let tabBar = self.tabBarController?.tabBar else {
+            return
+        }
+
+        tabBar.isHidden = false
     }
     
     func setupSearchController() {

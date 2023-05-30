@@ -72,8 +72,22 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         
         navigationItem.title = "Settings"
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.changeTabBar(hidden: true)
+        self.tabBarController?.tabBar.isTranslucent = true
+    }
 
 
+    func changeTabBar(hidden: Bool) {
+        guard let tabBar = self.tabBarController?.tabBar else {
+            return
+        }
+
+        tabBar.isHidden = hidden
+    }
     
     @objc func leaveChannel() {
         

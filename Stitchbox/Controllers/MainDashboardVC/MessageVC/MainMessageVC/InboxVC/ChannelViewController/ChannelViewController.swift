@@ -75,9 +75,18 @@ class ChannelViewController: SBUChannelViewController {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil, shouldUnhide {
             
-            changeTabBar(hidden: false)
-            self.tabBarController?.tabBar.isTranslucent = false
-            
+            /*
+            if let vc = UIViewController.currentViewController() {
+                print(vc)
+                if vc is MainSearchVC {
+                    
+                    changeTabBar(hidden: false)
+                    tabBarController?.tabBar.isTranslucent = false
+                    
+                }
+                
+            } */
+    
         }
       
     }
