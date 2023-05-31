@@ -244,9 +244,6 @@ class ProfileViewController: UIViewController {
                         cell.coverImage.load(url: url, str: coverUrl)
                         selectCoverImage.load(url: url, str: coverUrl)
                     }
-                } else {
-                    cell.avatarImage.image = UIImage.init(named: "defaultuser")
-                    selectAvatarImage.image = UIImage.init(named: "defaultuser")
                 }
 
                 if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
