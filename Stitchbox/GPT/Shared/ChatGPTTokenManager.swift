@@ -54,14 +54,10 @@ class ChatGPTTokenManager {
     }
     
     func clearHistory() {
-        historyList.removeAll()
-        
-        let guideUserHistory = Message(role: "user", content: "Please prioritize accurate and relevant information, ensure logical order and layout, keep responses short, concise, and clear, understand context and tailor responses accordingly")
-        let guideAssistantHistory = Message(role: "assistant", content: "Yes I will repsond based on prioritize accurate and relevant information, ensure logical order and layout, keep responses short, concise, and clear, understand context and tailor responses accordingly")
-        
-        historyList.append(guideUserHistory)
-        historyList.append(guideAssistantHistory)
+        guard historyList.count > 2 else { return } // If there are only guide messages, no need to do anything.
+        historyList = Array(historyList.prefix(2)) // Keep only the first two messages
     }
+
     
     func setHistory(messages: [Message]) {
         

@@ -1021,7 +1021,7 @@ extension PostNode {
         
         let imgView = UIImageView()
         imgView.image = popupLikeImage
-        imgView.frame.size = CGSize(width: 150, height: 120)
+        imgView.frame.size = CGSize(width: 170, height: 120)
         
         if let vc = UIViewController.currentViewController() {
             

@@ -71,26 +71,6 @@ class ChannelViewController: SBUChannelViewController {
     }
     
     
-    
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil, shouldUnhide {
-            
-            /*
-            if let vc = UIViewController.currentViewController() {
-                print(vc)
-                if vc is MainSearchVC {
-                    
-                    changeTabBar(hidden: false)
-                    tabBarController?.tabBar.isTranslucent = false
-                    
-                }
-                
-            } */
-    
-        }
-      
-    }
-    
     func setupProfileButtons() {
         
         let button = UIButton()
@@ -151,12 +131,9 @@ class ChannelViewController: SBUChannelViewController {
     
     func clickVoiceCallBarButton(_ sender: AnyObject) {
         
-        
         preProcessGroupCall()
         
-        
     }
-    
     
     func preProcessGroupCall() {
         
