@@ -79,12 +79,13 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.backgroundImage = UIImage()
         navigationBarAppearance.shadowImage = UIImage()
-        navigationBarAppearance.backgroundEffect = nil  // Ensure no background effect interferes
+        navigationBarAppearance.shadowColor = .clear
+        navigationBarAppearance.backgroundEffect = nil
 
-        navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        navigationController?.navigationBar.compactAppearance = navigationBarAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-        navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.isTranslucent = true
 
 
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
@@ -93,6 +94,8 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         navigationController?.setNavigationBarHidden(false, animated: true)
         
     }
+
+
     
     
     @objc func onPan(_ panGesture: UIPanGestureRecognizer) {
@@ -148,7 +151,8 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             playVideo(index: currentIndex!)
             
         }
-       
+        
+
     }
     
     
