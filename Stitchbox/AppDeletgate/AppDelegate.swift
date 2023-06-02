@@ -21,6 +21,9 @@ import OneSignal
 import GooglePlaces
 import GoogleMaps
 import Sentry
+import SwipeTransition
+import SwipeTransitionAutoSwipeBack
+import SwipeTransitionAutoSwipeToDismiss
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -65,8 +68,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         
-     
+        SwipeBackConfiguration.shared = CustomSwipeBackConfiguration()
+        
         return true
+        
     }
     
     

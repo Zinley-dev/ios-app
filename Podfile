@@ -57,6 +57,9 @@ target 'Stitchbox' do
   pod 'swift-vibrant'
   
   pod 'Sentry'
+  pod "SwipeTransition"
+  pod "SwipeTransitionAutoSwipeBack"      # if needed
+  pod "SwipeTransitionAutoSwipeToDismiss" # if needed
   
   target 'StitchboxTests' do
     inherit! :search_paths

@@ -469,13 +469,7 @@ extension PostNode {
                     
                     if let navVC = vc.navigationController {
                         
-                        
-                        let snapshotdc = vc.view.snapshotView(afterScreenUpdates: false)
-                                
-                        // Store the snapshot
-                        viewSnapshot = snapshotdc
-                        vc.view.window?.insertSubview(viewSnapshot!, at: 0)
-                        
+                     
                         if vc is FeedViewController {
 
                           
@@ -536,11 +530,7 @@ extension PostNode {
                                 
                                 if let navVC = vc.navigationController {
                                     
-                                    let snapshotdc = vc.view.snapshotView(afterScreenUpdates: false)
-                                            
-                                    // Store the snapshot
-                                    viewSnapshot = snapshotdc
-                                    vc.view.window?.insertSubview(viewSnapshot!, at: 0)
+                                   
                                     
                                     let navigationBarAppearance = UINavigationBarAppearance()
                                     navigationBarAppearance.configureWithDefaultBackground()

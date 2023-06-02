@@ -12086,7 +12086,7 @@
         <image name="fistBumpedStats" width="66.666664123535156" height="32.666667938232422"/>
         <image name="following" width="30" height="30"/>
         <image name="game_add" width="30" height="30.5"/>
-        <image name="gpt_bot" width="30" height="30"/>
+        <image name="gpt_bot" width="34" height="34"/>
         <image name="gpt_bot_filled" width="34" height="34"/>
         <image name="home" width="34" height="35"/>
         <image name="home.filled" width="24" height="26"/>

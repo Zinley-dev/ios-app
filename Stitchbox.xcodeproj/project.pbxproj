@@ -361,6 +361,7 @@
 		6ACB10B929EB73C8009D054E /* RiotHistoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ACB10B729EB73C8009D054E /* RiotHistoryView.xib */; };
 		6ACB10BA29EB73C8009D054E /* RiotHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACB10B829EB73C8009D054E /* RiotHistoryView.swift */; };
 		6ACB10BD29EB790D009D054E /* In-gameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACB10BC29EB790D009D054E /* In-gameVC.swift */; };
+		6ACEE23C2A299F75006DFAC9 /* CustomSwipeBackConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACEE23B2A299F75006DFAC9 /* CustomSwipeBackConfiguration.swift */; };
 		6AE1CE67294D590D00B1C435 /* SendBirdGlobalAuthen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE1CE66294D590D00B1C435 /* SendBirdGlobalAuthen.swift */; };
 		6AE1CE6B294D698300B1C435 /* CreateChannelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE1CE6A294D698300B1C435 /* CreateChannelVC.swift */; };
 		6AE1CE6F294D6A4A00B1C435 /* SelectedUserCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AE1CE6D294D6A4A00B1C435 /* SelectedUserCollectionViewCell.xib */; };
@@ -848,6 +849,7 @@
 		6ACB10B729EB73C8009D054E /* RiotHistoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RiotHistoryView.xib; sourceTree = "<group>"; };
 		6ACB10B829EB73C8009D054E /* RiotHistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiotHistoryView.swift; sourceTree = "<group>"; };
 		6ACB10BC29EB790D009D054E /* In-gameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "In-gameVC.swift"; sourceTree = "<group>"; };
+		6ACEE23B2A299F75006DFAC9 /* CustomSwipeBackConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSwipeBackConfiguration.swift; sourceTree = "<group>"; };
 		6AE1CE66294D590D00B1C435 /* SendBirdGlobalAuthen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBirdGlobalAuthen.swift; sourceTree = "<group>"; };
 		6AE1CE6A294D698300B1C435 /* CreateChannelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChannelVC.swift; sourceTree = "<group>"; };
 		6AE1CE6D294D6A4A00B1C435 /* SelectedUserCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectedUserCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -1125,6 +1127,7 @@
 		390FD7362909264D0068B883 /* Stitchbox */ = {
 			isa = PBXGroup;
 			children = (
+				6ACEE23A2A299F6C006DFAC9 /* CustomSwipeBackConfiguration */,
 				6A9289C42A2454070092FD58 /* SlideAnimator */,
 				6A47AA802A18678700E3E1FF /* fireworks */,
 				6A7ED4B62A0D9A4400C8204E /* PaymentControl */,
@@ -3055,6 +3058,14 @@
 			path = "In-gameVC";
 			sourceTree = "<group>";
 		};
+		6ACEE23A2A299F6C006DFAC9 /* CustomSwipeBackConfiguration */ = {
+			isa = PBXGroup;
+			children = (
+				6ACEE23B2A299F75006DFAC9 /* CustomSwipeBackConfiguration.swift */,
+			);
+			path = CustomSwipeBackConfiguration;
+			sourceTree = "<group>";
+		};
 		6AE1CE68294D5CD000B1C435 /* Constant */ = {
 			isa = PBXGroup;
 			children = (
@@ -4213,6 +4224,7 @@
 				6AAD7A63294C699E003E3AB6 /* DispatchQueue+Extensions.swift in Sources */,
 				6AF97345297B5A2A00C76814 /* BadgesHeaderView.swift in Sources */,
 				6AF9734A297B5A7500C76814 /* ProfilePostsHeaderView.swift in Sources */,
+				6ACEE23C2A299F75006DFAC9 /* CustomSwipeBackConfiguration.swift in Sources */,
 				6A7ED4B02A0B519800C8204E /* SB-MetaVC.swift in Sources */,
 				6A0D545529750F8E0059530C /* PostModel.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
