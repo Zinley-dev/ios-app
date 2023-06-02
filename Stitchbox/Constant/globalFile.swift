@@ -316,431 +316,105 @@ extension UITextView {
 }
 
 
-
 func pauseVideoIfNeed(pauseIndex: Int) {
-  
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is SelectedPostVC {
-            
-            if let update1 = vc as? SelectedPostVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-                    
-                    if cell.sideButtonView != nil {
-                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        } else if vc is FeedViewController {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-                    
-                    if cell.sideButtonView != nil {
-                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        } else if vc is PostListWithHashtagVC {
-            
-            if let update1 = vc as? PostListWithHashtagVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-                    
-                    if cell.sideButtonView != nil {
-                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        } else if vc is MainSearchVC {
-            
-            if let update1 = vc as? MainSearchVC {
-                
-                if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-                    
-                    if cell.sideButtonView != nil {
-                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        } else if vc is ReelVC {
-            
-            if let update1 = vc as? ReelVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? ReelNode {
-                    
-                    if cell.buttonsView != nil {
-                        
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        }
-             
-        
+    guard let vc = UIViewController.currentViewController() else { return }
+
+    if let selectedPostVC = vc as? SelectedPostVC,
+       let postCell = selectedPostVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+        handlePauseVideoInCell(postCell)
+    } else if let feedVC = vc as? FeedViewController,
+        let postCell = feedVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+        handlePauseVideoInCell(postCell)
+    } else if let postListVC = vc as? PostListWithHashtagVC,
+        let postCell = postListVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+        handlePauseVideoInCell(postCell)
+    } else if let searchVC = vc as? MainSearchVC,
+        let postCell = searchVC.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+        handlePauseVideoInCell(postCell)
+    } else if let reelVC = vc as? ReelVC,
+        let reelCell = reelVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? ReelNode {
+        handlePauseVideoInReelCell(reelCell)
     }
+}
+
+func handlePauseVideoInCell(_ cell: PostNode) {
+    if let sideButtonView = cell.sideButtonView {
+        sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+        
+        if !cell.buttonsView.streamView.isHidden {
+            cell.buttonsView.streamView.stopSpin()
+        }
+    }
+
+    cell.videoNode.player?.seek(to: CMTime.zero)
+    cell.videoNode.pause()
+}
+
+func handlePauseVideoInReelCell(_ cell: ReelNode) {
+    if let buttonsView = cell.buttonsView {
+        if !buttonsView.streamView.isHidden {
+            buttonsView.streamView.stopSpin()
+        }
+    }
+
+    cell.videoNode.player?.seek(to: CMTime.zero)
+    cell.videoNode.pause()
 }
 
 
 func playVideoIfNeed(playIndex: Int) {
-  
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is SelectedPostVC {
-            
-            if let update1 = vc as? SelectedPostVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-                        
-                        if let muteStatus = shouldMute {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if muteStatus {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                }
-                            }
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if globalIsSound {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                }
-                            }
-                           
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                        
-                        
-                        
-                      
-                    }
-                    
-                }
-                
-            }
-            
-        } else if vc is FeedViewController {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-                        
-                        if let muteStatus = shouldMute {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if muteStatus {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                }
-                            }
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if globalIsSound {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                }
-                            }
-                           
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                    
-                    }
-                    
-                }
-                
-            }
-            
-        } else if vc is PostListWithHashtagVC {
-            
-            if let update1 = vc as? PostListWithHashtagVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-            
-                        if let muteStatus = shouldMute {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if muteStatus {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                }
-                            }
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if globalIsSound {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                }
-                            }
-                           
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                    
-                    }
-                    
-                }
-                
-            }
-            
-        } else if vc is MainSearchVC {
-            
-            if let update1 = vc as? MainSearchVC {
-                
-                if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-                        
-                        if let muteStatus = shouldMute {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if muteStatus {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                }
-                            }
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if globalIsSound {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                }
-                            }
-                           
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                    
-                    }
-                    
-                }
-                
-            }
-            
-        }  else if vc is ReelVC {
-            
-            if let update1 = vc as? ReelVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? ReelNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-            
-                        if let muteStatus = shouldMute {
-                        
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
+    guard let vc = UIViewController.currentViewController() else { return }
 
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                    
-                    }
-                    
-                }
-                
-            }
-            
-        }
-             
-        
+    var postCell: PostNode?
+    var reelCell: ReelNode?
+
+    if let selectedPostVC = vc as? SelectedPostVC {
+        postCell = selectedPostVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
+    } else if let feedVC = vc as? FeedViewController {
+        postCell = feedVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
+    } else if let postListVC = vc as? PostListWithHashtagVC {
+        postCell = postListVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
+    } else if let searchVC = vc as? MainSearchVC {
+        postCell = searchVC.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
+    } else if let reelVC = vc as? ReelVC {
+        reelCell = reelVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? ReelNode
+    }
+
+    if let videoCell = postCell {
+        handleVideoNodeInCell(videoCell, muteStatus: shouldMute ?? globalIsSound)
+    } else if let videoCell = reelCell {
+        handleVideoNodeInReelCell(videoCell, muteStatus: shouldMute ?? globalIsSound)
     }
 }
+
+func handleVideoNodeInCell(_ cell: PostNode, muteStatus: Bool) {
+    guard !cell.videoNode.isPlaying() else { return }
+    
+    if !cell.buttonsView.streamView.isHidden {
+        cell.buttonsView.streamView.spin()
+    }
+
+    if let sideButtonView = cell.sideButtonView {
+        let image = muteStatus ? muteImage : unmuteImage
+        sideButtonView.soundBtn.setImage(image, for: .normal)
+    }
+    
+    cell.videoNode.muted = muteStatus
+    cell.videoNode.play()
+}
+
+func handleVideoNodeInReelCell(_ cell: ReelNode, muteStatus: Bool) {
+    guard !cell.videoNode.isPlaying() else { return }
+    
+    if !cell.buttonsView.streamView.isHidden {
+        cell.buttonsView.streamView.spin()
+    }
+    
+    cell.videoNode.muted = muteStatus
+    cell.videoNode.play()
+}
+
+
 
 class ImageSaver: NSObject {
     func writeToPhotoAlbum(image: UIImage) {

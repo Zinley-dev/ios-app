@@ -72,23 +72,8 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             collectionNode.view.addSubview(pullControl)
         }
         
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithDefaultBackground()
-        navigationBarAppearance.backgroundColor = .clear
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.backgroundImage = UIImage()
-        navigationBarAppearance.shadowImage = UIImage()
-        navigationBarAppearance.shadowColor = .clear
-        navigationBarAppearance.backgroundEffect = nil
-
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.isTranslucent = true
-
+        setupNavBar()
         
-        navigationController?.setNavigationBarHidden(false, animated: true)
         
     }
 
@@ -117,6 +102,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             
         }
         
+        setupNavBar()
 
     }
     
@@ -145,6 +131,27 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         
     }
     
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .clear
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundImage = UIImage()
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.shadowColor = .clear
+        navigationBarAppearance.backgroundEffect = nil
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.isTranslucent = true
+
+        
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        
+    }
     
     @objc private func refreshListData(_ sender: Any) {
         // Call API
