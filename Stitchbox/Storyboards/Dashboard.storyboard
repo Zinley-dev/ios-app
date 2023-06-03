@@ -4358,9 +4358,6 @@
                                                                 <integer key="value" value="10"/>
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
-                                                        <connections>
-                                                            <action selector="usernameBtnPressed:" destination="eFE-jL-EIl" eventType="editingDidBegin" id="3Gy-wM-X3t"/>
-                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                             </stackView>
@@ -4425,9 +4422,6 @@
                                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                         <textInputTraits key="textInputTraits"/>
-                                                                                        <connections>
-                                                                                            <action selector="nameOnTapped:" destination="eFE-jL-EIl" eventType="editingDidBegin" id="W9p-Zy-bFe"/>
-                                                                                        </connections>
                                                                                     </textField>
                                                                                 </subviews>
                                                                                 <constraints>
@@ -4467,9 +4461,6 @@
                                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                         <textInputTraits key="textInputTraits"/>
-                                                                                        <connections>
-                                                                                            <action selector="discordDidPressed:" destination="eFE-jL-EIl" eventType="editingDidBegin" id="R5W-9I-vom"/>
-                                                                                        </connections>
                                                                                     </textField>
                                                                                 </subviews>
                                                                                 <constraints>
@@ -4509,9 +4500,6 @@
                                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                         <textInputTraits key="textInputTraits"/>
-                                                                                        <connections>
-                                                                                            <action selector="BioDidPress:" destination="eFE-jL-EIl" eventType="editingDidBegin" id="A87-18-MeW"/>
-                                                                                        </connections>
                                                                                     </textField>
                                                                                 </subviews>
                                                                                 <constraints>
@@ -5014,9 +5002,6 @@
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <textInputTraits key="textInputTraits"/>
-                                                                <connections>
-                                                                    <action selector="EmailOnTapped:" destination="g9S-Du-2Wz" eventType="editingDidBegin" id="voN-Xv-17H"/>
-                                                                </connections>
                                                             </textField>
                                                         </subviews>
                                                         <constraints>
@@ -5056,9 +5041,6 @@
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <textInputTraits key="textInputTraits"/>
-                                                                <connections>
-                                                                    <action selector="phoneTapped:" destination="g9S-Du-2Wz" eventType="editingDidBegin" id="CrR-oj-9Ed"/>
-                                                                </connections>
                                                             </textField>
                                                         </subviews>
                                                         <constraints>
@@ -5098,9 +5080,6 @@
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <textInputTraits key="textInputTraits"/>
-                                                                <connections>
-                                                                    <action selector="birthdayOnTapped:" destination="g9S-Du-2Wz" eventType="editingDidBegin" id="iux-zD-kMw"/>
-                                                                </connections>
                                                             </textField>
                                                         </subviews>
                                                         <constraints>

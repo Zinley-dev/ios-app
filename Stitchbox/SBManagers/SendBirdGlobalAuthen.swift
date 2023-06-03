@@ -34,7 +34,6 @@ func syncSendbirdAccount() {
         SBUGlobals.CurrentUser = sbuUser
     }
     
-    print(SBUGlobals.CurrentUser?.userId, SBUGlobals.CurrentUser?.nickname, SBUGlobals.CurrentUser?.profileUrl)
   
     SBUMain.connectIfNeeded { user, error in
         if let error = error {

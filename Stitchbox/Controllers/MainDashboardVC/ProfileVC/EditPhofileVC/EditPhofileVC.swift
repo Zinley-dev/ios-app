@@ -9,6 +9,8 @@ import UIKit
 import PixelSDK
 import Alamofire
 import Photos
+import SendBirdSDK
+import SendBirdUIKit
 
 class EditPhofileVC: UIViewController {
     
@@ -38,6 +40,23 @@ class EditPhofileVC: UIViewController {
         setupButtons()
         container.editControllerDelegate = self
         
+        let discordTap = UITapGestureRecognizer(target: self, action: #selector(discordTxtFieldTapped))
+        discordTxtField.isUserInteractionEnabled = true
+        discordTxtField.addGestureRecognizer(discordTap)
+
+        let usernameTap = UITapGestureRecognizer(target: self, action: #selector(usernameTxtFieldTapped))
+        usernameTxtField.isUserInteractionEnabled = true
+        usernameTxtField.addGestureRecognizer(usernameTap)
+
+        let nameTap = UITapGestureRecognizer(target: self, action: #selector(nameTxtFieldTapped))
+        nameTxtField.isUserInteractionEnabled = true
+        nameTxtField.addGestureRecognizer(nameTap)
+
+        let bioTap = UITapGestureRecognizer(target: self, action: #selector(bioTextFieldTapped))
+        bioTextField.isUserInteractionEnabled = true
+        bioTextField.addGestureRecognizer(bioTap)
+
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,58 +78,6 @@ class EditPhofileVC: UIViewController {
         
     }
     
-    @IBAction func usernameBtnPressed(_ sender: Any) {
-        
-        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
-            
-            EGIVC.type = "Username"
-            self.navigationController?.pushViewController(EGIVC, animated: true)
-            
-        }
-        
-        
-    }
-    
-    
-    @IBAction func nameOnTapped(_ sender: Any) {
-        
-        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
-            
-            EGIVC.type = "Name"
-            self.navigationController?.pushViewController(EGIVC, animated: true)
-            
-        }
-        
-        
-    }
-    
-    
-    
-    @IBAction func discordDidPressed(_ sender: Any) {
-        
-        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
-            
-            EGIVC.type = "Discord Link"
-            self.navigationController?.pushViewController(EGIVC, animated: true)
-            
-        }
-        
-        
-    }
-    
-    
-    @IBAction func BioDidPress(_ sender: Any) {
-        
-        
-        if let EBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditBioVC") as? EditBioVC {
-            
-
-            self.navigationController?.pushViewController(EBVC, animated: true)
-            
-        }
-        
-    }
-    
     @IBAction func MoreInfoOnTap(_ sender: Any) {
         
         if let MPIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MorePersonalInfoVC") as? MorePersonalInfoVC {
@@ -120,6 +87,52 @@ class EditPhofileVC: UIViewController {
         
     }
     
+    
+    // Custom function for each UITextField
+    @objc func discordTxtFieldTapped() {
+        
+        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
+            
+            EGIVC.type = "Discord Link"
+            self.navigationController?.pushViewController(EGIVC, animated: true)
+            
+        }
+        
+    }
+
+    @objc func usernameTxtFieldTapped() {
+        
+        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
+            
+            EGIVC.type = "Username"
+            self.navigationController?.pushViewController(EGIVC, animated: true)
+            
+        }
+        
+    }
+
+    @objc func nameTxtFieldTapped() {
+        
+        if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
+            
+            EGIVC.type = "Name"
+            self.navigationController?.pushViewController(EGIVC, animated: true)
+            
+        }
+        
+    }
+
+    @objc func bioTextFieldTapped() {
+        
+        if let EBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditBioVC") as? EditBioVC {
+            
+
+            self.navigationController?.pushViewController(EBVC, animated: true)
+            
+        }
+        
+    }
+
     
     @IBAction func changeCoverOnTapped(_ sender: Any) {
         
@@ -334,6 +347,14 @@ extension EditPhofileVC: EditControllerDelegate {
                               let url = apiResponse.body?["url"] as? String  else {
                                 return
                         }
+                        
+                        
+                        SBUMain.updateUserInfo(nickname: SBDMain.getCurrentUser()!.nickname, profileUrl: url) { error in
+                            if error != nil {
+                                print(error?.localizedDescription)
+                            }
+                        }
+                        
                         
                         NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
 

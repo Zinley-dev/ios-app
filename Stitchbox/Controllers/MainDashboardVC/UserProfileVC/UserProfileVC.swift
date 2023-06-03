@@ -662,7 +662,8 @@ extension UserProfileVC {
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
             
             self.navigationController?.setNavigationBarHidden(false, animated: true)
-            self.hidesBottomBarWhenPushed = false
+            hideMiddleBtn(vc: self)
+            channelVC.shouldUnhide = true
             self.navigationController?.pushViewController(channelVC, animated: true)
             
         }
