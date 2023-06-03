@@ -383,7 +383,7 @@ func playVideoIfNeed(playIndex: Int) {
     if let videoCell = postCell {
         handleVideoNodeInCell(videoCell, muteStatus: shouldMute ?? !globalIsSound)
     } else if let videoCell = reelCell {
-        handleVideoNodeInReelCell(videoCell, muteStatus: shouldMute ?? globalIsSound)
+        handleVideoNodeInReelCell(videoCell, muteStatus: shouldMute ?? !globalIsSound)
     }
 }
 
