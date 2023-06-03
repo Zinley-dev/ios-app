@@ -390,14 +390,20 @@ func playVideoIfNeed(playIndex: Int) {
 func handleVideoNodeInCell(_ cell: PostNode, muteStatus: Bool) {
     guard !cell.videoNode.isPlaying() else { return }
     
-    if !cell.buttonsView.streamView.isHidden {
-        cell.buttonsView.streamView.spin()
-    }
+    if cell.buttonsView != nil {
+        
+        if !cell.buttonsView.streamView.isHidden {
+            cell.buttonsView.streamView.spin()
+        }
 
-    if let sideButtonView = cell.sideButtonView {
-        let image = muteStatus ? muteImage : unmuteImage
-        sideButtonView.soundBtn.setImage(image, for: .normal)
+        if let sideButtonView = cell.sideButtonView {
+            let image = muteStatus ? muteImage : unmuteImage
+            sideButtonView.soundBtn.setImage(image, for: .normal)
+        }
+        
     }
+    
+    
     
     cell.videoNode.muted = muteStatus
     cell.videoNode.play()
@@ -406,12 +412,17 @@ func handleVideoNodeInCell(_ cell: PostNode, muteStatus: Bool) {
 func handleVideoNodeInReelCell(_ cell: ReelNode, muteStatus: Bool) {
     guard !cell.videoNode.isPlaying() else { return }
     
-    if !cell.buttonsView.streamView.isHidden {
-        cell.buttonsView.streamView.spin()
+    if cell.buttonsView != nil {
+        
+        if !cell.buttonsView.streamView.isHidden {
+            cell.buttonsView.streamView.spin()
+        }
+
     }
     
     cell.videoNode.muted = muteStatus
     cell.videoNode.play()
+    
 }
 
 

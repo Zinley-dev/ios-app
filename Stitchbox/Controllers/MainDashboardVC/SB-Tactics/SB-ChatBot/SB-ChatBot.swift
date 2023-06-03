@@ -80,7 +80,6 @@ class SB_ChatBot: UIViewController {
     
     func setupForMeta() {
         
-        
         // Create SwiftUI view
         let chatBotView = ChatBotView(toolbarActions: toolbarActions)
         
@@ -89,7 +88,7 @@ class SB_ChatBot: UIViewController {
         
         // Add the toolbar to the view
         view.addSubview(metaToolbar)
-        metaToolbar.barTintColor = .secondary
+        metaToolbar.barTintColor = .darkGray
 
             // Define constraints
         NSLayoutConstraint.activate([
