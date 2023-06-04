@@ -693,13 +693,12 @@ class CommentNode: ASCellNode {
     func openPost(id: String) {
       
         presentSwiftLoader()
-        
+
         APIManager.shared.getPostDetail(postId: id) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success(let apiResponse):
-                
                 guard let data = apiResponse.body else {
                     Dispatch.main.async {
                         SwiftLoader.hide()

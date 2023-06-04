@@ -654,7 +654,7 @@ extension ReelVC {
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
-        self.collectionNode.leadingScreensForBatching = 2.0
+        self.collectionNode.leadingScreensForBatching = 3.0
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         // Set the data source and delegate
         self.collectionNode.dataSource = self

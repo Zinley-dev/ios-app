@@ -649,6 +649,7 @@ extension UserProfileVC {
         let channelParams = SBDGroupChannelParams()
         channelParams.isDistinct = true
         channelParams.addUserIds([self.userId ?? "", userUID])
+        channelParams.operatorUserIds = [userUID]
         
         
         SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
@@ -660,6 +661,7 @@ extension UserProfileVC {
             checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
             
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
+            
             
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             hideMiddleBtn(vc: self)

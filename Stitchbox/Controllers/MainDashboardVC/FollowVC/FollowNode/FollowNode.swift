@@ -160,7 +160,7 @@ class FollowNode: ASCellNode {
         self.nameNode.attributedText = NSAttributedString(string: user.name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
         
         
-        if let userAvatar = user.avatar {
+        if let userAvatar = user.avatar, userAvatar != "" {
             
             avatarNode.url = URL(string: userAvatar)
             
