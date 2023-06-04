@@ -206,6 +206,12 @@ class UserProfileVC: UIViewController {
                         cell.descriptionLbl.addGestureRecognizer(descriptionTap)
                     }
                     
+                    if data.discordUrl != "" {
+                        cell.discordLbl.isHidden = true
+                        cell.discordChecked.isHidden = false
+                    } else {
+                        cell.discordLbl.text = "None"
+                    }
                     
                     cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
                     cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
