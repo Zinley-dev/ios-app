@@ -721,6 +721,8 @@ class CommentNode: ASCellNode {
                                         general_vc.viewWillDisappear(true)
                                     }
                                     
+                                    RVC.onPresent = true
+                                    
                                     let nav = UINavigationController(rootViewController: RVC)
 
                                     // Set the user ID, nickname, and onPresent properties of UPVC

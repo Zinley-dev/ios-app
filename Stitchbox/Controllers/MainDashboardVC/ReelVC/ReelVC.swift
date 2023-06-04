@@ -33,7 +33,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     var searchHashtag: String!
     var keyword: String!
     var hasViewAppeared = false
-    
+    var onPresent = false
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
     lazy var delayItem3 = workItem()
@@ -66,11 +66,17 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             pullControl.bounds = CGRect(x: pullControl.bounds.origin.x, y: -50, width: pullControl.bounds.size.width, height: pullControl.bounds.size.height)
         }
         
-        if #available(iOS 10.0, *) {
-            collectionNode.view.refreshControl = pullControl
-        } else {
-            collectionNode.view.addSubview(pullControl)
+        if !onPresent {
+            
+            if #available(iOS 10.0, *) {
+                collectionNode.view.refreshControl = pullControl
+            } else {
+                collectionNode.view.addSubview(pullControl)
+            }
+            
         }
+        
+        
         
         setupNavBar()
         
@@ -202,9 +208,20 @@ extension ReelVC {
     @objc func onClickBack(_ sender: AnyObject) {
         
         
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
+        if onPresent {
+            
+            self.dismiss(animated: true)
+            
+            
+        } else {
+            
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }
+            
+            
         }
+
         
     }
     
@@ -654,7 +671,7 @@ extension ReelVC {
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
-        self.collectionNode.leadingScreensForBatching = 3.0
+        self.collectionNode.leadingScreensForBatching = 2.0
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         // Set the data source and delegate
         self.collectionNode.dataSource = self
