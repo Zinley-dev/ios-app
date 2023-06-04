@@ -136,12 +136,23 @@ class SettingVC: UIViewController {
         
         delay(1) {
             
-            _AppCoreData.signOut()
-            if let SNVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartNavVC") as? StartNavVC {
+        _AppCoreData.signOut()
+            
+            
+            
+        if let SNVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartViewController") as? StartViewController {
                 
-                SNVC.modalPresentationStyle = .fullScreen
-                SwiftLoader.hide()
-                self.present(SNVC, animated: true)
+                
+            let nav = UINavigationController(rootViewController: SNVC)
+
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .background
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+                
             }
         }
         

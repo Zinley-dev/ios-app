@@ -25,6 +25,15 @@ class LoginController: UIViewController, ControllerType {
     }
     
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        passwordTextfield.addUnderLine()
+        usernameTextfield.addUnderLine()
+        
+    }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
