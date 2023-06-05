@@ -30,7 +30,11 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     @IBOutlet weak var selectedUserListHeight: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     
-    
+    @IBOutlet weak var collectionLayout: UICollectionViewFlowLayout! {
+        didSet {
+            collectionLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        }
+    }
     //
     var joinedUserIds: [String] = []
     var bannedList: [String] = []
@@ -51,17 +55,30 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
    
     private lazy var _leftBarButton: UIBarButtonItem = {
         
-        let leftButton = UIButton(type: .custom)
+        let backButton = UIButton(type: .custom)
         
-        leftButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
-        leftButton.frame = back_frame
-        leftButton.setTitleColor(UIColor.white, for: .normal)
-        leftButton.setTitle("", for: .normal)
-        leftButton.sizeToFit()
+        backButton.frame = back_frame
+        backButton.contentMode = .center
         
-        let backButtonBarButton = UIBarButtonItem(customView: leftButton)
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+        
+        backButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        backButton.setTitle("", for: .normal)
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+        
+        self.navigationItem.leftBarButtonItem = backButtonBarButton
+        
         return backButtonBarButton
+
     }()
     
     private lazy var _rightBarButton: UIBarButtonItem = {
@@ -184,7 +201,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         layout.itemSize = CGSize(width: 120, height: 30)
         self.selectedUserListView.collectionViewLayout = layout
         self.selectedUserListView.contentInset = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
-        self.selectedUserListView.register(SelectedUserCollectionViewCell.nib(), forCellWithReuseIdentifier: SelectedUserCollectionViewCell.cellReuseIdentifier())
+        self.selectedUserListView.register(HashtagCell.nib(), forCellWithReuseIdentifier: HashtagCell.cellReuseIdentifier())
         self.selectedUserListView.isHidden = true
         self.selectedUserListView.showsHorizontalScrollIndicator = false
         self.selectedUserListView.showsVerticalScrollIndicator = false
@@ -209,8 +226,11 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     }
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelectedUserCollectionViewCell.cellReuseIdentifier(), for: indexPath) as! SelectedUserCollectionViewCell
-        cell.nicknameLabel.text = selectedUsers[indexPath.row].nickname
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
+        cell.hashTagLabel.text = selectedUsers[indexPath.row].nickname
+        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.backgroundColor = .clear
+        cell.backgroundColor = .primary
         return cell
     }
 

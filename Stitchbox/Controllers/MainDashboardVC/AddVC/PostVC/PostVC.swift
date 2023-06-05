@@ -717,8 +717,9 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
 
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         
-        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+  
         cell.hashTagLabel.text = hashtagList[indexPath.row]
+        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
         cell.hashTagLabel.backgroundColor = .clear
         cell.backgroundColor = .primary
         

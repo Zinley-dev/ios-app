@@ -3209,6 +3209,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="collectionLayout" destination="foW-a8-luO" id="eV3-7q-FR8"/>
                         <outlet property="selectedUserListHeight" destination="qUm-bK-gEA" id="WNS-cW-yLc"/>
                         <outlet property="selectedUserListView" destination="pcx-De-tlz" id="Gje-Lk-y1T"/>
                         <outlet property="tableView" destination="bvq-nz-OMQ" id="11H-qr-5VP"/>
@@ -5271,6 +5272,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="collectionLayout" destination="Ynw-JC-c8a" id="SBS-R7-aJc"/>
                         <outlet property="selectedUserListHeight" destination="RNa-Yi-Mzf" id="XEo-1i-NBP"/>
                         <outlet property="selectedUserListView" destination="Pa3-Xz-M62" id="fCH-KI-bhj"/>
                         <outlet property="tableView" destination="thQ-wO-d46" id="pk8-Ip-2kz"/>
