@@ -11,6 +11,11 @@ class EditPostVC: UIViewController {
     
     let backButton: UIButton = UIButton(type: .custom)
     
+    @IBOutlet weak var collectionLayout: UICollectionViewFlowLayout! {
+        didSet {
+            collectionLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        }
+    }
     
     @IBOutlet weak var playImg: UIImageView!
     @IBOutlet weak var thumbnailImg: UIImageView!
@@ -121,7 +126,7 @@ class EditPostVC: UIViewController {
             HTVC.completionHandler = { text in
                 
                 if !text.findMHashtagText().isEmpty {
-                    self.collectionHeight.constant = 70.0
+                    self.collectionHeight.constant = 50.0
                     self.settingViewHeight.constant = 315
                     self.collectionView.isHidden = false
                     self.hashtagLbl.text = "Hashtag added"
@@ -129,7 +134,7 @@ class EditPostVC: UIViewController {
                     self.hashtagList = text.findMHashtagText()
                 } else {
                     self.collectionHeight.constant = 0.0
-                    self.settingViewHeight.constant = 335 - 70
+                    self.settingViewHeight.constant = 335 - 50
                     self.collectionView.isHidden = true
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList.removeAll()
@@ -337,14 +342,14 @@ extension EditPostVC {
             self.hiddenHashTagTxtField.text = self.hashtagList.joined(separator: "")
             
             if !self.hashtagList.isEmpty {
-                self.collectionHeight.constant = 70.0
+                self.collectionHeight.constant = 50.0
                 self.settingViewHeight.constant = 315
                 self.collectionView.isHidden = false
                 self.hashtagLbl.text = "Hashtag added"
                 self.hashtagLbl.text = "Hashtag #"
             } else {
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 335 - 70
+                self.settingViewHeight.constant = 335 - 50
                 self.collectionView.isHidden = true
                 self.hashtagLbl.text = "Hashtag #"
             }
@@ -491,17 +496,14 @@ extension EditPostVC {
         collectionView.contentInset = UIEdgeInsets.init(top: 0, left: 14, bottom: 0, right: 14)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(SelectedHashtagCollectionViewCell.nib(), forCellWithReuseIdentifier: SelectedHashtagCollectionViewCell.cellReuseIdentifier())
+        collectionView.register(HashtagCell.nib(), forCellWithReuseIdentifier: HashtagCell.cellReuseIdentifier())
         collectionHeight.constant = 0
         collectionView.isHidden = true
         
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .vertical
-            layout.itemSize = CGSize(width: 120, height: 30)
-        }
+      
     }
     
     
@@ -614,9 +616,12 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: SelectedHashtagCollectionViewCell.cellReuseIdentifier(), for: indexPath)) as! SelectedHashtagCollectionViewCell
+        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         
-        cell.hashtag.text = hashtagList[indexPath.row]
+        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.text = hashtagList[indexPath.row]
+        cell.hashTagLabel.backgroundColor = .clear
+        cell.backgroundColor = .primary
         
         return cell
         
@@ -631,7 +636,7 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
                 self.collectionHeight.constant = 0
                 self.collectionView.isHidden = true
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 335 - 70
+                self.settingViewHeight.constant = 335 - 50
                 
                 self.hiddenHashTagTxtField.text = ""
                 self.hashtagLbl.text = "Hashtag #"

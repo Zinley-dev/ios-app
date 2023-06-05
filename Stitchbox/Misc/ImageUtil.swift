@@ -133,6 +133,41 @@ extension UIImageView {
   
     }
     
+    func loadProfileContent(url: URL, str: String) {
+        
+        imageStorage.async.object(forKey: str) { result in
+            if case .value(let image) = result {
+                
+                DispatchQueue.main.async {
+                    self.image = image
+                }
+               
+                
+            } else {
+                
+                AF.request(url).responseImage { response in
+                                      
+                   switch response.result {
+                    case let .success(value):
+                       DispatchQueue.main.async {
+                           self.image = value
+                       }
+                       try? imageStorage.setObject(value, forKey: str, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+                                          
+                           case let .failure(error):
+                               print(error)
+                                self.image = UIImage.init(named: "empty")
+                        }
+                    
+                    
+                                      
+                  }
+                
+            }
+        }
+  
+    }
+    
     func loadGame(url: URL) {
         
         let cacheKey = url.absoluteString

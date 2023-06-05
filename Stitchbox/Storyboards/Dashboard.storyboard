@@ -8076,6 +8076,7 @@
                         <outlet property="allowCmtSwitch" destination="JDE-ha-3g9" id="68E-BW-hTi"/>
                         <outlet property="avatarImage" destination="Wo1-yw-9zM" id="XHP-AZ-sFJ"/>
                         <outlet property="collectionHeight" destination="4hl-fX-OTJ" id="hfw-Jn-2xk"/>
+                        <outlet property="collectionLayout" destination="zQB-jP-pFj" id="6No-35-k7F"/>
                         <outlet property="collectionView" destination="6TN-lF-lEI" id="9Qg-dE-Hi5"/>
                         <outlet property="descTxtView" destination="vAk-wt-wq6" id="RQu-UE-ce9"/>
                         <outlet property="followLbl" destination="2VD-Ci-OfS" id="rOv-nz-nss"/>
@@ -9772,6 +9773,7 @@
                         <outlet property="allowCmtSwitch" destination="9oj-rk-tvT" id="HNI-K3-Wkr"/>
                         <outlet property="avatarImage" destination="BPe-zo-SyQ" id="P0K-Bt-jez"/>
                         <outlet property="collectionHeight" destination="4yn-iJ-VRt" id="amh-uc-Yc7"/>
+                        <outlet property="collectionLayout" destination="h4Q-rL-DBf" id="cxR-JT-IRy"/>
                         <outlet property="collectionView" destination="1ZZ-kC-RqC" id="J3h-Gg-bb5"/>
                         <outlet property="descTxtView" destination="cRi-4B-kHC" id="lQm-hx-5zS"/>
                         <outlet property="followLbl" destination="vEX-Ks-qGt" id="9XL-XN-Dic"/>

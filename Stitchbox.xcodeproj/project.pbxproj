@@ -101,6 +101,7 @@
 		6A1235AC2950351C004B612E /* GroupNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235AB2950351C004B612E /* GroupNode.swift */; };
 		6A136362299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A136361299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift */; };
 		6A136365299C6A6D00E70507 /* AddGameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A136364299C6A6D00E70507 /* AddGameVC.swift */; };
+		6A16F63E2A2DAB5E00AC9502 /* UploadContentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A16F63D2A2DAB5E00AC9502 /* UploadContentManager.swift */; };
 		6A251CEE29EA003A00F6AC0D /* LOLProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A251CED29EA003A00F6AC0D /* LOLProfileHeaderCell.swift */; };
 		6A251CF129EA3DB200F6AC0D /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A251CF029EA3DB200F6AC0D /* ChatCell.swift */; };
 		6A286B5A29C90D4B00C72718 /* UserLoginActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B5929C90D4A00C72718 /* UserLoginActivityModel.swift */; };
@@ -131,8 +132,6 @@
 		6A3F0A69297F900900366665 /* PostNavVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A68297F900900366665 /* PostNavVC.swift */; };
 		6A3F0A6C297FA44200366665 /* HashtagVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A6B297FA44200366665 /* HashtagVC.swift */; };
 		6A3F0A6F297FA91200366665 /* HashtagsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A6E297FA91200366665 /* HashtagsModel.swift */; };
-		6A3F0A76297FADB900366665 /* SelectedHashtagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A74297FADB900366665 /* SelectedHashtagCollectionViewCell.swift */; };
-		6A3F0A77297FADB900366665 /* SelectedHashtagCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A3F0A75297FADB900366665 /* SelectedHashtagCollectionViewCell.xib */; };
 		6A3F0A7B2980BE3400366665 /* FollowingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A7A2980BE3400366665 /* FollowingVC.swift */; };
 		6A3F0A7D2980BE4200366665 /* FollowerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A7C2980BE4200366665 /* FollowerVC.swift */; };
 		6A3F0A802980BF8500366665 /* FollowNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A7F2980BF8500366665 /* FollowNode.swift */; };
@@ -590,6 +589,7 @@
 		6A1235AB2950351C004B612E /* GroupNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupNode.swift; sourceTree = "<group>"; };
 		6A136361299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfSheetPresentationControllerHeightProtocol.swift; sourceTree = "<group>"; };
 		6A136364299C6A6D00E70507 /* AddGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGameVC.swift; sourceTree = "<group>"; };
+		6A16F63D2A2DAB5E00AC9502 /* UploadContentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadContentManager.swift; sourceTree = "<group>"; };
 		6A251CED29EA003A00F6AC0D /* LOLProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOLProfileHeaderCell.swift; sourceTree = "<group>"; };
 		6A251CF029EA3DB200F6AC0D /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		6A286B5929C90D4A00C72718 /* UserLoginActivityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoginActivityModel.swift; sourceTree = "<group>"; };
@@ -620,8 +620,6 @@
 		6A3F0A68297F900900366665 /* PostNavVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNavVC.swift; sourceTree = "<group>"; };
 		6A3F0A6B297FA44200366665 /* HashtagVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagVC.swift; sourceTree = "<group>"; };
 		6A3F0A6E297FA91200366665 /* HashtagsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagsModel.swift; sourceTree = "<group>"; };
-		6A3F0A74297FADB900366665 /* SelectedHashtagCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedHashtagCollectionViewCell.swift; sourceTree = "<group>"; };
-		6A3F0A75297FADB900366665 /* SelectedHashtagCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectedHashtagCollectionViewCell.xib; sourceTree = "<group>"; };
 		6A3F0A7A2980BE3400366665 /* FollowingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingVC.swift; sourceTree = "<group>"; };
 		6A3F0A7C2980BE4200366665 /* FollowerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerVC.swift; sourceTree = "<group>"; };
 		6A3F0A7F2980BF8500366665 /* FollowNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowNode.swift; sourceTree = "<group>"; };
@@ -1125,6 +1123,7 @@
 		390FD7362909264D0068B883 /* Stitchbox */ = {
 			isa = PBXGroup;
 			children = (
+				6A16F63C2A2DAB4900AC9502 /* UploadContentManager */,
 				6ACEE23A2A299F6C006DFAC9 /* CustomSwipeBackConfiguration */,
 				6A9289C42A2454070092FD58 /* SlideAnimator */,
 				6A47AA802A18678700E3E1FF /* fireworks */,
@@ -1524,6 +1523,14 @@
 			path = AddGameVC;
 			sourceTree = "<group>";
 		};
+		6A16F63C2A2DAB4900AC9502 /* UploadContentManager */ = {
+			isa = PBXGroup;
+			children = (
+				6A16F63D2A2DAB5E00AC9502 /* UploadContentManager.swift */,
+			);
+			path = UploadContentManager;
+			sourceTree = "<group>";
+		};
 		6A18897829692FCF00C658FA /* StartViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1793,19 +1800,9 @@
 		6A3F0A72297FAD3800366665 /* Message */ = {
 			isa = PBXGroup;
 			children = (
-				6A3F0A73297FAD7A00366665 /* HashtagViewCell */,
 				6AE1CE6C294D6A4000B1C435 /* UserViewCell */,
 			);
 			path = Message;
-			sourceTree = "<group>";
-		};
-		6A3F0A73297FAD7A00366665 /* HashtagViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				6A3F0A74297FADB900366665 /* SelectedHashtagCollectionViewCell.swift */,
-				6A3F0A75297FADB900366665 /* SelectedHashtagCollectionViewCell.xib */,
-			);
-			path = HashtagViewCell;
 			sourceTree = "<group>";
 		};
 		6A3F0A782980BE1500366665 /* FollowerVC */ = {
@@ -3660,7 +3657,6 @@
 				395477B1293FC524008EED97 /* bg.mp4 in Resources */,
 				6A80F1AB29BA78E70047595A /* GameListView.xib in Resources */,
 				6AAD7A6A294C69B1003E3AB6 /* README.md in Resources */,
-				6A3F0A77297FADB900366665 /* SelectedHashtagCollectionViewCell.xib in Resources */,
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
 				6AEA33F0298CE4A6005A4C5D /* PostHeader.xib in Resources */,
 				6AEA3403298DDA04005A4C5D /* PostSettingVC.xib in Resources */,
@@ -3947,6 +3943,7 @@
 				6A6627782965771400A4488B /* NetworkManager.swift in Sources */,
 				6ABDDCBC2A01024400CDAD39 /* ChatGPTAPI.swift in Sources */,
 				148C7107291B0F210046FC5D /* LogInByPhoneViewController.swift in Sources */,
+				6A16F63E2A2DAB5E00AC9502 /* UploadContentManager.swift in Sources */,
 				6A3F0A8F2982454400366665 /* UserProfileHeaderCell.swift in Sources */,
 				6A307CCB29B6765600A89529 /* SearchNode.swift in Sources */,
 				6A12359F29503492004B612E /* ChannelSettingsVC.swift in Sources */,
@@ -4076,7 +4073,6 @@
 				6A3F0A8C2982331F00366665 /* UserProfileVC.swift in Sources */,
 				6AAD7A0D294C6453003E3AB6 /* AppKey.swift in Sources */,
 				6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */,
-				6A3F0A76297FADB900366665 /* SelectedHashtagCollectionViewCell.swift in Sources */,
 				6A0D54462974E9300059530C /* ChallengerCardProfileHeaderCell.swift in Sources */,
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
 				6A839B3829A0331E00BD0A9A /* GameCell.swift in Sources */,
@@ -4514,7 +4510,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Stitchbox/Stitchbox.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.9;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_TEAM = T3Q3X9BH8B;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -4537,7 +4533,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.2;
+				MARKETING_VERSION = 5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -4558,7 +4554,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Stitchbox/Stitchbox.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.9;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_TEAM = T3Q3X9BH8B;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -4581,7 +4577,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.2;
+				MARKETING_VERSION = 5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

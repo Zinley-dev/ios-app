@@ -32,6 +32,11 @@ class PostVC: UIViewController {
     @IBOutlet weak var settingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var collectionHeight: NSLayoutConstraint!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionLayout: UICollectionViewFlowLayout! {
+        didSet {
+            collectionLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        }
+    }
     @IBOutlet weak var descTxtView: UITextView!
     @IBOutlet weak var addBtn: UIButton!
     @IBOutlet weak var globalBtn: UIButton!
@@ -146,7 +151,7 @@ class PostVC: UIViewController {
             HTVC.completionHandler = { text in
                 
                 if !text.findMHashtagText().isEmpty {
-                    self.collectionHeight.constant = 70.0
+                    self.collectionHeight.constant = 50.0
                     self.settingViewHeight.constant = 315
                     self.collectionView.isHidden = false
                     self.hashtagLbl.text = "Hashtag added"
@@ -154,7 +159,7 @@ class PostVC: UIViewController {
                     self.hashtagList = text.findMHashtagText()
                 } else {
                     self.collectionHeight.constant = 0.0
-                    self.settingViewHeight.constant = 335 - 70
+                    self.settingViewHeight.constant = 335 - 50
                     self.collectionView.isHidden = true
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList.removeAll()
@@ -414,6 +419,16 @@ extension PostVC {
                     
                     print("Start uploading")
                     if let checkImage = self.renderedImage {
+
+                        
+                        Dispatch.background {
+                            
+                            UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height)
+                            
+                        }
+                        
+                        
+                        
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
@@ -422,7 +437,6 @@ extension PostVC {
                             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
                         }
                         
-                        self.uploadImageToDB(image: checkImage)
                     } else {
                         self.showErrorAlert("Oops!", msg: "We encountered error while getting your exported image, please try again!")
                     }
@@ -448,21 +462,21 @@ extension PostVC {
             
             print("Start exporting")
             self.exportVideo(video: self.selectedVideo){
-                            
+
+                
+                Dispatch.background {
+                    
+                    print("Start uploading video to db")
+                    UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length)
+                    
+                }
+                
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     showNote(text: "Thank you, your content is being uploaded!")
                     self.dismiss(animated: true, completion: nil)
                     NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
                    
-                }
-
-                
-                Dispatch.background {
-                    
-                    print("Start uploading video to db")
-                    self.uploadVideoToDB(url: self.exportedURL)
-                    
                 }
                     
                                     
@@ -504,34 +518,6 @@ extension PostVC {
         })
     }
 
-
-    
-    
-    func uploadImageToDB(image: UIImage) {
-        
-        APIManager.shared.uploadImage(image: image) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                
-                guard apiResponse.body?["message"] as? String == "avatar uploaded successfully",
-                      let url = apiResponse.body?["url"] as? String  else {
-                        return
-                }
-                
-                self.writeContentImageToDB(imageUrl: url)
-
-
-            case .failure(let error):
-                print(error)
-            }
-            
-            
-        }
-        
-        
-    }
     
     func exportVideo(video: SessionVideo, completed: @escaping DownloadComplete) {
         
@@ -565,155 +551,9 @@ extension PostVC {
         
     }
     
-    
-    func uploadVideoToDB(url: URL) {
-    
-        let data = try! Data(contentsOf: url)
-        
-        APIManager.shared.uploadVideo(video: data) { [weak self] result in
-            guard let self = self else { return }
 
-            switch result {
-            case .success(let apiResponse):
-            
-                
-                guard apiResponse.body?["message"] as? String == "video uploaded successfully",
-                    let data = apiResponse.body?["data"] as? [String: Any] else {
-                        return
-                }
-                
 
-                // Try to create a SendBirdRoom object from the data
-                let videoInfo =  Mapper<VideoPostModel>().map(JSONObject: data)
-                let downloadedUrl = videoInfo?.video_url ?? ""
-               
-                if downloadedUrl != "" {
-                    self.writeContentVideoToDB(videoUrl: downloadedUrl)
-                } else {
-                    print("Couldn't get video url")
-                }
-                
-
-            case .failure(let error):
-                global_percentComplete = 0.00
-                print(error)
-            }
-            
-        } process: { percent in
-            global_percentComplete = Double(percent)
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "updateProgressBar")), object: nil)
-            print("Uploading ... \(percent)%")
-        }
-
-    }
-    
-    
-    func writeContentImageToDB(imageUrl: String) {
-        
-        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-            print("Can't get userDataSource")
-            return
-        }
-
-        let loadUsername = userDataSource.userName
-        
-        var contentPost = [String: Any]()
-        
-        
-        
-        var update_hashtaglist = [String]()
-        
-        if hashtagList.isEmpty == true {
-            
-            update_hashtaglist = ["#\(loadUsername ?? "")"]
-            
-        } else {
-            
-            update_hashtaglist = hashtagList
-            if !update_hashtaglist.contains("#\(loadUsername ?? "")") {
-                update_hashtaglist.insert("#\(loadUsername ?? "")", at: 0)
-            }
-            
-        }
-        contentPost = ["content": selectedDescTxtView, "images": [imageUrl], "tags": [userUID], "hashtags": update_hashtaglist, "streamLink": global_fullLink]
-        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
-        contentPost["metadata"] = ["width": origin_width!, "height": origin_height!, "length": length!, "contentMode": 0]
-        print(contentPost)
-        APIManager.shared.createPost(params: contentPost) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                
-                print("Posted successfully \(apiResponse)")
-                needReloadPost = true
-
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
-       
-    }
-    
-    
-    
-    func writeContentVideoToDB(videoUrl: String) {
- 
-        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-            print("Can't get userDataSource")
-            return
-        }
-        
-        
-        let videoData =  ["rawUrl": videoUrl]
-        
-        
-        let loadUsername = userDataSource.userName
-        
-        var contentPost = [String: Any]()
-        
-        
-        
-        var update_hashtaglist = [String]()
-        
-        if hashtagList.isEmpty == true {
-            
-            update_hashtaglist = ["#\(loadUsername ?? "")"]
-            
-        } else {
-            
-            update_hashtaglist = hashtagList
-            if let username = loadUsername {
-                if !update_hashtaglist.contains("#\(username)") {
-                    update_hashtaglist.insert("#\(username)", at: 0)
-                }
-            }
-            
-            
-        }
-        
-        contentPost = ["content": selectedDescTxtView, "video": videoData, "tags": [userUID], "streamLink": global_fullLink, "hashtags": update_hashtaglist]
-        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
-        contentPost["metadata"] = ["width": origin_width!, "height": origin_height!, "length": length!, "contentMode": 0]
-        
-        APIManager.shared.createPost(params: contentPost) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                
-                print("Posted successfully \(apiResponse)")
-                needReloadPost = true
-
-            case .failure(let error):
-                print(error)
-            }
-        }
-
-        
-    }
-    
+  
 }
 
 extension PostVC {
@@ -847,25 +687,22 @@ extension PostVC {
     func setupDefaultView() {
         
         collectionHeight.constant = 0.0
-        settingViewHeight.constant = 335 - 70
+        settingViewHeight.constant = 335 - 50
         
     }
 
     func setupScrollView() {
+        
         collectionView.contentInset = UIEdgeInsets.init(top: 0, left: 14, bottom: 0, right: 14)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(SelectedHashtagCollectionViewCell.nib(), forCellWithReuseIdentifier: SelectedHashtagCollectionViewCell.cellReuseIdentifier())
+        collectionView.register(HashtagCell.nib(), forCellWithReuseIdentifier: HashtagCell.cellReuseIdentifier())
         collectionHeight.constant = 0
         collectionView.isHidden = true
         
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
-        
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .vertical
-            layout.itemSize = CGSize(width: 120, height: 30)
-        }
+
     }
     
 }
@@ -878,9 +715,12 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: SelectedHashtagCollectionViewCell.cellReuseIdentifier(), for: indexPath)) as! SelectedHashtagCollectionViewCell
+        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         
-        cell.hashtag.text = hashtagList[indexPath.row]
+        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.text = hashtagList[indexPath.row]
+        cell.hashTagLabel.backgroundColor = .clear
+        cell.backgroundColor = .primary
         
         return cell
         
@@ -895,7 +735,7 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
                 self.collectionHeight.constant = 0
                 self.collectionView.isHidden = true
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 335 - 70
+                self.settingViewHeight.constant = 335 - 50
                 
                 self.hiddenHashTagTxtField.text = ""
                 self.hashtagLbl.text = "Hashtag #"

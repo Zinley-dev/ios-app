@@ -135,6 +135,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     func setupScrollView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        //layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.itemSize = CGSize(width: 120, height: 30)
         selectedUserListView.collectionViewLayout = layout
         selectedUserListView.contentInset = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
