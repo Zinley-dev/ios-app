@@ -4150,9 +4150,9 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="102"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jyA-ng-Pk7">
-                                        <rect key="frame" x="8" y="21" width="60" height="60"/>
+                                        <rect key="frame" x="12" y="1" width="60" height="100"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="SNc-Qf-gS6"/>
+                                            <constraint firstAttribute="height" constant="100" id="SNc-Qf-gS6"/>
                                             <constraint firstAttribute="width" constant="60" id="nFI-gd-I5c"/>
                                         </constraints>
                                         <connections>
@@ -4160,13 +4160,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IN7-gU-0YZ">
-                                        <rect key="frame" x="31" y="63.666666666666657" width="183" height="20"/>
+                                        <rect key="frame" x="38" y="64.666666666666671" width="176" height="20"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="0.88" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="vMb-QV-cRp">
-                                        <rect key="frame" x="214" y="56" width="145" height="35"/>
+                                        <rect key="frame" x="214" y="57" width="145" height="35"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3GP-AZ-FWt">
                                                 <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
@@ -4213,10 +4213,10 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HlJ-zK-3ld">
-                                        <rect key="frame" x="16" y="61" width="15" height="25"/>
+                                        <rect key="frame" x="25" y="63" width="13" height="23"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="25" id="KGg-Ns-NeY"/>
-                                            <constraint firstAttribute="width" constant="15" id="r2U-Z7-GWD"/>
+                                            <constraint firstAttribute="height" constant="23" id="KGg-Ns-NeY"/>
+                                            <constraint firstAttribute="width" constant="13" id="r2U-Z7-GWD"/>
                                         </constraints>
                                         <state key="normal" image="back_icn_white"/>
                                         <connections>
@@ -4226,7 +4226,7 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.2274978459" green="0.2352662385" blue="0.2509829998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
-                                    <constraint firstItem="jyA-ng-Pk7" firstAttribute="leading" secondItem="2eg-X1-5k0" secondAttribute="leading" constant="8" id="6u8-PD-LB4"/>
+                                    <constraint firstItem="jyA-ng-Pk7" firstAttribute="leading" secondItem="2eg-X1-5k0" secondAttribute="leading" constant="12" id="6u8-PD-LB4"/>
                                     <constraint firstItem="IN7-gU-0YZ" firstAttribute="centerY" secondItem="HlJ-zK-3ld" secondAttribute="centerY" id="Hdn-NZ-6dz"/>
                                     <constraint firstItem="vMb-QV-cRp" firstAttribute="centerY" secondItem="HlJ-zK-3ld" secondAttribute="centerY" id="KSb-kj-znL"/>
                                     <constraint firstAttribute="height" constant="102" id="L7E-Hb-87o"/>
@@ -4235,7 +4235,7 @@
                                     <constraint firstAttribute="bottom" secondItem="HlJ-zK-3ld" secondAttribute="bottom" constant="16" id="ZsS-cs-U9u"/>
                                     <constraint firstAttribute="trailing" secondItem="vMb-QV-cRp" secondAttribute="trailing" constant="16" id="c2O-Gf-Do0"/>
                                     <constraint firstItem="vMb-QV-cRp" firstAttribute="leading" secondItem="IN7-gU-0YZ" secondAttribute="trailing" id="dYV-Kd-fxF"/>
-                                    <constraint firstItem="HlJ-zK-3ld" firstAttribute="leading" secondItem="2eg-X1-5k0" secondAttribute="leading" constant="16" id="q9M-xI-xLd"/>
+                                    <constraint firstItem="HlJ-zK-3ld" firstAttribute="leading" secondItem="2eg-X1-5k0" secondAttribute="leading" constant="25" id="q9M-xI-xLd"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8TE-CX-HdF">
@@ -4294,7 +4294,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xHj-e6-2Uy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2260" y="3083"/>
+            <point key="canvasLocation" x="2260" y="3082.7586206896553"/>
         </scene>
         <!--Edit PhofileVC-->
         <scene sceneID="HxV-gM-Dmz">

@@ -200,7 +200,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
 
         let voiceCallButton = UIButton(type: .custom)
         voiceCallButton.semanticContentAttribute = .forceRightToLeft
-        voiceCallButton.setTitle("Join", for: .normal)
+        voiceCallButton.setTitle("Join ", for: .normal)
         voiceCallButton.setTitleColor(.white, for: .normal)
         voiceCallButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         voiceCallButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)

@@ -258,7 +258,7 @@ class ChannelViewController: SBUChannelViewController {
         if self.getRoom != nil && self.getRoom.participants.count > 0 {
             voiceCallButton = UIButton(type: .custom)
             voiceCallButton.semanticContentAttribute = .forceRightToLeft
-            voiceCallButton.setTitle("Join", for: .normal)
+            voiceCallButton.setTitle("Join ", for: .normal)
             voiceCallButton.setTitleColor(.white, for: .normal)
             voiceCallButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
             voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
