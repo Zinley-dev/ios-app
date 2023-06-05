@@ -63,9 +63,8 @@ class LoginControllerViewModel: ViewModelProtocol {
                  }
                  */
                 // call api toward login api of backend
-                APIManager.shared.normalLogin(username: username, password: password) { [weak self] result in
-                    guard let self = self else { return }
-                    
+                APIManager.shared.normalLogin(username: username, password: password) { [unowned self] result in
+ 
                     switch result {
                     case .success(let apiResponse):
                         // get and process data

@@ -102,9 +102,8 @@ class CreateAccountViewModel: ViewModelProtocol {
             print("SUBCRIBE>...")
             if uname.count >= 3 {
                 
-                APIManager.shared.checkUsernameExist(username: uname) { [weak self] result in
-                    guard let self = self else { return }
-
+                APIManager.shared.checkUsernameExist(username: uname) { [unowned self] result in
+                  
                     switch result {
                     case .success(let response):
                         if let data = response.body?["data"] as? String, data != "" {
@@ -136,9 +135,8 @@ class CreateAccountViewModel: ViewModelProtocol {
                     presentSwiftLoader()
                 }
                 
-                APIManager.shared.register(params: params) { [weak self] result in
-                    guard let self = self else { return }
-
+                APIManager.shared.register(params: params) { [unowned self] result in
+                   
                     switch result {
                     case .success(let response):
                         print(response)
@@ -176,8 +174,7 @@ class CreateAccountViewModel: ViewModelProtocol {
                 if let socialId = _AppCoreData.userDataSource.value?.socialId, socialId != "" {
                     let params = ["username": username, "password": password, "provider": signinMethod, "socialId": socialId, "name": _AppCoreData.userDataSource.value?.name ?? "", "avatar": _AppCoreData.userDataSource.value?.avatarURL ?? "", "email": _AppCoreData.userDataSource.value?.email ?? ""]
                     print("VAO IF..................... \(_AppCoreData.userDataSource.value?.toJSON())")
-                    APIManager.shared.socialRegister(params: params) { [weak self] result in
-                        guard let self = self else { return }
+                    APIManager.shared.socialRegister(params: params) { [unowned self] result in
                         
                         switch result {
                         case .success(let response):

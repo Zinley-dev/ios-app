@@ -187,6 +187,12 @@ class LastStepViewController: UIViewController, ControllerType {
             .subscribe(onNext: { [unowned self] username, password, refCode in
                 let credentials: (String, String, String)
                 
+                DispatchQueue.main.async {
+                    
+                   presentSwiftLoader()
+                    
+                }
+            
                 if password.isEmpty {
                     let randomPassword = generateRandomPassword()
                     self.passwordTextfield.text = randomPassword
@@ -204,6 +210,7 @@ class LastStepViewController: UIViewController, ControllerType {
                 DispatchQueue.main.async {
                     if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TutorialVC") as? TutorialVC {
                         vc.modalPresentationStyle = .fullScreen
+                        SwiftLoader.hide()
                         self?.present(vc, animated: true)
                     }
                 }
@@ -212,6 +219,9 @@ class LastStepViewController: UIViewController, ControllerType {
         
         viewModel.output.errorsObservable
             .subscribe(onNext: { error in
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                }
                 self.presentError(error: error)
             })
             .disposed(by: disposeBag)

@@ -17,7 +17,7 @@ class UploadContentManager {
     
     func uploadImageToDB(image: UIImage, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double = 0) {
         
-        APIManager.shared.uploadImage(image: image) { result in
+        APIManager.shared.uploadImage(image: image) { [unowned self] result in
     
             switch result {
             case .success(let apiResponse):
@@ -46,7 +46,7 @@ class UploadContentManager {
     
         let data = try! Data(contentsOf: url)
         
-        APIManager.shared.uploadVideo(video: data) { result in
+        APIManager.shared.uploadVideo(video: data) { [unowned self] result in
           
             switch result {
             case .success(let apiResponse):

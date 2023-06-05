@@ -24,7 +24,6 @@ class LoginController: UIViewController, ControllerType {
         forgotBtn.addTarget(self, action: #selector(onClickForgot(_:)), for: .touchUpInside)
     }
     
-    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -46,10 +45,14 @@ class LoginController: UIViewController, ControllerType {
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
+                
                 DispatchQueue.main.async {
                     
-                    self.presentError(error: error)
+                   presentSwiftLoader()
+                    
                 }
+                
+                
             })
             .disposed(by: disposeBag)
         

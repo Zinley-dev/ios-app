@@ -17,8 +17,8 @@ class FinalResetVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        nextButton.rx.tap.asObservable().subscribe { [weak self] _ in
-            guard let self = self, self.isButtonEnabled else {
+        nextButton.rx.tap.asObservable().subscribe { [unowned self] _ in
+            guard self.isButtonEnabled else {
                 return
             }
             

@@ -56,9 +56,8 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
                 print(phone, countryCode)
                 print(phone.formatPhoneNumber())
                 // call api toward login api of backend
-                APIManager.shared.phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { [weak self] result in
-                    guard let self = self else { return }
-                    
+                APIManager.shared.phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { [unowned self] result in
+                   
                     switch result {
                     case .success(let apiResponse):
                         // get and process data
@@ -171,8 +170,8 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                 
                 if (self.output.type == "email") {
                     self.loadingSubject.onNext(true)
-                    APIManager.shared.emailVerify(email: phone, OTP: code) { [weak self] result in
-                        guard let self = self else { return }
+                    APIManager.shared.emailVerify(email: phone, OTP: code) { result in
+                     
                         
                         switch result {
                         case .success(let apiResponse):
@@ -219,9 +218,8 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                 else if (self.output.type == "phone") {
                     self.loadingSubject.onNext(true)
                     print("VERIFY OTP \("+" + phone.formatPhoneNumber()) --- CODE \(code)")
-                    APIManager.shared.phoneVerify(phone: "+" + phone.formatPhoneNumber(), OTP: code) { [weak self] result in
-                        guard let self = self else { return }
-                        
+                    APIManager.shared.phoneVerify(phone: "+" + phone.formatPhoneNumber(), OTP: code) { result in
+                       
                         switch result {
                         case .success(let apiResponse):
                             // get and process data
@@ -274,8 +272,7 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                     }
                     // call api toward login api of backend
                     self.loadingSubject.onNext(true)
-                    APIManager.shared.phoneVerify(phone: countryCode + phone.formatPhoneNumber(), OTP: code) { [weak self] result in
-                        guard let self = self else { return }
+                    APIManager.shared.phoneVerify(phone: countryCode + phone.formatPhoneNumber(), OTP: code) {  result in
                         
                         switch result {
                         case .success(let apiResponse):
@@ -330,9 +327,8 @@ class LoginByPhoneVerifyViewModel: ViewModelProtocol {
                 }
                 self.loadingSubject.onNext(true)
                 // call api toward login api of backend
-                APIManager.shared.phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { [weak self] result in
-                    guard let self = self else { return }
-
+                APIManager.shared.phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { [unowned self] result in
+                  
                     switch result {
                     case .success(let apiResponse):
                         // get and process data
