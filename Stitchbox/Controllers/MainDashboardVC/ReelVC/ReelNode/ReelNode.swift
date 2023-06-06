@@ -788,6 +788,8 @@ extension ReelNode {
         
         if let vc = UIViewController.currentViewController() {
             
+            general_vc = vc
+            
             if vc is ReelVC {
                 
                 if let update1 = vc as? ReelVC {

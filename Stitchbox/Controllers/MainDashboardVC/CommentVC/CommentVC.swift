@@ -279,7 +279,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "delete_cmt")), object: nil)
         
         
-        delay(0.01) {
+        delay(0.001) {
             
             if let vc = UIViewController.currentViewController() {
                 

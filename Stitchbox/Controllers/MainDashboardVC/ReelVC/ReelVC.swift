@@ -13,7 +13,6 @@ import Alamofire
 class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
     @IBOutlet weak var contentView: UIView!
-    
     let backButton: UIButton = UIButton(type: .custom)
     var currentIndex: Int?
     var isfirstLoad = true
@@ -75,9 +74,7 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             }
             
         }
-        
-        
-        
+
         setupNavBar()
         
         
@@ -100,7 +97,6 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        hasViewAppeared = true
         
         if currentIndex != nil, currentIndex != nil {
             //newPlayingIndex
@@ -113,8 +109,11 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        hasViewAppeared = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_reel")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReelVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_reel")), object: nil)
@@ -1208,16 +1207,12 @@ extension ReelVC {
     
     func pauseVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
-            if cell.sideButtonView != nil {
-                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+            if !cell.buttonsView.streamView.isHidden {
                 
-                if !cell.buttonsView.streamView.isHidden {
-                    
-                    cell.buttonsView.streamView.stopSpin()
-                    
-                }
+                cell.buttonsView.streamView.stopSpin()
+                
             }
             
             cell.videoNode.pause()
@@ -1230,7 +1225,7 @@ extension ReelVC {
     func playVideo(index: Int) {
         
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             if !cell.videoNode.isPlaying() {
                 
@@ -1242,15 +1237,7 @@ extension ReelVC {
                 
                 if let muteStatus = shouldMute {
                     
-                    if cell.sideButtonView != nil {
-                        
-                        if muteStatus {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        } else {
-                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                        }
-                    }
-                    
+
                     if muteStatus {
                         cell.videoNode.muted = true
                     } else {
@@ -1261,14 +1248,6 @@ extension ReelVC {
                     
                 } else {
                     
-                    if cell.sideButtonView != nil {
-                        
-                        if globalIsSound {
-                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                        } else {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        }
-                    }
                     
                     if globalIsSound {
                         cell.videoNode.muted = false

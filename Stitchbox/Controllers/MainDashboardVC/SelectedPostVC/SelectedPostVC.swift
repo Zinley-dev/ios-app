@@ -62,11 +62,18 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        hasViewAppeared = true
+        
+    }
+    
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        hasViewAppeared = true
+       
         
         if currentIndex != nil {
             
@@ -266,8 +273,6 @@ extension SelectedPostVC {
         }
         
     }
-    
-    
     
 }
 

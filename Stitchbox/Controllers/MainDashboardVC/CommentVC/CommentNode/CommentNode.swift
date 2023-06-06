@@ -666,6 +666,7 @@ class CommentNode: ASCellNode {
 
                 if general_vc != nil {
                     general_vc.viewWillDisappear(true)
+                    general_vc.viewDidDisappear(true)
                 }
                 
               
@@ -694,9 +695,8 @@ class CommentNode: ASCellNode {
       
         presentSwiftLoader()
 
-        APIManager.shared.getPostDetail(postId: id) { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.getPostDetail(postId: id) { result in
+         
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body else {
@@ -719,7 +719,10 @@ class CommentNode: ASCellNode {
 
                                     if general_vc != nil {
                                         general_vc.viewWillDisappear(true)
+                                        general_vc.viewDidDisappear(true)
                                     }
+                                    
+                               
                                     
                                     RVC.onPresent = true
                                     
@@ -734,9 +737,9 @@ class CommentNode: ASCellNode {
                                     nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
                                     nav.modalPresentationStyle = .fullScreen
+                                    
                                     vc.present(nav, animated: true, completion: nil)
-
-
+                                    
                                 }
                             }
                             
@@ -756,8 +759,8 @@ class CommentNode: ASCellNode {
                     SwiftLoader.hide()
                 }
                 
+            }
         }
-    }
         
     }
     
