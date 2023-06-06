@@ -265,8 +265,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "notification_copy_cmt")), object: nil)
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "notification_delete_cmt")), object: nil)
         
-        
-        delay(0.01) {
+    
+        delay(0.001) {
             
             if let vc = UIViewController.currentViewController() {
                 
@@ -275,7 +275,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     if !update1.hasViewAppeared {
                         update1.viewWillAppear(true)
                     }
-                   
+                    
                     
                 } else if let update1 = vc as? PostListWithHashtagVC {
                     
