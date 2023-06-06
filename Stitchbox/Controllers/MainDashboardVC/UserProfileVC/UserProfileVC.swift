@@ -13,6 +13,10 @@ import SendBirdUIKit
 
 class UserProfileVC: UIViewController {
     
+    private let fireworkController = FountainFireworkController()
+    private let fireworkController2 = ClassicFireworkController()
+    
+    
     enum Section: Hashable {
         case header
         case challengeCard
@@ -864,7 +868,7 @@ extension UserProfileVC {
         
         imgView.center = self.view.center
         self.view.addSubview(imgView)
-        
+        addfireWork(imgView: imgView)
         
         imgView.transform = CGAffineTransform.identity
         
@@ -2005,6 +2009,11 @@ extension UserProfileVC {
             
         }
         
+    }
+    
+    func addfireWork(imgView: UIImageView) {
+        self.fireworkController.addFirework(sparks: 10, above: imgView)
+        self.fireworkController2.addFireworks(count: 10, sparks: 8, around: imgView)
     }
     
     

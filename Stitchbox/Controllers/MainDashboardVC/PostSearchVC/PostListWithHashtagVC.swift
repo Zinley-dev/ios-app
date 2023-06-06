@@ -888,6 +888,13 @@ extension PostListWithHashtagVC {
                 } else {
                     collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                     reloadAllCurrentHashtag()
+                    
+                    delay(0.75) {
+                        if indexPath < self.posts.count {
+                            playVideoIfNeed(playIndex: indexPath)
+                        }
+                    }
+                    
                 }
             }
             

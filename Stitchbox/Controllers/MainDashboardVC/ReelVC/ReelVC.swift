@@ -466,10 +466,14 @@ extension ReelVC {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return posts[collectionView.tag].hashtags.count
-        
+        if collectionView.tag < posts.count {
+            return posts[collectionView.tag].hashtags.count
+        } else {
+            print("Warning: collectionView.tag is out of range!")
+            return 0
+        }
     }
+
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -984,6 +988,14 @@ extension ReelVC {
                 posts.removeObject(deletingPost)
                 collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                 reloadAllCurrentHashtag()
+                
+                delay(0.75) {
+                    if indexPath < self.posts.count {
+                        playVideoIfNeed(playIndex: indexPath)
+                    }
+                }
+                  
+                
             }
             
         }
