@@ -109,9 +109,6 @@ class UserProfileVC: UIViewController {
             
             
             
-            NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.report), name: (NSNotification.Name(rawValue: "report_user")), object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.block), name: (NSNotification.Name(rawValue: "block_user")), object: nil)
             
             
         }
@@ -121,6 +118,10 @@ class UserProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.report), name: (NSNotification.Name(rawValue: "report_user")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.block), name: (NSNotification.Name(rawValue: "block_user")), object: nil)
         
         if !loadingView.isHidden {
             
@@ -152,6 +153,16 @@ class UserProfileVC: UIViewController {
         
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_user")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "block_user")), object: nil)
+        
         
     }
     
@@ -1372,11 +1383,7 @@ extension UserProfileVC {
     
     
     @objc func onClickBack(_ sender: AnyObject) {
-        
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_user")), object: nil)
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "block_user")), object: nil)
-        
+    
         
         if onPresent {
             self.dismiss(animated: true)
@@ -1952,12 +1959,6 @@ extension UserProfileVC {
         
         
         let ok = UIAlertAction(title: "Got it", style: .default) { (alert) in
-            
-            
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_user")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_user")), object: nil)
-            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "block_user")), object: nil)
-            
             
             if self.onPresent {
                 self.dismiss(animated: true)
