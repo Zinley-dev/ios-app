@@ -892,7 +892,7 @@ extension APIManager {
       completion(result)
     }
   }
-  func openLink(postId: string, link: string, completion: @escaping APICompletion) {
+  func openLink(postId: String, link: String, completion: @escaping APICompletion) {
     openLinkManager.request(.openLink(body: ["postId": postId, "link": link])) { result in
       completion(result)
     }
