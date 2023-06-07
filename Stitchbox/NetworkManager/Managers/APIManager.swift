@@ -51,6 +51,7 @@ struct APIManager {
     let gamePatchManager = Manager<GamePatchApi>()
     let usedTokenManager = Manager<UsedTokenApi>()
     let promotionManager = Manager<PromotionApi>()
+  let openLinkManager = Manager<OpenLinkLogApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -888,6 +889,11 @@ extension APIManager {
   
   func applyPromotion(id: String, completion: @escaping APICompletion) {
     promotionManager.request(.applyPromotion(id: id)) { result in
+      completion(result)
+    }
+  }
+  func openLink(postId: string, link: string, completion: @escaping APICompletion) {
+    openLinkManager.request(.openLink(body: ["postId": postId, "link": link])) { result in
       completion(result)
     }
   }
