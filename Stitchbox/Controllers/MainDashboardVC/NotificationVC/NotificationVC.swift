@@ -469,8 +469,8 @@ extension NotificationVC: ASTableDelegate {
         
         if refresh_request == false {
             
-            self.retrieveNextPageWithCompletion { (newNotis) in
-                
+            self.retrieveNextPageWithCompletion { [weak self] (newNotis) in
+                guard let self = self else { return }
                 self.insertNewRowsInTableNode(newNotis: newNotis)
                 
                 context.completeBatchFetching(true)

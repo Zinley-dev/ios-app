@@ -148,8 +148,8 @@ extension FistBumpeeVC: ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         print("batchfetching start")
-        self.retrieveNextPageWithCompletion { (newFollowees) in
-            
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowees) in
+            guard let self = self else { return }
             self.insertNewRowsInTableNode(newFistBumpees: newFollowees)
             
             context.completeBatchFetching(true)

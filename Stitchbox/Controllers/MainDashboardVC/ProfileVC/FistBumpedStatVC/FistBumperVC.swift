@@ -147,8 +147,8 @@ extension FistBumperVC: ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        self.retrieveNextPageWithCompletion { (newFollowers) in
-            
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowers) in
+            guard let self = self else { return }
             self.insertNewRowsInTableNode(newFistBumpers: newFollowers)
             
             context.completeBatchFetching(true)

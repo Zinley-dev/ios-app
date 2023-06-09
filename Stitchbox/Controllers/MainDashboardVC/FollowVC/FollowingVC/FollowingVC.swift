@@ -98,8 +98,8 @@ extension FollowingVC: ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        self.retrieveNextPageWithCompletion { (newFollowings) in
-            
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowings) in
+            guard let self = self else { return }
             self.insertNewRowsInTableNode(newFollowings: newFollowings)
             
             context.completeBatchFetching(true)

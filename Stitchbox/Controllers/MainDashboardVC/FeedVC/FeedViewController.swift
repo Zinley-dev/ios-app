@@ -840,36 +840,36 @@ extension FeedViewController: ASCollectionDataSource {
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
-            
-            if self.posts.count >= 150 {
+        
+        if refresh_request == false {
+            retrieveNextPageWithCompletion { [weak self] (newPosts) in
+                guard let self = self else { return }
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 
-                context.completeBatchFetching(true)
-                clearAllData()
-                
-                
-            } else {
-                
-                if refresh_request == false {
-                    self.retrieveNextPageWithCompletion { (newPosts) in
-                        
-                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                        
-                        
-                        context.completeBatchFetching(true)
-                        
-                        
-                    }
-                } else {
-                    context.completeBatchFetching(true)
+                // if we have more than 150 posts
+                if self.posts.count > 75 {
+                    // calculate how many items to remove
+                    let itemsToRemove = self.posts.count > 75 ? min(self.posts.count, self.posts.count - 75) : 0
+
+                    
+                    // remove the first itemsToRemove posts
+                    let oldPosts = Array(self.posts.prefix(itemsToRemove))
+                    
+                    self.posts.removeFirst(itemsToRemove)
+                    
+                    // generate the index paths for old posts
+                    let indexPathsToRemove = oldPosts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+                    
+                    // delete the old posts from collectionNode
+                    collectionNode.deleteItems(at: indexPathsToRemove)
                 }
                 
-                
-                
+                context.completeBatchFetching(true)
             }
+        } else {
+            context.completeBatchFetching(true)
         }
-
-
-
+    }
     
 }
 
