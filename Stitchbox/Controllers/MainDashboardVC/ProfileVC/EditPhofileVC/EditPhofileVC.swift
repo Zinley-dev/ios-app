@@ -63,7 +63,7 @@ class EditPhofileVC: UIViewController {
         super.viewWillAppear(animated)
         
         setupDefaultInfo()
-        //checkAccountStatus()
+        checkAccountStatus()
  
     }
     

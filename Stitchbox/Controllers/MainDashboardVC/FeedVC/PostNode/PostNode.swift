@@ -1290,7 +1290,7 @@ extension PostNode {
     }
     
     private func createHeaderInsetSpec() -> ASInsetLayoutSpec {
-        let headerInset = UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
+        let headerInset = UIEdgeInsets(top: 8, left: 16, bottom: 0, right: 16)
         return ASInsetLayoutSpec(insets: headerInset, child: headerNode)
     }
     

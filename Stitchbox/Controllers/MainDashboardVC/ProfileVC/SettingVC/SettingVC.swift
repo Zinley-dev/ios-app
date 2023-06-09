@@ -365,10 +365,6 @@ extension SettingVC {
     
     func checkAccountStatus() {
         
-        
-        self.setupLayoutForPro()
-        
-        /*
         if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
             
             if passEligible {
@@ -385,7 +381,7 @@ extension SettingVC {
             
             checkPlan()
             
-        }*/
+        }
         
     }
     
@@ -402,18 +398,18 @@ extension SettingVC {
                 }
                 
             } else {
-                
+             
                 Dispatch.main.async {
-                    
+                
                     self.setupLayoutForPro()
                     
                 }
-                
+  
             }
         }
         
     }
-    
+
     func setupLayoutForPro() {
         
         mainViewHeight.constant = 950

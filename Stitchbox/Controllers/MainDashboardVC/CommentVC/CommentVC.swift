@@ -801,9 +801,14 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
         if let currentIndex = self.CommentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
             
             if let node = tableNode.nodeForRow(at: IndexPath(row: currentIndex, section: 0)) as? CommentNode {
-                node.loadReplyBtnNode.isHidden = true
-                node.setNeedsLayout()
+                UIView.animate(withDuration: 0.3, animations: {
+                    node.loadReplyBtnNode.alpha = 0
+                }, completion: { _ in
+                    node.loadReplyBtnNode.isHidden = true
+                    node.setNeedsLayout()
+                })
             }
+
             
         }
         

@@ -840,35 +840,36 @@ extension FeedViewController: ASCollectionDataSource {
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
-        
-        if self.posts.count >= 150 {
             
-            context.completeBatchFetching(true)
-            clearAllData()
-            
-            
-        } else {
-            
-            if refresh_request == false {
-                self.retrieveNextPageWithCompletion { (newPosts) in
-                    
-                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                    
-                    
-                    context.completeBatchFetching(true)
-                    
-                    
-                }
-            } else {
+            if self.posts.count >= 150 {
+                
                 context.completeBatchFetching(true)
+                clearAllData()
+                
+                
+            } else {
+                
+                if refresh_request == false {
+                    self.retrieveNextPageWithCompletion { (newPosts) in
+                        
+                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                        
+                        
+                        context.completeBatchFetching(true)
+                        
+                        
+                    }
+                } else {
+                    context.completeBatchFetching(true)
+                }
+                
+                
+                
             }
-            
-            
-            
         }
-    }
-    
-    
+
+
+
     
 }
 
@@ -1028,11 +1029,13 @@ extension FeedViewController {
             }
             
             
+            
         }
         
         
         // Insert new items at index paths
         self.collectionNode.insertItems(at: indexPaths)
+        showGuide()
         
     }
     
@@ -1376,3 +1379,5 @@ extension FeedViewController {
     
     
 }
+
+

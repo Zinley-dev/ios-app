@@ -61,8 +61,7 @@ class ProfileHeaderCell: UICollectionViewCell {
     }
     
     func checkProImg() {
-        proImg.isHidden = true
-        /*
+        
         if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
             
             if passEligible {
@@ -80,7 +79,7 @@ class ProfileHeaderCell: UICollectionViewCell {
             checkPlan()
             
         }
-        */
+        
     }
 
     
@@ -108,6 +107,7 @@ class ProfileHeaderCell: UICollectionViewCell {
         
         
     }
+
 
     
 }

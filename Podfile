@@ -60,6 +60,7 @@ target 'Stitchbox' do
   pod "SwipeTransition"
   pod "SwipeTransitionAutoSwipeBack"      # if needed
   pod "SwipeTransitionAutoSwipeToDismiss" # if needed
+  pod 'GLWalkthrough'
   
   target 'StitchboxTests' do
     inherit! :search_paths

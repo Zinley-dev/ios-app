@@ -21,7 +21,7 @@ class IAPManager {
             return
         }
         
-        let config = Qonversion.Configuration(projectKey: "NTQCaNySQ0GHbt6xsWrQPM0VlohWmjCO", launchMode: .analytics)
+        let config = Qonversion.Configuration(projectKey: "NTQCaNySQ0GHbt6xsWrQPM0VlohWmjCO", launchMode: .subscriptionManagement)
         Qonversion.initWithConfig(config)
         Qonversion.shared().setProperty(.userID, value: userUID)
     }

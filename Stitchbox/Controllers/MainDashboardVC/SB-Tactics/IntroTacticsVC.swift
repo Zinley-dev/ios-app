@@ -113,7 +113,7 @@ class IntroTacticsVC: UIViewController, ZSWTappableLabelTapDelegate {
             navigationController.navigationBar.isTranslucent = false
         }
         
-        //checkAccountStatus()
+        checkAccountStatus()
         
     }
     

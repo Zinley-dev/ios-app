@@ -54,6 +54,7 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.8)
     - PromisesObjC (~> 2.1)
   - FLAnimatedImage (1.0.17)
+  - GLWalkthrough (0.1.1)
   - GoogleAppMeasurement (10.3.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.3.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
@@ -216,6 +217,7 @@ DEPENDENCIES:
   - FirebaseAnalytics (~> 10.3.0)
   - FirebaseAuth (~> 10.3.0)
   - FLAnimatedImage (~> 1.0)
+  - GLWalkthrough
   - GoogleMaps
   - GooglePlaces
   - GoogleSignIn (~> 7.0.0)
@@ -261,6 +263,7 @@ SPEC REPOS:
     - FirebaseCoreInternal
     - FirebaseInstallations
     - FLAnimatedImage
+    - GLWalkthrough
     - GoogleAppMeasurement
     - GoogleMaps
     - GooglePlaces
@@ -327,6 +330,7 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: 971029061d326000d65bfdc21f5502c75c8b0893
   FirebaseInstallations: 52153982b057d3afcb4e1fbb3eb0b6d00611e681
   FLAnimatedImage: bbf914596368867157cc71b38a8ec834b3eeb32b
+  GLWalkthrough: 802e6f7f23ac16d77b3c64dfbf6b4d60d3d48999
   GoogleAppMeasurement: c7d6fff39bf2d829587d74088d582e32d75133c3
   GoogleMaps: 0dce473ab18742d0f327887853630927cbee9127
   GooglePlaces: 46231f49e2dc52aa9a604f99e2e6b29996f30cc7
@@ -368,6 +372,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 3d906ac6ee3569a5081704f13ce60c166defd5da
+PODFILE CHECKSUM: 9514a473feae36aa50e4da8d950ddbb1463f321c
 
 COCOAPODS: 1.12.1
