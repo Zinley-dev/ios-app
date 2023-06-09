@@ -1035,7 +1035,6 @@ extension FeedViewController {
         
         // Insert new items at index paths
         self.collectionNode.insertItems(at: indexPaths)
-        showGuide()
         
     }
     
