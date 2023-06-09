@@ -731,8 +731,8 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        self.retrieveNextPageWithCompletion { (newPosts) in
-            
+        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
             self.insertNewRowsInTableNode(newPosts: newPosts)
             
             
