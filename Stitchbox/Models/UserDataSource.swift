@@ -99,6 +99,24 @@ class ChallengeCardData: Mappable {
     }
 }
 
+class WalkThrough: Mappable {
+  private(set) var fullScreen: Bool = false
+  private(set) var fistBump: Bool = false
+  private(set) var zoom: Bool = false
+  private(set) var streamingLink: Bool = false
+  
+  required init?(map: ObjectMapper.Map) {
+    
+  }
+  
+  func mapping(map: ObjectMapper.Map) {
+    fullScreen <- map["fullScreen"]
+    fistBump <- map["fistBump"]
+    zoom <- map["zoom"]
+    streamingLink <- map["streamingLink"]
+  }
+}
+
 class ThirdPartyCredential: Mappable {
     private(set) var uid: String = ""
     required init?(map: ObjectMapper.Map) {
@@ -231,6 +249,8 @@ class UserDataSource: Mappable {
     private(set) var ageRange: AgeRange?
     private(set) var challengeCard: ChallengeCardData?
     private(set) var riotLOLAccount: RiotLOLAccount?
+    private(set) var walkThrough: WalkThrough?
+  
     required init?(map: Map) {
         //
     }
@@ -273,5 +293,6 @@ class UserDataSource: Mappable {
         challengeCard   <- map["challengeCard"]
         riotLOLAccount  <- map["riotAccount"]
         passEligible  <- map["passEligible"]
+        walkThrough  <- map["walkThrough"]
     }
 }

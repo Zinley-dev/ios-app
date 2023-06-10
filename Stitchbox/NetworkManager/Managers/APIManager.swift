@@ -390,6 +390,14 @@ extension APIManager {
     }
   }
   
+  func updateWalkThrough(isFullScreen: Bool , isFistbump: Bool, isZoom: Bool, isStreaming: Bool, completion: @escaping APICompletion) {
+    var params = ["fullScreen": isFullScreen, "fistBump": isFistbump, "zoom": isZoom, "streamingLink": isStreaming]
+    userManager.request(.updateWalkThrough(params: params)){
+      result in
+      completion(result)
+    }
+  }
+  
     func updatePhone(phone: String, completion: @escaping APICompletion) {
       userManager.request(.updatePhone(params: ["phone": phone])){
           result in
