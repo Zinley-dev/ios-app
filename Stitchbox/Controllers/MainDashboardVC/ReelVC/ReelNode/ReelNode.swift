@@ -243,7 +243,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 let aspectRatio = Float(width) / Float(height)
              
                 // Set contentMode based on aspect ratio
-                if aspectRatio >= 0.5 && aspectRatio <= 0.65 { // Close to 9:16 aspect ratio (vertical)
+                if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
                     self.videoNode.contentMode = .scaleAspectFill
                     self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
@@ -277,7 +277,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 let aspectRatio = Float(width) / Float(height)
 
                 // Set contentMode based on aspect ratio
-                if aspectRatio >= 0.5 && aspectRatio <= 0.65 { // Close to 9:16 aspect ratio (vertical)
+                if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
                     self.imageNode.contentMode = .scaleAspectFill
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
                     self.imageNode.contentMode = .scaleAspectFit
