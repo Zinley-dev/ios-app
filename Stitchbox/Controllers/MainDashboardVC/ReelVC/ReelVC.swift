@@ -447,17 +447,20 @@ extension ReelVC {
 
 extension ReelVC {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         let item = posts[collectionView.tag]
-        
-        
-        cell.hashTagLabel.text = item.hashtags[indexPath.row]
-        
+
+        if indexPath.row < item.hashtags.count {
+            cell.hashTagLabel.text = item.hashtags[indexPath.row]
+        } else {
+            // handle the error: this might mean printing an error message, or using a default value
+            cell.hashTagLabel.text = "Error: hashtag not found"
+            print("Error: No hashtag for index \(indexPath.row)")
+        }
+            
         return cell
-        
-        
     }
+
     
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -568,7 +571,7 @@ extension ReelVC: ASCollectionDataSource {
                     
                     
                     self?.insertNewRowsInCollectionNode(newPosts: newPosts)
-                    self?.deleteIfOver()
+                    self?.cleanupPosts(collectionNode: collectionNode)
                     
                     context.completeBatchFetching(true)
                     
@@ -586,7 +589,7 @@ extension ReelVC: ASCollectionDataSource {
                             
                             
                             self?.insertNewRowsInCollectionNode(newPosts: newPosts)
-                            self?.deleteIfOver()
+                            self?.cleanupPosts(collectionNode: collectionNode)
                             
                             context.completeBatchFetching(true)
                             
@@ -597,7 +600,7 @@ extension ReelVC: ASCollectionDataSource {
                     } else {
                         
                         self?.insertNewRowsInCollectionNode(newPosts: newPosts)
-                        self?.deleteIfOver()
+                        self?.cleanupPosts(collectionNode: collectionNode)
                         
                         context.completeBatchFetching(true)
                         
@@ -616,7 +619,7 @@ extension ReelVC: ASCollectionDataSource {
                             
                             
                             self?.insertNewRowsInCollectionNode(newPosts: newPosts)
-                            self?.deleteIfOver()
+                            self?.cleanupPosts(collectionNode: collectionNode)
                             
                             
                             context.completeBatchFetching(true)
@@ -628,7 +631,7 @@ extension ReelVC: ASCollectionDataSource {
                     } else {
                         
                         self?.insertNewRowsInCollectionNode(newPosts: newPosts)
-                        self?.deleteIfOver()
+                        self?.cleanupPosts(collectionNode: collectionNode)
                         
                         
                         context.completeBatchFetching(true)
@@ -647,26 +650,23 @@ extension ReelVC: ASCollectionDataSource {
         }
     }
     
-    func deleteIfOver() {
-        
-        // if we have more than 150 posts
-        if self.posts.count > 75 {
-            // calculate how many items to remove
-            let itemsToRemove = self.posts.count > 75 ? min(self.posts.count, self.posts.count - 75) : 0
+    private func cleanupPosts(collectionNode: ASCollectionNode) {
+        let postThreshold = 100
+        let postsToRemove = 50
 
-            
-            // remove the first itemsToRemove posts
-            let oldPosts = Array(self.posts.prefix(itemsToRemove))
-            
-            self.posts.removeFirst(itemsToRemove)
-            
+        if self.posts.count > postThreshold {
+            // remove the first postsToRemove posts
+            let oldPosts = Array(self.posts.prefix(postsToRemove))
+            self.posts.removeFirst(postsToRemove)
+
             // generate the index paths for old posts
-            let indexPathsToRemove = oldPosts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
-            
+            let indexPathsToRemove = oldPosts.indices.map { IndexPath(row: $0, section: 0) }
+
             // delete the old posts from collectionNode
-            collectionNode.deleteItems(at: indexPathsToRemove)
+            collectionNode.performBatchUpdates({
+                collectionNode.deleteItems(at: indexPathsToRemove)
+            }, completion: nil)
         }
-        
     }
     
     
@@ -878,59 +878,53 @@ extension ReelVC {
     }
     
     
-    
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-        
         // checking empty
         guard newPosts.count > 0 else {
             return
         }
-        
+
         if refresh_request {
-            
             refresh_request = false
-            
-            
             if !self.posts.isEmpty {
-                
-                
                 var delete_indexPaths: [IndexPath] = []
-                
                 for row in 0..<self.posts.count {
                     let path = IndexPath(row: row, section: 0) // single indexpath
-                    delete_indexPaths.append(path) // app
+                    delete_indexPaths.append(path) // append
                 }
-                
+
                 self.posts.removeAll()
-                self.collectionNode.deleteItems(at: delete_indexPaths)
-                
+                self.collectionNode.performBatch(animated: true, updates: {
+                    self.collectionNode.deleteItems(at: delete_indexPaths)
+                })
             }
-            
         }
-        
+
         // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()
         for i in newPosts {
             if let item = PostModel(JSON: i) {
                 if !self.posts.contains(item) {
-                    self.posts.append(item)
                     items.append(item)
                 }
             }
         }
-        
-        if !items.isEmpty {
-            // Construct index paths for the new rows
-            let startIndex = self.posts.count - items.count
-            let endIndex = startIndex + items.count - 1
-            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-            
-            // Insert new items at index paths
-            self.collectionNode.insertItems(at: indexPaths)
+
+        // Construct index paths for the new rows
+        if items.count > 0 {
+            self.collectionNode.performBatch(animated: true, updates: {
+                let startIndex = self.posts.count
+                self.posts.append(contentsOf: items)
+                let endIndex = self.posts.count - 1
+                let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
+                
+                // Insert new items at index paths
+                self.collectionNode.insertItems(at: indexPaths)
+            }, completion: nil)
         }
-        
-        
     }
+
+
     
 }
 

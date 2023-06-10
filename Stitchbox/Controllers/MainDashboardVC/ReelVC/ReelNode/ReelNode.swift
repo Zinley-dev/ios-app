@@ -55,7 +55,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.imageNode = ASImageNode()
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
-        //self.scrollView = UIScrollView()
         self.hashtagsNode = ASDisplayNode()
         self.videoNode = ASVideoNode()
         self.gradientNode = GradienView()
@@ -1302,6 +1301,7 @@ extension ReelNode: UIGestureRecognizerDelegate {
     }
 
 
+    
     
 }
 
