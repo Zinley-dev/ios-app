@@ -233,7 +233,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
             self.videoNode.shouldAutoplay = false
             self.videoNode.shouldAutorepeat = true
-            self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+            
             self.videoNode.muted = false
             self.videoNode.delegate = self
             
@@ -241,21 +241,25 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
                 // Calculate aspect ratio
                 let aspectRatio = Float(width) / Float(height)
-
+             
                 // Set contentMode based on aspect ratio
-                if aspectRatio >= 0.5 && aspectRatio <= 0.6 { // Close to 9:16 aspect ratio (vertical)
+                if aspectRatio >= 0.5 && aspectRatio <= 0.65 { // Close to 9:16 aspect ratio (vertical)
                     self.videoNode.contentMode = .scaleAspectFill
+                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
                     self.videoNode.contentMode = .scaleAspectFit
+                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
                     self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
                 } else {
                     // Default contentMode, adjust as needed
                     self.videoNode.contentMode = .scaleAspectFit
+                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
                     self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
                 }
             } else {
                 // Default contentMode, adjust as needed
                 self.videoNode.contentMode = .scaleAspectFit
+                self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
                 self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
             }
 
@@ -273,7 +277,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 let aspectRatio = Float(width) / Float(height)
 
                 // Set contentMode based on aspect ratio
-                if aspectRatio >= 0.5 && aspectRatio <= 0.6 { // Close to 9:16 aspect ratio (vertical)
+                if aspectRatio >= 0.5 && aspectRatio <= 0.65 { // Close to 9:16 aspect ratio (vertical)
                     self.imageNode.contentMode = .scaleAspectFill
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
                     self.imageNode.contentMode = .scaleAspectFit
@@ -391,8 +395,31 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         }
     }
-    
-    
+
+
+    /*
+    func videoNode(_ videoNode: ASVideoNode, willChange state: ASVideoNodePlayerState, to toState: ASVideoNodePlayerState) {
+        switch toState {
+        case .initialLoading, .loading:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self, weak videoNode] in
+                guard let self = self else { return }
+                // Check if videoNode is still loading
+                if videoNode?.playerState == .initialLoading || videoNode?.playerState == .loading {
+                    // Reset the player
+                    videoNode?.asset = nil
+                    if let post = self.post {
+                        videoNode?.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
+                    }
+                    videoNode?.play()
+                }
+            }
+        default:
+            // Handle other player states as needed
+            break
+        }
+    }*/
+
+
     @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
         //guard let view = recognizer.view else { return }
 

@@ -41,7 +41,7 @@ class GradientImageNode: ASDisplayNode {
 
     func updateGradient(with image: UIImage) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let smallImage = image.resize(targetSize: CGSize(width: 100, height: 100))
+            let smallImage = image.resize(targetSize: CGSize(width: 250, height: 250))
             let palette = Vibrant.from(smallImage).getPalette()
 
             DispatchQueue.main.async {
@@ -53,8 +53,6 @@ class GradientImageNode: ASDisplayNode {
             }
         }
     }
-
-
 
 
 }

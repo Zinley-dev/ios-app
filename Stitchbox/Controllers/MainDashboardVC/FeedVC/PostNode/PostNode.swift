@@ -971,6 +971,28 @@ extension PostNode {
         }
         
     }
+
+    /*
+    func videoNode(_ videoNode: ASVideoNode, willChange state: ASVideoNodePlayerState, to toState: ASVideoNodePlayerState) {
+        switch toState {
+        case .initialLoading, .loading:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self, weak videoNode] in
+                guard let self = self else { return }
+                // Check if videoNode is still loading
+                if videoNode?.playerState == .initialLoading || videoNode?.playerState == .loading {
+                    // Reset the player
+                    videoNode?.asset = nil
+                    if let post = self.post {
+                        videoNode?.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
+                    }
+                    videoNode?.play()
+                }
+            }
+        default:
+            // Handle other player states as needed
+            break
+        }
+    } */
     
     @objc func likeTapped() {
         
