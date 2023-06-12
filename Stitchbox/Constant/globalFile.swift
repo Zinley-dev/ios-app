@@ -49,6 +49,7 @@ var navigationControllerHeight:CGFloat = 0.0
 var tabBarControllerHeight:CGFloat = 0.0
 let horizontalPadding: CGFloat = 12
 let bottomValue: CGFloat = 40
+let bottomValueNoHide: CGFloat = 0
 
 let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitchbox", "domain": ["stitchbox.gg"], "status": true])
 let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
@@ -1253,7 +1254,7 @@ class CustomSlider: UISlider {
                 update1.timeLbl.text = processTime()
                 update1.timeLbl.isHidden = false
                 update1.blurView.isHidden = false
-                
+        
                 
             } else if let update1 = vc as? MainSearchVC {
                 
@@ -1301,7 +1302,7 @@ class CustomSlider: UISlider {
             if let update1 = vc as? FeedViewController {
                 
                 if update1.tabBarController?.tabBar.isTranslucent == false {
-                    update1.bottomConstraint.constant = 0
+                    update1.bottomConstraint.constant = bottomValueNoHide
                 } else {
                     update1.bottomConstraint.constant = bottomValue
                 }

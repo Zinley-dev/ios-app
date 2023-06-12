@@ -207,7 +207,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         self.tabBarController?.tabBar.isTranslucent = false
         showMiddleBtn(vc: self)
         
-        bottomConstraint.constant = 0
+        bottomConstraint.constant = bottomValueNoHide
         
     }
     
@@ -694,7 +694,7 @@ extension FeedViewController {
                 self.tabBarController?.tabBar.isTranslucent = false
                 showMiddleBtn(vc: self)
                 
-                bottomConstraint.constant = 0
+                bottomConstraint.constant = bottomValueNoHide
             }
             
         }
