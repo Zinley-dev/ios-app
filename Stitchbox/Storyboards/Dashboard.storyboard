@@ -3,7 +3,7 @@
     <device id="retina5_9" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -7667,21 +7667,20 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bzb-HO-UxG" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="127.66666666666669" y="252" width="120" height="44"/>
-                                <color key="backgroundColor" red="0.51372551919999998" green="0.52549022440000004" blue="0.54509806630000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <rect key="frame" x="32" y="252" width="311" height="44"/>
+                                <color key="backgroundColor" name="Primary"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="0c7-X5-7WK"/>
-                                    <constraint firstAttribute="width" constant="120" id="FV1-mJ-tWy"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Save">
-                                    <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="View available domains ">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                         <real key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="size">
                                         <integer key="value" value="2"/>
                                     </userDefinedRuntimeAttribute>
@@ -7696,13 +7695,14 @@
                         <constraints>
                             <constraint firstItem="9uq-kH-LLk" firstAttribute="top" secondItem="KBq-NR-s2h" secondAttribute="top" constant="32" id="8Jn-iS-Jho"/>
                             <constraint firstItem="bzb-HO-UxG" firstAttribute="centerX" secondItem="wbS-0P-Akm" secondAttribute="centerX" id="JFm-Of-fx6"/>
+                            <constraint firstItem="KBq-NR-s2h" firstAttribute="trailing" secondItem="bzb-HO-UxG" secondAttribute="trailing" constant="32" id="Wjd-KS-79Z"/>
+                            <constraint firstItem="bzb-HO-UxG" firstAttribute="leading" secondItem="KBq-NR-s2h" secondAttribute="leading" constant="32" id="XIU-VL-DvS"/>
                             <constraint firstItem="bzb-HO-UxG" firstAttribute="top" secondItem="9uq-kH-LLk" secondAttribute="bottom" constant="50" id="XiO-6C-pSf"/>
                             <constraint firstItem="KBq-NR-s2h" firstAttribute="trailing" secondItem="9uq-kH-LLk" secondAttribute="trailing" constant="32" id="bD2-MS-rve"/>
                             <constraint firstItem="9uq-kH-LLk" firstAttribute="leading" secondItem="KBq-NR-s2h" secondAttribute="leading" constant="32" id="grY-Nt-7Bf"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="saveBtn" destination="bzb-HO-UxG" id="Kaj-1E-OdC"/>
                         <outlet property="streamingLinkTxt" destination="Tc3-Xe-b1T" id="Dlt-oh-50i"/>
                     </connections>
                 </viewController>
@@ -7724,7 +7724,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RqC-E3-rnc">
-                                <rect key="frame" x="0.0" y="487" width="375" height="325"/>
+                                <rect key="frame" x="0.0" y="502" width="375" height="310"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sDe-vH-vIh">
                                         <rect key="frame" x="2" y="2" width="371" height="40"/>
@@ -7817,7 +7817,7 @@
                                         <cells/>
                                     </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EYU-7W-j1f">
-                                        <rect key="frame" x="0.0" y="162" width="375" height="161"/>
+                                        <rect key="frame" x="0.0" y="162" width="375" height="146"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="IES-Sf-6gY">
                                                 <rect key="frame" x="0.0" y="8" width="375" height="95"/>
@@ -7966,7 +7966,7 @@
                                     <constraint firstItem="8BZ-Yw-j3W" firstAttribute="top" secondItem="sDe-vH-vIh" secondAttribute="bottom" constant="8" id="rM8-Ta-Ain"/>
                                     <constraint firstItem="6TN-lF-lEI" firstAttribute="top" secondItem="8BZ-Yw-j3W" secondAttribute="bottom" constant="2" id="reZ-Ai-vQT"/>
                                     <constraint firstAttribute="trailing" secondItem="8BZ-Yw-j3W" secondAttribute="trailing" constant="2" id="uKB-tL-rej"/>
-                                    <constraint firstAttribute="height" constant="325" id="weg-zT-RVM"/>
+                                    <constraint firstAttribute="height" constant="310" id="weg-zT-RVM"/>
                                     <constraint firstAttribute="bottom" secondItem="EYU-7W-j1f" secondAttribute="bottom" constant="2" id="ysu-K0-IQ8"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -7974,7 +7974,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uru-nU-vsQ">
-                                <rect key="frame" x="0.0" y="94" width="375" height="381"/>
+                                <rect key="frame" x="0.0" y="94" width="375" height="396"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="Wo1-yw-9zM">
                                         <rect key="frame" x="8" y="8" width="60" height="60"/>
@@ -8036,7 +8036,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Hi, let's unleash your gameplay!" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="vAk-wt-wq6">
-                                        <rect key="frame" x="8" y="76" width="359" height="297"/>
+                                        <rect key="frame" x="8" y="76" width="359" height="312"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -12023,7 +12023,7 @@
             <size key="intrinsicContentSize" width="329" height="15.666666666666666"/>
         </designable>
         <designable name="bzb-HO-UxG">
-            <size key="intrinsicContentSize" width="36" height="30"/>
+            <size key="intrinsicContentSize" width="174" height="30"/>
         </designable>
         <designable name="f1f-he-Mm3">
             <size key="intrinsicContentSize" width="53" height="30"/>

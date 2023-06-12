@@ -510,20 +510,30 @@ extension PostListWithHashtagVC {
 
 
 extension PostListWithHashtagVC {
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
+
+        // Check if collectionView.tag is within the range of the posts array
+        guard collectionView.tag < posts.count else {
+            print("Error: No post for tag \(collectionView.tag)")
+            cell.hashTagLabel.text = "Error: post not found"
+            return cell
+        }
+        
         let item = posts[collectionView.tag]
 
-        if indexPath.row < item.hashtags.count {
-            cell.hashTagLabel.text = item.hashtags[indexPath.row]
-        } else {
-            // handle the error: this might mean printing an error message, or using a default value
-            cell.hashTagLabel.text = "Error: hashtag not found"
+        // Check if indexPath.row is within the range of the hashtags array
+        guard indexPath.row < item.hashtags.count else {
             print("Error: No hashtag for index \(indexPath.row)")
+            cell.hashTagLabel.text = "Error: hashtag not found"
+            return cell
         }
-            
+
+        cell.hashTagLabel.text = item.hashtags[indexPath.row]
         return cell
     }
+
 
     
     

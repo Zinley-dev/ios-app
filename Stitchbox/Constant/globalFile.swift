@@ -1078,8 +1078,8 @@ func requestAppleReview() {
     // Calculate the difference in days between the current date and the user creation date
     let daysSinceCreation = calendar.dateComponents([.day], from: userCreationDate, to: currentDate).day ?? 0
 
-    // Check if the user was created more than 2 days ago
-    if daysSinceCreation >= 2 {
+    // Check if the user was created more than 1 days ago
+    if daysSinceCreation >= 1 {
 
         // Retrieve the date of the last review request from UserDefaults
         if let lastReviewRequestDate = UserDefaults.standard.object(forKey: "lastReviewRequestDate") as? Date {
@@ -1090,17 +1090,23 @@ func requestAppleReview() {
             // Check if at least a month has passed since the last review request
             if monthsSinceLastRequest >= 1 {
                 // Request the review
-                AppStoreReviewManager.requestReviewIfAppropriate()
-                
-                // Update the date of the last review request
+                if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    AppStoreReviewManager.requestReviewIfAppropriate(inScene: scene)
+                    // Update the date of the last review request
+                    UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
+                }
+     
+            }
+            
+        } else {
+            
+            // If there's no date of the last review request, it means it's the first time the review is being requested
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                AppStoreReviewManager.requestReviewIfAppropriate(inScene: scene)
+                // Store the date of this review request
                 UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
             }
-        } else {
-            // If there's no date of the last review request, it means it's the first time the review is being requested
-            AppStoreReviewManager.requestReviewIfAppropriate()
-            
-            // Store the date of this review request
-            UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
+   
         }
     }
 }

@@ -1130,9 +1130,9 @@ extension Bluring where Self: UIView {
 }
 
 enum AppStoreReviewManager {
-  static func requestReviewIfAppropriate() {
-      SKStoreReviewController.requestReview()
-  }
+    static func requestReviewIfAppropriate(inScene scene: UIWindowScene) {
+        SKStoreReviewController.requestReview(in: scene)
+    }
 }
 
 // Conformance

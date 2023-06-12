@@ -152,14 +152,14 @@ class PostVC: UIViewController {
                 
                 if !text.findMHashtagText().isEmpty {
                     self.collectionHeight.constant = 50.0
-                    self.settingViewHeight.constant = 315
+                    self.settingViewHeight.constant = 295
                     self.collectionView.isHidden = false
                     self.hashtagLbl.text = "Hashtag added"
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList = text.findMHashtagText()
                 } else {
                     self.collectionHeight.constant = 0.0
-                    self.settingViewHeight.constant = 335 - 50
+                    self.settingViewHeight.constant = 295 - 50
                     self.collectionView.isHidden = true
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList.removeAll()
@@ -687,7 +687,7 @@ extension PostVC {
     func setupDefaultView() {
         
         collectionHeight.constant = 0.0
-        settingViewHeight.constant = 335 - 50
+        settingViewHeight.constant = 295 - 50
         
     }
 
@@ -736,7 +736,7 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
                 self.collectionHeight.constant = 0
                 self.collectionView.isHidden = true
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 335 - 50
+                self.settingViewHeight.constant = 295 - 50
                 
                 self.hiddenHashTagTxtField.text = ""
                 self.hashtagLbl.text = "Hashtag #"
