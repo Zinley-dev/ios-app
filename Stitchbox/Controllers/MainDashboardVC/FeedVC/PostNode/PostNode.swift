@@ -19,6 +19,8 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class PostNode: ASCellNode, ASVideoNodeDelegate {
     
+    var previousTimeStamp: TimeInterval = 0.0
+    var totalWatchedTime: TimeInterval = 0.0
     weak var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: ASVideoNode
@@ -622,74 +624,51 @@ extension PostNode {
         }
         
     }
-    
-    
+
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
-        currentTimeStamp = timeInterval
-       
+        let videoDuration = videoNode.currentItem?.duration.seconds ?? 0
+
+        // Compute the time the user has spent actually watching the video
+        if timeInterval >= previousTimeStamp {
+            totalWatchedTime += timeInterval - previousTimeStamp
+        }
+        previousTimeStamp = timeInterval
+
         setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!), currentTime: timeInterval, maxDuration: videoNode.currentItem!.duration)
-        
-        
-        if (videoNode.currentItem?.duration.seconds)! <= 15 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.8 {
-                
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-                
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 15, (videoNode.currentItem?.duration.seconds)! <= 30 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.7 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 30, (videoNode.currentItem?.duration.seconds)! <= 60 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.6 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 60 , (videoNode.currentItem?.duration.seconds)! <= 90 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.5 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 90, (videoNode.currentItem?.duration.seconds)! <= 120 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.4 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 120 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.5 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
+
+        let watchedPercentage = totalWatchedTime/videoDuration
+        let minimumWatchedPercentage: Double
+
+        // Setting different thresholds based on video length
+        switch videoDuration {
+        case 0..<15:
+            minimumWatchedPercentage = 0.8
+        case 15..<30:
+            minimumWatchedPercentage = 0.7
+        case 30..<60:
+            minimumWatchedPercentage = 0.6
+        case 60..<90:
+            minimumWatchedPercentage = 0.5
+        case 90..<120:
+            minimumWatchedPercentage = 0.4
+        default:
+            minimumWatchedPercentage = 0.5
         }
         
+        // Check if user has watched a certain minimum amount of time (e.g. 5 seconds)
+        let minimumWatchedTime = 5.0
+        if shouldCountView && totalWatchedTime >= minimumWatchedTime && watchedPercentage >= minimumWatchedPercentage {
+            shouldCountView = false
+            endVideo(watchTime: Double(totalWatchedTime))
+        }
+        
+        // Optionally, add another condition to check if user is actively engaging with the video
+        // if shouldCountView && userIsEngagingWithVideo {
+        //     endVideo(watchTime: Double(totalWatchedTime))
+        // }
     }
+
     
     func videoDidPlay(toEnd videoNode: ASVideoNode) {
         

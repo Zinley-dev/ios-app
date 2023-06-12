@@ -1115,8 +1115,8 @@ func requestAppleReview() {
 
 class CustomSlider: UISlider {
     
-    @IBInspectable var trackHeight: CGFloat = 2
-    @IBInspectable var highlightedTrackHeight: CGFloat = 5.0
+    @IBInspectable var trackHeight: CGFloat = 2.67
+    @IBInspectable var highlightedTrackHeight: CGFloat = 7.0
     @IBInspectable var thumbRadius: CGFloat = 5
     @IBInspectable var highlightedThumbRadius: CGFloat = 10
     
