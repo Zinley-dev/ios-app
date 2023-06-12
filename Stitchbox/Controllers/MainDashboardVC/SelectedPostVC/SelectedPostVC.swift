@@ -14,7 +14,9 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var playTimeBar: UIProgressView!
+    @IBOutlet weak var timeLbl: UILabel!
+    @IBOutlet weak var blurView: UIView!
+    @IBOutlet weak var playTimeBar: CustomSlider!
     var selectedPost = [PostModel]()
     var posts = [PostModel]()
     var selectedIndexPath = 0
@@ -1000,6 +1002,16 @@ extension SelectedPostVC {
             }
             
             cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    func seekVideo(index: Int, time: CMTime) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            cell.videoNode.player?.seek(to: time)
             
         }
         

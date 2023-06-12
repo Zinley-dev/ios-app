@@ -43,7 +43,9 @@ class ReelVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     var isReel = false
     var isHashtag = false
     
-    @IBOutlet weak var playTimeBar: UIProgressView!
+    @IBOutlet weak var timeLbl: UILabel!
+    @IBOutlet weak var blurView: UIView!
+    @IBOutlet weak var playTimeBar: CustomSlider!
     
     private var pullControl = UIRefreshControl()
       
@@ -1230,6 +1232,16 @@ extension ReelVC {
             }
             
             cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    func seekVideo(index: Int, time: CMTime) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+            
+            cell.videoNode.player?.seek(to: time)
             
         }
         

@@ -15,10 +15,14 @@ import ObjectMapper
 
 class FeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
+    
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var timeLbl: UILabel!
+    @IBOutlet weak var blurView: UIView!
+    @IBOutlet weak var playTimeBar: CustomSlider!
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
     
@@ -48,8 +52,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var firstAnimated = true
     var lastLoadTime: Date?
     var isPromote = false
-    
-    @IBOutlet weak var playTimeBar: UIProgressView!
+
     
     private var pullControl = UIRefreshControl()
     
@@ -682,7 +685,7 @@ extension FeedViewController {
                 navigationController?.setNavigationBarHidden(true, animated: true)
                 changeTabBar(hidden: true, animated: true)
                 self.tabBarController?.tabBar.isTranslucent = true
-                bottomConstraint.constant = 20
+                bottomConstraint.constant = bottomValue
                 hideMiddleBtn(vc: self)
                 
             } else {
@@ -1235,6 +1238,17 @@ extension FeedViewController {
             }
             
             cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    
+    func seekVideo(index: Int, time: CMTime) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            cell.videoNode.player?.seek(to: time)
             
         }
         

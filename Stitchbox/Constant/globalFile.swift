@@ -48,6 +48,7 @@ var globalSetting: SettingModel!
 var navigationControllerHeight:CGFloat = 0.0
 var tabBarControllerHeight:CGFloat = 0.0
 let horizontalPadding: CGFloat = 12
+let bottomValue: CGFloat = 40
 
 let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitchbox", "domain": ["stitchbox.gg"], "status": true])
 let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
@@ -1110,4 +1111,291 @@ func requestAppleReview() {
         }
     }
 }
+
+class CustomSlider: UISlider {
+    
+    @IBInspectable var trackHeight: CGFloat = 2
+    @IBInspectable var highlightedTrackHeight: CGFloat = 5.0
+    @IBInspectable var thumbRadius: CGFloat = 5
+    @IBInspectable var highlightedThumbRadius: CGFloat = 10
+    
+    private lazy var thumbView: UIView = {
+        let thumb = UIView()
+        thumb.backgroundColor = .white
+        return thumb
+    }()
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        let thumb = thumbImage(radius: thumbRadius)
+        setThumbImage(thumb, for: .normal)
+        
+        self.addTarget(self, action: #selector(sliderDidStartSliding), for: .touchDown)
+        self.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
+        self.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
+    }
+    
+    private func thumbImage(radius: CGFloat) -> UIImage {
+        thumbView.frame = CGRect(x: 0, y: radius / 2, width: radius * 2, height: radius * 2)
+        thumbView.layer.cornerRadius = radius
+        
+        let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
+        return renderer.image { rendererContext in
+            thumbView.layer.render(in: rendererContext.cgContext)
+        }
+    }
+    
+    @objc func sliderDidStartSliding() {
+        processOnSliding()
+        startLayout()
+    }
+    
+    @objc func sliderDidEndSliding() {
+        processEndedSliding()
+        endLayout()
+    }
+    
+    func startLayout() {
+        setThumbImage(thumbImage(radius: highlightedThumbRadius), for: .normal)
+        trackHeight = highlightedTrackHeight
+        setNeedsDisplay()
+    }
+    
+    func endLayout() {
+        setThumbImage(thumbImage(radius: thumbRadius), for: .normal)
+        trackHeight = 2
+        setNeedsDisplay()
+    }
+    
+    override func trackRect(forBounds bounds: CGRect) -> CGRect {
+        var newRect = super.trackRect(forBounds: bounds)
+        newRect.size.height = trackHeight
+        return newRect
+    }
+    
+    @objc func sliderValueDidChange() {
+        // Get the new video time
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                update1.timeLbl.text = processTime()
+
+                
+            } else if let update1 = vc as? PostListWithHashtagVC {
+                
+                update1.timeLbl.text = processTime()
+                
+            } else if let update1 = vc as? MainSearchVC {
+                
+                update1.PostSearchVC.timeLbl.text = processTime()
+                
+            } else if let update1 = vc as? ReelVC {
+                
+                update1.timeLbl.text = processTime()
+                
+            } else if let update1 = vc as? SelectedPostVC {
+                
+                update1.timeLbl.text = processTime()
+                
+            }
+            
+        }
+        
+    }
+
+    
+    func processTime() -> String {
+        
+        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+        // Calculate the minutes and seconds
+        let totalSeconds = Int(CMTimeGetSeconds(newVideoTime))
+        let seconds = totalSeconds % 60
+        let minutes = totalSeconds / 60
+
+        // Calculate total duration minutes and seconds
+        let totalDurationSeconds = Int(self.maximumValue)
+        let durationSeconds = totalDurationSeconds % 60
+        let durationMinutes = totalDurationSeconds / 60
+
+        // Print the time in the format 00:00 / 00:00
+        return String(format: "%02d:%02d / %02d:%02d", minutes, seconds, durationMinutes, durationSeconds)
+        
+    }
+    
+    func processOnSliding() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if update1.tabBarController?.tabBar.isTranslucent == false {
+                    update1.bottomConstraint.constant = 10
+                }
+                
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+                
+                
+            } else if let update1 = vc as? PostListWithHashtagVC {
+                
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+                
+                
+            } else if let update1 = vc as? MainSearchVC {
+                
+                if update1.PostSearchVC.currentIndex != nil {
+                    update1.PostSearchVC.pauseVideo(index: update1.PostSearchVC.currentIndex!)
+                }
+                
+                update1.PostSearchVC.timeLbl.text = processTime()
+                update1.PostSearchVC.timeLbl.isHidden = false
+                update1.PostSearchVC.blurView.isHidden = false
+               
+                
+            } else if let update1 = vc as? ReelVC {
+                
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+               
+                
+            } else if let update1 = vc as? SelectedPostVC {
+                
+               
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+                
+            }
+            
+        }
+        
+    }
+
+    func processEndedSliding() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if update1.tabBarController?.tabBar.isTranslucent == false {
+                    update1.bottomConstraint.constant = 0
+                } else {
+                    update1.bottomConstraint.constant = bottomValue
+                }
+                
+              
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+                
+            } else if let update1 = vc as? PostListWithHashtagVC {
+                
+                
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+                
+            } else if let update1 = vc as? MainSearchVC {
+                
+                if update1.PostSearchVC.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.PostSearchVC.seekVideo(index: update1.PostSearchVC.currentIndex!, time: newVideoTime)
+                    update1.PostSearchVC.playVideo(index: update1.PostSearchVC.currentIndex!)
+                    
+                }
+                
+                update1.PostSearchVC.timeLbl.isHidden = true
+                update1.PostSearchVC.blurView.isHidden = true
+               
+                
+            } else if let update1 = vc as? ReelVC {
+                
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+               
+                
+            } else if let update1 = vc as? SelectedPostVC {
+                
+               
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+                
+            }
+            
+        }
+        
+    }
+
+}
+
+
 

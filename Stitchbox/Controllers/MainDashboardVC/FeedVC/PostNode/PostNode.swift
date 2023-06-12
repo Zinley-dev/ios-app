@@ -341,7 +341,7 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
     }
     
-    func setVideoProgress(rate: Float) {
+    func setVideoProgress(rate: Float, currentTime: TimeInterval, maxDuration: CMTime) {
         
         
         if let vc = UIViewController.currentViewController() {
@@ -352,7 +352,9 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 if let update1 = vc as? FeedViewController {
                     
                     if update1.playTimeBar != nil {
-                        update1.playTimeBar.setProgress(rate, animated: true)
+                        
+                        update1.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
+                        update1.playTimeBar.setValue(Float(currentTime), animated: true)
                     }
                     
                 }
@@ -362,7 +364,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 if let update2 = vc as? SelectedPostVC {
                     
                     if update2.playTimeBar != nil {
-                        update2.playTimeBar.setProgress(rate, animated: true)
+                        update2.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
+                        update2.playTimeBar.setValue(Float(currentTime), animated: true)
                     }
                     
                 }
@@ -373,7 +376,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 if let update2 = vc as? MainSearchVC {
                     
                     if update2.PostSearchVC.playTimeBar != nil {
-                        update2.PostSearchVC.playTimeBar.setProgress(rate, animated: true)
+                        update2.PostSearchVC.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
+                        update2.PostSearchVC.playTimeBar.setValue(Float(currentTime), animated: true)
                     }
                     
                 }
@@ -381,10 +385,12 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 
             } else if vc is PostListWithHashtagVC {
                 
+                
                 if let update2 = vc as? PostListWithHashtagVC {
                     
                     if update2.playTimeBar != nil {
-                        update2.playTimeBar.setProgress(rate, animated: true)
+                        update2.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
+                        update2.playTimeBar.setValue(Float(currentTime), animated: true)
                     }
                     
                     
@@ -621,7 +627,8 @@ extension PostNode {
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
         currentTimeStamp = timeInterval
-        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!))
+       
+        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!), currentTime: timeInterval, maxDuration: videoNode.currentItem!.duration)
         
         
         if (videoNode.currentItem?.duration.seconds)! <= 15 {

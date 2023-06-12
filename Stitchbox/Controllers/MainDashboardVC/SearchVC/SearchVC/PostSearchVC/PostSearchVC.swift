@@ -13,7 +13,9 @@ import Alamofire
 class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
     @IBOutlet weak var contentview: UIView!
-    @IBOutlet weak var playTimeBar: UIProgressView!
+    @IBOutlet weak var timeLbl: UILabel!
+    @IBOutlet weak var blurView: UIView!
+    @IBOutlet weak var playTimeBar: CustomSlider!
     
     var page = 1
     var keyword = ""
@@ -831,6 +833,16 @@ extension PostSearchVC {
             }
             
             cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    func seekVideo(index: Int, time: CMTime) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            cell.videoNode.player?.seek(to: time)
             
         }
         
