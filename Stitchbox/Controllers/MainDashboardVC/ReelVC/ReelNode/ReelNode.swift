@@ -875,6 +875,20 @@ extension ReelNode {
             return
             
         }
+        
+        APIManager.shared.openLink(postId: post.id, link: post.streamLink) { [weak self] result in
+            guard let self = self else { return }
+        
+            switch result {
+            case .success(let apiResponse):
+                print(apiResponse)
+                
+            case .failure(let error):
+                print(error)
+            }
+    
+        }
+        
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 

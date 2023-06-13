@@ -47,6 +47,7 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
             switch result {
             case .success(let apiResponse):
+              
                 guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
                     print("Couldn't cast")
                     return

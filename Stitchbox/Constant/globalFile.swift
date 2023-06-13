@@ -996,24 +996,24 @@ extension UIView {
 }
 
 
-func presentStreamingIntro() {
+    func presentStreamingIntro() {
     
-    if let SIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingIntroVC") as? StreamingIntroVC {
-        
-        if let vc = UIViewController.currentViewController() {
+        if let SIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingIntroVC") as? StreamingIntroVC {
             
-            let nav = UINavigationController(rootViewController: SIVC)
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: SIVC)
 
-            // Customize the navigation bar appearance
-            nav.navigationBar.barTintColor = .background
-            nav.navigationBar.tintColor = .white
-            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
-            nav.modalPresentationStyle = .fullScreen
-            vc.present(nav, animated: true, completion: nil)
+                nav.modalPresentationStyle = .fullScreen
+                vc.present(nav, animated: true, completion: nil)
 
 
-        }
+            }
     }
     
     

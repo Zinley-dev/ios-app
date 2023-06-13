@@ -280,7 +280,7 @@ extension FindFriendsVC: ASTableDataSource {
 
                 // Configure the fields of the interface.
                 composeVC.recipients = [phoneNumber]
-                composeVC.body = "[Stitchbox] I am \(userDataSource.userName ?? "") on Stitchbox. To download the app and stay connected with your gaming friends. tap:https://stitchbox.gg/"
+                composeVC.body = "[Stitchbox] I am \(userDataSource.userName ?? "") on Stitchbox. To download the app and stay connected with your gaming friends. tap:https://apps.apple.com/us/app/stitchbox/id1660843872"
 
                 // Present the view controller modally.
                 if MFMessageComposeViewController.canSendText() {
