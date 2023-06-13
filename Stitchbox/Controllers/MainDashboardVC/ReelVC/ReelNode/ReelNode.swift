@@ -24,7 +24,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var totalWatchedTime: TimeInterval = 0.0
     weak var collectionNode: ASCollectionNode?
     weak var post: PostModel!
-    var imageHolder: UIImage!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: ASVideoNode
     var imageNode: ASImageNode
@@ -61,7 +60,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.videoNode = ASVideoNode()
         self.gradientNode = GradienView()
         self.backgroundImage = GradientImageNode()
-        self.imageHolder = UIImage()
+       
         super.init()
         
         self.gradientNode.isLayerBacked = true
@@ -550,19 +549,15 @@ extension ReelNode {
     
     @objc func soundProcess() {
         
-        if videoNode.isPlaying() {
-            
-            if videoNode.muted == true {
-                videoNode.muted = false
-                shouldMute = false
-                animateUnmute()
-        
-            } else {
-                videoNode.muted = true
-                shouldMute = true
-                animateMute()
-            }
-            
+        if videoNode.muted == true {
+            videoNode.muted = false
+            shouldMute = false
+            animateUnmute()
+    
+        } else {
+            videoNode.muted = true
+            shouldMute = true
+            animateMute()
         }
         
     }
@@ -891,35 +886,20 @@ extension ReelNode {
         imgView.image = popupLikeImage
         imgView.frame.size = CGSize(width: 170, height: 120)
        
-        if let vc = UIViewController.currentViewController() {
-             
-            if vc is ReelVC {
-                
-                if let update1 = vc as? ReelVC {
-                    
-                    imgView.center = update1.view.center
-                    update1.view.addSubview(imgView)
-                    
-                }
-                
-            }
-                        
-                        
-                        
-                   
-        }
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
         
         
         imgView.transform = CGAffineTransform.identity
         
-        UIView.animate(withDuration: 1) {
+        UIView.animate(withDuration: 0.5) {
             
             imgView.alpha = 0
             
         }
         
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             
             if imgView.alpha == 0 {
                 
@@ -936,113 +916,39 @@ extension ReelNode {
     }
     
     func animateMute() {
-        
-        
-        if imageHolder == nil || imageHolder != muteImage {
-            
-            imageHolder = muteImage
-            
-            let imgView = UIImageView()
-            imgView.image = muteImage
-            imgView.frame.size = CGSize(width: 45, height: 45)
-           
-            if let vc = UIViewController.currentViewController() {
-                 
-                if vc is ReelVC {
-                    
-                    if let update1 = vc as? ReelVC {
-                        
-                        imgView.center = update1.view.center
-                        update1.view.addSubview(imgView)
-                        
-                    }
-                    
-                }
-                            
-                            
-                            
-                       
-            }
-            
-            
-            imgView.transform = CGAffineTransform.identity
-            
-            UIView.animate(withDuration: 1) {
-                
-                imgView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if imgView.alpha == 0 {
-                    
-                    imgView.removeFromSuperview()
-                    
-                }
-                
-            }
-            
-            
-            
-        }
+        let imgView = UIImageView(image: muteImage)
+        imgView.frame.size = CGSize(width: 45, height: 45)
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
 
-        
+        UIView.animate(withDuration: 0.5, animations: {
+            imgView.alpha = 0
+            imgView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        }) { _ in
+            imgView.removeFromSuperview()
+        }
     }
-    
+
     func animateUnmute() {
-        
-        if imageHolder == nil || imageHolder != unmuteImage {
-            
-            imageHolder = unmuteImage
-            
-            let imgView = UIImageView()
-            imgView.image = unmuteImage
-            imgView.frame.size = CGSize(width:45, height: 45)
-           
-            if let vc = UIViewController.currentViewController() {
-                 
-                if vc is ReelVC {
-                    
-                    if let update1 = vc as? ReelVC {
-                        
-                        imgView.center = update1.view.center
-                        update1.view.addSubview(imgView)
-                        
-                    }
-                    
-                }
-                            
-                            
-                            
-                       
+        let imgView = UIImageView(image: unmuteImage)
+        imgView.frame.size = CGSize(width: 45, height: 45)
+
+        if let vc = UIViewController.currentViewController() {
+            if let update1 = vc as? ReelVC {
+                imgView.center = update1.view.center
+                update1.view.addSubview(imgView)
             }
-            
-            
-            imgView.transform = CGAffineTransform.identity
-            
-            UIView.animate(withDuration: 1) {
-                
-                imgView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if imgView.alpha == 0 {
-                    
-                    imgView.removeFromSuperview()
-                    
-                }
-                
-            }
-            
         }
 
-        
+        UIView.animate(withDuration: 0.5, animations: {
+            imgView.alpha = 0
+            imgView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        }) { _ in
+            imgView.removeFromSuperview()
+        }
     }
+
+
     
     func checkIfLike() {
         

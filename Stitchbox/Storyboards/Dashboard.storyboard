@@ -7761,12 +7761,22 @@
                                     <action selector="SaveBtnPressed:" destination="pT2-vj-An9" eventType="touchUpInside" id="vi0-Pj-CxE"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bc6-gu-Nb6">
+                                <rect key="frame" x="16" y="683.66666666666663" width="343" height="62.333333333333371"/>
+                                <string key="text">Stitchbox is not affiliated with, endorsed by, or representative of any views associated with the available domain options listed above or any company on the available company list.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="KBq-NR-s2h"/>
                         <color key="backgroundColor" name="Background"/>
                         <constraints>
                             <constraint firstItem="9uq-kH-LLk" firstAttribute="top" secondItem="KBq-NR-s2h" secondAttribute="top" constant="32" id="8Jn-iS-Jho"/>
+                            <constraint firstItem="KBq-NR-s2h" firstAttribute="trailing" secondItem="Bc6-gu-Nb6" secondAttribute="trailing" constant="16" id="91g-zS-cbt"/>
                             <constraint firstItem="bzb-HO-UxG" firstAttribute="centerX" secondItem="wbS-0P-Akm" secondAttribute="centerX" id="JFm-Of-fx6"/>
+                            <constraint firstItem="Bc6-gu-Nb6" firstAttribute="leading" secondItem="KBq-NR-s2h" secondAttribute="leading" constant="16" id="OzP-dx-6LT"/>
+                            <constraint firstItem="KBq-NR-s2h" firstAttribute="bottom" secondItem="Bc6-gu-Nb6" secondAttribute="bottom" constant="32" id="PFb-QX-a7P"/>
                             <constraint firstItem="KBq-NR-s2h" firstAttribute="trailing" secondItem="bzb-HO-UxG" secondAttribute="trailing" constant="32" id="Wjd-KS-79Z"/>
                             <constraint firstItem="bzb-HO-UxG" firstAttribute="leading" secondItem="KBq-NR-s2h" secondAttribute="leading" constant="32" id="XIU-VL-DvS"/>
                             <constraint firstItem="bzb-HO-UxG" firstAttribute="top" secondItem="9uq-kH-LLk" secondAttribute="bottom" constant="50" id="XiO-6C-pSf"/>
