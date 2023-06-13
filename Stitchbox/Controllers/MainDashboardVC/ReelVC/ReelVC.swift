@@ -281,7 +281,7 @@ extension ReelVC {
             if !post.muxPlaybackId.isEmpty {
                 currentIndex = 0
                 newPlayingIndex = 0
-                playVideoIfNeed(playIndex: currentIndex!)
+                playVideo(index: currentIndex!)
                 isVideoPlaying = true
             }
             
@@ -349,11 +349,11 @@ extension ReelVC {
                             
                         }
                         
-                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                        pauseVideo(index: currentIndex)
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
+                    playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? ReelNode {
@@ -379,7 +379,7 @@ extension ReelVC {
                         
                     }
                     
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideo(index: currentIndex)
                     
                 }
                 
@@ -435,7 +435,7 @@ extension ReelVC {
             
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                pauseVideo(index: currentIndex!)
                 currentIndex = nil
             }
             
@@ -1008,9 +1008,9 @@ extension ReelVC {
                 collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                 reloadAllCurrentHashtag()
                 
-                delay(0.75) {
-                    if indexPath < self.posts.count {
-                        playVideoIfNeed(playIndex: indexPath)
+                delay(0.75) { [weak self] in
+                    if indexPath < self?.posts.count ?? 0 {
+                        self?.playVideo(index: indexPath)
                     }
                 }
                   
@@ -1258,6 +1258,36 @@ extension ReelVC {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             if !cell.videoNode.isPlaying() {
+                
+                
+                if let width = cell.post.metadata?.width, let height = cell.post.metadata?.height, width != 0, height != 0 {
+                    // Calculate aspect ratio
+                    let aspectRatio = Float(width) / Float(height)
+                 
+                    // Set contentMode based on aspect ratio
+                    if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
+                        
+                        let userDefaults = UserDefaults.standard
+                       
+                        
+                        if userDefaults.bool(forKey: "hasGuideLandZoom") == false {
+                           
+                            
+                            delayItem.perform(after: 0.5) {
+                                cell.zoomAnimation()
+                                cell.walkthroughPanAndZoom()
+                            }
+                           
+                            // Update the flag indicator
+                            userDefaults.set(true, forKey: "hasGuideLandZoom")
+                            userDefaults.synchronize() // This forces the app to update userDefaults
+                           
+                            
+                        }
+                       
+                    }
+                }
+                
                 
                 if !cell.buttonsView.streamView.isHidden {
                     

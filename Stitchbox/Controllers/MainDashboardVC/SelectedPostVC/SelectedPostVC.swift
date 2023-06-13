@@ -193,11 +193,11 @@ extension SelectedPostVC {
                 if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                     // Pause the current video, if any.
                     if let currentIndex = currentIndex {
-                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                        pauseVideo(index: currentIndex)
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
+                    playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
@@ -211,7 +211,7 @@ extension SelectedPostVC {
             } else {
                 
                 if let currentIndex = currentIndex {
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideo(index: currentIndex)
                 }
                 
                 imageTimerWorkItem?.cancel()
@@ -252,7 +252,7 @@ extension SelectedPostVC {
             
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                pauseVideo(index: currentIndex!)
                 currentIndex = nil
             }
             
@@ -445,14 +445,15 @@ extension SelectedPostVC {
         DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100000)) {
             self.collectionNode.scrollToItem(at: IndexPath(row: self.startIndex, section: 0), at: .centeredVertically, animated: false)
             
-            self.delayItem.perform(after: 0.25) {
+            self.delayItem.perform(after: 0.25) { [weak self] in
+                guard let self = self else { return }
                 // 5. Set the `isfirstLoad`, `currentIndex`, and `willIndex` variables based on the `startIndex`.
                 
                 if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
                     
                     self.currentIndex = self.startIndex
                     self.newPlayingIndex = self.startIndex
-                    playVideoIfNeed(playIndex: self.startIndex)
+                    playVideo(index: self.startIndex)
                     self.isVideoPlaying = true
                     
                 } else {
@@ -915,9 +916,9 @@ extension SelectedPostVC {
                     collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                     reloadAllCurrentHashtag()
                     
-                    delay(0.75) {
-                        if indexPath < self.posts.count {
-                            playVideoIfNeed(playIndex: indexPath)
+                    delay(0.75) { [weak self] in
+                        if indexPath < self?.posts.count ?? 0 {
+                            self?.playVideo(index: indexPath)
                         }
                     }
                     

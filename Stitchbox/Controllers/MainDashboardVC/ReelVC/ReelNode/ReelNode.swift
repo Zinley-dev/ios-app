@@ -345,7 +345,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         //guard let view = videoNode.view else { return }
     
         if recognizer.state == .began {
-            disableSroll()
+            disableScroll()
         }
 
         if recognizer.state == .changed {
@@ -399,34 +399,40 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
 
 
-    /*
-    func videoNode(_ videoNode: ASVideoNode, willChange state: ASVideoNodePlayerState, to toState: ASVideoNodePlayerState) {
-        switch toState {
-        case .initialLoading, .loading:
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self, weak videoNode] in
-                guard let self = self else { return }
-                // Check if videoNode is still loading
-                if videoNode?.playerState == .initialLoading || videoNode?.playerState == .loading {
-                    // Reset the player
-                    videoNode?.asset = nil
-                    if let post = self.post {
-                        videoNode?.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
-                    }
-                    videoNode?.play()
-                }
+    func walkthroughPanAndZoom() {
+        // Store original center for later use
+        let originalCenter = videoNode.view.center
+        
+        // Disable scrolling during walkthrough
+        disableScroll()
+
+        // Simulate pan by translating center
+        let simulatedTranslation = CGPoint(x: 30, y: 30)
+        videoNode.view.center = CGPoint(x: videoNode.view.center.x + simulatedTranslation.x, y: videoNode.view.center.y + simulatedTranslation.y)
+        
+        // Animate zoom in and pan back to original center with spring effect
+        UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.2, options: [], animations: {
+            self.videoNode.view.transform = CGAffineTransform(scaleX: 1.6, y: 1.6) // Increased zoom
+            self.videoNode.view.center = originalCenter
+        }) { _ in
+            // Animate zoom out with spring effect
+            UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.2, options: [], animations: {
+                self.videoNode.view.transform = CGAffineTransform.identity
+            }) { _ in
+                // Re-enable scrolling once walkthrough is complete
+                self.enableScroll()
             }
-        default:
-            // Handle other player states as needed
-            break
         }
-    }*/
+    }
+
+
 
 
     @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
         //guard let view = recognizer.view else { return }
 
         if recognizer.state == .began {
-            disableSroll()
+            disableScroll()
            
         }
 
@@ -674,6 +680,34 @@ extension ReelNode {
             
         }
         
+        
+    }
+    
+    
+    @objc func zoomAnimation() {
+        
+        let imgView = UIImageView()
+        imgView.frame.size = CGSize(width: 170, height: 120)
+        
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
+        
+        let tapImages: [UIImage] = [
+            UIImage(named: "zoom1")!,
+            UIImage(named: "zoom2")!,
+            UIImage(named: "zoom3")!
+        ]
+        
+        imgView.animationImages = tapImages
+        imgView.animationDuration = 1.5 // time duration for complete animation cycle
+        imgView.animationRepeatCount = 1 // number of times the animation repeats, set to 1 to play once
+        imgView.startAnimating()
+        
+        // Optional: clear images after animation ends
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            imgView.animationImages = nil
+            imgView.removeFromSuperview()
+        }
         
     }
     
@@ -1247,7 +1281,7 @@ extension ReelNode
 
 extension ReelNode {
     
-    func disableSroll() {
+    func disableScroll() {
         
         if let vc = UIViewController.currentViewController() {
             

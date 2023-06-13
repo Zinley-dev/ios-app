@@ -274,11 +274,11 @@ extension PostSearchVC {
                 if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                     // Pause the current video, if any.
                     if let currentIndex = currentIndex {
-                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                        pauseVideo(index: currentIndex)
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
+                    playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
@@ -292,7 +292,7 @@ extension PostSearchVC {
             } else {
                 
                 if let currentIndex = currentIndex {
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideo(index: currentIndex)
                 }
                 
                 imageTimerWorkItem?.cancel()
@@ -333,7 +333,7 @@ extension PostSearchVC {
             
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                pauseVideo(index: currentIndex!)
                 currentIndex = nil
             }
             
@@ -584,8 +584,6 @@ extension PostSearchVC {
         
         if keyword != "" {
             
-            print("Post search: \(keyword)")
-            
             APIManager.shared.searchPost(query: keyword, page: page) { [weak self] result in
                 guard let self = self else { return }
                 
@@ -750,9 +748,9 @@ extension PostSearchVC {
                 collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                 reloadAllCurrentHashtag()
                 
-                delay(0.75) {
-                    if indexPath < self.posts.count {
-                        playVideoIfNeed(playIndex: indexPath)
+                delay(0.75) { [weak self] in
+                    if indexPath < self?.posts.count ?? 0 {
+                        self?.playVideo(index: indexPath)
                     }
                 }
                 

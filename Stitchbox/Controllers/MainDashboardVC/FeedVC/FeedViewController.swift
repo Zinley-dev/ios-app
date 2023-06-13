@@ -557,7 +557,7 @@ extension FeedViewController {
             if !post.muxPlaybackId.isEmpty {
                 currentIndex = 0
                 newPlayingIndex = 0
-                playVideoIfNeed(playIndex: currentIndex!)
+                playVideo(index: currentIndex!)
                 isVideoPlaying = true
             }
             
@@ -609,11 +609,11 @@ extension FeedViewController {
                 if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                     // Pause the current video, if any.
                     if let currentIndex = currentIndex {
-                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                        pauseVideo(index: currentIndex)
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
+                    playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
@@ -627,7 +627,7 @@ extension FeedViewController {
             } else {
                 
                 if let currentIndex = currentIndex {
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideo(index: currentIndex)
                 }
                 
                 imageTimerWorkItem?.cancel()
@@ -667,7 +667,7 @@ extension FeedViewController {
             
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                pauseVideo(index: currentIndex!)
                 currentIndex = nil
             }
             
@@ -1117,9 +1117,9 @@ extension FeedViewController {
                 collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                 reloadAllCurrentHashtag()
                 
-                delay(0.75) {
-                    if indexPath < self.posts.count {
-                        playVideoIfNeed(playIndex: indexPath)
+                delay(0.75) { [weak self] in
+                    if indexPath < self?.posts.count ?? 0 {
+                        self?.playVideo(index: indexPath)
                     }
                 }
                 
@@ -1266,6 +1266,26 @@ extension FeedViewController {
             
             if !cell.videoNode.isPlaying() {
                 
+                
+                let userDefaults = UserDefaults.standard
+                
+                
+                if userDefaults.bool(forKey: "hasGuideLandTap") == false {
+                   
+                    
+                    delayItem.perform(after: 0.5) {
+                        cell.tapAnimation()
+                    }
+                   
+                    // Update the flag indicator
+                    userDefaults.set(true, forKey: "hasGuideLandTap")
+                    userDefaults.synchronize() // This forces the app to update userDefaults
+                   
+                    
+                }
+                
+                
+                
                 if !cell.buttonsView.streamView.isHidden {
                     
                     cell.buttonsView.streamView.spin()
@@ -1316,6 +1336,13 @@ extension FeedViewController {
             }
             
         }
+        
+    }
+    
+    func processTapWalkThrough() {
+        
+        
+        
         
     }
     

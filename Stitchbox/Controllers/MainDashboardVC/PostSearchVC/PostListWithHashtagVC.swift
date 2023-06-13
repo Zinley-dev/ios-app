@@ -371,7 +371,7 @@ extension PostListWithHashtagVC {
             if !post.muxPlaybackId.isEmpty {
                 currentIndex = 0
                 newPlayingIndex = 0
-                playVideoIfNeed(playIndex: currentIndex!)
+                playVideo(index: currentIndex!)
                 isVideoPlaying = true
             }
             
@@ -424,11 +424,11 @@ extension PostListWithHashtagVC {
                 if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                     // Pause the current video, if any.
                     if let currentIndex = currentIndex {
-                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                        pauseVideo(index: currentIndex)
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
+                    playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
@@ -442,7 +442,7 @@ extension PostListWithHashtagVC {
             } else {
                 
                 if let currentIndex = currentIndex {
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideo(index: currentIndex)
                 }
                 
                 imageTimerWorkItem?.cancel()
@@ -483,7 +483,7 @@ extension PostListWithHashtagVC {
             
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                pauseVideo(index: currentIndex!)
                 currentIndex = nil
             }
             
@@ -737,7 +737,6 @@ extension PostListWithHashtagVC {
         if let hashtag = searchHashtag, hashtag != "" {
             
             let finalTag = hashtag.dropFirst()
-            print(finalTag)
             APIManager.shared.getHashtagPost(tag: String(finalTag), page: page) { [weak self] result in
                 guard let self = self else { return }
                 
@@ -911,7 +910,7 @@ extension PostListWithHashtagVC {
                     
                     delay(0.75) {
                         if indexPath < self.posts.count {
-                            playVideoIfNeed(playIndex: indexPath)
+                            self.playVideo(index: indexPath)
                         }
                     }
                     

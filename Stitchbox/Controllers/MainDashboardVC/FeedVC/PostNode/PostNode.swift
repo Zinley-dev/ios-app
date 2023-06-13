@@ -1014,6 +1014,36 @@ extension PostNode {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
     
+    @objc func tapAnimation() {
+        
+        let imgView = UIImageView()
+        imgView.frame.size = CGSize(width: 170, height: 120)
+        
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
+        
+        let tapImages: [UIImage] = [
+            UIImage(named: "tap1")!,
+            UIImage(named: "tap2")!,
+            UIImage(named: "tap3")!,
+            UIImage(named: "tap4")!,
+            UIImage(named: "tap5")!,
+            UIImage(named: "tap6")!
+        ]
+        
+        imgView.animationImages = tapImages
+        imgView.animationDuration = 1.5 // time duration for complete animation cycle
+        imgView.animationRepeatCount = 1 // number of times the animation repeats, set to 1 to play once
+        imgView.startAnimating()
+        
+        // Optional: clear images after animation ends
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            imgView.animationImages = nil
+            imgView.removeFromSuperview()
+        }
+        
+    }
+    
     
     @objc func likeHandle() {
         

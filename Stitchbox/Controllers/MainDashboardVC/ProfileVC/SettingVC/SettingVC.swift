@@ -133,6 +133,7 @@ class SettingVC: UIViewController {
         presentSwiftLoader()
         sendbirdLogout()
         IAPManager.shared.signout()
+        removeAllUserDefaults()
         
         delay(1) {
             
@@ -158,6 +159,7 @@ class SettingVC: UIViewController {
         
         
     }
+    
     
     
     @IBAction func SoundSwitchPressed(_ sender: Any) {

@@ -220,7 +220,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             }
             hashTagBorder.removeFromSuperlayer()
             HashtagSearchVC.view.isHidden = true
-            pauseVideoIfNeed(pauseIndex: PostSearchVC.currentIndex ?? 0)
+            PostSearchVC.pauseVideo(index: PostSearchVC.currentIndex ?? 0)
         case SearchMode.posts:
             postBtn.layer.addSublayer(postBorder)
             userBorder.removeFromSuperlayer()

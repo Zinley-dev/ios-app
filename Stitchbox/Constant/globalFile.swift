@@ -317,7 +317,7 @@ extension UITextView {
     }
 }
 
-
+/*
 func pauseVideoIfNeed(pauseIndex: Int) {
     guard let vc = UIViewController.currentViewController() else { return }
 
@@ -338,6 +338,8 @@ func pauseVideoIfNeed(pauseIndex: Int) {
         handlePauseVideoInReelCell(reelCell)
     }
 }
+
+*/
 
 func handlePauseVideoInCell(_ cell: PostNode) {
     if let sideButtonView = cell.sideButtonView {
@@ -363,7 +365,8 @@ func handlePauseVideoInReelCell(_ cell: ReelNode) {
     cell.videoNode.pause()
 }
 
-
+/*
+ 
 func playVideoIfNeed(playIndex: Int) {
     guard let vc = UIViewController.currentViewController() else { return }
 
@@ -388,6 +391,7 @@ func playVideoIfNeed(playIndex: Int) {
         handleVideoNodeInReelCell(videoCell, muteStatus: shouldMute ?? !globalIsSound)
     }
 }
+*/
 
 func handleVideoNodeInCell(_ cell: PostNode, muteStatus: Bool) {
     guard !cell.videoNode.isPlaying() else { return }
@@ -1400,3 +1404,8 @@ class CustomSlider: UISlider {
 
 
 
+func removeAllUserDefaults() {
+    for key in UserDefaults.standard.dictionaryRepresentation().keys {
+        UserDefaults.standard.removeObject(forKey: key)
+    }
+}

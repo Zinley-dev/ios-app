@@ -9,28 +9,6 @@ import UIKit
 import ObjectMapper
 import SafariServices
 
-var test = """
-Neeko:
-
-* Changes: Passive, Q, W, and R
-
-* New: Can disguise as any unit with a health bar (Cooldown -> 2 seconds). Q deals bonus damage to monsters.
-
-* Nerfs: R's cooldown has increased to 120/105/90 seconds, magic damage reduced to 150/350/550 (+100% AP).
-
-* Buffs: Passive's disguise doesn't break on damage. Clone from W can be repositioned and can mimic emotes.
-
-Aatrox:
-
-* Changes: Passive and R
-
-* New: None
-
-* Nerfs: None
-
-* Buffs: Bonus Physical Damage on Passive increased to 4-12% of target's maximum health. Bonus Movement Speed on R increased to 60/80/100%.
-"""
-
 class SB_MetaVC: UIViewController {
     
     @IBOutlet weak var patchLbl: UILabel!
@@ -120,14 +98,18 @@ extension SB_MetaVC {
     }
     
     func setupOriginalButton() {
-    
+      
         originalButton.frame = back_frame
         originalButton.contentMode = .center
+        
+        let img = UIImage.init(named: "link")?.resize(targetSize: CGSize(width: 25, height: 25))
 
+        let imageSize = CGSize(width: 13, height: 23)
+        originalButton.setImage(img, for: [])
 
         originalButton.addTarget(self, action: #selector(onClickLink(_:)), for: .touchUpInside)
         originalButton.setTitleColor(UIColor.white, for: .normal)
-        originalButton.setTitle("Link", for: .normal)
+        originalButton.setTitle("", for: .normal)
         let originalButtonBarButton = UIBarButtonItem(customView: originalButton)
 
         self.navigationItem.rightBarButtonItem = originalButtonBarButton
