@@ -483,6 +483,7 @@ extension SearchViewController {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         contentview.isHidden = false
         searchView.isHidden = true
+        searchController?.dismiss(animated: true)
     }
 
     
@@ -507,6 +508,7 @@ extension SearchViewController {
         
         if let text = searchBar.text, text != "" {
             
+            searchController?.dismiss(animated: true)
             saveRecentText(text: text)
             
             if let MSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainSearchVC") as? MainSearchVC {

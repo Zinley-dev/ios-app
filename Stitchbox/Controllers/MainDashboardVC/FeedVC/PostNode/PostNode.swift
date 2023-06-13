@@ -348,7 +348,6 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
         
         if let vc = UIViewController.currentViewController() {
             
-            
             if vc is FeedViewController {
                 
                 if let update1 = vc as? FeedViewController {
@@ -399,6 +398,8 @@ class PostNode: ASCellNode, ASVideoNodeDelegate {
                 }
                 
                 
+            } else {
+                print("Unknown vc: \(vc) \(vc.children)")
             }
             
             

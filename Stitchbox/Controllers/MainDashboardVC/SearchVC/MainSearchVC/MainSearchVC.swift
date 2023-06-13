@@ -523,6 +523,7 @@ extension MainSearchVC {
             
             saveRecentText(text: text)
             self.searchText = text
+            self.searchController?.dismiss(animated: true)
             self.sendSearchRequestToTargetVC()
             
             contentView.isHidden = false
