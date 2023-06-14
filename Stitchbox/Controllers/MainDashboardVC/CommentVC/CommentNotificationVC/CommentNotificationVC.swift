@@ -928,6 +928,15 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
                 let nav = UINavigationController(rootViewController: RVC)
                 
+                if general_vc != nil {
+                    general_vc.viewWillDisappear(true)
+                    general_vc.viewDidDisappear(true)
+                }
+                
+           
+                
+                RVC.onPresent = true
+                
                 // Set the user ID, nickname, and onPresent properties of UPVC
                 RVC.posts = [viewPost]
                 
