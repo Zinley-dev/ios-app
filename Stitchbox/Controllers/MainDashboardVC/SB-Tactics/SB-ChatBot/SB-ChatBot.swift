@@ -58,7 +58,7 @@ class SB_ChatBot: UIViewController {
                 
                 isPro = true
                 
-                global_gpt = "gpt-4"
+                global_gpt = "gpt-4-0613"
                 selectedGpt = "GPT 4"
                 setupClearAndGptButtons()
                 
@@ -379,7 +379,7 @@ extension SB_ChatBot {
         if title == "GPT 4" {
             checkAccountStatus()
         } else {
-            global_gpt = "gpt-3.5-turbo"
+            global_gpt = "gpt-3.5-turbo-0613"
             selectedGpt = title
             
             gptButton.setTitle(title, for: .normal)
@@ -398,7 +398,7 @@ extension SB_ChatBot {
             
             if passEligible {
                 
-                global_gpt = "gpt-4"
+                global_gpt = "gpt-4-0613"
                 selectedGpt = "GPT 4"
                 
                 gptButton.setTitle("GPT 4", for: .normal)
@@ -445,7 +445,7 @@ extension SB_ChatBot {
              
                 Dispatch.main.async {
                 
-                    global_gpt = "gpt-4"
+                    global_gpt = "gpt-4-0613"
                     self?.selectedGpt = "GPT 4"
                     
                     self?.gptButton.setTitle("GPT 4", for: .normal)
@@ -468,7 +468,7 @@ extension SB_ChatBot {
                 
                 isPro = false
 
-                global_gpt = "gpt-3.5-turbo"
+                global_gpt = "gpt-3.5-turbo-0613"
                 self?.selectedGpt = "GPT 3.5"
                 self?.setupClearAndGptButtons()
                 
@@ -476,7 +476,7 @@ extension SB_ChatBot {
              
                 isPro = true
                 
-                global_gpt = "gpt-4"
+                global_gpt = "gpt-4-0613"
                 self?.selectedGpt = "GPT 4"
                 self?.setupClearAndGptButtons()
   

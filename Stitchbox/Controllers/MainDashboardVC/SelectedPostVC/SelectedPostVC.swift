@@ -400,23 +400,10 @@ extension SelectedPostVC: ASCollectionDataSource {
 
 extension SelectedPostVC {
     
-    
     func loadPosts() {
         // 1. Check if the `selectedPost` array has any items. If it does not, return immediately.
         guard selectedPost.count > 0 else {
             return
-        }
-        
-        // 2. If the `selectedPost` array has more than 150 items, remove the items beyond the 150th index based on the current index.
-        if selectedPost.count > 150 {
-            let count = selectedPost.count
-            if currentIndex - 0 <= 75 {
-                selectedPost.removeSubrange(150...count-1)
-            } else {
-                if (0...selectedPost.count - 151).contains(currentIndex) == false {
-                    selectedPost.removeSubrange(0...selectedPost.count - 151)
-                }
-            }
         }
         
         // 3. Append the `selectedPost` items to the `posts` array, and update the `indexPaths` array with the new index paths.
@@ -442,32 +429,27 @@ extension SelectedPostVC {
             return
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100000)) {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100)) { [weak self] in
+            guard let self = self else { return }
             self.collectionNode.scrollToItem(at: IndexPath(row: self.startIndex, section: 0), at: .centeredVertically, animated: false)
             
-            self.delayItem.perform(after: 0.25) { [weak self] in
-                guard let self = self else { return }
-                // 5. Set the `isfirstLoad`, `currentIndex`, and `willIndex` variables based on the `startIndex`.
+            if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
                 
-                if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
-                    
-                    self.currentIndex = self.startIndex
-                    self.newPlayingIndex = self.startIndex
-                    playVideo(index: self.startIndex)
-                    self.isVideoPlaying = true
-                    self.playTimeBar.isHidden = false
-                    
-                } else {
-                    self.isVideoPlaying = false
-                    self.playTimeBar.isHidden = true
-                }
+                self.currentIndex = self.startIndex
+                self.newPlayingIndex = self.startIndex
+                playVideo(index: self.startIndex)
+                self.isVideoPlaying = true
+                self.playTimeBar.isHidden = false
                 
+            } else {
+                self.isVideoPlaying = false
+                self.playTimeBar.isHidden = true
             }
+            
         }
+    
     }
-    
-    
-    
     
 }
 
@@ -1028,9 +1010,13 @@ extension SelectedPostVC {
             
             if !cell.videoNode.isPlaying() {
                 
-                if !cell.buttonsView.streamView.isHidden {
+                if cell.buttonsView != nil {
                     
-                    cell.buttonsView.streamView.spin()
+                    if !cell.buttonsView.streamView.isHidden {
+                        
+                        cell.buttonsView.streamView.spin()
+                        
+                    }
                     
                 }
                 
