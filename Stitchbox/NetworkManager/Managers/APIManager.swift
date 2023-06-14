@@ -883,4 +883,17 @@ extension APIManager {
         }
     }
     
+    func searchFistbumpee(query: String, userid: String, page: Int, completion: @escaping APICompletion) {
+      let params = ["query": query, "userid": userid]
+      fistBumpManager.request(.searchFistBumpee(params: params, page: page, lim: 10)) { result in
+        completion(result)
+      }
+    }
+    
+    func searchFistbumper(query: String, userid: String, page: Int, completion: @escaping APICompletion) {
+      let params = ["query": query, "userid": userid]
+      fistBumpManager.request(.searchFistBumper(params: params, page: page, lim: 10)) { result in
+        completion(result)
+      }
+    }
 }
