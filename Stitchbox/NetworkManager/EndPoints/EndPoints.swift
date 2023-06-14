@@ -843,6 +843,8 @@ extension LikePostApi: EndPointType {
 public enum FistBumpAPI {
     case getFistBumpee(userID: String, page: Int, limit: Int)
     case getFistBumper(userID: String, page: Int, limit: Int)
+    case searchFistBumpee (params: [String:Any], page: Int, lim: Int = 10)
+    case searchFistBumper (params: [String:Any], page: Int, lim: Int = 10)
     case getFistBumperCount(userID: String)
     case getFistBumpeeCount(userID: String)
     case isFistBumper(userID: String)
@@ -867,6 +869,10 @@ extension FistBumpAPI: EndPointType {
             return "/fistbumper/count/\(userID)"
         case .getFistBumpeeCount(userID: let userID):
             return "/fistbumpee/count/\(userID)"
+        case .searchFistBumpee(let params, let page, let lim):
+          return "/fistbumpee/search/\(params["userid"] ?? "")?search=\(params["query"] ?? "")&page=\(page)&limit=\(lim)"
+        case .searchFistBumper(let params, let page, let lim):
+          return "/fistbumper/search/\(params["userid"] ?? "")?search=\(params["query"] ?? "")&page=\(page)&limit=\(lim)"
         case .isFistBumper(userID: let userID):
             return "/isfistbumper/\(userID)"
         case .isFistBumpee(userID: let userID):
@@ -890,6 +896,10 @@ extension FistBumpAPI: EndPointType {
             return .get
         case .getFistBumpeeCount:
             return .get
+        case .searchFistBumpee:
+          return .get
+        case .searchFistBumper:
+          return .get
         case .isFistBumper:
             return .get
         case .isFistBumpee:
@@ -912,6 +922,10 @@ extension FistBumpAPI: EndPointType {
         case .getFistBumperCount(userID: _):
             return .request
         case .getFistBumpeeCount(userID: _):
+            return .request
+        case .searchFistBumpee:
+            return .request
+        case .searchFistBumper:
             return .request
         case .isFistBumper(userID: _):
             return .request
