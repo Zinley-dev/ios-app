@@ -507,8 +507,7 @@ extension SearchViewController {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         if let text = searchBar.text, text != "" {
-            
-            searchController?.dismiss(animated: true)
+        
             saveRecentText(text: text)
             
             if let MSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainSearchVC") as? MainSearchVC {

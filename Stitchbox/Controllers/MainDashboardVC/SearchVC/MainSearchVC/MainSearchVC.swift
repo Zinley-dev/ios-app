@@ -334,6 +334,7 @@ extension MainSearchVC {
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
+        navigationItem.title = "Search"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
