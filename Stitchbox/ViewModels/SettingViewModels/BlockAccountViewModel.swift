@@ -60,8 +60,9 @@ class BlockAccountsViewModel: ViewModelProtocol {
     }
     
     func getBlocks(page: Int, completion: @escaping () -> Void = {}) -> Void  {
-        APIManager().getBlocks(page: page){
-            result in
+        APIManager.shared.getBlocks(page: page){ [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 print("page number \(page)")
@@ -84,8 +85,10 @@ class BlockAccountsViewModel: ViewModelProtocol {
     
     func unblock(blockId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().deleteBlocks(params: ["blockId": blockId]){
-            result in switch result {
+        APIManager.shared.deleteBlocks(params: ["blockId": blockId]){ [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
             case .success(_):
                 self.successSubject.onNext(.unblock())
                 completion()
@@ -98,8 +101,10 @@ class BlockAccountsViewModel: ViewModelProtocol {
     
     func follow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().insertFollows(params: ["FollowId": userId]){
-            result in switch result {
+        APIManager.shared.insertFollows(params: ["FollowId": userId]){ [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
             case .success(_):
                 self.successSubject.onNext(.follow())
                 completion()
@@ -111,8 +116,10 @@ class BlockAccountsViewModel: ViewModelProtocol {
     
     func unfollow(userId: String, completion: @escaping () -> Void = {}) -> Void {
         // do something with your strinf
-        APIManager().unFollow(params: ["FollowId": userId]){
-            result in switch result {
+        APIManager.shared.unFollow(params: ["FollowId": userId]){ [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
             case .success(_):
                 self.successSubject.onNext(.unfollow())
                 completion()

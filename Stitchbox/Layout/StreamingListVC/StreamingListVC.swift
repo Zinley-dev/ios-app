@@ -24,6 +24,11 @@ class StreamingListVC: UIViewController {
         self.wireDelegates()
         
         self.view.insertSubview(tableNode.view, at: 0)
+        self.tableNode.view.translatesAutoresizingMaskIntoConstraints = false
+        self.tableNode.view.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 16).isActive = true
+        self.tableNode.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+        self.tableNode.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+        self.tableNode.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
         self.applyStyle()
         
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
@@ -40,13 +45,6 @@ class StreamingListVC: UIViewController {
         
     }
     
-    override func viewWillLayoutSubviews() {
-        
-        super.viewWillLayoutSubviews()
-        
-        self.tableNode.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - 50)
-        
-    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)

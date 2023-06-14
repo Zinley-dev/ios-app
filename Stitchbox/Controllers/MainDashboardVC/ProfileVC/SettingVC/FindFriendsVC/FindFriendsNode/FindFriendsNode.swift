@@ -222,7 +222,7 @@ class FindFriendsNode: ASCellNode {
 
                         // Configure the fields of the interface.
                         composeVC.recipients = [user.phoneNumber]
-                        composeVC.body = "[Stitchbox] I am \(userDataSource.userName ?? "null") on Stitchbox. To download the app and stay connected with your gaming friends. tap:https://apps.apple.com/us/app/dual/id1576592262"
+                        composeVC.body = "[Stitchbox] I am \(userDataSource.userName ?? "null") on Stitchbox. To download the app and stay connected with your gaming friends. tap:https://apps.apple.com/us/app/stitchbox/id1660843872"
 
                         // Present the view controller modally.
                         if MFMessageComposeViewController.canSendText() {

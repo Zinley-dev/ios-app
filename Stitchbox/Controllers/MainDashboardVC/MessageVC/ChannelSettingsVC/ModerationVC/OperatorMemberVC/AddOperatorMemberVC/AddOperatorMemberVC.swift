@@ -57,16 +57,28 @@ class AddOperatorMemberVC: UIViewController, UISearchBarDelegate, UINavigationCo
     
     private lazy var _leftBarButton: UIBarButtonItem = {
         
-        let leftButton = UIButton(type: .custom)
+        let backButton = UIButton(type: .custom)
         
-        leftButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
-        leftButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
-        leftButton.setTitleColor(UIColor.white, for: .normal)
-        leftButton.setTitle("     Add Operators", for: .normal)
-        leftButton.sizeToFit()
+        backButton.frame = back_frame
+        backButton.contentMode = .center
         
-        let backButtonBarButton = UIBarButtonItem(customView: leftButton)
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+        
+        backButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        backButton.setTitle("", for: .normal)
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+        
+        self.navigationItem.leftBarButtonItem = backButtonBarButton
+        
         return backButtonBarButton
     }()
     

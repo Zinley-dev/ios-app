@@ -11,10 +11,12 @@ import AlamofireImage
 import Alamofire
 
 class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
-
+    
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var playTimeBar: UIProgressView!
+    @IBOutlet weak var timeLbl: UILabel!
+    @IBOutlet weak var blurView: UIView!
+    @IBOutlet weak var playTimeBar: CustomSlider!
     var selectedPost = [PostModel]()
     var posts = [PostModel]()
     var selectedIndexPath = 0
@@ -25,7 +27,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     var currentIndex: Int!
     var imageIndex: Int?
     var imageTimerWorkItem: DispatchWorkItem?
-    
+    var hasViewAppeared = false
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -38,7 +40,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         setupCollectionNode()
@@ -58,16 +60,27 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
         
-       
+      
+        
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        hasViewAppeared = true
+        
+    }
+    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+       
         
         if currentIndex != nil {
             
             if posts[currentIndex].muxPlaybackId != "" {
-                playVideoIfNeed(playIndex: currentIndex)
+                playVideo(index: currentIndex)
             }
             
         }
@@ -78,10 +91,12 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        hasViewAppeared = false
+        
         if currentIndex != nil {
             
             if posts[currentIndex].muxPlaybackId != "" {
-                pauseVideoIfNeed(pauseIndex: currentIndex)
+                pauseVideo(index: currentIndex)
             }
             
         }
@@ -95,12 +110,12 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
 extension SelectedPostVC {
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
@@ -125,7 +140,7 @@ extension SelectedPostVC {
         
         SwiftLoader.show(title: progress, animated: true)
         
- 
+        
     }
     
 }
@@ -133,24 +148,24 @@ extension SelectedPostVC {
 
 extension SelectedPostVC {
     
-
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if !posts.isEmpty, scrollView == collectionNode.view {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-
+            
             // Calculate the visible cells.
             let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
-
+            
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
             
             var foundVisibleVideo = false
             
             for cell in visibleCells {
-            
+                
                 let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
                 let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
                 let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
@@ -160,7 +175,7 @@ extension SelectedPostVC {
                 }
             }
             
-
+            
             if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                 
                 foundVisibleVideo = true
@@ -178,11 +193,11 @@ extension SelectedPostVC {
                 if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                     // Pause the current video, if any.
                     if let currentIndex = currentIndex {
-                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                        pauseVideo(index: currentIndex)
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
+                    playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
@@ -196,9 +211,9 @@ extension SelectedPostVC {
             } else {
                 
                 if let currentIndex = currentIndex {
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideo(index: currentIndex)
                 }
-
+                
                 imageTimerWorkItem?.cancel()
                 imageTimerWorkItem = DispatchWorkItem { [weak self] in
                     guard let self = self else { return }
@@ -211,17 +226,17 @@ extension SelectedPostVC {
                         }
                     }
                 }
-
+                
                 if let imageTimerWorkItem = imageTimerWorkItem {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
                 }
-
-            
-                        // Reset the current playing index.
+                
+                
+                // Reset the current playing index.
                 currentIndex = nil
                 
             }
-
+            
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
             if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
@@ -233,17 +248,17 @@ extension SelectedPostVC {
                     }
                 }
             }
-
-
+            
+            
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                pauseVideo(index: currentIndex!)
                 currentIndex = nil
             }
             
         }
         
-    
+        
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
@@ -251,34 +266,43 @@ extension SelectedPostVC {
         if scrollView == collectionNode.view, posts.count > 3 {
             
             if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-               navigationController?.setNavigationBarHidden(true, animated: true)
-
+                navigationController?.setNavigationBarHidden(true, animated: true)
+                
             } else {
-               navigationController?.setNavigationBarHidden(false, animated: true)
+                navigationController?.setNavigationBarHidden(false, animated: true)
             }
             
         }
-       
+        
     }
-
-
     
 }
 
 extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
+
+        // Check if collectionView.tag is within the range of the posts array
+        guard collectionView.tag < posts.count else {
+            print("Error: No post for tag \(collectionView.tag)")
+            cell.hashTagLabel.text = "Error: post not found"
+            return cell
+        }
         
-        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         let item = posts[collectionView.tag]
-        
-     
+
+        // Check if indexPath.row is within the range of the hashtags array
+        guard indexPath.row < item.hashtags.count else {
+            print("Error: No hashtag for index \(indexPath.row)")
+            cell.hashTagLabel.text = "Error: hashtag not found"
+            return cell
+        }
+
         cell.hashTagLabel.text = item.hashtags[indexPath.row]
-        
         return cell
-        
-        
     }
+
     
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -286,13 +310,17 @@ extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       
-        return posts[collectionView.tag].hashtags.count
-        
+        if collectionView.tag < posts.count {
+            return posts[collectionView.tag].hashtags.count
+        } else {
+            // Handle the condition when there are no posts at the given index
+            return 0
+        }
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
+        return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
     }
     
 }
@@ -335,9 +363,9 @@ extension SelectedPostVC: ASCollectionDataSource {
             node.isSelectedPost = true
             
             node.settingBtn = { (node) in
-            
+                
                 self.settingPost(item: post)
-                  
+                
             }
             
             delay(0.3) {
@@ -358,6 +386,7 @@ extension SelectedPostVC: ASCollectionDataSource {
         
         if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
             
+            navigationController?.setNavigationBarHidden(false, animated: true)
             PLWHVC.searchHashtag = selectedHashtag
             self.navigationController?.pushViewController(PLWHVC, animated: true)
             
@@ -371,23 +400,10 @@ extension SelectedPostVC: ASCollectionDataSource {
 
 extension SelectedPostVC {
     
-    
     func loadPosts() {
         // 1. Check if the `selectedPost` array has any items. If it does not, return immediately.
         guard selectedPost.count > 0 else {
             return
-        }
-        
-        // 2. If the `selectedPost` array has more than 150 items, remove the items beyond the 150th index based on the current index.
-        if selectedPost.count > 150 {
-            let count = selectedPost.count
-            if currentIndex - 0 <= 75 {
-                selectedPost.removeSubrange(150...count-1)
-            } else {
-                if (0...selectedPost.count - 151).contains(currentIndex) == false {
-                    selectedPost.removeSubrange(0...selectedPost.count - 151)
-                }
-            }
         }
         
         // 3. Append the `selectedPost` items to the `posts` array, and update the `indexPaths` array with the new index paths.
@@ -413,29 +429,27 @@ extension SelectedPostVC {
             return
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100000)) {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100)) { [weak self] in
+            guard let self = self else { return }
             self.collectionNode.scrollToItem(at: IndexPath(row: self.startIndex, section: 0), at: .centeredVertically, animated: false)
             
-            self.delayItem.perform(after: 0.25) {
-                // 5. Set the `isfirstLoad`, `currentIndex`, and `willIndex` variables based on the `startIndex`.
+            if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
                 
-                if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
-                    
-                    self.currentIndex = self.startIndex
-                    self.newPlayingIndex = self.startIndex
-                    playVideoIfNeed(playIndex: self.startIndex)
-                    self.isVideoPlaying = true
-                    
-                } else {
-                    self.isVideoPlaying = false
-                }
+                self.currentIndex = self.startIndex
+                self.newPlayingIndex = self.startIndex
+                playVideo(index: self.startIndex)
+                self.isVideoPlaying = true
+                self.playTimeBar.isHidden = false
                 
+            } else {
+                self.isVideoPlaying = false
+                self.playTimeBar.isHidden = true
             }
+            
         }
+    
     }
-
-
-
     
 }
 
@@ -454,7 +468,7 @@ extension SelectedPostVC {
         self.contentView.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
         self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: -1).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
@@ -491,14 +505,14 @@ extension SelectedPostVC {
         
         setupBackButton()
         setupTitle()
-      
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -508,23 +522,23 @@ extension SelectedPostVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
     func setupTitle() {
         
         self.navigationItem.title = "Posts"
-       
-       
+        
+        
     }
     
 }
@@ -561,36 +575,45 @@ extension SelectedPostVC {
     
     @objc func onClickDelete(_ sender: AnyObject) {
         
-      
+        
+        presentSwiftLoader()
+        
         if let id = editeddPost?.id, id != "" {
             
-            Dispatch.main.async {
+            APIManager.shared.deleteMyPost(pid: id) { [weak self] result in
+                guard let self = self else { return }
                 
-                self.removePost()
-                
-            }
-            
-            APIManager().deleteMyPost(pid: id) { result in
                 switch result {
                 case .success(_):
                     needReloadPost = true
                     
+                    SwiftLoader.hide()
                     
-                  case .failure(let error):
+                    Dispatch.main.async {
+                        
+                        self.removePost()
+                        
+                    }
+                    
+                    
+                case .failure(let error):
                     print(error)
+                    SwiftLoader.hide()
+                    
                     delay(0.1) {
                         Dispatch.main.async {
                             self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
                         }
-
+                        
                     }
                     
                 }
-              }
+            }
             
         } else {
-        
+            
             delay(0.1) {
+                SwiftLoader.hide()
                 self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
             }
             
@@ -599,7 +622,7 @@ extension SelectedPostVC {
         
         
         
-       
+        
         
     }
     
@@ -608,7 +631,7 @@ extension SelectedPostVC {
         print("Edit requested")
         if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC {
             
-            //pauseVideoIfNeed(pauseIndex: selectedIndex)
+            navigationController?.setNavigationBarHidden(false, animated: true)
             EPVC.selectedPost = editeddPost
             self.navigationController?.pushViewController(EPVC, animated: true)
             
@@ -631,19 +654,19 @@ extension SelectedPostVC {
             let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
             
             ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
-                           
+                
                 
             }
-           
+            
             delay(0.1) {
                 self.present(ac, animated: true, completion: nil)
             }
-           
+            
             
         } else {
             print("Can't get postID")
         }
-    
+        
         
     }
     
@@ -655,6 +678,7 @@ extension SelectedPostVC {
             
             VVC.selected_item = editeddPost
             delay(0.1) {
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
                 self.navigationController?.pushViewController(VVC, animated: true)
             }
             
@@ -674,7 +698,7 @@ extension SelectedPostVC {
         } else {
             print("Can't get postID")
         }
-       
+        
         
     }
     
@@ -685,7 +709,7 @@ extension SelectedPostVC {
             if post.muxPlaybackId != "" {
                 
                 let url = "https://stream.mux.com/\(post.muxPlaybackId)/high.mp4"
-               
+                
                 downloadVideo(url: url, id: post.muxAssetId)
                 
             } else {
@@ -700,20 +724,20 @@ extension SelectedPostVC {
             
         }
         
-       
+        
     }
     
     func downloadVideo(url: String, id: String) {
         
         
         AF.request(url).downloadProgress(closure : { (progress) in
-       
+            
             self.swiftLoader(progress: "\(String(format:"%.2f", Float(progress.fractionCompleted) * 100))%")
             
         }).responseData{ (response) in
             
             switch response.result {
-            
+                
             case let .success(value):
                 
                 
@@ -725,7 +749,7 @@ extension SelectedPostVC {
                 } catch {
                     print("Something went wrong!")
                 }
-          
+                
                 PHPhotoLibrary.shared().performChanges({
                     PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
                 }) { saved, error in
@@ -747,13 +771,13 @@ extension SelectedPostVC {
                         
                         
                         DispatchQueue.main.async {
-                        
+                            
                             let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
                             let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                             alertController.addAction(defaultAction)
                             self.present(alertController, animated: true, completion: nil)
                         }
-     
+                        
                         
                     }
                 }
@@ -761,9 +785,9 @@ extension SelectedPostVC {
             case let .failure(error):
                 print(error)
                 
-        }
-           
-           
+            }
+            
+            
         }
         
     }
@@ -777,11 +801,11 @@ extension SelectedPostVC {
     
     
     func writeToPhotoAlbum(image: UIImage) {
-            UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
-        }
-
-        @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-            print("Save finished!")
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
+    }
+    
+    @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        print("Save finished!")
     }
     
     
@@ -828,9 +852,9 @@ extension SelectedPostVC {
     
     
     @objc func copyPost() {
-    
+        
         if let id = self.editeddPost?.id {
-           
+            
             let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
@@ -860,20 +884,36 @@ extension SelectedPostVC {
     @objc func removePost() {
         
         if let deletingPost = editeddPost {
-           
+            
             if let indexPath = posts.firstIndex(of: deletingPost) {
                 
                 posts.removeObject(deletingPost)
-                collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                reloadAllCurrentHashtag()
+                
+                // check if there are no more posts
+                if posts.isEmpty {
+                    if onPresent {
+                        self.dismiss(animated: true)
+                    } else {
+                        navigationController?.popViewController(animated: true)
+                    }
+                } else {
+                    collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                    reloadAllCurrentHashtag()
+                    
+                    delay(0.75) { [weak self] in
+                        if indexPath < self?.posts.count ?? 0 {
+                            self?.playVideo(index: indexPath)
+                        }
+                    }
+                    
+                }
             }
             
         }
         
-       
     }
     
-
+    
     
     func reloadAllCurrentHashtag() {
         if !posts.isEmpty {
@@ -927,7 +967,104 @@ extension SelectedPostVC {
         delay(0.1) {
             self.present(ac, animated: true, completion: nil)
         }
-      
+        
+    }
+    
+    
+    
+    func pauseVideo(index: Int) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if cell.sideButtonView != nil {
+                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                
+                if !cell.buttonsView.streamView.isHidden {
+                    
+                    cell.buttonsView.streamView.stopSpin()
+                    
+                }
+            }
+            
+            cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    func seekVideo(index: Int, time: CMTime) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            cell.videoNode.player?.seek(to: time)
+            
+        }
+        
+    }
+    
+    
+    func playVideo(index: Int) {
+        
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            if !cell.videoNode.isPlaying() {
+                
+                if cell.buttonsView != nil {
+                    
+                    if !cell.buttonsView.streamView.isHidden {
+                        
+                        cell.buttonsView.streamView.spin()
+                        
+                    }
+                    
+                }
+                
+                if let muteStatus = shouldMute {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if muteStatus {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        }
+                    }
+                   
+                    if muteStatus {
+                        cell.videoNode.muted = true
+                    } else {
+                        cell.videoNode.muted = false
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                } else {
+                    
+                    if cell.sideButtonView != nil {
+                        
+                        if globalIsSound {
+                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
+                        } else {
+                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+                        }
+                    }
+                   
+                    if globalIsSound {
+                        cell.videoNode.muted = false
+                    } else {
+                        cell.videoNode.muted = true
+                    }
+                    
+                    cell.videoNode.play()
+                    
+                }
+ 
+              
+            }
+            
+        }
+        
     }
     
 }

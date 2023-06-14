@@ -323,7 +323,9 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
     
     func performAcceptAPIRequest(channel: String, inviterUID: String) {
         
-        APIManager().acceptSBInvitationRequest(user_id: inviterUID, channelUrl: channel) { result in
+        APIManager.shared.acceptSBInvitationRequest(user_id: inviterUID, channelUrl: channel) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 // Check if the request was successful

@@ -32,6 +32,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
     var currentSearchText = ""
     let backButton: UIButton = UIButton(type: .custom)
     var searchController: UISearchController?
+    var hasViewAppeared = false
     
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var contentView: UIView!
@@ -159,6 +160,15 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
+        hasViewAppeared = true
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        hasViewAppeared = false
+        
     }
 
     
@@ -210,7 +220,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             }
             hashTagBorder.removeFromSuperlayer()
             HashtagSearchVC.view.isHidden = true
-            pauseVideoIfNeed(pauseIndex: PostSearchVC.currentIndex ?? 0)
+            PostSearchVC.pauseVideo(index: PostSearchVC.currentIndex ?? 0)
         case SearchMode.posts:
             postBtn.layer.addSublayer(postBorder)
             userBorder.removeFromSuperlayer()
@@ -324,6 +334,7 @@ extension MainSearchVC {
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
+        navigationItem.title = "Search"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
@@ -513,6 +524,7 @@ extension MainSearchVC {
             
             saveRecentText(text: text)
             self.searchText = text
+            self.searchController?.dismiss(animated: true)
             self.sendSearchRequestToTargetVC()
             
             contentView.isHidden = false
@@ -531,7 +543,9 @@ extension MainSearchVC {
             return
         }
         
-        APIManager().getAutoComplete(query: searchText) { result in
+        APIManager.shared.getAutoComplete(query: searchText) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -602,7 +616,9 @@ extension MainSearchVC {
     
     func saveRecentUser(userId: String) {
         
-        APIManager().addRecent(query: userId, type: "user") { result in
+        APIManager.shared.addRecent(query: userId, type: "user") { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -620,7 +636,9 @@ extension MainSearchVC {
     
     func saveRecentText(text: String) {
         
-        APIManager().addRecent(query: text, type: "text") { result in
+        APIManager.shared.addRecent(query: text, type: "text") { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -634,5 +652,7 @@ extension MainSearchVC {
         }
         
     }
+    
+    
     
 }

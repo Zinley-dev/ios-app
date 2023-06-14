@@ -20,6 +20,10 @@ import TikTokOpenSDK
 import OneSignal
 import GooglePlaces
 import GoogleMaps
+import Sentry
+import SwipeTransition
+import SwipeTransitionAutoSwipeBack
+import SwipeTransitionAutoSwipeToDismiss
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -43,9 +47,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-        TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        UNUserNotificationCenter.current().delegate = self
         
+        UNUserNotificationCenter.current().delegate = self
+        setupPixelSDK()
+        sendbird_authentication()
+        
+       
         setupPixelSDK()
         sendbird_authentication()
         syncSendbirdAccount()
@@ -55,14 +62,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         getGameList()
         activeSpeaker()
         setupVolumeObserver()
-        IAPManager.shared.configure()
-        //listenVolumeButton()
+        sentrySetup()
+        
         
         GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         
-     
+        //SwipeBackConfiguration.shared = CustomSwipeBackConfiguration()
+        
         return true
+        
+    }
+    
+    
+    func sentrySetup() {
+        
+        SentrySDK.start { options in
+                options.dsn = "https://3406dbc29f884019aa59d9319a12b765@o4505243020689408.ingest.sentry.io/4505243021606912"
+                options.debug = true // Enabled debug when first installing is always helpful
+
+                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                // We recommend adjusting this value in production.
+                options.tracesSampleRate = 1.0
+            }
+        
     }
     
     private func setupVolumeObserver() {
@@ -83,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else if currentVolume < previousVolume {
             consecutiveVolumeDownPresses += 1
             if consecutiveVolumeDownPresses >= 2 {
-                muteVideoIfNeed()
+               // muteVideoIfNeed()
                 consecutiveVolumeDownPresses = 0
             }
         }
@@ -173,6 +196,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
+        /*
         // Update badge number
         if let aps = userInfo["aps"] as? [String: AnyObject], let badgeCount = aps["badge"] as? Int {
             UIApplication.shared.applicationIconBadgeNumber = badgeCount
@@ -188,6 +212,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         // Call completion handler
         completionHandler(.newData)
+        
+        */
     }
 
 
@@ -307,8 +333,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
       -> Bool {
         
         if let scheme = url.scheme,
-           scheme.localizedCaseInsensitiveCompare("stitchbox") == .orderedSame,
-           let view = url.host {
+           scheme.localizedCaseInsensitiveCompare("stitchbox") == .orderedSame {
           
             var parameters: [String: String] = [:]
             URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.forEach {
@@ -411,7 +436,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert, .sound])
+        completionHandler([.badge, .sound])
     }
     
     
@@ -532,17 +557,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 } else if let InviteUserVC = currentVC as? InviteUserVC, InviteUserVC.channel?.channelUrl == channelUrl {
                     nav.popBack(4)
                 } else {
-                    self.presentChatWithNav(nav: nav, channelUrl: channelUrl)
+                    
+                    if currentVC is FeedViewController || currentVC is IntroTacticsVC || currentVC is ProfileViewController || currentVC is MainMessageVC {
+                        self.presentChatWithNavAndHideBar(nav: nav, channelUrl: channelUrl)
+                    } else {
+                        self.presentChatWithNav(nav: nav, channelUrl: channelUrl)
+                    }
+    
                 }
                 
             } else {
                 self.presentChatWithoutNav(vc: currentVC, channelUrl: channelUrl)
             }
-
-            
-            
+  
         }
         
+        
+    }
+    
+    func presentChatWithNavAndHideBar(nav: UINavigationController, channelUrl: String) {
+        
+        let mlsp = SBDMessageListParams()
+        let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
+        channelVC.shouldUnhide = true
+        nav.pushViewController(channelVC, animated: true)
         
     }
     
@@ -568,7 +606,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         global_suppport_game_list.removeAll()
         
-        APIManager().getGames { result in
+        APIManager.shared.getGames { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 

@@ -29,6 +29,11 @@ class GameDomainListVC: UIViewController {
         self.wireDelegates()
         
         self.contentView.insertSubview(tableNode.view, at: 0)
+        self.tableNode.view.translatesAutoresizingMaskIntoConstraints = false
+        self.tableNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
+        self.tableNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
+        self.tableNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
+        self.tableNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         self.applyStyle()
         
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
@@ -46,15 +51,7 @@ class GameDomainListVC: UIViewController {
         
         
     }
-    
-    override func viewWillLayoutSubviews() {
-        
-        super.viewWillLayoutSubviews()
-        
-        self.tableNode.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: self.contentView.frame.height - 50)
-        
-    }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         

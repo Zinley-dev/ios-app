@@ -12,16 +12,16 @@ import SendBirdUIKit
 import RxSwift
 
 class FollowingVC: UIViewController {
-
+    
     @IBOutlet weak var contentView: UIView!
     private var currPage = 1
- 
+    
     var inSearchMode = false
     var tableNode: ASTableNode!
     var searchUserList = [FollowModel]()
     var userList = [FollowModel]()
     var userId = ""
-
+    
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -30,14 +30,14 @@ class FollowingVC: UIViewController {
         self.wireDelegates()
         
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableNode()
         // Do any additional setup after loading the view.
- 
+        
     }
-
+    
 }
 
 extension FollowingVC {
@@ -66,7 +66,7 @@ extension FollowingVC {
         self.tableNode.view.isPagingEnabled = false
         self.tableNode.view.backgroundColor = UIColor.clear
         self.tableNode.view.showsVerticalScrollIndicator = false
-            
+        
     }
     
     func wireDelegates() {
@@ -76,36 +76,36 @@ extension FollowingVC {
     }
     
 }
-    
-extension FollowingVC: ASTableDelegate {
 
+extension FollowingVC: ASTableDelegate {
+    
     func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
-            
+        
         let width = UIScreen.main.bounds.size.width;
-            
+        
         let min = CGSize(width: width, height: 40);
         let max = CGSize(width: width, height: 1000);
         return ASSizeRangeMake(min, max);
-               
+        
     }
-        
-        
+    
+    
     func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
-            
-        return true
-            
-    }
         
+        return true
+        
+    }
+    
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-            
-        self.retrieveNextPageWithCompletion { (newFollowings) in
-            
+        
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowings) in
+            guard let self = self else { return }
             self.insertNewRowsInTableNode(newFollowings: newFollowings)
             
             context.completeBatchFetching(true)
             
         }
-            
+        
     }
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
@@ -126,14 +126,14 @@ extension FollowingVC: ASTableDelegate {
         }
         
     }
-           
-}
     
+}
+
 extension FollowingVC: ASTableDataSource {
-        
+    
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-            
-            
+        
+        
         let array = inSearchMode ? searchUserList : userList
         
         
@@ -146,16 +146,16 @@ extension FollowingVC: ASTableDataSource {
         }
         
         return array.count
-            
-            
-    }
         
+        
+    }
+    
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-            
+        
         let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
         
         if let myId = _AppCoreData.userDataSource.value?.userID {
-    
+            
             if myId == self.userId {
                 user.action = "following"
                 user.needCheck = false
@@ -170,15 +170,15 @@ extension FollowingVC: ASTableDataSource {
             node = FollowNode(with: user)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-        
-
+            
+            
             return node
         }
-            
-    }
         
-
-            
+    }
+    
+    
+    
 }
 
 extension FollowingVC {
@@ -199,49 +199,51 @@ extension FollowingVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager().getFollows(userId: userId, page: currPage) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    
-                    if !data.isEmpty {
-                        self.currPage += 1
-                        print("Successfully retrieved \(data.count) followings.")
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                    
-                case .failure(let error):
-                    print(error)
+        APIManager.shared.getFollows(userId: userId, page: currPage) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                    return
+                }
+                
+                if !data.isEmpty {
+                    self.currPage += 1
+                    print("Successfully retrieved \(data.count) followings.")
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
         
     }
-     
+    
     func insertNewRowsInTableNode(newFollowings: [[String: Any]]) {
         // Check if there are new posts to insert
         guard !newFollowings.isEmpty else { return }
         
-
+        
         // Calculate the range of new rows
         let startIndex = userList.count
         let endIndex = startIndex + newFollowings.count
@@ -257,7 +259,7 @@ extension FollowingVC {
         
         // Insert the new rows
         tableNode.insertRows(at: insertIndexPaths, with: .automatic)
-       
+        
     }
     
 }

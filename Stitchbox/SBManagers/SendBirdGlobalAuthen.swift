@@ -17,17 +17,24 @@ func syncSendbirdAccount() {
         print("Sendbird: Stitchbox authentication failed")
         return
     }
-
+    
     guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
         print("Sendbird: Can't get userUID")
         return
     }
-
+    
     let loadUsername = userDataSource.userName ?? "default"
     let avatarUrl = userDataSource.avatarURL
-    let sbuUser = SBUUser(userId: userUID, nickname: loadUsername, profileUrl: avatarUrl)
-    SBUGlobals.CurrentUser = sbuUser
-
+    
+    if avatarUrl != "" {
+        let sbuUser = SBUUser(userId: userUID, nickname: loadUsername, profileUrl: avatarUrl)
+        SBUGlobals.CurrentUser = sbuUser
+    } else {
+        let sbuUser = SBUUser(userId: userUID, nickname: loadUsername, profileUrl: emptySB)
+        SBUGlobals.CurrentUser = sbuUser
+    }
+    
+  
     SBUMain.connectIfNeeded { user, error in
         if let error = error {
             print("SBUMain.connect:", error.localizedDescription)
@@ -62,7 +69,7 @@ func syncSendbirdAccount() {
             // No pending push token.
         }
 
-        SBDMain.setChannelInvitationPreferenceAutoAccept(false) { error in
+        SBDMain.setChannelInvitationPreferenceAutoAccept(true) { error in
             guard error == nil else {
                 print("Senbird Invites:", error!.localizedDescription)
                 return
@@ -90,7 +97,6 @@ func sendbirdLogout() {
         print("Sendbird: Stitchbox authentication failed")
         return
     }
-
     SBUMain.connect { user, error in
         if let error = error {
             print("Sendbird: \(error.localizedDescription)")
@@ -130,6 +136,11 @@ func sendbirdLogout() {
         SBDMain.removeAllUserEventDelegates()
         SBDMain.removeSessionDelegate()
         SBDMain.removeAllUserEventDelegates()
+        
+        SBUMain.disconnect {
+            
+        }
+        
     }
 }
 
@@ -137,7 +148,7 @@ func sendbirdLogout() {
 func checkForChannelInvitation(channelUrl: String, user_ids: [String]) {
     
     
-    APIManager().channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
+    APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
         switch result {
         case .success(let apiResponse):
             // Check if the request was successful

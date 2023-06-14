@@ -24,6 +24,14 @@ class LoginController: UIViewController, ControllerType {
         forgotBtn.addTarget(self, action: #selector(onClickForgot(_:)), for: .touchUpInside)
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        passwordTextfield.addUnderLine()
+        usernameTextfield.addUnderLine()
+        
+    }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -37,10 +45,14 @@ class LoginController: UIViewController, ControllerType {
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
+                
                 DispatchQueue.main.async {
                     
-                    self.presentError(error: error)
+                   presentSwiftLoader()
+                    
                 }
+                
+                
             })
             .disposed(by: disposeBag)
         

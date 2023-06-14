@@ -13,7 +13,7 @@ import FLAnimatedImage
 class BlockedListVC: UIViewController {
     
     let backButton: UIButton = UIButton(type: .custom)
-   
+    
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
@@ -59,23 +59,23 @@ class BlockedListVC: UIViewController {
         
         
         if firstAnimated {
-                    
-                    do {
-                        
-                        let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                        let gifData = try NSData(contentsOfFile: path) as Data
-                        let image = FLAnimatedImage(animatedGIFData: gifData)
-                        
-                        
-                        self.loadingImage.animatedImage = image
-                        
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                    
-                    loadingView.backgroundColor = self.view.backgroundColor
-         
-                }
+            
+            do {
+                
+                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                let gifData = try NSData(contentsOfFile: path) as Data
+                let image = FLAnimatedImage(animatedGIFData: gifData)
+                
+                
+                self.loadingImage.animatedImage = image
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            loadingView.backgroundColor = self.view.backgroundColor
+            
+        }
         
         
         let navigationBarAppearance = UINavigationBarAppearance()
@@ -83,12 +83,12 @@ class BlockedListVC: UIViewController {
         navigationBarAppearance.backgroundColor = .background
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+        
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
     }
-
+    
 }
 
 extension BlockedListVC {
@@ -100,10 +100,10 @@ extension BlockedListVC {
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -113,15 +113,15 @@ extension BlockedListVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Blocked List"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
     
@@ -249,38 +249,40 @@ extension BlockedListVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getBlocks(page: currentPage) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    
-                    if !data.isEmpty {
-                        self.currentPage += 1
-                        print("Successfully retrieved \(data.count) blocks.")
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                    
-                case .failure(let error):
-                    print(error)
+        APIManager.shared.getBlocks(page: currentPage) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                    return
+                }
+                
+                if !data.isEmpty {
+                    self.currentPage += 1
+                    print("Successfully retrieved \(data.count) blocks.")
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
@@ -307,13 +309,13 @@ extension BlockedListVC {
         }
         
         for i in newBlocks {
-
+            
             let item = BlockUserModel(JSON: i)
             items.append(item!)
-          
+            
         }
         
-    
+        
         self.blockList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
         
@@ -324,31 +326,31 @@ extension BlockedListVC {
     func hideAnimation() {
         
         if firstAnimated {
+            
+            firstAnimated = false
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                Dispatch.main.async {
+                    self.loadingView.alpha = 0
+                }
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
                     
-                    firstAnimated = false
-                    
-                    UIView.animate(withDuration: 0.5) {
-                        
-                        Dispatch.main.async {
-                            self.loadingView.alpha = 0
-                        }
-                        
-                    }
-                    
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        
-                        if self.loadingView.alpha == 0 {
-                            
-                            self.loadingView.isHidden = true
-                            
-                        }
-                        
-                    }
-                    
+                    self.loadingView.isHidden = true
                     
                 }
+                
+            }
+            
+            
+        }
         
     }
-
+    
 }

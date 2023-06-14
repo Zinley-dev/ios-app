@@ -51,8 +51,10 @@ class ContactUsViewModel: ViewModelProtocol {
     
     func logic() {
         submitSubject.subscribe{(images, content) in
-            APIManager().uploadContact(images: images, content: content) {
-                result in switch result {
+            APIManager.shared.uploadContact(images: images, content: content) { [weak self] result in
+                guard let self = self else { return }
+
+                switch result {
                 case .success(let response):
                     print(response)
                     self.successSubject.onNext("Successfully sent replies")

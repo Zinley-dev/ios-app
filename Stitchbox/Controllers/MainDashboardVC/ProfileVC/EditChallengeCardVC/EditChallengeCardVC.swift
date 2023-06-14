@@ -102,7 +102,7 @@ class EditChallengeCardVC: UIViewController, UICollectionViewDelegate {
                         if card.quote != "" {
                             cell.infoLbl.text = card.quote
                         } else {
-                            cell.infoLbl.text = "Stitchboxer"
+                            cell.infoLbl.text = "Stitchbox User"
                         }
                         
                     }
@@ -577,7 +577,9 @@ extension EditChallengeCardVC {
         if let badgeID = bID {
             
             presentSwiftLoader()
-            APIManager().updateChallengeCard(params: ["badge": "b\(badgeID+1)"]) { result in
+            APIManager.shared.updateChallengeCard(params: ["badge": "b\(badgeID+1)"]) { [weak self] result in
+                guard let self = self else { return }
+
                 switch result {
                 case .success(let apiResponse):
                     

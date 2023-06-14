@@ -98,14 +98,18 @@ extension SB_MetaVC {
     }
     
     func setupOriginalButton() {
-    
+      
         originalButton.frame = back_frame
         originalButton.contentMode = .center
+        
+        let img = UIImage.init(named: "link")?.resize(targetSize: CGSize(width: 25, height: 25))
 
+        let imageSize = CGSize(width: 13, height: 23)
+        originalButton.setImage(img, for: [])
 
         originalButton.addTarget(self, action: #selector(onClickLink(_:)), for: .touchUpInside)
         originalButton.setTitleColor(UIColor.white, for: .normal)
-        originalButton.setTitle("Link", for: .normal)
+        originalButton.setTitle("", for: .normal)
         let originalButtonBarButton = UIBarButtonItem(customView: originalButton)
 
         self.navigationItem.rightBarButtonItem = originalButtonBarButton
@@ -151,7 +155,9 @@ extension SB_MetaVC {
 extension SB_MetaVC {
     func loadMeta() {
         
-        APIManager().getGamePatch(gameId: global_gameId) { result in
+        APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -164,6 +170,8 @@ extension SB_MetaVC {
                 Dispatch.main.async {
                     self.patchLbl.text = "Patch: \(patch)"
                 }
+                
+                print(content)
                 self.originalLink = originPatch
                 self.displayMeta(content: content)
             case .failure(let error):

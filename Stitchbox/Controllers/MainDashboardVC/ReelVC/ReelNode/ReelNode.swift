@@ -20,9 +20,10 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
+    var previousTimeStamp: TimeInterval = 0.0
+    var totalWatchedTime: TimeInterval = 0.0
     weak var collectionNode: ASCollectionNode?
     weak var post: PostModel!
-    var imageHolder: UIImage!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: ASVideoNode
     var imageNode: ASImageNode
@@ -55,12 +56,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.imageNode = ASImageNode()
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
-        //self.scrollView = UIScrollView()
         self.hashtagsNode = ASDisplayNode()
         self.videoNode = ASVideoNode()
         self.gradientNode = GradienView()
         self.backgroundImage = GradientImageNode()
-        self.imageHolder = UIImage()
+       
         super.init()
         
         self.gradientNode.isLayerBacked = true
@@ -234,7 +234,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
             self.videoNode.shouldAutoplay = false
             self.videoNode.shouldAutorepeat = true
-            self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+            
             self.videoNode.muted = false
             self.videoNode.delegate = self
             
@@ -242,21 +242,25 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
                 // Calculate aspect ratio
                 let aspectRatio = Float(width) / Float(height)
-
+             
                 // Set contentMode based on aspect ratio
-                if aspectRatio >= 0.5 && aspectRatio <= 0.6 { // Close to 9:16 aspect ratio (vertical)
+                if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
                     self.videoNode.contentMode = .scaleAspectFill
+                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
                     self.videoNode.contentMode = .scaleAspectFit
+                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
                     self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
                 } else {
                     // Default contentMode, adjust as needed
                     self.videoNode.contentMode = .scaleAspectFit
+                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
                     self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
                 }
             } else {
                 // Default contentMode, adjust as needed
                 self.videoNode.contentMode = .scaleAspectFit
+                self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
                 self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
             }
 
@@ -274,7 +278,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 let aspectRatio = Float(width) / Float(height)
 
                 // Set contentMode based on aspect ratio
-                if aspectRatio >= 0.5 && aspectRatio <= 0.6 { // Close to 9:16 aspect ratio (vertical)
+                if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
                     self.imageNode.contentMode = .scaleAspectFill
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
                     self.imageNode.contentMode = .scaleAspectFit
@@ -340,7 +344,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         //guard let view = videoNode.view else { return }
     
         if recognizer.state == .began {
-            disableSroll()
+            disableScroll()
         }
 
         if recognizer.state == .changed {
@@ -392,13 +396,42 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         }
     }
-    
-    
+
+
+    func walkthroughPanAndZoom() {
+        // Store original center for later use
+        let originalCenter = videoNode.view.center
+        
+        // Disable scrolling during walkthrough
+        disableScroll()
+
+        // Simulate pan by translating center
+        let simulatedTranslation = CGPoint(x: 30, y: 30)
+        videoNode.view.center = CGPoint(x: videoNode.view.center.x + simulatedTranslation.x, y: videoNode.view.center.y + simulatedTranslation.y)
+        
+        // Animate zoom in and pan back to original center with spring effect
+        UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.2, options: [], animations: {
+            self.videoNode.view.transform = CGAffineTransform(scaleX: 1.6, y: 1.6) // Increased zoom
+            self.videoNode.view.center = originalCenter
+        }) { _ in
+            // Animate zoom out with spring effect
+            UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.2, options: [], animations: {
+                self.videoNode.view.transform = CGAffineTransform.identity
+            }) { _ in
+                // Re-enable scrolling once walkthrough is complete
+                self.enableScroll()
+            }
+        }
+    }
+
+
+
+
     @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
         //guard let view = recognizer.view else { return }
 
         if recognizer.state == .began {
-            disableSroll()
+            disableScroll()
            
         }
 
@@ -479,7 +512,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
        
     }
     
-    func setVideoProgress(rate: Float) {
+    func setVideoProgress(rate: Float, currentTime: TimeInterval, maxDuration: CMTime) {
         
         
         if let vc = UIViewController.currentViewController() {
@@ -490,7 +523,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 if let update1 = vc as? ReelVC {
                     
                     if update1.playTimeBar != nil {
-                        update1.playTimeBar.setProgress(rate, animated: true)
+                        update1.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
+                        update1.playTimeBar.setValue(Float(currentTime), animated: true)
                     }
                     
                 }
@@ -515,19 +549,15 @@ extension ReelNode {
     
     @objc func soundProcess() {
         
-        if videoNode.isPlaying() {
-            
-            if videoNode.muted == true {
-                videoNode.muted = false
-                shouldMute = false
-                animateUnmute()
-        
-            } else {
-                videoNode.muted = true
-                shouldMute = true
-                animateMute()
-            }
-            
+        if videoNode.muted == true {
+            videoNode.muted = false
+            shouldMute = false
+            animateUnmute()
+    
+        } else {
+            videoNode.muted = true
+            shouldMute = true
+            animateMute()
         }
         
     }
@@ -535,69 +565,46 @@ extension ReelNode {
     
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
-       
-        currentTimeStamp = timeInterval
-        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!))
-    
-        
-        if (videoNode.currentItem?.duration.seconds)! <= 15 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.8 {
-                
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-               
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 15, (videoNode.currentItem?.duration.seconds)! <= 30 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.7 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 30, (videoNode.currentItem?.duration.seconds)! <= 60 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.6 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 60 , (videoNode.currentItem?.duration.seconds)! <= 90 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.5 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 90, (videoNode.currentItem?.duration.seconds)! <= 120 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.4 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
-        } else if (videoNode.currentItem?.duration.seconds)! > 120 {
-            
-            if timeInterval/(videoNode.currentItem?.duration.seconds)! >= 0.5 {
-                if shouldCountView {
-                    shouldCountView = false
-                    endVideo(watchTime: Double(timeInterval))
-                }
-            }
-            
+        let videoDuration = videoNode.currentItem?.duration.seconds ?? 0
+
+        // Compute the time the user has spent actually watching the video
+        if timeInterval >= previousTimeStamp {
+            totalWatchedTime += timeInterval - previousTimeStamp
+        }
+        previousTimeStamp = timeInterval
+
+        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!), currentTime: timeInterval, maxDuration: videoNode.currentItem!.duration)
+
+        let watchedPercentage = totalWatchedTime/videoDuration
+        let minimumWatchedPercentage: Double
+
+        // Setting different thresholds based on video length
+        switch videoDuration {
+        case 0..<15:
+            minimumWatchedPercentage = 0.8
+        case 15..<30:
+            minimumWatchedPercentage = 0.7
+        case 30..<60:
+            minimumWatchedPercentage = 0.6
+        case 60..<90:
+            minimumWatchedPercentage = 0.5
+        case 90..<120:
+            minimumWatchedPercentage = 0.4
+        default:
+            minimumWatchedPercentage = 0.5
         }
         
+        // Check if user has watched a certain minimum amount of time (e.g. 5 seconds)
+        let minimumWatchedTime = 5.0
+        if shouldCountView && totalWatchedTime >= minimumWatchedTime && watchedPercentage >= minimumWatchedPercentage {
+            shouldCountView = false
+            endVideo(watchTime: Double(totalWatchedTime))
+        }
+        
+        // Optionally, add another condition to check if user is actively engaging with the video
+        // if shouldCountView && userIsEngagingWithVideo {
+        //     endVideo(watchTime: Double(totalWatchedTime))
+        // }
     }
     
     func videoDidPlay(toEnd videoNode: ASVideoNode) {
@@ -618,7 +625,8 @@ extension ReelNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
-                APIManager().createView(post: post.id, watchTime: watchTime) { result in
+                APIManager.shared.createView(post: post.id, watchTime: watchTime) { [weak self] result in
+                    guard let self = self else { return }
                     
                     switch result {
                     case .success(let apiResponse):
@@ -649,7 +657,8 @@ extension ReelNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
-                APIManager().createView(post: id, watchTime: 0) { result in
+                APIManager.shared.createView(post: id, watchTime: 0) { [weak self] result in
+                    guard let self = self else { return }
                     
                     switch result {
                     case .success(let apiResponse):
@@ -669,17 +678,60 @@ extension ReelNode {
         
     }
     
+    
+    @objc func zoomAnimation() {
+        
+        let imgView = UIImageView()
+        imgView.frame.size = CGSize(width: 170, height: 120)
+        
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
+        
+        let tapImages: [UIImage] = [
+            UIImage(named: "zoom1")!,
+            UIImage(named: "zoom2")!,
+            UIImage(named: "zoom3")!
+        ]
+        
+        imgView.animationImages = tapImages
+        imgView.animationDuration = 1.5 // time duration for complete animation cycle
+        imgView.animationRepeatCount = 1 // number of times the animation repeats, set to 1 to play once
+        imgView.startAnimating()
+        
+        // Optional: clear images after animation ends
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            imgView.animationImages = nil
+            imgView.removeFromSuperview()
+        }
+        
+    }
+    
 }
 
 
 extension ReelNode {
     
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
-    
+        
         hashtagView.collectionView.delegate = dataSourceDelegate
         hashtagView.collectionView.dataSource = dataSourceDelegate
         hashtagView.collectionView.tag = row
-        hashtagView.collectionView.setContentOffset(hashtagView.collectionView.contentOffset, animated:true) // Stops collection view if it was scrolling.
+
+        // Retrieve the current contentOffset
+        let contentOffset = hashtagView.collectionView.contentOffset
+
+        // Check if the contentSize is greater than the collectionView's frame size
+        if hashtagView.collectionView.contentSize.height > hashtagView.collectionView.frame.size.height {
+            // Check whether the desired contentOffset.y is within valid range
+            if contentOffset.y >= 0 && contentOffset.y <= hashtagView.collectionView.contentSize.height - hashtagView.collectionView.frame.size.height {
+                // If yes, stop the collectionView if it was scrolling
+                hashtagView.collectionView.setContentOffset(contentOffset, animated:true)
+            } else {
+                print("Invalid content offset: \(contentOffset.y). It should be between 0 and \(hashtagView.collectionView.contentSize.height - hashtagView.collectionView.frame.size.height).")
+                // You can replace this with your own error handling code
+            }
+        }
+
         hashtagView.collectionView.register(HashtagCell.nib(), forCellWithReuseIdentifier: HashtagCell.cellReuseIdentifier())
         hashtagView.collectionView.reloadData()
         
@@ -771,6 +823,8 @@ extension ReelNode {
         
         if let vc = UIViewController.currentViewController() {
             
+            general_vc = vc
+            
             if vc is ReelVC {
                 
                 if let update1 = vc as? ReelVC {
@@ -821,6 +875,20 @@ extension ReelNode {
             return
             
         }
+        
+        APIManager.shared.openLink(postId: post.id, link: post.streamLink) { [weak self] result in
+            guard let self = self else { return }
+        
+            switch result {
+            case .success(let apiResponse):
+                print(apiResponse)
+                
+            case .failure(let error):
+                print(error)
+            }
+    
+        }
+        
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 
@@ -830,37 +898,22 @@ extension ReelNode {
         
         let imgView = UIImageView()
         imgView.image = popupLikeImage
-        imgView.frame.size = CGSize(width: 120, height: 120)
+        imgView.frame.size = CGSize(width: 170, height: 120)
        
-        if let vc = UIViewController.currentViewController() {
-             
-            if vc is ReelVC {
-                
-                if let update1 = vc as? ReelVC {
-                    
-                    imgView.center = update1.view.center
-                    update1.view.addSubview(imgView)
-                    
-                }
-                
-            }
-                        
-                        
-                        
-                   
-        }
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
         
         
         imgView.transform = CGAffineTransform.identity
         
-        UIView.animate(withDuration: 1) {
+        UIView.animate(withDuration: 0.5) {
             
             imgView.alpha = 0
             
         }
         
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             
             if imgView.alpha == 0 {
                 
@@ -877,118 +930,45 @@ extension ReelNode {
     }
     
     func animateMute() {
-        
-        
-        if imageHolder == nil || imageHolder != muteImage {
-            
-            imageHolder = muteImage
-            
-            let imgView = UIImageView()
-            imgView.image = muteImage
-            imgView.frame.size = CGSize(width: 45, height: 45)
-           
-            if let vc = UIViewController.currentViewController() {
-                 
-                if vc is ReelVC {
-                    
-                    if let update1 = vc as? ReelVC {
-                        
-                        imgView.center = update1.view.center
-                        update1.view.addSubview(imgView)
-                        
-                    }
-                    
-                }
-                            
-                            
-                            
-                       
-            }
-            
-            
-            imgView.transform = CGAffineTransform.identity
-            
-            UIView.animate(withDuration: 1) {
-                
-                imgView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if imgView.alpha == 0 {
-                    
-                    imgView.removeFromSuperview()
-                    
-                }
-                
-            }
-            
-            
-            
-        }
+        let imgView = UIImageView(image: muteImage)
+        imgView.frame.size = CGSize(width: 45, height: 45)
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
 
-        
+        UIView.animate(withDuration: 0.5, animations: {
+            imgView.alpha = 0
+            imgView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        }) { _ in
+            imgView.removeFromSuperview()
+        }
     }
-    
+
     func animateUnmute() {
-        
-        if imageHolder == nil || imageHolder != unmuteImage {
-            
-            imageHolder = unmuteImage
-            
-            let imgView = UIImageView()
-            imgView.image = unmuteImage
-            imgView.frame.size = CGSize(width:45, height: 45)
-           
-            if let vc = UIViewController.currentViewController() {
-                 
-                if vc is ReelVC {
-                    
-                    if let update1 = vc as? ReelVC {
-                        
-                        imgView.center = update1.view.center
-                        update1.view.addSubview(imgView)
-                        
-                    }
-                    
-                }
-                            
-                            
-                            
-                       
+        let imgView = UIImageView(image: unmuteImage)
+        imgView.frame.size = CGSize(width: 45, height: 45)
+
+        if let vc = UIViewController.currentViewController() {
+            if let update1 = vc as? ReelVC {
+                imgView.center = update1.view.center
+                update1.view.addSubview(imgView)
             }
-            
-            
-            imgView.transform = CGAffineTransform.identity
-            
-            UIView.animate(withDuration: 1) {
-                
-                imgView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if imgView.alpha == 0 {
-                    
-                    imgView.removeFromSuperview()
-                    
-                }
-                
-            }
-            
         }
 
-        
+        UIView.animate(withDuration: 0.5, animations: {
+            imgView.alpha = 0
+            imgView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        }) { _ in
+            imgView.removeFromSuperview()
+        }
     }
+
+
     
     func checkIfLike() {
         
-        APIManager().hasLikedPost(id: post.id) { result in
-            
+        APIManager.shared.hasLikedPost(id: post.id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
     
@@ -1024,7 +1004,9 @@ extension ReelNode {
             self.isLike = true
         }
         
-        APIManager().likePost(id: post.id) { result in
+        APIManager.shared.likePost(id: post.id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                print(apiResponse)
@@ -1045,7 +1027,9 @@ extension ReelNode {
             self.isLike = false
         }
         
-        APIManager().unlikePost(id: post.id) { result in
+        APIManager.shared.unlikePost(id: post.id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 print(apiResponse)
@@ -1105,7 +1089,9 @@ extension ReelNode {
     
     func totalLikeCount() {
         
-        APIManager().countLikedPost(id: post.id) { result in
+        APIManager.shared.countLikedPost(id: post.id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
     
@@ -1129,7 +1115,9 @@ extension ReelNode {
     
     func totalCmtCount() {
         
-        APIManager().countComment(post: post.id) { result in
+        APIManager.shared.countComment(post: post.id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
              
@@ -1213,7 +1201,7 @@ extension ReelNode
 
 extension ReelNode {
     
-    func disableSroll() {
+    func disableScroll() {
         
         if let vc = UIViewController.currentViewController() {
             
@@ -1274,6 +1262,7 @@ extension ReelNode: UIGestureRecognizerDelegate {
     }
 
 
+    
     
 }
 

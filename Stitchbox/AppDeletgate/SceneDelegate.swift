@@ -69,6 +69,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        requestAppleReview()
+        
     }
 
     func sceneWillResignActive(_ scene: UIScene) {

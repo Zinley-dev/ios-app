@@ -24,8 +24,8 @@ class FollowerVC: UIViewController {
     var tableNode: ASTableNode!
     var searchUserList = [FollowModel]()
     var userList = [FollowModel]()
-  
-
+    
+    
     var userId = ""
     
     required init?(coder aDecoder: NSCoder) {
@@ -42,7 +42,7 @@ class FollowerVC: UIViewController {
         // Do any additional setup after loading the view.
         
     }
-
+    
     
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -66,7 +66,7 @@ class FollowerVC: UIViewController {
                 y: (size-iconSize)/2,
                 width: iconSize,
                 height: iconSize
-        ))
+            ))
         //removeView.layer.borderColor = UIColor.white.cgColor
         removeView.layer.masksToBounds = true
         //removeView.layer.borderWidth = 1
@@ -77,7 +77,7 @@ class FollowerVC: UIViewController {
         
         removeAction.image = removeView.asImage()
         removeAction.backgroundColor = .background
-       
+        
         
         return UISwipeActionsConfiguration(actions: [removeAction])
         
@@ -86,10 +86,12 @@ class FollowerVC: UIViewController {
     }
     
     func removeFollower(userUID: String, row: Int) {
-
+        
         if userUID != "" {
             
-            APIManager().deleteFollower(params: ["FollowId": userUID]) { result in
+            APIManager.shared.deleteFollower(params: ["FollowId": userUID]) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(_):
                     DispatchQueue.main.async {
@@ -97,7 +99,7 @@ class FollowerVC: UIViewController {
                         self.tableNode.deleteRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
                         showNote(text: "Remove followed!")
                     }
-                   
+                    
                 case .failure(_):
                     DispatchQueue.main.async {
                         showNote(text: "Unable to remove follow!")
@@ -169,9 +171,9 @@ extension FollowerVC: ASTableDelegate {
     }
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-      
-        self.retrieveNextPageWithCompletion { (newFollowers) in
-            
+        
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowers) in
+            guard let self = self else { return }
             self.insertNewRowsInTableNode(newFollowers: newFollowers)
             
             context.completeBatchFetching(true)
@@ -195,7 +197,7 @@ extension FollowerVC: ASTableDelegate {
             }
             
         }
-
+        
         
     }
     
@@ -224,7 +226,7 @@ extension FollowerVC: ASTableDataSource {
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         //let array = inSearchMode ? searchChannelList : channels
         let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
-    
+        
         user.loadFromMode = "follower"
         user.loadFromUserId = self.userId
         
@@ -233,8 +235,8 @@ extension FollowerVC: ASTableDataSource {
             node = FollowNode(with: user)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-        
-
+            
+            
             return node
         }
         
@@ -248,51 +250,53 @@ extension FollowerVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager().getFollowers(userId: userId, page: currPage) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    
-                    
-                    if !data.isEmpty {
-                        self.currPage += 1
+        APIManager.shared.getFollowers(userId: userId, page: currPage) { [weak self] result in
+            guard let self = self else { return }
             
-                        print("Successfully retrieved \(data.count) followers.")
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                    
-                case .failure(let error):
-                    print(error)
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                    return
+                }
+                
+                
+                if !data.isEmpty {
+                    self.currPage += 1
+                    
+                    print("Successfully retrieved \(data.count) followers.")
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
         
     }
-     
+    
     func insertNewRowsInTableNode(newFollowers: [[String: Any]]) {
         // Check if there are new posts to insert
         guard !newFollowers.isEmpty else { return }
         
-
+        
         // Calculate the range of new rows
         let startIndex = userList.count
         let endIndex = startIndex + newFollowers.count
@@ -308,9 +312,9 @@ extension FollowerVC {
         
         // Insert the new rows
         tableNode.insertRows(at: insertIndexPaths, with: .automatic)
-       
         
-
+        
+        
     }
     
 }

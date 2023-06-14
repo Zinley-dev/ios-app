@@ -21,7 +21,7 @@ class StreamingLinkVC: UIViewController {
         }
     }
     
-    @IBOutlet weak var saveBtn: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,45 +57,17 @@ class StreamingLinkVC: UIViewController {
     
     @IBAction func SaveBtnPressed(_ sender: Any) {
         
-        if let text = streamingLinkTxt.text, text != "", isVerified == true {
-            
-            
-            if let url = URL(string: text) {
-                
-                if let domain = url.host {
-                    
-                    if check_Url(host: domain) == true {
-                        
-                        global_host = domain
-                        global_fullLink = text
-                        
-                        isVerified = true
-                        
-                        if let navigationController = self.navigationController {
-                            navigationController.popViewController(animated: true)
-                        }
-                        
-
-                        
-                        
-                    } else {
-                        
-                        isVerified = false
-                        saveBtn.backgroundColor = .disableButtonBackground
-                        saveBtn.titleLabel?.textColor = .lightGray
-                        streamError()
-                        return
-                        
-                    }
-                    
-                }
-            }
-            
-        }
+        let slideVC =  StreamingListVC()
+        
+        slideVC.modalPresentationStyle = .custom
+        slideVC.transitioningDelegate = self
+        global_presetingRate = Double(0.65)
+        global_cornerRadius = 40
+    
+        self.present(slideVC, animated: true, completion: nil)
         
     }
     
-
 }
 
 
@@ -108,23 +80,18 @@ extension StreamingLinkVC: UITextFieldDelegate {
             if verifyUrl(urlString: text) == true {
                 
                 isVerified = true
-                saveBtn.backgroundColor = .primary
-                saveBtn.titleLabel?.textColor = .white
+                createSaveBtn()
                 
             } else {
                 
                 isVerified = false
-                saveBtn.backgroundColor = .disableButtonBackground
-                saveBtn.titleLabel?.textColor = .lightGray
-                
+                self.navigationItem.rightBarButtonItem = nil
             }
             
         } else {
             
             isVerified = false
-            saveBtn.backgroundColor = .disableButtonBackground
-            saveBtn.titleLabel?.textColor = .lightGray
-            
+            self.navigationItem.rightBarButtonItem = nil
         }
         
     }
@@ -195,6 +162,31 @@ extension StreamingLinkVC {
 
         
     }
+    
+    func createSaveBtn() {
+      
+        let createButton = UIButton(type: .custom)
+        createButton.addTarget(self, action: #selector(saveLink(_:)), for: .touchUpInside)
+        createButton.semanticContentAttribute = .forceRightToLeft
+        createButton.setTitle("Save", for: .normal)
+        createButton.setTitleColor(.white, for: .normal)
+        createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
+        createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
+        createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
+        createButton.backgroundColor = .primary
+        createButton.cornerRadius = 15
+        let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
+        customView.addSubview(createButton)
+        createButton.center = customView.center
+        let createBarButton = UIBarButtonItem(customView: customView)
+
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+      
+        self.navigationItem.rightBarButtonItem = createBarButton
+         
+    }
 
     
 }
@@ -206,6 +198,49 @@ extension StreamingLinkVC {
             navigationController.popViewController(animated: true)
         }
     }
+    
+    @objc func saveLink(_ sender: AnyObject) {
+        
+        if let text = streamingLinkTxt.text, text != "", isVerified == true {
+            
+            
+            if let url = URL(string: text) {
+                
+                if let domain = url.host {
+                    
+                    if check_Url(host: domain) == true {
+                        
+                        global_host = domain
+                        global_fullLink = text
+                        
+                        isVerified = true
+                        
+                        if let navigationController = self.navigationController {
+                            navigationController.popViewController(animated: true)
+                        }
+                        
+
+                        
+                        
+                    } else {
+                        
+                        isVerified = false
+                        /*
+                        saveBtn.backgroundColor = .disableButtonBackground
+                        saveBtn.titleLabel?.textColor = .lightGray
+                         */
+                        streamError()
+                        return
+                        
+                    }
+                    
+                }
+            }
+            
+        }
+        
+    }
+    
     
     @objc func onClickAdd(_ sender: AnyObject) {
         print("Added")

@@ -154,7 +154,9 @@ extension SearchViewController {
     
     func loadRecentSearch() {
         
-        APIManager().getRecent { result in
+        APIManager.shared.getRecent { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
 
@@ -481,6 +483,7 @@ extension SearchViewController {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         contentview.isHidden = false
         searchView.isHidden = true
+        searchController?.dismiss(animated: true)
     }
 
     
@@ -504,7 +507,7 @@ extension SearchViewController {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         if let text = searchBar.text, text != "" {
-            
+        
             saveRecentText(text: text)
             
             if let MSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainSearchVC") as? MainSearchVC {
@@ -530,7 +533,9 @@ extension SearchViewController {
             return
         }
         
-        APIManager().getAutoComplete(query: searchText) { result in
+        APIManager.shared.getAutoComplete(query: searchText) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -600,7 +605,9 @@ extension SearchViewController {
     
     func saveRecentUser(userId: String) {
         
-        APIManager().addRecent(query: userId, type: "user") { result in
+        APIManager.shared.addRecent(query: userId, type: "user") { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -618,7 +625,9 @@ extension SearchViewController {
     
     func saveRecentText(text: String) {
         
-        APIManager().addRecent(query: text, type: "text") { result in
+        APIManager.shared.addRecent(query: text, type: "text") { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -637,7 +646,9 @@ extension SearchViewController {
 
         if objectId != "" {
         
-            APIManager().deleteRecent(id: objectId) { result in
+            APIManager.shared.deleteRecent(id: objectId) { [weak self] result in
+                guard let self = self else { return }
+
                 switch result {
                 case .success(_):
                     DispatchQueue.main.async {

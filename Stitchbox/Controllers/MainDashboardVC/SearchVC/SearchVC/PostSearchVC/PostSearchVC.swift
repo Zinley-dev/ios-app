@@ -11,23 +11,25 @@ import AlamofireImage
 import Alamofire
 
 class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
-
+    
     @IBOutlet weak var contentview: UIView!
-    @IBOutlet weak var playTimeBar: UIProgressView!
+    @IBOutlet weak var timeLbl: UILabel!
+    @IBOutlet weak var blurView: UIView!
+    @IBOutlet weak var playTimeBar: CustomSlider!
     
     var page = 1
     var keyword = ""
     var prev_keyword = ""
     var post_list = [PostModel]()
     
-  
+    
     var currentIndex: Int?
     var imageIndex: Int?
     
     
     var isfirstLoad = true
     var didScroll = false
-
+    
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var selected_item: PostModel!
@@ -48,7 +50,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupCollectionNode()
         
@@ -75,9 +77,9 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         if currentIndex != nil {
             //newPlayingIndex
-            pauseVideoIfNeed(pauseIndex: currentIndex!)
+            pauseVideo(index: currentIndex!)
         }
-    
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -85,7 +87,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         if currentIndex != nil {
             //newPlayingIndex
-            playVideoIfNeed(playIndex: currentIndex!)
+            playVideo(index: currentIndex!)
         }
         
     }
@@ -110,11 +112,11 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     @objc private func refreshListData(_ sender: Any) {
-       // self.pullControl.endRefreshing() // You can stop after API Call
+        // self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
-  
+        
         clearAllData()
-   
+        
     }
     
     @objc func clearAllData() {
@@ -126,21 +128,21 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
         shouldMute = nil
         page = 1
         updateData()
-               
+        
     }
     
     
     func updateData() {
         
         self.retrieveNextPageWithCompletion { (newPosts) in
-                
+            
             if newPosts.count > 0 {
-                        
+                
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 
-                                 
+                
             } else {
-              
+                
                 self.refresh_request = false
                 self.posts.removeAll()
                 self.collectionNode.reloadData()
@@ -156,29 +158,29 @@ class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionView
                 
                 self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
                 
-             
-                    
+                
+                
             }
-              
-          
+            
+            
         }
         
         
     }
-
-
+    
+    
 }
 
 
 extension PostSearchVC {
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
@@ -203,7 +205,7 @@ extension PostSearchVC {
         
         SwiftLoader.show(title: progress, animated: true)
         
- 
+        
     }
     
 }
@@ -213,20 +215,20 @@ extension PostSearchVC {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         // Check if this is the first visible cell and it contains a video.
-    
+        
         if isfirstLoad {
             isfirstLoad = false
             let post = posts[0]
             if !post.muxPlaybackId.isEmpty {
                 currentIndex = 0
                 newPlayingIndex = 0
-                playVideoIfNeed(playIndex: currentIndex!)
+                playVideo(index: currentIndex!)
                 isVideoPlaying = true
             }
             
         }
     }
-
+    
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
@@ -234,17 +236,17 @@ extension PostSearchVC {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-
+            
             // Calculate the visible cells.
             let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
-
+            
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
             
             var foundVisibleVideo = false
             
             for cell in visibleCells {
-            
+                
                 let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
                 let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
                 let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
@@ -254,7 +256,7 @@ extension PostSearchVC {
                 }
             }
             
-
+            
             if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                 
                 foundVisibleVideo = true
@@ -272,11 +274,11 @@ extension PostSearchVC {
                 if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                     // Pause the current video, if any.
                     if let currentIndex = currentIndex {
-                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                        pauseVideo(index: currentIndex)
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
+                    playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
@@ -290,9 +292,9 @@ extension PostSearchVC {
             } else {
                 
                 if let currentIndex = currentIndex {
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideo(index: currentIndex)
                 }
-
+                
                 imageTimerWorkItem?.cancel()
                 imageTimerWorkItem = DispatchWorkItem { [weak self] in
                     guard let self = self else { return }
@@ -305,17 +307,17 @@ extension PostSearchVC {
                         }
                     }
                 }
-
+                
                 if let imageTimerWorkItem = imageTimerWorkItem {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
                 }
-
-            
-                        // Reset the current playing index.
+                
+                
+                // Reset the current playing index.
                 currentIndex = nil
                 
             }
-
+            
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
             if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
@@ -327,17 +329,17 @@ extension PostSearchVC {
                     }
                 }
             }
-
-
+            
+            
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                pauseVideo(index: currentIndex!)
                 currentIndex = nil
             }
             
         }
         
-    
+        
     }
     
     
@@ -345,18 +347,31 @@ extension PostSearchVC {
 
 
 extension PostSearchVC {
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
+
+        // Check if collectionView.tag is within the range of the posts array
+        guard collectionView.tag < posts.count else {
+            print("Error: No post for tag \(collectionView.tag)")
+            cell.hashTagLabel.text = "Error: post not found"
+            return cell
+        }
         
-        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         let item = posts[collectionView.tag]
-        
-     
+
+        // Check if indexPath.row is within the range of the hashtags array
+        guard indexPath.row < item.hashtags.count else {
+            print("Error: No hashtag for index \(indexPath.row)")
+            cell.hashTagLabel.text = "Error: hashtag not found"
+            return cell
+        }
+
         cell.hashTagLabel.text = item.hashtags[indexPath.row]
-        
         return cell
-        
-        
     }
+
+
     
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -364,10 +379,14 @@ extension PostSearchVC {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       
-        return posts[collectionView.tag].hashtags.count
-        
+        if collectionView.tag < posts.count {
+            return posts[collectionView.tag].hashtags.count
+        } else {
+            // Handle the condition when there are no posts at the given index
+            return 0
+        }
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -387,7 +406,7 @@ extension PostSearchVC {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
+        return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
     }
     
 }
@@ -431,9 +450,9 @@ extension PostSearchVC: ASCollectionDataSource {
             
             
             node.settingBtn = { (node) in
-            
+                
                 self.settingPost(item: post)
-                  
+                
             }
             
             delay(0.3) {
@@ -449,35 +468,43 @@ extension PostSearchVC: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        if self.posts.count >= 150 {
-            
-            context.completeBatchFetching(true)
-            clearAllData()
-            
-            
-        } else {
-            
-            if refresh_request == false {
-                self.retrieveNextPageWithCompletion { (newPosts) in
-                    
-                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                    
-
-                    context.completeBatchFetching(true)
-                    
-                    
-                }
-            } else {
+        if refresh_request == false {
+            retrieveNextPageWithCompletion { [weak self] (newPosts) in
+                guard let self = self else { return }
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+                self.cleanupPosts(collectionNode: collectionNode)
+                
                 context.completeBatchFetching(true)
             }
-            
-            
-            
+        } else {
+            context.completeBatchFetching(true)
         }
     }
-    
 
-    
+    private func cleanupPosts(collectionNode: ASCollectionNode) {
+        let postThreshold = 100
+        let postsToRemove = 50
+        let startIndex = 15
+
+        if self.posts.count > postThreshold {
+            // check if we have enough posts to remove
+            if (startIndex + postsToRemove) <= self.posts.count {
+                // remove the posts from startIndex to startIndex + postsToRemove
+                self.posts.removeSubrange(startIndex..<(startIndex + postsToRemove))
+
+                // generate the index paths for old posts
+                let indexPathsToRemove = Array(startIndex..<(startIndex + postsToRemove)).map { IndexPath(row: $0, section: 0) }
+
+                // delete the old posts from collectionNode
+                collectionNode.performBatchUpdates({
+                    collectionNode.deleteItems(at: indexPathsToRemove)
+                }, completion: nil)
+            }
+        }
+    }
+
+
 }
 
 
@@ -502,7 +529,7 @@ extension PostSearchVC {
         self.contentview.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
         self.collectionNode.view.topAnchor.constraint(equalTo: self.contentview.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentview.leadingAnchor, constant: 0).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentview.leadingAnchor, constant: -1).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentview.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentview.bottomAnchor, constant: 0).isActive = true
         
@@ -512,7 +539,7 @@ extension PostSearchVC {
         // Reload the data on the collection node
         self.collectionNode.reloadData()
     }
-
+    
     
     
     func applyStyle() {
@@ -537,10 +564,10 @@ extension PostSearchVC {
         
         
         if prev_keyword == "" || prev_keyword != keyword {
-             
+            
             prev_keyword = keyword
             clearAllData()
-           
+            
         }
         
         
@@ -557,38 +584,38 @@ extension PostSearchVC {
         
         if keyword != "" {
             
-            print("Post search: \(keyword)")
-
-                APIManager().searchPost(query: keyword, page: page) { result in
-                    switch result {
-                    case .success(let apiResponse):
-                        print(apiResponse)
-                        guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                            return
-                        }
-                        if !data.isEmpty {
-                            print("Successfully retrieved \(data.count) posts.")
-                            let items = data
-                            self.page += 1
-                            DispatchQueue.main.async {
-                                block(items)
-                            }
-                        } else {
-                            
-                            let item = [[String: Any]]()
-                            DispatchQueue.main.async {
-                                block(item)
-                            }
-                        }
-                    case .failure(let error):
-                        print(error)
+            APIManager.shared.searchPost(query: keyword, page: page) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let apiResponse):
+                    print(apiResponse)
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         let item = [[String: Any]]()
                         DispatchQueue.main.async {
                             block(item)
+                        }
+                        return
+                    }
+                    if !data.isEmpty {
+                        print("Successfully retrieved \(data.count) posts.")
+                        let items = data
+                        self.page += 1
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
                     }
                 }
             }
@@ -600,41 +627,35 @@ extension PostSearchVC {
                 block(item)
             }
         }
-            
         
-  
+        
+        
     }
     
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-        
+
         // checking empty
         guard newPosts.count > 0 else {
             return
         }
-        
+
         if refresh_request {
-            
+
             refresh_request = false
-            
 
             if !self.posts.isEmpty {
-                
-               
                 var delete_indexPaths: [IndexPath] = []
-                
                 for row in 0..<self.posts.count {
                     let path = IndexPath(row: row, section: 0) // single indexpath
-                    delete_indexPaths.append(path) // app
+                    delete_indexPaths.append(path) // append
                 }
-            
+
                 self.posts.removeAll()
                 self.collectionNode.deleteItems(at: delete_indexPaths)
-                   
             }
-            
         }
-        
+
         // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()
         for i in newPosts {
@@ -644,20 +665,23 @@ extension PostSearchVC {
                     items.append(item)
                 }
             }
-            
         }
-        
-        // Construct index paths for the new rows
-        let startIndex = self.posts.count - items.count
-        let endIndex = startIndex + items.count - 1
-        let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
 
-        // Insert new items at index paths
-        self.collectionNode.insertItems(at: indexPaths)
-      
+        // Construct index paths for the new rows
+        if items.count > 0 {
+            let startIndex = self.posts.count - items.count
+            let endIndex = startIndex + items.count - 1
+            print(startIndex, endIndex)
+            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
+
+            // Insert new items at index paths
+            self.collectionNode.insertItems(at: indexPaths)
+        }
     }
 
 
+    
+    
 }
 
 
@@ -685,9 +709,9 @@ extension PostSearchVC {
     }
     
     @objc func copyPost() {
-    
+        
         if let id = self.editeddPost?.id {
-           
+            
             let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
@@ -717,17 +741,24 @@ extension PostSearchVC {
     @objc func removePost() {
         
         if let deletingPost = editeddPost {
-           
+            
             if let indexPath = posts.firstIndex(of: deletingPost) {
                 
                 posts.removeObject(deletingPost)
                 collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                 reloadAllCurrentHashtag()
+                
+                delay(0.75) { [weak self] in
+                    if indexPath < self?.posts.count ?? 0 {
+                        self?.playVideo(index: indexPath)
+                    }
+                }
+                
             }
             
         }
         
-       
+        
     }
     
     func reloadAllCurrentHashtag() {
@@ -782,7 +813,7 @@ extension PostSearchVC {
         delay(0.1) {
             self.present(ac, animated: true, completion: nil)
         }
-      
+        
     }
     
     
@@ -801,6 +832,16 @@ extension PostSearchVC {
             }
             
             cell.videoNode.pause()
+            
+        }
+        
+    }
+    
+    func seekVideo(index: Int, time: CMTime) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            cell.videoNode.player?.seek(to: time)
             
         }
         
@@ -830,7 +871,7 @@ extension PostSearchVC {
                             cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
                         }
                     }
-                   
+                    
                     if muteStatus {
                         cell.videoNode.muted = true
                     } else {
@@ -849,7 +890,7 @@ extension PostSearchVC {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                     }
-                   
+                    
                     if globalIsSound {
                         cell.videoNode.muted = false
                     } else {
@@ -859,12 +900,13 @@ extension PostSearchVC {
                     cell.videoNode.play()
                     
                 }
- 
-              
+                
+                
             }
             
         }
         
     }
+    
     
 }

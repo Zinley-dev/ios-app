@@ -7,5 +7,5 @@
 
 import Foundation
 
-var sendbird_key = "5D264FFE-6C2B-4046-97EB-52B0F04CDF87"
-var pixel_key = "ZFZ7ImsiOiJve3NvYDZKJFY7SjlON01dMWJBIiwidiI6ImY4RkRqIiwiaSI6IjUzIn1yTWZ1"
+var sendbird_key = "188F3A17-C24B-4EAC-832C-552E85B3FB42"
+var pixel_key = "dHN7ImsiOiJKbXdMcSVRdEIkVW9sS2QpKiIsInYiOiJmOEZEaiIsImkiOiIxNDcifUZy"

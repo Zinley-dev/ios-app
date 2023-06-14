@@ -24,6 +24,11 @@ enum Result {
 }
 
 struct APIManager {
+    
+    static let shared = APIManager()
+    private init() {}
+    
+    
     let authManager = Manager<AuthApi>()
     let SBmanager = Manager<ChatApi>()
     let searchManager = Manager<SearchApi>()
@@ -49,8 +54,9 @@ struct APIManager {
     let supportedRegionManager = Manager<SupportedRegionApi>()
     let gptHistoryManager = Manager<GptHistoryApi>()
     let gamePatchManager = Manager<GamePatchApi>()
-    let usedTokenManager = Manager<UsedTokenApi>()
+    //let usedTokenManager = Manager<UsedTokenApi>()
     let promotionManager = Manager<PromotionApi>()
+    let openLinkManager = Manager<OpenLinkLogApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -739,9 +745,6 @@ extension APIManager {
     }
 }
 extension APIManager {
-  /**
-      type: String = POST | COMMENT | USER
-   */
   func report(type: String, reason: String, note: String, reportId: String, completion: @escaping APICompletion) {
     var params = ["type": type, "reason": reason, "note": note]
       switch type {
@@ -775,19 +778,7 @@ extension APIManager {
 
 
 extension APIManager {
-  
-  /*
-   params = {
-   "riotUsername": "",
-   "riotAccountId": "",
-   "riotId": "",
-   "riotPuuid": "",
-   "riotLevel": "",
-   "riotSummonerId": "",
-   "riotProfileImage": "",
-   "region": "",
-   }
-  */
+
   func confirmRiot(params: [String: Any], completion: @escaping APICompletion) {
     userManager.request(.riotUpdate(params: params)) { result in
       completion(result)
@@ -869,16 +860,6 @@ extension APIManager {
       completion(result)
     }
   }
-  func getUsedToken(completion: @escaping APICompletion) {
-    usedTokenManager.request(.getUsedToken) { result in
-      completion(result)
-    }
-  }
-  func updateUsedToken(usedToken: Int, completion: @escaping APICompletion) {
-    usedTokenManager.request(.updateUsedToken(body: ["usage": usedToken])) { result in
-      completion(result)
-    }
-  }
   
   func getPromotion(completion: @escaping APICompletion) {
     promotionManager.request(.getPromotion) { result in
@@ -891,4 +872,15 @@ extension APIManager {
       completion(result)
     }
   }
+    
+}
+
+extension APIManager {
+    
+    func openLink(postId: String, link: String, completion: @escaping APICompletion) {
+        openLinkManager.request(.openLink(body: ["postId": postId, "link": link])) { result in
+          completion(result)
+        }
+    }
+    
 }

@@ -29,6 +29,8 @@ class ChallengerCardProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var gameWidth: NSLayoutConstraint!
     @IBOutlet weak var gameHeight: NSLayoutConstraint!
     
+    var lastAvatarImgUrl: URL?
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()

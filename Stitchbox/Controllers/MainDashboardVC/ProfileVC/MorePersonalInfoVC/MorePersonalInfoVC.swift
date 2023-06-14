@@ -23,6 +23,18 @@ class MorePersonalInfoVC: UIViewController {
         // Do any additional setup after loading the view.
         setupBackButton()
         
+        let birthdayTap = UITapGestureRecognizer(target: self, action: #selector(birthdayTxtFieldTapped))
+        birthdayTxtField.isUserInteractionEnabled = true
+        birthdayTxtField.addGestureRecognizer(birthdayTap)
+
+        let phoneTap = UITapGestureRecognizer(target: self, action: #selector(phoneTxtFieldTapped))
+        phoneTxtField.isUserInteractionEnabled = true
+        phoneTxtField.addGestureRecognizer(phoneTap)
+
+        let emailTap = UITapGestureRecognizer(target: self, action: #selector(emailTxtFieldTapped))
+        emailTxtField.isUserInteractionEnabled = true
+        emailTxtField.addGestureRecognizer(emailTap)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,37 +62,31 @@ class MorePersonalInfoVC: UIViewController {
     }
     
     
-    @IBAction func EmailOnTapped(_ sender: Any) {
-        
-        if let EEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditEmailVC") as? EditEmailVC {
-            
-            self.navigationController?.pushViewController(EEVC, animated: true)
-            
-        }
-        
-        
-    }
-    
-    @IBAction func phoneTapped(_ sender: Any) {
-        
-        if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhoneVC") as? EditPhoneVC {
-            
-            self.navigationController?.pushViewController(EPVC, animated: true)
-            
-        }
-        
-    }
-    
-    
-    @IBAction func birthdayOnTapped(_ sender: Any) {
-        
+    @objc func birthdayTxtFieldTapped() {
         if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditBirthdayVC") as? EditBirthdayVC {
         
             self.navigationController?.pushViewController(EGIVC, animated: true)
             
         }
-        
     }
+
+    @objc func phoneTxtFieldTapped() {
+        if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhoneVC") as? EditPhoneVC {
+            
+            self.navigationController?.pushViewController(EPVC, animated: true)
+            
+        }
+    }
+
+    @objc func emailTxtFieldTapped() {
+        if let EEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditEmailVC") as? EditEmailVC {
+            
+            self.navigationController?.pushViewController(EEVC, animated: true)
+            
+        }
+    }
+    
+    
     
 }
 

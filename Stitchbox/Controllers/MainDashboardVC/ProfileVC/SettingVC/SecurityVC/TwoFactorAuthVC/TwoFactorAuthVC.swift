@@ -8,9 +8,9 @@
 import UIKit
 
 class TwoFactorAuthVC: UIViewController {
-
+    
     let backButton: UIButton = UIButton(type: .custom)
-   
+    
     
     
     var isPhone = false
@@ -23,7 +23,7 @@ class TwoFactorAuthVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         processDefaultData()
@@ -36,7 +36,9 @@ class TwoFactorAuthVC: UIViewController {
         if isPhone {
             isPhone = false
             presentSwiftLoader()
-            APIManager().turnOff2fa(method: "phone") { result in
+            APIManager.shared.turnOff2fa(method: "phone") { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
@@ -45,11 +47,13 @@ class TwoFactorAuthVC: UIViewController {
                         SwiftLoader.hide()
                     }
                     reloadGlobalSettings()
-
+                    
                 case .failure(let error):
                     print(error)
                     DispatchQueue.main.async {
+                        self.showErrorAlert("Oops!", msg: "Cannot turn off your 2fa and this time, please try again")
                         SwiftLoader.hide()
+                        self.PhoneSwitch.setOn(true, animated: true)
                     }
                 }
             }
@@ -58,7 +62,9 @@ class TwoFactorAuthVC: UIViewController {
         } else {
             isPhone = true
             presentSwiftLoader()
-            APIManager().turnOn2fa(method: "phone") { result in
+            APIManager.shared.turnOn2fa(method: "phone") { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
@@ -66,7 +72,8 @@ class TwoFactorAuthVC: UIViewController {
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
-                            self.showErrorAlert("Oops!", msg: "This phone may has been registered")
+                            self.showErrorAlert("Oops!", msg: "This phone may has already been registered")
+                            self.PhoneSwitch.setOn(false, animated: true)
                             
                         }
                         
@@ -77,14 +84,15 @@ class TwoFactorAuthVC: UIViewController {
                         SwiftLoader.hide()
                         self.moveToVerifyVC(selectedType: "2FA - phone")
                     }
-
+                    
                 case .failure(let error):
                     self.isPhone = false
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
-                        self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please try again")
+                        self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please make sure you have your phone ready and try again.")
+                        self.PhoneSwitch.setOn(false, animated: true)
                     }
-                  
+                    
                     print(error)
                 }
             }
@@ -101,26 +109,33 @@ class TwoFactorAuthVC: UIViewController {
         if isEmail {
             isEmail = false
             presentSwiftLoader()
-            APIManager().turnOff2fa(method: "email") { result in
+            APIManager.shared.turnOff2fa(method: "email") { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
                     print(apiResponse)
                     reloadGlobalSettings()
-
+                    
                 case .failure(let error):
                     print(error)
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "Cannot turn off your 2fa and this time, please make sure you have your email ready and try again.")
+                        self.EmailSwitch.setOn(true, animated: true)
+                        
                     }
                 }
             }
-    
+            
             
         } else {
             isEmail = true
             presentSwiftLoader()
-            APIManager().turnOn2fa(method: "email") { result in
+            APIManager.shared.turnOn2fa(method: "email") { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
@@ -128,7 +143,8 @@ class TwoFactorAuthVC: UIViewController {
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
-                            self.showErrorAlert("Oops!", msg: "This email may has been registered")
+                            self.showErrorAlert("Oops!", msg: "This email may has already been registered")
+                            self.EmailSwitch.setOn(false, animated: true)
                         }
                         
                         return
@@ -138,14 +154,15 @@ class TwoFactorAuthVC: UIViewController {
                         SwiftLoader.hide()
                         self.moveToVerifyVC(selectedType: "2FA - email")
                     }
-
+                    
                 case .failure(let error):
                     self.isEmail = false
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
                         self.showErrorAlert("Oops!", msg: "Cannot turn on your 2fa and this time, please make sure you have your email ready and try again.")
+                        self.EmailSwitch.setOn(false, animated: true)
                     }
-                  
+                    
                     print(error)
                 }
             }
@@ -167,8 +184,8 @@ class TwoFactorAuthVC: UIViewController {
         }
         
     }
-
-
+    
+    
 }
 
 extension TwoFactorAuthVC {
@@ -176,26 +193,36 @@ extension TwoFactorAuthVC {
     func setupButtons() {
         
         setupBackButton()
-       
+        
     }
     
     func setupBackButton() {
+        //Two-Factor Authentication
         
-        
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.frame = back_frame
+        backButton.contentMode = .center
+        
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+        
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Two-Factor Authentication", for: .normal)
-        backButton.sizeToFit()
+        navigationItem.title = "Two-Factor Authentication"
+        
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+        
     }
-  
-
+    
+    
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
@@ -225,7 +252,7 @@ extension TwoFactorAuthVC {
                 self.PhoneSwitch.setOn(false, animated: true)
                 isPhone = false
             }
-           
+            
             
         }
         

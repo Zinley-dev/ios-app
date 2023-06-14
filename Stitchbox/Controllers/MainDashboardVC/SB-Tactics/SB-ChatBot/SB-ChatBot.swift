@@ -40,12 +40,12 @@ class SB_ChatBot: UIViewController {
         setupButtons()
         global_gameId = gameId
         global_gameName = name
-        global_gpt = "gpt-3.5-turbo"
-        selectedGpt = "GPT 3.5"
         
-    
+        
+        
+        presentSwiftLoader()
         checkforMeta()
-        setupClearAndGptButtons()
+        
         
     }
     
@@ -57,6 +57,10 @@ class SB_ChatBot: UIViewController {
             if passEligible {
                 
                 isPro = true
+                
+                global_gpt = "gpt-4-0613"
+                selectedGpt = "GPT 4"
+                setupClearAndGptButtons()
                 
             } else {
                 
@@ -71,9 +75,12 @@ class SB_ChatBot: UIViewController {
         }
     }
     
+    
     func checkforMeta() {
         
-        APIManager().getGamePatch(gameId: global_gameId) { result in
+        APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -100,7 +107,6 @@ class SB_ChatBot: UIViewController {
     
     func setupForMeta() {
         
-        
         // Create SwiftUI view
         let chatBotView = ChatBotView(toolbarActions: toolbarActions)
         
@@ -109,7 +115,7 @@ class SB_ChatBot: UIViewController {
         
         // Add the toolbar to the view
         view.addSubview(metaToolbar)
-        metaToolbar.barTintColor = .secondary
+        metaToolbar.barTintColor = .darkGray
 
             // Define constraints
         NSLayoutConstraint.activate([
@@ -121,7 +127,7 @@ class SB_ChatBot: UIViewController {
         
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let metaButton = UIBarButtonItem(title: "View current patch", style: .plain, target: self, action: #selector(metaButtonTapped))
-        metaButton.tintColor = .black
+        metaButton.tintColor = .white
 
         metaToolbar.setItems([flexibleSpace, metaButton], animated: false)
         
@@ -373,7 +379,7 @@ extension SB_ChatBot {
         if title == "GPT 4" {
             checkAccountStatus()
         } else {
-            global_gpt = "gpt-3.5-turbo"
+            global_gpt = "gpt-3.5-turbo-0613"
             selectedGpt = title
             
             gptButton.setTitle(title, for: .normal)
@@ -392,7 +398,7 @@ extension SB_ChatBot {
             
             if passEligible {
                 
-                global_gpt = "gpt-4"
+                global_gpt = "gpt-4-0613"
                 selectedGpt = "GPT 4"
                 
                 gptButton.setTitle("GPT 4", for: .normal)
@@ -415,7 +421,7 @@ extension SB_ChatBot {
     
     func checkPlan() {
         
-        IAPManager.shared.checkPermissions { result in
+        IAPManager.shared.checkPermissions { [weak self] result in
             if result == false {
                 
                 Dispatch.main.async {
@@ -430,7 +436,7 @@ extension SB_ChatBot {
                         nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
                         nav.modalPresentationStyle = .fullScreen
-                        self.present(nav, animated: true, completion: nil)
+                        self?.present(nav, animated: true, completion: nil)
                     }
                     
                 }
@@ -439,12 +445,12 @@ extension SB_ChatBot {
              
                 Dispatch.main.async {
                 
-                    global_gpt = "gpt-4"
-                    self.selectedGpt = "GPT 4"
+                    global_gpt = "gpt-4-0613"
+                    self?.selectedGpt = "GPT 4"
                     
-                    self.gptButton.setTitle("GPT 4", for: .normal)
-                    self.cancelPicker()
-                    self.toolbar.removeFromSuperview()
+                    self?.gptButton.setTitle("GPT 4", for: .normal)
+                    self?.cancelPicker()
+                    self?.toolbar.removeFromSuperview()
                     
                 }
   
@@ -457,15 +463,22 @@ extension SB_ChatBot {
     
     func checkPlanForToken() {
         
-        IAPManager.shared.checkPermissions { result in
+        IAPManager.shared.checkPermissions { [weak self] result in
             if result == false {
                 
                 isPro = false
-                self.checkTokenLimit()
+
+                global_gpt = "gpt-3.5-turbo-0613"
+                self?.selectedGpt = "GPT 3.5"
+                self?.setupClearAndGptButtons()
                 
             } else {
              
                 isPro = true
+                
+                global_gpt = "gpt-4-0613"
+                self?.selectedGpt = "GPT 4"
+                self?.setupClearAndGptButtons()
   
             }
         }
@@ -487,34 +500,7 @@ extension SB_ChatBot {
        
     }
     
-    
-    func checkTokenLimit() {
-        
-        APIManager().getUsedToken { result in
-            switch result {
-            case .success(let apiResponse):
-   
-                if let data = apiResponse.body, let remainToken = data["remainToken"] as? Int {
-                    
-                    if remainToken > 0 {
-                        isTokenLimit = false
-                    } else {
-                        isTokenLimit = true
-                    }
-                    
-                } else {
-                    isTokenLimit = true
-                }
-              
-            case .failure(let error):
-                
-                isTokenLimit = true
-                print(error)
-                
-            }
-        }
-        
-    }
+
 
   
 }

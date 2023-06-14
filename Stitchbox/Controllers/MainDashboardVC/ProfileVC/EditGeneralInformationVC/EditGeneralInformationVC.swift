@@ -8,7 +8,7 @@
 import UIKit
 
 class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
-
+    
     
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var availaleUsernameLbl: UILabel!
@@ -31,7 +31,7 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         infoTxtField.delegate = self
         infoTxtField.addTarget(self, action: #selector(EditGeneralInformationVC.textFieldDidChange(_:)), for: .editingChanged)
@@ -39,7 +39,7 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
         if type == "Name" || type == "Username" {
             infoTxtField.maxLength = 15
         }
-
+        
         setupButtons()
         setupLbl()
         loadDefaultInfo()
@@ -52,7 +52,7 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
         delay(0.1) {
             self.infoTxtField.addUnderLine()
         }
-      
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -65,13 +65,13 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
     @IBAction func saveBtnPressed(_ sender: Any) {
         
         if type == "Name" {
-        
+            
             processName()
             
         } else if type == "Username" {
             
             if isUsernameVerify == true {
-            
+                
                 processUsername()
                 
             } else {
@@ -79,7 +79,7 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
             }
             
         } else if type == "Discord Link" {
-        
+            
             processDiscord()
             
         } else if type == "Email" {
@@ -104,15 +104,17 @@ extension EditGeneralInformationVC {
                 if let domain = url.host {
                     
                     if discord_verify(host: domain) == true {
-
+                        
                         self.view.endEditing(true)
                         presentSwiftLoader()
-                        APIManager().updateme(params: ["discordLink": urlString]) { result in
+                        APIManager.shared.updateme(params: ["discordLink": urlString]) { [weak self] result in
+                            guard let self = self else { return }
+                            
                             switch result {
                             case .success(let apiResponse):
                                 
                                 guard apiResponse.body?["message"] as? String == "success" else {
-                                        return
+                                    return
                                 }
                                 
                                 DispatchQueue.main {
@@ -129,7 +131,7 @@ extension EditGeneralInformationVC {
                                     SwiftLoader.hide()
                                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                                 }
-                            
+                                
                             }
                         }
                         
@@ -154,15 +156,17 @@ extension EditGeneralInformationVC {
     func processName() {
         
         if let name = infoTxtField.text, name != "" {
-    
+            
             self.view.endEditing(true)
             presentSwiftLoader()
-            APIManager().updateme(params: ["name": name]) { result in
+            APIManager.shared.updateme(params: ["name": name]) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
                     guard apiResponse.body?["message"] as? String == "success" else {
-                            return
+                        return
                     }
                     
                     
@@ -195,7 +199,9 @@ extension EditGeneralInformationVC {
             
             presentSwiftLoader()
             view.endEditing(true)
-            APIManager().checkUsernameExist(username: username) { result in
+            APIManager.shared.checkUsernameExist(username: username) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
@@ -222,7 +228,7 @@ extension EditGeneralInformationVC {
                         
                     }
                     
-        
+                    
                 case .failure(let error):
                     
                     DispatchQueue.main.async {
@@ -243,12 +249,14 @@ extension EditGeneralInformationVC {
     
     func saveUserName(username: String) {
         
-        APIManager().updateme(params: ["username": username]) { result in
+        APIManager.shared.updateme(params: ["username": username]) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
                 guard apiResponse.body?["message"] as? String == "success" else {
-                        return
+                    return
                 }
                 
                 DispatchQueue.main.async {
@@ -260,7 +268,7 @@ extension EditGeneralInformationVC {
                     self.saveBtn.backgroundColor = .disableButtonBackground
                     self.saveBtn.titleLabel?.textColor = .lightGray
                     NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
-        
+                    
                 }
             case .failure(let error):
                 
@@ -268,7 +276,7 @@ extension EditGeneralInformationVC {
                     SwiftLoader.hide()
                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
-              
+                
             }
         }
         
@@ -282,14 +290,14 @@ extension EditGeneralInformationVC {
     func setupButtons() {
         
         setupBackButton()
-    
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -299,19 +307,19 @@ extension EditGeneralInformationVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "\(type)"
-
+        
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
-
+    
     
     
     func setupLbl() {
@@ -319,7 +327,7 @@ extension EditGeneralInformationVC {
         editLblName.text = "Your \(type.lowercased())"
         
     }
-
+    
     
     func loadDefaultInfo() {
         
@@ -376,20 +384,20 @@ extension EditGeneralInformationVC {
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-
+        
         if let text = infoTxtField.text, text != "" {
             
             if type == "Discord Link" {
                 
                 if verifyUrl(urlString: text) == true {
                     
-                 
+                    
                     saveBtn.backgroundColor = .primary
                     saveBtn.titleLabel?.textColor = .white
                     
                 } else {
                     
-                  
+                    
                     saveBtn.backgroundColor = .disableButtonBackground
                     saveBtn.titleLabel?.textColor = .lightGray
                     
@@ -403,7 +411,7 @@ extension EditGeneralInformationVC {
                         self.checkAvailaleName(searchText: text)
                     }
                 }
-               
+                
                 
             } else {
                 
@@ -426,12 +434,12 @@ extension EditGeneralInformationVC {
     
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
@@ -439,7 +447,9 @@ extension EditGeneralInformationVC {
     
     func checkAvailaleName(searchText: String) {
         
-        APIManager().checkUsernameExist(username: searchText) { result in
+        APIManager.shared.checkUsernameExist(username: searchText) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -470,7 +480,7 @@ extension EditGeneralInformationVC {
                     
                 }
                 
-    
+                
             case .failure(let error):
                 
                 DispatchQueue.main.async {

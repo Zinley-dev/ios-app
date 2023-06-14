@@ -77,6 +77,7 @@ class CommentNode: ASCellNode {
         
         let timeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         
+        
         if self.post.reply_to != "" {
            
             if let username = self.post.reply_to_username {
@@ -97,13 +98,14 @@ class CommentNode: ASCellNode {
                     
                     if self.post.is_title == true {
                     
-                        if self.post.createdAt == self.post.last_modified {
+                        if self.post.updatedAt != Date() {
                             
-                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
+                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.updatedAt, numericDates: true))", attributes: timeAttributes)
                             
                         } else {
                             
-                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
+                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
+                            
                         }
                         
                     } else {
@@ -120,7 +122,7 @@ class CommentNode: ASCellNode {
                     self.cmtNode.attributedText = user
                     
                     
-                } else {
+                }  else {
                                                
                     
                     let user = NSMutableAttributedString()
@@ -160,15 +162,14 @@ class CommentNode: ASCellNode {
                 
                 if self.post.is_title == true {
                     
-                    
-                    if self.post.createdAt == self.post.last_modified {
+                    if self.post.updatedAt != Date() {
                         
-                
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
+                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.updatedAt, numericDates: true))", attributes: timeAttributes)
                         
                     } else {
                         
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.last_modified, numericDates: true))", attributes: timeAttributes)
+                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
+                        
                     }
                     
                 } else {
@@ -348,7 +349,8 @@ class CommentNode: ASCellNode {
     
     func checkLikeCmt() {
         
-        APIManager().islike(comment: post.comment_id) { result in
+        APIManager.shared.islike(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
             
             switch result {
             case .success(let apiResponse):
@@ -392,8 +394,9 @@ class CommentNode: ASCellNode {
     
     func cmtCount() {
         
-        APIManager().countLike(comment: post.comment_id) { result in
-            
+        APIManager.shared.countLike(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
     
@@ -428,13 +431,8 @@ class CommentNode: ASCellNode {
         
     }
     
-
-    
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        
-        
         let headerSubStack = ASStackLayoutSpec.vertical()
-        
         
         avatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
         infoNode.style.preferredSize = CGSize(width: 30.0, height: 60.0)
@@ -447,40 +445,25 @@ class CommentNode: ASCellNode {
         horizontalSubStack.spacing = 10
         horizontalSubStack.justifyContent = ASStackLayoutJustifyContent.start
         horizontalSubStack.children = [timeNode, replyBtnNode]
-  
-        if self.post.has_reply == true {
-            
+
+        if self.post.has_reply == true && loadReplyBtnNode.isHidden == false {
             headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack, loadReplyBtnNode]
-            
-            
         } else {
-            
             headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack]
-            
         }
-      
-  
+
         let headerStack = ASStackLayoutSpec.horizontal()
-      
-        
         headerStack.spacing = 10
         headerStack.justifyContent = ASStackLayoutJustifyContent.start
-        
         headerStack.children = [avatarNode, headerSubStack, infoNode]
         
-        
         if self.post.isReply == true {
-            
             return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 40, bottom: 16, right: 20), child: headerStack)
-            
         } else {
-            
             return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 20), child: headerStack)
-            
         }
-        
-    
     }
+
     
     func addReplyUIDBtn(label: ActiveLabel) {
         
@@ -635,37 +618,23 @@ class CommentNode: ASCellNode {
                     
                 }
                 
-                label.handleURLTap { string in
+                label.handleURLTap { [weak self] string in
                     
                     
                     let url = string.absoluteString
                     
                     if url.contains("https://stitchbox.gg/app/account/") {
                         
-                        
-                        let id = string.lastPathComponent
-                        
-                        if id != "" {
-                            self.moveToUserProfileVC(id: id)
+                        if let id = self?.getUIDParameter(from: url) {
+                            self?.moveToUserProfileVC(id: id)
                         }
-                              
-                        
-                        
-                        
-                        
+            
                     } else if url.contains("https://stitchbox.gg/app/post/") {
-                        
-                        
-                        let id = string.lastPathComponent
-                        
-                        if id != "" {
-                            self.openPost(id: id)
+                    
+                        if let id = self?.getUIDParameter(from: url) {
+                            self?.openPost(id: id)
                         }
-                              
-                        
-                        
-                        
-                        
+
                     } else {
                         
                         guard let requestUrl = URL(string: url) else {
@@ -694,6 +663,14 @@ class CommentNode: ASCellNode {
             
             if let vc = UIViewController.currentViewController() {
                 
+
+                if general_vc != nil {
+                    general_vc.viewWillDisappear(true)
+                    general_vc.viewDidDisappear(true)
+                }
+                
+              
+                
                 let nav = UINavigationController(rootViewController: UPVC)
 
                 // Set the user ID, nickname, and onPresent properties of UPVC
@@ -717,11 +694,11 @@ class CommentNode: ASCellNode {
     func openPost(id: String) {
       
         presentSwiftLoader()
-        
-        APIManager().getPostDetail(postId: id) { result in
+
+        APIManager.shared.getPostDetail(postId: id) { result in
+         
             switch result {
             case .success(let apiResponse):
-                
                 guard let data = apiResponse.body else {
                     Dispatch.main.async {
                         SwiftLoader.hide()
@@ -738,6 +715,16 @@ class CommentNode: ASCellNode {
                             if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
                                 
                                 if let vc = UIViewController.currentViewController() {
+                                
+
+                                    if general_vc != nil {
+                                        general_vc.viewWillDisappear(true)
+                                        general_vc.viewDidDisappear(true)
+                                    }
+                                    
+                               
+                                    
+                                    RVC.onPresent = true
                                     
                                     let nav = UINavigationController(rootViewController: RVC)
 
@@ -750,9 +737,9 @@ class CommentNode: ASCellNode {
                                     nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
                                     nav.modalPresentationStyle = .fullScreen
+                                    
                                     vc.present(nav, animated: true, completion: nil)
-
-
+                                    
                                 }
                             }
                             
@@ -772,8 +759,8 @@ class CommentNode: ASCellNode {
                     SwiftLoader.hide()
                 }
                 
+            }
         }
-    }
         
     }
     
@@ -875,7 +862,9 @@ extension CommentNode {
             self.textNode.attributedText = like
         }
         
-        APIManager().likeComment(comment: post.comment_id) { result in
+        APIManager.shared.likeComment(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
             
@@ -927,7 +916,9 @@ extension CommentNode {
             self.textNode.attributedText = like
         }
         
-        APIManager().unlike(comment: post.comment_id) { result in
+        APIManager.shared.unlike(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 
@@ -960,6 +951,23 @@ extension CommentNode {
         
     }
     
+    func addReplyNodes(_ nodes: [CommentNode]) {
+            for node in nodes {
+                addSubnode(node) // assuming that CommentNode is a subclass of ASDisplayNode
+            }
+        }
+    
   
+    
+    func getUIDParameter(from urlString: String) -> String? {
+        if let url = URL(string: urlString) {
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            return components?.queryItems?.first(where: { $0.name == "uid" })?.value
+        } else {
+            return nil
+        }
+    }
+
+
     
 }

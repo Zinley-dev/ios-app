@@ -30,7 +30,7 @@ class FistBumpeeVC: UIViewController {
         self.wireDelegates()
         
     }
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +40,7 @@ class FistBumpeeVC: UIViewController {
         setupTableNode()
         
     }
-
+    
 }
 
 extension FistBumpeeVC {
@@ -52,10 +52,10 @@ extension FistBumpeeVC {
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -65,16 +65,16 @@ extension FistBumpeeVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "FistBumped List"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
         
     }
-
+    
     
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
@@ -148,8 +148,8 @@ extension FistBumpeeVC: ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         print("batchfetching start")
-        self.retrieveNextPageWithCompletion { (newFollowees) in
-            
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowees) in
+            guard let self = self else { return }
             self.insertNewRowsInTableNode(newFistBumpees: newFollowees)
             
             context.completeBatchFetching(true)
@@ -213,42 +213,46 @@ extension FistBumpeeVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-            APIManager().getFistBumpee(page: currPage) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    
-                    if !data.isEmpty {
-                        self.currPage += 1
-                        print("Successfully retrieved \(data.count) fistBumpees.")
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
+        APIManager.shared.getFistBumpee(page: currPage) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
                         
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
+                        block(item)
                     }
+                    return
+                }
+                
+                if !data.isEmpty {
+                    self.currPage += 1
+                    print("Successfully retrieved \(data.count) fistBumpees.")
+                    let items = data
+                    DispatchQueue.main.async {
+                        
+                        block(items)
+                    }
+                } else {
                     
-                case .failure(let error):
-                    print(error)
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
-    
+        
     }
     
     func insertNewRowsInTableNode(newFistBumpees: [[String: Any]]) {
@@ -268,17 +272,17 @@ extension FistBumpeeVC {
         }
         
         for i in newFistBumpees {
-
+            
             let item = FistBumpUserModel(JSON: i)
             items.append(item!)
-          
+            
         }
         
-    
+        
         self.fistBumpList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
         
     }
- 
+    
     
 }

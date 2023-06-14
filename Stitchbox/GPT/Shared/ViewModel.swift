@@ -216,57 +216,58 @@ class ViewModel: ObservableObject {
         api.setHistoryList(messages: messages)
     }
 
-    
-    func getConversationHistory(completion: @escaping () -> Void) {
-        
-        if global_gameName == "SB Chatbot" {
-            
-            self.processFinalPreConversation(completion: completion)
-            
-        } else {
-            
-            APIManager().getGamePatch(gameId: global_gameId) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [String: Any],
-                          let conversationContent = data["conversationContent"] as? String else {
-                        
-                        DispatchQueue.main.async {
-                            self.processFinalPreConversation(completion: completion)
-                        }
-                  
-                        return
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.processFinalPreConversationWithMeta(conversationContent: conversationContent,completion: completion)
-                    }
 
-                  
-                  
-                case .failure(let error):
-                    print(error)
-                    
-                    
-                    DispatchQueue.main.async {
-                        self.processFinalPreConversation(completion: completion)
-                    }
+     func getConversationHistory(completion: @escaping () -> Void) {
+         
+         if global_gameName == "SB Chatbot" {
+             
+             self.processFinalPreConversation(completion: completion)
+             
+         } else {
+             
+             APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
+                 guard let self = self else { return }
+                 
+                 switch result {
+                 case .success(let apiResponse):
+                     
+                     guard let data = apiResponse.body?["data"] as? [String: Any],
+                           let conversationContent = data["conversationContent"] as? String else {
+                         
+                         DispatchQueue.main.async {
+                             self.processFinalPreConversation(completion: completion)
+                         }
                    
+                         return
+                     }
+                     
+                     DispatchQueue.main.async {
+                         self.processFinalPreConversationWithMeta(conversationContent: conversationContent,completion: completion)
+                     }
+
+                   
+                   
+                 case .failure(let error):
+                     print(error)
+                     
+                     
+                     DispatchQueue.main.async {
+                         self.processFinalPreConversation(completion: completion)
+                     }
                     
-                }
-            }
-            
-            
-        }
-        
-    
-    }
-    
+                     
+                 }
+             }
+             
+             
+         }
+         
+     
+     }
+     
     func processFinalPreConversation(completion: @escaping () -> Void) {
         
-        
-        APIManager().getGptConversation(gameId: global_gameId) { [weak self] result in
+        APIManager.shared.getGptConversation(gameId: global_gameId) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
@@ -311,6 +312,9 @@ class ViewModel: ObservableObject {
                                 self.history.append(guideUserHistory)
                                 self.history.append(guideAssistantHistory)
                                 self.setConversationHistory(messages: self.history)
+                                
+                                SwiftLoader.hide()
+                                
                                 completion()
                             }
                         }
@@ -338,7 +342,7 @@ class ViewModel: ObservableObject {
     func processFinalPreConversationWithMeta(conversationContent: String, completion: @escaping () -> Void) {
         
         
-        APIManager().getGptConversation(gameId: global_gameId) { [weak self] result in
+        APIManager.shared.getGptConversation(gameId: global_gameId) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
@@ -384,6 +388,9 @@ class ViewModel: ObservableObject {
                                 self.history.append(guideUserHistory)
                                 self.history.append(guideAssistantHistory)
                                 self.setConversationHistory(messages: self.history)
+                                
+                                SwiftLoader.hide()
+                                
                                 completion()
                             }
                         }
@@ -427,6 +434,10 @@ class ViewModel: ObservableObject {
         self.history.append(assistantHistory)
         self.setConversationHistory(messages: self.history)
         
+        Dispatch.main.async {
+            SwiftLoader.hide()
+        }
+        
         completion()
     }
 
@@ -460,6 +471,13 @@ struct ConversationHistory: Codable {
 struct ConversationData: Codable {
     let prompts: [String]
     let responses: [String]
+}
+
+extension String {
+    func trimmingPrefix(_ prefix: String) -> String {
+        guard self.hasPrefix(prefix) else { return self }
+        return String(self.dropFirst(prefix.count))
+    }
 }
 
 

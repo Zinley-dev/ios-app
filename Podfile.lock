@@ -42,18 +42,19 @@ PODS:
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
     - GoogleUtilities/Environment (~> 7.8)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
-  - FirebaseCore (10.9.0):
+  - FirebaseCore (10.10.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreInternal (10.9.0):
+  - FirebaseCoreInternal (10.10.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseInstallations (10.9.0):
+  - FirebaseInstallations (10.10.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - PromisesObjC (~> 2.1)
   - FLAnimatedImage (1.0.17)
+  - GLWalkthrough (0.1.1)
   - GoogleAppMeasurement (10.3.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.3.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
@@ -74,12 +75,12 @@ PODS:
     - GoogleUtilities/Network (~> 7.8)
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleMaps (7.4.0):
-    - GoogleMaps/Maps (= 7.4.0)
-  - GoogleMaps/Base (7.4.0)
-  - GoogleMaps/Maps (7.4.0):
+  - GoogleMaps (8.0.0):
+    - GoogleMaps/Maps (= 8.0.0)
+  - GoogleMaps/Base (8.0.0)
+  - GoogleMaps/Maps (8.0.0):
     - GoogleMaps/Base
-  - GooglePlaces (7.4.0)
+  - GooglePlaces (8.0.0)
   - GoogleSignIn (7.0.0):
     - AppAuth (~> 1.5)
     - GTMAppAuth (< 3.0, >= 1.3)
@@ -164,11 +165,22 @@ PODS:
   - SendBirdUIKit (2.2.14):
     - SendBirdSDK (>= 3.1.39)
   - SendBirdWebRTC (1.6.1)
+  - Sentry (8.7.2):
+    - Sentry/Core (= 8.7.2)
+    - SentryPrivate (= 8.7.2)
+  - Sentry/Core (8.7.2):
+    - SentryPrivate (= 8.7.2)
+  - SentryPrivate (8.7.2)
   - swift-vibrant (1.0.0)
   - SwiftEntryKit (1.2.6):
     - QuickLayout (= 3.0.0)
   - Swifter (2.5.0)
   - SwiftLint (0.50.3)
+  - SwipeTransition (0.5.0)
+  - SwipeTransitionAutoSwipeBack (0.5.0):
+    - SwipeTransition (~> 0.5.0)
+  - SwipeTransitionAutoSwipeToDismiss (0.5.0):
+    - SwipeTransition (~> 0.5.0)
   - Texture (3.1.0):
     - Texture/AssetsLibrary (= 3.1.0)
     - Texture/Core (= 3.1.0)
@@ -205,6 +217,7 @@ DEPENDENCIES:
   - FirebaseAnalytics (~> 10.3.0)
   - FirebaseAuth (~> 10.3.0)
   - FLAnimatedImage (~> 1.0)
+  - GLWalkthrough
   - GoogleMaps
   - GooglePlaces
   - GoogleSignIn (~> 7.0.0)
@@ -219,10 +232,14 @@ DEPENDENCIES:
   - SendBirdCalls (~> 1.9.7)
   - SendBirdSDK (~> 3.1.37)
   - SendBirdUIKit (~> 2.2.11)
+  - Sentry
   - swift-vibrant
   - SwiftEntryKit (= 1.2.6)
   - Swifter (from `https://github.com/mattdonnelly/Swifter.git`)
   - SwiftLint (~> 0.50.3)
+  - SwipeTransition
+  - SwipeTransitionAutoSwipeBack
+  - SwipeTransitionAutoSwipeToDismiss
   - Texture (~> 3.1.0)
   - TikTokOpenSDK (~> 5.0.14)
   - ZSWTaggedString/Swift (~> 4.0)
@@ -246,6 +263,7 @@ SPEC REPOS:
     - FirebaseCoreInternal
     - FirebaseInstallations
     - FLAnimatedImage
+    - GLWalkthrough
     - GoogleAppMeasurement
     - GoogleMaps
     - GooglePlaces
@@ -273,9 +291,14 @@ SPEC REPOS:
     - SendBirdSDK
     - SendBirdUIKit
     - SendBirdWebRTC
+    - Sentry
+    - SentryPrivate
     - swift-vibrant
     - SwiftEntryKit
     - SwiftLint
+    - SwipeTransition
+    - SwipeTransitionAutoSwipeBack
+    - SwipeTransitionAutoSwipeToDismiss
     - Texture
     - TikTokOpenSDK
     - ZSWTaggedString
@@ -303,13 +326,14 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: 787de205d524c3a4b17d527916f1d066e4361660
   FirebaseAnalytics: 036232b6a1e2918e5f67572417be1173576245f3
   FirebaseAuth: 0e415d29d846c1dce2fb641e46f35e9888d9bec6
-  FirebaseCore: b68d3616526ec02e4d155166bbafb8eca64af557
-  FirebaseCoreInternal: d2b4acb827908e72eca47a9fd896767c3053921e
-  FirebaseInstallations: c58489c9caacdbf27d1da60891a87318e20218e0
+  FirebaseCore: d027ff503d37edb78db98429b11f580a24a7df2a
+  FirebaseCoreInternal: 971029061d326000d65bfdc21f5502c75c8b0893
+  FirebaseInstallations: 52153982b057d3afcb4e1fbb3eb0b6d00611e681
   FLAnimatedImage: bbf914596368867157cc71b38a8ec834b3eeb32b
+  GLWalkthrough: 802e6f7f23ac16d77b3c64dfbf6b4d60d3d48999
   GoogleAppMeasurement: c7d6fff39bf2d829587d74088d582e32d75133c3
-  GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
-  GooglePlaces: 544e908d94860bf6f8fc1865b80d2c7eb6b5f937
+  GoogleMaps: 0dce473ab18742d0f327887853630927cbee9127
+  GooglePlaces: 46231f49e2dc52aa9a604f99e2e6b29996f30cc7
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
@@ -334,15 +358,20 @@ SPEC CHECKSUMS:
   SendBirdSDK: 8021d9afea643cf7a9768b50c1a36ef51297b28a
   SendBirdUIKit: 0f3d085f0aa42fc1be87140eb33d0d6d5dd844ee
   SendBirdWebRTC: d848df17569ecb607d0c5503b726bae3ce3dcf68
+  Sentry: c43b6d1d51bf96edbaeac7772c4178aa54f4f450
+  SentryPrivate: 760a9fd5d134c4d926c4c0afe9c4deceadbf4557
   swift-vibrant: 3def73c5c281db74f420ec386590d9c1c5b0995c
   SwiftEntryKit: 96a2fa90b2631bbbfac50d18449e9ca3d0635f13
   Swifter: 4c2f8cf320c2f751c10128f841d8e9bd8609d988
   SwiftLint: 77f7cb2b9bb81ab4a12fcc86448ba3f11afa50c6
+  SwipeTransition: 2d35c95dcb4c47a6a1cc530235a3cbf7114b5670
+  SwipeTransitionAutoSwipeBack: 3d6f744757e86d69ea46fd8b3018bcfb6d81cb00
+  SwipeTransitionAutoSwipeToDismiss: bb082e2070c846bd8b542cf0a70f64f877dafdc4
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
   TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 811d5742ff4d2c88fe70dfb29e6864ffdb8a4176
+PODFILE CHECKSUM: 9514a473feae36aa50e4da8d950ddbb1463f321c
 
 COCOAPODS: 1.12.1

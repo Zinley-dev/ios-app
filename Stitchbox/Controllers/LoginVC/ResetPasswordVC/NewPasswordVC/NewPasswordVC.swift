@@ -61,42 +61,47 @@ class NewPasswordVC: UIViewController, ControllerType {
     })
   }
   
-  func bindAction(with viewModel: NewPasswordViewModel) {
-    
-    let userInputs = Observable.combineLatest(
-      passwordTextfield.rx.text.orEmpty,
-      enteredPasswordTextfield.rx.text.orEmpty) { ($0, $1) }
-    nextButton.rx.tap.asObservable()
-      .withLatestFrom(userInputs)
-      .subscribe(viewModel.action.submitDidTap)
-      .disposed(by: disposeBag)
-    
-    nextButton.rx.tap.asObservable().subscribe { _ in
-      presentSwiftLoader()
-    }.disposed(by: disposeBag)
-    
-    viewModel.output.submitResultObservable
-      .subscribe(onNext: { successMessage in
-        if successMessage == "success" {
-          DispatchQueue.main.async {
-            if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FinalResetVC") as? FinalResetVC {
-              SwiftLoader.hide()
-              self.navigationController?.pushViewController(vc, animated: true)
+    func bindAction(with viewModel: NewPasswordViewModel) {
+        
+        let userInputs = Observable.combineLatest(
+          passwordTextfield.rx.text.orEmpty,
+          enteredPasswordTextfield.rx.text.orEmpty) { ($0, $1) }
+        
+        nextButton.rx.tap.asObservable()
+          .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
+          .withLatestFrom(userInputs)
+          .subscribe(viewModel.action.submitDidTap)
+          .disposed(by: disposeBag)
+        
+        nextButton.rx.tap.asObservable()
+          .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
+          .subscribe { _ in
+            presentSwiftLoader()
+          }.disposed(by: disposeBag)
+        
+        viewModel.output.submitResultObservable
+          .subscribe(onNext: { successMessage in
+            if successMessage == "success" {
+              DispatchQueue.main.async {
+                if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FinalResetVC") as? FinalResetVC {
+                  SwiftLoader.hide()
+                  self.navigationController?.pushViewController(vc, animated: true)
+                }
+              }
             }
-          }
-        }
-      })
-      .disposed(by: disposeBag)
-    
-    viewModel.output.errorsObservable
-      .subscribe(onNext: { error in
-        DispatchQueue.main.async {
-          SwiftLoader.hide()
-          self.presentErrorAlert(message: "Password not match!")
-        }
-      })
-      .disposed(by: disposeBag)
-  }
+          })
+          .disposed(by: disposeBag)
+        
+        viewModel.output.errorsObservable
+          .subscribe(onNext: { error in
+            DispatchQueue.main.async {
+              SwiftLoader.hide()
+              self.presentErrorAlert(message: "Password not match!")
+            }
+          })
+          .disposed(by: disposeBag)
+    }
+
   
   override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews()

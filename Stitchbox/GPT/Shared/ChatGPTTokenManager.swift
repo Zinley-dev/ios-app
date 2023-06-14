@@ -12,7 +12,7 @@ class ChatGPTTokenManager {
     
     private let tokenizer: GPTEncoder
     private(set) var historyList: [Message]
-    private var maxTokenCount: Int = 4096
+    private var maxTokenCount: Int = 16000
     
     init(tokenizer: GPTEncoder) {
  
@@ -27,10 +27,10 @@ class ChatGPTTokenManager {
     
     func appendMessageToHistory(userText: String, responseText: String) {
         
-        if global_gpt == "gpt-4" {
+        if global_gpt == "gpt-4-0613" {
             self.maxTokenCount = 8192
         } else {
-            self.maxTokenCount = 4096
+            self.maxTokenCount = 16000
         }
         
         let userMessage = Message(role: "user", content: userText)
@@ -54,21 +54,17 @@ class ChatGPTTokenManager {
     }
     
     func clearHistory() {
-        historyList.removeAll()
-        
-        let guideUserHistory = Message(role: "user", content: "Please prioritize accurate and relevant information, ensure logical order and layout, keep responses short, concise, and clear, understand context and tailor responses accordingly")
-        let guideAssistantHistory = Message(role: "assistant", content: "Yes I will repsond based on prioritize accurate and relevant information, ensure logical order and layout, keep responses short, concise, and clear, understand context and tailor responses accordingly")
-        
-        historyList.append(guideUserHistory)
-        historyList.append(guideAssistantHistory)
+        guard historyList.count > 2 else { return } // If there are only guide messages, no need to do anything.
+        historyList = Array(historyList.prefix(2)) // Keep only the first two messages
     }
+
     
     func setHistory(messages: [Message]) {
         
-        if global_gpt == "gpt-4" {
+        if global_gpt == "gpt-4-0613" {
             self.maxTokenCount = 8192
         } else {
-            self.maxTokenCount = 4096
+            self.maxTokenCount = 16000
         }
         
         historyList = messages

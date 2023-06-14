@@ -42,9 +42,9 @@ class GroupNode: ASCellNode {
         // Determine the border color based on the current user's userID
         let borderColor: UIColor
         if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != "" {
-            borderColor = userUID == participant.user.userId ? UIColor.secondary : UIColor.lightGray
+            borderColor = userUID == participant.user.userId ? UIColor.secondary : UIColor.white
         } else {
-            borderColor = .lightGray
+            borderColor = .white
         }
         view.borderColors = borderColor
         

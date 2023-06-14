@@ -19,7 +19,7 @@ class PushNotificationVC: UIViewController {
     @IBOutlet weak var FollowSwitch: UISwitch!
     @IBOutlet weak var MessageSwitch: UISwitch!
     
-   
+    
     var isCommentNoti = false
     var isMessageNoti = false
     var isPostNoti = false
@@ -29,11 +29,11 @@ class PushNotificationVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupButtons()
         loadDefaultsValue()
-       
+        
     }
     
     func loadDefaultsValue() {
@@ -118,17 +118,19 @@ class PushNotificationVC: UIViewController {
             isPostNoti = true
         }
         
-        APIManager().updateSettings(params: params) {
-                        result in switch result {
-                        case .success(_):
-                            print("Setting API update success")
-                            reloadGlobalSettings()
-                        case.failure(let error):
-                            DispatchQueue.main.async {
-                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                            }
-                        }
-                    }
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+            case.failure(let error):
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
         
         
     }
@@ -148,17 +150,19 @@ class PushNotificationVC: UIViewController {
             isCommentNoti = true
         }
         
-        APIManager().updateSettings(params: params) {
-                        result in switch result {
-                        case .success(_):
-                            print("Setting API update success")
-                            reloadGlobalSettings()
-                        case.failure(let error):
-                            DispatchQueue.main.async {
-                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                            }
-                        }
-                    }
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+            case.failure(let error):
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
         
     }
     
@@ -177,17 +181,19 @@ class PushNotificationVC: UIViewController {
             isMentionNoti = true
         }
         
-        APIManager().updateSettings(params: params) {
-                        result in switch result {
-                        case .success(_):
-                            print("Setting API update success")
-                            reloadGlobalSettings()
-                        case.failure(let error):
-                            DispatchQueue.main.async {
-                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                            }
-                        }
-                    }
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+            case.failure(let error):
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
         
     }
     
@@ -206,17 +212,19 @@ class PushNotificationVC: UIViewController {
             isFollowNoti = true
         }
         
-        APIManager().updateSettings(params: params) {
-                        result in switch result {
-                        case .success(_):
-                            print("Setting API update success")
-                            reloadGlobalSettings()
-                        case.failure(let error):
-                            DispatchQueue.main.async {
-                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                            }
-                        }
-                    }
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+            case.failure(let error):
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
         
     }
     
@@ -228,7 +236,7 @@ class PushNotificationVC: UIViewController {
             
             params = ["notifications": ["message": false]]
             isMessageNoti = false
-    
+            
         } else {
             
             params = ["notifications": ["message": true]]
@@ -236,21 +244,23 @@ class PushNotificationVC: UIViewController {
             
         }
         
-        APIManager().updateSettings(params: params) {
-                        result in switch result {
-                        case .success(_):
-                            print("Setting API update success")
-                            reloadGlobalSettings()
-                        case.failure(let error):
-                            DispatchQueue.main.async {
-                                self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
-                            }
-                        }
-                    }
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+            case.failure(let error):
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
         
     }
-
-
+    
+    
 }
 
 
@@ -263,10 +273,10 @@ extension PushNotificationVC {
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -276,15 +286,15 @@ extension PushNotificationVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Push Notification"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
     

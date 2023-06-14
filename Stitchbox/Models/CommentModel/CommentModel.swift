@@ -10,6 +10,8 @@ import Foundation
 
 class CommentModel {
     
+    var replies: [CommentModel]?
+    
     var just_add: Bool!
     var lastCmtSnapshot: Int!
     var hasLoadedReplied = false
@@ -300,6 +302,12 @@ class CommentModel {
             
         }
         
+        if let hasLoadedReplied = Comment_model["hasLoadedReplied"] as? Bool  {
+            
+            self.hasLoadedReplied = hasLoadedReplied
+            
+        }
+        
         if let owner = Comment_model["owner"] as? [String: Any] {
             
             if let comment_avatarUrl = owner["avatar"] as? String {
@@ -319,25 +327,41 @@ class CommentModel {
             }
         }
         
-        if let replyTo = Comment_model["replyTo"] as? [String: Any] {
+        if let post = Comment_model["post"] as? [String: Any] {
             
-            self._isReply = true
-            
-            if let reply_to_cid = replyTo["_id"] as? String {
-                self._reply_to_cid = reply_to_cid
+            if let owner_uid = post["userId"] as? String {
+                self._owner_uid = owner_uid
             }
             
-           if let replyOwner = replyTo["owner"] as? [String: Any] {
-               
-               if let reply_to_username = replyOwner["username"] as? String {
-                   self._reply_to_username = reply_to_username
+        }
+        
+        if let replyTo = Comment_model["replyTo"] as? [String: Any] {
+            
+            if !replyTo.isEmpty {
+                
+                self._isReply = true
+                
+                if let reply_to_cid = replyTo["_id"] as? String {
+                    self._reply_to_cid = reply_to_cid
+                }
+                
+               if let replyOwner = replyTo["owner"] as? [String: Any] {
+                   
+                   if let reply_to_username = replyOwner["username"] as? String {
+                       self._reply_to_username = reply_to_username
+                   }
+                   
+                   if let reply_to = replyOwner["_id"] as? String {
+                       self._reply_to = reply_to
+                   }
+     
                }
-               
-               if let reply_to = replyOwner["_id"] as? String {
-                   self._reply_to = reply_to
-               }
- 
-           }
+                
+            } else {
+                self._isReply = false
+            }
+            
+            
 
         } else {
             
@@ -386,9 +410,6 @@ class CommentModel {
             self._is_title = is_title
         }
         
-        if let owner_uid = Comment_model["ownerId"] as? String {
-            self._owner_uid = owner_uid
-        }
         
         if let createdAt = Comment_model["createdAt"] as? Date {
             self._createdAt = createdAt

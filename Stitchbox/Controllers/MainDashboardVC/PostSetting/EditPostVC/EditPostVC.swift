@@ -8,9 +8,14 @@
 import UIKit
 
 class EditPostVC: UIViewController {
-
+    
     let backButton: UIButton = UIButton(type: .custom)
     
+    @IBOutlet weak var collectionLayout: UICollectionViewFlowLayout! {
+        didSet {
+            collectionLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        }
+    }
     
     @IBOutlet weak var playImg: UIImageView!
     @IBOutlet weak var thumbnailImg: UIImageView!
@@ -48,7 +53,7 @@ class EditPostVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         global_host = ""
         global_fullLink = ""
@@ -91,13 +96,13 @@ class EditPostVC: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         
-       
+        
     }
     
     @IBAction func allowCmtSwitchPressed(_ sender: Any) {
         
         if isAllowComment == true {
-                  
+            
             isAllowComment =  false
             allowCmtSwitch.setOn(false, animated: true)
             
@@ -121,15 +126,15 @@ class EditPostVC: UIViewController {
             HTVC.completionHandler = { text in
                 
                 if !text.findMHashtagText().isEmpty {
-                    self.collectionHeight.constant = 70.0
-                    self.settingViewHeight.constant = 315
+                    self.collectionHeight.constant = 50.0
+                    self.settingViewHeight.constant = 295
                     self.collectionView.isHidden = false
                     self.hashtagLbl.text = "Hashtag added"
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList = text.findMHashtagText()
                 } else {
                     self.collectionHeight.constant = 0.0
-                    self.settingViewHeight.constant = 335 - 70
+                    self.settingViewHeight.constant = 295 - 50
                     self.collectionView.isHidden = true
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList.removeAll()
@@ -211,8 +216,8 @@ class EditPostVC: UIViewController {
         
     }
     
-
-
+    
+    
 }
 
 extension EditPostVC {
@@ -233,7 +238,7 @@ extension EditPostVC {
         setupBackButton()
         createPostBtn()
         emptyBtnLbl()
-    
+        
     }
     
     
@@ -258,9 +263,9 @@ extension EditPostVC {
         backButton.setTitle("     Edit Post", for: .normal)
         backButton.sizeToFit()
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-    
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-       
+        
     }
     
     func setupGesture() {
@@ -278,7 +283,7 @@ extension EditPostVC {
     }
     
     func setDefaultStreamingLink() {
-    
+        
         if selectedPost.streamLink != "" {
             
             let streamUrl = selectedPost.streamLink
@@ -294,7 +299,7 @@ extension EditPostVC {
                         DispatchQueue.main.async {
                             self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
                         }
-
+                        
                     }
                     
                 }
@@ -305,7 +310,7 @@ extension EditPostVC {
     }
     
     func setDefaultComment() {
-    
+        
         
         if selectedPost.setting?.allowComment == true {
             
@@ -337,19 +342,19 @@ extension EditPostVC {
             self.hiddenHashTagTxtField.text = self.hashtagList.joined(separator: "")
             
             if !self.hashtagList.isEmpty {
-                self.collectionHeight.constant = 70.0
-                self.settingViewHeight.constant = 315
+                self.collectionHeight.constant = 50.0
+                self.settingViewHeight.constant = 295
                 self.collectionView.isHidden = false
                 self.hashtagLbl.text = "Hashtag added"
                 self.hashtagLbl.text = "Hashtag #"
             } else {
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 335 - 70
+                self.settingViewHeight.constant = 295 - 50
                 self.collectionView.isHidden = true
                 self.hashtagLbl.text = "Hashtag #"
             }
             
-         
+            
             self.collectionView.reloadData()
             
         }
@@ -421,12 +426,11 @@ extension EditPostVC {
             
         }
         
-    
     }
-
-   
+    
+    
     func createDisablePostBtn() {
-       
+        
         let createButton = UIButton(type: .custom)
         //createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
@@ -442,16 +446,16 @@ extension EditPostVC {
         customView.addSubview(createButton)
         createButton.center = customView.center
         let createBarButton = UIBarButtonItem(customView: customView)
-
+        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
-      
+        
         self.navigationItem.rightBarButtonItem = createBarButton
-         
+        
     }
     
     func createPostBtn() {
-      
+        
         let createButton = UIButton(type: .custom)
         createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
@@ -467,19 +471,19 @@ extension EditPostVC {
         customView.addSubview(createButton)
         createButton.center = customView.center
         let createBarButton = UIBarButtonItem(customView: customView)
-
+        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
-      
+        
         self.navigationItem.rightBarButtonItem = createBarButton
-         
+        
     }
     
-
+    
     
     func emptyBtnLbl() {
         
-       
+        
         globalBtn.setTitle("", for: .normal)
         privateBtn.setTitle("", for: .normal)
         followingBtn.setTitle("", for: .normal)
@@ -487,25 +491,22 @@ extension EditPostVC {
         streamingLinkBtn.setTitle("", for: .normal)
         
     }
-
+    
     func setupScrollView() {
         collectionView.contentInset = UIEdgeInsets.init(top: 0, left: 14, bottom: 0, right: 14)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(SelectedHashtagCollectionViewCell.nib(), forCellWithReuseIdentifier: SelectedHashtagCollectionViewCell.cellReuseIdentifier())
+        collectionView.register(HashtagCell.nib(), forCellWithReuseIdentifier: HashtagCell.cellReuseIdentifier())
         collectionHeight.constant = 0
         collectionView.isHidden = true
         
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .vertical
-            layout.itemSize = CGSize(width: 120, height: 30)
-        }
+      
     }
     
-
+    
 }
 
 
@@ -550,16 +551,18 @@ extension EditPostVC {
         var updateText = ""
         
         
-        if let text = descTxtView.text, text != "Hi, what's on your thought?" {
+        if let text = descTxtView.text, text != "Hi, let's unleash your gameplay!" {
             updateText = text
         }
         
         
         contentPost = ["id": selectedPost.id, "content": updateText, "streamLink": global_fullLink, "hashtags": update_hashtaglist]
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment]
-       
+        
         presentSwiftLoader()
-        APIManager().updatePost(params: contentPost) { result in
+        APIManager.shared.updatePost(params: contentPost) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(_):
                 needReloadPost = true
@@ -576,12 +579,12 @@ extension EditPostVC {
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     self.showErrorAlert("Oops", msg: "Unable to update \(error.localizedDescription)")
+                }
             }
         }
-    }
         
-
-      
+        
+        
     }
     
     @objc func handleKeyboardShow(notification: Notification) {
@@ -594,13 +597,13 @@ extension EditPostVC {
     }
     
     @objc func dismissKeyboardOnTap(sender: AnyObject!) {
-  
+        
         if isKeyboardShow {
             self.view.endEditing(true)
         } else {
             descTxtView.becomeFirstResponder()
         }
-  
+        
     }
     
 }
@@ -610,12 +613,15 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return hashtagList.count
     }
-     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: SelectedHashtagCollectionViewCell.cellReuseIdentifier(), for: indexPath)) as! SelectedHashtagCollectionViewCell
         
-        cell.hashtag.text = hashtagList[indexPath.row]
+        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
+        
+        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.text = hashtagList[indexPath.row]
+        cell.hashTagLabel.backgroundColor = .clear
+        cell.backgroundColor = .primary
         
         return cell
         
@@ -630,7 +636,7 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
                 self.collectionHeight.constant = 0
                 self.collectionView.isHidden = true
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 335 - 70
+                self.settingViewHeight.constant = 295 - 50
                 
                 self.hiddenHashTagTxtField.text = ""
                 self.hashtagLbl.text = "Hashtag #"
@@ -638,11 +644,11 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
             } else {
                 
                 self.hiddenHashTagTxtField.text = self.hashtagList.joined(separator: "")
-            
+                
             }
             
             collectionView.reloadData()
-           
+            
         }
         
     }
@@ -652,12 +658,12 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
 
 extension EditPostVC: UITextViewDelegate {
     
-
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         
         if textView == descTxtView {
             
-            if textView.text == "Hi, what's on your thought?" {
+            if textView.text == "Hi, let's unleash your gameplay!" {
                 
                 textView.text = ""
                 
@@ -672,7 +678,7 @@ extension EditPostVC: UITextViewDelegate {
             
             if textView.text == "" {
                 
-                textView.text = "Hi, what's on your thought?"
+                textView.text = "Hi, let's unleash your gameplay!"
                 
             } else {
                 selectedDescTxtView = textView.text
@@ -698,12 +704,12 @@ extension EditPostVC {
     // func show error alert
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                    
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }

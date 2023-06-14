@@ -102,6 +102,24 @@ class LastStepViewController: UIViewController, ControllerType {
     }
 
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        usernameTextfield.addUnderLine()
+        passwordTextfield.addUnderLine()
+        refCodeTextfield.addUnderLine()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        usernameTextfield.addUnderLine()
+        passwordTextfield.addUnderLine()
+        refCodeTextfield.addUnderLine()
+        
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -157,72 +175,76 @@ class LastStepViewController: UIViewController, ControllerType {
     
     func bindAction(with viewModel: CreateAccountViewModel) {
         
-        //presentSwiftLoader()
-        
         let userInputs = Observable.combineLatest(
             usernameTextfield.rx.text.orEmpty,
-                passwordTextfield.rx.text.orEmpty,
-                refCodeTextfield.rx.text.orEmpty) { ($0, $1, $2)
-                }
-
-            submitButton.rx.tap.asObservable()
-                .withLatestFrom(userInputs)
-                .map({ username, password, refCode in
-                    if password.isEmpty {
-                        let randomPassword = generateRandomPassword()
-                        self.passwordTextfield.text = randomPassword
-                        return (username, randomPassword, refCode)
-                    } else {
-                        return (username, password, refCode)
-                    }
-                })
-                .subscribe(viewModel.action.submitDidTap)
-                .disposed(by: disposeBag)
-      
-      viewModel.output.registerSuccessObservable
-        .subscribe(onNext: { [weak self] successMessage in
-            DispatchQueue.main.async {
-                if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TutorialVC") as? TutorialVC {
-                    vc.modalPresentationStyle = .fullScreen
-                    self?.present(vc, animated: true)
-                }
-
-            }
-            
-        })
-        .disposed(by: disposeBag)
-      
-      viewModel.output.errorsObservable
-        .subscribe(onNext: { error in
-          self.presentError(error: error)
-        })
-        .disposed(by: disposeBag)
-      
-      viewModel.output.usernameExistObservable
-        .subscribe { exist in
-            print("CHECK>.....\(exist)")
-          DispatchQueue.main.async {
-            if (exist) {
-              self.checkUsernameLabel.text = "Username is available"
-              self.checkUsernameLabel.textColor = UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1)
+            passwordTextfield.rx.text.orEmpty,
+            refCodeTextfield.rx.text.orEmpty
+        ) { ($0, $1, $2) }
+        
+        submitButton.rx.tap.asObservable()
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
+            .withLatestFrom(userInputs)
+            .subscribe(onNext: { [unowned self] username, password, refCode in
+                let credentials: (String, String, String)
                 
-              
-              
-            } else {
-              self.checkUsernameLabel.text = "Username is already in use"
-              self.checkUsernameLabel.textColor = UIColor.red
-              //self.submitButton.isEnabled = false
-              
+                DispatchQueue.main.async {
+                    
+                   presentSwiftLoader()
+                    
+                }
+            
+                if password.isEmpty {
+                    let randomPassword = generateRandomPassword()
+                    self.passwordTextfield.text = randomPassword
+                    credentials = (username, randomPassword, refCode)
+                } else {
+                    credentials = (username, password, refCode)
+                }
+                
+                viewModel.action.submitDidTap.onNext(credentials)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.output.registerSuccessObservable
+            .subscribe(onNext: { [weak self] successMessage in
+                DispatchQueue.main.async {
+                    if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TutorialVC") as? TutorialVC {
+                        vc.modalPresentationStyle = .fullScreen
+                        SwiftLoader.hide()
+                        self?.present(vc, animated: true)
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.output.errorsObservable
+            .subscribe(onNext: { error in
+                DispatchQueue.main.async {
+                    SwiftLoader.hide()
+                }
+                self.presentError(error: error)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.output.usernameExistObservable
+            .subscribe { exist in
+                print("CHECK>.....\(exist)")
+                DispatchQueue.main.async {
+                    if (exist) {
+                        self.checkUsernameLabel.text = "Username is available"
+                        self.checkUsernameLabel.textColor = UIColor(red: 92/255.0, green: 195/255.0, blue: 103/255.0, alpha: 1)
+                    } else {
+                        self.checkUsernameLabel.text = "Username is already in use"
+                        self.checkUsernameLabel.textColor = UIColor.red
+                    }
+                    
+                    viewModel.isValidInput.bind(to: self.submitButton.rx.isEnabled)
+                        .disposed(by: self.disposeBag)
+                }
             }
-              
-              viewModel.isValidInput.bind(to: self.submitButton.rx.isEnabled)
-                .disposed(by: self.disposeBag)
-              
-              
-          }
-          
-        }.disposed(by: disposeBag)
+            .disposed(by: disposeBag)
     }
+
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

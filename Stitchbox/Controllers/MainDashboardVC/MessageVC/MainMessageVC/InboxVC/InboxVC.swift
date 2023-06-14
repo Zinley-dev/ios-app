@@ -26,7 +26,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     var limit: UInt = 20
     var refreshControl: UIRefreshControl?
     var trypingIndicatorTimer: [String : Timer] = [:]
-    
+    var lastRefreshDate: Date? // Stores the date of the last refresh
     var channelListQuery: SBDGroupChannelListQuery?
     
     var channels: [SBDGroupChannel] = []
@@ -83,6 +83,16 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         }
         // Update the active status of the channels
         updateActiveStatus()
+        
+        
+        // Compare the current date with the last refresh date
+          let timeInterval = Date().timeIntervalSince(self.lastRefreshDate ?? Date())
+
+          // Check if it has been more than 30 minutes (1800 seconds) since the last refresh
+          if timeInterval > 1800 {
+              refreshChannelList()
+          }
+        
     }
     
     
@@ -90,42 +100,43 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     @objc func longPressChannel(_ recognizer: UILongPressGestureRecognizer) {
         let point = recognizer.location(in: self.groupChannelsTableView)
-        guard let indexPath = self.groupChannelsTableView.indexPathForRow(at: point) else { return }
-        if recognizer.state == .began {
-            let channel = self.channels[indexPath.row]
-            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            
-            let actionLeave = UIAlertAction(title: "Leave message", style: .destructive) { (action) in
-                channel.leave(completionHandler: { (error) in
-                    if let error = error {
-                        Utils.showAlertController(error: error, viewController: self)
-                        return
-                    }
-                })
-            }
-            
-        
-            let actionNotificationOn = UIAlertAction(title: "Turn notification on", style: .default) { (action) in
-               channel.setMyPushTriggerOption(.all) { error in
-                    if let error = error {
-                        Utils.showAlertController(error: error, viewController: self)
-                        return
+            guard let indexPath = self.groupChannelsTableView.indexPathForRow(at: point) else { return }
+            if recognizer.state == .began {
+                let channel = self.channels[indexPath.row]
+                let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+                let actionLeave = UIAlertAction(title: "Leave message", style: .destructive) { [weak self] (action) in
+                    channel.leave(completionHandler: { (error) in
+                        if let error = error {
+                            if let strongSelf = self {
+                                Utils.showAlertController(error: error, viewController: strongSelf)
+                            }
+                            return
+                        }
+                    })
+                }
+
+                let actionNotificationOn = UIAlertAction(title: "Turn notification on", style: .default) { [weak self] (action) in
+                    channel.setMyPushTriggerOption(.all) { error in
+                        if let error = error, let strongSelf = self {
+                            Utils.showAlertController(error: error, viewController: strongSelf)
+                            return
+                        }
                     }
                 }
-            }
-            
-            let actionNotificationOff = UIAlertAction(title: "Turn notification off", style: .default) { (action) in
-                channel.setMyPushTriggerOption(.off) { error in
-                    if let error = error {
-                        Utils.showAlertController(error: error, viewController: self)
-                        return
+
+                let actionNotificationOff = UIAlertAction(title: "Turn notification off", style: .default) { [weak self] (action) in
+                    channel.setMyPushTriggerOption(.off) { error in
+                        if let error = error, let strongSelf = self {
+                            Utils.showAlertController(error: error, viewController: strongSelf)
+                            return
+                        }
                     }
                 }
-            }
-            
-            let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            
-            alert.modalPresentationStyle = .popover
+
+                let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+                alert.modalPresentationStyle = .popover
             
             
             if channel.myPushTriggerOption == .off {
@@ -166,11 +177,10 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     
     func updateTotalUnreadMessageCountBadge() {
-        SBDMain.getTotalUnreadMessageCount { (unreadCount, error) in
-            guard let navigationController = self.navigationController else { return }
+        SBDMain.getTotalUnreadMessageCount { [weak self] (unreadCount, error) in
+            guard let navigationController = self?.navigationController else { return }
             if error != nil {
                 navigationController.tabBarItem.badgeValue = nil
-                
                 return
             }
             
@@ -182,9 +192,9 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             }
         }
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) { [weak self] in
             SBDMain.getTotalUnreadMessageCount { (unreadCount, error) in
-                guard let navigationController = self.navigationController else { return }
+                guard let navigationController = self?.navigationController else { return }
                 if error != nil {
                     navigationController.tabBarItem.badgeValue = nil
                     return
@@ -199,6 +209,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             }
         }
     }
+
     
     func buildTypingIndicatorLabel(channel: SBDGroupChannel) -> String {
         let typingMembers = channel.getTypingUsers()
@@ -214,16 +225,15 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         if let channelUrl = timer.userInfo as? [Any] {
             self.trypingIndicatorTimer[channelUrl[0] as! String]?.invalidate()
             self.trypingIndicatorTimer.removeValue(forKey: channelUrl[0] as! String)
-            DispatchQueue.main.async {
-                
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 if let index = self.channels.firstIndex(of: channelUrl[1] as! SBDGroupChannel) {
                     self.groupChannelsTableView.reloadRows(at:  [IndexPath(row: index, section: 0)], with: .automatic)
                 }
-                
-                
             }
         }
     }
+
     
     
     // MARK: - UITableViewDataSource
@@ -304,8 +314,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             
             cell.frozenImageView.isHidden = !channel.isFrozen
 
-            
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 if let members = channel.members {
                     let filteredMembers = members.compactMap { $0 as? SBDMember }.filter { $0.userId != SBDMain.getCurrentUser()?.userId }
                     let count = filteredMembers.count
@@ -535,6 +545,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     // MARK: - Load channels
     @objc func refreshChannelList() {
+        self.lastRefreshDate = Date()
         self.loadChannelListNextPage(true)
     }
     
@@ -554,37 +565,36 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             self.channelListQuery?.limit = self.limit
             self.channelListQuery?.includeFrozenChannel = true
             self.channelListQuery?.includeEmptyChannel = true
-            
-           
-            
         }
         
-        if self.channelListQuery?.hasNext == false {
+        guard let query = self.channelListQuery, query.hasNext else {
             return
         }
         
-        self.channelListQuery?.loadNextPage(completionHandler: { (newChannels, error) in
-            if error != nil {
-                
+        query.loadNextPage { [weak self] (newChannels, error) in
+            if let error = error {
+                print("Failed to load next page: \(error)")
                 DispatchQueue.main.async {
-                    self.refreshControl?.endRefreshing()
+                    self?.refreshControl?.endRefreshing()
                 }
-                
                 return
             }
             
             DispatchQueue.main.async {
                 if refresh {
-                    self.channels.removeAll()
+                    self?.channels.removeAll()
                 }
-                           
-                self.channels += newChannels!
-                self.sortChannelList(needReload: true)
-                self.lastUpdatedTimestamp = Int64(Date().timeIntervalSince1970*1000)
-                self.refreshControl?.endRefreshing()
+                
+                if let newChannels = newChannels {
+                    self?.channels += newChannels
+                    self?.sortChannelList(needReload: true)
+                    self?.lastUpdatedTimestamp = Int64(Date().timeIntervalSince1970*1000)
+                }
+                self?.refreshControl?.endRefreshing()
             }
-        })
+        }
     }
+
     
     
     func upsertChannels(_ channels: [SBDGroupChannel]?, needReload: Bool) {
@@ -630,6 +640,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 self.groupChannelsTableView.reloadSections([0], with: .automatic)
             }
         }
+        
+        self.lastRefreshDate = Date()
     }
 
     
@@ -666,11 +678,12 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
                 
             }
-            
+              
             
         } else {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 var index: Int?
                 for (i, ch) in self.channels.enumerated() {
                     if ch.channelUrl == sender.channelUrl {
@@ -686,6 +699,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 self.groupChannelsTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
                 self.updateTotalUnreadMessageCountBadge()
             }
+
             
         }
         
@@ -697,35 +711,36 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     func checkIfShouldPushNoti(pushChannel: SBDGroupChannel) {
         // Check if push notifications are enabled for the group channel
-        if pushChannel.myPushTriggerOption != .off {
+        if pushChannel.myPushTriggerOption != .off, let lastMessage = pushChannel.lastMessage?.message {
             // Get the current view controller
             if let vc = UIViewController.currentViewController() {
                 // Check the type of the current view controller
                 switch vc {
-                case is ChannelViewController:
+                case let channelVC as ChannelViewController:
                     // Check if the channelUrl property of the view controller is the same as the channelUrl property of the group channel
-                    if let channelVC = vc as? ChannelViewController, channelVC.channelUrl != pushChannel.channelUrl {
-                        createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    if channelVC.channelUrl != pushChannel.channelUrl {
+                        createLocalNotificationForActiveSendbirdUsers(title: "", body: lastMessage, channel: pushChannel)
                     }
-                case is MainMessageVC:
+                case let mainMessageVC as MainMessageVC:
                     // Check if the InboxVC view is hidden
-                    if let mainMessageVC = vc as? MainMessageVC, mainMessageVC.InboxVC.view.isHidden {
-                        createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    if mainMessageVC.InboxVC.view.isHidden {
+                        createLocalNotificationForActiveSendbirdUsers(title: "", body: lastMessage, channel: pushChannel)
                     }
                 default:
                     // If the current view controller is neither a ChannelViewController nor a MainMessageVC, create a local notification
-                    createLocalNotificationForActiveSendbirdUsers(title: "", body: pushChannel.lastMessage!.message, channel: pushChannel)
+                    createLocalNotificationForActiveSendbirdUsers(title: "", body: lastMessage, channel: pushChannel)
                 }
             }
         }
     }
+
     
     
     func channelDidUpdateTypingStatus(_ sender: SBDGroupChannel) {
         guard sender.isTyping(), let currentUser = SBDMain.getCurrentUser(), sender.getTypingUsers()?.firstIndex(of: currentUser) == nil else { return }
         let timerKey = sender.channelUrl
         invalidateTimer(for: timerKey)
-        let timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(InboxVC.typingIndicatorTimeout(_ :)), userInfo: [timerKey, sender], repeats: false)
+        let timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(InboxVC.typingIndicatorTimeout(_ :)), userInfo: [timerKey, sender] as [Any], repeats: false)
         trypingIndicatorTimer[timerKey] = timer
         let index = channels.firstIndex { $0.channelUrl == sender.channelUrl }
         guard let row = index else { return }
@@ -757,12 +772,14 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             channelLogsParams = SBDGroupChannelChangeLogsParams.create(with: channelListQuery)
         }
 
-        let getMyGroupChannelChangeLogs: (String?, SBDGroupChannelChangeLogsParams) -> Void = { token, channelLogsParams in
+        let getMyGroupChannelChangeLogs: (String?, SBDGroupChannelChangeLogsParams) -> Void = { [weak self] token, channelLogsParams in
             SBDMain.getMyGroupChannelChangeLogs(byToken: token, params: channelLogsParams) { updatedChannels, deletedChannelUrls, hasMore, token, error in
                 if let error = error {
                     print(error.localizedDescription)
                 }
 
+                guard let self = self else { return }
+                
                 self.lastUpdatedToken = token
                 self.upsertChannels(updatedChannels, needReload: false)
                 self.deleteChannels(channelUrls: deletedChannelUrls, needReload: false)
@@ -770,12 +787,10 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             }
         }
 
-        if let token = token {
-            getMyGroupChannelChangeLogs(token, channelLogsParams)
-        } else {
-            getMyGroupChannelChangeLogs(nil, channelLogsParams)
-        }
+        self.lastRefreshDate = Date()
+        getMyGroupChannelChangeLogs(token, channelLogsParams)
     }
+
 
     
     

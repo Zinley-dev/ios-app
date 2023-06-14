@@ -70,7 +70,8 @@ class ChatGPTAPI: @unchecked Sendable {
     
         if tokenManager.historyList.count <= 2 {
             
-            APIManager().createGptConversation(params: conversation) { result in
+            APIManager.shared.createGptConversation(params: conversation) { [weak self] result in
+                guard let self = self else { return }
                 
                 switch result {
                 case .success(let apiResponse):
@@ -87,7 +88,8 @@ class ChatGPTAPI: @unchecked Sendable {
             
         } else {
             
-            APIManager().updateGptConversation(params: conversation) { result in
+            APIManager.shared.updateGptConversation(params: conversation) { [weak self] result in
+                guard let self = self else { return }
                 
                 switch result {
                 case .success(let apiResponse):
@@ -105,51 +107,6 @@ class ChatGPTAPI: @unchecked Sendable {
         }
         
         tokenManager.appendMessageToHistory(userText: userText, responseText: responseText)
-        updateToken(tokens: countTokens(messages: userText + responseText))
-        
-    }
-    
-    func checkTokenLimit() {
-        
-        APIManager().getUsedToken { result in
-            switch result {
-            case .success(let apiResponse):
-                
-                if let data = apiResponse.body, let remainToken = data["remainToken"] as? Int {
-                
-                    if remainToken > 0 {
-                        isTokenLimit = false
-                    } else {
-                        isTokenLimit = true
-                    }
-                    
-                } else {
-                    isTokenLimit = true
-                }
-              
-            case .failure(let error):
-                
-                isTokenLimit = true
-                print(error)
-                
-            }
-        }
-        
-    }
-    
-    func updateToken(tokens: Int) {
-        
-        APIManager().updateUsedToken(usedToken: tokens) { result in
-            switch result {
-            case .success(let apiResponse):
-                print(apiResponse)
-                self.checkTokenLimit()
-              
-            case .failure(let error):
-                print(error)
-                self.checkTokenLimit()
-            }
-        }
         
     }
     
@@ -160,123 +117,51 @@ class ChatGPTAPI: @unchecked Sendable {
 
     func sendMessageStream(text: String) async throws -> AsyncThrowingStream<String, Error> {
         
-        if isPro {
-            
-            var urlRequest = self.urlRequest
+        var urlRequest = self.urlRequest
 
-            let requestBodyText = global_gameName != "SB Chatbot" ? "Focus strictly on the \(global_gameName) game topic. Disregard unrelated questions. Query: \(text)" : text
-            urlRequest.httpBody = try jsonBody(text: requestBodyText)
-            
-            print(requestBodyText)
-
-            let (result, response) = try await urlSession.bytes(for: urlRequest)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                throw "Invalid response"
+        let requestBodyText = global_gameName != "SB Chatbot" ? "Focus strictly on the \(global_gameName) game topic. Disregard unrelated questions. Query: \(text)" : text
+        urlRequest.httpBody = try jsonBody(text: requestBodyText)
+  
+        let (result, response) = try await urlSession.bytes(for: urlRequest)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw "Invalid response"
+        }
+        
+        guard 200...299 ~= httpResponse.statusCode else {
+            var errorText = ""
+            for try await line in result.lines {
+                errorText += line
             }
             
-            guard 200...299 ~= httpResponse.statusCode else {
-                var errorText = ""
-                for try await line in result.lines {
-                    errorText += line
-                }
-                
-                if let data = errorText.data(using: .utf8), let errorResponse = try? jsonDecoder.decode(ErrorRootResponse.self, from: data).error {
-                    errorText = "\n\(errorResponse.message)"
-                }
-                
-                throw "Bad Response: \(httpResponse.statusCode), \(errorText)"
+            if let data = errorText.data(using: .utf8), let errorResponse = try? jsonDecoder.decode(ErrorRootResponse.self, from: data).error {
+                errorText = "\n\(errorResponse.message)"
             }
             
-            return AsyncThrowingStream<String, Error> { continuation in
-                Task(priority: .userInitiated) { [weak self] in
-                    guard let self else { return }
-                    do {
-                        var responseText = ""
-                        for try await line in result.lines {
-                            if line.hasPrefix("data: "),
-                               let data = line.dropFirst(6).data(using: .utf8),
-                               let response = try? self.jsonDecoder.decode(StreamCompletionResponse.self, from: data),
-                               let text = response.choices.first?.delta.content {
-                                responseText += text
-                                continuation.yield(text)
-                            }
-                        }
-                        
-                        self.appendToHistoryList(userText: text, responseText: responseText)
-                        continuation.finish()
-                    } catch {
-                        continuation.finish(throwing: error)
-                    }
-                }
-            }
-            
-            
-        } else {
-            
-            if isTokenLimit {
-                
-                var errorText = ""
-                errorText = "\n\("Your token limit has been reached. It will reset at 12am. To enjoy unlimited access, consider upgrading to SB Pro today.")"
-                
-                throw "Bad Response: \(errorText)"
-                
-                
-            } else {
-                
-                var urlRequest = self.urlRequest
-            
-                if global_gameName != "SB Chatbot" {
-                    urlRequest.httpBody = try jsonBody(text: "Focus and answer only relates to \(global_gameName) game topic" + text)
-                } else {
-                    urlRequest.httpBody = try jsonBody(text: text)
-                }
-                
-                let (result, response) = try await urlSession.bytes(for: urlRequest)
-                
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    throw "Invalid response"
-                }
-                
-                guard 200...299 ~= httpResponse.statusCode else {
-                    var errorText = ""
+            throw "Bad Response: \(httpResponse.statusCode), \(errorText)"
+        }
+        
+        return AsyncThrowingStream<String, Error> { continuation in
+            Task(priority: .userInitiated) { [weak self] in
+                guard let self else { return }
+                do {
+                    var responseText = ""
                     for try await line in result.lines {
-                        errorText += line
-                    }
-                    
-                    if let data = errorText.data(using: .utf8), let errorResponse = try? jsonDecoder.decode(ErrorRootResponse.self, from: data).error {
-                        errorText = "\n\(errorResponse.message)"
-                    }
-                    
-                    throw "Bad Response: \(httpResponse.statusCode), \(errorText)"
-                }
-                
-                return AsyncThrowingStream<String, Error> { continuation in
-                    Task(priority: .userInitiated) { [weak self] in
-                        guard let self else { return }
-                        do {
-                            var responseText = ""
-                            for try await line in result.lines {
-                                if line.hasPrefix("data: "),
-                                   let data = line.dropFirst(6).data(using: .utf8),
-                                   let response = try? self.jsonDecoder.decode(StreamCompletionResponse.self, from: data),
-                                   let text = response.choices.first?.delta.content {
-                                    responseText += text
-                                    continuation.yield(text)
-                                }
-                            }
-                            
-                            self.appendToHistoryList(userText: text, responseText: responseText)
-                            continuation.finish()
-                        } catch {
-                            continuation.finish(throwing: error)
+                        if line.hasPrefix("data: "),
+                           let data = line.dropFirst(6).data(using: .utf8),
+                           let response = try? self.jsonDecoder.decode(StreamCompletionResponse.self, from: data),
+                           let text = response.choices.first?.delta.content {
+                            responseText += text
+                            continuation.yield(text)
                         }
                     }
+                    
+                    self.appendToHistoryList(userText: text, responseText: responseText)
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
                 }
-                
-                
             }
-              
         }
     
         
@@ -286,7 +171,8 @@ class ChatGPTAPI: @unchecked Sendable {
     func deleteHistoryList() {
         tokenManager.clearHistory()
         
-        APIManager().clearGptConversation(gameId: global_gameId) { result in
+        APIManager.shared.clearGptConversation(gameId: global_gameId) { [weak self] result in
+            guard let self = self else { return }
             
             switch result {
             case .success(let apiResponse):
@@ -307,13 +193,4 @@ class ChatGPTAPI: @unchecked Sendable {
         tokenManager.setHistory(messages: messages)
     }
     
-}
-
-extension String: CustomNSError {
-    
-    public var errorUserInfo: [String : Any] {
-        [
-            NSLocalizedDescriptionKey: self
-        ]
-    }
 }

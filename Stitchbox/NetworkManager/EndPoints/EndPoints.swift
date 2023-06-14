@@ -15,7 +15,7 @@ protocol BaseURL {
 enum APIBuilder {
     struct APIBuilderConstants {
         static let ApiScheme = "https"
-        static let ApiHost = "api.stitchbox.dev/v1"
+        static let ApiHost = "api.stitchbox.live/v1"
 //        static let ApiScheme = "http"
 //        static let ApiHost = "localhost:9090/v1"
     }
@@ -1723,6 +1723,45 @@ extension PromotionApi: EndPointType {
   
 }
 
+public enum OpenLinkLogApi {
+  case openLink(body: [String: Any])
+}
+extension OpenLinkLogApi: EndPointType {
+  var path: String {
+    switch self {
+      case .openLink:
+        return "/"
+    }
+  }
 
+  var module: String {
+    return "/open-link"
+  }
+
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .openLink:
+        return .post
+
+    }
+  }
+
+  var task: HTTPTask {
+    switch self {
+      case .openLink(let body):
+        return .requestParameters(parameters: body)
+
+    }
+  }
+
+  var headers: [String : String]? {
+    var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-Client-Timezone": "\(secondsFromGMT)"]
+  }
+
+}
 
 

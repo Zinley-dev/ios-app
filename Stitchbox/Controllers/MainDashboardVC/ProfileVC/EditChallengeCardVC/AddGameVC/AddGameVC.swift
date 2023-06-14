@@ -31,7 +31,9 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         if reloadAddedGame {
             reloadAddedGame = false
-            APIManager().getme { result in
+            APIManager.shared.getme { [weak self] result in
+                guard let self = self else { return }
+
                 switch result {
                 case .success(let response):
                     
@@ -74,71 +76,25 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if gameList.count < 4 {
-            return gameList.count + 1
-        }
-        
-        
-        return gameList.count
-        
+        return min(gameList.count + 1, 4)
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if gameList.count < 4 {
-            
-            if indexPath.row < gameList.count {
-               
-               let game = gameList[indexPath.row]
-               
-               if let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell") as? GameCell {
-                   
-                   cell.configureCell(game)
-                   return cell
-                   
-               } else {
-                   
-                   return GameCell()
-                   
-               }
-               
-            } else {
-                
-                if let cell = tableView.dequeueReusableCell(withIdentifier: "addNewGameCell") as? addNewGameCell {
-
-                    cell.addGameBtn.addTarget(self, action: #selector(AddGameVC.addGameBtnPressed), for: .touchUpInside)
-                    return cell
-                    
-                    
-                } else {
-                    
-                    return addNewGameCell()
-                    
-                }
-            }
-            
-        } else {
-            
-            let game = gameList[indexPath.row]
-            
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell") as? GameCell {
-                
-                cell.configureCell(game)
-                
-                return cell
-                
-            } else {
-                
-                return GameCell()
-                
-            }
-            
-            
+        // Display "addNewGameCell" if index is equal to gameList.count and it is less than 4
+        if indexPath.row == gameList.count && indexPath.row < 4 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "addNewGameCell") as? addNewGameCell ?? addNewGameCell()
+            cell.addGameBtn.addTarget(self, action: #selector(AddGameVC.addGameBtnPressed), for: .touchUpInside)
+            return cell
         }
         
-        
+        // Display regular "GameCell"
+        let game = gameList[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell") as? GameCell ?? GameCell()
+        cell.configureCell(game)
+        return cell
     }
+
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -193,7 +149,9 @@ class AddGameVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     title: ""
                 ) { action, view, actionHandler in
                     
-                    APIManager().deleteGameForCard(gameId: self.gameList[indexPath.row].gameId) { result in
+                    APIManager.shared.deleteGameForCard(gameId: self.gameList[indexPath.row].gameId) { [weak self] result in
+                        guard let self = self else { return }
+
                         switch result {
                         case .success(_):
                             DispatchQueue.main.async {

@@ -16,15 +16,16 @@ import AVFAudio
 import ObjectMapper
 
 
-let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 30, height: 23))
-let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 30, height: 23))
-let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 90, height: 65))
 
+let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 23))
+let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 23))
+let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 100, height: 65))
+
+var general_vc: UIViewController!
 var general_room: Room!
 var gereral_group_chanel_url: String!
 var startTime = Date()
 var isPro = false
-var isTokenLimit = false
 var global_gpt = "gpt-3.5-turbo"
 var global_gameId = ""
 var global_gameName = ""
@@ -47,6 +48,8 @@ var globalSetting: SettingModel!
 var navigationControllerHeight:CGFloat = 0.0
 var tabBarControllerHeight:CGFloat = 0.0
 let horizontalPadding: CGFloat = 12
+let bottomValue: CGFloat = 40
+let bottomValueNoHide: CGFloat = 0
 
 let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitchbox", "domain": ["stitchbox.gg"], "status": true])
 let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
@@ -57,7 +60,7 @@ let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company":
 let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
 
 var emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-with-concrete-floor_53876-70804.jpg?w=1380"
-
+var emptySB = "https://stitchbox-app-images.s3.us-east-1.amazonaws.com/adf94fba-69a1-4dc3-b934-003a04265c39.png"
 let xBtn = UIImage(named: "1024x")?.resize(targetSize: CGSize(width: 12, height: 12))
 
 var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
@@ -210,7 +213,7 @@ extension UILabel {
 func processUpdateAvatar(channel: SBDGroupChannel, image: UIImage) {
     
     
-    APIManager().uploadImage(image: image) { result in
+    APIManager.shared.uploadImage(image: image) { result in
         
         switch result {
         case .success(let apiResponse):
@@ -314,432 +317,121 @@ extension UITextView {
     }
 }
 
-
-
+/*
 func pauseVideoIfNeed(pauseIndex: Int) {
-  
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is SelectedPostVC {
-            
-            if let update1 = vc as? SelectedPostVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-                    
-                    if cell.sideButtonView != nil {
-                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        } else if vc is FeedViewController {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-                    
-                    if cell.sideButtonView != nil {
-                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        } else if vc is PostListWithHashtagVC {
-            
-            if let update1 = vc as? PostListWithHashtagVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-                    
-                    if cell.sideButtonView != nil {
-                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        } else if vc is MainSearchVC {
-            
-            if let update1 = vc as? MainSearchVC {
-                
-                if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-                    
-                    if cell.sideButtonView != nil {
-                        cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        } else if vc is ReelVC {
-            
-            if let update1 = vc as? ReelVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? ReelNode {
-                    
-                    if cell.buttonsView != nil {
-                        
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.stopSpin()
-                            
-                        }
-                    }
-                    
-                    cell.videoNode.player?.seek(to: CMTime.zero)
-                    cell.videoNode.pause()
-                    
-                }
-                
-            }
-            
-        }
-             
-        
+    guard let vc = UIViewController.currentViewController() else { return }
+
+    if let selectedPostVC = vc as? SelectedPostVC,
+       let postCell = selectedPostVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+        handlePauseVideoInCell(postCell)
+    } else if let feedVC = vc as? FeedViewController,
+        let postCell = feedVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+        handlePauseVideoInCell(postCell)
+    } else if let postListVC = vc as? PostListWithHashtagVC,
+        let postCell = postListVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+        handlePauseVideoInCell(postCell)
+    } else if let searchVC = vc as? MainSearchVC,
+        let postCell = searchVC.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
+        handlePauseVideoInCell(postCell)
+    } else if let reelVC = vc as? ReelVC,
+        let reelCell = reelVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? ReelNode {
+        handlePauseVideoInReelCell(reelCell)
     }
 }
 
+*/
 
+func handlePauseVideoInCell(_ cell: PostNode) {
+    if let sideButtonView = cell.sideButtonView {
+        sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+        
+        if !cell.buttonsView.streamView.isHidden {
+            cell.buttonsView.streamView.stopSpin()
+        }
+    }
+
+    cell.videoNode.player?.seek(to: CMTime.zero)
+    cell.videoNode.pause()
+}
+
+func handlePauseVideoInReelCell(_ cell: ReelNode) {
+    if let buttonsView = cell.buttonsView {
+        if !buttonsView.streamView.isHidden {
+            buttonsView.streamView.stopSpin()
+        }
+    }
+
+    cell.videoNode.player?.seek(to: CMTime.zero)
+    cell.videoNode.pause()
+}
+
+/*
+ 
 func playVideoIfNeed(playIndex: Int) {
-  
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is SelectedPostVC {
-            
-            if let update1 = vc as? SelectedPostVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-                        
-                        if let muteStatus = shouldMute {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if muteStatus {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                }
-                            }
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if globalIsSound {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                }
-                            }
-                           
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                        
-                        
-                        
-                      
-                    }
-                    
-                }
-                
-            }
-            
-        } else if vc is FeedViewController {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-                        
-                        if let muteStatus = shouldMute {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if muteStatus {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                }
-                            }
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if globalIsSound {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                }
-                            }
-                           
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                    
-                    }
-                    
-                }
-                
-            }
-            
-        } else if vc is PostListWithHashtagVC {
-            
-            if let update1 = vc as? PostListWithHashtagVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-            
-                        if let muteStatus = shouldMute {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if muteStatus {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                }
-                            }
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if globalIsSound {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                }
-                            }
-                           
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                    
-                    }
-                    
-                }
-                
-            }
-            
-        } else if vc is MainSearchVC {
-            
-            if let update1 = vc as? MainSearchVC {
-                
-                if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-                        
-                        if let muteStatus = shouldMute {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if muteStatus {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                }
-                            }
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
-                            if cell.sideButtonView != nil {
-                                
-                                if globalIsSound {
-                                    cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                                } else {
-                                    cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                                }
-                            }
-                           
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                    
-                    }
-                    
-                }
-                
-            }
-            
-        }  else if vc is ReelVC {
-            
-            if let update1 = vc as? ReelVC {
-                
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? ReelNode {
-                    
-                    if !cell.videoNode.isPlaying() {
-                        
-                        
-                        if !cell.buttonsView.streamView.isHidden {
-                            
-                            cell.buttonsView.streamView.spin()
-                            
-                        }
-            
-                        if let muteStatus = shouldMute {
-                        
-                           
-                            if muteStatus {
-                                cell.videoNode.muted = true
-                            } else {
-                                cell.videoNode.muted = false
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        } else {
-                            
+    guard let vc = UIViewController.currentViewController() else { return }
 
-                            if globalIsSound {
-                                cell.videoNode.muted = false
-                            } else {
-                                cell.videoNode.muted = true
-                            }
-                            
-                            cell.videoNode.play()
-                            
-                        }
-                    
-                    }
-                    
-                }
-                
-            }
-            
-        }
-             
-        
+    var postCell: PostNode?
+    var reelCell: ReelNode?
+
+    if let selectedPostVC = vc as? SelectedPostVC {
+        postCell = selectedPostVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
+    } else if let feedVC = vc as? FeedViewController {
+        postCell = feedVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
+    } else if let postListVC = vc as? PostListWithHashtagVC {
+        postCell = postListVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
+    } else if let searchVC = vc as? MainSearchVC {
+        postCell = searchVC.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
+    } else if let reelVC = vc as? ReelVC {
+        reelCell = reelVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? ReelNode
+    }
+
+    if let videoCell = postCell {
+        handleVideoNodeInCell(videoCell, muteStatus: shouldMute ?? !globalIsSound)
+    } else if let videoCell = reelCell {
+        handleVideoNodeInReelCell(videoCell, muteStatus: shouldMute ?? !globalIsSound)
     }
 }
+*/
+
+func handleVideoNodeInCell(_ cell: PostNode, muteStatus: Bool) {
+    guard !cell.videoNode.isPlaying() else { return }
+    
+    if cell.buttonsView != nil {
+        
+        if !cell.buttonsView.streamView.isHidden {
+            cell.buttonsView.streamView.spin()
+        }
+
+        if let sideButtonView = cell.sideButtonView {
+            let image = muteStatus ? muteImage : unmuteImage
+            sideButtonView.soundBtn.setImage(image, for: .normal)
+        }
+        
+    }
+    
+    
+    
+    cell.videoNode.muted = muteStatus
+    cell.videoNode.play()
+}
+
+func handleVideoNodeInReelCell(_ cell: ReelNode, muteStatus: Bool) {
+    guard !cell.videoNode.isPlaying() else { return }
+    
+    if cell.buttonsView != nil {
+        
+        if !cell.buttonsView.streamView.isHidden {
+            cell.buttonsView.streamView.spin()
+        }
+
+    }
+    
+    cell.videoNode.muted = muteStatus
+    cell.videoNode.play()
+    
+}
+
+
 
 class ImageSaver: NSObject {
     func writeToPhotoAlbum(image: UIImage) {
@@ -892,7 +584,7 @@ extension Collection {
 
 func reloadGlobalUserInformation() {
 
-    APIManager().getme { result in
+    APIManager.shared.getme { result in
         switch result {
         case .success(let response):
             
@@ -922,7 +614,7 @@ func reloadGlobalUserInformation() {
 
 func reloadGlobalSettings() {
     
-    APIManager().getSettings { result in
+    APIManager.shared.getSettings { result in
         switch result {
         case .success(let apiResponse):
             
@@ -1304,24 +996,24 @@ extension UIView {
 }
 
 
-func presentStreamingIntro() {
+    func presentStreamingIntro() {
     
-    if let SIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingIntroVC") as? StreamingIntroVC {
-        
-        if let vc = UIViewController.currentViewController() {
+        if let SIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingIntroVC") as? StreamingIntroVC {
             
-            let nav = UINavigationController(rootViewController: SIVC)
+            if let vc = UIViewController.currentViewController() {
+                
+                let nav = UINavigationController(rootViewController: SIVC)
 
-            // Customize the navigation bar appearance
-            nav.navigationBar.barTintColor = .background
-            nav.navigationBar.tintColor = .white
-            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
-            nav.modalPresentationStyle = .fullScreen
-            vc.present(nav, animated: true, completion: nil)
+                nav.modalPresentationStyle = .fullScreen
+                vc.present(nav, animated: true, completion: nil)
 
 
-        }
+            }
     }
     
     
@@ -1392,8 +1084,8 @@ func requestAppleReview() {
     // Calculate the difference in days between the current date and the user creation date
     let daysSinceCreation = calendar.dateComponents([.day], from: userCreationDate, to: currentDate).day ?? 0
 
-    // Check if the user was created more than 2 days ago
-    if daysSinceCreation >= 2 {
+    // Check if the user was created more than 1 days ago
+    if daysSinceCreation >= 1 {
 
         // Retrieve the date of the last review request from UserDefaults
         if let lastReviewRequestDate = UserDefaults.standard.object(forKey: "lastReviewRequestDate") as? Date {
@@ -1404,18 +1096,316 @@ func requestAppleReview() {
             // Check if at least a month has passed since the last review request
             if monthsSinceLastRequest >= 1 {
                 // Request the review
-                AppStoreReviewManager.requestReviewIfAppropriate()
-                
-                // Update the date of the last review request
+                if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    AppStoreReviewManager.requestReviewIfAppropriate(inScene: scene)
+                    // Update the date of the last review request
+                    UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
+                }
+     
+            }
+            
+        } else {
+            
+            // If there's no date of the last review request, it means it's the first time the review is being requested
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                AppStoreReviewManager.requestReviewIfAppropriate(inScene: scene)
+                // Store the date of this review request
                 UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
             }
-        } else {
-            // If there's no date of the last review request, it means it's the first time the review is being requested
-            AppStoreReviewManager.requestReviewIfAppropriate()
-            
-            // Store the date of this review request
-            UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
+   
         }
     }
 }
 
+class CustomSlider: UISlider {
+    
+    @IBInspectable var trackHeight: CGFloat = 2.67
+    @IBInspectable var highlightedTrackHeight: CGFloat = 7.0
+    @IBInspectable var thumbRadius: CGFloat = 5
+    @IBInspectable var highlightedThumbRadius: CGFloat = 10
+    
+    private lazy var thumbView: UIView = {
+        let thumb = UIView()
+        thumb.backgroundColor = .white
+        return thumb
+    }()
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        let thumb = thumbImage(radius: thumbRadius)
+        setThumbImage(thumb, for: .normal)
+        
+        self.addTarget(self, action: #selector(sliderDidStartSliding), for: .touchDown)
+        self.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
+        self.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
+    }
+    
+    private func thumbImage(radius: CGFloat) -> UIImage {
+        thumbView.frame = CGRect(x: 0, y: radius / 2, width: radius * 2, height: radius * 2)
+        thumbView.layer.cornerRadius = radius
+        
+        let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
+        return renderer.image { rendererContext in
+            thumbView.layer.render(in: rendererContext.cgContext)
+        }
+    }
+    
+    @objc func sliderDidStartSliding() {
+        processOnSliding()
+        startLayout()
+    }
+    
+    @objc func sliderDidEndSliding() {
+        processEndedSliding()
+        endLayout()
+    }
+    
+    func startLayout() {
+        setThumbImage(thumbImage(radius: highlightedThumbRadius), for: .normal)
+        trackHeight = highlightedTrackHeight
+        setNeedsDisplay()
+    }
+    
+    func endLayout() {
+        setThumbImage(thumbImage(radius: thumbRadius), for: .normal)
+        trackHeight = 2
+        setNeedsDisplay()
+    }
+    
+    override func trackRect(forBounds bounds: CGRect) -> CGRect {
+        var newRect = super.trackRect(forBounds: bounds)
+        newRect.size.height = trackHeight
+        return newRect
+    }
+    
+    @objc func sliderValueDidChange() {
+        // Get the new video time
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                update1.timeLbl.text = processTime()
+
+                
+            } else if let update1 = vc as? PostListWithHashtagVC {
+                
+                update1.timeLbl.text = processTime()
+                
+            } else if let update1 = vc as? MainSearchVC {
+                
+                update1.PostSearchVC.timeLbl.text = processTime()
+                
+            } else if let update1 = vc as? ReelVC {
+                
+                update1.timeLbl.text = processTime()
+                
+            } else if let update1 = vc as? SelectedPostVC {
+                
+                update1.timeLbl.text = processTime()
+                
+            }
+            
+        }
+        
+    }
+
+    
+    func processTime() -> String {
+        
+        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+        // Calculate the minutes and seconds
+        let totalSeconds = Int(CMTimeGetSeconds(newVideoTime))
+        let seconds = totalSeconds % 60
+        let minutes = totalSeconds / 60
+
+        // Calculate total duration minutes and seconds
+        let totalDurationSeconds = Int(self.maximumValue)
+        let durationSeconds = totalDurationSeconds % 60
+        let durationMinutes = totalDurationSeconds / 60
+
+        // Print the time in the format 00:00 / 00:00
+        return String(format: "%02d:%02d / %02d:%02d", minutes, seconds, durationMinutes, durationSeconds)
+        
+    }
+    
+    func processOnSliding() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if update1.tabBarController?.tabBar.isTranslucent == false {
+                    update1.bottomConstraint.constant = 10
+                }
+                
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+                
+                
+            } else if let update1 = vc as? PostListWithHashtagVC {
+                
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+        
+                
+            } else if let update1 = vc as? MainSearchVC {
+                
+                if update1.PostSearchVC.currentIndex != nil {
+                    update1.PostSearchVC.pauseVideo(index: update1.PostSearchVC.currentIndex!)
+                }
+                
+                update1.PostSearchVC.timeLbl.text = processTime()
+                update1.PostSearchVC.timeLbl.isHidden = false
+                update1.PostSearchVC.blurView.isHidden = false
+               
+                
+            } else if let update1 = vc as? ReelVC {
+                
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+               
+                
+            } else if let update1 = vc as? SelectedPostVC {
+                
+               
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+                
+            }
+            
+        }
+        
+    }
+
+    func processEndedSliding() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if let update1 = vc as? FeedViewController {
+                
+                if update1.tabBarController?.tabBar.isTranslucent == false {
+                    update1.bottomConstraint.constant = bottomValueNoHide
+                } else {
+                    update1.bottomConstraint.constant = bottomValue
+                }
+                
+              
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+                
+            } else if let update1 = vc as? PostListWithHashtagVC {
+                
+                
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+                
+            } else if let update1 = vc as? MainSearchVC {
+                
+                if update1.PostSearchVC.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.PostSearchVC.seekVideo(index: update1.PostSearchVC.currentIndex!, time: newVideoTime)
+                    update1.PostSearchVC.playVideo(index: update1.PostSearchVC.currentIndex!)
+                    
+                }
+                
+                update1.PostSearchVC.timeLbl.isHidden = true
+                update1.PostSearchVC.blurView.isHidden = true
+               
+                
+            } else if let update1 = vc as? ReelVC {
+                
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+               
+                
+            } else if let update1 = vc as? SelectedPostVC {
+                
+               
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+                
+            }
+            
+        }
+        
+    }
+
+}
+
+
+
+func removeAllUserDefaults() {
+    for key in UserDefaults.standard.dictionaryRepresentation().keys {
+        UserDefaults.standard.removeObject(forKey: key)
+    }
+}

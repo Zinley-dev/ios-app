@@ -34,7 +34,7 @@ class RiotSyncVC: UIViewController, UINavigationControllerDelegate, UISearchBarD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-  
+        
         setupButtons()
         setupSearchController()
         setupTableNode()
@@ -57,7 +57,7 @@ class RiotSyncVC: UIViewController, UINavigationControllerDelegate, UISearchBarD
         navigationBarAppearance.backgroundColor = .background
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+        
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
@@ -78,9 +78,9 @@ class RiotSyncVC: UIViewController, UINavigationControllerDelegate, UISearchBarD
     }
     
     func createDayPicker() {
-
+        
         regionTxtField.inputView = dayPicker
-
+        
     }
     
     
@@ -122,10 +122,10 @@ extension RiotSyncVC {
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -135,25 +135,25 @@ extension RiotSyncVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
     
-   
+    
     @objc func onClickBack(_ sender: AnyObject) {
         if let navigationController = self.navigationController {
             navigationController.popViewController(animated: true)
         }
     }
-
+    
     
     func setupTableNode() {
         
@@ -170,13 +170,13 @@ extension RiotSyncVC {
         self.searchTableNode.view.trailingAnchor.constraint(equalTo: self.contentview.trailingAnchor, constant: 0).isActive = true
         self.searchTableNode.view.bottomAnchor.constraint(equalTo: self.contentview.bottomAnchor, constant: 0).isActive = true
         
-      
+        
         self.searchTableNode.delegate = self
         self.searchTableNode.dataSource = self
         
         self.applyStyle()
         
-
+        
     }
     
     
@@ -189,7 +189,7 @@ extension RiotSyncVC {
         self.searchTableNode.view.showsVerticalScrollIndicator = false
         
     }
-
+    
 }
 
 extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
@@ -229,7 +229,7 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
             return { ASCellNode() }
         }
     }
-
+    
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
@@ -240,28 +240,28 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
         
         
     }
-
+    
     
     func syncRiotAccount(account: RiotAccountModel) {
         
         if let username = _AppCoreData.userDataSource.value?.userName, let name = account.name {
             
             let alert = UIAlertController(title: "Hey \(username)!", message: "Please confirm if \(name) is your account. We will sync this account with SB-Tactics by default. You can change this anytime in the settings.", preferredStyle: UIAlertController.Style.actionSheet)
-
-                            // add the actions (buttons)
+            
+            // add the actions (buttons)
             alert.addAction(UIAlertAction(title: "Confirm to sync", style: UIAlertAction.Style.default, handler: { action in
-                                
+                
                 self.finalSyncAccount(account: account)
-                                
+                
             }))
-
+            
             alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-
+            
             self.present(alert, animated: true, completion: nil)
             
         }
         
-       
+        
     }
     
     func finalSyncAccount(account: RiotAccountModel) {
@@ -270,13 +270,15 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
         
         let data = ["riotUsername": account.name!, "riotAccountId": account.acct_id!, "riotId": String(account.id ?? 0), "riotPuuid": account.puuid!, "riotLevel": account.level!, "riotSummonerId": account.summoner_id!, "riotProfileImage": account.profile_image_url!, "tier": account.tier!, "division": String(account.division ?? 0), "tierImage": account.tier_image_url!, "region": regionName, "lp": account.lp ?? 0] as [String : Any]
         
-    
-        APIManager().confirmRiot(params: data) { result in
+        
+        APIManager.shared.confirmRiot(params: data) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
                 guard apiResponse.body?["message"] as? String == "success" else {
-                        return
+                    return
                 }
                 
                 
@@ -286,13 +288,13 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
                     reloadGlobalUserInformation()
                     
                     if let SBPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ProfileVC") as? SB_ProfileVC {
-                       
+                        
                         delay(1.5) {
                             SwiftLoader.hide()
                             self.navigationController?.pushViewController(SBPVC, animated: true)
                             self.navigationController?.viewControllers.remove(at: 1)
                         }
-   
+                        
                     }
                     
                 }
@@ -304,7 +306,7 @@ extension RiotSyncVC: ASTableDataSource, ASTableDelegate {
                     SwiftLoader.hide()
                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
-              
+                
             }
         }
         
@@ -329,10 +331,12 @@ extension RiotSyncVC {
         }
     }
     
-
+    
     func search(for searchText: String) {
         
-        APIManager().searchUserRiot(region: searchRegion, username: searchText) { result in
+        APIManager.shared.searchUserRiot(region: searchRegion, username: searchText) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -358,50 +362,52 @@ extension RiotSyncVC {
             case .failure(let error):
                 
                 print(error)
-               
+                
             }
         }
         
     }
     
- 
+    
 }
 
 extension RiotSyncVC {
     
     func loadRegion(block: @escaping ([[String: Any]]) -> Void) {
-    
-            APIManager().getSupportedRegion { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    
-                    if !data.isEmpty {
-                        print("Successfully retrieved \(data.count) regions.")
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                    
-                case .failure(let error):
-                    print(error)
+        
+        APIManager.shared.getSupportedRegion { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                    return
+                }
+                
+                if !data.isEmpty {
+                    print("Successfully retrieved \(data.count) regions.")
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
@@ -415,14 +421,14 @@ extension RiotSyncVC {
         guard newRegions.count > 0 else {
             return
         }
-      
+        
         var items = [RegionModel]()
- 
+        
         for i in newRegions {
-
+            
             let item = RegionModel(regionModel: i)
             items.append(item)
-          
+            
         }
         
         self.regionList.append(contentsOf: items)
@@ -438,7 +444,7 @@ extension RiotSyncVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         
         return 1
-
+        
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -463,30 +469,30 @@ extension RiotSyncVC: UIPickerViewDelegate, UIPickerViewDataSource {
         }
         
         pickerLabel?.textColor = UIColor.white
-
+        
         return pickerLabel!
     }
     
-   
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-       
+        
         if regionList[row].name != nil {
-                  
+            
             regionTxtField.text = regionList[row].name
             searchRegion = regionList[row].shortName
             regionName = regionList[row].name
         }
-    
+        
         
     }
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }

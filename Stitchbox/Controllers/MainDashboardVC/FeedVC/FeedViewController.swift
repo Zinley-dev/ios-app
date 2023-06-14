@@ -14,15 +14,21 @@ import ObjectMapper
 
 
 class FeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
-
+    
+    
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var timeLbl: UILabel!
+    @IBOutlet weak var blurView: UIView!
+    @IBOutlet weak var playTimeBar: CustomSlider!
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
-  
-    let promotionButton = UIButton(type: .custom)
+    
+    var hasViewAppeared = false
+    
+    //let promotionButton = UIButton(type: .custom)
     let homeButton: UIButton = UIButton(type: .custom)
     var promotionList = [PromoteModel]()
     var currentIndex: Int?
@@ -46,18 +52,18 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var firstAnimated = true
     var lastLoadTime: Date?
     var isPromote = false
-    
-    @IBOutlet weak var playTimeBar: UIProgressView!
+
     
     private var pullControl = UIRefreshControl()
     
-   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-   
-        // Do any additional setup after loading the view
         
+        
+        // Do any additional setup after loading the view
+        syncSendbirdAccount()
+        IAPManager.shared.configure()
         navigationControllerHeight = self.navigationController!.navigationBar.frame.height
         tabBarControllerHeight = (self.tabBarController?.tabBar.frame.height)!
         
@@ -82,7 +88,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         //self.navigationController?.hidesBarsOnSwipe = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
-       
+        
         
         
         //
@@ -93,43 +99,50 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         
-       
+        
+        
         if let tabBarController = self.tabBarController {
             let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
             for viewController in viewControllersToPreload {
                 _ = viewController.view
             }
         }
-
+        
+        
         
         if let navigationController = self.navigationController {
-                    navigationController.navigationBar.prefersLargeTitles = false
-                    navigationController.navigationBar.isTranslucent = false
-                }
+            navigationController.navigationBar.prefersLargeTitles = false
+            navigationController.navigationBar.isTranslucent = false
+        }
+        
+        
         
         self.loadNewestCoreData {
             self.loadSettings {
                 print("Oke!")
             }
         }
-    
+        
     }
     
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        //showTabbar()
         checkNotification()
         showMiddleBtn(vc: self)
         loadFeed()
+        
+        hasViewAppeared = true
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backgroundColor = .background
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+        
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
@@ -142,26 +155,28 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 let image = FLAnimatedImage(animatedGIFData: gifData)
                 
                 
-                self.loadingImage.animatedImage = image
+                loadingImage.animatedImage = image
                 
             } catch {
                 print(error.localizedDescription)
             }
             
             loadingView.backgroundColor = self.view.backgroundColor
- 
+            
+        } else {
+            showTabbar()
         }
         
         if currentIndex != nil {
             //newPlayingIndex
             playVideo(index: currentIndex!)
-          
+            
         }
         
- 
+        
     }
     
-
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -174,6 +189,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        hasViewAppeared = false
+        
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         
         if currentIndex != nil {
@@ -183,14 +200,25 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
     }
     
+    func showTabbar() {
+        
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        changeTabBar(hidden: false, animated: false)
+        self.tabBarController?.tabBar.isTranslucent = false
+        showMiddleBtn(vc: self)
+        
+        bottomConstraint.constant = bottomValueNoHide
+        
+    }
+    
     
     @objc private func refreshListData(_ sender: Any) {
         // Call API
-
+        
         self.clearAllData()
         
     }
-
+    
     @objc func clearAllData() {
         
         refresh_request = true
@@ -200,20 +228,20 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         shouldMute = nil
         imageIndex = nil
         updateData()
-               
+        
     }
     
     
     func updateData() {
         self.retrieveNextPageWithCompletion { (newPosts) in
-                
+            
             if newPosts.count > 0 {
-                        
+                
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 
-                                 
+                
             } else {
-              
+                
                 
                 self.refresh_request = false
                 self.posts.removeAll()
@@ -223,7 +251,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
                     
-                 
+                    
                 } else {
                     
                     self.collectionNode.view.restore()
@@ -241,17 +269,17 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
                 
-             
-                    
+                
+                
             }
-              
-          
+            
+            
         }
         
         
     }
-     
-
+    
+    
 }
 
 extension FeedViewController {
@@ -262,7 +290,7 @@ extension FeedViewController {
             
             DispatchQueue.main.async {
                 self.progressBar.isHidden = true
-               
+                
             }
             global_percentComplete = 0.00
             
@@ -272,9 +300,9 @@ extension FeedViewController {
             DispatchQueue.main.async {
                 self.progressBar.isHidden = false
                 self.progressBar.progress = (CGFloat(global_percentComplete)/100)
-               
+                
             }
-
+            
         }
         
     }
@@ -294,9 +322,9 @@ extension FeedViewController {
                     
                     collectionNode.scrollToItem(at: IndexPath(row: 1, section: 0), at: .centeredVertically, animated: false)
                     collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
+                    
                 }
-        
+                
             }
             
         } else {
@@ -304,14 +332,16 @@ extension FeedViewController {
             delayItem3.perform(after: 0.25) {
                 self.clearAllData()
             }
-
-        }
             
+        }
+        
     }
     
     func checkNotification() {
         
-        APIManager().getBadge { result in
+        APIManager.shared.getBadge { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -338,7 +368,7 @@ extension FeedViewController {
                         }
                         
                     }
- 
+                    
                 }
                 
             case .failure(let error):
@@ -347,8 +377,8 @@ extension FeedViewController {
                 }
                 print(error)
                 
+            }
         }
-    }
         
         
         
@@ -363,7 +393,7 @@ extension FeedViewController {
     func setupButtons() {
         
         setupHomeButton()
-
+        
     }
     
     
@@ -377,70 +407,61 @@ extension FeedViewController {
         homeButton.setTitle("", for: .normal)
         homeButton.sizeToFit()
         let homeButtonBarButton = UIBarButtonItem(customView: homeButton)
-    
+        
         self.navigationItem.leftBarButtonItem = homeButtonBarButton
-       
+        
     }
     
     
     func setupEmptyNotiButton() {
         
-         let notiButton = UIButton(type: .custom)
-         notiButton.setImage(UIImage.init(named: "noNoti"), for: [])
-         notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
-         notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-         let notiBarButton = UIBarButtonItem(customView: notiButton)
-
-         let searchButton = UIButton(type: .custom)
-         searchButton.setImage(UIImage(named: "search"), for: [])
-         searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
-         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-         let searchBarButton = UIBarButtonItem(customView: searchButton)
+        let notiButton = UIButton(type: .custom)
+        notiButton.setImage(UIImage.init(named: "noNoti"), for: [])
+        notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
+        notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let notiBarButton = UIBarButtonItem(customView: notiButton)
+        
+        let searchButton = UIButton(type: .custom)
+        searchButton.setImage(UIImage(named: "search"), for: [])
+        searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
+        searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let searchBarButton = UIBarButtonItem(customView: searchButton)
         
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
         
-        let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
+        //let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
         
-       
+        
     }
     
     
     func setupHasNotiButton() {
         
-         let notiButton = UIButton(type: .custom)
-         notiButton.setImage(UIImage.init(named: "homeNoti"), for: [])
-         notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
-         notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-         let notiBarButton = UIBarButtonItem(customView: notiButton)
-
-         let searchButton = UIButton(type: .custom)
-         searchButton.setImage(UIImage(named: "search"), for: [])
-         searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
-         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-         let searchBarButton = UIBarButtonItem(customView: searchButton)
+        let notiButton = UIButton(type: .custom)
+        notiButton.setImage(UIImage.init(named: "homeNoti"), for: [])
+        notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
+        notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let notiBarButton = UIBarButtonItem(customView: notiButton)
+        
+        let searchButton = UIButton(type: .custom)
+        searchButton.setImage(UIImage(named: "search"), for: [])
+        searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
+        searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let searchBarButton = UIBarButtonItem(customView: searchButton)
         
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
-        let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, promotionBarButton]
+        //let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
         
     }
+    
 
-    func createPromotionButton() -> UIBarButtonItem {
-        self.isPromote = true
-        
-        self.promotionButton.setImage(UIImage(named: "promotion icon")!.resize(targetSize: CGSize(width: 23, height: 23)), for: [])
-        self.promotionButton.addTarget(self, action: #selector(self.onClickPromote(_:)), for: .touchUpInside)
-        self.promotionButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        //self.promotionButton.promote()
-
-        return UIBarButtonItem(customView: self.promotionButton)
-    }
-
+    
 }
 
 extension FeedViewController {
@@ -471,8 +492,9 @@ extension FeedViewController {
     }
     
     @objc func onClickPromote(_ sender: AnyObject) {
-
+        
         if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PromoteVC") as? PromoteVC {
+            
             PVC.promotionList = self.promotionList
             PVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
@@ -487,12 +509,12 @@ extension FeedViewController {
 extension FeedViewController {
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
@@ -517,7 +539,7 @@ extension FeedViewController {
         
         SwiftLoader.show(title: progress, animated: true)
         
- 
+        
     }
     
 }
@@ -528,20 +550,20 @@ extension FeedViewController {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         // Check if this is the first visible cell and it contains a video.
-    
+        
         if isfirstLoad {
             isfirstLoad = false
             let post = posts[0]
             if !post.muxPlaybackId.isEmpty {
                 currentIndex = 0
                 newPlayingIndex = 0
-                playVideoIfNeed(playIndex: currentIndex!)
+                playVideo(index: currentIndex!)
                 isVideoPlaying = true
             }
             
         }
     }
-
+    
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
@@ -549,17 +571,17 @@ extension FeedViewController {
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-
+            
             // Calculate the visible cells.
             let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
-
+            
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
             
             var foundVisibleVideo = false
             
             for cell in visibleCells {
-            
+                
                 let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
                 let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
                 let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
@@ -569,7 +591,7 @@ extension FeedViewController {
                 }
             }
             
-
+            
             if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                 
                 foundVisibleVideo = true
@@ -587,11 +609,11 @@ extension FeedViewController {
                 if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                     // Pause the current video, if any.
                     if let currentIndex = currentIndex {
-                        pauseVideoIfNeed(pauseIndex: currentIndex)
+                        pauseVideo(index: currentIndex)
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
-                    playVideoIfNeed(playIndex: currentIndex!)
+                    playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
@@ -605,9 +627,9 @@ extension FeedViewController {
             } else {
                 
                 if let currentIndex = currentIndex {
-                    pauseVideoIfNeed(pauseIndex: currentIndex)
+                    pauseVideo(index: currentIndex)
                 }
-
+                
                 imageTimerWorkItem?.cancel()
                 imageTimerWorkItem = DispatchWorkItem { [weak self] in
                     guard let self = self else { return }
@@ -620,17 +642,17 @@ extension FeedViewController {
                         }
                     }
                 }
-
+                
                 if let imageTimerWorkItem = imageTimerWorkItem {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
                 }
-
-            
+                
+                
                 // Reset the current playing index.
                 currentIndex = nil
                 
             }
-
+            
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
             if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
@@ -645,52 +667,51 @@ extension FeedViewController {
             
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
-                pauseVideoIfNeed(pauseIndex: currentIndex!)
+                pauseVideo(index: currentIndex!)
                 currentIndex = nil
             }
             
         }
         
-    
+        
     }
-
-
+    
+    
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         
         if scrollView == collectionNode.view {
             
             if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-               navigationController?.setNavigationBarHidden(true, animated: true)
-                 changeTabBar(hidden: true, animated: true)
-                 self.tabBarController?.tabBar.isTranslucent = true
-                 hideMiddleBtn(vc: self)
-                 bottomConstraint.constant = 20
+                navigationController?.setNavigationBarHidden(true, animated: true)
+                changeTabBar(hidden: true, animated: true)
+                self.tabBarController?.tabBar.isTranslucent = true
+                bottomConstraint.constant = bottomValue
+                hideMiddleBtn(vc: self)
                 
-
             } else {
-               navigationController?.setNavigationBarHidden(false, animated: true)
+                navigationController?.setNavigationBarHidden(false, animated: true)
                 changeTabBar(hidden: false, animated: false)
                 self.tabBarController?.tabBar.isTranslucent = false
                 showMiddleBtn(vc: self)
                 
-                bottomConstraint.constant = 0
+                bottomConstraint.constant = bottomValueNoHide
             }
             
         }
-       
+        
     }
     
     func changeTabBar(hidden: Bool, animated: Bool) {
         guard let tabBar = self.tabBarController?.tabBar else {
             return
         }
-
+        
         if tabBar.isHidden == hidden {
             return
         }
-
+        
         let duration: TimeInterval = (animated ? 0.25 : 0.0)
-
+        
         if hidden {
             UIView.animate(withDuration: duration, animations: {
                 tabBar.alpha = 0
@@ -701,32 +722,43 @@ extension FeedViewController {
         } else {
             tabBar.isHidden = false
             tabBar.alpha = 0
-
+            
             UIView.animate(withDuration: duration) {
                 tabBar.alpha = 1
             }
         }
     }
-
-
-
-
     
-
+    
+    
+    
+    
+    
 }
 
 extension FeedViewController {
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
+
+        // Check if collectionView.tag is within the range of the posts array
+        guard collectionView.tag < posts.count else {
+            print("Error: No post for tag \(collectionView.tag)")
+            cell.hashTagLabel.text = "Error: post not found"
+            return cell
+        }
         
-        let cell = (collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath)) as! HashtagCell
         let item = posts[collectionView.tag]
-        
-     
+
+        // Check if indexPath.row is within the range of the hashtags array
+        guard indexPath.row < item.hashtags.count else {
+            print("Error: No hashtag for index \(indexPath.row)")
+            cell.hashTagLabel.text = "Error: hashtag not found"
+            return cell
+        }
+
         cell.hashTagLabel.text = item.hashtags[indexPath.row]
-        
         return cell
-        
-        
     }
     
     
@@ -735,10 +767,14 @@ extension FeedViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       
-        return posts[collectionView.tag].hashtags.count
-        
+        if collectionView.tag < posts.count {
+            return posts[collectionView.tag].hashtags.count
+        } else {
+            print("Warning: collectionView.tag is out of range!")
+            return 0
+        }
     }
+
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -756,7 +792,7 @@ extension FeedViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
+        return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
     }
     
     
@@ -801,9 +837,9 @@ extension FeedViewController: ASCollectionDataSource {
             
             
             node.settingBtn = { (node) in
-            
+                
                 self.settingPost(item: post)
-                  
+                
             }
             
             delay(0.3) {
@@ -819,33 +855,42 @@ extension FeedViewController: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        if self.posts.count >= 150 {
-            
-            context.completeBatchFetching(true)
-            clearAllData()
-            
-            
-        } else {
-            
-            if refresh_request == false {
-                self.retrieveNextPageWithCompletion { (newPosts) in
-                    
-                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                    
-
-                    context.completeBatchFetching(true)
-                    
-                    
-                }
-            } else {
+        if refresh_request == false {
+            retrieveNextPageWithCompletion { [weak self] (newPosts) in
+                guard let self = self else { return }
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+                self.cleanupPosts(collectionNode: collectionNode)
+                
                 context.completeBatchFetching(true)
             }
-            
-            
-            
+        } else {
+            context.completeBatchFetching(true)
         }
     }
-    
+
+    private func cleanupPosts(collectionNode: ASCollectionNode) {
+        let postThreshold = 100
+        let postsToRemove = 50
+        let startIndex = 15
+
+        if self.posts.count > postThreshold {
+            // check if we have enough posts to remove
+            if (startIndex + postsToRemove) <= self.posts.count {
+                // remove the posts from startIndex to startIndex + postsToRemove
+                self.posts.removeSubrange(startIndex..<(startIndex + postsToRemove))
+
+                // generate the index paths for old posts
+                let indexPathsToRemove = Array(startIndex..<(startIndex + postsToRemove)).map { IndexPath(row: $0, section: 0) }
+
+                // delete the old posts from collectionNode
+                collectionNode.performBatchUpdates({
+                    collectionNode.deleteItems(at: indexPathsToRemove)
+                }, completion: nil)
+            }
+        }
+    }
+
 
     
 }
@@ -868,7 +913,7 @@ extension FeedViewController {
         self.contentView.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
         self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: -1).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
@@ -877,7 +922,7 @@ extension FeedViewController {
         // Reload the data on the collection node
         self.collectionNode.reloadData()
     }
-
+    
     
     
     func applyStyle() {
@@ -896,10 +941,12 @@ extension FeedViewController {
 
 extension FeedViewController {
     
-
+    
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager().getUserFeed { result in
+        APIManager.shared.getUserFeed { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -914,7 +961,7 @@ extension FeedViewController {
                     self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data
-                  
+                    
                     DispatchQueue.main.async {
                         block(items)
                     }
@@ -930,41 +977,35 @@ extension FeedViewController {
                 let item = [[String: Any]]()
                 DispatchQueue.main.async {
                     block(item)
+                }
             }
         }
-    }
         
     }
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-        
+
         // checking empty
         guard newPosts.count > 0 else {
             return
         }
-        
+
         if refresh_request {
-            
+
             refresh_request = false
-            
 
             if !self.posts.isEmpty {
-                
-               
                 var delete_indexPaths: [IndexPath] = []
-                
                 for row in 0..<self.posts.count {
                     let path = IndexPath(row: row, section: 0) // single indexpath
-                    delete_indexPaths.append(path) // app
+                    delete_indexPaths.append(path) // append
                 }
-            
+
                 self.posts.removeAll()
                 self.collectionNode.deleteItems(at: delete_indexPaths)
-                   
             }
-            
         }
-        
+
         // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()
         for i in newPosts {
@@ -974,44 +1015,35 @@ extension FeedViewController {
                     items.append(item)
                 }
             }
-            
         }
-        
-        // Construct index paths for the new rows
-        let startIndex = self.posts.count - items.count
-        let endIndex = startIndex + items.count - 1
-        let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-        
-        if firstAnimated {
-            
-            firstAnimated = false
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-            
-        }
-        
 
-        // Insert new items at index paths
-        self.collectionNode.insertItems(at: indexPaths)
-      
+        // Construct index paths for the new rows
+        if items.count > 0 {
+            let startIndex = self.posts.count - items.count
+            let endIndex = startIndex + items.count - 1
+            print(startIndex, endIndex)
+            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
+
+            if firstAnimated {
+                firstAnimated = false
+
+                UIView.animate(withDuration: 0.5) {
+                    self.loadingView.alpha = 0
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    if self.loadingView.alpha == 0 {
+                        self.loadingView.isHidden = true
+                    }
+                }
+            }
+
+            // Insert new items at index paths
+            self.collectionNode.insertItems(at: indexPaths)
+        }
     }
 
+    
     
 }
 
@@ -1046,9 +1078,9 @@ extension FeedViewController {
     }
     
     @objc func copyPost() {
-    
+        
         if let id = self.editeddPost?.id {
-           
+            
             let link = "https://stitchbox.gg/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
@@ -1078,17 +1110,24 @@ extension FeedViewController {
     @objc func removePost() {
         
         if let deletingPost = editeddPost {
-           
+            
             if let indexPath = posts.firstIndex(of: deletingPost) {
                 
                 posts.removeObject(deletingPost)
                 collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                 reloadAllCurrentHashtag()
+                
+                delay(0.75) { [weak self] in
+                    if indexPath < self?.posts.count ?? 0 {
+                        self?.playVideo(index: indexPath)
+                    }
+                }
+                
             }
             
         }
         
-       
+        
     }
     
     func reloadAllCurrentHashtag() {
@@ -1143,14 +1182,14 @@ extension FeedViewController {
         delay(0.1) {
             self.present(ac, animated: true, completion: nil)
         }
-      
+        
     }
     
     func switchToProfileVC() {
         
         changeTabBar(hidden: false, animated: false)
         self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
-       
+        
         
     }
     
@@ -1167,18 +1206,20 @@ extension FeedViewController {
     
     func resetNoti() {
         
-            APIManager().resetBadge { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    Dispatch.main.async {
-                        self.setupEmptyNotiButton()
-                    }
-
-                case .failure(let error):
-                    
-                    print(error)
-                    
+        APIManager.shared.resetBadge { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                
+                Dispatch.main.async {
+                    self.setupEmptyNotiButton()
+                }
+                
+            case .failure(let error):
+                
+                print(error)
+                
             }
         }
         
@@ -1207,12 +1248,43 @@ extension FeedViewController {
     }
     
     
+    func seekVideo(index: Int, time: CMTime) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+            
+            cell.videoNode.player?.seek(to: time)
+            
+        }
+        
+    }
+    
+    
     func playVideo(index: Int) {
         
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
             
             if !cell.videoNode.isPlaying() {
+                
+                
+                let userDefaults = UserDefaults.standard
+                
+                
+                if userDefaults.bool(forKey: "hasGuideLandTap") == false {
+                   
+                    
+                    delayItem.perform(after: 0.5) {
+                        cell.tapAnimation()
+                    }
+                   
+                    // Update the flag indicator
+                    userDefaults.set(true, forKey: "hasGuideLandTap")
+                    userDefaults.synchronize() // This forces the app to update userDefaults
+                   
+                    
+                }
+                
+                
                 
                 if !cell.buttonsView.streamView.isHidden {
                     
@@ -1230,7 +1302,7 @@ extension FeedViewController {
                             cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
                         }
                     }
-                   
+                    
                     if muteStatus {
                         cell.videoNode.muted = true
                     } else {
@@ -1249,7 +1321,7 @@ extension FeedViewController {
                             cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
                         }
                     }
-                   
+                    
                     if globalIsSound {
                         cell.videoNode.muted = false
                     } else {
@@ -1259,11 +1331,18 @@ extension FeedViewController {
                     cell.videoNode.play()
                     
                 }
- 
-              
+                
+                
             }
             
         }
+        
+    }
+    
+    func processTapWalkThrough() {
+        
+        
+        
         
     }
     
@@ -1275,15 +1354,17 @@ extension FeedViewController {
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
-        APIManager().getSettings { result in
+        APIManager.shared.getSettings { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
-            
+                
                 guard let data = apiResponse.body else {
                     completed()
-                        return
+                    return
                 }
-
+                
                 let settings =  Mapper<SettingModel>().map(JSONObject: data)
                 globalSetting = settings
                 globalIsSound = settings?.AutoPlaySound ?? false
@@ -1291,9 +1372,9 @@ extension FeedViewController {
                 completed()
                 
             case .failure(_):
-            
+                
                 completed()
-               
+                
             }
         }
         
@@ -1302,14 +1383,16 @@ extension FeedViewController {
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
         
-        APIManager().getme { result in
+        APIManager.shared.getme { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 
                 if let data = response.body {
                     
                     if !data.isEmpty {
-                    
+                        
                         if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
                             _AppCoreData.reset()
                             _AppCoreData.userDataSource.accept(newUserData)
@@ -1318,7 +1401,7 @@ extension FeedViewController {
                             completed()
                         }
                         
-                      
+                        
                     } else {
                         completed()
                     }
@@ -1339,3 +1422,5 @@ extension FeedViewController {
     
     
 }
+
+

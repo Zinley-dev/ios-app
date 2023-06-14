@@ -30,7 +30,11 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     @IBOutlet weak var selectedUserListHeight: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     
-    
+    @IBOutlet weak var collectionLayout: UICollectionViewFlowLayout! {
+        didSet {
+            collectionLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        }
+    }
     //
     var joinedUserIds: [String] = []
     var bannedList: [String] = []
@@ -49,34 +53,32 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     private lazy var leftBarButton: UIBarButtonItem? = _leftBarButton
     private lazy var rightBarButton: UIBarButtonItem? = _rightBarButton
    
-    /*
-    private lazy var _titleView: SBUNavigationTitleView = {
-        var titleView: SBUNavigationTitleView
-        if #available(iOS 11, *) {
-            titleView = SBUNavigationTitleView()
-        } else {
-            titleView = SBUNavigationTitleView(
-                frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50)
-            )
-        }
-        titleView.text = "Add members"
-        titleView.textAlignment = .center
-        return titleView
-    }() */
-    
     private lazy var _leftBarButton: UIBarButtonItem = {
         
-        let leftButton = UIButton(type: .custom)
+        let backButton = UIButton(type: .custom)
         
-        leftButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
-        leftButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
-        leftButton.frame = back_frame
-        leftButton.setTitleColor(UIColor.white, for: .normal)
-        leftButton.setTitle("", for: .normal)
-        leftButton.sizeToFit()
+        backButton.frame = back_frame
+        backButton.contentMode = .center
         
-        let backButtonBarButton = UIBarButtonItem(customView: leftButton)
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+        
+        backButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
+        backButton.setTitleColor(UIColor.white, for: .normal)
+        backButton.setTitle("", for: .normal)
+        let backButtonBarButton = UIBarButtonItem(customView: backButton)
+        
+        self.navigationItem.leftBarButtonItem = backButtonBarButton
+        
         return backButtonBarButton
+
     }()
     
     private lazy var _rightBarButton: UIBarButtonItem = {
@@ -134,6 +136,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         }
         
         
+        NotificationCenter.default.addObserver(self, selector: #selector(InviteUserVC.InviteToChannel), name: (NSNotification.Name(rawValue: "invite")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(InviteUserVC.createChannel), name: (NSNotification.Name(rawValue: "create")), object: nil)
+        
        
     }
     
@@ -149,6 +154,15 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "invite")), object: nil)
+        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "create")), object: nil)
+        
         
     }
     
@@ -187,7 +201,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         layout.itemSize = CGSize(width: 120, height: 30)
         self.selectedUserListView.collectionViewLayout = layout
         self.selectedUserListView.contentInset = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
-        self.selectedUserListView.register(SelectedUserCollectionViewCell.nib(), forCellWithReuseIdentifier: SelectedUserCollectionViewCell.cellReuseIdentifier())
+        self.selectedUserListView.register(HashtagCell.nib(), forCellWithReuseIdentifier: HashtagCell.cellReuseIdentifier())
         self.selectedUserListView.isHidden = true
         self.selectedUserListView.showsHorizontalScrollIndicator = false
         self.selectedUserListView.showsVerticalScrollIndicator = false
@@ -212,8 +226,11 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     }
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelectedUserCollectionViewCell.cellReuseIdentifier(), for: indexPath) as! SelectedUserCollectionViewCell
-        cell.nicknameLabel.text = selectedUsers[indexPath.row].nickname
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
+        cell.hashTagLabel.text = selectedUsers[indexPath.row].nickname
+        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.backgroundColor = .clear
+        cell.backgroundColor = .primary
         return cell
     }
 
@@ -256,16 +273,22 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 if searchUserList.contains(user) {
                     searchUserList.removeObject(user)
                 }
-                rightBarButton?.isEnabled = false
-                selectedUserListHeight.constant = 0
-                selectedUserListView.isHidden = true
             } else {
                 selectedUsers.append(user)
                 cell.selectUser(true)
+            }
+
+            // Update button and view based on number of selected users
+            if selectedUsers.count > 0 {
                 rightBarButton?.isEnabled = true
                 selectedUserListHeight.constant = 40
                 selectedUserListView.isHidden = false
+            } else {
+                rightBarButton?.isEnabled = false
+                selectedUserListHeight.constant = 0
+                selectedUserListView.isHidden = true
             }
+
             setupStyles()
             selectedUserListView.reloadData()
         }
@@ -303,7 +326,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
 
     
     func loadDefaultUsers(needChecked: Bool) {
-        APIManager().searchUsersForChat(keyword: "") { result in
+        APIManager.shared.searchUsersForChat(keyword: "") { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
@@ -348,9 +373,12 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     }
 
     func searchUsers(keyword: String) {
-        APIManager().searchUsersForChat(keyword: keyword) { result in
+        APIManager.shared.searchUsersForChat(keyword: keyword) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
+     
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     return
                 }
@@ -385,15 +413,15 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                return
            }
 
-           // Check if the joinedUserIds array has exactly 2 elements
-           if joinedUserIds.count == 2 {
-               createNewChannel()
-           } else {
-               // Get an array of user IDs from the selectedUsers array
-               let userIds = Array(self.selectedUsers).sbu_getUserIds()
-               // Invite users to the group channel
-               inviteUsers(userIds: userIds)
-           }
+           let slideVC = InviteView()
+           
+           slideVC.modalPresentationStyle = .custom
+           slideVC.transitioningDelegate = self
+           global_presetingRate = Double(0.35)
+           global_cornerRadius = 35
+           self.present(slideVC, animated: true, completion: nil)
+           
+        
        }
     }
 
@@ -440,6 +468,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                // Create an instance of ChannelViewController
                let channelVC = ChannelViewController(channelUrl: channelUrl!, messageListParams: nil)
                // Push ChannelViewController onto the navigation stack
+               channelVC.shouldUnhide = true
                self.navigationController?.pushViewController(channelVC, animated: true)
                // Remove view controllers in the stack after it
                self.navigationController?.viewControllers.removeSubrange(1...4)
@@ -461,29 +490,35 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     
     
     func inviteUsers(userIds: [String]) {
-       // Get a reference to the group channel
-       guard let channel = self.channel else { return }
-
-       // Invite users to the group channel
-       channel.inviteUserIds(userIds) { [weak self] error in
-           guard let self = self else { return }
-
-           // Check if the invitation was successful
-           if let error = error {
-               print(error.localizedDescription)
-               return
-           }
-
-           // Check if the channelUrl property is not nil
-           if let url = self.channelUrl {
-               // Call checkForChannelInvitation function
-               checkForChannelInvitation(channelUrl: url, user_ids: userIds)
-           }
-
-           // Pop back to the fourth view controller in the navigation stack
-           self.navigationController?.popBack(4)
-       }
+        // Get a reference to the group channel
+        guard let channel = self.channel else { return }
+        
+        // Check if the channelUrl property is not nil
+        guard let url = self.channelUrl else { return }
+        
+        inviteUsersToChannel(userIds: userIds, channel: channel, url: url)
     }
+
+    func inviteUsersToChannel(userIds: [String], channel: SBDGroupChannel, url: String) {
+        channel.inviteUserIds(userIds) { [weak self] error in
+            guard let self = self else { return }
+            
+            // Check if the invitation was successful
+            if let error = error {
+                print(error.localizedDescription)
+                showErrorAlert("Oops!", msg: error.localizedDescription)
+                return
+            }
+            
+            // Call checkForChannelInvitation function
+            checkForChannelInvitation(channelUrl: url, user_ids: userIds)
+
+            // Pop back to the fourth view controller in the navigation stack
+            // Assuming you have a custom implementation for popBack function
+            self.navigationController?.popBack(4)
+        }
+    }
+
 
     
     
@@ -496,6 +531,24 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         SBULoading.stop()
     }
 
+    
+    @objc func createChannel() {
+        
+        createNewChannel()
+        
+        
+    }
+    
+    
+    
+    
+    @objc func InviteToChannel() {
+        
+        let userIds = Array(self.selectedUsers).sbu_getUserIds()
+        // Invite users to the group channel
+        inviteUsers(userIds: userIds)
+        
+    }
     
   
 

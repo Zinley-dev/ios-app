@@ -101,25 +101,41 @@ struct ContentView: View {
                     .frame(width: 30, height: 30)
                     .cornerRadius(15)
             }
+        
             
+            if #available(iOS 16.0, *) {
+                TextField("", text: $vm.inputMessage, prompt: Text("Ask us anything!").foregroundColor(.gray), axis: .vertical)
+                               #if os(iOS) || os(macOS)
+                               .textFieldStyle(.plain)
+                               .preferredColorScheme(.dark)
+                               .background(.clear) // To see this
+                               .foregroundColor(.white)
+                               .accentColor(Color(red: 194.0 / 255.0, green: 169.0 / 255.0, blue: 250.0 / 255.0, opacity: 1.0)) // Set the color of the placeholder
+                               .font(.system(size: 15)) // And here
+                           
+                               #endif
+                               .focused($isTextFieldFocused)
+                               .disabled(vm.isInteractingWithChatGPT)
+            } else {
+                ZStack(alignment: .leading) {
+                    if vm.inputMessage.isEmpty && !isTextFieldFocused {
+                        Text("Ask us anything!")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 15))
+                    }
+                    TextField("", text: $vm.inputMessage)
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .background(Color.clear)
+                        .foregroundColor(.white)
+                        .accentColor(Color(red: 194.0 / 255.0, green: 169.0 / 255.0, blue: 250.0 / 255.0, opacity: 1.0))
+                        .font(.system(size: 15))
+                        .focused($isTextFieldFocused)
+                        .disabled(vm.isInteractingWithChatGPT)
+                }
+            }
 
-            
-            TextField("", text: $vm.inputMessage, prompt: Text("Ask us anything!").foregroundColor(.gray), axis: .vertical)
-                #if os(iOS) || os(macOS)
-                .textFieldStyle(.plain)
-                .preferredColorScheme(.dark)
-                .background(.clear) // To see this
-                .foregroundColor(.white)
-                .accentColor(Color(red: 194.0 / 255.0, green: 169.0 / 255.0, blue: 250.0 / 255.0, opacity: 1.0)) // Set the color of the placeholder
-                .font(.system(size: 15)) // And here
-            
-                #endif
-                .focused($isTextFieldFocused)
-                .disabled(vm.isInteractingWithChatGPT)
-            
-            
 
-            
+
             if vm.isInteractingWithChatGPT {
                 DotLoadingView().frame(width: 40, height: 30)
             } else {
@@ -166,15 +182,6 @@ struct ContentView: View {
 
 }
 
-struct ContentView_Previews: PreviewProvider {
-    @State static private var dummyScrollToLastMessage = false
-    
-    static var previews: some View {
-        NavigationStack {
-            ContentView(vm: ViewModel(api: ChatGPTAPI(apiKey: "PROVIDE_API_KEY")), scrollToLastMessage: $dummyScrollToLastMessage)
-        }
-    }
-}
 
 
 struct ViewOffsetKey: PreferenceKey {

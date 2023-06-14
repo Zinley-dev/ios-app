@@ -64,6 +64,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
   override func viewDidLoad() {
     super.viewDidLoad()
     
+      
     if _AppCoreData.userSession.value == nil {
         _AppCoreData.signOut()
         
@@ -112,6 +113,8 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
       termOfUseLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         
         
+        
+        
     } else {
         
         self.loadNewestCoreData {
@@ -128,13 +131,14 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        
         if player != nil {
             player!.play()
             
             delay(1) {
                 NotificationCenter.default.addObserver(self, selector: #selector(self.playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player!.currentItem)
             }
-           
+        
         }
         
 
@@ -142,6 +146,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         
         if player != nil {
             player!.pause()
@@ -330,7 +335,9 @@ extension StartViewController {
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
-        APIManager().getSettings { result in
+        APIManager.shared.getSettings { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
             
@@ -357,11 +364,15 @@ extension StartViewController {
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
         
-        APIManager().getme { result in
+        APIManager.shared.getme { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let response):
                 
                 if let data = response.body {
+                    
+                    print(data)
                     
                     if !data.isEmpty {
                     

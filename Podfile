@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '16.0'
+platform :ios, '15.0'
 
 target 'Stitchbox' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -55,6 +55,12 @@ target 'Stitchbox' do
   pod 'GoogleMaps'
   pod 'GooglePlaces'
   pod 'swift-vibrant'
+  
+  pod 'Sentry'
+  pod "SwipeTransition"
+  pod "SwipeTransitionAutoSwipeBack"      # if needed
+  pod "SwipeTransitionAutoSwipeToDismiss" # if needed
+  pod 'GLWalkthrough'
   
   target 'StitchboxTests' do
     inherit! :search_paths

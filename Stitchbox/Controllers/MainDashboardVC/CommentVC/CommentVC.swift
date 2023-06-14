@@ -28,17 +28,17 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     var cmtPage = 2
     @IBOutlet weak var totalCmtCount: UILabel!
     @IBOutlet weak var bView: UIView!
-
+    var isMovingForward = false
     var hasSetPointOrigin = false
     var pointOrigin: CGPoint?
     var editedComment: CommentModel?
     var editedIndexpath: IndexPath?
-
+    
     var reply_to_uid: String!
     var reply_to_cid: String!
     var reply_to_username: String!
     var firstAnimated = true
-
+    
     var prev_id: String!
     
     var root_id: String!
@@ -52,6 +52,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
     var placeholderLabel : UILabel!
+    
     var CommentList = [CommentModel]()
     var tableNode: ASTableNode!
     
@@ -67,8 +68,8 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     var uid_dict = [String: String]()
     
     var post: PostModel!
-
-
+    
+    
     let searchResultContainerView = UIView()
     
     lazy var autocompleteVC: AutocompeteViewController = {
@@ -78,7 +79,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         self.searchResultContainerView.addSubview(vc.view)
         vc.view.frame = searchResultContainerView.bounds
-    
+        
         
         vc.userSearchcompletionHandler = { newMention, userUID in
             if newMention.isEmpty {
@@ -121,7 +122,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
             
             
             self.cmtTxtView.text = String(finalText)
-
+            
             
             self.searchResultContainerView.isHidden = true
             vc.clearTable()
@@ -131,10 +132,10 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         return vc
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerAction))
         view.addGestureRecognizer(panGesture)
@@ -142,10 +143,10 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         setupTableNode()
         setupSearchController()
         setupPlaceholder()
-
+        
         setupLongPressGesture()
         loadAvatar()
-      
+        
         commentBtn.setTitle("", for: .normal)
         getInitCmt()
         
@@ -160,19 +161,22 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         
         //
-    
+        
+        
+        
         
     }
     
     func getInitCmt() {
-        APIManager().getInitComment(postId: post.id) { result in
+        APIManager.shared.getInitComment(postId: post.id) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [String: Any] else {
                     print("Couldn't cast")
                     return
                 }
-
+                
                 if let count = data["count"] as? Int {
                     
                     DispatchQueue.main.async {
@@ -180,16 +184,17 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                     }
                     
                 }
-
+                
                 if let title = data["title"] as? [[String: Any]] {
                     for titleItem in title {
+                        
                         let item = CommentModel(postKey: titleItem["_id"] as! String, Comment_model: titleItem)
                         self.CommentList.insert(item, at: 0)
                     }
                 } else {
                     print("Title is null or couldn't be cast")
                 }
-
+                
                 if let pin = data["pin"] as? [[String: Any]] {
                     for pinItem in pin {
                         let item = CommentModel(postKey: pinItem["_id"] as! String, Comment_model: pinItem)
@@ -198,7 +203,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                 } else {
                     print("Pin is null or couldn't be cast")
                 }
-
+                
                 if let commentsContainer = data["comments"] as? [String: Any],
                    let comments = commentsContainer["data"] as? [[String: Any]] {
                     for comment in comments {
@@ -229,11 +234,6 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
             }
         }
     }
-
-
-
-    
-    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -260,7 +260,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
             }
             
             loadingView.backgroundColor = self.view.backgroundColor
- 
+            
         }
         
     }
@@ -270,13 +270,55 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-
+        
         
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "pin_cmt")), object: nil)
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "unpin_cmt")), object: nil)
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_cmt")), object: nil)
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_cmt")), object: nil)
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "delete_cmt")), object: nil)
+        
+        
+        delay(0.001) {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                if let update1 = vc as? FeedViewController {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                    
+                } else if let update1 = vc as? PostListWithHashtagVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                } else if let update1 = vc as? MainSearchVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.PostSearchVC.viewWillAppear(true)
+                    }
+                    
+                } else if let update1 = vc as? ReelVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                } else if let update1 = vc as? SelectedPostVC {
+                    
+                    if !update1.hasViewAppeared {
+                        update1.viewWillAppear(true)
+                    }
+                    
+                }
+                
+            }
+            
+        }
         
     }
     
@@ -314,8 +356,8 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         
     }
-
-
+    
+    
 }
 
 extension CommentVC {
@@ -327,7 +369,7 @@ extension CommentVC {
         
         if let text = textView.text, text != "" {
             let curTxtLen = text.count
-         
+            
             if curTxtLen < previousTxtLen && !isInAutocomplete {
                 handleDeletion()
             } else {
@@ -339,41 +381,41 @@ extension CommentVC {
             mention_dict.removeAll()
             self.searchResultContainerView.isHidden = true
         }
-       
+        
     }
     
     func handleDeletion() {
         
         var txtBefore: String
         var targetTxt: String
-            if let lastSpace = previousTxt.lastIndex(of: " ") {
-                txtBefore = String(previousTxt[..<lastSpace])
-                targetTxt = String(previousTxt[previousTxt.index(after: lastSpace)...])
-                
-            } else {
-                txtBefore = ""
-                targetTxt = previousTxt
+        if let lastSpace = previousTxt.lastIndex(of: " ") {
+            txtBefore = String(previousTxt[..<lastSpace])
+            targetTxt = String(previousTxt[previousTxt.index(after: lastSpace)...])
+            
+        } else {
+            txtBefore = ""
+            targetTxt = previousTxt
+        }
+        print("target txt: " + targetTxt)
+        if let firstOfTarget = targetTxt.first {
+            print("first charactor: " + String(firstOfTarget))
+            switch firstOfTarget {
+            case "@":
+                print("delete @")
+                self.mention_arr.removeObject(targetTxt)
+                self.previousTxtLen = txtBefore.count
+                self.previousTxt = txtBefore
+                uid_dict[String(targetTxt.dropFirst())] = nil
+                self.cmtTxtView.text = txtBefore
+                print("target: " + targetTxt)
+            case "#":
+                print("delete #")
+            default:
+                print("normal delete")
+                updatePrevCmtTxt()
+                return
             }
-            print("target txt: " + targetTxt)
-            if let firstOfTarget = targetTxt.first {
-                print("first charactor: " + String(firstOfTarget))
-                switch firstOfTarget {
-                case "@":
-                    print("delete @")
-                    self.mention_arr.removeObject(targetTxt)
-                    self.previousTxtLen = txtBefore.count
-                    self.previousTxt = txtBefore
-                    uid_dict[String(targetTxt.dropFirst())] = nil
-                    self.cmtTxtView.text = txtBefore
-                    print("target: " + targetTxt)
-                case "#":
-                    print("delete #")
-                default:
-                    print("normal delete")
-                    updatePrevCmtTxt()
-                    return
-                }
-            }
+        }
         
         updatePrevCmtTxt()
         
@@ -381,45 +423,45 @@ extension CommentVC {
     
     
     
-func checkCurrenText(text: String) {
-    
-    if hashtag_arr != text.findMHashtagText() {
-        hashtag_arr = text.findMHashtagText()
-        if !hashtag_arr.isEmpty {
-            let hashtagToSearch = hashtag_arr[hashtag_arr.count - 1]
-            let hashtagToSearchTrimmed = String(hashtagToSearch.dropFirst(1))
-           
-            if !hashtagToSearchTrimmed.isEmpty {
-                self.searchResultContainerView.isHidden = false
-                self.autocompleteVC.search(text: hashtagToSearchTrimmed, with: AutocompeteViewController.Mode.hashtag)
-                isInAutocomplete = true
-            }
-        }
+    func checkCurrenText(text: String) {
         
-    } else if mention_arr != text.findMentiontagText() {
-        mention_arr = text.findMentiontagText()
-        if !mention_arr.isEmpty {
-            let userToSearch = mention_arr[mention_arr.count - 1]
-            let userToSearchTrimmed = String(userToSearch.dropFirst(1))
-            
-            if !userToSearchTrimmed.isEmpty {
-                self.searchResultContainerView.isHidden = false
-                self.autocompleteVC.search(text: userToSearchTrimmed, with: AutocompeteViewController.Mode.user)
-                isInAutocomplete = true
-
+        if hashtag_arr != text.findMHashtagText() {
+            hashtag_arr = text.findMHashtagText()
+            if !hashtag_arr.isEmpty {
+                let hashtagToSearch = hashtag_arr[hashtag_arr.count - 1]
+                let hashtagToSearchTrimmed = String(hashtagToSearch.dropFirst(1))
+                
+                if !hashtagToSearchTrimmed.isEmpty {
+                    self.searchResultContainerView.isHidden = false
+                    self.autocompleteVC.search(text: hashtagToSearchTrimmed, with: AutocompeteViewController.Mode.hashtag)
+                    isInAutocomplete = true
+                }
             }
             
+        } else if mention_arr != text.findMentiontagText() {
+            mention_arr = text.findMentiontagText()
+            if !mention_arr.isEmpty {
+                let userToSearch = mention_arr[mention_arr.count - 1]
+                let userToSearchTrimmed = String(userToSearch.dropFirst(1))
+                
+                if !userToSearchTrimmed.isEmpty {
+                    self.searchResultContainerView.isHidden = false
+                    self.autocompleteVC.search(text: userToSearchTrimmed, with: AutocompeteViewController.Mode.user)
+                    isInAutocomplete = true
+                    
+                }
+                
+            }
+        } else {
+            
+            self.searchResultContainerView.isHidden = true
+            
         }
-    } else {
-
-        self.searchResultContainerView.isHidden = true
+        self.updatePrevCmtTxt()
+        
+        print("Done")
         
     }
-    self.updatePrevCmtTxt()
-    
-    print("Done")
-    
-}
     
     func updatePrevCmtTxt() {
         self.previousTxtLen = self.cmtTxtView.text.count
@@ -432,10 +474,12 @@ extension CommentVC {
     
     func loadCommentTitle() {
         
-        APIManager().getTitleComment(postId: post.id) { result in
+        APIManager.shared.getTitleComment(postId: post.id) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
-              
+                
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     self.loadPinnedPost()
                     return
@@ -454,14 +498,16 @@ extension CommentVC {
             case .failure(let error):
                 print(error)
                 self.loadPinnedPost()
-          }
-      }
+            }
+        }
         
     }
     
     func loadPinnedPost() {
         
-        APIManager().getPinComment(postId: post.id) { result in
+        APIManager.shared.getPinComment(postId: post.id) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -483,8 +529,8 @@ extension CommentVC {
             case .failure(let error):
                 print(error)
                 self.wireDelegates()
-          }
-      }
+            }
+        }
         
     }
     
@@ -526,7 +572,7 @@ extension CommentVC {
     
     func setupTableNode() {
         
-       
+        
         self.tableNode = ASTableNode(style: .plain)
         tView.addSubview(tableNode.view)
         self.applyStyle()
@@ -565,23 +611,23 @@ extension CommentVC {
     }
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         
-                                                                                       
+        
         present(alert, animated: true, completion: nil)
         
     }
     
-  
+    
     func loadAvatar() {
         guard let userDataSource = _AppCoreData.userDataSource.value else {
             return
         }
         let avatarUrl = userDataSource.avatarURL
-
+        
         imageStorage.async.object(forKey: avatarUrl) { result in
             if case .value(let image) = result {
                 // Return the image from cache
@@ -590,7 +636,7 @@ extension CommentVC {
                 }
                 return
             }
-
+            
             // Image not found in cache or storage, fetch from network
             AF.request(avatarUrl).validate().responseImage { response in
                 switch response.result {
@@ -603,7 +649,7 @@ extension CommentVC {
             }
         }
     }
-
+    
     
 }
 
@@ -639,11 +685,11 @@ extension CommentVC {
                 
                 if uid == self.post.owner?.id {
                     commentSettings.isPostOwner = true
-    
+                    
                 } else {
                     commentSettings.isPostOwner = false
                 }
-
+                
                 if uid == selectedCmt.comment_uid {
                     commentSettings.isCommentOwner = true
                 } else {
@@ -653,12 +699,12 @@ extension CommentVC {
                 if selectedCmt.is_title {
                     commentSettings.isTitle = true
                 }
-               
+                
                 editedComment = selectedCmt
                 editedIndexpath = indexPath
                 
                 self.present(commentSettings, animated: true, completion: nil)
-            
+                
             }
         }
     }
@@ -685,12 +731,12 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        self.retrieveNextPageWithCompletion { (newPosts) in
-            
+        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
             self.insertNewRowsInTableNode(newPosts: newPosts)
             
-        
-      
+            
+            
             context.completeBatchFetching(true)
             
             
@@ -700,7 +746,7 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
     
     
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-    
+        
         
         return self.CommentList.count
         
@@ -708,200 +754,168 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         let comment = self.CommentList[indexPath.row]
-        
-        return makeCommentNodeBlock(with: comment, indexPath: indexPath)
+        return makeCommentNodeBlock(with: comment)
     }
-
-    private func makeCommentNodeBlock(with comment: CommentModel, indexPath: IndexPath) -> ASCellNodeBlock {
+    
+    
+    private func makeCommentNodeBlock(with comment: CommentModel) -> ASCellNodeBlock {
         let nodeBlock: ASCellNodeBlock = {
             let node = CommentNode(with: comment)
             node.neverShowPlaceholders = true
-            node.debugName = "Node \(indexPath.row)"
             
-            node.replyBtn = { (node) in
+            node.replyBtn = { [weak self] (node) in
+                guard let self = self else { return }
+                if let currentIndex = self.CommentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
+                    self.handleReply(for: comment, indexPath: IndexPath(row: currentIndex, section: 0))
+                }
+            }
             
-                self.handleReply(for: comment, indexPath: indexPath)
+            node.reply = { [weak self] (nodes) in
+                guard let self = self else { return }
+                self.loadReplied(comment: comment)
             }
             
             
-            node.reply = { (nodes) in
-                
-                self.handleReplyBtn(for: comment, commentNode: node, indexPath: indexPath)
-            }
-            
-
             return node
         }
         
         return nodeBlock
     }
-
-
-    private func handleReplyBtn(for comment: CommentModel, commentNode: CommentNode?, indexPath: IndexPath) {
+    
+    
+    func loadReplied(comment: CommentModel) {
+        guard let commentId = comment.comment_id else {
+            // If the comment ID is nil, return early
+            return
+        }
         
-        if self.prev_id != nil {
+        if comment.lastCmtSnapshot == nil {
+            comment.lastCmtSnapshot = 1
+        }
+        
+        if comment.has_reply == false {
+            // If the item has no reply, return early
+            return
+        }
+        
+        if let currentIndex = self.CommentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
             
-            if self.prev_id != self.CommentList[indexPath.row].comment_id {
-                
-                //self.CmtQuery = nil
-                self.prev_id = self.CommentList[indexPath.row].comment_id
-                
+            if let node = tableNode.nodeForRow(at: IndexPath(row: currentIndex, section: 0)) as? CommentNode {
+                UIView.animate(withDuration: 0.3, animations: {
+                    node.loadReplyBtnNode.alpha = 0
+                }, completion: { _ in
+                    node.loadReplyBtnNode.isHidden = true
+                    node.setNeedsLayout()
+                })
             }
-            
-            
-        } else {
-            
-            self.prev_id = self.CommentList[indexPath.row].comment_id
+
             
         }
         
-
-        if comment.root_id != "", comment.has_reply == true {
+        APIManager.shared.getReply(for: commentId, page: comment.lastCmtSnapshot) { [weak self] result in
+            guard let self = self else { return }
             
-            let newIndex = self.findIndexForRootCmt(post: comment)
-            let newPost = self.CommentList[newIndex]
-                       
-            var newDict = ["createdAt": Date(), "content": comment.text!, "isReply": true, "postId": comment.post_id!, "parentId": comment.root_id!, "hasReply": false, "ownerId": comment.owner_uid!] as [String : Any]
-            newDict["owner"] = ["_id": comment.comment_uid, "avatar": comment.comment_avatarUrl, "username": comment.comment_username, "name": comment.comment_name]
-            
-            
-            newDict["replyTo"] = ["_id": comment.reply_to_cid!, "owner": ["username": comment.reply_to_username!, "_id": comment.reply_to!]]
-            
-            if comment.updatedAt != nil {
+            switch result {
+            case .success(let apiResponse):
                 
-                newDict.updateValue(comment.updatedAt!, forKey: "updatedAt")
+                guard var replyData = apiResponse.body?["data"] as? [[String: Any]],
+                      !replyData.isEmpty else {
+                    // If the API response is not successful or the reply data is empty, return early
+                    return
+                }
                 
-            } else {
+                // Remove duplicates
+                replyData = replyData.filter { reply in
+                    print(reply)
+                    let replyModel = CommentModel(postKey: reply["_id"] as! String, Comment_model: reply)
+                    return !self.checkDuplicateLoading(post: replyModel)
+                }
                 
-                newDict.updateValue(Date(), forKey: "updatedAt")
+                // Now, replyData should contain only unique items
+                if !replyData.isEmpty {
+                    // Set 'has_reply' attribute of the last unique reply to true
+                    replyData[replyData.count - 1]["hasReply"] = true
+                    replyData[replyData.count - 1]["hasLoadedReplied"] = true
+                }
                 
+                let newCommentModels = replyData.map { CommentModel(postKey: $0["_id"] as! String, Comment_model: $0) }
+                
+                // Find the current index of the item
+                if let currentIndex = self.CommentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
+                    
+                    self.CommentList.insert(contentsOf: newCommentModels, at: currentIndex + 1)
+                    
+                    DispatchQueue.main.async {
+                        let indexPaths = (currentIndex + 1 ..< currentIndex + 1 + newCommentModels.count).map { IndexPath(row: $0, section: 0) }
+                        self.tableNode.insertRows(at: indexPaths, with: .none)
+                        
+                        // Scroll to the last new row
+                        let lastNewRowIndex = currentIndex + newCommentModels.count
+                        self.tableNode.scrollToRow(at: IndexPath(row: lastNewRowIndex, section: 0), at: .bottom, animated: true)
+                    }
+                    
+                    comment.lastCmtSnapshot += 1
+                }
+                
+            case .failure(let error):
+                print("CmtCount: \(error)")
             }
-            
-            if comment.last_modified != nil {
-                
-                newDict.updateValue(comment.last_modified!, forKey: "last_modified")
-                
-            } else {
-                
-                newDict.updateValue(Date(), forKey: "last_modified")
-                
-            }
-            
-            if comment.is_title == true {
-                
-                newDict.updateValue(true, forKey: "isTitle")
-                
-            } else {
-                
-                newDict.updateValue(false, forKey: "isTitle")
-                
-            }
-        
-            let elem = CommentModel(postKey: comment.comment_id, Comment_model: newDict)
-            self.CommentList[indexPath.row] = elem
-            
-            self.tableNode.reloadRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
-            
-            self.loadReplied(item: newPost, indexex: indexPath.row, root_index: newIndex)
-            
-            
-        } else {
-            
-            var newDict = ["createdAt": Date(), "content": comment.text!, "isReply": false, "postId": comment.post_id!, "hasReply": false, "ownerId": comment.owner_uid!] as [String : Any]
-            newDict["owner"] = ["_id": comment.comment_uid, "avatar": comment.comment_avatarUrl, "username": comment.comment_username, "name": comment.comment_name]
-            
-        
-            if comment.updatedAt != nil {
-                
-                newDict.updateValue(comment.updatedAt!, forKey: "updatedAt")
-                
-            } else {
-                
-                newDict.updateValue(Date(), forKey: "updatedAt")
-                
-            }
-            
-            if comment.last_modified != nil {
-                
-                newDict.updateValue(comment.last_modified!, forKey: "last_modified")
-                
-            } else {
-                
-                newDict.updateValue(Date(), forKey: "last_modified")
-                
-            }
-            
-            if comment.is_title == true {
-                
-                newDict.updateValue(true, forKey: "is_title")
-                
-            } else {
-                
-                newDict.updateValue(false, forKey: "is_title")
-                
-            }
-        
-            let elem = CommentModel(postKey: comment.comment_id, Comment_model: newDict)
-            self.CommentList[indexPath.row] = elem
-            
-            self.tableNode.reloadRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
-            
-            self.loadReplied(item: comment, indexex: indexPath.row, root_index: indexPath.row)
-            
         }
-        
     }
-
-
+    
+    
+    
     private func handleReply(for comment: CommentModel, indexPath: IndexPath) {
         // Handle reply submitted
         // ...
         
         self.ReplyBtn(item: comment)
     }
-
+    
     
 }
 
 extension CommentVC {
     
     func retrieveNextPageWithCompletion( block: @escaping ([[String: Any]]) -> Void) {
-       
-        APIManager().getComment(postId: post.id, page: cmtPage) { result in
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    if !data.isEmpty {
-                        print("Successfully retrieved \(data.count) comments.")
-                        let items = data
-                        self.cmtPage += 1
-                    
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                case .failure(let error):
-                    print(error)
+        
+        APIManager.shared.getComment(postId: post.id, page: cmtPage) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
+                    }
+                    return
+                }
+                if !data.isEmpty {
+                    print("Successfully retrieved \(data.count) comments.")
+                    let items = data
+                    self.cmtPage += 1
+                    
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                }
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
         }
-    
+        
     }
     
     func insertNewRowsInTableNode(newPosts: [[String: Any]]) {
@@ -945,8 +959,8 @@ extension CommentVC {
         hideAnimation()
         
     }
-
-
+    
+    
     func checkDuplicateLoading(post: CommentModel) -> Bool {
         return CommentList.contains { $0.comment_id == post.comment_id }
     }
@@ -954,17 +968,17 @@ extension CommentVC {
     func hideAnimation() {
         
         if firstAnimated {
-                    
+            
             firstAnimated = false
-                    
+            
             UIView.animate(withDuration: 0.25) {
-                        
+                
                 Dispatch.main.async {
                     self.loadingView.alpha = 0
                 }
-                        
+                
             }
-                    
+            
             
             if !CommentList.isEmpty {
                 
@@ -993,14 +1007,14 @@ extension CommentVC {
                 
                 
             }
-                    
-                    
-                    
-                    
+            
+            
+            
+            
         }
         
     }
-   
+    
     
     
 }
@@ -1019,10 +1033,10 @@ extension CommentVC {
                 
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
-            
+                
                 if let username = CommentList[cIndex].comment_username {
                     
-                
+                    
                     self.placeholderLabel.text = "Reply to @\(username)"
                     
                     
@@ -1071,7 +1085,7 @@ extension CommentVC {
         
         return index
     }
-
+    
     
     func findCommentIndex(item: CommentModel) -> Int {
         if let index = self.CommentList.firstIndex(where: { $0.comment_uid == item.comment_uid && $0.comment_id == item.comment_id }) {
@@ -1084,84 +1098,19 @@ extension CommentVC {
 
 extension CommentVC {
     
-    func loadReplied(item: CommentModel, indexex: Int, root_index: Int) {
-        guard let commentId = item.comment_id else {
-            // If the comment ID is nil, return early
-            return
-        }
-
-        if self.CommentList[root_index].lastCmtSnapshot == nil {
-            self.CommentList[root_index].lastCmtSnapshot = 1
-        }
-
-        APIManager().getReply(for: commentId, page: self.CommentList[root_index].lastCmtSnapshot) { result in
-            switch result {
-            case .success(let apiResponse):
-
-                guard let replyData = apiResponse.body?["data"] as? [[String: Any]],
-                      !replyData.isEmpty else {
-                    // If the API response is not successful or the reply data is empty, return early
-                    return
-                }
-
-                // Filter out any reply data that has already been loaded
-                let newReplyData = replyData.filter { reply in
-                    let cmtId = reply["_id"] as! String
-                    let newReplyModel = CommentModel(postKey: cmtId, Comment_model: reply)
-                    return !self.checkDuplicateLoading(post: newReplyModel)
-                }
-
-                guard !newReplyData.isEmpty else {
-                    // If there is no new reply data to load, return early
-                    return
-                }
-
-                var mutableReplyData = newReplyData
-                mutableReplyData[mutableReplyData.count - 1]["hasReply"] = true
-
-                let section = 0
-                var indexPaths: [IndexPath] = []
-
-                var start = indexex + 1
-
-                for row in start..<start + mutableReplyData.count {
-                    let path = IndexPath(row: row, section: section)
-                    indexPaths.append(path)
-                }
-
-                let newCommentModels = mutableReplyData.map { CommentModel(postKey: $0["_id"] as! String, Comment_model: $0) }
-                self.CommentList.insert(contentsOf: newCommentModels, at: start)
-
-                DispatchQueue.main.async {
-                    self.tableNode.performBatch(animated: true, updates: {
-                        self.tableNode.insertRows(at: indexPaths, with: .none)
-                    }, completion: { _ in
-                        self.CommentList[root_index].lastCmtSnapshot += 1
-                        self.tableNode.scrollToRow(at: IndexPath(row: indexex + newCommentModels.count, section: 0), at: .bottom, animated: true)
-                    })
-                }
-
-            case .failure(let error):
-                print("CmtCount: \(error)")
-            }
-        }
-    }
-
-
-
     
     func sendCommentBtn() {
         // Check condition here
-
+        
         guard let commentText = cmtTxtView.text, !commentText.isEmpty else {
             return
         }
-
+        
         guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
             print("Can't get userUID")
             return
         }
-
+        
         // Append values to mention_list array
         for (key, value) in uid_dict {
             
@@ -1173,32 +1122,30 @@ extension CommentVC {
                 
             }
             
-            
-            
         }
-
+        
         var data = ["content": commentText, "postId": post.id] as [String : Any]
         
         if !mention_dict.isEmpty {
             data.updateValue(mention_dict, forKey: "mention_dict")
         }
-
+        
         if let replyToCID = reply_to_cid {
             data.updateValue(replyToCID, forKey: "replyTo")
         }
-
+        
         if let root = root_id {
             data.updateValue(root, forKey: "parentId")
         }
-
+        
         if !mention_list.isEmpty {
             data.updateValue(mention_list, forKey: "mention")
         }
-
+        
         // Call the API to create a comment
-        APIManager().createComment(params: data) { [weak self] result in
+        APIManager.shared.createComment(params: data) { [weak self] result in
             guard let self = self else { return }
-
+            
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success", let returnData = apiResponse.body?["data"] as? [String: Any] else {
@@ -1217,12 +1164,12 @@ extension CommentVC {
                     isReply = false
                 }
                 
-                var update = ["ownerId": self.post.owner?.id ?? "", "isReply": isReply!, "hasReply": false, "createdAt": Date(), "updatedAt": Date(), "last_modified": Date(), "isPined": false]
+                var update = ["ownerId": self.post.owner?.id ?? "", "isReply": isReply!, "hasReply": false, "createdAt": Date(), "updatedAt": Date(), "last_modified": Date(), "isPined": false] as [String : Any]
                 
                 update["owner"] = ["_id": userUID, "avatar": userDataSource.avatarURL, "username": userDataSource.userName, "name": userDataSource.name]
                 
                 if self.reply_to_cid != nil {
-                    data["replyTo"] = ["_id": self.reply_to_cid!, "owner": ["username": self.reply_to_username!, "_id": self.reply_to_cid!]]
+                    data["replyTo"] = ["_id": self.reply_to_cid!, "owner": ["username": self.reply_to_username!, "_id": self.reply_to_cid!]] as [String : Any]
                 }
                 
                 data.merge(dict: update)
@@ -1236,8 +1183,15 @@ extension CommentVC {
                     self.CommentList.insert(item, at: start)
                     
                     DispatchQueue.main.async {
-                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
-                        self.tableNode.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
+                        // Insert the new comment at its respective position
+                        let indexPath = IndexPath(row: start, section: 0)
+                        self.tableNode.insertRows(at: [indexPath], with: .none)
+                        
+                        // Scroll to the new comment
+                        self.tableNode.scrollToRow(at: indexPath, at: .top, animated: true)
+                        
+                        // Reload the new comment
+                        //self.tableNode.reloadRows(at: [indexPath], with: .none)
                     }
                 } else {
                     if self.CommentList.isEmpty || !self.CommentList[0].is_title {
@@ -1249,10 +1203,18 @@ extension CommentVC {
                     self.CommentList.insert(item, at: start)
                     
                     DispatchQueue.main.async {
-                        self.tableNode.insertRows(at: [IndexPath(row: start, section: 0)], with: .none)
-                        self.tableNode.scrollToRow(at: IndexPath(row: start, section: 0), at: .top, animated: true)
+                        // Insert the new comment at its respective position
+                        let indexPath = IndexPath(row: start, section: 0)
+                        self.tableNode.insertRows(at: [indexPath], with: .none)
+                        
+                        // Scroll to the new comment
+                        self.tableNode.scrollToRow(at: indexPath, at: .top, animated: true)
+                        
+                        // Reload the new comment
+                        //self.tableNode.reloadRows(at: [indexPath], with: .none)
                     }
                 }
+                
                 
                 // Update UI elements
                 self.calculateToTalCmt()
@@ -1286,13 +1248,14 @@ extension CommentVC {
                 
             case .failure(let error):
                 print(error)
+                self.isSending = false
                 DispatchQueue.main.async {
                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
             } }
-        }
-
-
+    }
+    
+    
     
 }
 
@@ -1301,15 +1264,15 @@ extension CommentVC {
     @objc func handleKeyboardShow(notification: Notification) {
         
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                let keyboardHeight = keyboardSize.height
-                bottomConstraint.constant = -keyboardHeight
-              
-                viewHeight.constant = cmtTxtView.layer.frame.height + 25
-                avatarBottomConstraint.constant = 11
-                sendBtnBottomConstraint.constant = 11
-                textConstraint.constant = 8
-                bView.isHidden = false
-               
+            let keyboardHeight = keyboardSize.height
+            bottomConstraint.constant = -keyboardHeight
+            
+            viewHeight.constant = cmtTxtView.layer.frame.height + 25
+            avatarBottomConstraint.constant = 11
+            sendBtnBottomConstraint.constant = 11
+            textConstraint.constant = 8
+            bView.isHidden = false
+            
             
             UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
                 self.view.layoutIfNeeded()
@@ -1324,7 +1287,7 @@ extension CommentVC {
     @objc func handleKeyboardHide(notification: Notification) {
         
         bottomConstraint.constant = 0
-       
+        
         textConstraint.constant = 30
         avatarBottomConstraint.constant = 30
         sendBtnBottomConstraint.constant = 30
@@ -1350,8 +1313,8 @@ extension CommentVC {
             
             //
             self.searchResultContainerView.isHidden = true
-                
- 
+            
+            
         } else{
             viewHeight.constant = cmtTxtView.layer.frame.height + 41
         }
@@ -1371,13 +1334,15 @@ extension CommentVC {
     
     @objc func calculateToTalCmt() {
         
-        APIManager().countComment(post: post.id) { result in
+        APIManager.shared.countComment(post: post.id) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 
                 guard apiResponse.body?["message"] as? String == "success",
                       let commentsCountFromQuery = apiResponse.body?["comments"] as? Int  else {
-                        return
+                    return
                 }
                 
                 if commentsCountFromQuery == 0  {
@@ -1385,21 +1350,21 @@ extension CommentVC {
                     DispatchQueue.main.async {
                         self.totalCmtCount.text = "No Comment"
                     }
-                   
+                    
                 } else {
                     
                     DispatchQueue.main.async {
                         self.totalCmtCount.text = "\(commentsCountFromQuery) Comments"
                     }
-                  
-                }
                     
+                }
+                
             case .failure(let error):
                 print("CmtCount: \(error)")
             }
         }
         
-    
+        
     }
     
     @objc func panGestureRecognizerAction(sender: UIPanGestureRecognizer) {
@@ -1430,7 +1395,9 @@ extension CommentVC {
     
     func pinCmt(items: CommentModel, indexPath: Int) {
         
-        APIManager().pinComment(commentId: items.comment_id) { result in
+        APIManager.shared.pinComment(commentId: items.comment_id) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success" else {
@@ -1446,10 +1413,10 @@ extension CommentVC {
                     
                     self.CommentList[indexPath]._is_pinned = true
                     self.tableNode.reloadRows(at: [IndexPath(row: indexPath, section: 0)], with: .automatic)
-                
+                    
                 }
                 
-               
+                
             case .failure(let error):
                 print(error)
                 
@@ -1464,7 +1431,9 @@ extension CommentVC {
     
     func unPinCmt(items: CommentModel, indexPath: Int) {
         
-        APIManager().unpinComment(commentId: items.comment_id) { result in
+        APIManager.shared.unpinComment(commentId: items.comment_id) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success" else {
@@ -1480,10 +1449,10 @@ extension CommentVC {
                     
                     self.CommentList[indexPath]._is_pinned = false
                     self.tableNode.reloadRows(at: [IndexPath(row: indexPath, section: 0)], with: .automatic)
-                
+                    
                 }
                 
-               
+                
             case .failure(let error):
                 print(error)
                 
@@ -1492,13 +1461,15 @@ extension CommentVC {
                 }
             }
         }
-    
+        
     }
     
     
     func removeComment(items: CommentModel, indexPath: Int) {
         
-        APIManager().deleteComment(commentId: items.comment_id) { result in
+        APIManager.shared.deleteComment(commentId: items.comment_id) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success" else {
@@ -1527,7 +1498,7 @@ extension CommentVC {
                     
                 }
                 
-               
+                
             case .failure(let error):
                 print(error)
                 
@@ -1553,7 +1524,7 @@ extension CommentVC {
         tableNode.deleteRows(at: indexPaths, with: .automatic)
     }
     
-
+    
     
 }
 
@@ -1564,7 +1535,7 @@ extension CommentVC {
         if let cmt = editedComment, let index = editedIndexpath?.row {
             pinCmt(items: cmt, indexPath: index)
         }
-    
+        
     }
     
     @objc func unpinRequest() {
@@ -1572,7 +1543,7 @@ extension CommentVC {
         if let cmt = editedComment, let index = editedIndexpath?.row {
             unPinCmt(items: cmt, indexPath: index)
         }
-       
+        
     }
     
     @objc func copyRequest() {
@@ -1591,7 +1562,7 @@ extension CommentVC {
         if let cmt = editedComment, let index = editedIndexpath?.row {
             removeComment(items: cmt, indexPath: index)
         }
-       
+        
     }
     
     @objc func reportRequest() {
@@ -1612,7 +1583,7 @@ extension CommentVC {
             }
             
         }
-    
+        
     }
     
 }
@@ -1631,10 +1602,10 @@ extension CommentVC {
                 
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
-            
+                
                 if let username = CommentList[cIndex].comment_username {
                     
-                
+                    
                     self.placeholderLabel.text = "Reply to @\(username)"
                     
                     
@@ -1660,7 +1631,7 @@ extension CommentVC {
             tableNode.scrollToRow(at: IndexPath(row: cIndex, section: 0), at: .top, animated: true)
             
         }
- 
+        
     }
     
 }

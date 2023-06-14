@@ -14,7 +14,7 @@ var oldTabbarFr: CGRect = .zero
 
 class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, UISearchBarDelegate {
 
-    @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
+   // @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var requestBtn: UIButton!
@@ -91,6 +91,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         // tabbar
         showMiddleBtn(vc: self)
         checkCallForLayout()
+        
     
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -101,6 +102,11 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
+        guard let tabBar = self.tabBarController?.tabBar else {
+            return
+        }
+
+        tabBar.isHidden = false
     }
     
     func setupSearchController() {
@@ -123,7 +129,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     @objc func searchBarSetting(_ sender: AnyObject) {
         if searchController?.searchBar.isHidden == true {
-            buttonStackView.isHidden = true
+            //buttonStackView.isHidden = true
             navigationItem.searchController = searchController
             searchController?.searchBar.isHidden = false
             
@@ -132,7 +138,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
             }
             
         } else {
-            buttonStackView.isHidden = false
+            //buttonStackView.isHidden = false
             navigationItem.searchController = nil
             searchController?.searchBar.isHidden = true
         }
@@ -194,7 +200,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
 
         let voiceCallButton = UIButton(type: .custom)
         voiceCallButton.semanticContentAttribute = .forceRightToLeft
-        voiceCallButton.setTitle("Join", for: .normal)
+        voiceCallButton.setTitle("Join ", for: .normal)
         voiceCallButton.setTitleColor(.white, for: .normal)
         voiceCallButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         voiceCallButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
@@ -348,9 +354,9 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         
-        contentViewTopConstant.constant = 10
+        //contentViewTopConstant.constant = 10
         
-        buttonStackView.isHidden = false
+        //buttonStackView.isHidden = false
         navigationItem.searchController = nil
         searchController?.searchBar.isHidden = true
        
@@ -382,7 +388,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
     
-        contentViewTopConstant.constant = -50
+        //contentViewTopConstant.constant = -50
         
         if InboxVC.view.isHidden == false {
             

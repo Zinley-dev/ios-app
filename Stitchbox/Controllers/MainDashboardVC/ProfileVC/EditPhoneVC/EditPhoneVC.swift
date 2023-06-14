@@ -9,8 +9,8 @@ import UIKit
 import CountryPickerView
 
 class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerViewDataSource {
- 
-
+    
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     private var cpv = CountryPickerView(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
@@ -34,22 +34,22 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
         viewController.navigationController?.navigationBar.backgroundColor = UIColor.background
         viewController.navigationController?.navigationBar.bottomBorderColor = UIColor.black
         viewController.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-    
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         cpv.hostViewController = self
         cpv.showCountryNameInView = true
         cpv.showPhoneCodeInView = false
         cpv.textColor = .white
         
-
+        
         countryCodeNameTextfield.leftView = cpv
         countryCodeNameTextfield.leftViewMode = .always
-       
+        
         cpv.delegate = self
         cpv.dataSource = self
         
@@ -75,7 +75,7 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
         phoneTextfield.addUnderLine()
         
     }
-
+    
     @IBAction func NextBtnPressed(_ sender: Any) {
         
         if let countryCode = countryCodeTextfield.text, countryCode != "", let phone = phoneTextfield.text, phone != "" {
@@ -88,7 +88,9 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
             
             self.view.endEditing(true)
             
-            APIManager().updatePhone(phone: countryCode + phone) { result in
+            APIManager.shared.updatePhone(phone: countryCode + phone) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let apiResponse):
                     
@@ -110,9 +112,9 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
                         SwiftLoader.hide()
                         self.moveToVerifyVC(phone: countryCode + phone)
                     }
-                  
+                    
                 case .failure(let error):
-                
+                    
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
                         print(error)
@@ -160,14 +162,14 @@ extension EditPhoneVC {
     func setupButtons() {
         
         setupBackButton()
-    
+        
     }
     
     func setupBackButton() {
-    
+        
         backButton.frame = back_frame
         backButton.contentMode = .center
-
+        
         if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
@@ -177,20 +179,20 @@ extension EditPhoneVC {
             backButton.imageEdgeInsets = padding
             backButton.setImage(backImage, for: [])
         }
-
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
         navigationItem.title = "Edit Phone"
         
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        
         self.navigationItem.leftBarButtonItem = backButtonBarButton
-
-
+        
+        
         
     }
     
-
+    
 }
 
 extension EditPhoneVC {
@@ -203,7 +205,7 @@ extension EditPhoneVC {
     }
     
     func showErrorAlert(_ title: String, msg: String) {
-                                                                                
+        
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)

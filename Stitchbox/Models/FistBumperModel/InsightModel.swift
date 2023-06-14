@@ -8,31 +8,31 @@
 
 import ObjectMapper
 
-class InsightModel: Mappable {
-
-  private(set) var total3Day: Int = 0
-  private(set) var totalDay: Int = 0
-  private(set) var totalWeek: Int = 0
-  private(set) var avg: Int = 0
-  private(set) var percentDay: String = ""
-  private(set) var percent3Day: String = ""
-  private(set) var percentWeek: String = ""
-  private(set) var percentAvg: String = ""
+class InnerDataModel: Mappable {
+    private(set) var percent: String = ""
+    private(set) var total: Int = 0
     
-  required init?(map: Map) {
+    required init?(map: Map) { }
     
-  }
-  
-  func mapping(map: ObjectMapper.Map) {
-    total3Day <- map["3day.total"]
-    totalDay <- map ["day.total"]
-    totalWeek <- map ["week.total"]
-    avg <- map["avg.total"]
-    percentDay <- map["day.percent"]
-    percent3Day <- map ["3day.percent"]
-    percentWeek <- map ["week.percent"]
-    percentAvg <- map["avg.percent"]
-  }
-  
-  
+    func mapping(map: Map) {
+        percent <- map["percent"]
+        total <- map["total"]
+    }
 }
+
+class InsightModel: Mappable {
+    private(set) var threeDay: InnerDataModel?
+    private(set) var avg: InnerDataModel?
+    private(set) var day: InnerDataModel?
+    private(set) var week: InnerDataModel?
+    
+    required init?(map: Map) { }
+    
+    func mapping(map: Map) {
+        threeDay <- map["data.3day"]
+        avg <- map["data.avg"]
+        day <- map["data.day"]
+        week <- map["data.week"]
+    }
+}
+

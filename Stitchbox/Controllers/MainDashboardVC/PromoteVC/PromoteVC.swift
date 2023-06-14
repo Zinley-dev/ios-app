@@ -52,7 +52,7 @@ class PromoteVC: UIViewController {
     
     func getPromotion() {
         
-        APIManager().getPromotion { [weak self] result in
+        APIManager.shared.getPromotion { [weak self] result in
             guard let self = self else { return }
 
             DispatchQueue.main.async {

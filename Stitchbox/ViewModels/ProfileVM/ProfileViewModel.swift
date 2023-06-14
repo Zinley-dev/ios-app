@@ -41,7 +41,7 @@ class ProfileViewModel: ViewModelProtocol {
     private let followingListSubject = PublishSubject<[FollowModel]>()
     private let allFollowingListSubject = PublishSubject<[FollowModel]>()
     private let myPostSubject = PublishSubject<[PostModel]>()
-  
+    
     init() {
         input = Input()
         action = Action()
@@ -61,28 +61,32 @@ class ProfileViewModel: ViewModelProtocol {
         
     }
     func getMyPost(page: Int = 1) {
-        APIManager().getMyPost(page: page) { result in
+        APIManager.shared.getMyPost(page: page) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
-                case .success(let response):
-                    print("================ooooOOOoooo=================================")
-                    guard response.body?["message"] as? String == "success",
-                          let data = response.body?["data"] as? [[String: Any]] else {
-                        print("err")
-                        return
-                    }
-                    let posts = data.map { item in
-                      let mypost = PostModel(JSON: item)!
-                      return mypost
-                    }
+            case .success(let response):
+                print("================ooooOOOoooo=================================")
+                guard response.body?["message"] as? String == "success",
+                      let data = response.body?["data"] as? [[String: Any]] else {
+                    print("err")
+                    return
+                }
+                let posts = data.map { item in
+                    let mypost = PostModel(JSON: item)!
+                    return mypost
+                }
                 self.myPostSubject.onNext(posts)
-                case .failure(let error):
-                  print(error)
+            case .failure(let error):
+                print(error)
             }
         }
     }
     func getFollowing(page: Int = 1) {
         print("LOAD PAGE \(page)")
-        APIManager().getFollows(page:page) { result in
+        APIManager.shared.getFollows(page:page) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -102,7 +106,9 @@ class ProfileViewModel: ViewModelProtocol {
     }
     func getFollowers(page: Int = 1) {
         print("LOAD PAGE \(page)")
-        APIManager().getFollowers(page: page) { result in
+        APIManager.shared.getFollowers(page: page) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -121,8 +127,9 @@ class ProfileViewModel: ViewModelProtocol {
         }
     }
     func getFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping (Int) -> Void = {_ in}) -> Void  {
-        APIManager().getFistBumperCount(userID: userID){
-            result in
+        APIManager.shared.getFistBumperCount(userID: userID){ [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let response):
                 if let data = response.body {
@@ -144,7 +151,10 @@ class ProfileViewModel: ViewModelProtocol {
         }
     }
     func unfollow(userId: String = "") {
-        APIManager().unFollow(params: ["FollowId": userId]) { result in
+        
+        APIManager.shared.unFollow(params: ["FollowId": userId]) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(_):
                 showNote(text: "Unfollowed!")
@@ -158,7 +168,9 @@ class ProfileViewModel: ViewModelProtocol {
     
     
     func insertfollow(userId: String = "") {
-        APIManager().insertFollows(params: ["FollowId": userId]) { result in
+        APIManager.shared.insertFollows(params: ["FollowId": userId]) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(_):
                 showNote(text: "Followed!")
@@ -168,22 +180,22 @@ class ProfileViewModel: ViewModelProtocol {
             
         }
     }
-//    func getAllFollowing() {
-//        APIManager().getAllFollow { result in
-//            switch result {
-//            case .success(let response):
-//                guard response.body?["message"] as? String == "success",
-//                      let data = response.body?["data"] as? [[String: Any]] else {
-//                    return
-//                }
-//                let list = data.map { item in
-//                    return FollowerModel(JSON: item)!
-//                }
-//                print("Following List: ", list)
-//                self.allFollowingListSubject.onNext(list)
-//            case .failure(let error):
-//                print("Error loading following: ", error)
-//            }
-//        }
-//    }
+    //    func getAllFollowing() {
+    //        APIManager().getAllFollow { result in
+    //            switch result {
+    //            case .success(let response):
+    //                guard response.body?["message"] as? String == "success",
+    //                      let data = response.body?["data"] as? [[String: Any]] else {
+    //                    return
+    //                }
+    //                let list = data.map { item in
+    //                    return FollowerModel(JSON: item)!
+    //                }
+    //                print("Following List: ", list)
+    //                self.allFollowingListSubject.onNext(list)
+    //            case .failure(let error):
+    //                print("Error loading following: ", error)
+    //            }
+    //        }
+    //    }
 }
