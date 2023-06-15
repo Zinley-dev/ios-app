@@ -379,7 +379,7 @@ extension SB_ChatBot {
         if title == "GPT 4" {
             checkAccountStatus()
         } else {
-            global_gpt = "gpt-3.5-turbo-0613"
+            global_gpt = "gpt-3.5-turbo-16k-0613"
             selectedGpt = title
             
             gptButton.setTitle(title, for: .normal)
@@ -468,7 +468,7 @@ extension SB_ChatBot {
                 
                 isPro = false
 
-                global_gpt = "gpt-3.5-turbo-0613"
+                global_gpt = "gpt-3.5-turbo-16k-0613"
                 self?.selectedGpt = "GPT 3.5"
                 self?.setupClearAndGptButtons()
                 
