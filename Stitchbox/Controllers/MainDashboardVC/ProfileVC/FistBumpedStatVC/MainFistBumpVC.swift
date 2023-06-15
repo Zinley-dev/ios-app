@@ -370,7 +370,7 @@ extension MainFistBumpVC {
 
 
     func searchUsers(for searchText: String) {
-            
+        
             let fistbump = !fistBumpeeVC.view.isHidden ? fistBumperVC.fistBumpList : fistBumpeeVC.fistBumpList
             
             let searchUserList = fistbump.filter { $0.userName.range(of: searchText, options: .caseInsensitive) != nil }
@@ -386,6 +386,8 @@ extension MainFistBumpVC {
             }
         }
 
+    
+    
 
     
 }
