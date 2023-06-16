@@ -26,7 +26,7 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
    
     var window: UIWindow?
     
-    var sections = [setting(name:"Views", items: ["Total views", "Views in 60 mins", "Views in 24 hours"]), setting(name:"GG!", items: ["Total GG!","GG! in 60 mins", "GG! in 24 hours"])]
+    var sections = [setting(name:"Views", items: ["Total views", "Views in 60 mins", "Views in 24 hours"]), setting(name:"GG!", items: ["Total GG!","GG! in 60 mins", "GG! in 24 hours"]), setting(name:"Streamlink", items: ["Total clicked","Clicked in 60 mins", "Clicked in 24 hours"])]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +47,7 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
             switch result {
             case .success(let apiResponse):
-              
+                
                 guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
                     print("Couldn't cast")
                     return
@@ -130,6 +130,18 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 default:
                     break
                 }
+            case 2: // "GG!"
+                switch indexPath.row {
+                case 0:
+                    stat = stats?.streamLink.total
+                case 1:
+                    stat = stats?.streamLink.totalInHour
+                case 2:
+                    stat = stats?.streamLink.totalInDay
+                default:
+                    break
+                }
+            
             default:
                 break
             }

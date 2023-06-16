@@ -29,6 +29,7 @@ class MainFistBumpVC: UIViewController, UINavigationBarDelegate, UINavigationCon
     var fistBumperCount = 0
     var fistBumpeeCount = 0
     var onPresent = false
+    lazy var delayItem = workItem()
     
     lazy var fistBumperVC: FistBumperVC = {
         
@@ -368,28 +369,123 @@ extension MainFistBumpVC {
         }
     }
 
-
+    
     func searchUsers(for searchText: String) {
         
-            let fistbump = !fistBumpeeVC.view.isHidden ? fistBumperVC.fistBumpList : fistBumpeeVC.fistBumpList
+        let fistbump = !fistBumpeeVC.view.isHidden ? fistBumperVC.fistBumpList : fistBumpeeVC.fistBumpList
+        
+        let searchUserList = fistbump.filter { $0.userName.range(of: searchText, options: .caseInsensitive) != nil }
+        
+        if !searchUserList.isEmpty {
             
-            let searchUserList = fistbump.filter { $0.userName.range(of: searchText, options: .caseInsensitive) != nil }
-            
-            let targetVC = !fistBumperVC.view.isHidden ? fistBumperVC : fistBumpeeVC
-    
-            if let updateVC = targetVC as? FistBumperVC {
-                updateVC.searchUserList = searchUserList
-                updateVC.tableNode.reloadData()
-            } else if let updateVC = targetVC as? FistBumpeeVC {
-                updateVC.searchUserList = searchUserList
-                updateVC.tableNode.reloadData()
+            if !fistBumperVC.view.isHidden {
+                fistBumperVC.searchUserList = searchUserList
+                fistBumperVC.tableNode.reloadData()
+            } else {
+                fistBumperVC.searchUserList = searchUserList
+                fistBumperVC.tableNode.reloadData()
             }
+            
+        } else {
+            
+            if !fistBumperVC.view.isHidden {
+                
+                delayItem.perform(after: 0.35) {
+                    print("Search fistbumper using api")
+                    self.searchFistbumpers(for: searchText)
+                }
+                
+            } else {
+                
+                delayItem.perform(after: 0.35) {
+                    print("Search fistbumpee using api")
+                    self.searchFistbumpees(for: searchText)
+                }
+            }
+            
         }
+        
+        
+    }
+    
+    
+    func searchFistbumpers(for searchText: String) {
+        
+        if let userUID = _AppCoreData.userDataSource.value?.userID {
+            
+            
+            APIManager.shared.searchFistbumper(query: searchText, userid: userUID, page: 1) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let apiResponse):
+                    
+                    
+                    guard apiResponse.body?["message"] as? String == "success",
+                          let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        return
+                    }
+                    
+                    let list = data.map { item in
+                        return FistBumpUserModel(JSON: item)!
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.fistBumperVC.searchUserList = list
+                        self.fistBumperVC.tableNode.reloadData()
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            
 
+            
+        }
+        
+        
+    }
     
     
+    func searchFistbumpees(for searchText: String) {
+        
+        if let userUID = _AppCoreData.userDataSource.value?.userID {
+            
+            
+            APIManager.shared.searchFistbumpee(query: searchText, userid: userUID, page: 1) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let apiResponse):
+                    
+                    
+                    guard apiResponse.body?["message"] as? String == "success",
+                          let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        return
+                    }
+                    
+                    let list = data.map { item in
+                        return FistBumpUserModel(JSON: item)!
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.fistBumpeeVC.searchUserList = list
+                        self.fistBumpeeVC.tableNode.reloadData()
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            
 
-    
+            
+        }
+        
+    }
+
+
 }
 
 extension MainFistBumpVC {

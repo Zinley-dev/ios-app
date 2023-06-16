@@ -3,7 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -757,7 +757,6 @@
                         <outletCollection property="collectionLoginProviders" destination="6j6-Gq-nNo" collectionClass="NSMutableArray" id="25R-OU-vNn"/>
                         <outletCollection property="collectionLoginStackProviders" destination="3mN-YX-AWw" collectionClass="NSMutableArray" id="AlP-hs-bPx"/>
                         <outletCollection property="collectionLoginStackProviders" destination="vel-Mc-0Kk" collectionClass="NSMutableArray" id="y8I-me-IyR"/>
-                        <outletCollection property="collectionLoginStackProviders" destination="7h2-bm-RVn" collectionClass="NSMutableArray" id="arL-Nn-de7"/>
                         <outletCollection property="collectionLoginStackProviders" destination="CSz-ci-sQV" collectionClass="NSMutableArray" id="Hkh-de-FSf"/>
                     </connections>
                 </viewController>
@@ -1866,9 +1865,6 @@
         </scene>
     </scenes>
     <designables>
-        <designable name="3uf-b9-C82">
-            <size key="intrinsicContentSize" width="104" height="34"/>
-        </designable>
         <designable name="Dlf-TU-NMz">
             <size key="intrinsicContentSize" width="39" height="29"/>
         </designable>
@@ -1877,9 +1873,6 @@
         </designable>
         <designable name="LfU-xY-avf">
             <size key="intrinsicContentSize" width="39" height="29"/>
-        </designable>
-        <designable name="Nhf-Gd-k7X">
-            <size key="intrinsicContentSize" width="105.5" height="34"/>
         </designable>
         <designable name="QHM-oC-nqz">
             <size key="intrinsicContentSize" width="557" height="14.5"/>

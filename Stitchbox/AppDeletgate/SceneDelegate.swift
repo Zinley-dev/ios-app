@@ -7,6 +7,8 @@
 
 import UIKit
 import FBSDKCoreKit
+import AppsFlyerLib
+import AppTrackingTransparency
 
 enum RootType {
     case Main
@@ -68,11 +70,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             currentFeedVC.loadFeed()
         }
         
-        
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
+       
+        if _AppCoreData.userDataSource.value?.userID != "" {
+            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
+        }
+    
         
     }
+
 
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
@@ -89,7 +96,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
 
 }
 

@@ -10,10 +10,12 @@ import Foundation
 struct Stats: Codable {
     let like: Statistic
     let view: Statistic
+    let streamLink: Statistic
     
     enum CodingKeys: String, CodingKey {
         case like
         case view
+        case streamLink
     }
 }
 

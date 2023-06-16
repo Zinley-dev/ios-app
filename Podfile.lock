@@ -9,6 +9,9 @@ PODS:
   - AppAuth/Core (1.6.2)
   - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
+  - AppsFlyerFramework (6.11.1):
+    - AppsFlyerFramework/Main (= 6.11.1)
+  - AppsFlyerFramework/Main (6.11.1)
   - Cache (5.3.0)
   - EzPopup (1.2.4)
   - FBAEMKit (14.1.0):
@@ -211,6 +214,7 @@ DEPENDENCIES:
   - ActiveLabel
   - Alamofire (~> 5.6.4)
   - AlamofireImage
+  - AppsFlyerFramework
   - Cache (~> 5.3.0)
   - EzPopup
   - FBSDKLoginKit (~> 14.1.0)
@@ -251,6 +255,7 @@ SPEC REPOS:
     - Alamofire
     - AlamofireImage
     - AppAuth
+    - AppsFlyerFramework
     - Cache
     - EzPopup
     - FBAEMKit
@@ -318,6 +323,7 @@ SPEC CHECKSUMS:
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
+  AppsFlyerFramework: fc1fd93999a3e53d028259265b92150d55decfe3
   Cache: 48762993ec44e1d93483c4d4a13edd18452326f4
   EzPopup: 37f2c40e8ce50412a269bfba365baa7085c28002
   FBAEMKit: a899515e45476027f73aef377b5cffadcd56ca3a
@@ -372,6 +378,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 9514a473feae36aa50e4da8d950ddbb1463f321c
+PODFILE CHECKSUM: b6d4e95f6bf5ab8702eb8207802846f917e012c5
 
 COCOAPODS: 1.12.1
