@@ -173,7 +173,11 @@ class UserDataSource: Mappable {
     private(set) var signinMethod : String = ""
     private(set) var socialId : String = ""
     private(set) var discordUrl : String = ""
-    
+    private var _favoriteContent : [String] = []
+    var favoriteContent: [String] {
+      set(newValue) { _favoriteContent = newValue}
+      get { return _favoriteContent }
+    }
     private var _name : String = ""
     var name: String {
       set(newValue) { _name = newValue}
@@ -273,5 +277,6 @@ class UserDataSource: Mappable {
         challengeCard   <- map["challengeCard"]
         riotLOLAccount  <- map["riotAccount"]
         passEligible  <- map["passEligible"]
+        favoriteContent  <- map["favoriteContent"]
     }
 }

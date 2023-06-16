@@ -506,7 +506,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
             // Check if the invitation was successful
             if let error = error {
                 print(error.localizedDescription)
-                showErrorAlert("Oops!", msg: error.localizedDescription)
+                self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 return
             }
             

@@ -388,6 +388,7 @@ public enum UserAPI {
     case emailExist(params: [String: Any])
     case addGameChallengeCard(params: [String: Any])
     case updateGameChallengeCard(params: [String: Any])
+    case updateFavoriteContent(params: [String: Any] )
     case deleteGameChallengeCard(params: [String: Any])
 }
 extension UserAPI: EndPointType {
@@ -409,6 +410,8 @@ extension UserAPI: EndPointType {
             return "/me"
           case .updateChallengeCard:
             return "/me/challenge-card"
+          case .updateFavoriteContent:
+            return "/me/favorite-content"
         case .updateEmail:
           return "/email"
           case .riotUpdate:
@@ -458,6 +461,8 @@ extension UserAPI: EndPointType {
             return .patch
           case .updateChallengeCard:
             return .patch
+          case .updateFavoriteContent:
+            return .patch
           case .updatePhone:
             return .patch
           case .updateEmail:
@@ -506,6 +511,8 @@ extension UserAPI: EndPointType {
         case .updateme(let params):
             return .requestParameters(parameters: params)
           case .updateChallengeCard(let params):
+            return .requestParameters(parameters: params)
+          case .updateFavoriteContent(let params):
             return .requestParameters(parameters: params)
         case .updatePhone(let params):
             return .requestParameters(parameters: params)

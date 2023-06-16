@@ -438,7 +438,7 @@ extension SelectedPostVC {
                 
                 self.currentIndex = self.startIndex
                 self.newPlayingIndex = self.startIndex
-                playVideo(index: self.startIndex)
+                self.playVideo(index: self.startIndex)
                 self.isVideoPlaying = true
                 self.playTimeBar.isHidden = false
                 
