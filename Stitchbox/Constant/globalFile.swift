@@ -14,7 +14,9 @@ import UserNotifications
 import CoreMedia
 import AVFAudio
 import ObjectMapper
-
+import AppTrackingTransparency
+import AdSupport
+import AppsFlyerLib
 
 
 let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 23))
@@ -1407,5 +1409,39 @@ class CustomSlider: UISlider {
 func removeAllUserDefaults() {
     for key in UserDefaults.standard.dictionaryRepresentation().keys {
         UserDefaults.standard.removeObject(forKey: key)
+    }
+}
+
+
+func requestTrackingAuthorization(userId: String) {
+    AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
+    ATTrackingManager.requestTrackingAuthorization { status in
+        switch status {
+        case .authorized:
+            // User has authorized tracking.
+            print("User has authorized tracking.")
+            AppsFlyerLib.shared().customerUserID = userId
+            AppsFlyerLib.shared().start(completionHandler: { (dictionary, error) in
+                        if (error != nil){
+                            print(error ?? "")
+                            return
+                        } else {
+                            print(dictionary ?? "")
+                            return
+                        }
+                    })
+        case .denied:
+            // User has denied tracking.
+            print("User has denied tracking.")
+        case .notDetermined:
+            // User has not yet made a choice.
+            print("User has not yet made a choice.")
+        case .restricted:
+            // The device is restricted from tracking.
+            print("The device is restricted from tracking.")
+        @unknown default:
+            // Handle other cases.
+            print("Unknown case.")
+        }
     }
 }

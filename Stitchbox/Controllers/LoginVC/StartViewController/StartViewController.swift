@@ -15,6 +15,7 @@ import ZSWTaggedString
 import SafariServices
 import AuthenticationServices
 import ObjectMapper
+import AppsFlyerLib
 
 class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
@@ -372,7 +373,7 @@ extension StartViewController {
                 
                 if let data = response.body {
                     
-                    print(data)
+                  
                     
                     if !data.isEmpty {
                     

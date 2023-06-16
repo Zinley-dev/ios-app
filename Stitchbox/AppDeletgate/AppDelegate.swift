@@ -24,6 +24,8 @@ import Sentry
 import SwipeTransition
 import SwipeTransitionAutoSwipeBack
 import SwipeTransitionAutoSwipeToDismiss
+import AppsFlyerLib
+import AppTrackingTransparency
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -51,8 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         setupPixelSDK()
         sendbird_authentication()
+        registerAppsFlyer()
         
-       
         setupPixelSDK()
         sendbird_authentication()
         syncSendbirdAccount()
@@ -78,13 +80,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func sentrySetup() {
         
         SentrySDK.start { options in
-                options.dsn = "https://3406dbc29f884019aa59d9319a12b765@o4505243020689408.ingest.sentry.io/4505243021606912"
-                options.debug = true // Enabled debug when first installing is always helpful
-
-                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-                // We recommend adjusting this value in production.
-                options.tracesSampleRate = 1.0
-            }
+            options.dsn = "https://3406dbc29f884019aa59d9319a12b765@o4505243020689408.ingest.sentry.io/4505243021606912"
+            options.debug = true // Enabled debug when first installing is always helpful
+            
+            // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+            // We recommend adjusting this value in production.
+            options.tracesSampleRate = 1.0
+        }
         
     }
     
@@ -106,15 +108,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else if currentVolume < previousVolume {
             consecutiveVolumeDownPresses += 1
             if consecutiveVolumeDownPresses >= 2 {
-               // muteVideoIfNeed()
+                // muteVideoIfNeed()
                 consecutiveVolumeDownPresses = 0
             }
         }
         
         previousVolume = currentVolume
     }
-
-
+    
+    
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         // Initialize OneSignal
         OneSignal.initWithLaunchOptions(launchOptions)
@@ -143,47 +145,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     
                     switch template {
                         
-                        case "NEW_COMMENT":
-                            if let post = metaDataOneSignal.post {
-                                self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
-                            }
-                           
-                        case "REPLY_COMMENT":
-                            if let post = metaDataOneSignal.post {
-                                self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
-                            }
-                         
-                        case "NEW_FISTBUMP_1":
-                            if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
-                                self.openUser(userId: userId, username: username)
-                            }
-                        case "NEW_FISTBUMP_2":
-                            self.openFistBumpList()
-                        case "NEW_FOLLOW_1":
-                           
-                            if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
-                                self.openUser(userId: userId, username: username)
-                            }
+                    case "NEW_COMMENT":
+                        if let post = metaDataOneSignal.post {
+                            self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
+                        }
                         
-                        case "NEW_FOLLOW_2":
-                            self.openFollow()
-                        case "NEW_TAG":
-                            if let post = metaDataOneSignal.post {
-                                self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
-                            }
-                        case "NEW_POST":
-                            self.openPost(post: metaDataOneSignal.post)
+                    case "REPLY_COMMENT":
+                        if let post = metaDataOneSignal.post {
+                            self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
+                        }
                         
-                        case "LIKE_COMMENT":
-                            if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
-                                self.openUser(userId: userId, username: username)
-                            }
-                        case "LIKE_POST":
-                            if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
-                                self.openUser(userId: userId, username: username)
-                            }
-                        default:
-                            print("None")
+                    case "NEW_FISTBUMP_1":
+                        if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                            self.openUser(userId: userId, username: username)
+                        }
+                    case "NEW_FISTBUMP_2":
+                        self.openFistBumpList()
+                    case "NEW_FOLLOW_1":
+                        
+                        if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                            self.openUser(userId: userId, username: username)
+                        }
+                        
+                    case "NEW_FOLLOW_2":
+                        self.openFollow()
+                    case "NEW_TAG":
+                        if let post = metaDataOneSignal.post {
+                            self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
+                        }
+                    case "NEW_POST":
+                        self.openPost(post: metaDataOneSignal.post)
+                        
+                    case "LIKE_COMMENT":
+                        if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                            self.openUser(userId: userId, username: username)
+                        }
+                    case "LIKE_POST":
+                        if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                            self.openUser(userId: userId, username: username)
+                        }
+                    default:
+                        print("None")
                         
                     }
                     
@@ -197,27 +199,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         /*
-        // Update badge number
-        if let aps = userInfo["aps"] as? [String: AnyObject], let badgeCount = aps["badge"] as? Int {
-            UIApplication.shared.applicationIconBadgeNumber = badgeCount
-            
-            // Get tab bar controller and update badge number
-            if let tabBarController = self.window?.rootViewController as? UITabBarController {
-                if let tabItems = tabBarController.tabBar.items {
-                    let tabItem = tabItems[0]
-                    tabItem.badgeValue = badgeCount > 0 ? "\(badgeCount)" : nil
-                }
-            }
-        }
-        
-        // Call completion handler
-        completionHandler(.newData)
-        
-        */
+         // Update badge number
+         if let aps = userInfo["aps"] as? [String: AnyObject], let badgeCount = aps["badge"] as? Int {
+         UIApplication.shared.applicationIconBadgeNumber = badgeCount
+         
+         // Get tab bar controller and update badge number
+         if let tabBarController = self.window?.rootViewController as? UITabBarController {
+         if let tabItems = tabBarController.tabBar.items {
+         let tabItem = tabItems[0]
+         tabItem.badgeValue = badgeCount > 0 ? "\(badgeCount)" : nil
+         }
+         }
+         }
+         
+         // Call completion handler
+         completionHandler(.newData)
+         
+         */
     }
-
-
-
+    
+    
+    
     // Helper function to convert a string to a dictionary
     func convertStringToDictionary(text: String) -> [String:Any]? {
         if let data = text.data(using: .utf8) {
@@ -230,8 +232,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         return nil
     }
-
-
+    
+    
     func setupPixelSDK() {
         
         PixelSDK.setup(pixel_key)
@@ -308,17 +310,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.componentTheme.backgroundColor = .background
         
         //SBUFontSet.body1 = UIFont.systemFont(ofSize: 20)
-       
+        
     }
-
+    
     // MARK: UISceneSession Lifecycle
-
+    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-
+    
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
@@ -330,51 +332,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         _ application: UIApplication,
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey: Any])
-      -> Bool {
+    -> Bool {
         
         if let scheme = url.scheme,
            scheme.localizedCaseInsensitiveCompare("stitchbox") == .orderedSame {
-          
+            
             var parameters: [String: String] = [:]
             URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.forEach {
-              parameters[$0.name] = $0.value
+                parameters[$0.name] = $0.value
             }
             
-          // TODO implement
-          // redirect(to: view, with: parameters)
+            // TODO implement
+            // redirect(to: view, with: parameters)
         }
         
         guard let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
               let annotation = options[UIApplication.OpenURLOptionsKey.annotation] else {
-          return false
+            return false
         }
         
         if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
-          return true
+            return true
         }
         
-      ApplicationDelegate.shared.application(
-          application,
-          open: url,
-          sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-          annotation: options[UIApplication.OpenURLOptionsKey.annotation]
-      )
-      return GIDSignIn.sharedInstance.handle(url)
+        ApplicationDelegate.shared.application(
+            application,
+            open: url,
+            sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+            annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+        )
+        return GIDSignIn.sharedInstance.handle(url)
     }
-  
-  func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-    if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
-      return true
+    
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
+            return true
+        }
+        return false
     }
-    return false
-  }
-  
-  func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-    if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: nil, annotation: "") {
-      return true
+    
+    func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
+        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: nil, annotation: "") {
+            return true
+        }
+        return false
     }
-    return false
-  }
     
     
     //
@@ -401,7 +403,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     private func attemptRegisterForNotifications(application: UIApplication) {
         print("Attempting to register APNS...")
-      
+        
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self
             // user notifications auth
@@ -415,7 +417,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 
                 if granted {
                     print("Auth granted.")
-                  
+                    
                 } else {
                     print("Auth denied")
                 }
@@ -428,13 +430,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
         }
         
- 
+        
         application.registerForRemoteNotifications()
-       
-       
+        
+        
     }
     
-   
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .sound])
     }
@@ -482,7 +484,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // There might be some calls failed to be ended
         // In this case, I recommend that you register local notification to notify the unterminated calls.
     }
-
+    
     // This method is called when a local notification is received and the user has interacted with it.
     // It presents a ChannelViewController with the channel specified in the notification.
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
@@ -503,12 +505,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else if ((response.notification.request.content.userInfo["sendbird"] as? NSDictionary) != nil) {
             
             guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty,
-                let payload = response.notification.request.content.userInfo["sendbird"] as? NSDictionary,
-                let channel = payload["channel"] as? NSDictionary,
-                let channelUrl = channel["channel_url"] as? String else {
+                  let payload = response.notification.request.content.userInfo["sendbird"] as? NSDictionary,
+                  let channel = payload["channel"] as? NSDictionary,
+                  let channelUrl = channel["channel_url"] as? String else {
                 return
             }
-
+            
             checkAndPresendChatVC(userUID: userUID, channelUrl: channelUrl)
             // Call the completion handler to indicate that the method has finished executing.
             completionHandler()
@@ -517,7 +519,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else {
             completionHandler()
         }
-            
+        
         
         
     }
@@ -532,7 +534,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 print(error.localizedDescription)
                 return
             }
-
+            
             // If the app is in the foreground, present a ChannelViewController with the channel URL.
             // If the app is in the background, pop the current view controller and present a ChannelViewController.
             guard let currentVC = UIViewController.currentViewController() else { return }
@@ -563,13 +565,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     } else {
                         self.presentChatWithNav(nav: nav, channelUrl: channelUrl)
                     }
-    
+                    
                 }
                 
             } else {
                 self.presentChatWithoutNav(vc: currentVC, channelUrl: channelUrl)
             }
-  
+            
         }
         
         
@@ -608,16 +610,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         APIManager.shared.getGames { [weak self] result in
             guard let self = self else { return }
-
+            
             switch result {
             case .success(let apiResponse):
                 
                 guard apiResponse.body?["message"] as? String == "success",
                       let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                   
+                    
                     return
                 }
-            
+                
                 let list = data.compactMap { GameList(JSON: $0) }
                 let filteredList = list.filter { $0.name != "Other" }
                 global_suppport_game_list += filteredList
@@ -637,22 +639,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let vc = UIViewController.currentViewController() {
                 
                 let nav = UINavigationController(rootViewController: MFBVC)
-
+                
                 // Set the user ID, nickname, and onPresent properties of UPVC
                 MFBVC.onPresent = true
-
+                
                 // Customize the navigation bar appearance
                 nav.navigationBar.barTintColor = .background
                 nav.navigationBar.tintColor = .white
                 nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
+                
                 nav.modalPresentationStyle = .fullScreen
                 vc.present(nav, animated: true, completion: nil)
-
-       
+                
+                
             }
         }
-
+        
         
     }
     
@@ -663,24 +665,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let vc = UIViewController.currentViewController() {
                 
                 let nav = UINavigationController(rootViewController: SPVC)
-
+                
                 // Set the user ID, nickname, and onPresent properties of UPVC
                 SPVC.onPresent = true
                 SPVC.selectedPost = [post]
                 SPVC.startIndex = 0
-               
+                
                 
                 // Customize the navigation bar appearance
                 nav.navigationBar.barTintColor = .background
                 nav.navigationBar.tintColor = .white
                 nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
+                
                 nav.modalPresentationStyle = .fullScreen
                 vc.present(nav, animated: true, completion: nil)
                 
             }
             
-
+            
         }
         
         
@@ -697,7 +699,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             slideVC.root_id = rootComment
             slideVC.type = type
             slideVC.post = post
-           
+            
             global_presetingRate = Double(0.75)
             global_cornerRadius = 35
             
@@ -714,31 +716,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func openUser(userId: String, username: String) {
         
-    
+        
         if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
             
             if let vc = UIViewController.currentViewController() {
                 
                 let nav = UINavigationController(rootViewController: UPVC)
-
+                
                 // Set the user ID, nickname, and onPresent properties of UPVC
                 UPVC.onPresent = true
                 UPVC.userId = userId
                 UPVC.nickname = username
-               
+                
                 
                 // Customize the navigation bar appearance
                 nav.navigationBar.barTintColor = .background
                 nav.navigationBar.tintColor = .white
                 nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
+                
                 nav.modalPresentationStyle = .fullScreen
                 vc.present(nav, animated: true, completion: nil)
                 
-       
+                
             }
             
-
+            
         }
         
     }
@@ -751,24 +753,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let vc = UIViewController.currentViewController() {
                 
                 let nav = UINavigationController(rootViewController: MFVC)
-
+                
                 // Set the user ID, nickname, and onPresent properties of UPVC
                 MFVC.onPresent = true
                 MFVC.showFollowerFirst = true
                 MFVC.userId = _AppCoreData.userDataSource.value?.userID ?? ""
                 MFVC.followerCount = 0
                 MFVC.followingCount = 0
-               
+                
                 
                 // Customize the navigation bar appearance
                 nav.navigationBar.barTintColor = .background
                 nav.navigationBar.tintColor = .white
                 nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
+                
                 nav.modalPresentationStyle = .fullScreen
                 vc.present(nav, animated: true, completion: nil)
                 
-       
+                
             }
             
         }
@@ -779,7 +781,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidBecomeActive(_ application: UIApplication) {
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
+        if _AppCoreData.userDataSource.value?.userID != "" {
+            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
+        }
+        
+        
     }
+    
+    func registerAppsFlyer() {
+        
+        AppsFlyerLib.shared().appsFlyerDevKey = "sumV9RMiJVui7vtQoBVEx"
+        AppsFlyerLib.shared().appleAppID = "1660843872"
+        
+    }
+    
+     
     
 }
 

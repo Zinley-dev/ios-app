@@ -11,7 +11,7 @@ import AlamofireImage
 import Alamofire
 import FLAnimatedImage
 import ObjectMapper
-
+import AppsFlyerLib
 
 class FeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
@@ -121,6 +121,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
             self.loadSettings {
                 print("Oke!")
             }
+        }
+        
+        if _AppCoreData.userDataSource.value?.userID != "" {
+            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
         
     }
@@ -1267,22 +1271,28 @@ extension FeedViewController {
             if !cell.videoNode.isPlaying() {
                 
                 
-                let userDefaults = UserDefaults.standard
-                
-                
-                if userDefaults.bool(forKey: "hasGuideLandTap") == false {
-                   
+                if index != 0 {
                     
-                    delayItem.perform(after: 0.5) {
-                        cell.tapAnimation()
+                    let userDefaults = UserDefaults.standard
+                    
+                    
+                    if userDefaults.bool(forKey: "hasGuideLandTap") == false {
+                       
+                        
+                        delayItem.perform(after: 0.5) {
+                            cell.tapAnimation()
+                        }
+                       
+                        // Update the flag indicator
+                        userDefaults.set(true, forKey: "hasGuideLandTap")
+                        userDefaults.synchronize() // This forces the app to update userDefaults
+                       
+                        
                     }
-                   
-                    // Update the flag indicator
-                    userDefaults.set(true, forKey: "hasGuideLandTap")
-                    userDefaults.synchronize() // This forces the app to update userDefaults
-                   
                     
                 }
+                
+                
                 
                 
                 
