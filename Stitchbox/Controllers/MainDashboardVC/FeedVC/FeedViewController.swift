@@ -431,12 +431,19 @@ extension FeedViewController {
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let searchBarButton = UIBarButtonItem(customView: searchButton)
         
+        
+        let customButton = UIButton(type: .custom)
+        customButton.setImage(UIImage(named: "custom")!.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
+        customButton.addTarget(self, action: #selector(onClickPreference(_:)), for: .touchUpInside)
+        customButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let customBarButton = UIBarButtonItem(customView: customButton)
+        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
         
         //let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, customBarButton]
         
         
     }
@@ -456,22 +463,39 @@ extension FeedViewController {
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let searchBarButton = UIBarButtonItem(customView: searchButton)
         
+        let customButton = UIButton(type: .custom)
+        customButton.setImage(UIImage(named: "custom")!.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
+        customButton.addTarget(self, action: #selector(onClickPreference(_:)), for: .touchUpInside)
+        customButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let customBarButton = UIBarButtonItem(customView: customButton)
+        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
+        
         //let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, customBarButton]
         
     }
     
 
-    
 }
 
 extension FeedViewController {
     
     @objc func onClickHome(_ sender: AnyObject) {
         shouldScrollToTop()
+    }
+    
+    @objc func onClickPreference(_ sender: AnyObject) {
+        if let NVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainPreferenceVC") as? MainPreferenceVC {
+            
+            resetNoti()
+            NVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(NVC, animated: true)
+            
+        }
     }
     
     @objc func onClickNoti(_ sender: AnyObject) {
