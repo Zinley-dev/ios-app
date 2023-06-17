@@ -70,6 +70,7 @@ class LoginController: UIViewController, ControllerType {
                       }
                       
                   } else {
+                      
                       RedirectionHelper.redirectToDashboard()
                       
                   }
@@ -97,13 +98,13 @@ class LoginController: UIViewController, ControllerType {
             passwordTextfield.rx.text.orEmpty) { ($0, $1) }
 
         signInButton.rx.tap.asObservable()
-            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance) // Avoid multiple taps
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
             .withLatestFrom(userInputs)
             .subscribe(viewModel.action.signInDidTap)
             .disposed(by: disposeBag)
         
         signInButton.rx.tap.asObservable()
-            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance) // Avoid multiple taps
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
             .subscribe { _ in
                 DispatchQueue.main.async {
                     presentSwiftLoader()
