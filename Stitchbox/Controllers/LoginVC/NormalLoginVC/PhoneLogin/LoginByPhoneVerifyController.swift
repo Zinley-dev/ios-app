@@ -320,12 +320,12 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
     
     func bindAction(with viewModel: LoginByPhoneVerifyViewModel) {
         sendCodeButton.rx.tap.asObservable()
-            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .subscribe(viewModel.action.sendOTPDidTap)
             .disposed(by: disposeBag)
 
         verifyButton.rx.tap.asObservable()
-            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .map({ () in
                 self.HidenTxtView.text!
             })

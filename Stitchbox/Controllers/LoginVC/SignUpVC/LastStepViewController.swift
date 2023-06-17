@@ -182,7 +182,7 @@ class LastStepViewController: UIViewController, ControllerType {
         ) { ($0, $1, $2) }
         
         submitButton.rx.tap.asObservable()
-            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance) // Avoid multiple taps
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
             .withLatestFrom(userInputs)
             .subscribe(onNext: { [unowned self] username, password, refCode in
                 let credentials: (String, String, String)
