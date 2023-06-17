@@ -277,8 +277,6 @@ extension AddGameDetailVC: UIPickerViewDelegate, UIPickerViewDataSource {
             return
         }
         
-        print(rowSelectedGame.domains)
-        
         selectedDomainList = rowSelectedGame.domains.enumerated().map { GameStatsDomainModel(postKey: String($0.offset + 1), GameStatsDomainModel: ["id": String($0.offset + 1), "domain": $0.element]) }
         
         pickYourGameTxtField.text = rowSelectedGame.name

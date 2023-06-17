@@ -1863,6 +1863,71 @@
             </objects>
             <point key="canvasLocation" x="-872" y="-153"/>
         </scene>
+        <!--PreferenceVC-->
+        <scene sceneID="Y4B-U2-KKa">
+            <objects>
+                <viewController storyboardIdentifier="PreferenceVC" id="rAe-fV-Sx0" customClass="PreferenceVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="klT-n1-fG3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYJ-oW-N41">
+                                <rect key="frame" x="16" y="89.5" width="343" height="437.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4u-g8-ovD" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="32" y="559" width="311" height="44"/>
+                                <color key="backgroundColor" name="Primary"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="cQZ-Jr-JDw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Continue">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="ContinueBtnPressed:" destination="rAe-fV-Sx0" eventType="touchUpInside" id="DBc-hH-usy"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick your favorite games" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Qu-qn-IG8">
+                                <rect key="frame" x="82" y="36" width="211.5" height="21.5"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="J9v-Hi-faC"/>
+                        <color key="backgroundColor" name="Background"/>
+                        <constraints>
+                            <constraint firstItem="b4u-g8-ovD" firstAttribute="leading" secondItem="J9v-Hi-faC" secondAttribute="leading" constant="32" id="0fJ-8R-NaT"/>
+                            <constraint firstItem="6Qu-qn-IG8" firstAttribute="centerX" secondItem="klT-n1-fG3" secondAttribute="centerX" id="4Cl-Qy-qJG"/>
+                            <constraint firstItem="J9v-Hi-faC" firstAttribute="trailing" secondItem="SYJ-oW-N41" secondAttribute="trailing" constant="16" id="9mx-jQ-GUk"/>
+                            <constraint firstItem="b4u-g8-ovD" firstAttribute="centerX" secondItem="klT-n1-fG3" secondAttribute="centerX" id="Jjw-bu-zFo"/>
+                            <constraint firstItem="J9v-Hi-faC" firstAttribute="bottom" secondItem="b4u-g8-ovD" secondAttribute="bottom" constant="64" id="Lgi-IK-pFT"/>
+                            <constraint firstItem="J9v-Hi-faC" firstAttribute="trailing" secondItem="b4u-g8-ovD" secondAttribute="trailing" constant="32" id="ZWs-ym-lH0"/>
+                            <constraint firstItem="b4u-g8-ovD" firstAttribute="top" secondItem="SYJ-oW-N41" secondAttribute="bottom" constant="32" id="jDL-Pq-rGf"/>
+                            <constraint firstItem="6Qu-qn-IG8" firstAttribute="top" secondItem="J9v-Hi-faC" secondAttribute="top" constant="16" id="mko-n6-saV"/>
+                            <constraint firstItem="SYJ-oW-N41" firstAttribute="top" secondItem="6Qu-qn-IG8" secondAttribute="bottom" constant="32" id="osQ-Oz-gpw"/>
+                            <constraint firstItem="SYJ-oW-N41" firstAttribute="leading" secondItem="J9v-Hi-faC" secondAttribute="leading" constant="16" id="zRj-hN-CKz"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="SYJ-oW-N41" id="QYu-4f-c10"/>
+                        <outlet property="continueBtn" destination="b4u-g8-ovD" id="5Qy-1V-Zz6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qDp-gG-exJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1714.4000000000001" y="622.93853073463276"/>
+        </scene>
     </scenes>
     <designables>
         <designable name="Dlf-TU-NMz">
@@ -1879,6 +1944,9 @@
         </designable>
         <designable name="WiJ-yr-vvC">
             <size key="intrinsicContentSize" width="45" height="29"/>
+        </designable>
+        <designable name="b4u-g8-ovD">
+            <size key="intrinsicContentSize" width="67" height="30"/>
         </designable>
         <designable name="foF-KE-EZR">
             <size key="intrinsicContentSize" width="39" height="29"/>

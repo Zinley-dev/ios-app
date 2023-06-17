@@ -290,7 +290,19 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
                       }
                     }
                 case .logInSuccess:
-                    RedirectionHelper.redirectToDashboard()
+                    if _AppCoreData.userDataSource.value?.favoriteContent.isEmpty == true {
+                        
+                        DispatchQueue.main.async {
+                            if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PreferenceVC") as? PreferenceVC {
+                                vc.modalPresentationStyle = .fullScreen
+                                self.present(vc, animated: true)
+                            }
+                        }
+                        
+                    } else {
+                        RedirectionHelper.redirectToDashboard()
+                        
+                    }
                 case .sendCodeSuccess:
                     DispatchQueue.main.async {
                         SwiftLoader.hide()
@@ -305,12 +317,22 @@ class LoginByPhoneVerifyController: UIViewController, ControllerType, UITextFiel
         PhoneNumber.text = viewModel.output.phoneNumber
 
     }
+    
     func bindAction(with viewModel: LoginByPhoneVerifyViewModel) {
-      sendCodeButton.rx.tap.asObservable().subscribe(viewModel.action.sendOTPDidTap).disposed(by: disposeBag)
-      verifyButton.rx.tap.asObservable().map({ () in
-          (self.HidenTxtView.text!)
-        }).subscribe(viewModel.action.verifyOTPDidTap).disposed(by: disposeBag)
+        sendCodeButton.rx.tap.asObservable()
+            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance)
+            .subscribe(viewModel.action.sendOTPDidTap)
+            .disposed(by: disposeBag)
+
+        verifyButton.rx.tap.asObservable()
+            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance)
+            .map({ () in
+                self.HidenTxtView.text!
+            })
+            .subscribe(viewModel.action.verifyOTPDidTap)
+            .disposed(by: disposeBag)
     }
+
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)

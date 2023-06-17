@@ -10,6 +10,8 @@ import PixelSDK
 import Alamofire
 import Photos
 import ObjectMapper
+import Cache
+import AlamofireImage
 
 class PostVC: UIViewController {
 
@@ -19,7 +21,8 @@ class PostVC: UIViewController {
         case video
     }
     
-    
+    var itemList = [GameList]()
+    @IBOutlet weak var categoryInput: UITextField!
     @IBOutlet weak var addLbl: UILabel!
     @IBOutlet weak var hashtagLbl: UILabel!
     @IBOutlet weak var hiddenHashTagTxtField: UITextField!
@@ -44,8 +47,11 @@ class PostVC: UIViewController {
     @IBOutlet weak var privateBtn: UIButton!
     @IBOutlet weak var hashtagBtn: UIButton!
     @IBOutlet weak var allowCmtSwitch: UISwitch!
+    @IBOutlet weak var gameImage: UIImageView!
+    @IBOutlet weak var selectedGameLbl: UILabel!
     
     var hashtagList = [String]()
+    var selectedGameId = ""
     var mode = 0
     var isAllowComment = true
     let backButton: UIButton = UIButton(type: .custom)
@@ -60,6 +66,8 @@ class PostVC: UIViewController {
     var length: Double!
     var renderedImage: UIImage!
     var selectedDescTxtView = ""
+    
+    var dayPicker = UIPickerView()
  
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +83,10 @@ class PostVC: UIViewController {
         setupGesture()
         loadPreviousSetting()
         loadAvatar()
+        loadAddGame()
+        
+        self.dayPicker.delegate = self
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,6 +112,31 @@ class PostVC: UIViewController {
         
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+    }
+    
+    func createDayPicker() {
+
+        categoryInput.inputView = dayPicker
+
+    }
+    
+    @IBAction func changeGameBtnPressed(_ sender: Any) {
+        
+        createDayPicker()
+        categoryInput.becomeFirstResponder()
+        
+    }
+    
+    func loadAddGame() {
+        
+        
+        for item in global_suppport_game_list {
+            if item.name != "Steam" {
+                itemList.append(item)
+            }
+        }
+
         
     }
     
@@ -769,6 +806,13 @@ extension PostVC {
     @objc func onClickPost(_ sender: AnyObject) {
         
         if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
+            
+            guard selectedGameId != ""  else {
+                showErrorAlert("Oops!", msg: "Please select your uploading game.")
+                return
+            }
+            
+            
             if mediaType == "image" {
                 uploadImage()
             } else if mediaType == "video" {
@@ -924,5 +968,81 @@ extension PostVC {
         SwiftLoader.show(title: progress, animated: true)
         
     }
+    
+}
+
+
+extension PostVC: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        
+        return 1
+
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
+        return itemList.count
+    }
+    
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var pickerLabel: UILabel? = (view as? UILabel)
+        if pickerLabel == nil {
+            pickerLabel = UILabel()
+            pickerLabel?.backgroundColor = UIColor.darkGray
+            pickerLabel?.font = UIFont.systemFont(ofSize: 15)
+            pickerLabel?.textAlignment = .center
+        }
+        
+        pickerLabel?.text = itemList[row].name
+        pickerLabel?.textColor = UIColor.white
+
+        return pickerLabel!
+    }
+    
+   
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+       
+        if let imgUrl = URL.init(string: itemList[row].cover) {
+          
+            imageStorage.async.object(forKey: itemList[row].cover) { result in
+                if case .value(let image) = result {
+                    
+                    DispatchQueue.main.async {
+                        self.gameImage.image = image
+                    }
+                   
+                   
+                } else {
+                    
+                    AF.request(imgUrl).responseImage { [weak self] response in
+                       guard let self = self else { return }
+                       switch response.result {
+                        case let .success(value):
+                           
+                          
+                           DispatchQueue.main.async {
+                               self.gameImage.image = value
+                           }
+                           
+                           try? imageStorage.setObject(value, forKey: itemList[row].cover, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+                                              
+                               case let .failure(error):
+                                   print(error)
+                            }
+                                          
+                      }
+                    
+                }
+            }
+            
+        }
+        
+        selectedGameId = itemList[row]._id
+    
+        
+    }
+    
     
 }

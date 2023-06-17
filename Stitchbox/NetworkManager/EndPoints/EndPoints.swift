@@ -389,6 +389,8 @@ public enum UserAPI {
     case addGameChallengeCard(params: [String: Any])
     case updateGameChallengeCard(params: [String: Any])
     case deleteGameChallengeCard(params: [String: Any])
+    case updateFavoriteContent(params: [String: Any] )
+    
 }
 extension UserAPI: EndPointType {
     var module: String {
@@ -441,6 +443,9 @@ extension UserAPI: EndPointType {
             return "/challenge-card"
           case .deleteGameChallengeCard:
             return "/challenge-card"
+          case .updateFavoriteContent:
+            return "/me/favorite-content"
+            
         }
     }
     
@@ -490,6 +495,8 @@ extension UserAPI: EndPointType {
             return .put
           case .deleteGameChallengeCard:
             return .delete
+          case .updateFavoriteContent:
+            return .patch
         }
     }
     
@@ -534,6 +541,8 @@ extension UserAPI: EndPointType {
           case .emailExist(let params):
             return .requestParameters(parameters: params)
           case .addGameChallengeCard(let params):
+            return .requestParameters(parameters: params)
+          case .updateFavoriteContent(let params):
             return .requestParameters(parameters: params)
           case .updateGameChallengeCard(let params):
             return .requestParameters(parameters: params)
