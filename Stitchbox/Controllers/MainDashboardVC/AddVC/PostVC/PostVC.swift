@@ -460,7 +460,7 @@ extension PostVC {
                         
                         Dispatch.background {
                             
-                            UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height)
+                            UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, gameID: self.selectedGameId)
                             
                         }
                         
@@ -504,7 +504,7 @@ extension PostVC {
                 Dispatch.background {
                     
                     print("Start uploading video to db")
-                    UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length)
+                    UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length, gameID: self.selectedGameId)
                     
                 }
                 
