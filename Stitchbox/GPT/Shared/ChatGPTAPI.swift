@@ -119,7 +119,7 @@ class ChatGPTAPI: @unchecked Sendable {
         
         var urlRequest = self.urlRequest
 
-        let requestBodyText = global_gameName != "SB Chatbot" ? "Focus strictly on the \(global_gameName) game topic. Disregard unrelated questions. Query: \(text)" : text
+        let requestBodyText = global_gameName != "SB Chatbot" ? "Focus strictly on the \(global_gameName) game topic, answer very detail based on truth. Disregard unrelated questions. Query: \(text)" : text
         urlRequest.httpBody = try jsonBody(text: requestBodyText)
   
         let (result, response) = try await urlSession.bytes(for: urlRequest)

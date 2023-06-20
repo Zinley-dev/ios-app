@@ -580,8 +580,8 @@ extension SelectedPostVC {
         
         if let id = editeddPost?.id, id != "" {
             
-            APIManager.shared.deleteMyPost(pid: id) { [weak self] result in
-                guard let self = self else { return }
+            APIManager.shared.deleteMyPost(pid: id) { result in
+                //guard let self = self else { return }
                 
                 switch result {
                 case .success(_):
