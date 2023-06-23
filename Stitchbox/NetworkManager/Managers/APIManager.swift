@@ -57,6 +57,7 @@ struct APIManager {
     //let usedTokenManager = Manager<UsedTokenApi>()
     let promotionManager = Manager<PromotionApi>()
     let openLinkManager = Manager<OpenLinkLogApi>()
+    let postStitchManager = Manager<PostStitchApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -904,4 +905,18 @@ extension APIManager {
         completion(result)
       }
     }
+  
+  
+  func stitch(rootId: String, memberId: String, completion: @escaping APICompletion) {
+    let params = ["rootId": rootId, "member": memberId]
+    postStitchManager.request(.stitch(body: params)) { result in
+      completion(result)
+    }
+  }
+  
+  func getByRoot(rootId: String, completion: @escaping APICompletion) {
+    postStitchManager.request(.getByRoot(rootId: rootId)) { result in
+      completion(result)
+    }
+  }
 }

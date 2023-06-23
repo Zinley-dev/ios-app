@@ -1786,3 +1786,52 @@ extension OpenLinkLogApi: EndPointType {
 }
 
 
+
+public enum PostStitchApi {
+  case stitch(body: [String: Any])
+  case getByRoot(rootId: String)
+}
+extension PostStitchApi: EndPointType {
+  var path: String {
+    switch self {
+      case .stitch:
+        return "/"
+      case .getByRoot(let rootId):
+        return "/\(rootId)"
+    }
+  }
+  
+  var module: String {
+    return "/post-stitch"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .stitch:
+        return .post
+      case .getByRoot:
+        return .get
+        
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .stitch(let body):
+        return .requestParameters(parameters: body)
+      case .getByRoot:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+    
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-Client-Timezone": "\(secondsFromGMT)"]
+  }
+  
+}
+
+
