@@ -69,7 +69,7 @@ struct ContentView: View {
                 }
             }
             // Set the background color to a specific color
-            .background(Color(red: 58/255, green: 60/255, blue: 64/255, opacity: 1.0))
+            .background(Color(red: 0/255, green: 0/255, blue: 0/255, opacity: 1.0))
         }
     }
 
@@ -104,7 +104,7 @@ struct ContentView: View {
         
             
             if #available(iOS 16.0, *) {
-                TextField("", text: $vm.inputMessage, prompt: Text("Ask us anything!").foregroundColor(.gray), axis: .vertical)
+                TextField("", text: $vm.inputMessage, prompt: Text("Ask us anything!").foregroundColor(.white), axis: .vertical)
                                #if os(iOS) || os(macOS)
                                .textFieldStyle(.plain)
                                .preferredColorScheme(.dark)
@@ -120,7 +120,7 @@ struct ContentView: View {
                 ZStack(alignment: .leading) {
                     if vm.inputMessage.isEmpty && !isTextFieldFocused {
                         Text("Ask us anything!")
-                            .foregroundColor(.gray)
+                            .foregroundColor(.white)
                             .font(.system(size: 15))
                     }
                     TextField("", text: $vm.inputMessage)

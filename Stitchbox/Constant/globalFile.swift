@@ -22,15 +22,13 @@ import AppsFlyerLib
 let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 23))
 let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 23))
 let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 100, height: 65))
-
+var chatbot_id = "64397f3ceff4334484bf537b"
 var general_vc: UIViewController!
 var general_room: Room!
 var gereral_group_chanel_url: String!
 var startTime = Date()
 var isPro = false
 var global_gpt = "gpt-3.5-turbo"
-var global_gameId = ""
-var global_gameName = ""
 var global_presetingRate = 0.0
 var global_cornerRadius = 0.0
 var global_percentComplete = 0.0
@@ -343,13 +341,9 @@ func pauseVideoIfNeed(pauseIndex: Int) {
 
 */
 
-func handlePauseVideoInCell(_ cell: PostNode) {
-    if let sideButtonView = cell.sideButtonView {
-        sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-        
-        if !cell.buttonsView.streamView.isHidden {
-            cell.buttonsView.streamView.stopSpin()
-        }
+func handlePauseVideoInCell(_ cell: ReelNode) {
+    if !cell.buttonsView.streamView.isHidden {
+        cell.buttonsView.streamView.stopSpin()
     }
 
     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -395,7 +389,7 @@ func playVideoIfNeed(playIndex: Int) {
 }
 */
 
-func handleVideoNodeInCell(_ cell: PostNode, muteStatus: Bool) {
+func handleVideoNodeInCell(_ cell: ReelNode, muteStatus: Bool) {
     guard !cell.videoNode.isPlaying() else { return }
     
     if cell.buttonsView != nil {
@@ -404,10 +398,6 @@ func handleVideoNodeInCell(_ cell: PostNode, muteStatus: Bool) {
             cell.buttonsView.streamView.spin()
         }
 
-        if let sideButtonView = cell.sideButtonView {
-            let image = muteStatus ? muteImage : unmuteImage
-            sideButtonView.soundBtn.setImage(image, for: .normal)
-        }
         
     }
     
@@ -646,16 +636,13 @@ func unmuteVideoIfNeed() {
                 
                 if update1.newPlayingIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? PostNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
                         
                         if cell.videoNode.isPlaying() {
                             
                             cell.videoNode.muted = false
                             shouldMute = false
-                            
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                            }
+
                             
                         }
                         
@@ -673,16 +660,13 @@ func unmuteVideoIfNeed() {
                 
                 if update1.newPlayingIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? PostNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
                         
                         if cell.videoNode.isPlaying() {
                             
                             cell.videoNode.muted = false
                             shouldMute = false
                             
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                            }
                             
                         }
                         
@@ -700,16 +684,12 @@ func unmuteVideoIfNeed() {
                 
                 if update1.PostSearchVC.newPlayingIndex != nil {
                     
-                    if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: update1.PostSearchVC.newPlayingIndex!, section: 0)) as? PostNode {
+                    if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: update1.PostSearchVC.newPlayingIndex!, section: 0)) as? ReelNode {
                         
                         if cell.videoNode.isPlaying() {
                             
                             cell.videoNode.muted = false
                             shouldMute = false
-                            
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                            }
                             
                         }
                         
@@ -727,16 +707,13 @@ func unmuteVideoIfNeed() {
                 
                 if update1.newPlayingIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? PostNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
                         
                         if cell.videoNode.isPlaying() {
                             
                             cell.videoNode.muted = false
                             shouldMute = false
-                            
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                            }
+
                             
                         }
                         
@@ -790,16 +767,12 @@ func muteVideoIfNeed() {
                 
                 if update1.newPlayingIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? PostNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
                         
                         if cell.videoNode.isPlaying() {
                             
                             cell.videoNode.muted = true
                             shouldMute = true
-                            
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                            }
                             
                         }
                         
@@ -817,16 +790,13 @@ func muteVideoIfNeed() {
                 
                 if update1.newPlayingIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? PostNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
                         
                         if cell.videoNode.isPlaying() {
                             
                             cell.videoNode.muted = true
                             shouldMute = true
                             
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                            }
                             
                         }
                         
@@ -844,16 +814,12 @@ func muteVideoIfNeed() {
                 
                 if update1.PostSearchVC.newPlayingIndex != nil {
                     
-                    if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: update1.PostSearchVC.newPlayingIndex!, section: 0)) as? PostNode {
+                    if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: update1.PostSearchVC.newPlayingIndex!, section: 0)) as? ReelNode {
                         
                         if cell.videoNode.isPlaying() {
                             
                             cell.videoNode.muted = true
                             shouldMute = true
-                            
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                            }
                             
                         }
                         
@@ -871,16 +837,12 @@ func muteVideoIfNeed() {
                 
                 if update1.newPlayingIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? PostNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
                         
                         if cell.videoNode.isPlaying() {
                             
                             cell.videoNode.muted = true
                             shouldMute = true
-                            
-                            if cell.sideButtonView != nil {
-                                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                            }
                             
                         }
                         
@@ -924,7 +886,7 @@ func muteVideoIfNeed() {
     
 }
 
-func resetView(cell: PostNode) {
+func resetView(cell: ReelNode) {
     
     if cell.isViewed == true {
         

@@ -29,11 +29,12 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var imageNode: ASImageNode
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
+    var buttonNode: ASDisplayNode
     var hashtagsNode: ASDisplayNode
     var backgroundImage: GradientImageNode
     var shouldCountView = true
     var headerView: PostHeader!
-    var buttonsView: ButtonSideList!
+    var buttonsView: ButtonsHeader!
     var hashtagView: HashtagView!
     var gradientNode: GradienView
     var time = 0
@@ -60,6 +61,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.videoNode = ASVideoNode()
         self.gradientNode = GradienView()
         self.backgroundImage = GradientImageNode()
+        self.buttonNode = ASDisplayNode()
        
         super.init()
         
@@ -87,6 +89,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
             self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
             
+            
+            
+            
+            
+            
             self.headerView.settingBtn.isHidden = true
 
             
@@ -100,11 +107,20 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 
             }
             
-            self.buttonsView = ButtonSideList()
+            self.buttonsView = ButtonsHeader()
+            self.buttonNode.view.addSubview(self.buttonsView)
+            
+            self.buttonsView.translatesAutoresizingMaskIntoConstraints = false
+            self.buttonsView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
+            self.buttonsView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
+            self.buttonsView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
+            self.buttonsView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
+
             self.buttonsView.likeBtn.setTitle("", for: .normal)
             self.buttonsView.commentBtn.setTitle("", for: .normal)
             self.buttonsView.shareBtn.setTitle("", for: .normal)
             self.buttonsView.streamlinkBtn.setTitle("", for: .normal)
+            
             
             self.hashtagView = HashtagView()
             self.hashtagsNode.view.addSubview(self.hashtagView)
@@ -118,9 +134,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
             avatarTap.numberOfTapsRequired = 1
-            self.headerView.avatarImage.isUserInteractionEnabled = true
-            self.headerView.avatarImage.addGestureRecognizer(avatarTap)
-            
+          
             let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
             usernameTap.numberOfTapsRequired = 1
             self.headerView.usernameLbl.isUserInteractionEnabled = true
@@ -129,9 +143,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
             username2Tap.numberOfTapsRequired = 1
-            self.headerView.timeLbl.isUserInteractionEnabled = true
-            self.headerView.timeLbl.addGestureRecognizer(username2Tap)
-            
+           
 
             let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.shareTapped))
             shareTap.numberOfTapsRequired = 1
@@ -174,24 +186,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             
             self.headerView.usernameLbl.text = post.owner?.username ?? ""
-            
-            if let url = post.owner?.avatar, url != "" {
-                
-                self.headerView.avatarImage.load(url: URL(string: url)!, str: url)
-                
-            }
-            
-        
-            //-------------------------------------//
-            
-            if let time = post.createdAt {
-                
-                self.headerView.timeLbl.text = timeAgoSinceDate(time, numericDates: true)
-                
-            } else {
-                self.headerView.timeLbl.text = ""
-            }
-            
             
             
             if let url = URL(string: post.streamLink), !post.streamLink.isEmpty {
@@ -327,14 +321,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 }
             }
             
-        }
-        
-        
-        DispatchQueue.main.async() {
-            self.buttonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: -100), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
-            self.view.addSubview(self.buttonsView)
-            //self.buttonsView.backgroundColor = .red
-            self.originalCenter = self.view.center
         }
   
     }
@@ -1139,25 +1125,23 @@ extension ReelNode {
     
 }
 
-
-extension ReelNode
-{
-
+extension ReelNode {
+    
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        
-        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
+         
+        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 50)
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
 
-        let headerInset = UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
+        let headerInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
-        let contentInset = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 170)
+        let contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 170)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
 
         hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 35)
-        let hashtagsInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
+        let hashtagsInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
         let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
 
         let verticalStack = ASStackLayoutSpec.vertical()
@@ -1170,7 +1154,10 @@ extension ReelNode
         
         verticalStack.children?.append(contentsOf: [hashtagsInsetSpec])
 
-        let verticalStackInset = UIEdgeInsets(top: 0, left: 8, bottom: 8, right: 8)
+        let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
+        verticalStack.children?.append(buttonsInsetSpec)
+        
+        let verticalStackInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
 
         let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
@@ -1180,7 +1167,7 @@ extension ReelNode
         let textInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
         let textInsetSpec1 = ASInsetLayoutSpec(insets: inset, child: gradientNode)
         let textInsetSpec2 = ASInsetLayoutSpec(insets: inset, child: backgroundImage)
-       
+     
         if post.muxPlaybackId != "" {
             let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: textInsetSpec)
             let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
@@ -1194,10 +1181,18 @@ extension ReelNode
 
             return thirdOverlay
         }
-        
     }
-    
+
+    private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
+        
+        buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 65)
+        let buttonsInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
+    }
 }
+
+
+
 
 extension ReelNode {
     

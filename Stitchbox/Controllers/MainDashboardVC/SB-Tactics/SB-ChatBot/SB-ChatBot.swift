@@ -15,9 +15,6 @@ class SB_ChatBot: UIViewController {
     let backButton: UIButton = UIButton(type: .custom)
     let gptButton = UIButton(type: .custom)
     let toolbarActions = ToolbarActions()
-    var name = ""
-    var short_name = ""
-    var gameId = ""
     var subscriptions = Set<AnyCancellable>()
     var selectedGpt = ""
     let toolbar = UIToolbar()
@@ -38,13 +35,9 @@ class SB_ChatBot: UIViewController {
         super.viewDidLoad()
 
         setupButtons()
-        global_gameId = gameId
-        global_gameName = name
-        
-        
-        
+
         presentSwiftLoader()
-        checkforMeta()
+        setupWithoutMeta()
         
         
     }
@@ -74,80 +67,7 @@ class SB_ChatBot: UIViewController {
             
         }
     }
-    
-    
-    func checkforMeta() {
-        
-        APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
-            guard let self = self else { return }
 
-            switch result {
-            case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [String: Any],
-                     let _ = data["content"] as? String, let _ = data["originPatch"] as? String, let _ = data["patch"] as? String else {
-                    Dispatch.main.async {
-                        self.setupWithoutMeta()
-                    }
-                    return
-                }
-                
-                Dispatch.main.async {
-                    self.setupForMeta()
-                }
-            case .failure(let error):
-                print(error)
-                Dispatch.main.async {
-                    self.setupWithoutMeta()
-                }
-            }
-        }
-        
-    }
-    
-    func setupForMeta() {
-        
-        // Create SwiftUI view
-        let chatBotView = ChatBotView(toolbarActions: toolbarActions)
-        
-        // Create Hosting Controller
-        let hostingController = UIHostingController(rootView: chatBotView)
-        
-        // Add the toolbar to the view
-        view.addSubview(metaToolbar)
-        metaToolbar.barTintColor = .darkGray
-
-            // Define constraints
-        NSLayoutConstraint.activate([
-            metaToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            metaToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            metaToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            metaToolbar.heightAnchor.constraint(equalToConstant: 44) // Or whatever height you want
-        ])
-        
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let metaButton = UIBarButtonItem(title: "View current patch", style: .plain, target: self, action: #selector(metaButtonTapped))
-        metaButton.tintColor = .white
-
-        metaToolbar.setItems([flexibleSpace, metaButton], animated: false)
-        
-        // Add as child view controller
-        addChild(hostingController)
-        view.addSubview(hostingController.view)
-        
-        // Configure constraints
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-                hostingController.view.topAnchor.constraint(equalTo: metaToolbar.bottomAnchor),
-                hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            ])
-        
-        hostingController.didMove(toParent: self)
-        
-    }
-    
     func setupWithoutMeta() {
         
         // Create SwiftUI view
@@ -204,7 +124,7 @@ extension SB_ChatBot {
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-        navigationItem.title = name
+        navigationItem.title = "SB ChatBot"
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
 
@@ -485,22 +405,8 @@ extension SB_ChatBot {
         
         
     }
-    
-    
-    @objc func metaButtonTapped() {
-        // Code for button 1
-        
-        if let SBMVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_MetaVC") as? SB_MetaVC {
-            
-            SBMVC.gameId = self.gameId
-            SBMVC.gameName = self.name
-            self.navigationController?.pushViewController(SBMVC, animated: true)
-            
-        }
-       
-    }
-    
 
+    
 
   
 }

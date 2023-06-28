@@ -9,9 +9,7 @@ import UIKit
 
 class PostHeader: UIView {
     
-    @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var usernameLbl: UILabel!
-    @IBOutlet weak var avatarImage: UIImageView!
     @IBOutlet var contentView: UIView!
     @IBOutlet var settingBtn: UIButton!
 

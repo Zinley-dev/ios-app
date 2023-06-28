@@ -62,11 +62,9 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         
         // Do any additional setup after loading the view
+        setupNavBar()
         syncSendbirdAccount()
         IAPManager.shared.configure()
-        navigationControllerHeight = self.navigationController!.navigationBar.frame.height
-        tabBarControllerHeight = (self.tabBarController?.tabBar.frame.height)!
-        
         setupButtons()
         setupCollectionNode()
         navigationControllerDelegate()
@@ -134,21 +132,12 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //showTabbar()
+        setupNavBar()
         checkNotification()
         showMiddleBtn(vc: self)
         loadFeed()
         
         hasViewAppeared = true
-        
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
         if firstAnimated {
             
@@ -167,8 +156,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
             
             loadingView.backgroundColor = self.view.backgroundColor
             
-        } else {
-            showTabbar()
         }
         
         if currentIndex != nil {
@@ -204,14 +191,25 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
     }
     
-    func showTabbar() {
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .clear
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundImage = UIImage()
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.shadowColor = .clear
+        navigationBarAppearance.backgroundEffect = nil
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.isTranslucent = true
+
         
         navigationController?.setNavigationBarHidden(false, animated: true)
-        changeTabBar(hidden: false, animated: false)
-        self.tabBarController?.tabBar.isTranslucent = false
-        showMiddleBtn(vc: self)
-        
-        bottomConstraint.constant = bottomValueNoHide
         
     }
     
@@ -234,7 +232,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         updateData()
         
     }
-    
     
     func updateData() {
         self.retrieveNextPageWithCompletion { (newPosts) in
@@ -432,18 +429,14 @@ extension FeedViewController {
         let searchBarButton = UIBarButtonItem(customView: searchButton)
         
         
-        let customButton = UIButton(type: .custom)
-        customButton.setImage(UIImage(named: "custom")!.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
-        customButton.addTarget(self, action: #selector(onClickPreference(_:)), for: .touchUpInside)
-        customButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        let customBarButton = UIBarButtonItem(customView: customButton)
+        
         
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
         
         //let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, customBarButton]
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
         
         
     }
@@ -463,18 +456,12 @@ extension FeedViewController {
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let searchBarButton = UIBarButtonItem(customView: searchButton)
         
-        let customButton = UIButton(type: .custom)
-        customButton.setImage(UIImage(named: "custom")!.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
-        customButton.addTarget(self, action: #selector(onClickPreference(_:)), for: .touchUpInside)
-        customButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        let customBarButton = UIBarButtonItem(customView: customButton)
-        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
         
         
         //let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton, fixedSpace, customBarButton]
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
         
     }
     
@@ -488,14 +475,7 @@ extension FeedViewController {
     }
     
     @objc func onClickPreference(_ sender: AnyObject) {
-        if let NVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainPreferenceVC") as? MainPreferenceVC {
-            
-            resetNoti()
-            NVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(NVC, animated: true)
-            
-        }
+
     }
     
     @objc func onClickNoti(_ sender: AnyObject) {
@@ -601,7 +581,7 @@ extension FeedViewController {
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
             
             // Calculate the visible cells.
-            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
+            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? ReelNode }
             
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
@@ -644,7 +624,7 @@ extension FeedViewController {
                     playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
-                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? ReelNode {
                         
                         resetView(cell: node)
                         
@@ -662,7 +642,7 @@ extension FeedViewController {
                 imageTimerWorkItem = DispatchWorkItem { [weak self] in
                     guard let self = self else { return }
                     if self.imageIndex != nil {
-                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
+                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? ReelNode {
                             if self.imageIndex == self.newPlayingIndex {
                                 resetView(cell: node)
                                 node.endImage(id: node.post.id)
@@ -683,7 +663,7 @@ extension FeedViewController {
             
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
+            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
                 if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
                     if let currentTime = cell.videoNode.currentItem?.currentTime() {
                         cell.videoNode.player?.seek(to: currentTime)
@@ -703,65 +683,7 @@ extension FeedViewController {
         
         
     }
-    
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        
-        if scrollView == collectionNode.view {
-            
-            if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-                navigationController?.setNavigationBarHidden(true, animated: true)
-                changeTabBar(hidden: true, animated: true)
-                self.tabBarController?.tabBar.isTranslucent = true
-                bottomConstraint.constant = bottomValue
-                hideMiddleBtn(vc: self)
-                
-            } else {
-                navigationController?.setNavigationBarHidden(false, animated: true)
-                changeTabBar(hidden: false, animated: false)
-                self.tabBarController?.tabBar.isTranslucent = false
-                showMiddleBtn(vc: self)
-                
-                bottomConstraint.constant = bottomValueNoHide
-            }
-            
-        }
-        
-    }
-    
-    func changeTabBar(hidden: Bool, animated: Bool) {
-        guard let tabBar = self.tabBarController?.tabBar else {
-            return
-        }
-        
-        if tabBar.isHidden == hidden {
-            return
-        }
-        
-        let duration: TimeInterval = (animated ? 0.25 : 0.0)
-        
-        if hidden {
-            UIView.animate(withDuration: duration, animations: {
-                tabBar.alpha = 0
-            }, completion: { _ in
-                tabBar.isHidden = true
-                tabBar.alpha = 1 // Reset the alpha back to 1
-            })
-        } else {
-            tabBar.isHidden = false
-            tabBar.alpha = 0
-            
-            UIView.animate(withDuration: duration) {
-                tabBar.alpha = 1
-            }
-        }
-    }
-    
-    
-    
-    
-    
-    
+ 
 }
 
 extension FeedViewController {
@@ -786,6 +708,8 @@ extension FeedViewController {
         }
 
         cell.hashTagLabel.text = item.hashtags[indexPath.row]
+        cell.backgroundColor = .clear
+        cell.hashTagLabel.backgroundColor = .clear
         return cell
     }
     
@@ -831,7 +755,7 @@ extension FeedViewController: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
+        let max = CGSize(width: self.view.layer.frame.width, height: contentView.frame.height);
         
         return ASSizeRangeMake(min, max);
     }
@@ -859,7 +783,7 @@ extension FeedViewController: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = PostNode(with: post)
+            let node = ReelNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -928,7 +852,8 @@ extension FeedViewController {
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
-        
+        flowLayout.minimumLineSpacing = 0.0
+        flowLayout.scrollDirection = .vertical
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.collectionNode.leadingScreensForBatching = 2.0
@@ -941,9 +866,11 @@ extension FeedViewController {
         self.contentView.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
         self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: -1).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
+        
+        //self.collectionNode.view.isScrollEnabled = false
         
         self.applyStyle()
         
@@ -955,7 +882,7 @@ extension FeedViewController {
     
     func applyStyle() {
         
-        self.collectionNode.view.isPagingEnabled = false
+        self.collectionNode.view.isPagingEnabled = true
         self.collectionNode.view.backgroundColor = UIColor.clear
         self.collectionNode.view.showsVerticalScrollIndicator = false
         self.collectionNode.view.allowsSelection = false
@@ -1162,7 +1089,7 @@ extension FeedViewController {
         if !posts.isEmpty {
             for index in 0..<posts.count {
                 let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
-                if let node = collectionNode.nodeForItem(at: indexPath) as? PostNode {
+                if let node = collectionNode.nodeForItem(at: indexPath) as? ReelNode {
                     
                     if node.hashtagView != nil {
                         node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
@@ -1214,8 +1141,7 @@ extension FeedViewController {
     }
     
     func switchToProfileVC() {
-        
-        changeTabBar(hidden: false, animated: false)
+    
         self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
         
         
@@ -1257,16 +1183,12 @@ extension FeedViewController {
     
     func pauseVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
-            if cell.sideButtonView != nil {
-                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+            if !cell.buttonsView.streamView.isHidden {
                 
-                if !cell.buttonsView.streamView.isHidden {
-                    
-                    cell.buttonsView.streamView.stopSpin()
-                    
-                }
+                cell.buttonsView.streamView.stopSpin()
+                
             }
             
             cell.videoNode.pause()
@@ -1278,7 +1200,7 @@ extension FeedViewController {
     
     func seekVideo(index: Int, time: CMTime) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             cell.videoNode.player?.seek(to: time)
             
@@ -1290,36 +1212,11 @@ extension FeedViewController {
     func playVideo(index: Int) {
         
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             if !cell.videoNode.isPlaying() {
                 
-                
-                if index != 0 {
-                    
-                    let userDefaults = UserDefaults.standard
-                    
-                    
-                    if userDefaults.bool(forKey: "hasGuideLandTap") == false {
-                       
-                        
-                        delayItem.perform(after: 0.5) {
-                            cell.tapAnimation()
-                        }
-                       
-                        // Update the flag indicator
-                        userDefaults.set(true, forKey: "hasGuideLandTap")
-                        userDefaults.synchronize() // This forces the app to update userDefaults
-                       
-                        
-                    }
-                    
-                }
-                
-                
-                
-                
-                
+
                 if !cell.buttonsView.streamView.isHidden {
                     
                     cell.buttonsView.streamView.spin()
@@ -1328,14 +1225,6 @@ extension FeedViewController {
                 
                 if let muteStatus = shouldMute {
                     
-                    if cell.sideButtonView != nil {
-                        
-                        if muteStatus {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        } else {
-                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                        }
-                    }
                     
                     if muteStatus {
                         cell.videoNode.muted = true
@@ -1346,15 +1235,7 @@ extension FeedViewController {
                     cell.videoNode.play()
                     
                 } else {
-                    
-                    if cell.sideButtonView != nil {
-                        
-                        if globalIsSound {
-                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                        } else {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        }
-                    }
+
                     
                     if globalIsSound {
                         cell.videoNode.muted = false

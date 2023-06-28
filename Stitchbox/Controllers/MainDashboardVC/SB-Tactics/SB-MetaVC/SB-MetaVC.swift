@@ -154,30 +154,7 @@ extension SB_MetaVC {
 
 extension SB_MetaVC {
     func loadMeta() {
-        
-        APIManager.shared.getGamePatch(gameId: global_gameId) { [weak self] result in
-            guard let self = self else { return }
 
-            switch result {
-            case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [String: Any],
-                      let content = data["content"] as? String, let originPatch = data["originPatch"] as? String, let patch = data["patch"] as? String else {
-                    print("Unable to convert")
-                    return
-                }
-                
-                Dispatch.main.async {
-                    self.patchLbl.text = "Patch: \(patch)"
-                }
-                
-                print(content)
-                self.originalLink = originPatch
-                self.displayMeta(content: content)
-            case .failure(let error):
-                print(error)
-            }
-        }
     }
 
     func displayMeta(content: String) {

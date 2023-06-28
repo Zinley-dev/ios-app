@@ -224,9 +224,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .secondary
-        followLbl.textColor = .lightGray
-        onlyMeLbl.textColor = .lightGray
+        publicLbl.textColor = .white
+        followLbl.textColor = .white
+        onlyMeLbl.textColor = .white
         
     }
     
@@ -239,9 +239,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .lightGray
-        followLbl.textColor = .secondary
-        onlyMeLbl.textColor = .lightGray
+        publicLbl.textColor = .white
+        followLbl.textColor = .white
+        onlyMeLbl.textColor = .white
     }
     
     @IBAction func privateBtnPressed(_ sender: Any) {
@@ -253,9 +253,9 @@ class PostVC: UIViewController {
         privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
         
         
-        publicLbl.textColor = .lightGray
-        followLbl.textColor = .lightGray
-        onlyMeLbl.textColor = .secondary
+        publicLbl.textColor = .white
+        followLbl.textColor = .white
+        onlyMeLbl.textColor = .white
         
         
     }
@@ -349,9 +349,9 @@ extension PostVC {
                                 self.followingBtn.setImage(UIImage(named: "following"), for: .normal)
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
-                                self.publicLbl.textColor = .secondary
-                                self.followLbl.textColor = .lightGray
-                                self.onlyMeLbl.textColor = .lightGray
+                                self.publicLbl.textColor = .white
+                                self.followLbl.textColor = .white
+                                self.onlyMeLbl.textColor = .white
                                 
                             }
    
@@ -365,9 +365,9 @@ extension PostVC {
                                 self.followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
-                                self.publicLbl.textColor = .lightGray
-                                self.followLbl.textColor = .secondary
-                                self.onlyMeLbl.textColor = .lightGray
+                                self.publicLbl.textColor = .white
+                                self.followLbl.textColor = .white
+                                self.onlyMeLbl.textColor = .white
                                 
                             }
                             
@@ -383,9 +383,9 @@ extension PostVC {
                                 self.privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
                                         
                                         
-                                self.publicLbl.textColor = .lightGray
-                                self.followLbl.textColor = .lightGray
-                                self.onlyMeLbl.textColor = .secondary
+                                self.publicLbl.textColor = .white
+                                self.followLbl.textColor = .white
+                                self.onlyMeLbl.textColor = .white
                                 
                             }
                             
@@ -617,9 +617,9 @@ extension PostVC {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .secondary
-        followLbl.textColor = .lightGray
-        onlyMeLbl.textColor = .lightGray
+        publicLbl.textColor = .white
+        followLbl.textColor = .white
+        onlyMeLbl.textColor = .white
         
     }
     

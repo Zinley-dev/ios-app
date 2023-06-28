@@ -103,20 +103,31 @@ class ImageViewCell: UICollectionViewCell {
     
     private func setupView() {
         contentView.addSubview(imageView)
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
+        
+        // Add gradient overlay
+        let gradient = CAGradientLayer()
+        gradient.frame = imageView.bounds
+        gradient.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        gradient.locations = [0.5, 1.0]
+        imageView.layer.insertSublayer(gradient, at: 0)
+        
+        contentView.addSubview(stackView)
+        
+        stackView.addArrangedSubview(videoSignView)
+        videoSignView.layer.cornerRadius = 10
+        videoSignView.layer.masksToBounds = true
+        
+        stackView.addArrangedSubview(countLabel)
+        //countLabel.font = UIFont(name: "YourCustomFontName", size: 14) // set your own custom font here
 
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
             contentView.topAnchor.constraint(equalTo: imageView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
-        ])
 
-        contentView.addSubview(stackView)
-
-        stackView.addArrangedSubview(videoSignView)
-        stackView.addArrangedSubview(countLabel)
-
-        NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
             
@@ -125,6 +136,7 @@ class ImageViewCell: UICollectionViewCell {
             videoSignView.heightAnchor.constraint(equalToConstant: 25),
         ])
     }
+
     
     func countView(with data: PostModel) {
         

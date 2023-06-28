@@ -120,20 +120,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
         self.loadNewestCoreData {
             self.loadSettings {
-                if _AppCoreData.userDataSource.value?.favoriteContent.isEmpty == true {
-                    
-                    DispatchQueue.main.async {
-                        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PreferenceVC") as? PreferenceVC {
-                            vc.modalPresentationStyle = .fullScreen
-                            self.present(vc, animated: true)
-                        }
-                    }
-                    
-                } else {
-        
-                    RedirectionHelper.redirectToDashboard()
-                    
-                }
+                RedirectionHelper.redirectToDashboard()
                 
             }
         }
@@ -207,20 +194,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     
     vm.output.loginResultObservable.subscribe(onNext: { isTrue in
       if (isTrue) {
-          if _AppCoreData.userDataSource.value?.favoriteContent.isEmpty == true {
-              
-              DispatchQueue.main.async {
-                  if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PreferenceVC") as? PreferenceVC {
-                      vc.modalPresentationStyle = .fullScreen
-                      self.present(vc, animated: true)
-                  }
-              }
-              
-          } else {
-              
-              RedirectionHelper.redirectToDashboard()
-              
-          }
+          RedirectionHelper.redirectToDashboard()
       }
     })
     .disposed(by: disposeBag)

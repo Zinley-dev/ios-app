@@ -47,19 +47,7 @@ class TutorialVC: UIViewController {
             nextIndex()
         case 4:
             print("Show next item here")
-            if _AppCoreData.userDataSource.value?.favoriteContent.isEmpty == true {
-                
-                DispatchQueue.main.async {
-                    if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PreferenceVC") as? PreferenceVC {
-                        vc.modalPresentationStyle = .fullScreen
-                        self.present(vc, animated: true)
-                    }
-                }
-                
-            } else {
-                RedirectionHelper.redirectToDashboard()
-                
-            }
+            RedirectionHelper.redirectToDashboard()
         default:
             break
         }

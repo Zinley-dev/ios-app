@@ -157,7 +157,7 @@ extension SelectedPostVC {
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
             
             // Calculate the visible cells.
-            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
+            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? ReelNode }
             
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
@@ -200,7 +200,7 @@ extension SelectedPostVC {
                     playVideo(index: currentIndex!)
                     isVideoPlaying = true
                     
-                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? ReelNode {
                         
                         resetView(cell: node)
                         
@@ -218,7 +218,7 @@ extension SelectedPostVC {
                 imageTimerWorkItem = DispatchWorkItem { [weak self] in
                     guard let self = self else { return }
                     if self.imageIndex != nil {
-                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
+                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? ReelNode {
                             if self.imageIndex == self.newPlayingIndex {
                                 resetView(cell: node)
                                 node.endImage(id: node.post.id)
@@ -239,7 +239,7 @@ extension SelectedPostVC {
             
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
+            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
                 if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
                     if let currentTime = cell.videoNode.currentItem?.currentTime() {
                         cell.videoNode.player?.seek(to: currentTime)
@@ -357,7 +357,7 @@ extension SelectedPostVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = PostNode(with: post)
+            let node = ReelNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             node.isSelectedPost = true
@@ -919,7 +919,7 @@ extension SelectedPostVC {
         if !posts.isEmpty {
             for index in 0..<posts.count {
                 let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
-                if let node = collectionNode.nodeForItem(at: indexPath) as? PostNode {
+                if let node = collectionNode.nodeForItem(at: indexPath) as? ReelNode {
                     
                     if node.hashtagView != nil {
                         node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
@@ -974,16 +974,12 @@ extension SelectedPostVC {
     
     func pauseVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
-            if cell.sideButtonView != nil {
-                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
+            if !cell.buttonsView.streamView.isHidden {
                 
-                if !cell.buttonsView.streamView.isHidden {
-                    
-                    cell.buttonsView.streamView.stopSpin()
-                    
-                }
+                cell.buttonsView.streamView.stopSpin()
+                
             }
             
             cell.videoNode.pause()
@@ -994,7 +990,7 @@ extension SelectedPostVC {
     
     func seekVideo(index: Int, time: CMTime) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             cell.videoNode.player?.seek(to: time)
             
@@ -1006,7 +1002,7 @@ extension SelectedPostVC {
     func playVideo(index: Int) {
         
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             if !cell.videoNode.isPlaying() {
                 
@@ -1022,15 +1018,6 @@ extension SelectedPostVC {
                 
                 if let muteStatus = shouldMute {
                     
-                    if cell.sideButtonView != nil {
-                        
-                        if muteStatus {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        } else {
-                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                        }
-                    }
-                   
                     if muteStatus {
                         cell.videoNode.muted = true
                     } else {
@@ -1041,14 +1028,6 @@ extension SelectedPostVC {
                     
                 } else {
                     
-                    if cell.sideButtonView != nil {
-                        
-                        if globalIsSound {
-                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                        } else {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        }
-                    }
                    
                     if globalIsSound {
                         cell.videoNode.muted = false

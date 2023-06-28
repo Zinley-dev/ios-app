@@ -21,33 +21,48 @@ import SendBirdCalls
     
     // TabBarButton – Setup Middle Button
     func setupMiddleButton() {
-        button.setImage(UIImage(named: "Add 2"), for: .normal)
-        button.backgroundColor = UIColor.tabbarbackground
-        button.layer.cornerRadius = 35
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOffset = CGSize(width: 0.0, height: -6.0)
-        button.layer.shadowRadius = 4
-        button.layer.shadowOpacity = 0.1
-        self.view.insertSubview(button, aboveSubview: self.tabBar)
+        // Configure button properties
+        button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+        button.backgroundColor = .clear
+        //button.backgroundColor = UIColor.tabbarbackground
+ 
+
+        // Calculate position
+        let tabBarHeight = self.tabBar.frame.height
+        let buttonSize = CGSize(width: 50, height: 50)  // Change to desired size of the button
+        let buttonFrame = CGRect(x: (self.tabBar.frame.width / 2) - (buttonSize.width / 2),
+                                 y: (tabBarHeight - buttonSize.height) / 2,
+                                 width: buttonSize.width,
+                                 height: buttonSize.height)
+
+        // Apply frame to button
+        button.frame = buttonFrame
+
+        self.tabBar.addSubview(button)
+
+        // Add target for button press
         button.addTarget(self, action: #selector(pressedAction(_:)), for: .touchUpInside)
+
+        // Set button layer's z-position
         button.layer.zPosition = 2500
+
+        // If your button is larger than your tab bar, you will have to adjust the size or position accordingly
+        if buttonSize.height > tabBarHeight {
+            print("Warning: button size is larger than tab bar height. Button will not fit in tab bar.")
+        }
         
         
     }
+
+    
     @objc func pressedAction(_ sender: UIButton) {
         // do your stuff here
         self.selectedIndex = 2
         presentPostVC()
         
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let sizeButton = 70
-        // safe place to set the frame of button manually
-        button.frame = CGRect.init(x: Int(self.view.bounds.midX) - sizeButton / 2, y: Int(self.tabBar.frame.minY) - sizeButton / 2, width: sizeButton, height: sizeButton)
-    }
-
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         //setupView()
@@ -56,8 +71,9 @@ import SendBirdCalls
         setupMiddleButton()
         SBDMain.add(self, identifier: self.sbu_className)
         
+        self.tabBar.isTranslucent = false
+        
     }
-    
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
@@ -143,7 +159,7 @@ import SendBirdCalls
             
             
             // Customize the navigation bar appearance
-            PNVC.navigationBar.barTintColor = .background
+            PNVC.navigationBar.barTintColor = .black
             PNVC.navigationBar.tintColor = .white
             PNVC.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
             

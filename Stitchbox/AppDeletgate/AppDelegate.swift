@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
         
         //SwipeBackConfiguration.shared = CustomSwipeBackConfiguration()
-        
+     
         return true
         
     }
@@ -560,7 +560,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     nav.popBack(4)
                 } else {
                     
-                    if currentVC is FeedViewController || currentVC is IntroTacticsVC || currentVC is ProfileViewController || currentVC is MainMessageVC {
+                    if currentVC is FeedViewController || currentVC is TrendingVC || currentVC is ProfileViewController || currentVC is MainMessageVC {
                         self.presentChatWithNavAndHideBar(nav: nav, channelUrl: channelUrl)
                     } else {
                         self.presentChatWithNav(nav: nav, channelUrl: channelUrl)

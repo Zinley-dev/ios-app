@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PostHeader" customModule="Stitchbox" customModuleProvider="target">
             <connections>
-                <outlet property="avatarImage" destination="Pd3-ma-7CN" id="OhT-A5-DNw"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="tw2-A7-LcA"/>
                 <outlet property="settingBtn" destination="kGz-a1-Rap" id="nnt-SU-ikM"/>
-                <outlet property="timeLbl" destination="ovi-3m-YPe" id="SOl-Gt-Rwn"/>
                 <outlet property="usernameLbl" destination="nAq-It-wTT" id="lAv-hK-YyV"/>
             </connections>
         </placeholder>
@@ -22,41 +20,17 @@
             <rect key="frame" x="0.0" y="0.0" width="660" height="80"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultuser" translatesAutoresizingMaskIntoConstraints="NO" id="Pd3-ma-7CN">
-                    <rect key="frame" x="0.0" y="15" width="50" height="50"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="foobar" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAq-It-wTT">
+                    <rect key="frame" x="8" y="30" width="150" height="20"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="50" id="Glx-eX-mWD"/>
-                        <constraint firstAttribute="width" constant="50" id="shq-TN-Gu4"/>
+                        <constraint firstAttribute="height" constant="20" id="CYI-HI-Ssa"/>
+                        <constraint firstAttribute="width" constant="150" id="JqE-Xt-CP0"/>
                     </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                            <real key="value" value="25"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </imageView>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="CDE-Z5-h4m">
-                    <rect key="frame" x="58" y="20" width="150" height="40"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="foobar" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAq-It-wTT">
-                            <rect key="frame" x="0.0" y="0.0" width="150" height="20"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="20" id="CYI-HI-Ssa"/>
-                                <constraint firstAttribute="width" constant="150" id="JqE-Xt-CP0"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2m ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ovi-3m-YPe">
-                            <rect key="frame" x="0.0" y="20" width="150" height="20"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                </stackView>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kGz-a1-Rap">
                     <rect key="frame" x="610" y="17.5" width="50" height="45"/>
                     <constraints>
@@ -70,19 +44,16 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="CDE-Z5-h4m" firstAttribute="leading" secondItem="Pd3-ma-7CN" secondAttribute="trailing" constant="8" id="7xL-hv-2hi"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="kGz-a1-Rap" secondAttribute="trailing" id="9aT-p0-aqB"/>
                 <constraint firstItem="kGz-a1-Rap" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Cmb-jD-DB0"/>
-                <constraint firstItem="Pd3-ma-7CN" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="PiO-vz-CAt"/>
-                <constraint firstItem="CDE-Z5-h4m" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="RP1-1H-ezA"/>
-                <constraint firstItem="Pd3-ma-7CN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="aPB-G9-W8R"/>
+                <constraint firstItem="nAq-It-wTT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="FpW-cn-6zv"/>
+                <constraint firstItem="nAq-It-wTT" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="NVj-bS-KfC"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="-252.17391304347828" y="-464.73214285714283"/>
         </view>
     </objects>
     <resources>
-        <image name="defaultuser" width="278" height="278"/>
         <image name="headerMore" width="18.5" height="4.5"/>
     </resources>
 </document>
