@@ -603,7 +603,7 @@ extension FeedViewController {
             if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                 
                 foundVisibleVideo = true
-                playTimeBar.isHidden = false
+                //playTimeBar.isHidden = false
                 imageIndex = nil
             } else {
                 playTimeBar.isHidden = true

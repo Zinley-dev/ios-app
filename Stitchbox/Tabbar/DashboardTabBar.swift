@@ -71,7 +71,16 @@ import SendBirdCalls
         setupMiddleButton()
         SBDMain.add(self, identifier: self.sbu_className)
         
+        
+        // Remove border line
+        self.tabBar.shadowImage = UIImage()
+        self.tabBar.backgroundImage = UIImage.from(color: .black)  // Assuming .tabbarbackground is your desired color
         self.tabBar.isTranslucent = false
+        
+        let layer = CALayer()
+        layer.backgroundColor = UIColor.black.cgColor // Use your tabBar color here
+        layer.frame = CGRect(x: 0, y: -1, width: self.tabBar.frame.width, height: 1)
+        self.tabBar.layer.addSublayer(layer)
         
     }
     
@@ -211,3 +220,16 @@ struct DashboardTabSwitchingView_Preview: PreviewProvider {
     }
 }
 #endif
+
+extension UIImage {
+    static func from(color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img ?? UIImage()
+    }
+}

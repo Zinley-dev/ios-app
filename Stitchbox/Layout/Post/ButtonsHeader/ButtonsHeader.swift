@@ -16,8 +16,6 @@ class ButtonsHeader: UIView {
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var likeCountLbl: UILabel!
     @IBOutlet weak var streamlinkBtn: UIButton!
-    @IBOutlet var streamView: UIView!
-    @IBOutlet var contentView: UIView!
 
     let kCONTENT_XIB_NAME = "ButtonsHeader"
     

@@ -1070,8 +1070,6 @@ extension ProfileViewController {
         return section
     }
 
-
-
     
     func createLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { [unowned self] index, env in
