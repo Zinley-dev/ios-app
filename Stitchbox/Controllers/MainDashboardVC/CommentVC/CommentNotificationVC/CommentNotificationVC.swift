@@ -250,8 +250,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             print(error.localizedDescription)
         }
         
-        loadingView.backgroundColor = self.view.backgroundColor
-        
+        loadingView.backgroundColor = .black
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -533,7 +532,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         self.tableNode.view.separatorStyle = .none
         self.tableNode.view.separatorColor = UIColor.lightGray
         self.tableNode.view.isPagingEnabled = false
-        self.tableNode.view.backgroundColor = UIColor.background
+        self.tableNode.view.backgroundColor = UIColor.black
         self.tableNode.view.showsVerticalScrollIndicator = false
         
         

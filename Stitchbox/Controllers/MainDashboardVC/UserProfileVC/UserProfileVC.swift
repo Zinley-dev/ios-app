@@ -241,15 +241,6 @@ class UserProfileVC: UIViewController {
                     cell.messageBtn.addTarget(self, action: #selector(messageTapped), for: .touchUpInside)
                     
                     
-                    // add target using gesture recognizer for image
-                    let avatarTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.avatarTapped))
-                    cell.avatarImage.isUserInteractionEnabled = true
-                    cell.avatarImage.addGestureRecognizer(avatarTap)
-                    
-                    let coverImageTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.coverImageTapped))
-                    cell.coverImage.isUserInteractionEnabled = true
-                    cell.coverImage.addGestureRecognizer(coverImageTap)
-                    
                     let numberOfFollowersTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followersTapped))
                     cell.followerStack.isUserInteractionEnabled = true
                     cell.followerStack.addGestureRecognizer(numberOfFollowersTap)

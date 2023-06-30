@@ -11,7 +11,6 @@ class PostHeader: UIView {
     
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet var contentView: UIView!
-    @IBOutlet var settingBtn: UIButton!
 
     let kCONTENT_XIB_NAME = "PostHeader"
     

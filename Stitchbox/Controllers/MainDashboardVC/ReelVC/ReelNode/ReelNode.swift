@@ -25,8 +25,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     weak var collectionNode: ASCollectionNode?
     weak var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
-    var videoNode: ASVideoNode
-    var imageNode: ASImageNode
+    var videoNode: RoundedCornerVideoNode
+    var imageNode: RoundedCornerImageNode
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
     var buttonNode: ASDisplayNode
@@ -54,11 +54,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
     init(with post: PostModel) {
         self.post = post
-        self.imageNode = ASImageNode()
+        self.imageNode = RoundedCornerImageNode()
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
         self.hashtagsNode = ASDisplayNode()
-        self.videoNode = ASVideoNode()
+        self.videoNode = RoundedCornerVideoNode()
         self.gradientNode = GradienView()
         self.backgroundImage = GradientImageNode()
         self.buttonNode = ASDisplayNode()
@@ -82,34 +82,17 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             self.headerView = PostHeader()
             self.headerNode.view.addSubview(self.headerView)
-            self.headerView.settingBtn.setTitle("", for: .normal)
+
             self.headerView.translatesAutoresizingMaskIntoConstraints = false
             self.headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
             self.headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
             self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
             self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
             
-            
-            
-            
-            
-            
-            self.headerView.settingBtn.isHidden = true
 
-            
-            if self.isSelectedPost == false {
-                
-                if post.owner?.id == _AppCoreData.userDataSource.value?.userID {
-                    
-                    self.headerView.settingBtn.isHidden = true
-                    
-                }
-                
-            }
-            
+
             self.buttonsView = ButtonsHeader()
             self.buttonNode.view.addSubview(self.buttonsView)
-            
             self.buttonsView.translatesAutoresizingMaskIntoConstraints = false
             self.buttonsView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
             self.buttonsView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
@@ -118,8 +101,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
             self.buttonsView.likeBtn.setTitle("", for: .normal)
             self.buttonsView.commentBtn.setTitle("", for: .normal)
+            self.buttonsView.commentBtn.setImage(cmtImage, for: .normal)
             self.buttonsView.shareBtn.setTitle("", for: .normal)
-            self.buttonsView.streamlinkBtn.setTitle("", for: .normal)
             
             
             self.hashtagView = HashtagView()
@@ -159,16 +142,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.buttonsView.commentBtn.addGestureRecognizer(commentTap)
             
             
-            let settingTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.settingTapped))
-            settingTap.numberOfTapsRequired = 1
-            self.headerView.settingBtn.addGestureRecognizer(settingTap)
-            
-            
-            let streamLinkTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.streamingLinkTapped))
-            streamLinkTap.numberOfTapsRequired = 1
-            self.buttonsView.streamlinkBtn.addGestureRecognizer(streamLinkTap)
-            
-            
             let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeHandle))
             doubleTap.numberOfTapsRequired = 2
             self.view.addGestureRecognizer(doubleTap)
@@ -187,21 +160,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             self.headerView.usernameLbl.text = post.owner?.username ?? ""
             
-            
-            if let url = URL(string: post.streamLink), !post.streamLink.isEmpty {
-                if let domain = url.host {
-                    if check_Url(host: domain) {
-                        self.buttonsView.hostLbl.text = "  \(domain)  "
-                    } else {
-                        self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
-                    }
-                } else {
-                    self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
-                }
-            } else {
-                self.buttonsView.hostLbl.text = "  \("stitchbox.gg")  "
-            }
-
             self.checkIfLike()
             self.totalLikeCount()
             self.totalCmtCount()
@@ -811,22 +769,14 @@ extension ReelNode {
             
             general_vc = vc
             
-            if vc is ReelVC {
-                
-                if let update1 = vc as? ReelVC {
-                    
-                    let slideVC = CommentVC()
-                    
-                    slideVC.post = self.post
-                    slideVC.modalPresentationStyle = .custom
-                    slideVC.transitioningDelegate = update1.self
-                    global_presetingRate = Double(0.75)
-                    global_cornerRadius = 35
-                    update1.present(slideVC, animated: true, completion: nil)
-                    
-                }
-                
-            }
+            let slideVC = CommentVC()
+            
+            slideVC.post = self.post
+            slideVC.modalPresentationStyle = .custom
+            slideVC.transitioningDelegate = vc.self
+            global_presetingRate = Double(0.75)
+            global_cornerRadius = 35
+            vc.present(slideVC, animated: true, completion: nil)
             
         }
         
@@ -1035,7 +985,7 @@ extension ReelNode {
               UIView.animate(withDuration: 0.1, animations: {
                   self.buttonsView.likeBtn.transform = CGAffineTransform.identity
               })
-            })
+        })
         
     }
     
@@ -1049,8 +999,7 @@ extension ReelNode {
               UIView.animate(withDuration: 0.1, animations: {
                   self.buttonsView.likeBtn.transform = CGAffineTransform.identity
               })
-            })
-        
+        })
     }
 
 }
@@ -1129,22 +1078,25 @@ extension ReelNode {
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
          
-        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 50)
+        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 70)
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
 
-        let headerInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        let headerInset = UIEdgeInsets(top: 0, left: 8, bottom: 2, right: 8)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
-        let contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 170)
-        let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
-
         hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 35)
-        let hashtagsInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
+        let hashtagsInset = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
-
+        
+        let contentInset = UIEdgeInsets(top: 2, left: 16, bottom: 2, right: 170)
+        let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
+        
         let verticalStack = ASStackLayoutSpec.vertical()
+        
+
+        let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
         
         verticalStack.children = [headerInsetSpec]
         
@@ -1153,11 +1105,11 @@ extension ReelNode {
         }
         
         verticalStack.children?.append(contentsOf: [hashtagsInsetSpec])
-
-        let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
         verticalStack.children?.append(buttonsInsetSpec)
-        
+
+                
         let verticalStackInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
 
         let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
@@ -1168,14 +1120,24 @@ extension ReelNode {
         let textInsetSpec1 = ASInsetLayoutSpec(insets: inset, child: gradientNode)
         let textInsetSpec2 = ASInsetLayoutSpec(insets: inset, child: backgroundImage)
      
+        let roundedCornerNode = RoundedCornerNode()
+
         if post.muxPlaybackId != "" {
-            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: textInsetSpec)
+            let textInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
+            
+            let backgroundSpec = ASBackgroundLayoutSpec(child: textInsetSpec, background: roundedCornerNode)
+            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: backgroundSpec)
+
             let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
             let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
 
             return thirdOverlay
         } else {
-            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: imageInsetSpec)
+            let imageInsetSpec = ASInsetLayoutSpec(insets: inset, child: imageNode)
+            
+            let backgroundSpec = ASBackgroundLayoutSpec(child: imageInsetSpec, background: roundedCornerNode)
+            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: backgroundSpec)
+            
             let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
             let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
 
@@ -1185,13 +1147,11 @@ extension ReelNode {
 
     private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
         
-        buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 65)
+        buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 55)
         let buttonsInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
 }
-
-
 
 
 extension ReelNode {
@@ -1261,3 +1221,30 @@ extension ReelNode: UIGestureRecognizerDelegate {
     
 }
 
+
+class RoundedCornerNode: ASDisplayNode {
+    override func didLoad() {
+        super.didLoad()
+        self.clipsToBounds = true
+        self.cornerRadius = 25
+        self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+    }
+}
+
+class RoundedCornerImageNode: ASNetworkImageNode {
+    override func didLoad() {
+        super.didLoad()
+        view.layer.cornerRadius = 25
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+        view.clipsToBounds = true
+    }
+}
+
+class RoundedCornerVideoNode: ASVideoNode {
+    override func didLoad() {
+        super.didLoad()
+        view.layer.cornerRadius = 25
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+        view.clipsToBounds = true
+    }
+}

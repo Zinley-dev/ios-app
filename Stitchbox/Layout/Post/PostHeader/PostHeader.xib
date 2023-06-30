@@ -11,49 +11,59 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PostHeader" customModule="Stitchbox" customModuleProvider="target">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="tw2-A7-LcA"/>
-                <outlet property="settingBtn" destination="kGz-a1-Rap" id="nnt-SU-ikM"/>
                 <outlet property="usernameLbl" destination="nAq-It-wTT" id="lAv-hK-YyV"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="660" height="80"/>
+            <rect key="frame" x="0.0" y="0.0" width="689" height="70"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="foobar" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAq-It-wTT">
-                    <rect key="frame" x="8" y="30" width="150" height="20"/>
+                    <rect key="frame" x="8" y="45" width="150" height="20"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="CYI-HI-Ssa"/>
                         <constraint firstAttribute="width" constant="150" id="JqE-Xt-CP0"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="15"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kGz-a1-Rap">
-                    <rect key="frame" x="610" y="17.5" width="50" height="45"/>
+                <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cM4-9B-opX">
+                    <rect key="frame" x="8" y="0.0" width="150" height="35"/>
+                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="45" id="EB5-MX-xpP"/>
-                        <constraint firstAttribute="width" constant="50" id="hJd-xW-Pkb"/>
+                        <constraint firstAttribute="width" constant="150" id="XkJ-IH-RoM"/>
+                        <constraint firstAttribute="height" constant="35" id="Yoc-Ve-145"/>
                     </constraints>
-                    <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="plain" image="headerMore"/>
-                </button>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="7"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Make a Stitch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntp-fA-FBJ">
+                    <rect key="frame" x="35.5" y="8.5" width="95" height="18"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="kGz-a1-Rap" secondAttribute="trailing" id="9aT-p0-aqB"/>
-                <constraint firstItem="kGz-a1-Rap" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Cmb-jD-DB0"/>
+                <constraint firstItem="ntp-fA-FBJ" firstAttribute="centerY" secondItem="cM4-9B-opX" secondAttribute="centerY" id="7Lv-dD-jKP"/>
+                <constraint firstItem="nAq-It-wTT" firstAttribute="top" secondItem="cM4-9B-opX" secondAttribute="bottom" constant="10" id="AFK-iM-eER"/>
                 <constraint firstItem="nAq-It-wTT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="FpW-cn-6zv"/>
-                <constraint firstItem="nAq-It-wTT" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="NVj-bS-KfC"/>
+                <constraint firstItem="cM4-9B-opX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="aim-Vo-67q"/>
+                <constraint firstItem="ntp-fA-FBJ" firstAttribute="centerX" secondItem="cM4-9B-opX" secondAttribute="centerX" id="gwH-y9-NBd"/>
+                <constraint firstItem="cM4-9B-opX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="kmD-4j-Jdr"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-252.17391304347828" y="-464.73214285714283"/>
+            <point key="canvasLocation" x="-231.15942028985509" y="-468.08035714285711"/>
         </view>
     </objects>
-    <resources>
-        <image name="headerMore" width="18.5" height="4.5"/>
-    </resources>
 </document>

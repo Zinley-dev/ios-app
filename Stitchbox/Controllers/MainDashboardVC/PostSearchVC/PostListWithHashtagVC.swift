@@ -982,11 +982,6 @@ extension PostListWithHashtagVC {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
-            if !cell.buttonsView.streamView.isHidden {
-                
-                cell.buttonsView.streamView.stopSpin()
-                
-            }
             
             cell.videoNode.pause()
             
@@ -1012,11 +1007,6 @@ extension PostListWithHashtagVC {
             
             if !cell.videoNode.isPlaying() {
                 
-                if !cell.buttonsView.streamView.isHidden {
-                    
-                    cell.buttonsView.streamView.spin()
-                    
-                }
                 
                 if let muteStatus = shouldMute {
                     

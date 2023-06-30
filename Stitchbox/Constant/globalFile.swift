@@ -19,8 +19,9 @@ import AdSupport
 import AppsFlyerLib
 
 
-let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 40, height: 23))
-let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 40, height: 23))
+let cmtImage = UIImage.init(named: "cmt")?.resize(targetSize: CGSize(width: 23, height: 23))
+let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 23, height: 23))
+let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 23, height: 23))
 let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 100, height: 65))
 var chatbot_id = "64397f3ceff4334484bf537b"
 var general_vc: UIViewController!
@@ -342,21 +343,11 @@ func pauseVideoIfNeed(pauseIndex: Int) {
 */
 
 func handlePauseVideoInCell(_ cell: ReelNode) {
-    if !cell.buttonsView.streamView.isHidden {
-        cell.buttonsView.streamView.stopSpin()
-    }
-
     cell.videoNode.player?.seek(to: CMTime.zero)
     cell.videoNode.pause()
 }
 
 func handlePauseVideoInReelCell(_ cell: ReelNode) {
-    if let buttonsView = cell.buttonsView {
-        if !buttonsView.streamView.isHidden {
-            buttonsView.streamView.stopSpin()
-        }
-    }
-
     cell.videoNode.player?.seek(to: CMTime.zero)
     cell.videoNode.pause()
 }
@@ -392,32 +383,12 @@ func playVideoIfNeed(playIndex: Int) {
 func handleVideoNodeInCell(_ cell: ReelNode, muteStatus: Bool) {
     guard !cell.videoNode.isPlaying() else { return }
     
-    if cell.buttonsView != nil {
-        
-        if !cell.buttonsView.streamView.isHidden {
-            cell.buttonsView.streamView.spin()
-        }
-
-        
-    }
-    
-    
-    
     cell.videoNode.muted = muteStatus
     cell.videoNode.play()
 }
 
 func handleVideoNodeInReelCell(_ cell: ReelNode, muteStatus: Bool) {
     guard !cell.videoNode.isPlaying() else { return }
-    
-    if cell.buttonsView != nil {
-        
-        if !cell.buttonsView.streamView.isHidden {
-            cell.buttonsView.streamView.spin()
-        }
-
-    }
-    
     cell.videoNode.muted = muteStatus
     cell.videoNode.play()
     

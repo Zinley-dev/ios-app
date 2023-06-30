@@ -16,7 +16,7 @@ class EditPhofileVC: UIViewController {
     
     let proButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var morePersonalInfoBtn: UIButton!
-    @IBOutlet weak var changeCoverPhotoBtn: UIButton!
+   
     @IBOutlet weak var changeProfilePhotoBtn: UIButton!
     
     @IBOutlet weak var contentView: UIView!
@@ -26,7 +26,7 @@ class EditPhofileVC: UIViewController {
     @IBOutlet weak var bioTextField: UITextField!
     
     @IBOutlet weak var avatarImage: UIImageView!
-    @IBOutlet weak var coverImage: UIImageView!
+   
     
     let backButton: UIButton = UIButton(type: .custom)
     let container = ContainerController(modes: [.library, .photo])
@@ -134,14 +134,6 @@ class EditPhofileVC: UIViewController {
     }
 
     
-    @IBAction func changeCoverOnTapped(_ sender: Any) {
-        
-        type = "cover"
-        requestImageUpdateForCover()
-        
-    }
-    
-    
     @IBAction func changeProfileImageOnTap(_ sender: Any) {
         
         type = "profile"
@@ -166,11 +158,7 @@ extension EditPhofileVC {
             let url = URL(string: avatarUrl)
             avatarImage.load(url: url!, str: avatarUrl)
         }
-        if let coverUrl = _AppCoreData.userDataSource.value?.cover, coverUrl != "" {
-            let url = URL(string: coverUrl)
-            coverImage.load(url: url!, str: coverUrl)
-            
-        }
+ 
         
         if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
             discordTxtField.text = discord
@@ -240,7 +228,6 @@ extension EditPhofileVC {
     func colorButtonLabel() {
         
         changeProfilePhotoBtn.titleLabel?.textColor = .secondary
-        changeCoverPhotoBtn.titleLabel?.textColor = .secondary
         morePersonalInfoBtn.titleLabel?.textColor = .secondary
         
     }
@@ -316,7 +303,7 @@ extension EditPhofileVC: EditControllerDelegate {
                     }
     
                 if self.type == "cover" {
-                    self.uploadAndSetupImageForCover(getImage: image)
+                    //self.uploadAndSetupImageForCover(getImage: image)
                 } else {
                     self.uploadAndSetupImageForProfile(getImage: image)
                 }
@@ -371,42 +358,7 @@ extension EditPhofileVC: EditControllerDelegate {
         
     }
     
-    
-    func uploadAndSetupImageForCover(getImage: SessionImage) {
-        
-        self.exportImage(currentImage: getImage) {
-            
-            self.coverImage.contentMode = .scaleAspectFill
-            self.coverImage.image = self.renderedImage
-            
-            Dispatch.background {
-                
-                APIManager.shared.uploadcover(image: self.renderedImage) { [weak self] result in
-                    guard let self = self else { return }
 
-                    switch result {
-                    case .success(let apiResponse):
-                        
-                        guard apiResponse.body?["message"] as? String == "cover uploaded successfully",
-                              let url = apiResponse.body?["url"] as? String  else {
-                                return
-                        }
-                        
-                        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
-
-
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
-            }
-    
-            
-        }
-        
-    }
-    
-    
     func exportImage(currentImage: SessionImage, completed: @escaping DownloadComplete) {
         ImageExporter.shared.export(images: [currentImage], progress: { progress in
             

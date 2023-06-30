@@ -177,10 +177,26 @@ extension SearchViewController {
                     
                 }
                 
-                self.getCurrentSupportGame()
+                if !recentList.isEmpty {
+                    
+                    DispatchQueue.main.async {
+                        self.hideAnimation()
+                        self.recentTableNode.reloadData()
+                        
+                    }
+                    
+                } else {
+                    DispatchQueue.main.async {
+                        self.hideAnimation()
+                    }
+                }
+                
+               
                 
             case .failure(let error):
-                self.getCurrentSupportGame()
+                DispatchQueue.main.async {
+                    self.hideAnimation()
+                }
                 print(error)
                
             }
@@ -189,40 +205,6 @@ extension SearchViewController {
         
     }
     
-    func getCurrentSupportGame() {
-        
-        if !global_suppport_game_list.isEmpty {
-            
-            for item in global_suppport_game_list {
-                
-                if item.name != "Other" {
-                    
-                    let newCustom = ["coverUrl": item.cover, "game_name": item.name, "game_shortName": item.shortName, "type": "game"]
-                    
-                    let item = RecentModel(RecentModel: newCustom)
-                    self.recentList.append(item)
-                    
-                }
-            
-            }
-           
-            if !recentList.isEmpty {
-                
-                DispatchQueue.main.async {
-                    self.hideAnimation()
-                    self.recentTableNode.reloadData()
-                    
-                }
-                
-            } else {
-                DispatchQueue.main.async {
-                    self.hideAnimation()
-                }
-            }
-            
-        }
-      
-    }
     
     func setupSearchController() {
         

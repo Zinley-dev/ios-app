@@ -74,7 +74,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     
     lazy var autocompleteVC: AutocompeteViewController = {
         let vc = AutocompeteViewController()
-        searchResultContainerView.backgroundColor = UIColor.background
+        searchResultContainerView.backgroundColor = UIColor.black
         
         
         self.searchResultContainerView.addSubview(vc.view)
@@ -259,7 +259,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                 print(error.localizedDescription)
             }
             
-            loadingView.backgroundColor = self.view.backgroundColor
+            loadingView.backgroundColor = .black
             
         }
         
@@ -579,7 +579,7 @@ extension CommentVC {
         self.tableNode.leadingScreensForBatching = 20
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
-        self.tableNode.view.backgroundColor = self.view.backgroundColor
+        self.tableNode.view.backgroundColor = .black
         
     }
     

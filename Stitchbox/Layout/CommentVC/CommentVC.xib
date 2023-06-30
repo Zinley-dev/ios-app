@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -33,7 +32,7 @@
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XTn-4C-h0H">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
-                    <color key="backgroundColor" name="Background"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="3F6-xZ-FrI"/>
                     </constraints>
@@ -43,7 +42,7 @@
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fQO-6b-zKr">
                     <rect key="frame" x="0.0" y="40" width="414" height="545"/>
-                    <color key="backgroundColor" name="Background"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
                 <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bfM-je-VR1">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="635"/>
@@ -66,7 +65,7 @@
                         </imageView>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GgO-qA-2D0">
                             <rect key="frame" x="50" y="11" width="314" height="34"/>
-                            <color key="backgroundColor" red="0.30120283303801543" green="0.30120283303801543" blue="0.30120283303801543" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -85,7 +84,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.30196303130000002" green="0.3019567132" blue="0.30196097490000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="GgO-qA-2D0" firstAttribute="leading" secondItem="v1U-BN-FXq" secondAttribute="trailing" constant="5" id="2AH-QL-fiW"/>
                         <constraint firstAttribute="bottom" secondItem="v1U-BN-FXq" secondAttribute="bottom" constant="30" id="2RW-5P-C4s"/>
@@ -109,14 +108,14 @@
                             </constraints>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="Egd-AB-Fpp" firstAttribute="centerY" secondItem="PDW-8h-0Nr" secondAttribute="centerY" id="MEm-2D-Qjg"/>
                         <constraint firstItem="Egd-AB-Fpp" firstAttribute="centerX" secondItem="PDW-8h-0Nr" secondAttribute="centerX" id="f1n-O1-FkM"/>
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" name="Background"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="HBG-jA-Rvu" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="0gP-lm-ZEQ"/>
                 <constraint firstAttribute="bottom" secondItem="fQO-6b-zKr" secondAttribute="bottom" constant="50" id="1my-Ke-gHs"/>
@@ -144,8 +143,5 @@
     <resources>
         <image name="defaultuser" width="278" height="278"/>
         <image name="send2" width="33.333332061767578" height="33.333332061767578"/>
-        <namedColor name="Background">
-            <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
     </resources>
 </document>

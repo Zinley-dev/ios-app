@@ -13,6 +13,13 @@ class GradientImageNode: ASDisplayNode {
     
     private let gradientLayer = CAGradientLayer()
     
+    override func didLoad() {
+        super.didLoad()
+        view.layer.cornerRadius = 25
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+        view.clipsToBounds = true
+    }
+    
     override func layout() {
         super.layout()
         DispatchQueue.main.async {
