@@ -13,6 +13,9 @@ import RxSwift
 import CoreMedia
 import SendBirdUIKit
 import SendBirdCalls
+import AlamofireImage
+import Cache
+import Alamofire
 
 @IBDesignable class DashboardTabBarController: UITabBarController, UITabBarControllerDelegate {
     
@@ -81,8 +84,80 @@ import SendBirdCalls
         layer.backgroundColor = UIColor.black.cgColor // Use your tabBar color here
         layer.frame = CGRect(x: 0, y: -1, width: self.tabBar.frame.width, height: 1)
         self.tabBar.layer.addSublayer(layer)
+        setUserProfileImageOnTabbar()
+        
+       
         
     }
+    
+    
+    func createCustomImageView(with image: UIImage) -> UIImageView {
+        let imageView = UIImageView(image: image.circularImage(size: CGSize(width: 35, height: 35)))
+        imageView.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        imageView.layer.shadowOpacity = 0.5
+        imageView.layer.shadowRadius = 1
+        
+        return imageView
+    }
+
+    func setUserProfileImageOnTabbar() {
+        guard let items = tabBar.items, let lastItem = items.last else { return }
+        
+        if _AppCoreData.userDataSource.value?.avatarURL != "" {
+            let userImageUrl = _AppCoreData.userDataSource.value?.avatarURL
+            
+            imageStorage.async.object(forKey: userImageUrl!) { result in
+                if case .value(let image) = result {
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        let customImageView = self?.createCustomImageView(with: image)
+                        let customImage = customImageView?.image?.withRenderingMode(.alwaysOriginal)
+                        lastItem.image = customImage
+                        lastItem.selectedImage = customImage
+                    }
+                    
+                } else {
+                    
+                    AF.request(userImageUrl!).responseImage { response in
+                                              
+                       switch response.result {
+                        case let .success(image):
+                           DispatchQueue.main.async { [weak self] in
+                               let customImageView = self?.createCustomImageView(with: image)
+                               let customImage = customImageView?.image?.withRenderingMode(.alwaysOriginal)
+                               lastItem.image = customImage
+                               lastItem.selectedImage = customImage
+                           }
+                           
+                           try? imageStorage.setObject(image, forKey: userImageUrl!, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+                                              
+                           case let .failure(error):
+                               print(error)
+                               DispatchQueue.main.async { [weak self] in
+                                   let defaultImage = UIImage(named: "defaultuser")!
+                                   let customImageView = self?.createCustomImageView(with: defaultImage)
+                                   let customImage = customImageView?.image?.withRenderingMode(.alwaysOriginal)
+                                   lastItem.image = customImage
+                                   lastItem.selectedImage = customImage
+                               }
+                       }
+                    }
+                }
+            }
+        } else {
+            print("avatar not found")
+            let defaultImage = UIImage(named: "defaultuser")!
+            let customImageView = createCustomImageView(with: defaultImage)
+            let customImage = customImageView.image?.withRenderingMode(.alwaysOriginal)
+            lastItem.image = customImage
+            lastItem.selectedImage = customImage
+        }
+    }
+
+    
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
@@ -232,4 +307,50 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return img ?? UIImage()
     }
+}
+
+extension UIImage {
+    func circularImage(size: CGSize?) -> UIImage {
+        let newImage = resizeForTabbar(targetSize: size ?? self.size)
+        let imageView: UIImageView = UIImageView(image: newImage)
+        var layerFrame = CGRect(x: 0, y: 0, width: newImage.size.width, height: newImage.size.height)
+        
+        if newImage.size.width != newImage.size.height {
+            let width = min(newImage.size.width, newImage.size.height)
+            layerFrame = CGRect(x: 0, y: 0, width: width, height: width)
+        }
+
+        imageView.layer.frame = layerFrame
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = layerFrame.width / 2
+        imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.layer.borderWidth = 0.0
+        imageView.layer.rasterizationScale = UIScreen.main.scale
+
+        UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, false, UIScreen.main.scale)
+        guard let context = UIGraphicsGetCurrentContext() else { return self }
+        imageView.layer.render(in: context)
+        let result = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return result ?? self
+    }
+    
+    func resizeForTabbar(targetSize: CGSize) -> UIImage {
+            let widthRatio  = targetSize.width  / size.width
+            let heightRatio = targetSize.height / size.height
+
+            // maintain the aspect ratio of the image
+            let ratio = max(widthRatio, heightRatio)
+            let newSize = CGSize(width: size.width * ratio, height: size.height * ratio)
+
+            let rect = CGRect(origin: .zero, size: newSize)
+
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+            self.draw(in: rect)
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+
+            return newImage ?? self
+        }
 }

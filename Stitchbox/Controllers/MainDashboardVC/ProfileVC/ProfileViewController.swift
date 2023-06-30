@@ -35,7 +35,7 @@ class ProfileViewController: UIViewController {
     
     private var datasource: Datasource!
     
-    @IBOutlet weak var selectAvatarImage: UIImageView!
+   
     @IBOutlet weak var collectionView: UICollectionView!
     
     var pullControl = UIRefreshControl()
@@ -44,11 +44,6 @@ class ProfileViewController: UIViewController {
     var profileData: ProfileHeaderData {
         return ProfileHeaderData(name: "Defaults", username: "", accountType: "Defaults/Public")
     }
-    
-    var challengeData: ChallengeCardHeaderData {
-        return ChallengeCardHeaderData(name: "Defaults")
-    }
-    
     
     
     func getMyPost(block: @escaping ([[String: Any]]) -> Void) {
@@ -129,7 +124,7 @@ class ProfileViewController: UIViewController {
         
         configureDatasource()
         wireDelegate()
-        
+        setupSettingButton()
         //self.getFistBumperCount()
         self.getFollowing()
         self.getFollowers()
@@ -204,6 +199,22 @@ class ProfileViewController: UIViewController {
     }
     
     
+    func setupSettingButton() {
+        
+        let settingButton = UIButton(type: .custom)
+        settingButton.setImage(UIImage.init(named: "noNoti"), for: [])
+        settingButton.addTarget(self, action: #selector(settingTapped(_:)), for: .touchUpInside)
+        settingButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let settingButtonBar = UIBarButtonItem(customView: settingButton)
+        
+      
+        //let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItem = settingButtonBar
+        
+        
+    }
+    
+    
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell {
         switch item {
         case .header(_):
@@ -223,7 +234,7 @@ class ProfileViewController: UIViewController {
                     }
                 } else {
                     cell.avatarImage.image = UIImage.init(named: "defaultuser")
-                    selectAvatarImage.image = UIImage.init(named: "defaultuser")
+                   
                 }
                 
                 

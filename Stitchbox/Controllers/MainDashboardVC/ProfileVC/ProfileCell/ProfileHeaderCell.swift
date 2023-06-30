@@ -34,14 +34,11 @@ class ProfileHeaderCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
-        
-    
         editProfileBtn.setTitleColor(.white, for: .normal)
-        fistBumpedListBtn.setTitleColor(.white, for: .normal)
+        fistBumpedListBtn.setTitleColor(.black, for: .normal)
         
         editProfileBtn.tintColor = .white
-        fistBumpedListBtn.tintColor = .white
+        fistBumpedListBtn.tintColor = .black
     
     }
     
