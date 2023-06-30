@@ -1127,10 +1127,6 @@ class CustomSlider: UISlider {
                 
                 update1.timeLbl.text = processTime()
                 
-            } else if let update1 = vc as? MainSearchVC {
-                
-                update1.PostSearchVC.timeLbl.text = processTime()
-                
             } else if let update1 = vc as? ReelVC {
                 
                 update1.timeLbl.text = processTime()
@@ -1194,17 +1190,6 @@ class CustomSlider: UISlider {
                 update1.timeLbl.isHidden = false
                 update1.blurView.isHidden = false
         
-                
-            } else if let update1 = vc as? MainSearchVC {
-                
-                if update1.PostSearchVC.currentIndex != nil {
-                    update1.PostSearchVC.pauseVideo(index: update1.PostSearchVC.currentIndex!)
-                }
-                
-                update1.PostSearchVC.timeLbl.text = processTime()
-                update1.PostSearchVC.timeLbl.isHidden = false
-                update1.PostSearchVC.blurView.isHidden = false
-               
                 
             } else if let update1 = vc as? ReelVC {
                 
@@ -1277,23 +1262,6 @@ class CustomSlider: UISlider {
                 
                 update1.timeLbl.isHidden = true
                 update1.blurView.isHidden = true
-                
-            } else if let update1 = vc as? MainSearchVC {
-                
-                if update1.PostSearchVC.currentIndex != nil {
-                    //newPlayingIndex
-                    
-                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-
-                    
-                    update1.PostSearchVC.seekVideo(index: update1.PostSearchVC.currentIndex!, time: newVideoTime)
-                    update1.PostSearchVC.playVideo(index: update1.PostSearchVC.currentIndex!)
-                    
-                }
-                
-                update1.PostSearchVC.timeLbl.isHidden = true
-                update1.PostSearchVC.blurView.isHidden = true
-               
                 
             } else if let update1 = vc as? ReelVC {
                 

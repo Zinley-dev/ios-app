@@ -794,7 +794,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WJP-2M-yQz">
                                 <rect key="frame" x="0.0" y="50" width="375" height="728"/>
-                                <color key="backgroundColor" name="Background"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="T5C-uI-FKo"/>
@@ -823,50 +823,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lNO-iw-K9G">
-                                <rect key="frame" x="0.0" y="50" width="375" height="697"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view hidden="YES" alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gp5-Y7-Sj8">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00 / 00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hvu-Cm-i0m">
-                                <rect key="frame" x="136.66666666666666" y="660" width="102" height="18"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="lMv-UZ-rl2" customClass="CustomSlider" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="-2" y="742" width="379" height="31"/>
-                                <color key="minimumTrackTintColor" name="Secondary"/>
-                                <color key="maximumTrackTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </slider>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="9FE-7D-TBX"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="lMv-UZ-rl2" firstAttribute="leading" secondItem="xmv-Vo-tZE" secondAttribute="leading" id="2ZE-Em-a05"/>
-                            <constraint firstItem="Hvu-Cm-i0m" firstAttribute="centerX" secondItem="xmv-Vo-tZE" secondAttribute="centerX" id="4NE-hl-ht4"/>
                             <constraint firstItem="lNO-iw-K9G" firstAttribute="leading" secondItem="9FE-7D-TBX" secondAttribute="leading" id="4v6-IK-TDZ"/>
-                            <constraint firstItem="Gp5-Y7-Sj8" firstAttribute="leading" secondItem="xmv-Vo-tZE" secondAttribute="leading" id="DEK-az-Cf8"/>
-                            <constraint firstAttribute="bottom" secondItem="Gp5-Y7-Sj8" secondAttribute="bottom" id="Ixq-E4-bZa"/>
-                            <constraint firstItem="Gp5-Y7-Sj8" firstAttribute="top" secondItem="xmv-Vo-tZE" secondAttribute="top" id="KRy-Lw-94m"/>
+                            <constraint firstItem="9FE-7D-TBX" firstAttribute="bottom" secondItem="lNO-iw-K9G" secondAttribute="bottom" id="HZl-wI-f7Z"/>
                             <constraint firstItem="9FE-7D-TBX" firstAttribute="trailing" secondItem="lNO-iw-K9G" secondAttribute="trailing" id="LBi-Os-Zn8"/>
-                            <constraint firstAttribute="trailing" secondItem="Gp5-Y7-Sj8" secondAttribute="trailing" id="XhZ-VC-pKm"/>
-                            <constraint firstAttribute="bottom" secondItem="lMv-UZ-rl2" secondAttribute="bottom" constant="40" id="Zzv-pd-D35"/>
-                            <constraint firstAttribute="trailing" secondItem="lMv-UZ-rl2" secondAttribute="trailing" id="a88-on-tRw"/>
-                            <constraint firstItem="lMv-UZ-rl2" firstAttribute="top" secondItem="lNO-iw-K9G" secondAttribute="bottom" constant="-5" id="k0H-2V-IgX"/>
                             <constraint firstItem="lNO-iw-K9G" firstAttribute="top" secondItem="9FE-7D-TBX" secondAttribute="top" id="muc-SD-2ob"/>
-                            <constraint firstItem="lMv-UZ-rl2" firstAttribute="top" secondItem="Hvu-Cm-i0m" secondAttribute="bottom" constant="64" id="u1n-nO-jsP"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="blurView" destination="Gp5-Y7-Sj8" id="vtZ-Y2-NgY"/>
                         <outlet property="contentview" destination="lNO-iw-K9G" id="3MW-w1-hla"/>
-                        <outlet property="playTimeBar" destination="lMv-UZ-rl2" id="HtH-Jh-nkb"/>
-                        <outlet property="timeLbl" destination="Hvu-Cm-i0m" id="tyi-gR-iJc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QWz-qz-JPo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -8283,9 +8254,6 @@
         </designable>
         <designable name="f1f-he-Mm3">
             <size key="intrinsicContentSize" width="53" height="30"/>
-        </designable>
-        <designable name="lMv-UZ-rl2">
-            <size key="intrinsicContentSize" width="-1" height="30"/>
         </designable>
         <designable name="mQ7-db-ueA">
             <size key="intrinsicContentSize" width="377" height="15.666666666666666"/>

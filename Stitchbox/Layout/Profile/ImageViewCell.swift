@@ -37,7 +37,7 @@ class ImageViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 13)
         label.numberOfLines = 1
         label.textColor = .white
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)

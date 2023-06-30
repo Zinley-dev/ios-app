@@ -184,7 +184,7 @@
 		6A58EA59294ECD5C005FA3CD /* SBUPendingMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58EA58294ECD5C005FA3CD /* SBUPendingMessageManager.swift */; };
 		6A58EA5E294ED210005FA3CD /* loading_typing.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6A58EA5D294ED210005FA3CD /* loading_typing.gif */; };
 		6A5C556229E89FC0006F51DD /* TacticsGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C556129E89FC0006F51DD /* TacticsGameModel.swift */; };
-		6A5C556529E8AC82006F51DD /* TacticsGameNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C556429E8AC82006F51DD /* TacticsGameNode.swift */; };
+		6A5C556529E8AC82006F51DD /* PostSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C556429E8AC82006F51DD /* PostSearchNode.swift */; };
 		6A5C556829E8EFB1006F51DD /* RiotSyncVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C556729E8EFB1006F51DD /* RiotSyncVC.swift */; };
 		6A5C556B29E8F7CA006F51DD /* RegionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C556A29E8F7CA006F51DD /* RegionModel.swift */; };
 		6A66277429655D2400A4488B /* Session+TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A66277329655D2400A4488B /* Session+TypeAlias.swift */; };
@@ -676,7 +676,7 @@
 		6A58EA58294ECD5C005FA3CD /* SBUPendingMessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SBUPendingMessageManager.swift; sourceTree = "<group>"; };
 		6A58EA5D294ED210005FA3CD /* loading_typing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading_typing.gif; sourceTree = "<group>"; };
 		6A5C556129E89FC0006F51DD /* TacticsGameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TacticsGameModel.swift; sourceTree = "<group>"; };
-		6A5C556429E8AC82006F51DD /* TacticsGameNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TacticsGameNode.swift; sourceTree = "<group>"; };
+		6A5C556429E8AC82006F51DD /* PostSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSearchNode.swift; sourceTree = "<group>"; };
 		6A5C556729E8EFB1006F51DD /* RiotSyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiotSyncVC.swift; sourceTree = "<group>"; };
 		6A5C556A29E8F7CA006F51DD /* RegionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionModel.swift; sourceTree = "<group>"; };
 		6A66277329655D2400A4488B /* Session+TypeAlias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Session+TypeAlias.swift"; sourceTree = "<group>"; };
@@ -2101,12 +2101,12 @@
 			path = "SB-TacticsGameModel";
 			sourceTree = "<group>";
 		};
-		6A5C556329E8AC6F006F51DD /* TacticsGameNode */ = {
+		6A5C556329E8AC6F006F51DD /* PostSearchNode */ = {
 			isa = PBXGroup;
 			children = (
-				6A5C556429E8AC82006F51DD /* TacticsGameNode.swift */,
+				6A5C556429E8AC82006F51DD /* PostSearchNode.swift */,
 			);
-			path = TacticsGameNode;
+			path = PostSearchNode;
 			sourceTree = "<group>";
 		};
 		6A5C556629E8EF9D006F51DD /* RiotSyncVC */ = {
@@ -2406,7 +2406,7 @@
 				6A9E3AF529E9D2BB002B36D7 /* SB-ChatBot */,
 				6A9E3AF229E91780002B36D7 /* RiotSearchNode */,
 				6A5C556629E8EF9D006F51DD /* RiotSyncVC */,
-				6A5C556329E8AC6F006F51DD /* TacticsGameNode */,
+				6A5C556329E8AC6F006F51DD /* PostSearchNode */,
 				6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */,
 			);
 			path = "SB-Tactics";
@@ -4186,7 +4186,7 @@
 				A54A768829900E24003A8C4A /* ISODateTransform.swift in Sources */,
 				6AC6D9FC29A5C92700B18139 /* AutocompeteViewController.swift in Sources */,
 				A5A5E40929376172004E9207 /* Color.swift in Sources */,
-				6A5C556529E8AC82006F51DD /* TacticsGameNode.swift in Sources */,
+				6A5C556529E8AC82006F51DD /* PostSearchNode.swift in Sources */,
 				6A9E4C742977AF2700B59176 /* BlockedListVC.swift in Sources */,
 				6AAD7A65294C699E003E3AB6 /* PresentationController.swift in Sources */,
 				6A7ED4AD2A0B48AF00C8204E /* MetaDisplay.swift in Sources */,
