@@ -92,8 +92,8 @@ import Alamofire
     
     
     func createCustomImageView(with image: UIImage) -> UIImageView {
-        let imageView = UIImageView(image: image.circularImage(size: CGSize(width: 35, height: 35)))
-        imageView.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+        let imageView = UIImageView(image: image.circularImage(size: CGSize(width: 37.5, height: 37.5)))
+        imageView.frame = CGRect(x: 0, y: 0, width: 37.5, height: 37.5)
         imageView.contentMode = .scaleAspectFill
         imageView.layer.shadowColor = UIColor.black.cgColor
         imageView.layer.shadowOffset = CGSize(width: 0, height: 1)

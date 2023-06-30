@@ -445,7 +445,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         if post.muxPlaybackId != "" {
             
-            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true"
+            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8"
             return URL(string: urlString)
             
         } else {

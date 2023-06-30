@@ -26,7 +26,6 @@ class ProfileViewController: UIViewController {
     
     var followerCount = 0
     var followingCount = 0
-    var fistBumpedCount = 0
     var hasLoaded = false
     
     
@@ -125,7 +124,6 @@ class ProfileViewController: UIViewController {
         configureDatasource()
         wireDelegate()
         setupSettingButton()
-        //self.getFistBumperCount()
         self.getFollowing()
         self.getFollowers()
         
@@ -327,11 +325,9 @@ extension ProfileViewController {
         reloadUserInformation {
             self.reloadGetFollowers {
                 self.reloadUserInformation {
-                    self.reloadGetFistBumperCount {
-                        self.applyAllChange()
-                        Dispatch.main.async {
-                            self.pullControl.endRefreshing()
-                        }
+                    self.applyAllChange()
+                    Dispatch.main.async {
+                        self.pullControl.endRefreshing()
                     }
                 }
             }
@@ -502,211 +498,7 @@ extension ProfileViewController {
 
 // selector for challengeCard
 extension ProfileViewController {
-    
-    @objc func editCardTapped(_ sender: UIButton) {
-        
-        if let ECCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditChallengeCardVC") as? EditChallengeCardVC {
-            
-            ECCVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            ECCVC.fistBumpedCount = fistBumpedCount
-            self.navigationController?.pushViewController(ECCVC, animated: true)
-            
-        }
-        
-    }
-    
-    @objc func game1Tapped(_ sender: UIButton) {
-        // make sure to check if any game is added unless peform adding game for +
-        
-        if let card = _AppCoreData.userDataSource.value?.challengeCard, let username = _AppCoreData.userDataSource.value?.userName
-        {
-            
-            if card.games.isEmpty == true {
-                
-                //AddGameVC
-                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
-                    AGVC.hidesBottomBarWhenPushed = true
-                    hideMiddleBtn(vc: self)
-                    
-                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
-                    {
-                        AGVC.gameList = games
-                        
-                    }
-                    
-                    self.navigationController?.pushViewController(AGVC, animated: true)
-                    
-                }
-                
-            } else {
-                
-                if let game = card.games.first {
-                    
-                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                    
-                    // add the actions (buttons)
-                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                        
-                        
-                        self.openLink(link: game.link)
-                        
-                    }))
-                    
-                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-    }
-    
-    @objc func game2Tapped(_ sender: UIButton) {
-        
-        if let card = _AppCoreData.userDataSource.value?.challengeCard, let username = _AppCoreData.userDataSource.value?.userName
-        {
-            
-            if card.games.count >= 2 {
-                
-                let game = card.games[1]
-                
-                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                
-                // add the actions (buttons)
-                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                    
-                    
-                    self.openLink(link: game.link)
-                    
-                }))
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
-            } else {
-                
-                //AddGameVC
-                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
-                    AGVC.hidesBottomBarWhenPushed = true
-                    hideMiddleBtn(vc: self)
-                    
-                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
-                    {
-                        AGVC.gameList = games
-                        
-                    }
-                    
-                    self.navigationController?.pushViewController(AGVC, animated: true)
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
-    
-    @objc func game3Tapped(_ sender: UIButton) {
-        
-        if let card = _AppCoreData.userDataSource.value?.challengeCard, let username = _AppCoreData.userDataSource.value?.userName
-        {
-            
-            if card.games.count >= 3 {
-                
-                let game = card.games[2]
-                
-                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                
-                // add the actions (buttons)
-                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                    
-                    
-                    self.openLink(link: game.link)
-                    
-                }))
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
-            } else {
-                
-                //AddGameVC
-                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
-                    AGVC.hidesBottomBarWhenPushed = true
-                    hideMiddleBtn(vc: self)
-                    
-                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
-                    {
-                        AGVC.gameList = games
-                        
-                    }
-                    
-                    self.navigationController?.pushViewController(AGVC, animated: true)
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
-    
-    @objc func game4Tapped(_ sender: UIButton) {
-        
-        if let card = _AppCoreData.userDataSource.value?.challengeCard, let username = _AppCoreData.userDataSource.value?.userName
-        {
-            
-            if card.games.count >= 4 {
-                
-                let game = card.games[3]
-                
-                
-                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                
-                // add the actions (buttons)
-                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                    
-                    
-                    self.openLink(link: game.link)
-                    
-                }))
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                
-                self.present(alert, animated: true, completion: nil)
-                
-                
-            } else {
-                
-                //AddGameVC
-                if let AGVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddGameVC") as? AddGameVC {
-                    AGVC.hidesBottomBarWhenPushed = true
-                    hideMiddleBtn(vc: self)
-                    
-                    if let games = _AppCoreData.userDataSource.value?.challengeCard?.games
-                    {
-                        AGVC.gameList = games
-                        
-                    }
-                    
-                    self.navigationController?.pushViewController(AGVC, animated: true)
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
-    
-    
+
     func openLink(link: String) {
         
         if link != ""
@@ -747,9 +539,9 @@ extension ProfileViewController {
     
     func createPhotosSection() -> NSCollectionLayoutSection {
         let numberOfItemsInRow: CGFloat = 3
-        let spacing: CGFloat = 10
+        let spacing: CGFloat = 5
         let width = (UIScreen.main.bounds.width - (numberOfItemsInRow + 1) * spacing) / numberOfItemsInRow
-        let height = width * 16 / 9  // This will give you an aspect ratio of 9:16
+        let height = width * 13.5 / 9  // This will give you an aspect ratio of 9:16
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(width),
                                               heightDimension: .absolute(height))
@@ -941,42 +733,7 @@ extension ProfileViewController {
             }
         }
     }
-    func getFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "") {
-        
-        APIManager.shared.getFistBumperCount(userID: userID){ [weak self]result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let response):
-                
-                guard response.body?["message"] as? String == "success",
-                      let data = response.body?["count"] as? [[String: Any]] else {
-                    self.fistBumpedCount = 0
-                    return
-                }
-                
-                var foundCount = false
-                for item in data {
-                    if let fistBumpedGet = item["count"] as? Int {
-                        self.fistBumpedCount = fistBumpedGet
-                        foundCount = true
-                        break
-                    }
-                }
-                
-                if !foundCount {
-                    self.fistBumpedCount = 0
-                }
-                
-                self.applyHeaderChange()
-                
-            case .failure(let error):
-                print("Error loading fistbumpers: ", error)
-                self.fistBumpedCount = 0
-            }
-        }
-        
-    }
+
     
     func applyHeaderChange() {
         
@@ -1108,37 +865,7 @@ extension ProfileViewController {
             }
         }
     }
-    func reloadGetFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "", completed: @escaping DownloadComplete) {
-        
-        APIManager.shared.getFistBumperCount(userID: userID){ [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let response):
-                
-                guard response.body?["message"] as? String == "success",
-                      let data = response.body?["paging"] as? [String: Any] else {
-                    self.fistBumpedCount = 0
-                    completed()
-                    return
-                }
-                
-                if let fistBumpedGet = data["total"] as? Int {
-                    self.fistBumpedCount = fistBumpedGet
-                } else {
-                    self.fistBumpedCount = 0
-                }
-                
-                completed()
-                
-            case .failure(let error):
-                print("Error loading fistbumpers: ", error)
-                self.fistBumpedCount = 0
-                completed()
-            }
-        }
-    }
-    
+
     
     
 }

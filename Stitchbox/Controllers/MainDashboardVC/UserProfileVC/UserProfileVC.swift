@@ -768,9 +768,9 @@ extension UserProfileVC {
     
     func createPhotosSection() -> NSCollectionLayoutSection {
         let numberOfItemsInRow: CGFloat = 3
-        let spacing: CGFloat = 10
+        let spacing: CGFloat = 5
         let width = (UIScreen.main.bounds.width - (numberOfItemsInRow + 1) * spacing) / numberOfItemsInRow
-        let height = width * 16 / 9  // This will give you an aspect ratio of 9:16
+        let height = width * 13.5 / 9  // This will give you an aspect ratio of 9:16
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(width),
                                               heightDimension: .absolute(height))
@@ -791,7 +791,6 @@ extension UserProfileVC {
         
         return section
     }
-
 
     
     func createLayout() -> UICollectionViewLayout {
