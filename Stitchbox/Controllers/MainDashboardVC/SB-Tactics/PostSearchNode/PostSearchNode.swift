@@ -23,7 +23,7 @@ class PostSearchNode: ASCellNode {
         let imageNode = ASImageNode()
         imageNode.image = UIImage(named: "play")
         imageNode.contentMode = .scaleAspectFill
-        imageNode.style.preferredSize = CGSize(width: 25, height: 25) // set the size here
+        imageNode.style.preferredSize = CGSize(width: 30, height: 30) // set the size here
         imageNode.clipsToBounds = true
 
         // Add shadow to layer
@@ -39,11 +39,12 @@ class PostSearchNode: ASCellNode {
     private lazy var countNode: ASTextNode = {
         let textNode = ASTextNode()
         let paragraphStyle = NSMutableParagraphStyle()
+        //textNode.style.preferredSize = CGSize(width: 100, height: 25) // set the size here
         paragraphStyle.alignment = .center
         textNode.attributedText = NSAttributedString(
             string: "0",
             attributes: [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
@@ -51,10 +52,31 @@ class PostSearchNode: ASCellNode {
         textNode.maximumNumberOfLines = 1
         return textNode
     }()
-
-
     
     
+    private lazy var stitchNode: ASTextNode = {
+        let textNode = ASTextNode()
+        //textNode.style.preferredSize.width = 70
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        textNode.attributedText = NSAttributedString(
+            string: "10 Stitches",
+            attributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ]
+        )
+        textNode.backgroundColor = .black // set the background color to dark gray
+        textNode.maximumNumberOfLines = 1
+
+        DispatchQueue.main.async {
+            textNode.view.cornerRadius = 3
+        }
+        
+        return textNode
+    }()
+
     init(with post: PostModel, keyword: String) {
         
         self.post = post
@@ -71,7 +93,7 @@ class PostSearchNode: ASCellNode {
         let ownerName = post.owner?.username ?? ""
         let hashtags = post.hashtags.joined(separator: " ")
         
-        let searchResults = [title, ownerName, hashtags].compactMap { searchString(in: $0, for: keyword, maxLength: 35) }
+        let searchResults = [title, ownerName, hashtags].compactMap { searchString(in: $0, for: keyword, maxLength: 40) }
         let highlightedKeyword = searchResults.first ?? ""
         
         let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles]
@@ -89,21 +111,6 @@ class PostSearchNode: ASCellNode {
         imageNode.contentMode = .scaleAspectFill
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
         
-        DispatchQueue.main.async {
-            self.videoSignNode.shadowColor = UIColor.black.cgColor
-            self.videoSignNode.shadowOpacity = 0.5
-            self.videoSignNode.shadowOffset = CGSize(width: 0, height: 2)
-            self.videoSignNode.shadowRadius = 2
-            self.videoSignNode.clipsToBounds = false
-            self.videoSignNode.layer.masksToBounds = false
-
-            self.countNode.shadowColor = UIColor.black.cgColor
-            self.countNode.shadowOpacity = 0.5
-            self.countNode.shadowOffset = CGSize(width: 0, height: 2)
-            self.countNode.shadowRadius = 2
-            self.countNode.clipsToBounds = false
-            self.countNode.layer.masksToBounds = false
-        }
 
         
         countView(with: post)
@@ -111,37 +118,42 @@ class PostSearchNode: ASCellNode {
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let nameNodeHeight: CGFloat = 35.0
+        let nameNodeHeight: CGFloat = 35.0 // Set your desired height
         nameNode.style.height = ASDimension(unit: .points, value: nameNodeHeight)
+        nameNode.style.flexGrow = 0.0 // Prevents nameNode from occupying more space
 
-        let imageNodeAspectRatio: CGFloat = 9.0 / 13.5
-        let ratioLayoutSpec = ASRatioLayoutSpec(ratio: imageNodeAspectRatio, child: imageNode)
-        ratioLayoutSpec.style.flexGrow = 1.0
+        let imageNodeMinHeight: CGFloat = constrainedSize.max.height - 35 - 8 // Set a minimum height for the image node
+        imageNode.style.minHeight = ASDimension(unit: .points, value: imageNodeMinHeight)
+        imageNode.style.flexGrow = 1.0 // Allows imageNode to fill remaining space
 
         let videoCountStack = ASStackLayoutSpec.horizontal()
-        videoCountStack.spacing = 8.0
+        videoCountStack.spacing = 2.0
         videoCountStack.children = [videoSignNode, countNode]
         videoCountStack.justifyContent = .center
-        videoCountStack.alignItems = .center
+        videoCountStack.alignItems = .center // This centers the nodes vertically
 
-        // Position videoCountStack at the bottom left of the image
-        let videoCountInsets = UIEdgeInsets(top: .infinity, left: 0, bottom: 0, right: .infinity)
+        let videoCountInsets = UIEdgeInsets(top: .infinity, left: 0, bottom: 2, right: .infinity)
         let videoCountInsetSpec = ASInsetLayoutSpec(insets: videoCountInsets, child: videoCountStack)
+    
+        
+        let stitchCountInsets = UIEdgeInsets(top: 8, left: 4, bottom: .infinity, right: .infinity)
+        let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: stitchNode)
 
-        // Add the stack as an overlay to the image
-        let overlayLayoutSpec = ASOverlayLayoutSpec(child: ratioLayoutSpec, overlay: videoCountInsetSpec)
+        let overlayLayoutSpec = ASOverlayLayoutSpec(child: imageNode, overlay: videoCountInsetSpec)
+        
+        
+        let overlayLayoutSpec2 = ASOverlayLayoutSpec(child: overlayLayoutSpec, overlay: stitchCountInsetSpec)
 
         let stack = ASStackLayoutSpec.vertical()
         stack.spacing = 8.0
-        stack.justifyContent = .start
-        stack.alignItems = .stretch
-        stack.children = [overlayLayoutSpec, nameNode]
+        stack.justifyContent = .start // align items to start
+        stack.alignItems = .stretch // stretch items to fill the width
+        stack.children = [overlayLayoutSpec2, nameNode]
 
         let insetLayoutSpec = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), child: stack)
 
         return insetLayoutSpec
     }
-
 
 
 
@@ -181,7 +193,7 @@ class PostSearchNode: ASCellNode {
                         self.countNode.attributedText = NSAttributedString(
                             string: "\(stats.view.total)",
                             attributes: [
-                                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
+                                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
                                 NSAttributedString.Key.foregroundColor: UIColor.white,
                                 NSAttributedString.Key.paragraphStyle: paragraphStyle
                             ]

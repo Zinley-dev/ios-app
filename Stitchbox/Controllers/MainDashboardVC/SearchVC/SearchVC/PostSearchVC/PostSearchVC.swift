@@ -241,8 +241,8 @@ extension PostSearchVC: ASCollectionDelegate {
         let spacing: CGFloat = 22 // adjust this as per your requirement
         let totalWidth = self.collectionNode.view.layer.frame.width
         let size = (totalWidth - spacing) / 3  // considering 1 spacing between 2 cells
-        let min = CGSize(width: size, height: size * 2)
-        let max = CGSize(width: size, height: size * 2)
+        let min = CGSize(width: size, height: size * 1.75)
+        let max = CGSize(width: size, height: size * 1.75)
         
         return ASSizeRangeMake(min, max)
     }

@@ -43,6 +43,17 @@ class ImageViewCell: UICollectionViewCell {
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return label
     }()
+    
+    private lazy var stichLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.numberOfLines = 1
+        label.textColor = .white
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        return label
+    }()
 
 
     private lazy var stackView: UIStackView = {
@@ -132,8 +143,8 @@ class ImageViewCell: UICollectionViewCell {
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
             
             // Size constraints for videoSignView
-            videoSignView.widthAnchor.constraint(equalToConstant: 25),
-            videoSignView.heightAnchor.constraint(equalToConstant: 25),
+            videoSignView.widthAnchor.constraint(equalToConstant: 30),
+            videoSignView.heightAnchor.constraint(equalToConstant: 30),
         ])
     }
 
