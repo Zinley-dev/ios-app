@@ -696,30 +696,6 @@ func unmuteVideoIfNeed() {
                 
             }
             
-        } else if vc is ReelVC {
-            
-            if let update1 = vc as? ReelVC {
-                
-                if update1.newPlayingIndex != nil {
-                    
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
-                        
-                        if cell.videoNode.isPlaying() {
-                            
-                            cell.videoNode.muted = false
-                            shouldMute = false
-                            cell.animateUnmute()
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-               
-                
-            }
-            
         }
              
         
@@ -825,33 +801,7 @@ func muteVideoIfNeed() {
                 
             }
             
-        } else if vc is ReelVC {
-            
-            if let update1 = vc as? ReelVC {
-                
-                if update1.newPlayingIndex != nil {
-                    
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
-                        
-                        if cell.videoNode.isPlaying() {
-                            
-                            cell.videoNode.muted = true
-                            shouldMute = true
-                            cell.animateMute()
-                            
-                         
-                        }
-                        
-                    }
-                    
-                }
-                
-               
-                
-            }
-            
         }
-             
         
     }
     
@@ -1123,14 +1073,6 @@ class CustomSlider: UISlider {
                 update1.timeLbl.text = processTime()
 
                 
-            } else if let update1 = vc as? PostListWithHashtagVC {
-                
-                update1.timeLbl.text = processTime()
-                
-            } else if let update1 = vc as? ReelVC {
-                
-                update1.timeLbl.text = processTime()
-                
             } else if let update1 = vc as? SelectedPostVC {
                 
                 update1.timeLbl.text = processTime()
@@ -1180,29 +1122,7 @@ class CustomSlider: UISlider {
                 update1.blurView.isHidden = false
                 
                 
-            } else if let update1 = vc as? PostListWithHashtagVC {
-                
-                if update1.currentIndex != nil {
-                    update1.pauseVideo(index: update1.currentIndex!)
-                }
-                
-                update1.timeLbl.text = processTime()
-                update1.timeLbl.isHidden = false
-                update1.blurView.isHidden = false
-        
-                
-            } else if let update1 = vc as? ReelVC {
-                
-                if update1.currentIndex != nil {
-                    update1.pauseVideo(index: update1.currentIndex!)
-                }
-                
-                update1.timeLbl.text = processTime()
-                update1.timeLbl.isHidden = false
-                update1.blurView.isHidden = false
-               
-                
-            } else if let update1 = vc as? SelectedPostVC {
+            }  else if let update1 = vc as? SelectedPostVC {
                 
                
                 if update1.currentIndex != nil {
@@ -1245,40 +1165,6 @@ class CustomSlider: UISlider {
                 
                 update1.timeLbl.isHidden = true
                 update1.blurView.isHidden = true
-                
-            } else if let update1 = vc as? PostListWithHashtagVC {
-                
-                
-                if update1.currentIndex != nil {
-                    //newPlayingIndex
-                    
-                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-
-                    
-                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
-                    update1.playVideo(index: update1.currentIndex!)
-                    
-                }
-                
-                update1.timeLbl.isHidden = true
-                update1.blurView.isHidden = true
-                
-            } else if let update1 = vc as? ReelVC {
-                
-                if update1.currentIndex != nil {
-                    //newPlayingIndex
-                    
-                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-
-                    
-                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
-                    update1.playVideo(index: update1.currentIndex!)
-                    
-                }
-                
-                update1.timeLbl.isHidden = true
-                update1.blurView.isHidden = true
-               
                 
             } else if let update1 = vc as? SelectedPostVC {
                 

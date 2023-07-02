@@ -350,7 +350,7 @@ extension NotificationVC {
     
     func openPost(post: PostModel) {
         
-        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
             
             let nav = UINavigationController(rootViewController: RVC)
             

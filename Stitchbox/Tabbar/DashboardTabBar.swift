@@ -90,70 +90,73 @@ import Alamofire
         
     }
     
-    
-    func createCustomImageView(with image: UIImage) -> UIImageView {
-        let imageView = UIImageView(image: image.circularImage(size: CGSize(width: 37.5, height: 37.5)))
-        imageView.frame = CGRect(x: 0, y: 0, width: 37.5, height: 37.5)
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.shadowColor = UIColor.black.cgColor
-        imageView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        imageView.layer.shadowOpacity = 0.5
-        imageView.layer.shadowRadius = 1
-        
-        return imageView
+    func createCustomImageView(with image: UIImage) -> UIImage {
+        let circularImage = image.circularImage(size: CGSize(width: 37.5, height: 37.5))
+        let imageWithBorder = circularImage.withBorder(width: 1.0, color: .black)
+        return imageWithBorder.withRenderingMode(.alwaysOriginal)
     }
+        
+    func createCustomSelectedImageView(with image: UIImage) -> UIImage {
+        let circularImage = image.circularImage(size: CGSize(width: 37.5, height: 37.5))
+        let imageWithBorder = circularImage.withBorder(width: 1.0, color: .secondary)
+        return imageWithBorder.withRenderingMode(.alwaysOriginal)
+    }
+
+
 
     func setUserProfileImageOnTabbar() {
         guard let items = tabBar.items, let lastItem = items.last else { return }
-        
+            
         if _AppCoreData.userDataSource.value?.avatarURL != "" {
             let userImageUrl = _AppCoreData.userDataSource.value?.avatarURL
-            
+                
             imageStorage.async.object(forKey: userImageUrl!) { result in
                 if case .value(let image) = result {
-                    
                     DispatchQueue.main.async { [weak self] in
-                        let customImageView = self?.createCustomImageView(with: image)
-                        let customImage = customImageView?.image?.withRenderingMode(.alwaysOriginal)
+                        let customImage = self?.createCustomImageView(with: image)
+                        let selectedCustomImage = self?.createCustomSelectedImageView(with: image)
+                        
                         lastItem.image = customImage
-                        lastItem.selectedImage = customImage
+                        lastItem.selectedImage = selectedCustomImage
                     }
-                    
                 } else {
-                    
                     AF.request(userImageUrl!).responseImage { response in
-                                              
-                       switch response.result {
+                        switch response.result {
                         case let .success(image):
-                           DispatchQueue.main.async { [weak self] in
-                               let customImageView = self?.createCustomImageView(with: image)
-                               let customImage = customImageView?.image?.withRenderingMode(.alwaysOriginal)
-                               lastItem.image = customImage
-                               lastItem.selectedImage = customImage
-                           }
-                           
-                           try? imageStorage.setObject(image, forKey: userImageUrl!, expiry: .date(Date().addingTimeInterval(2 * 3600)))
-                                              
-                           case let .failure(error):
-                               print(error)
-                               DispatchQueue.main.async { [weak self] in
-                                   let defaultImage = UIImage(named: "defaultuser")!
-                                   let customImageView = self?.createCustomImageView(with: defaultImage)
-                                   let customImage = customImageView?.image?.withRenderingMode(.alwaysOriginal)
-                                   lastItem.image = customImage
-                                   lastItem.selectedImage = customImage
-                               }
-                       }
+                            DispatchQueue.main.async { [weak self] in
+                                let customImage = self?.createCustomImageView(with: image)
+                                let selectedCustomImage = self?.createCustomSelectedImageView(with: image)
+                                
+                                lastItem.image = customImage
+                                lastItem.selectedImage = selectedCustomImage
+                            }
+                            
+                            try? imageStorage.setObject(image, forKey: userImageUrl!, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+                          
+                        case let .failure(error):
+                            print(error)
+                            DispatchQueue.main.async { [weak self] in
+                                let defaultImage = UIImage(named: "defaultuser")!
+                                
+                                let customImage = self?.createCustomImageView(with: defaultImage)
+                                let selectedCustomImage = self?.createCustomSelectedImageView(with: defaultImage)
+                                
+                                lastItem.image = customImage
+                                lastItem.selectedImage = selectedCustomImage
+                            }
+                        }
                     }
                 }
             }
         } else {
             print("avatar not found")
             let defaultImage = UIImage(named: "defaultuser")!
-            let customImageView = createCustomImageView(with: defaultImage)
-            let customImage = customImageView.image?.withRenderingMode(.alwaysOriginal)
+            
+            let customImage = createCustomImageView(with: defaultImage)
+            let selectedCustomImage = createCustomSelectedImageView(with: defaultImage)
+            
             lastItem.image = customImage
-            lastItem.selectedImage = customImage
+            lastItem.selectedImage = selectedCustomImage
         }
     }
 
@@ -353,4 +356,47 @@ extension UIImage {
 
             return newImage ?? self
         }
+    
+    func createCustomSelectedImageView(with image: UIImage) -> UIImageView {
+        let imageView = UIImageView(image: image)
+        imageView.layer.cornerRadius = imageView.frame.size.width / 2
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderWidth = 2.0
+        imageView.layer.borderColor = UIColor.red.cgColor
+        return imageView
+    }
+    
+    
+    func imageWithView(in imageView: UIImageView) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, imageView.isOpaque, 0.0)
+        defer { UIGraphicsEndImageContext() }
+        if let context = UIGraphicsGetCurrentContext() {
+            imageView.layer.render(in: context)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            return image
+        }
+        return nil
+    }
+
+    func withBorder(width: CGFloat, color: UIColor) -> UIImage {
+        let scale = self.scale
+        let radius = min(self.size.width, self.size.height) / 2
+        let imageSize = CGSize(width: 2 * radius, height: 2 * radius)
+        
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, scale)
+        let imageRect = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
+        let path = UIBezierPath(ovalIn: imageRect.insetBy(dx: width, dy: width))
+        
+        path.addClip()
+        self.draw(in: imageRect)
+        
+        color.setStroke()
+        path.lineWidth = width * 2 // Multiply by 2 because half of the border will be clipped off by the path.
+        path.stroke()
+        
+        let result = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return result?.withRenderingMode(.alwaysOriginal) ?? self
+    }
+
 }

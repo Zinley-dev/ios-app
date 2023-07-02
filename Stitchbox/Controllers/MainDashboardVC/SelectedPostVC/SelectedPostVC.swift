@@ -60,7 +60,12 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
         
-      
+        setupNavBar()
+        
+        if let navigationController = self.navigationController {
+            navigationController.navigationBar.prefersLargeTitles = false
+            navigationController.navigationBar.isTranslucent = false
+        }
         
     }
     
@@ -75,7 +80,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-       
+        setupNavBar()
         
         if currentIndex != nil {
             
@@ -100,6 +105,28 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
             }
             
         }
+        
+    }
+    
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .clear
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundImage = UIImage()
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.shadowColor = .clear
+        navigationBarAppearance.backgroundEffect = nil
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.isTranslucent = true
+
+        
+        navigationController?.setNavigationBarHidden(false, animated: true)
         
     }
     
@@ -261,20 +288,6 @@ extension SelectedPostVC {
         
     }
     
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        
-        if scrollView == collectionNode.view, posts.count > 3 {
-            
-            if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-                navigationController?.setNavigationBarHidden(true, animated: true)
-                
-            } else {
-                navigationController?.setNavigationBarHidden(false, animated: true)
-            }
-            
-        }
-        
-    }
     
 }
 
@@ -300,6 +313,8 @@ extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
         }
 
         cell.hashTagLabel.text = item.hashtags[indexPath.row]
+        cell.backgroundColor = .clear
+        cell.hashTagLabel.backgroundColor = .clear
         return cell
     }
 
@@ -329,7 +344,7 @@ extension SelectedPostVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
+        let max = CGSize(width: self.view.layer.frame.width, height: contentView.frame.height);
         
         return ASSizeRangeMake(min, max);
     }
@@ -456,31 +471,38 @@ extension SelectedPostVC {
 extension SelectedPostVC {
     
     func setupCollectionNode() {
-        
         let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 0.0
+        flowLayout.scrollDirection = .vertical
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        
-        flowLayout.minimumInteritemSpacing = 10.0
-        flowLayout.minimumLineSpacing = 10.0
-        
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
+        self.collectionNode.leadingScreensForBatching = 2.0
+        self.collectionNode.view.contentInsetAdjustmentBehavior = .never
+        // Set the data source and delegate
+        self.collectionNode.dataSource = self
+        self.collectionNode.delegate = self
         
+        // Add the collection node's view as a subview and set constraints
         self.contentView.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
         self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: -1).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
-        self.applyStyle()
-        self.wireDelegates()
+        //self.collectionNode.view.isScrollEnabled = false
         
+        self.applyStyle()
+        
+        // Reload the data on the collection node
+        self.collectionNode.reloadData()
     }
+    
     
     
     func applyStyle() {
         
-        self.collectionNode.view.isPagingEnabled = false
+        self.collectionNode.view.isPagingEnabled = true
         self.collectionNode.view.backgroundColor = UIColor.clear
         self.collectionNode.view.showsVerticalScrollIndicator = false
         self.collectionNode.view.allowsSelection = false

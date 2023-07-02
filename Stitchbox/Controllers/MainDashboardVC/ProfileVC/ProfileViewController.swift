@@ -200,7 +200,7 @@ class ProfileViewController: UIViewController {
     func setupSettingButton() {
         
         let settingButton = UIButton(type: .custom)
-        settingButton.setImage(UIImage.init(named: "noNoti"), for: [])
+        settingButton.setImage(UIImage.init(named: "profile_setting"), for: [])
         settingButton.addTarget(self, action: #selector(settingTapped(_:)), for: .touchUpInside)
         settingButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let settingButtonBar = UIBarButtonItem(customView: settingButton)

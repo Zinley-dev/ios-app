@@ -462,15 +462,18 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         if let vc = UIViewController.currentViewController() {
             
             
-            if vc is ReelVC {
+            if let update1 = vc as? FeedViewController {
                 
-                if let update1 = vc as? ReelVC {
-                    
-                    if update1.playTimeBar != nil {
-                        update1.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
-                        update1.playTimeBar.setValue(Float(currentTime), animated: true)
-                    }
-                    
+                if update1.playTimeBar != nil {
+                    update1.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
+                    update1.playTimeBar.setValue(Float(currentTime), animated: true)
+                }
+                
+            } else if let update1 = vc as? SelectedPostVC {
+                
+                if update1.playTimeBar != nil {
+                    update1.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
+                    update1.playTimeBar.setValue(Float(currentTime), animated: true)
                 }
                 
             }
@@ -745,13 +748,17 @@ extension ReelNode {
         
         if let vc = UIViewController.currentViewController() {
             
-            if vc is ReelVC {
+            if let update1 = vc as? FeedViewController {
                 
-                if let update1 = vc as? ReelVC {
-                    
-                    update1.present(ac, animated: true, completion: nil)
-                    
-                }
+                update1.present(ac, animated: true, completion: nil)
+                
+            } else if let update1 = vc as? SelectedPostVC {
+                
+                update1.present(ac, animated: true, completion: nil)
+                
+            } else if let update1 = vc as? PostListWithHashtagVC {
+                
+                update1.present(ac, animated: true, completion: nil)
                 
             }
             
@@ -884,10 +891,26 @@ extension ReelNode {
         imgView.frame.size = CGSize(width: 45, height: 45)
 
         if let vc = UIViewController.currentViewController() {
-            if let update1 = vc as? ReelVC {
+            
+            if let update1 = vc as? FeedViewController {
+                                
                 imgView.center = update1.view.center
                 update1.view.addSubview(imgView)
+                                
+            } else if let update1 = vc as? SelectedPostVC {
+                                
+                imgView.center = update1.view.center
+                update1.view.addSubview(imgView)
+                                
+            } else if let update1 = vc as? PostListWithHashtagVC {
+                                
+                imgView.center = update1.view.center
+                update1.view.addSubview(imgView)
+                                
             }
+            
+            
+           
         }
 
         UIView.animate(withDuration: 0.5, animations: {
@@ -1083,14 +1106,14 @@ extension ReelNode {
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
 
-        let headerInset = UIEdgeInsets(top: 0, left: 8, bottom: 2, right: 8)
+        let headerInset = UIEdgeInsets(top: 0, left: 4, bottom: 2, right: 8)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
         hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 35)
-        let hashtagsInset = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        let hashtagsInset = UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 0)
         let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
         
-        let contentInset = UIEdgeInsets(top: 2, left: 16, bottom: 2, right: 170)
+        let contentInset = UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 170)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
         
         let verticalStack = ASStackLayoutSpec.vertical()
@@ -1147,8 +1170,8 @@ extension ReelNode {
 
     private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
         
-        buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 55)
-        let buttonsInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 45)
+        let buttonsInset = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
 }
@@ -1160,15 +1183,20 @@ extension ReelNode {
         
         if let vc = UIViewController.currentViewController() {
             
-            if vc is ReelVC {
-                
-                if let update1 = vc as? ReelVC {
-                    
-                    update1.collectionNode.view.isScrollEnabled = false
-                    
-                }
-                
-            }
+
+            if let update1 = vc as? FeedViewController {
+                            
+                update1.collectionNode.view.isScrollEnabled = false
+                            
+                        } else if let update1 = vc as? SelectedPostVC {
+                            
+                            update1.collectionNode.view.isScrollEnabled = false
+                            
+                        } else if let update1 = vc as? PostListWithHashtagVC {
+                            
+                            update1.collectionNode.view.isScrollEnabled = false
+                            
+                        }
             
             
         }
@@ -1180,15 +1208,19 @@ extension ReelNode {
         
         if let vc = UIViewController.currentViewController() {
             
-            if vc is ReelVC {
-                
-                if let update1 = vc as? ReelVC {
-                    
-                    update1.collectionNode.view.isScrollEnabled = true
-                    
-                }
-                
-            }
+            if let update1 = vc as? FeedViewController {
+                            
+                update1.collectionNode.view.isScrollEnabled = true
+                            
+                        } else if let update1 = vc as? SelectedPostVC {
+                            
+                            update1.collectionNode.view.isScrollEnabled = true
+                            
+                        } else if let update1 = vc as? PostListWithHashtagVC {
+                            
+                            update1.collectionNode.view.isScrollEnabled = true
+                            
+                        }
             
             
         }

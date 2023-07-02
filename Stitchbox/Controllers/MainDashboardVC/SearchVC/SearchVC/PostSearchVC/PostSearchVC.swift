@@ -10,7 +10,7 @@ import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
 
-class PostSearchVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
+class PostSearchVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
     @IBOutlet weak var contentview: UIView!
     
@@ -169,72 +169,6 @@ extension PostSearchVC {
 }
 
 
-
-extension PostSearchVC {
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
-
-        // Check if collectionView.tag is within the range of the posts array
-        guard collectionView.tag < posts.count else {
-            print("Error: No post for tag \(collectionView.tag)")
-            cell.hashTagLabel.text = "Error: post not found"
-            return cell
-        }
-        
-        let item = posts[collectionView.tag]
-
-        // Check if indexPath.row is within the range of the hashtags array
-        guard indexPath.row < item.hashtags.count else {
-            print("Error: No hashtag for index \(indexPath.row)")
-            cell.hashTagLabel.text = "Error: hashtag not found"
-            return cell
-        }
-
-        cell.hashTagLabel.text = item.hashtags[indexPath.row]
-        return cell
-    }
-
-
-    
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView.tag < posts.count {
-            return posts[collectionView.tag].hashtags.count
-        } else {
-            // Handle the condition when there are no posts at the given index
-            return 0
-        }
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let selectedHashtag = posts[collectionView.tag].hashtags[indexPath.row]
-        
-        if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-            
-            PLWHVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            PLWHVC.searchHashtag = selectedHashtag
-            self.navigationController?.pushViewController(PLWHVC, animated: true)
-            
-        }
-        
-        
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
-    }
-    
-}
-
 extension PostSearchVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
@@ -334,7 +268,7 @@ extension PostSearchVC {
         self.collectionNode.view.isPagingEnabled = false
         self.collectionNode.view.backgroundColor = UIColor.clear
         self.collectionNode.view.showsVerticalScrollIndicator = false
-        self.collectionNode.view.allowsSelection = false
+        self.collectionNode.view.allowsSelection = true
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         self.collectionNode.needsDisplayOnBoundsChange = true
         
@@ -357,6 +291,20 @@ extension PostSearchVC {
             
         }
         
+        
+        
+    }
+    
+    
+    func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
+        
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+            
+            SPVC.selectedPost = posts
+            SPVC.startIndex = indexPath.row
+
+            self.navigationController?.pushViewController(SPVC, animated: true)
+        }
         
         
     }

@@ -288,12 +288,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         update1.PostSearchVC.viewWillAppear(true)
                     }
                     
-                } else if let update1 = vc as? ReelVC {
-                    
-                    if !update1.hasViewAppeared {
-                        update1.viewWillAppear(true)
-                    }
-                    
                 } else if let update1 = vc as? SelectedPostVC {
                     
                     if !update1.hasViewAppeared {
@@ -923,7 +917,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         if let viewPost = self.post {
             
-            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
                 
                 let nav = UINavigationController(rootViewController: RVC)
                 

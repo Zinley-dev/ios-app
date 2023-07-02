@@ -33,6 +33,7 @@ class ImageViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    
     private lazy var countLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -51,7 +52,10 @@ class ImageViewCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 13)
         label.numberOfLines = 1
         label.textColor = .white
+        label.backgroundColor = .black
+        label.text = "10 Stiches"
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        label.cornerRadius = 3
         return label
     }()
 
@@ -116,22 +120,23 @@ class ImageViewCell: UICollectionViewCell {
         contentView.addSubview(imageView)
         imageView.layer.cornerRadius = 10
         imageView.layer.masksToBounds = true
-        
+
         // Add gradient overlay
         let gradient = CAGradientLayer()
         gradient.frame = imageView.bounds
         gradient.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
         gradient.locations = [0.5, 1.0]
         imageView.layer.insertSublayer(gradient, at: 0)
-        
+
         contentView.addSubview(stackView)
-        
+
+        contentView.addSubview(stichLabel)
+
         stackView.addArrangedSubview(videoSignView)
         videoSignView.layer.cornerRadius = 10
         videoSignView.layer.masksToBounds = true
-        
+
         stackView.addArrangedSubview(countLabel)
-        //countLabel.font = UIFont(name: "YourCustomFontName", size: 14) // set your own custom font here
 
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
@@ -139,14 +144,20 @@ class ImageViewCell: UICollectionViewCell {
             contentView.topAnchor.constraint(equalTo: imageView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
 
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-            
+
             // Size constraints for videoSignView
             videoSignView.widthAnchor.constraint(equalToConstant: 30),
             videoSignView.heightAnchor.constraint(equalToConstant: 30),
+
+            stichLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            stichLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
+
+            
         ])
     }
+
 
     
     func countView(with data: PostModel) {

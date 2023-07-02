@@ -302,12 +302,6 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                         update1.PostSearchVC.viewWillAppear(true)
                     }
                     
-                } else if let update1 = vc as? ReelVC {
-                    
-                    if !update1.hasViewAppeared {
-                        update1.viewWillAppear(true)
-                    }
-                    
                 } else if let update1 = vc as? SelectedPostVC {
                     
                     if !update1.hasViewAppeared {

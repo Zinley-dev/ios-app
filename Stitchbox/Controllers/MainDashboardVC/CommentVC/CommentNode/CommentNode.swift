@@ -711,7 +711,7 @@ class CommentNode: ASCellNode {
                         
                         if let post = PostModel(JSON: data) {
                             
-                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
                                 
                                 if let vc = UIViewController.currentViewController() {
                                 

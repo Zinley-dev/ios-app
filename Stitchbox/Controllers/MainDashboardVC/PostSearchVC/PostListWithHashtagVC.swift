@@ -11,7 +11,7 @@ import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
 
-class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
+class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
     
     var searchHashtag: String?
@@ -21,9 +21,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var timeLbl: UILabel!
-    @IBOutlet weak var blurView: UIView!
-    @IBOutlet weak var playTimeBar: CustomSlider!
+   
     
     var isVideoPlaying = false
     var newPlayingIndex: Int?
@@ -59,7 +57,6 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
         
         // Do any additional setup after loading the view.
         
-        
         if let hashtag = searchHashtag {
             
             navigationItem.title = hashtag
@@ -81,46 +78,22 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
             }
             
         }
-      
+        
+        setupNavBar()
         setupButtons()
         
-        
     }
-    
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    func setupNavBar() {
         
-        if currentIndex != nil {
-            //newPlayingIndex
-            pauseVideo(index: currentIndex!)
-        }
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         
-    }
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_hashtag")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_hashtag")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_hashtag")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_hashtag")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(PostListWithHashtagVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_hashtag")), object: nil)
-        
-        
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        hasViewAppeared = false
-        
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_profile_hashtag")), object: nil)
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "copy_post_hashtag")), object: nil)
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "report_post_hashtag")), object: nil)
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post_hashtag")), object: nil)
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post_hashtag")), object: nil)
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
     }
     
@@ -166,21 +139,8 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegate, UIColle
             
         }
         
-        if currentIndex != nil {
-            //newPlayingIndex
-            playVideo(index: currentIndex!)
-            
-        }
         
-        
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        setupNavBar()
         
     }
     
@@ -359,228 +319,16 @@ extension PostListWithHashtagVC {
     
 }
 
-
-extension PostListWithHashtagVC {
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        // Check if this is the first visible cell and it contains a video.
-        
-        if isfirstLoad {
-            isfirstLoad = false
-            let post = posts[0]
-            if !post.muxPlaybackId.isEmpty {
-                currentIndex = 0
-                newPlayingIndex = 0
-                playVideo(index: currentIndex!)
-                isVideoPlaying = true
-            }
-            
-        }
-    }
-    
-    
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if !posts.isEmpty, scrollView == collectionNode.view {
-            
-            // Get the visible rect of the collection view.
-            let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-            
-            // Calculate the visible cells.
-            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? ReelNode }
-            
-            // Find the index of the visible video that is closest to the center of the screen.
-            var minDistanceFromCenter = CGFloat.infinity
-            
-            var foundVisibleVideo = false
-            
-            for cell in visibleCells {
-                
-                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
-                if distanceFromCenter < minDistanceFromCenter {
-                    newPlayingIndex = cell.indexPath!.row
-                    minDistanceFromCenter = distanceFromCenter
-                }
-            }
-            
-            
-            if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
-                
-                foundVisibleVideo = true
-                playTimeBar.isHidden = false
-                imageIndex = nil
-            } else {
-                playTimeBar.isHidden = true
-                imageIndex = newPlayingIndex
-            }
-            
-            
-            if foundVisibleVideo {
-                
-                // Start playing the new video if it's different from the current playing video.
-                if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-                    // Pause the current video, if any.
-                    if let currentIndex = currentIndex {
-                        pauseVideo(index: currentIndex)
-                    }
-                    // Play the new video.
-                    currentIndex = newPlayingIndex
-                    playVideo(index: currentIndex!)
-                    isVideoPlaying = true
-                    
-                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? ReelNode {
-                        
-                        resetView(cell: node)
-                        
-                    }
-                    
-                }
-                
-            } else {
-                
-                if let currentIndex = currentIndex {
-                    pauseVideo(index: currentIndex)
-                }
-                
-                imageTimerWorkItem?.cancel()
-                imageTimerWorkItem = DispatchWorkItem { [weak self] in
-                    guard let self = self else { return }
-                    if self.imageIndex != nil {
-                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? ReelNode {
-                            if self.imageIndex == self.newPlayingIndex {
-                                resetView(cell: node)
-                                node.endImage(id: node.post.id)
-                            }
-                        }
-                    }
-                }
-                
-                if let imageTimerWorkItem = imageTimerWorkItem {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
-                }
-                
-                
-                // Reset the current playing index.
-                currentIndex = nil
-                
-            }
-            
-            
-            // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
-                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                        cell.videoNode.player?.seek(to: currentTime)
-                    } else {
-                        cell.videoNode.player?.seek(to: CMTime.zero)
-                    }
-                }
-            }
-            
-            
-            // If there's no current playing video and no visible video, pause the last playing video, if any.
-            if !isVideoPlaying && currentIndex != nil {
-                pauseVideo(index: currentIndex!)
-                currentIndex = nil
-            }
-            
-        }
-        
-        
-    }
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        
-        if scrollView == collectionNode.view, posts.count > 3 {
-            
-            if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-                navigationController?.setNavigationBarHidden(true, animated: true)
-                
-            } else {
-                navigationController?.setNavigationBarHidden(false, animated: true)
-            }
-            
-        }
-        
-    }
-    
-    
-}
-
-
-extension PostListWithHashtagVC {
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
-
-        // Check if collectionView.tag is within the range of the posts array
-        guard collectionView.tag < posts.count else {
-            print("Error: No post for tag \(collectionView.tag)")
-            cell.hashTagLabel.text = "Error: post not found"
-            return cell
-        }
-        
-        let item = posts[collectionView.tag]
-
-        // Check if indexPath.row is within the range of the hashtags array
-        guard indexPath.row < item.hashtags.count else {
-            print("Error: No hashtag for index \(indexPath.row)")
-            cell.hashTagLabel.text = "Error: hashtag not found"
-            return cell
-        }
-
-        cell.hashTagLabel.text = item.hashtags[indexPath.row]
-        return cell
-    }
-
-
-    
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView.tag < posts.count {
-            return posts[collectionView.tag].hashtags.count
-        } else {
-            // Handle the condition when there are no posts at the given index
-            return 0
-        }
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let selectedHashtag = posts[collectionView.tag].hashtags[indexPath.row]
-        
-        if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-            
-            PLWHVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            PLWHVC.searchHashtag = selectedHashtag
-            self.navigationController?.pushViewController(PLWHVC, animated: true)
-            
-        }
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
-    }
-    
-}
-
 extension PostListWithHashtagVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
+        let spacing: CGFloat = 22 // adjust this as per your requirement
+        let totalWidth = self.collectionNode.view.layer.frame.width
+        let size = (totalWidth - spacing) / 3  // considering 1 spacing between 2 cells
+        let min = CGSize(width: size, height: size * 1.75)
+        let max = CGSize(width: size, height: size * 1.75)
         
-        return ASSizeRangeMake(min, max);
+        return ASSizeRangeMake(min, max)
     }
     
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
@@ -607,22 +355,9 @@ extension PostListWithHashtagVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = ReelNode(with: post)
+            let node = PostSearchNode(with: post, keyword: self.searchHashtag ?? "")
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            
-            
-            node.settingBtn = { (node) in
-                
-                self.settingPost(item: post)
-                
-            }
-            
-            delay(0.3) {
-                if node.hashtagView != nil {
-                    node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-                }
-            }
             
             //
             return node
@@ -635,38 +370,13 @@ extension PostListWithHashtagVC: ASCollectionDataSource {
             retrieveNextPageWithCompletion { [weak self] (newPosts) in
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                self.cleanupPosts(collectionNode: collectionNode)
-                
+   
                 context.completeBatchFetching(true)
             }
         } else {
             context.completeBatchFetching(true)
         }
     }
-
-    private func cleanupPosts(collectionNode: ASCollectionNode) {
-        let postThreshold = 100
-        let postsToRemove = 50
-        let startIndex = 15
-
-        if self.posts.count > postThreshold {
-            // check if we have enough posts to remove
-            if (startIndex + postsToRemove) <= self.posts.count {
-                // remove the posts from startIndex to startIndex + postsToRemove
-                self.posts.removeSubrange(startIndex..<(startIndex + postsToRemove))
-
-                // generate the index paths for old posts
-                let indexPathsToRemove = Array(startIndex..<(startIndex + postsToRemove)).map { IndexPath(row: $0, section: 0) }
-
-                // delete the old posts from collectionNode
-                collectionNode.performBatchUpdates({
-                    collectionNode.deleteItems(at: indexPathsToRemove)
-                }, completion: nil)
-            }
-        }
-    }
-
 
     
 }
@@ -677,9 +387,6 @@ extension PostListWithHashtagVC {
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
-        //flowLayout.minimumInteritemSpacing = 5.0
-        //flowLayout.minimumLineSpacing = 5.0
-        //flowLayout.estimatedItemSize = .zero
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
@@ -711,7 +418,7 @@ extension PostListWithHashtagVC {
         self.collectionNode.view.isPagingEnabled = false
         self.collectionNode.view.backgroundColor = UIColor.clear
         self.collectionNode.view.showsVerticalScrollIndicator = false
-        self.collectionNode.view.allowsSelection = false
+        self.collectionNode.view.allowsSelection = true
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         self.collectionNode.needsDisplayOnBoundsChange = true
         
@@ -723,6 +430,20 @@ extension PostListWithHashtagVC {
         self.collectionNode.dataSource = self
         
     }
+    
+    func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
+        
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+            
+            SPVC.selectedPost = posts
+            SPVC.startIndex = indexPath.row
+
+            self.navigationController?.pushViewController(SPVC, animated: true)
+        }
+        
+        
+    }
+
     
 }
 
@@ -832,210 +553,5 @@ extension PostListWithHashtagVC {
         }
     }
 
-    
-}
-
-
-extension PostListWithHashtagVC {
-    
-    func settingPost(item: PostModel) {
-        
-        let newsFeedSettingVC = NewsFeedSettingVC()
-        newsFeedSettingVC.modalPresentationStyle = .custom
-        newsFeedSettingVC.transitioningDelegate = self
-        
-        global_presetingRate = Double(0.35)
-        global_cornerRadius = 45
-        
-        if editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
-            newsFeedSettingVC.isOwner = true
-        } else {
-            newsFeedSettingVC.isOwner = false
-        }
-        
-        newsFeedSettingVC.isHashtag = true
-        editeddPost = item
-        self.present(newsFeedSettingVC, animated: true, completion: nil)
-        
-    }
-    
-    @objc func copyPost() {
-        
-        if let id = self.editeddPost?.id {
-            
-            let link = "https://stitchbox.gg/app/post/?uid=\(id)"
-            
-            UIPasteboard.general.string = link
-            showNote(text: "Post link is copied")
-            
-        } else {
-            showNote(text: "Post link is unable to be copied")
-        }
-        
-    }
-    
-    @objc func copyProfile() {
-        
-        if let id = self.editeddPost?.owner?.id {
-            
-            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
-            
-            UIPasteboard.general.string = link
-            showNote(text: "User profile link is copied")
-            
-        } else {
-            showNote(text: "User profile link is unable to be copied")
-        }
-        
-    }
-    
-    @objc func removePost() {
-        
-        if let deletingPost = editeddPost {
-            
-            if let indexPath = posts.firstIndex(of: deletingPost) {
-                
-                posts.removeObject(deletingPost)
-                
-                // check if there are no more posts
-                if posts.isEmpty {
-                    if onPresent {
-                        self.dismiss(animated: true)
-                    } else {
-                        navigationController?.popViewController(animated: true)
-                    }
-                } else {
-                    collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                    reloadAllCurrentHashtag()
-                    
-                    delay(0.75) {
-                        if indexPath < self.posts.count {
-                            self.playVideo(index: indexPath)
-                        }
-                    }
-                    
-                }
-            }
-            
-        }
-        
-    }
-    
-    
-    func reloadAllCurrentHashtag() {
-        if !posts.isEmpty {
-            for index in 0..<posts.count {
-                let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
-                if let node = collectionNode.nodeForItem(at: indexPath) as? ReelNode {
-                    
-                    if node.hashtagView != nil {
-                        node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-                        node.hashtagView.collectionView.reloadData()
-                    }
-                    
-                }
-            }
-        }
-    }
-    
-    @objc func reportPost() {
-        
-        let slideVC =  reportView()
-        
-        
-        slideVC.post_report = true
-        slideVC.postId = editeddPost?.id ?? ""
-        slideVC.modalPresentationStyle = .custom
-        slideVC.transitioningDelegate = self
-        global_presetingRate = Double(0.75)
-        global_cornerRadius = 35
-        
-        delay(0.1) {
-            self.present(slideVC, animated: true, completion: nil)
-        }
-        
-    }
-    
-    @objc func sharePost() {
-        
-        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-            print("Sendbird: Can't get userUID")
-            return
-        }
-        
-        let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(editeddPost?.id ?? "")")!]
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        
-        ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
-            
-            
-        }
-        
-        delay(0.1) {
-            self.present(ac, animated: true, completion: nil)
-        }
-        
-    }
-    
-    func pauseVideo(index: Int) {
-        
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
-            
-            
-            cell.videoNode.pause()
-            
-        }
-        
-    }
-    
-    func seekVideo(index: Int, time: CMTime) {
-        
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
-            
-            cell.videoNode.player?.seek(to: time)
-            
-        }
-        
-    }
-    
-    
-    func playVideo(index: Int) {
-        
-        
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
-            
-            if !cell.videoNode.isPlaying() {
-                
-                
-                if let muteStatus = shouldMute {
-                    
-                    
-                    if muteStatus {
-                        cell.videoNode.muted = true
-                    } else {
-                        cell.videoNode.muted = false
-                    }
-                    
-                    cell.videoNode.play()
-                    
-                } else {
-                    
-                    if globalIsSound {
-                        cell.videoNode.muted = false
-                    } else {
-                        cell.videoNode.muted = true
-                    }
-                    
-                    cell.videoNode.play()
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-    }
     
 }

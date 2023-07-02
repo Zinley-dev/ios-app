@@ -944,18 +944,6 @@ extension UserProfileVC {
     
 }
 
-extension UserProfileVC {
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-            navigationController?.setNavigationBarHidden(true, animated: true)
-        } else {
-            navigationController?.setNavigationBarHidden(false, animated: true)
-        }
-    }
-    
-    
-}
 
 extension UserProfileVC {
     
