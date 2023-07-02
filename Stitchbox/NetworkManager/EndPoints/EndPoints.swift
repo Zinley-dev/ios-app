@@ -368,6 +368,9 @@ extension AccountAPI: EndPointType {
 
 public enum UserAPI {
     case getme
+  case savePost (params: [String: Any])
+  case unsavePost (params: [String: Any])
+  case getSavedPost
     case deleteMe
     case undoDelete
     case getUserInfo(userId: String)
@@ -400,6 +403,12 @@ extension UserAPI: EndPointType {
         switch self {
         case .getme:
             return "/me"
+        case .savePost:
+          return "/me/saved-post"
+        case .unsavePost:
+          return "/me/saved-post"
+        case .getSavedPost:
+          return "/me/saved-post"
         case .getUserInfo(let userId):
             return "/\(userId)"
           case .deleteMe:
@@ -451,6 +460,12 @@ extension UserAPI: EndPointType {
         switch self {
         case .getme:
             return .get
+          case .savePost:
+            return .post
+          case .unsavePost:
+            return .delete
+          case .getSavedPost:
+            return .get
           case .getUserInfo:
             return .get
           case .deleteMe:
@@ -501,6 +516,12 @@ extension UserAPI: EndPointType {
     var task: HTTPTask {
         switch self {
         case .getme:
+            return .request
+          case .savePost(let params):
+            return .requestParameters(parameters: params)
+          case .unsavePost(let params):
+            return .requestParameters(parameters: params)
+          case .getSavedPost:
             return .request
           case .deleteMe:
             return .request
@@ -593,6 +614,8 @@ public enum PostAPI {
     case getRecommend
     case getUserFeed(limit: Int)
     case getHighTrending
+    case getPostTrending(page: Int)
+    case getTagTrending(page: Int)
     case create(params: [String: Any])
     case update(params: [String: Any])
     case getMyPost(page: Int)
@@ -627,6 +650,10 @@ extension PostAPI: EndPointType {
             return "/feed?limit=\(limit)"
           case .getHighTrending:
             return "/high-trending"
+          case .getPostTrending(let page):
+            return "/trending?page=\(page)&limit=10"
+          case .getTagTrending(let page):
+            return "/trending/hashtag?page=\(page)&limit=10"
             case .getUserPost(let user, let page):
                 return "/author/\(user)?page=\(page)&limit=10"
           case .deleteMyPost(let pid):
@@ -662,6 +689,10 @@ extension PostAPI: EndPointType {
             return .delete
           case .stats:
             return .get
+          case .getPostTrending:
+            return .get
+          case .getTagTrending:
+            return .get
         }
     }
     
@@ -690,6 +721,10 @@ extension PostAPI: EndPointType {
           case .deleteMyPost:
             return .request
           case .stats:
+            return .request
+          case .getPostTrending:
+            return .request
+          case .getTagTrending:
             return .request
         }
     }
@@ -1789,6 +1824,8 @@ extension OpenLinkLogApi: EndPointType {
 
 public enum PostStitchApi {
   case stitch(body: [String: Any])
+  case unstitch(body: [String: Any])
+  case accept(body: [String: Any])
   case getByRoot(rootId: String)
 }
 extension PostStitchApi: EndPointType {
@@ -1798,6 +1835,10 @@ extension PostStitchApi: EndPointType {
         return "/"
       case .getByRoot(let rootId):
         return "/\(rootId)"
+      case .unstitch:
+        return "/un-stitch"
+      case .accept:
+        return "/approve"
     }
   }
   
@@ -1811,13 +1852,67 @@ extension PostStitchApi: EndPointType {
         return .post
       case .getByRoot:
         return .get
-        
+      case .unstitch:
+        return .post
+      case .accept:
+        return .post
     }
   }
   
   var task: HTTPTask {
     switch self {
       case .stitch(let body):
+        return .requestParameters(parameters: body)
+      case .getByRoot:
+        return .request
+      case .unstitch(let body):
+        return .requestParameters(parameters: body)
+      case .accept(let body):
+        return .requestParameters(parameters: body)
+    }
+  }
+  
+  var headers: [String : String]? {
+    var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+    
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-Client-Timezone": "\(secondsFromGMT)"]
+  }
+  
+}
+
+public enum ShareApi {
+  case createShare(body: [String: Any])
+  case getByRoot(rootId: String)
+}
+extension ShareApi: EndPointType {
+  var path: String {
+    switch self {
+      case .createShare:
+        return "/"
+      case .getByRoot(let rootId):
+        return "/\(rootId)"
+    }
+  }
+  
+  var module: String {
+    return "/post-share"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .createShare:
+        return .post
+      case .getByRoot:
+        return .get
+        
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .createShare(let body):
         return .requestParameters(parameters: body)
       case .getByRoot:
         return .request

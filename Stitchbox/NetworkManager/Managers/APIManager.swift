@@ -58,6 +58,7 @@ struct APIManager {
     let promotionManager = Manager<PromotionApi>()
     let openLinkManager = Manager<OpenLinkLogApi>()
     let postStitchManager = Manager<PostStitchApi>()
+    let shareManager = Manager<ShareApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -916,6 +917,65 @@ extension APIManager {
   
   func getByRoot(rootId: String, completion: @escaping APICompletion) {
     postStitchManager.request(.getByRoot(rootId: rootId)) { result in
+      completion(result)
+    }
+  }
+  
+  func unstitch(rootId: String, memberId: String, completion: @escaping APICompletion) {
+    let params = ["rootId": rootId, "member": memberId]
+    postStitchManager.request(.unstitch(body: params)) { result in
+      completion(result)
+    }
+  }
+  
+  func acceptStitch(rootId: String, memberId: String, completion: @escaping APICompletion) {
+    let params = ["rootId": rootId, "member": memberId]
+    postStitchManager.request(.unstitch(body: params)) { result in
+      completion(result)
+    }
+  }
+  
+  func createShare(postId: String, userId: String, completion: @escaping APICompletion) {
+    let params = ["postId": postId, "userId": userId]
+    shareManager.request(.createShare(body: params)) { result in
+      completion(result)
+    }
+  }
+  
+  func getShare(postId: String, completion: @escaping APICompletion) {
+    shareManager.request(.getByRoot(rootId: postId)) { result in
+      completion(result)
+    }
+  }
+  
+  func savePost(postId: String, completion: @escaping APICompletion) {
+    let params = ["postId": postId]
+    userManager.request(.savePost(params: params)) { result in
+      completion(result)
+    }
+  }
+  
+  func unsavePost(postId: String, completion: @escaping APICompletion) {
+    let params = ["postId": postId]
+    userManager.request(.unsavePost(params: params)) { result in
+      completion(result)
+    }
+  }
+  
+  func getSavedPost(completion: @escaping APICompletion) {
+    userManager.request(.getSavedPost) { result in
+      completion(result)
+    }
+  }
+  
+  func getPostTrending(page: Int = 1, completion: @escaping APICompletion) {
+    postManager.request(.getPostTrending(page: page)) { result in
+      completion(result)
+    }
+  }
+  
+  func getPostTrendingTag(page: Int = 1, completion: @escaping APICompletion) {
+    postManager.request(.getTagTrending(page: page)) { result in
       completion(result)
     }
   }
