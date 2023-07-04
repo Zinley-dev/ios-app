@@ -26,7 +26,7 @@ class PostVC: UIViewController {
     @IBOutlet weak var addLbl: UILabel!
     @IBOutlet weak var hashtagLbl: UILabel!
     @IBOutlet weak var hiddenHashTagTxtField: UITextField!
-    @IBOutlet weak var streamingLinkLbl: UILabel!
+    @IBOutlet weak var stitchLbl: UILabel!
     @IBOutlet weak var onlyMeLbl: UILabel!
     @IBOutlet weak var followLbl: UILabel!
     @IBOutlet weak var publicLbl: UILabel!
@@ -47,15 +47,14 @@ class PostVC: UIViewController {
     @IBOutlet weak var privateBtn: UIButton!
     @IBOutlet weak var hashtagBtn: UIButton!
     @IBOutlet weak var allowCmtSwitch: UISwitch!
-    @IBOutlet weak var gameImage: UIImageView!
-    @IBOutlet weak var selectedGameLbl: UILabel!
+    @IBOutlet weak var allowStitchSwitch: UISwitch!
+   
     
     var hashtagList = [String]()
     var selectedGameId = ""
     var mode = 0
     var isAllowComment = true
     let backButton: UIButton = UIButton(type: .custom)
-    let container = ContainerController(modes: [.library, .photo, .video])
     var isKeyboardShow = false
     var mediaType = ""
     var selectedVideo: SessionVideo!
@@ -66,14 +65,13 @@ class PostVC: UIViewController {
     var length: Double!
     var renderedImage: UIImage!
     var selectedDescTxtView = ""
-    
-    var dayPicker = UIPickerView()
+
  
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        container.editControllerDelegate = self
+        
         global_fullLink = ""
         global_host = ""
         setupButtons()
@@ -83,20 +81,13 @@ class PostVC: UIViewController {
         setupGesture()
         loadPreviousSetting()
         loadAvatar()
-        loadAddGame()
-        
-        self.dayPicker.delegate = self
-        
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if global_host != "" {
-            streamingLinkLbl.text = "Streaming link added for \(global_host)"
-        } else {
-            streamingLinkLbl.text = "Streaming link"
-        }
+
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -115,40 +106,32 @@ class PostVC: UIViewController {
         
     }
     
-    func createDayPicker() {
-
-        categoryInput.inputView = dayPicker
-
-    }
-    
-    @IBAction func changeGameBtnPressed(_ sender: Any) {
-        
-        createDayPicker()
-        categoryInput.becomeFirstResponder()
-        
-    }
-    
-    func loadAddGame() {
-        
-        
-        for item in global_suppport_game_list {
-            if item.name != "Steam" {
-                itemList.append(item)
-            }
-        }
-
-        
-    }
     
     @IBAction func addMediaBtnPressed(_ sender: Any) {
     
-        // Include only Image from the users drafts
-        container.libraryController.draftMediaTypes = [.image, .video]
         
+        presentCamera()
+        
+    }
+    
+    func presentCamera() {
+        
+        let container = ContainerController(modes: [.library, .video], initialMode: .video, restoresPreviousMode: false)
+        
+        container.editControllerDelegate = self
         container.libraryController.previewCropController.maxRatioForPortraitMedia = CGSize(width: 1, height: .max)
         container.libraryController.previewCropController.maxRatioForLandscapeMedia = CGSize(width: .max, height: 1)
         container.libraryController.previewCropController.defaultsToAspectFillForPortraitMedia = false
         container.libraryController.previewCropController.defaultsToAspectFillForLandscapeMedia = false
+        
+    
+        container.cameraController.aspectRatio = CGSize(width: 9, height: 16)
+
+        
+        // Include only videos from the users photo library
+        container.libraryController.fetchPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+        // Include only videos from the users drafts
+        container.libraryController.draftMediaTypes = [.video]
        
         
         let nav = UINavigationController(rootViewController: container)
@@ -179,6 +162,13 @@ class PostVC: UIViewController {
         
     }
     
+    
+    @IBAction func allowStitchSwitchPressed(_ sender: Any) {
+        
+
+        
+    }
+    
     @IBAction func hashtagBtnPressed(_ sender: Any) {
         
         if let HTVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "HashtagVC") as? HashtagVC {
@@ -189,14 +179,14 @@ class PostVC: UIViewController {
                 
                 if !text.findMHashtagText().isEmpty {
                     self.collectionHeight.constant = 50.0
-                    self.settingViewHeight.constant = 295
+                    self.settingViewHeight.constant = 335
                     self.collectionView.isHidden = false
                     self.hashtagLbl.text = "Hashtag added"
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList = text.findMHashtagText()
                 } else {
                     self.collectionHeight.constant = 0.0
-                    self.settingViewHeight.constant = 295 - 50
+                    self.settingViewHeight.constant = 335 - 50
                     self.collectionView.isHidden = true
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList.removeAll()
@@ -267,18 +257,17 @@ class PostVC: UIViewController {
         
     }
     
-    @IBAction func StreamingLinkBtnPressed(_ sender: Any) {
+    @IBAction func stitchBtnPressed(_ sender: Any) {
         
-        
-        if let SLVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingLinkVC") as? StreamingLinkVC {
+        if let SCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchControlVC") as? StitchControlVC {
             
-            self.navigationController?.pushViewController(SLVC, animated: true)
+            self.navigationController?.pushViewController(SCVC, animated: true)
             
         }
         
+
+        
     }
-    
-    
     
     
 }
@@ -410,30 +399,6 @@ extension PostVC {
                     
                 }
                 
-                
-                
-                if let streamUrl = data.first?["streamLink"] as? String {
-                    
-                    if let url = URL(string: streamUrl) {
-                        
-                        if let domain = url.host {
-                            
-                            if check_Url(host: domain) == true {
-                                
-                                global_host = domain
-                                global_fullLink = streamUrl
-                                DispatchQueue.main.async {
-                                    self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
-                                }
-    
-                            }
-                            
-                        }
-                    }
-
-                }
-
-
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.setDefaultMode()
@@ -724,7 +689,7 @@ extension PostVC {
     func setupDefaultView() {
         
         collectionHeight.constant = 0.0
-        settingViewHeight.constant = 295 - 50
+        settingViewHeight.constant = 335 - 50
         
     }
 
@@ -773,7 +738,7 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
                 self.collectionHeight.constant = 0
                 self.collectionView.isHidden = true
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 295 - 50
+                self.settingViewHeight.constant = 335 - 50
                 
                 self.hiddenHashTagTxtField.text = ""
                 self.hashtagLbl.text = "Hashtag #"
@@ -896,7 +861,7 @@ extension PostVC: UITextViewDelegate {
         
         if textView == descTxtView {
             
-            if textView.text == "Hi, let's unleash your gameplay!" {
+            if textView.text == "Hi, let's share something fun!" {
                 
                 textView.text = ""
                 
@@ -911,7 +876,7 @@ extension PostVC: UITextViewDelegate {
             
             if textView.text == "" {
                 
-                textView.text = "Hi, let's unleash your gameplay!"
+                textView.text = "Hi, let's share something fun!"
                 
             } else {
                 selectedDescTxtView = textView.text
@@ -926,7 +891,7 @@ extension PostVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars <= 200    // 200 Limit Value
+        return numberOfChars <= 120    // 200 Limit Value
     }
     
     
@@ -968,81 +933,5 @@ extension PostVC {
         SwiftLoader.show(title: progress, animated: true)
         
     }
-    
-}
-
-
-extension PostVC: UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        
-        return 1
-
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
-        return itemList.count
-    }
-    
-    
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        var pickerLabel: UILabel? = (view as? UILabel)
-        if pickerLabel == nil {
-            pickerLabel = UILabel()
-            pickerLabel?.backgroundColor = UIColor.darkGray
-            pickerLabel?.font = UIFont.systemFont(ofSize: 15)
-            pickerLabel?.textAlignment = .center
-        }
-        
-        pickerLabel?.text = itemList[row].name
-        pickerLabel?.textColor = UIColor.white
-
-        return pickerLabel!
-    }
-    
-   
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-       
-        if let imgUrl = URL.init(string: itemList[row].cover) {
-          
-            imageStorage.async.object(forKey: itemList[row].cover) { result in
-                if case .value(let image) = result {
-                    
-                    DispatchQueue.main.async {
-                        self.gameImage.image = image
-                    }
-                   
-                   
-                } else {
-                    
-                    AF.request(imgUrl).responseImage { [weak self] response in
-                       guard let self = self else { return }
-                       switch response.result {
-                        case let .success(value):
-                           
-                          
-                           DispatchQueue.main.async {
-                               self.gameImage.image = value
-                           }
-                           
-                           try? imageStorage.setObject(value, forKey: itemList[row].cover, expiry: .date(Date().addingTimeInterval(2 * 3600)))
-                                              
-                               case let .failure(error):
-                                   print(error)
-                            }
-                                          
-                      }
-                    
-                }
-            }
-            
-        }
-        
-        selectedGameId = itemList[row]._id
-    
-        
-    }
-    
     
 }

@@ -28,6 +28,7 @@ class UserProfileVC: UIViewController {
     }
     
     let backButton: UIButton = UIButton(type: .custom)
+    let shareButton: UIButton = UIButton(type: .custom)
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
@@ -891,6 +892,7 @@ extension UserProfileVC {
     func setupButtons() {
         
         setupBackButton()
+        setupShareButton()
         setupTitle()
     }
     
@@ -916,6 +918,33 @@ extension UserProfileVC {
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
         
         self.navigationItem.leftBarButtonItem = backButtonBarButton
+        
+        
+        
+    }
+    
+    
+    func setupShareButton() {
+        
+        shareButton.frame = back_frame
+        shareButton.contentMode = .center
+        
+        if let backImage = UIImage(named: "share") {
+            let imageSize = CGSize(width: 23, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 + horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 - horizontalPadding)
+            shareButton.imageEdgeInsets = padding
+            shareButton.setImage(backImage, for: [])
+        }
+        
+        shareButton.addTarget(self, action: #selector(moreTapped(_:)), for: .touchUpInside)
+        shareButton.setTitleColor(UIColor.white, for: .normal)
+        shareButton.setTitle("", for: .normal)
+        let shareButtonBarButton = UIBarButtonItem(customView: shareButton)
+        
+        self.navigationItem.rightBarButtonItem = shareButtonBarButton
         
         
         

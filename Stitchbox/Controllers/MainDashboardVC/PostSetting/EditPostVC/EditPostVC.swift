@@ -208,11 +208,7 @@ class EditPostVC: UIViewController {
     @IBAction func StreamingLinkBtnPressed(_ sender: Any) {
         
         
-        if let SLVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingLinkVC") as? StreamingLinkVC {
-            
-            self.navigationController?.pushViewController(SLVC, animated: true)
-            
-        }
+
         
     }
     

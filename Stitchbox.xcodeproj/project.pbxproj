@@ -105,6 +105,7 @@
 		6A251CF129EA3DB200F6AC0D /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A251CF029EA3DB200F6AC0D /* ChatCell.swift */; };
 		6A26B82D2A4E891600C06ABF /* TabBarProfileView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A26B82C2A4E891600C06ABF /* TabBarProfileView.xib */; };
 		6A26B82F2A4E892400C06ABF /* TabBarProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A26B82E2A4E892400C06ABF /* TabBarProfileView.swift */; };
+		6A26B8322A521E9A00C06ABF /* StitchControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A26B8312A521E9A00C06ABF /* StitchControlVC.swift */; };
 		6A286B5A29C90D4B00C72718 /* UserLoginActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B5929C90D4A00C72718 /* UserLoginActivityModel.swift */; };
 		6A286B5D29C90E1800C72718 /* LoginActivityNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B5C29C90E1800C72718 /* LoginActivityNode.swift */; };
 		6A286B6029C97F0100C72718 /* LogInfomationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B5F29C97F0100C72718 /* LogInfomationVC.swift */; };
@@ -218,13 +219,8 @@
 		6A6FB09229DA586C003FCF6E /* GradientImageNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09129DA586C003FCF6E /* GradientImageNode.swift */; };
 		6A6FB09629DB6F2B003FCF6E /* ButtonSideList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */; };
 		6A6FB09729DB6F2B003FCF6E /* ButtonSideList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */; };
-		6A6FB09A29DBBC20003FCF6E /* StreamingIntroVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FB09929DBBC20003FCF6E /* StreamingIntroVC.swift */; };
 		6A78485E2984D1F6008B2263 /* NotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78485D2984D1F6008B2263 /* NotificationVC.swift */; };
-		6A7848642985096F008B2263 /* StreamingLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7848632985096F008B2263 /* StreamingLinkVC.swift */; };
-		6A784868298628CE008B2263 /* StreamingListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A784866298628CE008B2263 /* StreamingListVC.swift */; };
-		6A784869298628CE008B2263 /* StreamingListVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A784867298628CE008B2263 /* StreamingListVC.xib */; };
 		6A78486C29862931008B2263 /* StreamingDomainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78486B29862931008B2263 /* StreamingDomainModel.swift */; };
-		6A78486F29862C32008B2263 /* streamingListNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78486E29862C32008B2263 /* streamingListNode.swift */; };
 		6A7ED4A52A0895C900C8204E /* InfoDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4A42A0895C900C8204E /* InfoDetailVC.swift */; };
 		6A7ED4A82A08EF0300C8204E /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4A72A08EF0300C8204E /* Markdown */; };
 		6A7ED4AB2A08F7FC00C8204E /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4AA2A08F7FC00C8204E /* GPTEncoder */; };
@@ -595,6 +591,7 @@
 		6A251CF029EA3DB200F6AC0D /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		6A26B82C2A4E891600C06ABF /* TabBarProfileView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarProfileView.xib; sourceTree = "<group>"; };
 		6A26B82E2A4E892400C06ABF /* TabBarProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarProfileView.swift; sourceTree = "<group>"; };
+		6A26B8312A521E9A00C06ABF /* StitchControlVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchControlVC.swift; sourceTree = "<group>"; };
 		6A286B5929C90D4A00C72718 /* UserLoginActivityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoginActivityModel.swift; sourceTree = "<group>"; };
 		6A286B5C29C90E1800C72718 /* LoginActivityNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginActivityNode.swift; sourceTree = "<group>"; };
 		6A286B5F29C97F0100C72718 /* LogInfomationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInfomationVC.swift; sourceTree = "<group>"; };
@@ -709,14 +706,9 @@
 		6A6FB09129DA586C003FCF6E /* GradientImageNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientImageNode.swift; sourceTree = "<group>"; };
 		6A6FB09429DB6F2B003FCF6E /* ButtonSideList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonSideList.swift; sourceTree = "<group>"; };
 		6A6FB09529DB6F2B003FCF6E /* ButtonSideList.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonSideList.xib; sourceTree = "<group>"; };
-		6A6FB09929DBBC20003FCF6E /* StreamingIntroVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingIntroVC.swift; sourceTree = "<group>"; };
 		6A70D5082969F5BE008D80E6 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "CountryPickerView-master"; sourceTree = "<group>"; };
 		6A78485D2984D1F6008B2263 /* NotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationVC.swift; sourceTree = "<group>"; };
-		6A7848632985096F008B2263 /* StreamingLinkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingLinkVC.swift; sourceTree = "<group>"; };
-		6A784866298628CE008B2263 /* StreamingListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamingListVC.swift; sourceTree = "<group>"; };
-		6A784867298628CE008B2263 /* StreamingListVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamingListVC.xib; sourceTree = "<group>"; };
 		6A78486B29862931008B2263 /* StreamingDomainModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamingDomainModel.swift; sourceTree = "<group>"; };
-		6A78486E29862C32008B2263 /* streamingListNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = streamingListNode.swift; sourceTree = "<group>"; };
 		6A7ED4A42A0895C900C8204E /* InfoDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDetailVC.swift; sourceTree = "<group>"; };
 		6A7ED4AC2A0B48AF00C8204E /* MetaDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDisplay.swift; sourceTree = "<group>"; };
 		6A7ED4AF2A0B519800C8204E /* SB-MetaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SB-MetaVC.swift"; sourceTree = "<group>"; };
@@ -1400,7 +1392,6 @@
 				6AEA340E298F0E3E005A4C5D /* CommentVC */,
 				6AEA33FA298DCAB4005A4C5D /* HashtagCell */,
 				6AEA33EA298CE474005A4C5D /* Post */,
-				6A784865298628C0008B2263 /* StreamingListVC */,
 				6A3F0A72297FAD3800366665 /* Message */,
 				6A0D54342972414B0059530C /* Profile */,
 				6A0D5414296E43690059530C /* ChallengeCard */,
@@ -1612,6 +1603,14 @@
 			path = TabBarProfileView;
 			sourceTree = "<group>";
 		};
+		6A26B8302A521E7A00C06ABF /* StitchControlVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A26B8312A521E9A00C06ABF /* StitchControlVC.swift */,
+			);
+			path = StitchControlVC;
+			sourceTree = "<group>";
+		};
 		6A286B5829C90D3800C72718 /* LoginActivity */ = {
 			isa = PBXGroup;
 			children = (
@@ -1785,7 +1784,6 @@
 		6A3F0A5A297CB82800366665 /* AddVC */ = {
 			isa = PBXGroup;
 			children = (
-				6A78486229850953008B2263 /* StreamingLinkVC */,
 				6A3F0A6A297FA42800366665 /* HashtagVC */,
 				6A3F0A5D297CBA4300366665 /* PostVC */,
 				6A3F0A5B297CB83F00366665 /* AddVC.swift */,
@@ -2276,14 +2274,6 @@
 			path = ButtonSideList;
 			sourceTree = "<group>";
 		};
-		6A6FB09829DBBC00003FCF6E /* StreamingIntroVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A6FB09929DBBC20003FCF6E /* StreamingIntroVC.swift */,
-			);
-			path = StreamingIntroVC;
-			sourceTree = "<group>";
-		};
 		6A78485C2984D1E3008B2263 /* NotificationVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -2301,38 +2291,12 @@
 			path = PostModel;
 			sourceTree = "<group>";
 		};
-		6A78486229850953008B2263 /* StreamingLinkVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A78486D29862C26008B2263 /* streamingListNode */,
-				6A7848632985096F008B2263 /* StreamingLinkVC.swift */,
-			);
-			path = StreamingLinkVC;
-			sourceTree = "<group>";
-		};
-		6A784865298628C0008B2263 /* StreamingListVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A784866298628CE008B2263 /* StreamingListVC.swift */,
-				6A784867298628CE008B2263 /* StreamingListVC.xib */,
-			);
-			path = StreamingListVC;
-			sourceTree = "<group>";
-		};
 		6A78486A2986291E008B2263 /* StreamingDomainModel */ = {
 			isa = PBXGroup;
 			children = (
 				6A78486B29862931008B2263 /* StreamingDomainModel.swift */,
 			);
 			path = StreamingDomainModel;
-			sourceTree = "<group>";
-		};
-		6A78486D29862C26008B2263 /* streamingListNode */ = {
-			isa = PBXGroup;
-			children = (
-				6A78486E29862C32008B2263 /* streamingListNode.swift */,
-			);
-			path = streamingListNode;
 			sourceTree = "<group>";
 		};
 		6A7ED4A32A08959C00C8204E /* InfoDetailVC */ = {
@@ -2613,10 +2577,10 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A26B8302A521E7A00C06ABF /* StitchControlVC */,
 				6A7ED4C42A170F2500C8204E /* PromoteVC */,
 				6A7ED4A32A08959C00C8204E /* InfoDetailVC */,
 				6A802CC329E22D5000099F53 /* SB-Tactics */,
-				6A6FB09829DBBC00003FCF6E /* StreamingIntroVC */,
 				6A6FB08A29DA4155003FCF6E /* ReelVC */,
 				6A2B9A7F29D26AC100C2D9CD /* ViewVC */,
 				6A78485C2984D1E3008B2263 /* NotificationVC */,
@@ -3707,7 +3671,6 @@
 				6AEA33F8298DC8E1005A4C5D /* HashtagView.xib in Resources */,
 				6A80F1B729C7B6EE0047595A /* CommentNotificationVC.xib in Resources */,
 				6AAD7A24294C65F6003E3AB6 /* Ringing.mp3 in Resources */,
-				6A784869298628CE008B2263 /* StreamingListVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3945,7 +3908,6 @@
 				6AAD7A0A294C5DC8003E3AB6 /* InboxVC.swift in Sources */,
 				6A307CCE29B67CDE00A89529 /* UserSearchModel.swift in Sources */,
 				6A9E4C862977B8F000B59176 /* BlockNode.swift in Sources */,
-				6A7848642985096F008B2263 /* StreamingLinkVC.swift in Sources */,
 				6AF973382978F99E00C76814 /* EditGeneralInformationVC.swift in Sources */,
 				6AEA33E2298A2E33005A4C5D /* Timer.swift in Sources */,
 				6AE1CE67294D590D00B1C435 /* SendBirdGlobalAuthen.swift in Sources */,
@@ -4106,8 +4068,6 @@
 				6AAD7A3F294C6642003E3AB6 /* Int64+QuickStart.swift in Sources */,
 				6A58EA4D294EB280005FA3CD /* NotificationDelegate.swift in Sources */,
 				6A6C30DE2963F4720070167A /* ModerationVC.swift in Sources */,
-				6A784868298628CE008B2263 /* StreamingListVC.swift in Sources */,
-				6A6FB09A29DBBC20003FCF6E /* StreamingIntroVC.swift in Sources */,
 				A5D1E9ED2984DA2000839311 /* CreatePostRequest.swift in Sources */,
 				6ABDDCB92A01024400CDAD39 /* MessageRowView.swift in Sources */,
 				6A3F0A5C297CB83F00366665 /* AddVC.swift in Sources */,
@@ -4156,7 +4116,6 @@
 				390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */,
 				6A286B5D29C90E1800C72718 /* LoginActivityNode.swift in Sources */,
 				1457CCD72945898F003C742F /* CardStackView.swift in Sources */,
-				6A78486F29862C32008B2263 /* streamingListNode.swift in Sources */,
 				6A58EA59294ECD5C005FA3CD /* SBUPendingMessageManager.swift in Sources */,
 				6A7ED4C02A0F791D00C8204E /* LineCell.swift in Sources */,
 				6A80F1AF29BA87640047595A /* NotificationNode.swift in Sources */,
@@ -4197,6 +4156,7 @@
 				6A9E4C6629767EE100B59176 /* MyReferralCodeVC.swift in Sources */,
 				A5E2A41A2979B9CD0045F110 /* ProfileViewModel.swift in Sources */,
 				6AC6DA1729AD33DE00B18139 /* GradienView.swift in Sources */,
+				6A26B8322A521E9A00C06ABF /* StitchControlVC.swift in Sources */,
 				6A9E4C8B2977C4FC00B59176 /* ContactUsImageCell.swift in Sources */,
 				6AB8E9372956EB1900BFF169 /* SendBirdUserModel.swift in Sources */,
 				6AAD79FF294C4C68003E3AB6 /* NavigationVC.swift in Sources */,

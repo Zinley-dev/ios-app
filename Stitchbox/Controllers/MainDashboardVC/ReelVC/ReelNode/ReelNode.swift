@@ -51,6 +51,9 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
     //var panGestureRecognizer: UIPanGestureRecognizer!
     
+    private let fireworkController = FountainFireworkController()
+    private let fireworkController2 = ClassicFireworkController()
+    
     
     init(with post: PostModel) {
         self.post = post
@@ -806,46 +809,19 @@ extension ReelNode {
         
     }
     
-    @objc func profileTapped() {
-        
-        print("profileTapped")
-        
-    }
-    
-    @objc func streamingLinkTapped() {
-        guard let url = URL(string: post.streamLink), !post.streamLink.isEmpty else {
-            presentStreamingIntro()
-            return
-            
-        }
-        
-        APIManager.shared.openLink(postId: post.id, link: post.streamLink) { [weak self] result in
-            guard let self = self else { return }
-        
-            switch result {
-            case .success(let apiResponse):
-                print(apiResponse)
-                
-            case .failure(let error):
-                print(error)
-            }
-    
-        }
-        
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-    }
-
-
     @objc func likeHandle() {
         
         
         let imgView = UIImageView()
         imgView.image = popupLikeImage
-        imgView.frame.size = CGSize(width: 170, height: 120)
-       
+        imgView.frame.size = CGSize(width: 120, height: 120)
+        imgView.contentMode = .scaleAspectFit
         imgView.center = self.view.center
         self.view.addSubview(imgView)
         
+        
+        self.fireworkController.addFirework(sparks: 10, above: imgView)
+        self.fireworkController2.addFireworks(count: 10, sparks: 8, around: imgView)
         
         imgView.transform = CGAffineTransform.identity
         
@@ -1003,6 +979,10 @@ extension ReelNode {
         UIView.animate(withDuration: 0.1, animations: {
             self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
             self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
+            
+            
+            
+            
             }, completion: { _ in
               // Step 2
               UIView.animate(withDuration: 0.1, animations: {

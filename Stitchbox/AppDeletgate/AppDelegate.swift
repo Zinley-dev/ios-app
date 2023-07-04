@@ -237,7 +237,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func setupPixelSDK() {
         
         PixelSDK.setup(pixel_key)
-        PixelSDK.shared.maxVideoDuration = 180
+        PixelSDK.shared.maxVideoDuration = 120
         PixelSDK.shared.primaryFilters = PixelSDK.defaultStandardFilters + PixelSDK.defaultVisualEffectFilters
         
     }

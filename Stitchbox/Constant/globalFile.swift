@@ -848,6 +848,7 @@ func resetViewForReel(cell: ReelNode) {
 }
 
 extension UIView {
+    
     private static var originalTransformKey: UInt8 = 0
     
     private var originalTransform: CGAffineTransform? {
@@ -878,30 +879,8 @@ extension UIView {
             self.transform = originalTransform
         }
     }
-}
 
 
-    func presentStreamingIntro() {
-    
-        if let SIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingIntroVC") as? StreamingIntroVC {
-            
-            if let vc = UIViewController.currentViewController() {
-                
-                let nav = UINavigationController(rootViewController: SIVC)
-
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-
-
-            }
-    }
-    
-    
 }
 
 
