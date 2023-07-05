@@ -3689,7 +3689,7 @@
         <scene sceneID="tLb-bQ-bBr">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2Gf-ft-dFT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="gpt_bot" selectedImage="gpt_bot_filled" id="tvb-6D-BsV"/>
+                    <tabBarItem key="tabBarItem" title="" id="tvb-6D-BsV"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="DBH-so-Bk6">
                         <rect key="frame" x="0.0" y="50" width="375" height="44"/>
@@ -7277,7 +7277,7 @@
         <scene sceneID="jKR-lM-xF1">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5CQ-Ra-EEP" customClass="NavigationVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="chat" selectedImage="chat.filled" id="qpA-Go-YoS"/>
+                    <tabBarItem key="tabBarItem" title="" id="qpA-Go-YoS"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cy5-LO-t1Q">
                         <rect key="frame" x="0.0" y="50" width="375" height="44"/>
@@ -7997,7 +7997,7 @@
         <scene sceneID="kG5-Pe-QPN">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BII-AC-MXP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="home" selectedImage="home.filled" id="ybi-qx-dx4"/>
+                    <tabBarItem key="tabBarItem" title="" id="ybi-qx-dx4"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Wg0-HI-wMf">
                         <rect key="frame" x="0.0" y="50" width="375" height="44"/>
@@ -8149,17 +8149,11 @@
         <image name="btnAudioOff" width="78" height="76"/>
         <image name="btnCallEnd" width="78" height="76"/>
         <image name="btnSpeaker" width="78" height="76"/>
-        <image name="chat" width="33" height="33"/>
-        <image name="chat.filled" width="33" height="33"/>
         <image name="checkmark_2" width="26" height="26"/>
         <image name="contactUs" width="25" height="25"/>
         <image name="defaultuser" width="278" height="278"/>
         <image name="findFriends" width="28" height="28"/>
         <image name="following" width="30" height="30"/>
-        <image name="gpt_bot" width="34" height="34"/>
-        <image name="gpt_bot_filled" width="24" height="14"/>
-        <image name="home" width="34" height="35"/>
-        <image name="home.filled" width="24" height="26"/>
         <image name="img_icon_nofi_off" width="36" height="36"/>
         <image name="img_toast_check" width="40" height="32"/>
         <image name="leave3x" width="67" height="61"/>

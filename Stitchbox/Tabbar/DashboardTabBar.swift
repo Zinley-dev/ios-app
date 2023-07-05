@@ -85,10 +85,40 @@ import Alamofire
         layer.frame = CGRect(x: 0, y: -1, width: self.tabBar.frame.width, height: 1)
         self.tabBar.layer.addSublayer(layer)
         setUserProfileImageOnTabbar()
-        
+        setupImageForTabbar()
        
         
     }
+    
+    func setupImageForTabbar() {
+        guard let items = tabBar.items else { return }
+        
+        if items.count > 1 {
+            let firstTabBarItem = items[0]
+            let secondTabBarItem = items[1]
+            let thirdTabBarItem = items[3]
+            
+            
+            let homeImg = UIImage.init(named: "home")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let homefilledImg = UIImage.init(named: "home.filled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            
+            let trendingImg = UIImage.init(named: "trendingWhite")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let trendingfilledImg = UIImage.init(named: "trendingFilled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            
+            let chatImg = UIImage.init(named: "chat")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let chatfilledImg = UIImage.init(named: "chat.filled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            
+            firstTabBarItem.image = homeImg
+            firstTabBarItem.selectedImage = homefilledImg
+            
+            secondTabBarItem.image = trendingImg
+            secondTabBarItem.selectedImage = trendingfilledImg
+            
+            thirdTabBarItem.image = chatImg
+            thirdTabBarItem.selectedImage = chatfilledImg
+        }
+    }
+
     
     func createCustomImageView(with image: UIImage) -> UIImage {
         let circularImage = image.circularImage(size: CGSize(width: 37.5, height: 37.5))

@@ -318,11 +318,10 @@ extension StitchControlVC {
 extension StitchControlVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let spacing: CGFloat = 22 // adjust this as per your requirement
-        let totalWidth = self.collectionNode.view.layer.frame.width
-        let size = (totalWidth - spacing) / 3  // considering 1 spacing between 2 cells
-        let min = CGSize(width: size, height: size * 1.75)
-        let max = CGSize(width: size, height: size * 1.75)
+
+        let size = self.collectionNode.view.bounds.width/3 - 2
+        let min = CGSize(width: size, height: size * 13.5 / 9)
+        let max = CGSize(width: size, height: size * 13.5 / 9)
         
         return ASSizeRangeMake(min, max)
     }
@@ -330,6 +329,11 @@ extension StitchControlVC: ASCollectionDelegate {
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
         return true
     }
+    
+    func collectionNode(_ collectionNode: ASCollectionNode, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return .zero
+    }
+
     
 }
 
@@ -351,7 +355,7 @@ extension StitchControlVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = PostSearchNode(with: post, keyword: "HelloWorld")
+            let node = OwnerPostSearchNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -384,10 +388,12 @@ extension StitchControlVC {
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
         
+        flowLayout.minimumInteritemSpacing = 2 // Set minimum spacing between items to 0
+        flowLayout.minimumLineSpacing = 2 // Set minimum line spacing to 0
+        
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.collectionNode.leadingScreensForBatching = 2.0
-        self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         // Set the data source and delegate
         self.collectionNode.dataSource = self
         self.collectionNode.delegate = self
@@ -396,7 +402,7 @@ extension StitchControlVC {
         self.contentView.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
         self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: -1).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
@@ -430,7 +436,7 @@ extension StitchControlVC {
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
         
-        if let node = collectionNode.nodeForItem(at: indexPath as IndexPath) as? PostSearchNode {
+        if let node = collectionNode.nodeForItem(at: indexPath as IndexPath) as? OwnerPostSearchNode {
             
             if node.isSelected == true {
                 
@@ -449,7 +455,7 @@ extension StitchControlVC {
     }
 
     func collectionNode(_ collectionNode: ASCollectionNode, didDeselectItemAt indexPath: IndexPath) {
-        if let node = collectionNode.nodeForItem(at: indexPath) as? PostSearchNode {
+        if let node = collectionNode.nodeForItem(at: indexPath) as? OwnerPostSearchNode {
             node.layer.borderColor = UIColor.clear.cgColor
             let item = posts[indexPath.row]
 
