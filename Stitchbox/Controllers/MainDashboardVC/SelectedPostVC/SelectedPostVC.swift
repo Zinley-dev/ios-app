@@ -558,7 +558,7 @@ extension SelectedPostVC {
     
     func setupTitle() {
         
-        self.navigationItem.title = "Posts"
+        self.navigationItem.title = ""
         
         
     }

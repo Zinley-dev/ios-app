@@ -318,29 +318,6 @@ extension UITextView {
     }
 }
 
-/*
-func pauseVideoIfNeed(pauseIndex: Int) {
-    guard let vc = UIViewController.currentViewController() else { return }
-
-    if let selectedPostVC = vc as? SelectedPostVC,
-       let postCell = selectedPostVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-        handlePauseVideoInCell(postCell)
-    } else if let feedVC = vc as? FeedViewController,
-        let postCell = feedVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-        handlePauseVideoInCell(postCell)
-    } else if let postListVC = vc as? PostListWithHashtagVC,
-        let postCell = postListVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-        handlePauseVideoInCell(postCell)
-    } else if let searchVC = vc as? MainSearchVC,
-        let postCell = searchVC.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? PostNode {
-        handlePauseVideoInCell(postCell)
-    } else if let reelVC = vc as? ReelVC,
-        let reelCell = reelVC.collectionNode.nodeForItem(at: IndexPath(row: pauseIndex, section: 0)) as? ReelNode {
-        handlePauseVideoInReelCell(reelCell)
-    }
-}
-
-*/
 
 func handlePauseVideoInCell(_ cell: ReelNode) {
     cell.videoNode.player?.seek(to: CMTime.zero)
@@ -351,34 +328,6 @@ func handlePauseVideoInReelCell(_ cell: ReelNode) {
     cell.videoNode.player?.seek(to: CMTime.zero)
     cell.videoNode.pause()
 }
-
-/*
- 
-func playVideoIfNeed(playIndex: Int) {
-    guard let vc = UIViewController.currentViewController() else { return }
-
-    var postCell: PostNode?
-    var reelCell: ReelNode?
-
-    if let selectedPostVC = vc as? SelectedPostVC {
-        postCell = selectedPostVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
-    } else if let feedVC = vc as? FeedViewController {
-        postCell = feedVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
-    } else if let postListVC = vc as? PostListWithHashtagVC {
-        postCell = postListVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
-    } else if let searchVC = vc as? MainSearchVC {
-        postCell = searchVC.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? PostNode
-    } else if let reelVC = vc as? ReelVC {
-        reelCell = reelVC.collectionNode.nodeForItem(at: IndexPath(row: playIndex, section: 0)) as? ReelNode
-    }
-
-    if let videoCell = postCell {
-        handleVideoNodeInCell(videoCell, muteStatus: shouldMute ?? !globalIsSound)
-    } else if let videoCell = reelCell {
-        handleVideoNodeInReelCell(videoCell, muteStatus: shouldMute ?? !globalIsSound)
-    }
-}
-*/
 
 func handleVideoNodeInCell(_ cell: ReelNode, muteStatus: Bool) {
     guard !cell.videoNode.isPlaying() else { return }
