@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PostHeader" customModule="Stitchbox" customModuleProvider="target">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="tw2-A7-LcA"/>
+                <outlet property="stichBtn" destination="al0-EY-6tL" id="qo1-Wf-htW"/>
                 <outlet property="usernameLbl" destination="nAq-It-wTT" id="lAv-hK-YyV"/>
             </connections>
         </placeholder>
@@ -44,26 +45,51 @@
                         <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
                     </userDefinedRuntimeAttributes>
                 </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Make a Stitch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntp-fA-FBJ">
-                    <rect key="frame" x="35.5" y="8.5" width="95" height="18"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="D4A-7b-eVd">
+                    <rect key="frame" x="20.5" y="7.5" width="125" height="20"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Make a Stitch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntp-fA-FBJ">
+                            <rect key="frame" x="0.0" y="1" width="95" height="18"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="link" translatesAutoresizingMaskIntoConstraints="NO" id="eT1-BX-Lx3">
+                            <rect key="frame" x="105" y="0.0" width="20" height="20"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="20" id="BuM-ef-7Vn"/>
+                                <constraint firstAttribute="width" constant="20" id="Wq1-Ei-j00"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                </stackView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="al0-EY-6tL">
+                    <rect key="frame" x="8" y="0.0" width="150" height="35"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain"/>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="ntp-fA-FBJ" firstAttribute="centerY" secondItem="cM4-9B-opX" secondAttribute="centerY" id="7Lv-dD-jKP"/>
+                <constraint firstItem="D4A-7b-eVd" firstAttribute="centerX" secondItem="cM4-9B-opX" secondAttribute="centerX" id="5mZ-dX-DoV"/>
+                <constraint firstItem="al0-EY-6tL" firstAttribute="height" secondItem="cM4-9B-opX" secondAttribute="height" id="61x-uv-w6t"/>
                 <constraint firstItem="nAq-It-wTT" firstAttribute="top" secondItem="cM4-9B-opX" secondAttribute="bottom" constant="10" id="AFK-iM-eER"/>
+                <constraint firstItem="D4A-7b-eVd" firstAttribute="centerY" secondItem="cM4-9B-opX" secondAttribute="centerY" id="EBP-oe-547"/>
                 <constraint firstItem="nAq-It-wTT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="FpW-cn-6zv"/>
+                <constraint firstItem="al0-EY-6tL" firstAttribute="width" secondItem="cM4-9B-opX" secondAttribute="width" id="Srv-G3-Htl"/>
                 <constraint firstItem="cM4-9B-opX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="aim-Vo-67q"/>
-                <constraint firstItem="ntp-fA-FBJ" firstAttribute="centerX" secondItem="cM4-9B-opX" secondAttribute="centerX" id="gwH-y9-NBd"/>
+                <constraint firstItem="al0-EY-6tL" firstAttribute="centerX" secondItem="cM4-9B-opX" secondAttribute="centerX" id="dKw-ix-Zlf"/>
+                <constraint firstItem="al0-EY-6tL" firstAttribute="centerY" secondItem="cM4-9B-opX" secondAttribute="centerY" id="jir-n3-NNj"/>
                 <constraint firstItem="cM4-9B-opX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="kmD-4j-Jdr"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="-231.15942028985509" y="-468.08035714285711"/>
         </view>
     </objects>
+    <resources>
+        <image name="link" width="25" height="25"/>
+    </resources>
 </document>

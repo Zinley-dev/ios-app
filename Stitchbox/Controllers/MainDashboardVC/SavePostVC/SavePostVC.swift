@@ -457,7 +457,8 @@ extension SavePostVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getMyPost(page: page) { [weak self] result in
+        /*
+        APIManager.shared.getsavePost(page: page) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -492,6 +493,8 @@ extension SavePostVC {
                 }
             }
         }
+        
+        */
         
     }
     

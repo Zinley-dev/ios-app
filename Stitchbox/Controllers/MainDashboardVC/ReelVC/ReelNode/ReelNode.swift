@@ -20,6 +20,8 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
+    
+    var isSave = false
     var previousTimeStamp: TimeInterval = 0.0
     var totalWatchedTime: TimeInterval = 0.0
     weak var collectionNode: ASCollectionNode?
@@ -35,10 +37,12 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var shouldCountView = true
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
+    var sideButtonsView: ButtonSideList!
     var hashtagView: HashtagView!
     var gradientNode: GradienView
     var time = 0
     var likeCount = 0
+    var saveCount = 0
     var isLike = false
     var isSelectedPost = false
     var settingBtn : ((ASCellNode) -> Void)?
@@ -72,7 +76,9 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.gradientNode.isOpaque = false
         
         
+        
         DispatchQueue.main.async {
+            
             
             let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
             self.view.addGestureRecognizer(pinchGestureRecognizer)
@@ -82,6 +88,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.panGestureRecognizer.delegate = self
             self.panGestureRecognizer.minimumNumberOfTouches = 2
             self.view.addGestureRecognizer(self.panGestureRecognizer)
+            
+            
             
             self.headerView = PostHeader()
             self.headerNode.view.addSubview(self.headerView)
@@ -140,6 +148,16 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             likeTap.numberOfTapsRequired = 1
             self.buttonsView.likeBtn.addGestureRecognizer(likeTap)
             
+            let stitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.stitchTapped))
+            stitchTap.numberOfTapsRequired = 1
+            self.headerView.stichBtn.addGestureRecognizer(stitchTap)
+            
+            
+            let saveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.onClickSave))
+            saveTap.numberOfTapsRequired = 1
+            self.buttonsView.saveBtn.addGestureRecognizer(saveTap)
+            
+            
             let commentTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.cmtTapped))
             commentTap.numberOfTapsRequired = 1
             self.buttonsView.commentBtn.addGestureRecognizer(commentTap)
@@ -166,7 +184,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.checkIfLike()
             self.totalLikeCount()
             self.totalCmtCount()
-            
+            self.shareCount()
            
         }
        
@@ -283,6 +301,13 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             }
             
         }
+        
+        DispatchQueue.main.async() {
+            self.sideButtonsView = ButtonSideList()
+            self.sideButtonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: -185), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
+            self.view.addSubview(self.sideButtonsView)
+            self.originalCenter = self.view.center
+        }
   
     }
     
@@ -344,6 +369,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         }
     }
 
+    
+    
 
     func walkthroughPanAndZoom() {
         // Store original center for later use
@@ -730,6 +757,81 @@ extension ReelNode {
         
     }
     
+    @objc func onClickSave() {
+        
+        
+        if isSave {
+            
+            isSave = false
+            self.saveCount -= 1
+            
+            
+            unSaveAnimation()
+
+            
+        } else {
+            
+            self.saveCount += 1
+            isSave = true
+            
+            saveAnimation()
+            
+            APIManager.shared.savePost(postId: post.id) { [weak self] result in
+                guard let self = self else { return }
+
+                switch result {
+                case .success(let apiResponse):
+                    print(apiResponse)
+                   
+                case .failure(let error):
+                    print("SaveCount: \(error)")
+                    isSave = false
+                    unSaveAnimation()
+                }
+            }
+            
+        }
+        
+        
+        
+        
+    }
+    
+    func checkIfSave() {
+        
+        
+        
+    }
+    
+    
+    func shareCount() {
+        
+        
+        APIManager.shared.getShare(postId: post.id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                guard apiResponse.body?["message"] as? String == "success",
+                      let CountFromQuery = apiResponse.body?["shares"] as? Int  else {
+                        return
+                }
+                
+                DispatchQueue.main.async {
+                    self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(CountFromQuery)))"
+                }
+               
+            case .failure(let error):
+                print("SaveCount: \(error)")
+            }
+        }
+        
+    }
+    
+    
+    
+    
+    
     @objc func shareTapped() {
         
         
@@ -737,6 +839,22 @@ extension ReelNode {
             print("Sendbird: Can't get userUID")
             return
         }
+        
+        
+        APIManager.shared.createShare(postId: post.id, userId: userUID) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+    
+                print(apiResponse)
+                
+            case .failure(let error):
+                print(error)
+            }
+        
+        }
+        
         
         let loadUsername = userDataSource.userName
         
@@ -751,20 +869,7 @@ extension ReelNode {
         
         if let vc = UIViewController.currentViewController() {
             
-            if let update1 = vc as? FeedViewController {
-                
-                update1.present(ac, animated: true, completion: nil)
-                
-            } else if let update1 = vc as? SelectedPostVC {
-                
-                update1.present(ac, animated: true, completion: nil)
-                
-            } else if let update1 = vc as? PostListWithHashtagVC {
-                
-                update1.present(ac, animated: true, completion: nil)
-                
-            }
-            
+            vc.present(ac, animated: true, completion: nil)
             
         }
         
@@ -790,6 +895,12 @@ extension ReelNode {
             
         }
         
+    }
+    
+    @objc func stitchTapped() {
+        
+        print("Stitch")
+         
     }
     
     @objc func likeTapped() {
@@ -992,10 +1103,47 @@ extension ReelNode {
         
     }
     
+    func saveAnimation() {
+        
+        
+        self.buttonsView.saveCountLbl.text =  "\(formatPoints(num: Double(self.saveCount)))"
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            self.buttonsView.saveBtn.transform = self.buttonsView.saveBtn.transform.scaledBy(x: 0.9, y: 0.9)
+            self.buttonsView.saveBtn.setImage(saveImage!, for: .normal)
+            
+            
+            
+            
+            }, completion: { _ in
+              // Step 2
+              UIView.animate(withDuration: 0.1, animations: {
+                  self.buttonsView.saveBtn.transform = CGAffineTransform.identity
+              })
+        })
+        
+    }
+    
+    func unSaveAnimation() {
+        
+        self.buttonsView.saveCountLbl.text =  "\(formatPoints(num: Double(self.saveCount)))"
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            self.buttonsView.saveBtn.transform = self.buttonsView.saveBtn.transform.scaledBy(x: 0.9, y: 0.9)
+            self.buttonsView.saveBtn.setImage(unsaveImage!, for: .normal)
+            }, completion: { _ in
+              // Step 2
+              UIView.animate(withDuration: 0.1, animations: {
+                  self.buttonsView.saveBtn.transform = CGAffineTransform.identity
+              })
+        })
+        
+    }
+    
     func unlikeAnimation() {
         
         UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
+            self.buttonsView.likeBtn.transform = self.buttonsView.saveBtn.transform.scaledBy(x: 0.9, y: 0.9)
             self.buttonsView.likeBtn.setImage(emptyLikeImage!, for: .normal)
             }, completion: { _ in
               // Step 2
@@ -1081,6 +1229,7 @@ extension ReelNode {
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
          
+        setupSpace(constrainedSize: constrainedSize)
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 70)
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
@@ -1090,7 +1239,7 @@ extension ReelNode {
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
         hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 35)
-        let hashtagsInset = UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 0)
+        let hashtagsInset = UIEdgeInsets(top: 0, left: -14, bottom: 0, right: 0)
         let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
         
         let contentInset = UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 170)
@@ -1118,8 +1267,6 @@ extension ReelNode {
         let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
 
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        let imageInsetSpec = ASInsetLayoutSpec(insets: inset, child: imageNode)
-        let textInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
         let textInsetSpec1 = ASInsetLayoutSpec(insets: inset, child: gradientNode)
         let textInsetSpec2 = ASInsetLayoutSpec(insets: inset, child: backgroundImage)
      
@@ -1154,6 +1301,35 @@ extension ReelNode {
         let buttonsInset = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
+    
+    private func setupSpace(constrainedSize: ASSizeRange) {
+        delay(0.25) { [weak self] in
+            guard let self = self else { return }
+            if let buttonsView = self.buttonsView {
+             
+                let leftAndRightPadding: CGFloat = 16 * 2 // Padding for both sides
+                let itemWidth: CGFloat = 60
+                let numberOfItems: CGFloat = 4 // Number of items in the stack view
+                let superViewWidth: CGFloat = constrainedSize.min.width // Assuming this is the superview's width
+                
+                // Calculate the total width of items
+                let totalItemWidth: CGFloat = numberOfItems * itemWidth
+                
+                // Calculate the total space we have left for spacing after subtracting the item widths and paddings
+                let totalSpacingWidth: CGFloat = superViewWidth - totalItemWidth - leftAndRightPadding
+                
+                // Calculate the spacing by dividing the total space by the number of spaces (which is 3, for 4 items)
+                let spacing: CGFloat = totalSpacingWidth / (numberOfItems - 1)
+                
+                // Set the calculated spacing
+                print(spacing)
+                buttonsView.stackView.spacing = spacing
+            }
+        }
+    }
+
+
+
 }
 
 

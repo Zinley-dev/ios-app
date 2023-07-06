@@ -250,7 +250,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         fixedSpace.width = 2
         
         let chatbotButton = UIButton(type: .custom)
-        chatbotButton.setImage(UIImage(named: "gpt_bot"), for: [])
+        chatbotButton.setImage(UIImage(named: "gpt_bot")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
         chatbotButton.addTarget(self, action: #selector(openChatBot(_:)), for: .touchUpInside)
         chatbotButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let chatbotBarButton = UIBarButtonItem(customView: chatbotButton)

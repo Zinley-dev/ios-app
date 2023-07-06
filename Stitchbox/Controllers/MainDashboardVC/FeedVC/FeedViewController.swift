@@ -743,10 +743,11 @@ extension FeedViewController {
         
     }
     
+    /*
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
     }
-    
+    */
     
     
 }
@@ -754,8 +755,8 @@ extension FeedViewController {
 extension FeedViewController: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: contentView.frame.height);
+        let min = CGSize(width: self.collectionNode.layer.frame.width, height: 50);
+        let max = CGSize(width: self.collectionNode.layer.frame.width, height: collectionNode.frame.height);
         
         return ASSizeRangeMake(min, max);
     }
@@ -1196,7 +1197,6 @@ extension FeedViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
-            cell.videoNode.player?.seek(to: time)
             
         }
         
@@ -1210,6 +1210,9 @@ extension FeedViewController {
             
             if !cell.videoNode.isPlaying() {
                 
+                if cell.sideButtonsView != nil {
+                    cell.sideButtonsView.viewStitchBtn.spin()
+                }
                 
                 if let muteStatus = shouldMute {
                     

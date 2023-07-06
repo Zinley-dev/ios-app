@@ -10,6 +10,7 @@ import UIKit
 class PostHeader: UIView {
     
     @IBOutlet weak var usernameLbl: UILabel!
+    @IBOutlet var stichBtn: UIButton!
     @IBOutlet var contentView: UIView!
 
     let kCONTENT_XIB_NAME = "PostHeader"

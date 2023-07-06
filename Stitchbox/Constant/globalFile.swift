@@ -19,6 +19,10 @@ import AdSupport
 import AppsFlyerLib
 
 
+let saveImage = UIImage.init(named: "saved.filled")?.resize(targetSize: CGSize(width: 17, height: 17))
+let unsaveImage = UIImage.init(named: "save")?.resize(targetSize: CGSize(width: 17, height: 17))
+
+
 let cmtImage = UIImage.init(named: "cmt")?.resize(targetSize: CGSize(width: 23, height: 23))
 let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 23, height: 23))
 let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 23, height: 23))

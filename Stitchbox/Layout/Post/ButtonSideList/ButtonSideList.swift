@@ -11,15 +11,8 @@ class ButtonSideList: UIView {
     
     @IBOutlet var contentView: UIView!
     
-    @IBOutlet weak var shareBtn: UIButton!
-    @IBOutlet weak var commentBtn: UIButton!
-    @IBOutlet weak var commentCountLbl: UILabel!
-    @IBOutlet weak var hostLbl: UILabel!
-    @IBOutlet weak var likeBtn: UIButton!
-    @IBOutlet weak var likeCountLbl: UILabel!
-    @IBOutlet weak var streamlinkBtn: UIButton!
-   
-    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var viewStitchBtn: UIButton!
+
     @IBOutlet var streamView: UIView!
 
     let kCONTENT_XIB_NAME = "ButtonSideList"

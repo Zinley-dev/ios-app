@@ -9,12 +9,16 @@ import UIKit
 
 class ButtonsHeader: UIView {
     
+    @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var shareBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
     @IBOutlet weak var commentCountLbl: UILabel!
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var likeCountLbl: UILabel!
+    @IBOutlet weak var shareCountLbl: UILabel!
+    @IBOutlet weak var saveBtn: UIButton!
+    @IBOutlet weak var saveCountLbl: UILabel!
 
     let kCONTENT_XIB_NAME = "ButtonsHeader"
     

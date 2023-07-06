@@ -406,14 +406,6 @@ extension APIManager {
         }
       }
   
-  func updateFavoriteContent(contents: [String], completion: @escaping APICompletion) {
-    var params = ["contents": contents];
-    userManager.request(.updateFavoriteContent(params: params)){
-      result in
-      completion(result)
-    }
-  }
-  
     func updatePhone(phone: String, completion: @escaping APICompletion) {
       userManager.request(.updatePhone(params: ["phone": phone])){
           result in
