@@ -526,6 +526,7 @@ extension APIManager {
       completion(result)
     }
   }
+  
     func createPost(params: [String: Any], completion: @escaping APICompletion) {
         postManager.request(.create(params: params)) { result in
             completion(result)
@@ -915,7 +916,7 @@ extension APIManager {
     }
   }
   
-  func getByRoot(rootId: String, completion: @escaping APICompletion) {
+  func getStitchPost(rootId: String, completion: @escaping APICompletion) {
     postStitchManager.request(.getByRoot(rootId: rootId)) { result in
       completion(result)
     }
@@ -930,7 +931,7 @@ extension APIManager {
   
   func acceptStitch(rootId: String, memberId: String, completion: @escaping APICompletion) {
     let params = ["rootId": rootId, "member": memberId]
-    postStitchManager.request(.unstitch(body: params)) { result in
+    postStitchManager.request(.accept(body: params)) { result in
       completion(result)
     }
   }
