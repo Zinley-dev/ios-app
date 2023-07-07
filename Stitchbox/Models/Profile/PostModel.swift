@@ -83,6 +83,8 @@ class PostModel: Mappable {
   private(set) var estimatedCount: EstimatedCount?
   private(set) var metadata: PostMetadata?
   private(set) var createdAt: Date?
+    
+  var stitchedPosts = [PostModel]()
   
   required init?(map: ObjectMapper.Map) {
     

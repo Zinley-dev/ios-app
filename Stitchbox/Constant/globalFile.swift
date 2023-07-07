@@ -558,17 +558,16 @@ func unmuteVideoIfNeed() {
             
             if let update1 = vc as? FeedViewController {
                 
-                if update1.newPlayingIndex != nil {
+                if update1.currentIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
                         
-                        if cell.videoNode.isPlaying() {
+                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
                             
-                            cell.videoNode.muted = false
+                            cell2.videoNode.muted = false
                             shouldMute = false
-
-                            
                         }
+                        
                         
                     }
                     
@@ -582,65 +581,25 @@ func unmuteVideoIfNeed() {
             
             if let update1 = vc as? SelectedPostVC {
                 
-                if update1.newPlayingIndex != nil {
+                if update1.currentIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
                         
-                        if cell.videoNode.isPlaying() {
+                        
+                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
                             
-                            cell.videoNode.muted = false
-                            shouldMute = false
                             
+                            if cell2.videoNode.isPlaying() {
+                                
+                                cell2.videoNode.muted = false
+                                shouldMute = false
+                                
+                                
+                            }
                             
                         }
                         
-                    }
-                    
-                }
-                
-               
-                
-            }
-            
-        } else if vc is MainSearchVC {
-            
-            if let update1 = vc as? MainSearchVC {
-                
-                if update1.PostSearchVC.newPlayingIndex != nil {
-                    
-                    if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: update1.PostSearchVC.newPlayingIndex!, section: 0)) as? ReelNode {
-                        
-                        if cell.videoNode.isPlaying() {
-                            
-                            cell.videoNode.muted = false
-                            shouldMute = false
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-               
-                
-            }
-            
-        } else if vc is PostListWithHashtagVC {
-            
-            if let update1 = vc as? PostListWithHashtagVC {
-                
-                if update1.newPlayingIndex != nil {
-                    
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
-                        
-                        if cell.videoNode.isPlaying() {
-                            
-                            cell.videoNode.muted = false
-                            shouldMute = false
-
-                            
-                        }
-                        
+   
                     }
                     
                 }
@@ -665,16 +624,23 @@ func muteVideoIfNeed() {
             
             if let update1 = vc as? FeedViewController {
                 
-                if update1.newPlayingIndex != nil {
+                if update1.currentIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
                         
-                        if cell.videoNode.isPlaying() {
+                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
                             
-                            cell.videoNode.muted = true
-                            shouldMute = true
+                            
+                            if cell2.videoNode.isPlaying() {
+                                
+                                cell2.videoNode.muted = true
+                                shouldMute = true
+                                
+                                
+                            }
                             
                         }
+
                         
                     }
                     
@@ -688,70 +654,28 @@ func muteVideoIfNeed() {
             
             if let update1 = vc as? SelectedPostVC {
                 
-                if update1.newPlayingIndex != nil {
+                if update1.currentIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
                         
-                        if cell.videoNode.isPlaying() {
+                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
                             
-                            cell.videoNode.muted = true
-                            shouldMute = true
                             
+                            if cell2.videoNode.isPlaying() {
+                                
+                                cell2.videoNode.muted = true
+                                shouldMute = true
+                                
+                                
+                            }
                             
                         }
+
                         
                     }
                     
                 }
-                
-               
-                
-            }
-            
-        } else if vc is MainSearchVC {
-            
-            if let update1 = vc as? MainSearchVC {
-                
-                if update1.PostSearchVC.newPlayingIndex != nil {
-                    
-                    if let cell = update1.PostSearchVC.collectionNode.nodeForItem(at: IndexPath(row: update1.PostSearchVC.newPlayingIndex!, section: 0)) as? ReelNode {
-                        
-                        if cell.videoNode.isPlaying() {
-                            
-                            cell.videoNode.muted = true
-                            shouldMute = true
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-               
-                
-            }
-            
-        } else if vc is PostListWithHashtagVC {
-            
-            if let update1 = vc as? PostListWithHashtagVC {
-                
-                if update1.newPlayingIndex != nil {
-                    
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? ReelNode {
-                        
-                        if cell.videoNode.isPlaying() {
-                            
-                            cell.videoNode.muted = true
-                            shouldMute = true
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-               
-                
+                  
             }
             
         }
@@ -1046,7 +970,15 @@ class CustomSlider: UISlider {
                 }
                 
                 if update1.currentIndex != nil {
-                    update1.pauseVideo(index: update1.currentIndex!)
+                    //update1.pauseVideo(index: update1.currentIndex!)
+                    
+                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
+                        
+                        currentCell.pauseVideo(index: currentCell.currentIndex!)
+                        
+                        
+                    }
+                    
                 }
                 
                 update1.timeLbl.text = processTime()
@@ -1088,11 +1020,15 @@ class CustomSlider: UISlider {
                     //newPlayingIndex
                     
                     let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+                    
+                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
+                        
+                        currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
+                        currentCell.playVideo(index: currentCell.currentIndex!)
+                        
+                        
+                    }
 
-                    
-                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
-                    update1.playVideo(index: update1.currentIndex!)
-                    
                 }
                 
                 update1.timeLbl.isHidden = true

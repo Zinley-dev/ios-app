@@ -833,13 +833,11 @@ extension ReelNode {
     
     
     @objc func shareTapped() {
-        
-        
+    
         guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
             print("Sendbird: Can't get userUID")
             return
         }
-        
         
         APIManager.shared.createShare(postId: post.id, userId: userUID) { [weak self] result in
             guard let self = self else { return }

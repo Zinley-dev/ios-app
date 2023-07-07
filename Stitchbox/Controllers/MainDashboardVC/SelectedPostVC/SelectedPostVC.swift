@@ -31,8 +31,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
-    
-    var isfirstLoad = true
+  
     var onPresent = false
     var selectedIndex = 0
     var isVideoPlaying = false
