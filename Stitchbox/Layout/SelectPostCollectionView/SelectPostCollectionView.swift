@@ -7,16 +7,13 @@
 
 import UIKit
 
-class ButtonSideList: UIView {
+class SelectPostCollectionView: UIView {
     
     @IBOutlet var contentView: UIView!
-    
-    @IBOutlet weak var viewStitchBtn: UIButton!
-    @IBOutlet weak var stitchCount: UILabel!
-    @IBOutlet var stitchView: UIView!
-    
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var hideBtn: UIView!
 
-    let kCONTENT_XIB_NAME = "ButtonSideList"
+    let kCONTENT_XIB_NAME = "SelectPostCollectionView"
     
     override init(frame: CGRect) {
         super.init(frame: frame)

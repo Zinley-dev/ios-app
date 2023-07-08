@@ -45,7 +45,7 @@ class ImageViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var stichLabel: UILabel = {
+    lazy var stichLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center

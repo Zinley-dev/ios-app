@@ -5,13 +5,15 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ButtonSideList" customModule="Stitchbox" customModuleProvider="target">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="HuV-ZM-cpb"/>
-                <outlet property="streamView" destination="7iW-rQ-Yzm" id="mne-mI-iIf"/>
+                <outlet property="stitchCount" destination="Bgh-n1-z5Z" id="Zxw-AS-8I1"/>
+                <outlet property="stitchView" destination="dqo-Lv-Gj7" id="L3Y-h4-yh2"/>
                 <outlet property="viewStitchBtn" destination="dqo-Lv-Gj7" id="jB3-Ek-TIJ"/>
             </connections>
         </placeholder>
@@ -20,18 +22,20 @@
             <rect key="frame" x="0.0" y="0.0" width="195" height="166"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="prf-mf-ZFR">
-                    <rect key="frame" x="147" y="62" width="40" height="96"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3Ez-1G-1gB">
+                    <rect key="frame" x="137" y="58" width="50" height="66"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="playlist" translatesAutoresizingMaskIntoConstraints="NO" id="yKm-Vw-03B">
-                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5/10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bgh-n1-z5Z">
+                            <rect key="frame" x="0.0" y="0.0" width="50" height="18"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="40" id="4hP-MX-hwB"/>
-                                <constraint firstAttribute="height" constant="40" id="cQw-7x-C8v"/>
+                                <constraint firstAttribute="width" constant="50" id="pS5-a1-TxQ"/>
                             </constraints>
-                        </imageView>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7iW-rQ-Yzm">
-                            <rect key="frame" x="0.0" y="56" width="40" height="40"/>
+                            <rect key="frame" x="5" y="26" width="40" height="40"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dqo-Lv-Gj7">
                                     <rect key="frame" x="-5" y="-5" width="50" height="50"/>
@@ -68,8 +72,8 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="prf-mf-ZFR" secondAttribute="bottom" constant="8" id="HF1-45-xQG"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="prf-mf-ZFR" secondAttribute="trailing" constant="8" id="YUx-Eh-mt9"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="3Ez-1G-1gB" secondAttribute="bottom" constant="8" id="9vb-ft-VKt"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="3Ez-1G-1gB" secondAttribute="trailing" constant="8" id="lSU-Oq-PNB"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <userDefinedRuntimeAttributes>
@@ -81,7 +85,6 @@
         </view>
     </objects>
     <resources>
-        <image name="playlist" width="24" height="24"/>
         <image name="streamLinkBtn" width="16.5" height="17"/>
     </resources>
 </document>

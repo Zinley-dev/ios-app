@@ -95,7 +95,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         
         
@@ -601,85 +601,72 @@ extension FeedViewController {
     }
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        
-        if !posts.isEmpty, scrollView == collectionNode.view {
-            
-            // Get the visible rect of the collection view.
-            let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-            
-            // Calculate the visible cells.
-            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? OriginalNode }
-            
-            // Find the index of the visible video that is closest to the center of the screen.
-            var minDistanceFromCenter = CGFloat.infinity
-            
-            var foundVisibleVideo = false
-            
-            for cell in visibleCells {
-                
-                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
-                if distanceFromCenter < minDistanceFromCenter {
-                    newPlayingIndex = cell.indexPath!.row
-                    minDistanceFromCenter = distanceFromCenter
-                }
-            }
-            
-            print("Index check - \(currentIndex) - \(newPlayingIndex)")
+        guard !posts.isEmpty, scrollView == collectionNode.view else {
+            return
+        }
 
-            if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? OriginalNode, let newPlayingCell = collectionNode.nodeForItem(at: IndexPath(item: newPlayingIndex!, section: 0)) as? OriginalNode {
-                
-                if !newPlayingCell.post.stitchedPosts[newPlayingCell.currentIndex!].muxPlaybackId.isEmpty {
-                    foundVisibleVideo = true
-                    //playTimeBar.isHidden = false
-                    imageIndex = nil
-                } else {
-                    //playTimeBar.isHidden = true
-                    imageIndex = newPlayingIndex
-                }
-                
-                if foundVisibleVideo {
-                    // Start playing the new video if it's different from the current playing video.
-                    if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-                        // Pause the current video, if any.
-                        if currentCell.currentIndex != nil {
-                            currentCell.pauseVideo(index: currentCell.currentIndex!)
-                        }
-                        // Play the new video.
-                        currentIndex = newPlayingIndex
-                        newPlayingCell.playVideo(index: newPlayingCell.currentIndex!)
-                        
-                        if let node = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(item: newPlayingCell.currentIndex!, section: 0)) as? ReelNode {
-                            resetView(cell: node)
-                        }
-                    } else {
-                        // Do nothing if the current index is the same as newPlayingIndex
-                    }
-                } else {
-                    print("Couldn't find foundVisibleVideo")
-                }
-                
-                // If the video is stuck, reset the buffer by seeking to the current playback time.
-                if let currentIndex = newPlayingCell.currentIndex, let cell = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
-                    if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                        if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                            cell.videoNode.player?.seek(to: currentTime)
-                        } else {
-                            cell.videoNode.player?.seek(to: CMTime.zero)
-                        }
-                    }
-                }
-                
-               
-                
+        let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+        let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? OriginalNode }
+        
+        var minDistanceFromCenter = CGFloat.infinity
+        var newPlayingIndex: Int? = nil
+        var foundVisibleVideo = false
+
+        for cell in visibleCells {
+            let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+            let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+            let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+            
+            if distanceFromCenter < minDistanceFromCenter {
+                newPlayingIndex = cell.indexPath?.row
+                minDistanceFromCenter = distanceFromCenter
             }
-                
+        }
+
+        guard let newPlayingIndex = newPlayingIndex, let currentCell = collectionNode.nodeForItem(at: IndexPath(item: currentIndex ?? 0, section: 0)) as? OriginalNode, let newPlayingCell = collectionNode.nodeForItem(at: IndexPath(item: newPlayingIndex, section: 0)) as? OriginalNode else {
+            return
         }
         
+        // Safe guard for Array Out-of-Bounds
+        guard newPlayingCell.currentIndex != nil && newPlayingCell.currentIndex! < newPlayingCell.post.stitchedPosts.count else {
+            return
+        }
         
+        if !newPlayingCell.post.stitchedPosts[newPlayingCell.currentIndex!].muxPlaybackId.isEmpty {
+            foundVisibleVideo = true
+            imageIndex = nil
+        } else {
+            imageIndex = newPlayingIndex
+        }
+
+        if foundVisibleVideo {
+            if currentIndex != newPlayingIndex {
+                if let currentIndex = currentCell.currentIndex {
+                    currentCell.pauseVideo(index: currentIndex)
+                }
+
+                currentIndex = newPlayingIndex
+                newPlayingCell.playVideo(index: newPlayingCell.currentIndex ?? 0)
+
+                if let node = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(item: newPlayingCell.currentIndex ?? 0, section: 0)) as? ReelNode {
+                    resetView(cell: node)
+                }
+            }
+        } else {
+            print("Couldn't find foundVisibleVideo")
+        }
+
+        if let currentIndex = newPlayingCell.currentIndex, let cell = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
+            if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                    cell.videoNode.player?.seek(to: currentTime)
+                } else {
+                    cell.videoNode.player?.seek(to: CMTime.zero)
+                }
+            }
+        }
     }
+
  
 }
 
@@ -835,7 +822,7 @@ extension FeedViewController {
         flowLayout.minimumLineSpacing = 0.0
         flowLayout.scrollDirection = .vertical
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
+        self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
         self.collectionNode.leadingScreensForBatching = 2.0
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         // Set the data source and delegate
@@ -1042,28 +1029,7 @@ extension FeedViewController {
         
     }
     
-    @objc func removePost() {
-        
-
-        
-        
-    }
-    
-    func reloadAllCurrentHashtag() {
-        if !posts.isEmpty {
-            for index in 0..<posts.count {
-                let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
-                if let node = collectionNode.nodeForItem(at: indexPath) as? ReelNode {
-                    
-                    if node.hashtagView != nil {
-                        node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-                        node.hashtagView.collectionView.reloadData()
-                    }
-                    
-                }
-            }
-        }
-    }
+ 
     
     @objc func reportPost() {
         

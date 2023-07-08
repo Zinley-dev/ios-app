@@ -12,9 +12,10 @@ import Alamofire
 import SendBirdSDK
 import AVFoundation
 import AVKit
+import ActiveLabel
 
 
-fileprivate let FontSize: CGFloat = 13
+fileprivate let FontSize: CGFloat = 14
 fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
@@ -32,13 +33,13 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
     var buttonNode: ASDisplayNode
-    var hashtagsNode: ASDisplayNode
+    
     var backgroundImage: GradientImageNode
     var shouldCountView = true
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
     var sideButtonsView: ButtonSideList!
-    var hashtagView: HashtagView!
+    
     var gradientNode: GradienView
     var time = 0
     var likeCount = 0
@@ -46,6 +47,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var isLike = false
     var isSelectedPost = false
     var settingBtn : ((ASCellNode) -> Void)?
+    var viewStitchBtn : ((ASCellNode) -> Void)?
     var isViewed = false
     var currentTimeStamp: TimeInterval!
     var originalCenter: CGPoint?
@@ -64,7 +66,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.imageNode = RoundedCornerImageNode()
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
-        self.hashtagsNode = ASDisplayNode()
+       
         self.videoNode = RoundedCornerVideoNode()
         self.gradientNode = GradienView()
         self.backgroundImage = GradientImageNode()
@@ -115,15 +117,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.buttonsView.commentBtn.setImage(cmtImage, for: .normal)
             self.buttonsView.shareBtn.setTitle("", for: .normal)
             
-            
-            self.hashtagView = HashtagView()
-            self.hashtagsNode.view.addSubview(self.hashtagView)
-            
-            self.hashtagView.translatesAutoresizingMaskIntoConstraints = false
-            self.hashtagView.topAnchor.constraint(equalTo: self.hashtagsNode.view.topAnchor, constant: 0).isActive = true
-            self.hashtagView.bottomAnchor.constraint(equalTo: self.hashtagsNode.view.bottomAnchor, constant: 0).isActive = true
-            self.hashtagView.leadingAnchor.constraint(equalTo: self.hashtagsNode.view.leadingAnchor, constant: 0).isActive = true
-            self.hashtagView.trailingAnchor.constraint(equalTo: self.hashtagsNode.view.trailingAnchor, constant: 0).isActive = true
 
             
             let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
@@ -197,8 +190,19 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         headerNode.backgroundColor = UIColor.clear
        
+        let hashtagsText = post.hashtags.joined(separator: " ")
         
-        self.contentNode.attributedText = NSAttributedString(string: post.content, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+        if post.content == "" {
+            
+            self.contentNode.attributedText = NSAttributedString(string: hashtagsText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+            
+        } else {
+            
+            self.contentNode.attributedText = NSAttributedString(string: post.content + " " + hashtagsText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+            
+        }
+        
+        
         
         
         
@@ -302,11 +306,17 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
         }
         
+        
         DispatchQueue.main.async() {
             self.sideButtonsView = ButtonSideList()
-            self.sideButtonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: -185), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
+            self.sideButtonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: -150), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
             self.view.addSubview(self.sideButtonsView)
             self.originalCenter = self.view.center
+            
+            let viewStitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.viewStitchTapped))
+            viewStitchTap.numberOfTapsRequired = 1
+            self.sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
+            
         }
   
     }
@@ -487,32 +497,30 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
     
     func setVideoProgress(rate: Float, currentTime: TimeInterval, maxDuration: CMTime) {
-        
-        
         if let vc = UIViewController.currentViewController() {
-            
-            
             if let update1 = vc as? FeedViewController {
-                
-                if update1.playTimeBar != nil {
-                    update1.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
-                    update1.playTimeBar.setValue(Float(currentTime), animated: true)
-                }
-                
+                updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.playTimeBar)
             } else if let update1 = vc as? SelectedPostVC {
-                
-                if update1.playTimeBar != nil {
-                    update1.playTimeBar.maximumValue = Float(CMTimeGetSeconds(maxDuration))
-                    update1.playTimeBar.setValue(Float(currentTime), animated: true)
-                }
-                
+                updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.playTimeBar)
             }
-            
         }
-        
-        
-        
     }
+
+    func updateSlider(currentTime: TimeInterval, maxDuration: CMTime, playTimeBar: UISlider?) {
+        guard let playTimeBar = playTimeBar else { return }
+
+        let maxDurationSeconds = CMTimeGetSeconds(maxDuration)
+
+        // Check if maxDurationSeconds is not NaN and more than 0
+        if maxDurationSeconds.isNaN || maxDurationSeconds <= 0 {
+            print("Invalid maxDurationSeconds: \(maxDurationSeconds)")
+            return
+        }
+
+        playTimeBar.maximumValue = Float(maxDurationSeconds)
+        playTimeBar.setValue(Float(currentTime), animated: true)
+    }
+
     
 
 }
@@ -683,37 +691,6 @@ extension ReelNode {
         
     }
     
-}
-
-
-extension ReelNode {
-    
-    func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
-        
-        hashtagView.collectionView.delegate = dataSourceDelegate
-        hashtagView.collectionView.dataSource = dataSourceDelegate
-        hashtagView.collectionView.tag = row
-
-        // Retrieve the current contentOffset
-        let contentOffset = hashtagView.collectionView.contentOffset
-
-        // Check if the contentSize is greater than the collectionView's frame size
-        if hashtagView.collectionView.contentSize.height > hashtagView.collectionView.frame.size.height {
-            // Check whether the desired contentOffset.y is within valid range
-            if contentOffset.y >= 0 && contentOffset.y <= hashtagView.collectionView.contentSize.height - hashtagView.collectionView.frame.size.height {
-                // If yes, stop the collectionView if it was scrolling
-                hashtagView.collectionView.setContentOffset(contentOffset, animated:true)
-            } else {
-                print("Invalid content offset: \(contentOffset.y). It should be between 0 and \(hashtagView.collectionView.contentSize.height - hashtagView.collectionView.frame.size.height).")
-                // You can replace this with your own error handling code
-            }
-        }
-
-        hashtagView.collectionView.register(HashtagCell.nib(), forCellWithReuseIdentifier: HashtagCell.cellReuseIdentifier())
-        hashtagView.collectionView.reloadData()
-        
-    }
-
 }
 
 
@@ -918,6 +895,13 @@ extension ReelNode {
         
     }
     
+    
+    @objc func viewStitchTapped() {
+        
+        viewStitchBtn?(self)
+        
+    }
+    
     @objc func likeHandle() {
         
         
@@ -983,11 +967,6 @@ extension ReelNode {
                 update1.view.addSubview(imgView)
                                 
             } else if let update1 = vc as? SelectedPostVC {
-                                
-                imgView.center = update1.view.center
-                update1.view.addSubview(imgView)
-                                
-            } else if let update1 = vc as? PostListWithHashtagVC {
                                 
                 imgView.center = update1.view.center
                 update1.view.addSubview(imgView)
@@ -1233,14 +1212,11 @@ extension ReelNode {
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
 
-        let headerInset = UIEdgeInsets(top: 0, left: 4, bottom: 2, right: 8)
+        let headerInset = UIEdgeInsets(top: 0, left: 0, bottom: 2, right: 8)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
-        hashtagsNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 35)
-        let hashtagsInset = UIEdgeInsets(top: 0, left: -14, bottom: 0, right: 0)
-        let hashtagsInsetSpec = ASInsetLayoutSpec(insets: hashtagsInset, child: hashtagsNode)
-        
-        let contentInset = UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 170)
+      
+        let contentInset = UIEdgeInsets(top: 2, left: 20, bottom: 2, right: 100)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
         
         let verticalStack = ASStackLayoutSpec.vertical()
@@ -1250,17 +1226,18 @@ extension ReelNode {
         
         verticalStack.children = [headerInsetSpec]
         
-        if post.content != "" {
+        if post.content != "" || !post.hashtags.isEmpty {
             verticalStack.children?.append(contentInsetSpec)
         }
-        
-        verticalStack.children?.append(contentsOf: [hashtagsInsetSpec])
+    
         verticalStack.children?.append(buttonsInsetSpec)
-
+       
                 
-        let verticalStackInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        let verticalStackInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
 
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
+        
+   
 
         let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
 
@@ -1346,10 +1323,6 @@ extension ReelNode {
                             
                             update1.collectionNode.view.isScrollEnabled = false
                             
-                        } else if let update1 = vc as? PostListWithHashtagVC {
-                            
-                            update1.collectionNode.view.isScrollEnabled = false
-                            
                         }
             
             
@@ -1367,10 +1340,6 @@ extension ReelNode {
                 update1.collectionNode.view.isScrollEnabled = true
                             
                         } else if let update1 = vc as? SelectedPostVC {
-                            
-                            update1.collectionNode.view.isScrollEnabled = true
-                            
-                        } else if let update1 = vc as? PostListWithHashtagVC {
                             
                             update1.collectionNode.view.isScrollEnabled = true
                             
@@ -1407,6 +1376,79 @@ extension ReelNode: UIGestureRecognizerDelegate {
     
 }
 
+extension ReelNode {
+    
+    override func layout() {
+        delay(0.025) {
+            self.addActiveLabelToContentNode()
+        }
+    }
+    
+    
+    func addActiveLabelToContentNode() {
+        
+        DispatchQueue.main.async {
+            
+            self.contentNode.view.isUserInteractionEnabled = true
+            
+            
+            let label = ActiveLabel()
+            
+            //
+            self.contentNode.view.addSubview(label)
+            
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.topAnchor.constraint(equalTo: self.contentNode.view.topAnchor, constant: 0).isActive = true
+            label.leadingAnchor.constraint(equalTo: self.contentNode.view.leadingAnchor, constant: 0).isActive = true
+            label.trailingAnchor.constraint(equalTo: self.contentNode.view.trailingAnchor, constant: 0).isActive = true
+            label.bottomAnchor.constraint(equalTo: self.contentNode.view.bottomAnchor, constant: 0).isActive = true
+            
+                    
+            label.customize { label in
+                
+               
+                label.numberOfLines = Int(self.contentNode.lineCount)
+                label.enabledTypes = [.mention, .hashtag, .url]
+                
+                label.attributedText = self.contentNode.attributedText
+                //label.attributedText = textAttributes
+            
+                label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+                label.mentionColor = .secondary
+                label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+
+                
+                
+                label.handleMentionTap {  mention in
+                    
+                  
+                   
+                    
+                }
+                
+                label.handleHashtagTap { hashtag in
+                          
+                   
+                    
+                }
+                
+                label.handleURLTap { [weak self] string in
+                    
+                    
+ 
+                    
+                    
+                }
+                
+                
+                
+            }
+            
+        }
+            
+    }
+    
+}
 
 class RoundedCornerNode: ASDisplayNode {
     override func didLoad() {

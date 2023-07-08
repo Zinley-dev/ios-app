@@ -382,13 +382,7 @@ extension SelectedPostVC: ASCollectionDataSource {
                 
             }
             
-            delay(0.3) {
-                if node.hashtagView != nil {
-                    node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-                    node.hashtagView.collectionView.reloadData()
-                }
-            }
-            
+  
             //
             return node
         }
@@ -474,7 +468,7 @@ extension SelectedPostVC {
         flowLayout.minimumLineSpacing = 0.0
         flowLayout.scrollDirection = .vertical
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
+        self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
         self.collectionNode.leadingScreensForBatching = 2.0
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         // Set the data source and delegate
@@ -919,7 +913,7 @@ extension SelectedPostVC {
                     }
                 } else {
                     collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                    reloadAllCurrentHashtag()
+                    //reloadAllCurrentHashtag()
                     
                     delay(0.75) { [weak self] in
                         if indexPath < self?.posts.count ?? 0 {
@@ -934,24 +928,7 @@ extension SelectedPostVC {
         
     }
     
-    
-    
-    func reloadAllCurrentHashtag() {
-        if !posts.isEmpty {
-            for index in 0..<posts.count {
-                let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
-                if let node = collectionNode.nodeForItem(at: indexPath) as? ReelNode {
-                    
-                    if node.hashtagView != nil {
-                        node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-                        node.hashtagView.collectionView.reloadData()
-                    }
-                    
-                }
-            }
-        }
-    }
-    
+
     @objc func reportPost() {
         
         let slideVC = reportView()

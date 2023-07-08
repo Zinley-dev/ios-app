@@ -244,7 +244,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func setupStyle() {
         
-        SBUTheme.set(theme: .dark)
+        SBUTheme.set(theme: .light)
         
         
         SBUTheme.channelListTheme.navigationBarTintColor = UIColor.background
@@ -258,56 +258,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUGlobals.UsingImageCompression = true
         SBUGlobals.imageCompressionRate = 0.65
         SBUGlobals.imageResizingSize = CGSize(width: 480, height: 480)
-        SBUTheme.componentTheme.barItemTintColor = UIColor.white
+        SBUTheme.componentTheme.barItemTintColor = UIColor.black
         
         
-        SBUTheme.messageCellTheme.leftBackgroundColor = UIColor.darkGray
+        SBUTheme.messageCellTheme.leftBackgroundColor = UIColor.lightGray
         SBUTheme.messageCellTheme.rightBackgroundColor = UIColor.primary
         SBUTheme.messageCellTheme.userMessageLeftTextColor = UIColor.white
         SBUTheme.messageCellTheme.userMessageRightTextColor = UIColor.white
-        SBUTheme.messageCellTheme.userMessageLeftEditTextColor = UIColor.white
-        SBUTheme.messageCellTheme.userMessageRightEditTextColor = UIColor.white
+        SBUTheme.messageCellTheme.userMessageLeftEditTextColor = UIColor.black
+        SBUTheme.messageCellTheme.userMessageRightEditTextColor = UIColor.black
         SBUTheme.messageInputTheme.backgroundColor = UIColor.background
         SBUTheme.messageInputTheme.buttonTintColor = UIColor.white
         
         
-        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.white
-        SBUTheme.channelSettingsTheme.rightBarButtonTintColor = UIColor.white
-        SBUTheme.channelSettingsTheme.leftBarButtonTintColor = UIColor.white
-        SBUTheme.channelSettingsTheme.cellArrowIconTintColor = UIColor.white
-        SBUTheme.channelSettingsTheme.cellSwitchColor = UIColor.secondary
+        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.black
+        SBUTheme.channelSettingsTheme.rightBarButtonTintColor = UIColor.black
+        SBUTheme.channelSettingsTheme.leftBarButtonTintColor = UIColor.black
+        SBUTheme.channelSettingsTheme.cellArrowIconTintColor = UIColor.black
+        SBUTheme.channelSettingsTheme.cellSwitchColor = UIColor.black
         SBUTheme.channelSettingsTheme.cellTypeIconTintColor = UIColor.white
         SBUTheme.channelSettingsTheme.backgroundColor = .background
         
         
-        SBUTheme.userListTheme.navigationBarTintColor = UIColor.background
+        SBUTheme.userListTheme.navigationBarTintColor = UIColor.white
         
         
-        SBUTheme.messageSearchTheme.backgroundColor = .background
+        SBUTheme.messageSearchTheme.backgroundColor = .white
         SBUTheme.userListTheme.statusBarStyle = .lightContent
         
-        SBUTheme.overlayTheme.componentTheme.backgroundColor = .background
-        SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = .background
+        SBUTheme.overlayTheme.componentTheme.backgroundColor = .white
+        SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = .white
         
-        SBUTheme.userProfileTheme.backgroundColor = .background
-        SBUTheme.userProfileTheme.usernameTextColor = UIColor.white
-        SBUTheme.messageSearchResultCellTheme.backgroundColor = .background
+        SBUTheme.userProfileTheme.backgroundColor = .white
+        SBUTheme.userProfileTheme.usernameTextColor = UIColor.black
+        SBUTheme.messageSearchResultCellTheme.backgroundColor = .white
         
-        SBUTheme.userCellTheme.backgroundColor = .background
+        SBUTheme.userCellTheme.backgroundColor = .white
         
         
-        SBUTheme.channelTheme.navigationBarTintColor = UIColor.background
-        SBUTheme.channelTheme.backgroundColor = .background
+        SBUTheme.channelTheme.navigationBarTintColor = UIColor.white
+        SBUTheme.channelTheme.backgroundColor = .white
         
-        SBUTheme.channelTheme.leftBarButtonTintColor = UIColor.white
-        SBUTheme.channelTheme.rightBarButtonTintColor = UIColor.white
+        SBUTheme.channelTheme.leftBarButtonTintColor = UIColor.black
+        SBUTheme.channelTheme.rightBarButtonTintColor = UIColor.black
         
-        SBUTheme.componentTheme.loadingBackgroundColor = .background
+        SBUTheme.componentTheme.loadingBackgroundColor = .white
         SBUTheme.componentTheme.addReactionTintColor = UIColor.secondary
         SBUTheme.componentTheme.loadingSpinnerColor = UIColor.secondary
         
-        SBUTheme.componentTheme.emptyViewBackgroundColor = .background
-        SBUTheme.componentTheme.backgroundColor = .background
+        SBUTheme.componentTheme.emptyViewBackgroundColor = .white
+        SBUTheme.componentTheme.backgroundColor = .white
         
         //SBUFontSet.body1 = UIFont.systemFont(ofSize: 20)
         

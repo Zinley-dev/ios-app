@@ -363,6 +363,8 @@
 		6ACB10BA29EB73C8009D054E /* RiotHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACB10B829EB73C8009D054E /* RiotHistoryView.swift */; };
 		6ACB10BD29EB790D009D054E /* In-gameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACB10BC29EB790D009D054E /* In-gameVC.swift */; };
 		6ACE2D2D2A57578A009FB902 /* OriginalNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACE2D2C2A57578A009FB902 /* OriginalNode.swift */; };
+		6ACE2D312A58B293009FB902 /* SelectPostCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACE2D2F2A58B292009FB902 /* SelectPostCollectionView.swift */; };
+		6ACE2D322A58B293009FB902 /* SelectPostCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ACE2D302A58B293009FB902 /* SelectPostCollectionView.xib */; };
 		6ACEE23C2A299F75006DFAC9 /* CustomSwipeBackConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACEE23B2A299F75006DFAC9 /* CustomSwipeBackConfiguration.swift */; };
 		6AE1CE67294D590D00B1C435 /* SendBirdGlobalAuthen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE1CE66294D590D00B1C435 /* SendBirdGlobalAuthen.swift */; };
 		6AE1CE6B294D698300B1C435 /* CreateChannelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE1CE6A294D698300B1C435 /* CreateChannelVC.swift */; };
@@ -851,6 +853,8 @@
 		6ACB10B829EB73C8009D054E /* RiotHistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiotHistoryView.swift; sourceTree = "<group>"; };
 		6ACB10BC29EB790D009D054E /* In-gameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "In-gameVC.swift"; sourceTree = "<group>"; };
 		6ACE2D2C2A57578A009FB902 /* OriginalNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginalNode.swift; sourceTree = "<group>"; };
+		6ACE2D2F2A58B292009FB902 /* SelectPostCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPostCollectionView.swift; sourceTree = "<group>"; };
+		6ACE2D302A58B293009FB902 /* SelectPostCollectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectPostCollectionView.xib; sourceTree = "<group>"; };
 		6ACEE23B2A299F75006DFAC9 /* CustomSwipeBackConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSwipeBackConfiguration.swift; sourceTree = "<group>"; };
 		6AE1CE66294D590D00B1C435 /* SendBirdGlobalAuthen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBirdGlobalAuthen.swift; sourceTree = "<group>"; };
 		6AE1CE6A294D698300B1C435 /* CreateChannelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChannelVC.swift; sourceTree = "<group>"; };
@@ -1392,6 +1396,7 @@
 		6A0CF644296E2E2B00155889 /* Layout */ = {
 			isa = PBXGroup;
 			children = (
+				6ACE2D2E2A58B277009FB902 /* SelectPostCollectionView */,
 				6A26B82B2A4E88E900C06ABF /* TabBarProfileView */,
 				6AB929CF2A3D5141003E109E /* AddView */,
 				6ACB10B629EB739F009D054E /* RiotHistory */,
@@ -3084,6 +3089,15 @@
 			path = OriginalNode;
 			sourceTree = "<group>";
 		};
+		6ACE2D2E2A58B277009FB902 /* SelectPostCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				6ACE2D2F2A58B292009FB902 /* SelectPostCollectionView.swift */,
+				6ACE2D302A58B293009FB902 /* SelectPostCollectionView.xib */,
+			);
+			path = SelectPostCollectionView;
+			sourceTree = "<group>";
+		};
 		6ACEE23A2A299F6C006DFAC9 /* CustomSwipeBackConfiguration */ = {
 			isa = PBXGroup;
 			children = (
@@ -3704,6 +3718,7 @@
 				6A6C30FF2964156E0070167A /* UnmutedUserModView.xib in Resources */,
 				390FD7842909375C0068B883 /* Dashboard.storyboard in Resources */,
 				6A0CF64D296E2F0200155889 /* ProfileView.xib in Resources */,
+				6ACE2D322A58B293009FB902 /* SelectPostCollectionView.xib in Resources */,
 				6AC6D9F729A5C78C00B18139 /* logo3344556.png in Resources */,
 				6AC6D9F329A5C78C00B18139 /* load.gif in Resources */,
 				6AC6DA0F29A8AAEB00B18139 /* reportView.xib in Resources */,
@@ -4152,6 +4167,7 @@
 				A5A5E40D29386D37004E9207 /* UnderlineTextField.swift in Sources */,
 				1429CD032950119100CDBCC8 /* SNavigationItem.swift in Sources */,
 				6A7ED4BD2A0E067D00C8204E /* SubcriptionVC.swift in Sources */,
+				6ACE2D312A58B293009FB902 /* SelectPostCollectionView.swift in Sources */,
 				14120DE92991CF0B00AE51E0 /* FistBumpeeVC.swift in Sources */,
 				14FFF78829881EA40086E2D9 /* ListDisplayDataSource.swift in Sources */,
 				6A6FB08F29DA4294003FCF6E /* ReelNode.swift in Sources */,
