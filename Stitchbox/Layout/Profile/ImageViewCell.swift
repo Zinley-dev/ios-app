@@ -159,6 +159,9 @@ class ImageViewCell: UICollectionViewCell {
     }
 
 
+    func reset() {
+        self.layer.borderColor = UIColor.clear.cgColor
+    }
     
     func countView(with data: PostModel) {
         

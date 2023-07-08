@@ -22,7 +22,7 @@ fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
 class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
-    
+
     
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
@@ -95,7 +95,8 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
                 self.selectPostCollectionView.heightAnchor.constraint(equalToConstant: 280)
             ])
             
-            
+            self.selectPostCollectionView.collectionView.allowsMultipleSelection = false
+
             let hideTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(OriginalNode.hideTapped))
             hideTap.numberOfTapsRequired = 1
             self.selectPostCollectionView.hideBtn.addGestureRecognizer(hideTap)
@@ -110,41 +111,20 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     @objc func hideTapped() {
+        hideBtnPressed()
+    }
+    
+    func hideBtnPressed() {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? ReelNode {
 
             if selectPostCollectionView.isHidden == false {
-                
-                // Make sure layout is done before animating
-                cell.view.layoutIfNeeded()
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.selectPostCollectionView.alpha = 0
-                }) { _ in
-                    self.selectPostCollectionView.isHidden = true
-                    self.selectPostCollectionView.alpha = 1
-                }
-                
-                cell.headerNode.view.alpha = 0
-                cell.contentNode.view.alpha = 0
-                cell.sideButtonsView.stitchView.alpha = 0
-                cell.sideButtonsView.stitchCount.alpha = 0
-                cell.buttonNode.view.alpha = 0
-                cell.sideButtonsView.viewStitchBtn.alpha = 0
-                
-                UIView.animate(withDuration: 0.3, animations: {
-                    cell.headerNode.view.alpha = 1
-                    cell.contentNode.view.alpha = 1
-                    cell.sideButtonsView.stitchView.alpha = 1
-                    cell.sideButtonsView.stitchCount.alpha = 1
-                    cell.buttonNode.view.alpha = 1
-                    cell.sideButtonsView.viewStitchBtn.alpha = 1
-                }) { _ in
-                    cell.headerNode.isHidden = false
-                    cell.contentNode.isHidden = false
-                    cell.sideButtonsView.stitchView.isHidden = false
-                    cell.sideButtonsView.stitchCount.isHidden = false
-                    cell.buttonNode.isHidden = false
-                    cell.sideButtonsView.viewStitchBtn.isHidden = false
-                }
+
+                cell.headerNode.isHidden = false
+                cell.contentNode.isHidden = false
+                cell.sideButtonsView.isHidden = false
+                cell.buttonNode.isHidden = false
+                self.selectPostCollectionView.isHidden = true
+
             }
         }
     }
@@ -217,6 +197,13 @@ extension OriginalNode: ASCollectionDelegate, ASCollectionDataSource {
             node.viewStitchBtn = { (node) in
                         
                 self.viewStitchedPost(node: node as! ReelNode)
+                              
+            }
+            
+            
+            node.soundBtn = { (node) in
+                        
+                self.soundProcess(node: node as! ReelNode)
                               
             }
 
@@ -317,10 +304,10 @@ extension OriginalNode {
 
             // Insert new items at index paths
             self.collectionNode.insertItems(at: indexPaths)
+            self.selectPostCollectionView.collectionView.insertItems(at: indexPaths)
         }
     }
 
-    
     
 }
 
@@ -332,7 +319,7 @@ extension OriginalNode {
             guard let self = self else { return }
             self.insertNewRowsInCollectionNode(newPosts: newPosts)
             
-            self.cleanupPosts(collectionNode: collectionNode)
+            //self.cleanupPosts(collectionNode: collectionNode)
             
             context.completeBatchFetching(true)
         }
@@ -346,58 +333,60 @@ extension OriginalNode {
         if self.post.stitchedPosts.count > postThreshold {
             // check if we have enough posts to remove
             if (startIndex + postsToRemove) <= self.post.stitchedPosts.count {
+                
+                // generate the index paths for old posts
+                let indexPathsToRemove = Array(startIndex..<(startIndex + postsToRemove)).map { IndexPath(row: $0, section: 0) }
+                
                 // remove the posts from startIndex to startIndex + postsToRemove
                 self.post.stitchedPosts.removeSubrange(startIndex..<(startIndex + postsToRemove))
 
-                // generate the index paths for old posts
-                let indexPathsToRemove = Array(startIndex..<(startIndex + postsToRemove)).map { IndexPath(row: $0, section: 0) }
-
                 // delete the old posts from collectionNode
-                collectionNode.performBatchUpdates({
+                collectionNode.performBatch(animated: false, updates: {
                     collectionNode.deleteItems(at: indexPathsToRemove)
+                }, completion: nil)
+                
+                // delete the old posts from collectionView
+                selectPostCollectionView.collectionView.performBatchUpdates({
+                    selectPostCollectionView.collectionView.deleteItems(at: indexPathsToRemove)
                 }, completion: nil)
             }
         }
     }
+
+
+
 
     
 }
 
 extension OriginalNode {
     
+    
+    func soundProcess(node: ReelNode) {
+        
+        if selectPostCollectionView.isHidden == false {
+            
+            hideBtnPressed()
+            
+        } else {
+            node.soundProcess()
+        }
+
+        
+    }
+    
+    
     func viewStitchedPost(node: ReelNode) {
         
          
         if node.headerNode.isHidden == false {
-        
             node.headerNode.isHidden = true
             node.contentNode.isHidden = true
-            node.sideButtonsView.stitchView.isHidden = true
-            node.sideButtonsView.stitchCount.isHidden = true
+            node.sideButtonsView.isHidden = true
             node.buttonNode.isHidden = true
-            node.sideButtonsView.viewStitchBtn.isHidden = true
-            selectPostCollectionView.collectionView.reloadData()
-            selectPostCollectionView.isHidden = false
-            
-            delay(0.1) {
-                if let cell = self.selectPostCollectionView.collectionView.cellForItem(at: IndexPath(row: self.currentIndex!, section: 0) as IndexPath) as? ImageViewCell {
-                    
-                    cell.layer.cornerRadius = 10
-                    cell.layer.borderWidth = 4
-                    cell.layer.borderColor = UIColor.secondary.cgColor
-                    cell.isSelected = true
-                    self.selectPostCollectionView.collectionView.selectItem(at: IndexPath(row: self.currentIndex!, section: 0) as IndexPath, animated: false, scrollPosition: [])
-                    self.selectPostCollectionView.collectionView.scrollToItem(at: IndexPath(row: self.currentIndex!, section: 0) as IndexPath, at: .left, animated: true)
-                    
-                } else {
-                    
-                    print("Couldn't cast ?")
-                    
-                }
-            }
-            
-            
+            self.selectPostCollectionView.isHidden = false
         }
+
        
         
         
@@ -551,57 +540,7 @@ extension OriginalNode {
         }
         
     }
-    
-    @objc func removePost() {
-        
 
-        
-        
-    }
-    
-    func reloadAllCurrentHashtag() {
-        
-        
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if vc is FeedViewController {
-                
-                if let update1 = vc as? FeedViewController {
-                    
-                    if !update1.posts.isEmpty {
-                        for index in 0..<update1.posts.count {
-                            let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
-                            
-                        }
-                    }
-                    
-                }
-                
-            } else {
-                
-                if let update1 = vc as? SelectedPostVC {
-                    
-                    if !update1.posts.isEmpty {
-                        for index in 0..<update1.posts.count {
-                            let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
-                            
-                        }
-                    }
-                    
-                }
-                
-                
-                
-            }
-            
-            
-            
-        }
-        
-        
-
-    }
     
     @objc func reportPost() {
         
@@ -727,6 +666,8 @@ extension OriginalNode {
     func pauseVideo(index: Int) {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+            
+
              
             cell.videoNode.pause()
             
@@ -754,39 +695,52 @@ extension OriginalNode {
             if !cell.videoNode.isPlaying() {
                 
                 
-                if selectPostCollectionView.isHidden == false {
-                    cell.headerNode.isHidden = true
-                    cell.contentNode.isHidden = true
-                    cell.sideButtonsView.stitchView.isHidden = true
-                    cell.sideButtonsView.stitchCount.isHidden = true
-                    cell.buttonNode.isHidden = true
-                    cell.sideButtonsView.viewStitchBtn.isHidden = true
-                    
-                    if let cell = selectPostCollectionView.collectionView.cellForItem(at: IndexPath(row: index, section: 0) as IndexPath) as? ImageViewCell {
-                        
-                        cell.layer.cornerRadius = 10
-                        cell.layer.borderWidth = 4
-                        cell.layer.borderColor = UIColor.secondary.cgColor
-                        cell.isSelected = true
-                        selectPostCollectionView.collectionView.selectItem(at: IndexPath(row: index, section: 0) as IndexPath, animated: false, scrollPosition: [])
-                        selectPostCollectionView.collectionView.scrollToItem(at: IndexPath(row: index, section: 0) as IndexPath, at: .left, animated: true)
-                        
-                    } else {
-                        
-                        print("Couldn't cast ?")
-                        
+                let indexPath = IndexPath(row: index, section: 0)
+
+                if let cell = selectPostCollectionView.collectionView.cellForItem(at: indexPath) as? ImageViewCell {
+                    cell.layer.cornerRadius = 10
+                    cell.layer.borderWidth = 4
+                    cell.layer.borderColor = UIColor.secondary.cgColor
+                    cell.isSelected = true
+                    selectPostCollectionView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                    selectPostCollectionView.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+
+                    // Deselect all other cells
+                    for i in 0..<selectPostCollectionView.collectionView.numberOfItems(inSection: 0) {
+                        if i != index {
+                            selectPostCollectionView.collectionView.deselectItem(at: IndexPath(row: i, section: 0), animated: false)
+                            
+                            if let otherCell = selectPostCollectionView.collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? ImageViewCell {
+                                otherCell.layer.borderWidth = 0
+                                //cell.layer.borderColor = UIColor.clear.cgColor
+                                otherCell.isSelected = false
+                            }
+                        }
                     }
                     
-                    
-                    
                 } else {
+                    print("Couldn't cast ?")
+                }
+
+                
+                
+                if selectPostCollectionView.isHidden == false {
+                    guard let sideButtonsView = cell.sideButtonsView else { return }
+                    cell.headerNode.isHidden = true
+                    cell.contentNode.isHidden = true
+                    sideButtonsView.isHidden = true
+                    cell.buttonNode.isHidden = true
+       
+                } else {
+                    guard let sideButtonsView = cell.sideButtonsView else { return }
                     cell.headerNode.isHidden = false
                     cell.contentNode.isHidden = false
-                    cell.sideButtonsView.stitchView.isHidden = false
-                    cell.sideButtonsView.stitchCount.isHidden = false
+                    sideButtonsView.isHidden = false
                     cell.buttonNode.isHidden = false
-                    cell.sideButtonsView.viewStitchBtn.isHidden = false
+     
                 }
+
+
                 
                 if cell.sideButtonsView != nil {
                     cell.sideButtonsView.viewStitchBtn.spin()
@@ -835,23 +789,28 @@ extension OriginalNode {
 extension OriginalNode {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+    
         let item = post.stitchedPosts[indexPath.row]
 
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
-            cell.configureWithUrl(with: item)
-            if let username = item.owner?.username {
-                cell.stichLabel.text = "@\(username)"
-            } else {
-                cell.stichLabel.text = ""
-            }
-            
-            return cell
-        } else {
-            return ImageViewCell()
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell else {
+            // Make sure you have registered the cell with reuseIdentifier
+            fatalError("ImageViewCell is not registered or identifier is wrong")
         }
-        
+        if indexPath.row != currentIndex {
+            //cell.reset()
+        }
+        collectionView.deselectItem(at: indexPath, animated: false)
+        cell.configureWithUrl(with: item)
+
+        if let username = item.owner?.username {
+            cell.stichLabel.text = "@\(username)"
+        } else {
+            cell.stichLabel.text = ""
+        }
+
+        return cell
     }
+
     
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -866,37 +825,11 @@ extension OriginalNode {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-    
-        delay(0.1) {
-            self.selectPostCollectionView.collectionView.scrollToItem(at: indexPath, at: .left, animated: true)
-        }
-       
         
-        if let cell = collectionView.cellForItem(at: indexPath as IndexPath) as? ImageViewCell {
-            
-            if cell.isSelected == true {
-                
-                cell.layer.cornerRadius = 10
-                cell.layer.borderWidth = 2
-                cell.layer.borderColor = UIColor.secondary.cgColor
-                
-            }
-            
-            
-        }
-        
-        
+
     }
     
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
-        if let cell = collectionView.cellForItem(at: indexPath as IndexPath) as? ImageViewCell {
-            cell.layer.borderColor = UIColor.clear.cgColor
-        }
-        
-    }
-    
+
 
     
 }

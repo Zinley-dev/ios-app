@@ -13,7 +13,6 @@
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="HuV-ZM-cpb"/>
                 <outlet property="stitchCount" destination="Bgh-n1-z5Z" id="Zxw-AS-8I1"/>
-                <outlet property="stitchView" destination="dqo-Lv-Gj7" id="L3Y-h4-yh2"/>
                 <outlet property="viewStitchBtn" destination="dqo-Lv-Gj7" id="jB3-Ek-TIJ"/>
             </connections>
         </placeholder>

@@ -48,6 +48,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var isSelectedPost = false
     var settingBtn : ((ASCellNode) -> Void)?
     var viewStitchBtn : ((ASCellNode) -> Void)?
+    var soundBtn : ((ASCellNode) -> Void)?
     var isViewed = false
     var currentTimeStamp: TimeInterval!
     var originalCenter: CGPoint?
@@ -116,7 +117,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.buttonsView.commentBtn.setTitle("", for: .normal)
             self.buttonsView.commentBtn.setImage(cmtImage, for: .normal)
             self.buttonsView.shareBtn.setTitle("", for: .normal)
-            
+            self.buttonsView.shareBtn.setImage(shareImage, for: .normal)
 
             
             let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
@@ -528,7 +529,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 extension ReelNode {
     
     func didTap(_ videoNode: ASVideoNode) {
-        soundProcess()
+        soundBtn?(self)
+        //soundProcess()
     }
     
     

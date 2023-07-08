@@ -24,9 +24,10 @@ let unsaveImage = UIImage.init(named: "save")?.resize(targetSize: CGSize(width: 
 
 
 let cmtImage = UIImage.init(named: "cmt")?.resize(targetSize: CGSize(width: 23, height: 23))
-let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 23, height: 23))
-let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 23, height: 23))
-let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 100, height: 65))
+let shareImage = UIImage.init(named: "share")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
+let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
+let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
+let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 100, height: 81.25))
 var chatbot_id = "64397f3ceff4334484bf537b"
 var general_vc: UIViewController!
 var general_room: Room!
