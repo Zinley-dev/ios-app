@@ -55,7 +55,7 @@ target 'Stitchbox' do
   pod 'GoogleMaps'
   pod 'GooglePlaces'
   pod 'swift-vibrant'
-  
+  pod 'MarqueeLabel'
   pod 'Sentry'
   pod "SwipeTransition"
   pod "SwipeTransitionAutoSwipeBack"      # if needed

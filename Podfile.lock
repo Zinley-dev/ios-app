@@ -112,6 +112,7 @@ PODS:
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
   - GTMSessionFetcher/Core (3.1.1)
   - lottie-ios (4.0.1)
+  - MarqueeLabel (4.3.0)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
@@ -226,6 +227,7 @@ DEPENDENCIES:
   - GooglePlaces
   - GoogleSignIn (~> 7.0.0)
   - lottie-ios (~> 4.0.1)
+  - MarqueeLabel
   - NYTPhotoViewer (~> 1.1.0)
   - ObjectMapper (~> 3.5)
   - OneSignalXCFramework (< 4.0, >= 3.0.0)
@@ -277,6 +279,7 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - lottie-ios
+    - MarqueeLabel
     - nanopb
     - NYTPhotoViewer
     - ObjectMapper
@@ -345,6 +348,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   lottie-ios: 54d22edf55b839f0929cabbfe609c9aa548b1145
+  MarqueeLabel: 02f5ac8fd6877c94564556cb93fa86c70c08baeb
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
   ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
@@ -378,6 +382,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: b6d4e95f6bf5ab8702eb8207802846f917e012c5
+PODFILE CHECKSUM: 0862bb4412e96d7de9a2f019227ce022e81e64ba
 
 COCOAPODS: 1.12.1

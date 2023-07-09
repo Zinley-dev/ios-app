@@ -181,6 +181,9 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
             self.view.addGestureRecognizer(pinchGestureRecognizer)
             
+            let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTapGesture(_:)))
+            self.view.addGestureRecognizer(tap)
+            
             
             self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
             self.panGestureRecognizer.delegate = self
@@ -559,6 +562,12 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
 
     
+    @objc private func handleTapGesture(_ recognizer: UIPinchGestureRecognizer) {
+        
+        soundBtn?(self)
+        
+    }
+    
     @objc private func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
         //guard let view = videoNode.view else { return }
     
@@ -762,11 +771,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 }
 
 extension ReelNode {
-    
-    func didTap(_ videoNode: ASVideoNode) {
-        soundBtn?(self)
-        //soundProcess()
-    }
     
     
     @objc func soundProcess() {

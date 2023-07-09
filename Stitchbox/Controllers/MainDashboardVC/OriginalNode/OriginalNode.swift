@@ -15,6 +15,7 @@ import Alamofire
 import SendBirdSDK
 import AVFoundation
 import AVKit
+import MarqueeLabel
 
 
 fileprivate let FontSize: CGFloat = 13
@@ -23,7 +24,7 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
 
-    
+    var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
     var collectionNode: ASCollectionNode
@@ -58,6 +59,8 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             self.applyStyle()
             self.backgroundColor = .black
             self.collectionNode.view.indicatorStyle = .white
+            
+            self.addAnimatedLabelToTop()
         }
         
         self.automaticallyManagesSubnodes = true
@@ -354,8 +357,58 @@ extension OriginalNode {
     }
 
 
+    func addAnimatedLabelToTop() {
+        animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
+        animatedLabel.translatesAutoresizingMaskIntoConstraints = false
+        animatedLabel.backgroundColor = UIColor.clear
+        animatedLabel.type = .continuous
+        animatedLabel.leadingBuffer = 15.0
+        animatedLabel.trailingBuffer = 10.0
+        animatedLabel.animationDelay = 0.0
+        animatedLabel.textAlignment = .center
+        animatedLabel.font = UIFont.boldSystemFont(ofSize: 16) // Use a bold font for emphasis
+        animatedLabel.textColor = UIColor.white
+        animatedLabel.layer.masksToBounds = true
+        animatedLabel.layer.cornerRadius = 10 // Round the corners for a cleaner look
+
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(container)
+        container.addSubview(animatedLabel)
+        
+        NSLayoutConstraint.activate([
+            container.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 100),
+            container.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -100),
+            container.topAnchor.constraint(equalTo: self.view.topAnchor),
+            container.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 55),
+            animatedLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10), // Add padding around the text
+            animatedLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10), // Add padding around the text
+            animatedLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10), // Add padding around the text
+            animatedLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10) // Add padding around the text
+        ])
+        
+        // Make the label tappable
+        container.isUserInteractionEnabled = true
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(OriginalNode.labelTapped))
+        tap.numberOfTapsRequired = 1
+        container.addGestureRecognizer(tap)
+        
+    }
 
 
+    func applyAnimationText(text: String) {
+        animatedLabel.text = text + "                   "
+        animatedLabel.restartLabel()
+    }
+
+    @objc func labelTapped() {
+        if currentIndex != nil, currentIndex! + 1 < self.post.stitchedPosts.count {
+            
+            let indexPath = IndexPath(item: currentIndex! + 1, section: 0)
+            collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+            
+        }
+    }
     
 }
 
@@ -721,9 +774,41 @@ extension OriginalNode {
                 } else {
                     print("Couldn't cast ?")
                 }
+                
+                if index == 0 {
+                    
+                    delay(0.75) {
+                        let nextIndex = index + 1
+                        
+                        if nextIndex < self.post.stitchedPosts.count {
+                            
+                            let item = self.post.stitchedPosts[nextIndex]
+                            
+                            if let nextUsername = item.owner?.username {
+                                self.applyAnimationText(text: "Next: \(nextUsername)'s stitch!")
 
-                
-                
+                            }
+                           
+                        }
+                    }
+                    
+                } else {
+                    
+                    let nextIndex = index + 1
+                    
+                    if nextIndex < self.post.stitchedPosts.count {
+                        
+                        let item = self.post.stitchedPosts[nextIndex]
+                        
+                        if let nextUsername = item.owner?.username {
+                            self.applyAnimationText(text: "Next: \(nextUsername)'s stitch!")
+
+                        }
+                       
+                    }
+                    
+                }
+                   
                 if selectPostCollectionView.isHidden == false {
                     guard let sideButtonsView = cell.sideButtonsView else { return }
                     cell.headerNode.isHidden = true
