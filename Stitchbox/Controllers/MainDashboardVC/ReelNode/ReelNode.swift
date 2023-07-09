@@ -33,13 +33,12 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
     var buttonNode: ASDisplayNode
-    
+    var toggleContentNode = ASTextNode()
     var backgroundImage: GradientImageNode
     var shouldCountView = true
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
     var sideButtonsView: ButtonSideList!
-    
     var gradientNode: GradienView
     var time = 0
     var likeCount = 0
@@ -52,7 +51,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var isViewed = false
     var currentTimeStamp: TimeInterval!
     var originalCenter: CGPoint?
- 
+    var label: ActiveLabel!
     var pinchGestureRecognizer: UIPinchGestureRecognizer!
     var panGestureRecognizer: UIPanGestureRecognizer!
 
@@ -60,8 +59,9 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
     private let fireworkController = FountainFireworkController()
     private let fireworkController2 = ClassicFireworkController()
-    
-    
+ 
+    let maximumShowing = 100
+
     init(with post: PostModel) {
         self.post = post
         self.imageNode = RoundedCornerImageNode()
@@ -82,6 +82,101 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         DispatchQueue.main.async {
             
+            self.label = ActiveLabel()
+           
+            self.label.backgroundColor = .clear
+            self.contentNode.view.isUserInteractionEnabled = true
+        
+            self.label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            self.label.setContentHuggingPriority(.defaultLow, for: .vertical)
+            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+
+            
+
+            let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
+            self.label.customColor[customType] = .lightGray
+            self.label.numberOfLines = Int(self.contentNode.lineCount)
+            self.label.enabledTypes = [.hashtag, .url, customType, .mention]
+            self.label.attributedText = self.contentNode.attributedText
+            
+            
+            self.label.mentionColor = .secondary
+            
+            self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+            self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+            
+            self.label.handleCustomTap(for: customType) { element in
+                if element == "*more" {
+                    self.seeMore()
+                } else if element == "*hide" {
+                    self.hideContent()
+                }
+            }
+
+            self.label.handleHashtagTap { hashtag in
+                
+                var selectedHashtag = hashtag
+                selectedHashtag.insert("#", at: selectedHashtag.startIndex)
+                
+            
+                if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+                    
+                    if let vc = UIViewController.currentViewController() {
+                        
+                        let nav = UINavigationController(rootViewController: PLHVC)
+
+                        // Set the user ID, nickname, and onPresent properties of UPVC
+                        PLHVC.searchHashtag = selectedHashtag
+                        PLHVC.onPresent = true
+
+                        // Customize the navigation bar appearance
+                        nav.navigationBar.barTintColor = .background
+                        nav.navigationBar.tintColor = .white
+                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                        nav.modalPresentationStyle = .fullScreen
+                        vc.present(nav, animated: true, completion: nil)
+               
+                    }
+                }
+                
+                
+            }
+
+            self.label.handleURLTap { [weak self] string in
+                
+                let url = string.absoluteString
+                
+                if url.contains("https://stitchbox.gg/app/account/") {
+                    
+                    if let id = self?.getUIDParameter(from: url) {
+                        self?.moveToUserProfileVC(id: id)
+                    }
+        
+                } else if url.contains("https://stitchbox.gg/app/post/") {
+                
+                    if let id = self?.getUIDParameter(from: url) {
+                        self?.openPost(id: id)
+                    }
+
+                } else {
+                    
+                    guard let requestUrl = URL(string: url) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    }
+                }
+                
+            }
+            
+            
+            self.setupDefaultContent()
+            
+            self.contentNode.backgroundColor = .clear
             
             let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
             self.view.addGestureRecognizer(pinchGestureRecognizer)
@@ -184,29 +279,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
        
         
         automaticallyManagesSubnodes = true
-        
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .left
-        
-        headerNode.backgroundColor = UIColor.clear
-       
-        let hashtagsText = post.hashtags.joined(separator: " ")
-        
-        if post.content == "" {
-            
-            self.contentNode.attributedText = NSAttributedString(string: hashtagsText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-            
-        } else {
-            
-            self.contentNode.attributedText = NSAttributedString(string: post.content + " " + hashtagsText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-            
-        }
-        
-        
-        
-        
-        
+    
         if post.muxPlaybackId != "" {
             self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
             self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
@@ -272,13 +345,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 self.backgroundImage.setGradientImage(with: post.imageUrl)
             }
             
-            Dispatch.main.async {
-                
-                self.imageNode.view.isUserInteractionEnabled = true
 
-            }
-            
-        
             imageStorage.async.object(forKey: post.imageUrl.absoluteString) { result in
                 if case .value(let image) = result {
                     
@@ -305,12 +372,14 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 }
             }
             
+            
         }
         
         
         DispatchQueue.main.async() {
             self.sideButtonsView = ButtonSideList()
-            self.sideButtonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 155, y: -150), size: CGSize(width: 150, height: UIScreen.main.bounds.height))
+            self.sideButtonsView.backgroundColor = .clear
+            self.sideButtonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 60, y: -150), size: CGSize(width: 55, height: UIScreen.main.bounds.height))
             self.view.addSubview(self.sideButtonsView)
             self.originalCenter = self.view.center
             
@@ -322,6 +391,173 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
   
     }
     
+    func setupDefaultContent() {
+            
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .left
+            
+            headerNode.backgroundColor = UIColor.clear
+           
+            let hashtagsText = post.hashtags.joined(separator: " ")
+            
+            if post.content == "" {
+                
+                if hashtagsText.count > maximumShowing {
+                    
+                    let truncatedContent = hashtagsText.count <= maximumShowing ? hashtagsText : String(hashtagsText.prefix(maximumShowing))
+                    
+                    
+                    self.contentNode.attributedText = NSAttributedString(string: truncatedContent + " ..." + " *more", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+                    setNeedsLayout()
+                    layoutIfNeeded()
+
+                    label.attributedText = self.contentNode.attributedText
+                    self.label.removeFromSuperview()
+                    addActiveLabel()
+                   
+                } else {
+                    
+                    
+                    
+                    self.contentNode.attributedText = NSAttributedString(string: hashtagsText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+                    setNeedsLayout()
+                    layoutIfNeeded()
+
+                    label.attributedText = self.contentNode.attributedText
+                    self.label.removeFromSuperview()
+                    addActiveLabel()
+                  
+                }
+                
+                
+                
+            } else {
+                
+                let finalText = post.content + " " + hashtagsText
+                
+                let truncatedContent = finalText.count <= maximumShowing ? finalText : String(finalText.prefix(maximumShowing))
+                
+                if finalText.count > maximumShowing {
+                    
+                    
+                    
+                    self.contentNode.attributedText = NSAttributedString(string: truncatedContent + " ..." + " *more", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+                    setNeedsLayout()
+                    layoutIfNeeded()
+
+                    label.attributedText = self.contentNode.attributedText
+                    self.label.removeFromSuperview()
+                    addActiveLabel()
+                } else {
+                    
+                    
+                    
+                    
+                    self.contentNode.attributedText = NSAttributedString(string: finalText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+                    setNeedsLayout()
+                    layoutIfNeeded()
+
+                    label.attributedText = self.contentNode.attributedText
+                    self.label.removeFromSuperview()
+                    addActiveLabel()
+                    
+                }
+                
+                
+                
+            }
+            
+            
+        }
+
+    
+    func setupHideContent() {
+            
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .left
+            
+            headerNode.backgroundColor = UIColor.clear
+           
+            let hashtagsText = post.hashtags.joined(separator: " ")
+            
+            if post.content == "" {
+                
+                if hashtagsText.count > maximumShowing {
+                    
+                    
+                  
+                    
+                    self.contentNode.attributedText = NSAttributedString(string: hashtagsText + " *hide", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+                    setNeedsLayout()
+                    layoutIfNeeded()
+
+                    label.attributedText = self.contentNode.attributedText
+                    self.label.removeFromSuperview()
+                    addActiveLabel()
+                    
+                    
+                } else {
+                    
+                    
+                    self.contentNode.attributedText = NSAttributedString(string: hashtagsText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+                    setNeedsLayout()
+                    layoutIfNeeded()
+
+                    label.attributedText = self.contentNode.attributedText
+                    self.label.removeFromSuperview()
+                    addActiveLabel()
+                    
+                }
+                
+                
+                
+            } else {
+                
+                let finalText = post.content + " " + hashtagsText
+                
+                if finalText.count > maximumShowing {
+                    
+                    
+                   
+                    self.contentNode.attributedText = NSAttributedString(string: finalText + " *hide", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+                    setNeedsLayout()
+                    layoutIfNeeded()
+
+                    label.attributedText = self.contentNode.attributedText
+                    self.label.removeFromSuperview()
+                    addActiveLabel()
+                   
+                } else {
+                    
+                    
+                   
+                    self.contentNode.attributedText = NSAttributedString(string: finalText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
+                    setNeedsLayout()
+                    layoutIfNeeded()
+
+                    label.attributedText = self.contentNode.attributedText
+                    self.label.removeFromSuperview()
+                    addActiveLabel()
+                    
+                }
+                
+                
+                
+            }
+            
+        }
+
+
+    
+    func addActiveLabel() {
+    
+        self.contentNode.view.addSubview(self.label)
+          
+        // Set label's frame to match the contentNode's bounds.
+        self.label.frame = self.contentNode.view.bounds
+       
+    }
+
     
     @objc private func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
         //guard let view = videoNode.view else { return }
@@ -380,8 +616,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         }
     }
 
-    
-    
+  
 
     func walkthroughPanAndZoom() {
         // Store original center for later use
@@ -1205,7 +1440,7 @@ extension ReelNode {
 }
 
 extension ReelNode {
-    
+
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
          
         setupSpace(constrainedSize: constrainedSize)
@@ -1218,7 +1453,7 @@ extension ReelNode {
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
       
-        let contentInset = UIEdgeInsets(top: 2, left: 20, bottom: 2, right: 100)
+        let contentInset = UIEdgeInsets(top: 2, left: 20, bottom: 2, right: 70)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
         
         let verticalStack = ASStackLayoutSpec.vertical()
@@ -1278,7 +1513,7 @@ extension ReelNode {
         let buttonsInset = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
-    
+
     private func setupSpace(constrainedSize: ASSizeRange) {
         delay(0.25) { [weak self] in
             guard let self = self else { return }
@@ -1373,81 +1608,139 @@ extension ReelNode: UIGestureRecognizerDelegate {
         return false
     }
 
-
     
+    func getUIDParameter(from urlString: String) -> String? {
+        if let url = URL(string: urlString) {
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            return components?.queryItems?.first(where: { $0.name == "uid" })?.value
+        } else {
+            return nil
+        }
+    }
+
+    func moveToUserProfileVC(id: String) {
+        
+        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+            
+            if let vc = UIViewController.currentViewController() {
+                
+
+                if general_vc != nil {
+                    general_vc.viewWillDisappear(true)
+                    general_vc.viewDidDisappear(true)
+                }
+                
+              
+                
+                let nav = UINavigationController(rootViewController: UPVC)
+
+                // Set the user ID, nickname, and onPresent properties of UPVC
+                UPVC.userId = id
+                UPVC.onPresent = true
+
+                // Customize the navigation bar appearance
+                nav.navigationBar.barTintColor = .background
+                nav.navigationBar.tintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                nav.modalPresentationStyle = .fullScreen
+                vc.present(nav, animated: true, completion: nil)
+
+
+            }
+        }
+        
+    }
+    
+    
+    func openPost(id: String) {
+      
+        presentSwiftLoader()
+
+        APIManager.shared.getPostDetail(postId: id) { result in
+         
+            switch result {
+            case .success(let apiResponse):
+                guard let data = apiResponse.body else {
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                    }
+                  return
+                }
+               
+                if !data.isEmpty {
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                        
+                        if let post = PostModel(JSON: data) {
+                            
+                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                                
+                                if let vc = UIViewController.currentViewController() {
+                                
+
+                                    if general_vc != nil {
+                                        general_vc.viewWillDisappear(true)
+                                        general_vc.viewDidDisappear(true)
+                                    }
+                                    
+                               
+                                    
+                                    RVC.onPresent = true
+                                    
+                                    let nav = UINavigationController(rootViewController: RVC)
+
+                                    // Set the user ID, nickname, and onPresent properties of UPVC
+                                    RVC.posts = [post]
+                                   
+                                    // Customize the navigation bar appearance
+                                    nav.navigationBar.barTintColor = .background
+                                    nav.navigationBar.tintColor = .white
+                                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                                    nav.modalPresentationStyle = .fullScreen
+                                    
+                                    vc.present(nav, animated: true, completion: nil)
+                                    
+                                }
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                } else {
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
+                    }
+                }
+
+            case .failure(let error):
+                print(error)
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                }
+                
+            }
+        }
+        
+    }
     
 }
 
 extension ReelNode {
     
-    override func layout() {
-        delay(0.025) {
-            self.addActiveLabelToContentNode()
-        }
+    func seeMore() {
+        
+        setupHideContent()
+        setNeedsLayout()
+        
     }
     
-    
-    func addActiveLabelToContentNode() {
+    func hideContent() {
         
-        DispatchQueue.main.async {
-            
-            self.contentNode.view.isUserInteractionEnabled = true
-            
-            
-            let label = ActiveLabel()
-            
-            //
-            self.contentNode.view.addSubview(label)
-            
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.topAnchor.constraint(equalTo: self.contentNode.view.topAnchor, constant: 0).isActive = true
-            label.leadingAnchor.constraint(equalTo: self.contentNode.view.leadingAnchor, constant: 0).isActive = true
-            label.trailingAnchor.constraint(equalTo: self.contentNode.view.trailingAnchor, constant: 0).isActive = true
-            label.bottomAnchor.constraint(equalTo: self.contentNode.view.bottomAnchor, constant: 0).isActive = true
-            
-                    
-            label.customize { label in
-                
-               
-                label.numberOfLines = Int(self.contentNode.lineCount)
-                label.enabledTypes = [.mention, .hashtag, .url]
-                
-                label.attributedText = self.contentNode.attributedText
-                //label.attributedText = textAttributes
-            
-                label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-                label.mentionColor = .secondary
-                label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
-
-                
-                
-                label.handleMentionTap {  mention in
-                    
-                  
-                   
-                    
-                }
-                
-                label.handleHashtagTap { hashtag in
-                          
-                   
-                    
-                }
-                
-                label.handleURLTap { [weak self] string in
-                    
-                    
- 
-                    
-                    
-                }
-                
-                
-                
-            }
-            
-        }
-            
+        setupDefaultContent()
+        setNeedsLayout()
     }
     
 }

@@ -98,18 +98,7 @@ class UploadContentManager {
         
         var update_hashtaglist = [String]()
         
-        if hashtagList.isEmpty == true {
-            
-            update_hashtaglist = ["#\(loadUsername ?? "")"]
-            
-        } else {
-            
-            update_hashtaglist = hashtagList
-            if !update_hashtaglist.contains("#\(loadUsername ?? "")") {
-                update_hashtaglist.insert("#\(loadUsername ?? "")", at: 0)
-            }
-            
-        }
+
         contentPost = ["content": selectedDescTxtView, "images": [imageUrl], "tags": [userUID], "hashtags": update_hashtaglist, "streamLink": global_fullLink, "gameId": gameID]
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
         contentPost["metadata"] = ["width": origin_width, "height": origin_height, "length": length, "contentMode": 0]

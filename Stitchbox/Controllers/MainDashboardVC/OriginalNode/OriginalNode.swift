@@ -155,7 +155,7 @@ extension OriginalNode {
             let width = (UIScreen.main.bounds.width - (numberOfItemsInRow + 1) * spacing) / numberOfItemsInRow
             let height = width * 13.5 / 9  // This will give you an aspect ratio of 9:16
             
-            
+           
             return CGSize(width: width, height: height)
         } else {
             return CGSize(width: 0, height: 0)
