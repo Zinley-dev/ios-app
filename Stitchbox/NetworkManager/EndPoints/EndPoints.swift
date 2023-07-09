@@ -1826,7 +1826,10 @@ public enum PostStitchApi {
   case stitch(body: [String: Any])
   case unstitch(body: [String: Any])
   case accept(body: [String: Any])
+  case denied(body: [String: Any])
   case getByRoot(rootId: String)
+  case getMyStitch(page: Int)
+  case getMyWaitlist(page: Int)
 }
 extension PostStitchApi: EndPointType {
   var path: String {
@@ -1839,6 +1842,12 @@ extension PostStitchApi: EndPointType {
         return "/un-stitch"
       case .accept:
         return "/approve"
+      case .denied:
+        return "/denied"
+      case .getMyStitch(let page):
+        return "/my-stitch?page=\(page)"
+      case .getMyWaitlist(let page):
+        return "/my-wait-list?page=\(page)"
     }
   }
   
@@ -1856,6 +1865,12 @@ extension PostStitchApi: EndPointType {
         return .post
       case .accept:
         return .post
+      case .denied:
+        return .post
+      case .getMyStitch:
+        return .get
+      case .getMyWaitlist:
+        return .get
     }
   }
   
@@ -1869,6 +1884,12 @@ extension PostStitchApi: EndPointType {
         return .requestParameters(parameters: body)
       case .accept(let body):
         return .requestParameters(parameters: body)
+      case .denied(body: let body):
+        return .requestParameters(parameters: body)
+      case .getMyStitch:
+        return .request
+      case .getMyWaitlist:
+        return .request
     }
   }
   

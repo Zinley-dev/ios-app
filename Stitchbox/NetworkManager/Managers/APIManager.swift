@@ -921,6 +921,16 @@ extension APIManager {
       completion(result)
     }
   }
+  func getMyStitch(page: Int, completion: @escaping APICompletion) {
+    postStitchManager.request(.getMyStitch(page: page)) { result in
+      completion(result)
+    }
+  }
+  func getMyWaitlist(page: Int, completion: @escaping APICompletion) {
+    postStitchManager.request(.getMyStitch(page: page)) { result in
+      completion(result)
+    }
+  }
   
   func unstitch(rootId: String, memberId: String, completion: @escaping APICompletion) {
     let params = ["rootId": rootId, "member": memberId]
@@ -932,6 +942,12 @@ extension APIManager {
   func acceptStitch(rootId: String, memberId: String, completion: @escaping APICompletion) {
     let params = ["rootId": rootId, "member": memberId]
     postStitchManager.request(.accept(body: params)) { result in
+      completion(result)
+    }
+  }
+  func deniedStitch(rootId: String, memberId: String, completion: @escaping APICompletion) {
+    let params = ["rootId": rootId, "member": memberId]
+    postStitchManager.request(.denied(body: params)) { result in
       completion(result)
     }
   }
