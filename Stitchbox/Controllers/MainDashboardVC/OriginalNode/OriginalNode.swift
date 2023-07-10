@@ -24,6 +24,7 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
 
+    let threshold: CGFloat = 35 // Adjust this value as needed.
     var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
@@ -398,7 +399,6 @@ extension OriginalNode {
 
     func applyAnimationText(text: String) {
         animatedLabel.text = text + "                   "
-        animatedLabel.restartLabel()
     }
 
     @objc func labelTapped() {
@@ -438,6 +438,8 @@ extension OriginalNode {
             node.sideButtonsView.isHidden = true
             node.buttonNode.isHidden = true
             self.selectPostCollectionView.isHidden = false
+          
+            
         }
 
        
@@ -756,7 +758,9 @@ extension OriginalNode {
                     cell.layer.borderColor = UIColor.secondary.cgColor
                     cell.isSelected = true
                     selectPostCollectionView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-                    selectPostCollectionView.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                    
+                    self.selectPostCollectionView.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                    
 
                     // Deselect all other cells
                     for i in 0..<selectPostCollectionView.collectionView.numberOfItems(inSection: 0) {
@@ -777,7 +781,7 @@ extension OriginalNode {
                 
                 if index == 0 {
                     
-                    delay(0.75) {
+                    delay(1) {
                         let nextIndex = index + 1
                         
                         if nextIndex < self.post.stitchedPosts.count {
@@ -785,7 +789,7 @@ extension OriginalNode {
                             let item = self.post.stitchedPosts[nextIndex]
                             
                             if let nextUsername = item.owner?.username {
-                                self.applyAnimationText(text: "Next: \(nextUsername)'s stitch!")
+                                self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
 
                             }
                            
@@ -801,7 +805,7 @@ extension OriginalNode {
                         let item = self.post.stitchedPosts[nextIndex]
                         
                         if let nextUsername = item.owner?.username {
-                            self.applyAnimationText(text: "Next: \(nextUsername)'s stitch!")
+                            self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
 
                         }
                        
@@ -961,14 +965,17 @@ extension OriginalNode {
             var foundVisibleVideo = false
             
             for cell in visibleCells {
-                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-                let distanceFromCenter = abs(cellCenter.x - visibleRect.midX) // Use the x-coordinate for horizontal scroll
-                if distanceFromCenter < minDistanceFromCenter {
-                    newPlayingIndex = cell.indexPath!.row
-                    minDistanceFromCenter = distanceFromCenter
+                    let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+                    let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+                    let distanceFromCenter = abs(cellCenter.x - visibleRect.midX) // Use the x-coordinate for horizontal scroll
+                    
+                    // Only switch video if the distance from center is less than the min distance
+                    // and also less than the threshold.
+                    if distanceFromCenter < minDistanceFromCenter && distanceFromCenter < threshold {
+                        newPlayingIndex = cell.indexPath!.row
+                        minDistanceFromCenter = distanceFromCenter
+                    }
                 }
-            }
             
             if !post.stitchedPosts[newPlayingIndex!].muxPlaybackId.isEmpty {
                 foundVisibleVideo = true

@@ -9,6 +9,8 @@ import UIKit
 
 class PostHeader: UIView {
     
+    
+    @IBOutlet weak var createStitchView: UIView!
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet var stichBtn: UIButton!
     @IBOutlet var contentView: UIView!
@@ -29,8 +31,13 @@ class PostHeader: UIView {
     func commonInit() {
         
         
+        
         Bundle.main.loadNibNamed(kCONTENT_XIB_NAME, owner: self, options: nil)
         contentView.fixInView(self)
+
+        createStitchView.layer.cornerRadius = 5  // set as per your requirement.
+        createStitchView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]  // Top right corner, Bottom right corner respectively
+        createStitchView.clipsToBounds = true
 
     
     }

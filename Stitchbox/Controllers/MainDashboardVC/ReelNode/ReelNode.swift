@@ -97,11 +97,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
             self.label.customColor[customType] = .lightGray
             self.label.numberOfLines = Int(self.contentNode.lineCount)
-            self.label.enabledTypes = [.hashtag, .url, customType, .mention]
+            self.label.enabledTypes = [.hashtag, .url, customType]
             self.label.attributedText = self.contentNode.attributedText
             
             
-            self.label.mentionColor = .secondary
+                //self.label.mentionColor = .secondary
             
             self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
             self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
@@ -181,9 +181,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
             self.view.addGestureRecognizer(pinchGestureRecognizer)
             
-            let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTapGesture(_:)))
-            self.view.addGestureRecognizer(tap)
-            
             
             self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
             self.panGestureRecognizer.delegate = self
@@ -216,7 +213,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.buttonsView.commentBtn.setImage(cmtImage, for: .normal)
             self.buttonsView.shareBtn.setTitle("", for: .normal)
             self.buttonsView.shareBtn.setImage(shareImage, for: .normal)
-
+            self.buttonsView.saveBtn.setImage(unsaveImage, for: .normal)
             
             let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
             avatarTap.numberOfTapsRequired = 1
@@ -405,7 +402,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             if post.content == "" {
                 
-                if hashtagsText.count > maximumShowing {
+                if hashtagsText.count > maximumShowing, hashtagsText.count - maximumShowing >= 20 {
                     
                     let truncatedContent = hashtagsText.count <= maximumShowing ? hashtagsText : String(hashtagsText.prefix(maximumShowing))
                     
@@ -419,9 +416,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                     addActiveLabel()
                    
                 } else {
-                    
-                    
-                    
+                        
                     self.contentNode.attributedText = NSAttributedString(string: hashtagsText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
                     setNeedsLayout()
                     layoutIfNeeded()
@@ -440,7 +435,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 
                 let truncatedContent = finalText.count <= maximumShowing ? finalText : String(finalText.prefix(maximumShowing))
                 
-                if finalText.count > maximumShowing {
+                if finalText.count > maximumShowing, finalText.count - maximumShowing >= 20 {
                     
                     
                     
@@ -561,12 +556,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
        
     }
 
-    
-    @objc private func handleTapGesture(_ recognizer: UIPinchGestureRecognizer) {
-        
-        soundBtn?(self)
-        
-    }
     
     @objc private func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
         //guard let view = videoNode.view else { return }
@@ -771,6 +760,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 }
 
 extension ReelNode {
+    
+    func didTap(_ videoNode: ASVideoNode) {
+        soundBtn?(self)
+        //soundProcess()
+    }
     
     
     @objc func soundProcess() {

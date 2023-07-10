@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PostHeader" customModule="Stitchbox" customModuleProvider="target">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="tw2-A7-LcA"/>
+                <outlet property="createStitchView" destination="cM4-9B-opX" id="Yyt-8L-kMT"/>
                 <outlet property="stichBtn" destination="al0-EY-6tL" id="qo1-Wf-htW"/>
                 <outlet property="usernameLbl" destination="nAq-It-wTT" id="lAv-hK-YyV"/>
             </connections>
