@@ -12,6 +12,10 @@ import ObjectMapper
 
 class ChannelViewController: SBUChannelViewController {
     
+    deinit {
+        print("ChannelViewController is being deallocated.")
+    }
+    
     private lazy var CleftBarButton: UIBarButtonItem? = _leftBarButton
     private lazy var _leftBarButton: UIBarButtonItem = {
         return UIBarButtonItem(

@@ -9,6 +9,12 @@ import UIKit
 import ObjectMapper
 
 class ProfileViewController: UIViewController {
+    
+    deinit {
+        print("ProfileViewController is being deallocated.")
+    }
+    
+    
     typealias ViewModelType = ProfileViewModel
     // MARK: - Properties
     private var currpage = 1

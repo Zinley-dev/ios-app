@@ -8,6 +8,10 @@
 import UIKit
 
 class PhotoVC: UIViewController {
+    
+    deinit {
+        print("PhotoVC is being deallocated.")
+    }
 
     var selectedImg: UIImage!
     var selectedIndex: Int!

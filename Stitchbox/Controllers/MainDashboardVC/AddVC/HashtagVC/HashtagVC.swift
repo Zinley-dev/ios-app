@@ -10,6 +10,9 @@ import AsyncDisplayKit
 
 class HashtagVC: UIViewController {
     
+    deinit {
+        print("HashtagVC is being deallocated.")
+    }
     
     @IBOutlet weak var hashtagTxtField: UITextField!
     @IBOutlet weak var contentView: UIView!

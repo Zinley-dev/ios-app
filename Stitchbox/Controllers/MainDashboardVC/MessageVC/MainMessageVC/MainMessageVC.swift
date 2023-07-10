@@ -13,6 +13,10 @@ var oldTabbarFr: CGRect = .zero
 
 
 class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, UISearchBarDelegate {
+    
+    deinit {
+        print("MainMessageVC is being deallocated.")
+    }
 
    // @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!

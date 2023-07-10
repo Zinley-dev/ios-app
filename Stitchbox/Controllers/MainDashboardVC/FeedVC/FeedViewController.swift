@@ -13,7 +13,7 @@ import FLAnimatedImage
 import ObjectMapper
 import AppsFlyerLib
 
-class FeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
+class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
     
     @IBOutlet weak var progressBar: ProgressBar!
@@ -260,6 +260,9 @@ class FeedViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 
                 self.refresh_request = false
+                for item in self.posts {
+                    item.stitchedPosts.removeAll()
+                }
                 self.posts.removeAll()
                 self.collectionNode.reloadData()
                 
@@ -489,9 +492,6 @@ extension FeedViewController {
         shouldScrollToTop()
     }
     
-    @objc func onClickPreference(_ sender: AnyObject) {
-
-    }
     
     @objc func onClickNoti(_ sender: AnyObject) {
         if let NVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "NotificationVC") as? NotificationVC {
@@ -514,18 +514,6 @@ extension FeedViewController {
         }
     }
     
-    @objc func onClickPromote(_ sender: AnyObject) {
-        
-        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PromoteVC") as? PromoteVC {
-            
-            PVC.promotionList = self.promotionList
-            PVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(PVC, animated: true)
-            
-        }
-        
-    }
     
 }
 
@@ -579,7 +567,7 @@ extension FeedViewController {
             
             if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: 0, section: 0)) as? OriginalNode {
                 
-                if !currentCell.post.stitchedPosts[0].muxPlaybackId.isEmpty {
+                if !currentCell.post.stitchedPosts[0].value!.muxPlaybackId.isEmpty {
                     currentIndex = 0
                     newPlayingIndex = 0
                     currentCell.currentIndex = 0
@@ -632,7 +620,7 @@ extension FeedViewController {
             return
         }
         
-        if !newPlayingCell.post.stitchedPosts[newPlayingCell.currentIndex!].muxPlaybackId.isEmpty {
+        if !newPlayingCell.post.stitchedPosts[newPlayingCell.currentIndex!].value!.muxPlaybackId.isEmpty {
             foundVisibleVideo = true
             imageIndex = nil
         } else {
@@ -668,66 +656,6 @@ extension FeedViewController {
     }
 
  
-}
-
-extension FeedViewController {
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
-
-        // Check if collectionView.tag is within the range of the posts array
-        guard collectionView.tag < posts.count else {
-            print("Error: No post for tag \(collectionView.tag)")
-            cell.hashTagLabel.text = "Error: post not found"
-            return cell
-        }
-        
-        let item = posts[collectionView.tag]
-
-        // Check if indexPath.row is within the range of the hashtags array
-        guard indexPath.row < item.hashtags.count else {
-            print("Error: No hashtag for index \(indexPath.row)")
-            cell.hashTagLabel.text = "Error: hashtag not found"
-            return cell
-        }
-
-        cell.hashTagLabel.text = item.hashtags[indexPath.row]
-        cell.backgroundColor = .clear
-        cell.hashTagLabel.backgroundColor = .clear
-        return cell
-    }
-    
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView.tag < posts.count {
-            return posts[collectionView.tag].hashtags.count
-        } else {
-            print("Warning: collectionView.tag is out of range!")
-            return 0
-        }
-    }
-
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let selectedHashtag = posts[collectionView.tag].hashtags[indexPath.row]
-        
-        if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-            
-            PLWHVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            PLWHVC.searchHashtag = selectedHashtag
-            self.navigationController?.pushViewController(PLWHVC, animated: true)
-            
-        }
-        
-    }
-    
-    
 }
 
 extension FeedViewController: ASCollectionDelegate {
@@ -922,9 +850,12 @@ extension FeedViewController {
                     let path = IndexPath(row: row, section: 0) // single indexpath
                     delete_indexPaths.append(path) // append
                 }
+                
 
                 self.posts.removeAll()
                 self.collectionNode.deleteItems(at: delete_indexPaths)
+                
+                
             }
         }
 

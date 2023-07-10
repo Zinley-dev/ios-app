@@ -14,6 +14,10 @@ import Alamofire
 
 class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
+    deinit {
+        print("SavePostVC is being deallocated.")
+    }
+
 
     var hasViewAppeared = false
     let backButton: UIButton = UIButton(type: .custom)
@@ -356,7 +360,7 @@ extension SavePostVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = OwnerPostSearchNode(with: post)
+            let node = OwnerPostSearchNode(with: post, isSave: true)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -457,8 +461,7 @@ extension SavePostVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        /*
-        APIManager.shared.getsavePost(page: page) { [weak self] result in
+        APIManager.shared.getSavedPost { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -493,9 +496,7 @@ extension SavePostVC {
                 }
             }
         }
-        
-        */
-        
+      
     }
     
     

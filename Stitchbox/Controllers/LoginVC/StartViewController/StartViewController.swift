@@ -9,7 +9,6 @@ import UIKit
 import AVFoundation
 import RxSwift
 import RxCocoa
-import Lottie
 import ZSWTappableLabel
 import ZSWTaggedString
 import SafariServices
@@ -24,12 +23,12 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         return self.view.window!
     }
     
-  typealias ViewModelType = StartViewModel
+    typealias ViewModelType = StartViewModel
 
-  // MARK: - Properties
-//  private var viewModel: ViewModelType! = ViewModelType()
-  private lazy var vm: ViewModelType! = ViewModelType(vc: self)
-  private let disposeBag = DisposeBag()
+    // MARK: - Properties
+    //  private var viewModel: ViewModelType! = ViewModelType()
+    private lazy var vm: ViewModelType! = ViewModelType(vc: self)
+    private let disposeBag = DisposeBag()
   
   
     @IBOutlet weak var launchingView: UIView!

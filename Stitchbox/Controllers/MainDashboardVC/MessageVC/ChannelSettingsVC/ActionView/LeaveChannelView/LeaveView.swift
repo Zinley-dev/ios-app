@@ -9,6 +9,9 @@ import UIKit
 
 class LeaveView: UIViewController {
     
+    deinit {
+        print("LeaveView is being deallocated.")
+    }
     
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var leaveBtn: UIButton!

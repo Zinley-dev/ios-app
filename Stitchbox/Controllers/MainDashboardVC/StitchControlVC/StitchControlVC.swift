@@ -355,7 +355,7 @@ extension StitchControlVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = OwnerPostSearchNode(with: post)
+            let node = OwnerPostSearchNode(with: post, isSave: false)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             

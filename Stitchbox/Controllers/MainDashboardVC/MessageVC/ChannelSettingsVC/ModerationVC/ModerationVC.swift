@@ -11,6 +11,9 @@ import SendBirdUIKit
 
 class ModerationVC: UIViewController {
     
+    deinit {
+        print("ModerationVC is being deallocated.")
+    }
     
     @IBOutlet weak var banBtn: UIButton!
     @IBOutlet weak var mutedBtn: UIButton!

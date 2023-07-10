@@ -10,6 +10,10 @@ import FLAnimatedImage
 
 class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, UISearchBarDelegate {
     
+    deinit {
+        print("MainFollowVC is being deallocated.")
+    }
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     @IBOutlet weak var followingBtn: UIButton!

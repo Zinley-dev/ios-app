@@ -12,6 +12,10 @@ import Alamofire
 
 class PostSearchVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
+    deinit {
+        print("PostSearchVC is being deallocated.")
+    }
+    
     @IBOutlet weak var contentview: UIView!
     
     var page = 1

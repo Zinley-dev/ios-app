@@ -13,6 +13,10 @@ import ObjectMapper
 
 class SettingVC: UIViewController {
     
+    deinit {
+        print("SettingVC is being deallocated.")
+    }
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     @IBOutlet weak var logOutBtn: UIButton!

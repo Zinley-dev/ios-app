@@ -11,6 +11,10 @@ import FLAnimatedImage
 
 class SearchViewController: UIViewController, UINavigationControllerDelegate, UISearchBarDelegate {
     
+    deinit {
+        print("SearchViewController is being deallocated.")
+    }
+    
     struct SearchRecord {
         let keyWord: String
         let timeStamp: Double

@@ -9,6 +9,10 @@ import UIKit
 
 class EditBirthdayVC: UIViewController, UITextFieldDelegate {
     
+    deinit {
+        print("EditBirthdayVC is being deallocated.")
+    }
+    
     let backButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var birthdayTxtField: UITextField! {

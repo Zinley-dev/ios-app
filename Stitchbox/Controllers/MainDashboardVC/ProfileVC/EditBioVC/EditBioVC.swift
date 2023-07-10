@@ -8,6 +8,10 @@
 import UIKit
 
 class EditBioVC: UIViewController {
+    
+    deinit {
+        print("EditBioVC is being deallocated.")
+    }
 
     //@IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var bioTextView: UITextView!

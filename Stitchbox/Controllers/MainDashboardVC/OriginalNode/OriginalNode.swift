@@ -23,6 +23,11 @@ fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
 class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
+    
+    
+    deinit {
+        print("OriginalNode is being deallocated.")
+    }
 
     let threshold: CGFloat = 35 // Adjust this value as needed.
     var animatedLabel: MarqueeLabel!
@@ -39,9 +44,12 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
   
     init(with post: PostModel) {
         self.post = post
-        post.stitchedPosts.append(post)
         
-    
+        if !post.stitchedPosts.contains(where: { $0.value === post }) {
+            post.stitchedPosts.append(Weak(post))
+        }
+
+        
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 0.0
@@ -53,7 +61,9 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         super.init()
        
       
-        Dispatch.main.async {
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.collectionNode.backgroundColor = .black
             self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
             self.collectionNode.leadingScreensForBatching = 2.0
             self.collectionNode.view.contentInsetAdjustmentBehavior = .never
@@ -74,7 +84,8 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func addSubCollection() {
-        DispatchQueue.main.async() {
+        DispatchQueue.main.async() { [weak self] in
+            guard let self = self else { return }
             self.selectPostCollectionView = SelectPostCollectionView()
             self.selectPostCollectionView.translatesAutoresizingMaskIntoConstraints = false
             
@@ -144,7 +155,7 @@ extension OriginalNode {
     func applyStyle() {
         
         self.collectionNode.view.isPagingEnabled = true
-        self.collectionNode.view.backgroundColor = UIColor.clear
+        self.collectionNode.view.backgroundColor = UIColor.black
         self.collectionNode.view.showsVerticalScrollIndicator = false
         self.collectionNode.view.allowsSelection = false
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
@@ -183,39 +194,35 @@ extension OriginalNode: ASCollectionDelegate, ASCollectionDataSource {
     }
   
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
-        let post = post.stitchedPosts[indexPath.row]
-        
-        return {
-            let node = ReelNode(with: post)
-            node.neverShowPlaceholders = true
-            node.debugName = "Node \(indexPath.row)"
-            
-            
-            node.settingBtn = { (node) in
-                
-                self.settingPost(item: post)
-                
-            }
-            
-            
-            node.viewStitchBtn = { (node) in
-                        
-                self.viewStitchedPost(node: node as! ReelNode)
-                              
-            }
-            
-            
-            node.soundBtn = { (node) in
-                        
-                self.soundProcess(node: node as! ReelNode)
-                              
+        let weakPost = post.stitchedPosts[indexPath.row]
+
+        return { [weak self] in
+            guard let self = self, let post = weakPost.value else {
+                // Return an empty node if self or post is nil
+                return ASCellNode()
             }
 
-            
-            
+            let node = ReelNode(with: post)
+
+            node.neverShowPlaceholders = true
+            node.debugName = "Node \(indexPath.row)"
+
+            node.settingBtn = { [weak self] node in
+                self?.settingPost(item: post)
+            }
+
+            node.viewStitchBtn = { [weak self] node in
+                self?.viewStitchedPost(node: node as! ReelNode)
+            }
+
+            node.soundBtn = { [weak self] node in
+                self?.soundProcess(node: node as! ReelNode)
+            }
+
             return node
         }
     }
+
     
 }
 
@@ -288,12 +295,13 @@ extension OriginalNode {
         }
 
 
+        
         // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()
         for i in newPosts {
             if let item = PostModel(JSON: i) {
-                if !self.post.stitchedPosts.contains(item) {
-                    self.post.stitchedPosts.append(item)
+                if !post.stitchedPosts.contains(where: { $0.value === item }) {
+                    self.post.stitchedPosts.append(Weak(item))
                     items.append(item)
                 }
             }
@@ -321,11 +329,20 @@ extension OriginalNode {
         
         retrieveNextPageWithCompletion { [weak self] (newPosts) in
             guard let self = self else { return }
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
             
-            //self.cleanupPosts(collectionNode: collectionNode)
-            
-            context.completeBatchFetching(true)
+            if let vc = UIViewController.currentViewController() {
+                
+                if vc is FeedViewController || vc is SelectedPostVC {
+                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    context.completeBatchFetching(true)
+                } else {
+                    context.completeBatchFetching(true)
+                }
+                
+            } else {
+                context.completeBatchFetching(true)
+            }
+           
         }
     }
 
@@ -399,6 +416,7 @@ extension OriginalNode {
 
     func applyAnimationText(text: String) {
         animatedLabel.text = text + "                   "
+        animatedLabel.restartLabel()
     }
 
     @objc func labelTapped() {
@@ -788,11 +806,14 @@ extension OriginalNode {
                             
                             let item = self.post.stitchedPosts[nextIndex]
                             
-                            if let nextUsername = item.owner?.username {
+                            if let nextUsername = item.value!.owner?.username {
                                 self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
 
                             }
                            
+                        } else {
+                            self.applyAnimationText(text: "Unknown!")
+
                         }
                     }
                     
@@ -804,7 +825,7 @@ extension OriginalNode {
                         
                         let item = self.post.stitchedPosts[nextIndex]
                         
-                        if let nextUsername = item.owner?.username {
+                        if let nextUsername = item.value!.owner?.username {
                             self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
 
                         }
@@ -889,9 +910,9 @@ extension OriginalNode {
             //cell.reset()
         }
         collectionView.deselectItem(at: indexPath, animated: false)
-        cell.configureWithUrl(with: item)
+        cell.configureWithUrl(with: item.value!)
 
-        if let username = item.owner?.username {
+        if let username = item.value!.owner?.username {
             cell.stichLabel.text = "@\(username)"
         } else {
             cell.stichLabel.text = ""
@@ -933,7 +954,7 @@ extension OriginalNode {
         if isfirstLoad {
             isfirstLoad = false
             let post = post.stitchedPosts[0]
-            if !post.muxPlaybackId.isEmpty {
+            if !post.value!.muxPlaybackId.isEmpty {
                 currentIndex = 0
                 newPlayingIndex = 0
                 isVideoPlaying = true
@@ -977,7 +998,7 @@ extension OriginalNode {
                     }
                 }
             
-            if !post.stitchedPosts[newPlayingIndex!].muxPlaybackId.isEmpty {
+            if !post.stitchedPosts[newPlayingIndex!].value!.muxPlaybackId.isEmpty {
                 foundVisibleVideo = true
                 //playTimeBar.isHidden = false
                 imageIndex = nil

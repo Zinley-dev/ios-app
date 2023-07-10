@@ -12,6 +12,10 @@ import SendBirdSDK
 class BannedMemberVC: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
     
+    deinit {
+        print("BannedMemberVC is being deallocated.")
+    }
+    
     var channel: SBDGroupChannel?
     var query: SBDBannedUserListQuery?
     let backButton: UIButton = UIButton(type: .custom)

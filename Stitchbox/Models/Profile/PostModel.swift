@@ -82,9 +82,10 @@ class PostModel: Mappable {
   private(set) var setting: Setting?
   private(set) var estimatedCount: EstimatedCount?
   private(set) var metadata: PostMetadata?
+        
+  var stitchedPosts: [Weak<PostModel>] = []
   private(set) var createdAt: Date?
     
-  var stitchedPosts = [PostModel]()
   
   required init?(map: ObjectMapper.Map) {
     
@@ -121,4 +122,12 @@ extension PostModel: Hashable {
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
+}
+
+struct Weak<Object: AnyObject> {
+    weak var value: Object?
+    
+    init (_ value: Object) {
+        self.value = value
+    }
 }

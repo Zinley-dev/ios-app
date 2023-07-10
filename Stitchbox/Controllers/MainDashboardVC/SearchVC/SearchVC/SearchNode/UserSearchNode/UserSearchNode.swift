@@ -16,6 +16,10 @@ fileprivate let FontSize: CGFloat = 13
 
 class UserSearchNode: ASCellNode {
     
+    deinit {
+        print("UserSearchNode is being deallocated.")
+    }
+    
     weak var user: UserSearchModel!
 
     var userNameNode: ASTextNode!

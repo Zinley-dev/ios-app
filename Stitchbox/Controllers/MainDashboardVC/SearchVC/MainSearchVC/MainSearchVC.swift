@@ -10,6 +10,9 @@ import AsyncDisplayKit
 
 class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelegate {
     
+    deinit {
+        print("MainSearchVC is being deallocated.")
+    }
     
     struct SearchRecord {
         let keyWord: String

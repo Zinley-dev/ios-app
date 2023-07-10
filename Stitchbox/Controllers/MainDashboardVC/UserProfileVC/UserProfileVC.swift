@@ -13,6 +13,10 @@ import SendBirdUIKit
 
 class UserProfileVC: UIViewController {
     
+    deinit {
+        print("UserProfileVC is being deallocated.")
+    }
+    
     private let fireworkController = FountainFireworkController()
     private let fireworkController2 = ClassicFireworkController()
     

@@ -1570,7 +1570,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Adt-xN-LEd"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FB9-s1-bOa" firstAttribute="centerX" secondItem="vxo-nb-Nfw" secondAttribute="centerX" id="4jh-3q-1K1"/>
                             <constraint firstItem="Adt-xN-LEd" firstAttribute="bottom" secondItem="vxo-nb-Nfw" secondAttribute="bottom" id="HTy-r6-zT0"/>
@@ -6194,7 +6194,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p5q-wi-MaU">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="733"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KJQ-mW-SJo">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>

@@ -9,6 +9,9 @@ import UIKit
 
 class DismissOperatorModView: UIViewController{
     
+    deinit {
+        print("DismissOperatorModView is being deallocated.")
+    }
     
     @IBOutlet weak var promoteBtn: UIButton!
     @IBOutlet weak var promoteLbl: UILabel!

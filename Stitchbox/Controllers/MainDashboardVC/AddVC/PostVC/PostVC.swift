@@ -15,6 +15,9 @@ import AlamofireImage
 
 class PostVC: UIViewController {
 
+    deinit {
+        print("PostVC is being deallocated.")
+    }
     
     enum updateMedia {
         case image

@@ -16,6 +16,10 @@ fileprivate let FontSize: CGFloat = 13
 
 class FollowNode: ASCellNode {
     
+    deinit {
+        print("FollowNode is being deallocated.")
+    }
+    
     weak var user: FollowModel!
     var followAction : ((FollowNode) -> Void)?
     lazy var delayItem = workItem()

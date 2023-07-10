@@ -78,7 +78,7 @@ class OwnerPostSearchNode: ASCellNode {
         return textNode
     }()
 
-    init(with post: PostModel) {
+    init(with post: PostModel, isSave: Bool) {
         
         self.post = post
         self.imageNode = ASNetworkImageNode()
@@ -94,7 +94,27 @@ class OwnerPostSearchNode: ASCellNode {
         imageNode.contentMode = .scaleAspectFill
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
         
-
+        if isSave {
+            if let username = post.owner?.username {
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = .center
+                stitchNode.attributedText = NSAttributedString(
+                    string: "\(username)",
+                    attributes: [
+                        NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+                        NSAttributedString.Key.foregroundColor: UIColor.white,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyle
+                    ]
+                )
+                
+            } else {
+                
+            }
+            
+        } else {
+            
+        }
         
         countView(with: post)
         automaticallyManagesSubnodes = true

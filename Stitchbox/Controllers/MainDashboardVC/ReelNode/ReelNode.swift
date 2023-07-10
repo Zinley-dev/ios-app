@@ -21,10 +21,15 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
+    deinit {
+        print("ReelNode is being deallocated.")
+    }
+
     
     var isSave = false
     var previousTimeStamp: TimeInterval = 0.0
     var totalWatchedTime: TimeInterval = 0.0
+    var roundedCornerNode: RoundedCornerNode
     weak var collectionNode: ASCollectionNode?
     weak var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
@@ -67,7 +72,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.imageNode = RoundedCornerImageNode()
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
-       
+        self.roundedCornerNode = RoundedCornerNode()
         self.videoNode = RoundedCornerVideoNode()
         self.gradientNode = GradienView()
         self.backgroundImage = GradientImageNode()
@@ -80,8 +85,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         
         
-        DispatchQueue.main.async {
-            
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.label = ActiveLabel()
            
             self.label.backgroundColor = .clear
@@ -106,7 +111,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
             self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
             
-            self.label.handleCustomTap(for: customType) { element in
+            self.label.handleCustomTap(for: customType) { [weak self] element in
+                guard let self = self else { return }
                 if element == "*more" {
                     self.seeMore()
                 } else if element == "*hide" {
@@ -114,8 +120,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 }
             }
 
-            self.label.handleHashtagTap { hashtag in
-                
+            self.label.handleHashtagTap { [weak self] hashtag in
+                guard let self = self else { return }
                 var selectedHashtag = hashtag
                 selectedHashtag.insert("#", at: selectedHashtag.startIndex)
                 
@@ -145,19 +151,19 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             }
 
             self.label.handleURLTap { [weak self] string in
-                
+                guard let self = self else { return }
                 let url = string.absoluteString
                 
                 if url.contains("https://stitchbox.gg/app/account/") {
                     
-                    if let id = self?.getUIDParameter(from: url) {
-                        self?.moveToUserProfileVC(id: id)
+                    if let id = self.getUIDParameter(from: url) {
+                        self.moveToUserProfileVC(id: id)
                     }
         
                 } else if url.contains("https://stitchbox.gg/app/post/") {
                 
-                    if let id = self?.getUIDParameter(from: url) {
-                        self?.openPost(id: id)
+                    if let id = self.getUIDParameter(from: url) {
+                        self.openPost(id: id)
                     }
 
                 } else {
@@ -198,7 +204,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
             self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
             
-
+            
 
             self.buttonsView = ButtonsHeader()
             self.buttonNode.view.addSubview(self.buttonsView)
@@ -316,7 +322,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             }
 
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
             }
             
@@ -349,7 +356,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             imageStorage.async.object(forKey: post.imageUrl.absoluteString) { result in
                 if case .value(let image) = result {
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.imageNode.image = image
                     }
                    
@@ -376,7 +384,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         }
         
         
-        DispatchQueue.main.async() {
+        DispatchQueue.main.async() { [weak self] in
+            guard let self = self else { return }
             self.sideButtonsView = ButtonSideList()
             self.sideButtonsView.backgroundColor = .clear
             self.sideButtonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 60, y: -150), size: CGSize(width: 55, height: UIScreen.main.bounds.height))
@@ -387,6 +396,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             viewStitchTap.numberOfTapsRequired = 1
             self.sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
             
+            
+           
         }
   
     }
@@ -920,6 +931,7 @@ extension ReelNode {
         
         // Optional: clear images after animation ends
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            guard let self = self else { return }
             imgView.animationImages = nil
             imgView.removeFromSuperview()
         }
@@ -971,7 +983,6 @@ extension ReelNode {
     
     @objc func onClickSave() {
         
-        
         if isSave {
             
             isSave = false
@@ -1009,9 +1020,45 @@ extension ReelNode {
         
     }
     
+    func test() {
+        
+        APIManager.shared.getShare(postId: post.id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                print("Share get: \(apiResponse)")
+                
+                
+            case .failure(let error):
+                print("SaveCount: \(error)")
+            }
+        }
+        
+    }
+    
     func checkIfSave() {
         
         
+        
+    }
+    
+
+    
+    func unsave() {
+        
+        APIManager.shared.unsavePost(postId: post.id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                print("Share get: \(apiResponse)")
+                
+                
+            case .failure(let error):
+                print("SaveCount: \(error)")
+            }
+        }
         
     }
     
@@ -1029,7 +1076,8 @@ extension ReelNode {
                         return
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(CountFromQuery)))"
                 }
                
@@ -1039,10 +1087,6 @@ extension ReelNode {
         }
         
     }
-    
-    
-    
-    
     
     @objc func shareTapped() {
     
@@ -1160,7 +1204,8 @@ extension ReelNode {
         }
         
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
             
             if imgView.alpha == 0 {
                 
@@ -1237,11 +1282,13 @@ extension ReelNode {
                 
                 self.isLike = checkIsLike
                 if self.isLike {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
                     }
                 } else {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.buttonsView.likeBtn.setImage(emptyLikeImage!, for: .normal)
                     }
                 }
@@ -1256,7 +1303,8 @@ extension ReelNode {
     func performLike() {
 
         self.likeCount += 1
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.likeAnimation()
             self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
             self.isLike = true
@@ -1279,7 +1327,8 @@ extension ReelNode {
         
         
         self.likeCount -= 1
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.unlikeAnimation()
             self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
             self.isLike = false
@@ -1371,7 +1420,8 @@ extension ReelNode {
     
     func totalLikeCountFromLocal() {
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeLikes ?? 0)))"
         }
         
@@ -1379,7 +1429,8 @@ extension ReelNode {
     
     func totalCmtCountFromLocal() {
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeComments ?? 0)))"
         }
         
@@ -1400,7 +1451,8 @@ extension ReelNode {
                 
                 self.likeCount = likeCountFromQuery
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(likeCountFromQuery)))"
                 }
                
@@ -1424,7 +1476,8 @@ extension ReelNode {
                         return
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(commentsCountFromQuery)))"
                 }
                 
@@ -1480,7 +1533,6 @@ extension ReelNode {
         let textInsetSpec1 = ASInsetLayoutSpec(insets: inset, child: gradientNode)
         let textInsetSpec2 = ASInsetLayoutSpec(insets: inset, child: backgroundImage)
      
-        let roundedCornerNode = RoundedCornerNode()
 
         if post.muxPlaybackId != "" {
             let textInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
@@ -1660,14 +1712,16 @@ extension ReelNode: UIGestureRecognizerDelegate {
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                   return
                 }
                
                 if !data.isEmpty {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                         
                         if let post = PostModel(JSON: data) {
@@ -1708,14 +1762,16 @@ extension ReelNode: UIGestureRecognizerDelegate {
                     }
                     
                 } else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                 }
 
             case .failure(let error):
                 print(error)
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                 }
                 

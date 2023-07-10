@@ -12,7 +12,6 @@ target 'Stitchbox' do
   pod 'RxCocoa', '~> 6.5.0'
   pod 'Alamofire', '~> 5.6.4'
   pod 'Cache', '~> 5.3.0'
-  pod 'lottie-ios', '~> 4.0.1'
   pod 'ObjectMapper', '~> 3.5'
   pod 'EzPopup'
 
@@ -60,7 +59,6 @@ target 'Stitchbox' do
   pod "SwipeTransition"
   pod "SwipeTransitionAutoSwipeBack"      # if needed
   pod "SwipeTransitionAutoSwipeToDismiss" # if needed
-  pod 'GLWalkthrough'
   pod 'AppsFlyerFramework'
   
   target 'StitchboxTests' do
