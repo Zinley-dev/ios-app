@@ -29,6 +29,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         print("OriginalNode is being deallocated.")
     }
 
+    var posts = [PostModel]()
     let threshold: CGFloat = 35 // Adjust this value as needed.
     var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
@@ -45,12 +46,11 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     init(with post: PostModel) {
         self.post = post
         
-        if !post.stitchedPosts.contains(where: { $0.value === post }) {
-            post.stitchedPosts.append(Weak(post))
+        if !posts.contains(post) {
+            posts.append(post)
         }
 
-        
-        
+    
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 0.0
         flowLayout.scrollDirection = .horizontal
@@ -190,14 +190,14 @@ extension OriginalNode: ASCollectionDelegate, ASCollectionDataSource {
     
     
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
-        return post.stitchedPosts.count
+        return posts.count
     }
   
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
-        let weakPost = post.stitchedPosts[indexPath.row]
+        let post = posts[indexPath.row]
 
         return { [weak self] in
-            guard let self = self, let post = weakPost.value else {
+            guard let self = self else {
                 // Return an empty node if self or post is nil
                 return ASCellNode()
             }
@@ -300,8 +300,8 @@ extension OriginalNode {
         var items = [PostModel]()
         for i in newPosts {
             if let item = PostModel(JSON: i) {
-                if !post.stitchedPosts.contains(where: { $0.value === item }) {
-                    self.post.stitchedPosts.append(Weak(item))
+                if !posts.contains(item) {
+                    posts.append(item)
                     items.append(item)
                 }
             }
@@ -309,7 +309,7 @@ extension OriginalNode {
 
         // Construct index paths for the new rows
         if items.count > 0 {
-            let startIndex = self.post.stitchedPosts.count - items.count
+            let startIndex = posts.count - items.count
             let endIndex = startIndex + items.count - 1
             print(startIndex, endIndex)
             let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
@@ -351,15 +351,15 @@ extension OriginalNode {
         let postsToRemove = 27 // scale down from 50 to 27
         let startIndex = 8 // scale down from 15 to 8
 
-        if self.post.stitchedPosts.count > postThreshold {
+        if posts.count > postThreshold {
             // check if we have enough posts to remove
-            if (startIndex + postsToRemove) <= self.post.stitchedPosts.count {
+            if (startIndex + postsToRemove) <= posts.count {
                 
                 // generate the index paths for old posts
                 let indexPathsToRemove = Array(startIndex..<(startIndex + postsToRemove)).map { IndexPath(row: $0, section: 0) }
                 
                 // remove the posts from startIndex to startIndex + postsToRemove
-                self.post.stitchedPosts.removeSubrange(startIndex..<(startIndex + postsToRemove))
+                posts.removeSubrange(startIndex..<(startIndex + postsToRemove))
 
                 // delete the old posts from collectionNode
                 collectionNode.performBatch(animated: false, updates: {
@@ -420,7 +420,7 @@ extension OriginalNode {
     }
 
     @objc func labelTapped() {
-        if currentIndex != nil, currentIndex! + 1 < self.post.stitchedPosts.count {
+        if currentIndex != nil, currentIndex! + 1 < posts.count {
             
             let indexPath = IndexPath(item: currentIndex! + 1, section: 0)
             collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
@@ -802,11 +802,11 @@ extension OriginalNode {
                     delay(1) {
                         let nextIndex = index + 1
                         
-                        if nextIndex < self.post.stitchedPosts.count {
+                        if nextIndex < self.posts.count {
                             
-                            let item = self.post.stitchedPosts[nextIndex]
+                            let item = self.posts[nextIndex]
                             
-                            if let nextUsername = item.value!.owner?.username {
+                            if let nextUsername = item.owner?.username {
                                 self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
 
                             }
@@ -821,14 +821,16 @@ extension OriginalNode {
                     
                     let nextIndex = index + 1
                     
-                    if nextIndex < self.post.stitchedPosts.count {
+                    if nextIndex < posts.count {
                         
-                        let item = self.post.stitchedPosts[nextIndex]
+                        let item = posts[nextIndex]
                         
-                        if let nextUsername = item.value!.owner?.username {
+                        if let nextUsername = item.owner?.username {
                             self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
 
                         }
+                        
+                        
                        
                     }
                     
@@ -857,7 +859,7 @@ extension OriginalNode {
                 }
                 
                 if cell.sideButtonsView != nil {
-                    cell.sideButtonsView.stitchCount.text = "\(index + 1)/\(post.stitchedPosts.count)"
+                    cell.sideButtonsView.stitchCount.text = "\(index + 1)/\(posts.count)"
                 }
                 
                 if let muteStatus = shouldMute {
@@ -900,7 +902,7 @@ extension OriginalNode {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     
-        let item = post.stitchedPosts[indexPath.row]
+        let item = posts[indexPath.row]
 
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell else {
             // Make sure you have registered the cell with reuseIdentifier
@@ -909,14 +911,16 @@ extension OriginalNode {
         if indexPath.row != currentIndex {
             //cell.reset()
         }
+        
         collectionView.deselectItem(at: indexPath, animated: false)
-        cell.configureWithUrl(with: item.value!)
+        cell.configureWithUrl(with: item)
 
-        if let username = item.value!.owner?.username {
+        if let username = item.owner?.username {
             cell.stichLabel.text = "@\(username)"
         } else {
             cell.stichLabel.text = ""
         }
+        
 
         return cell
     }
@@ -928,7 +932,7 @@ extension OriginalNode {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return post.stitchedPosts.count
+        return posts.count
     }
 
     
@@ -953,8 +957,8 @@ extension OriginalNode {
         
         if isfirstLoad {
             isfirstLoad = false
-            let post = post.stitchedPosts[0]
-            if !post.value!.muxPlaybackId.isEmpty {
+            let post = posts[0]
+            if !post.muxPlaybackId.isEmpty {
                 currentIndex = 0
                 newPlayingIndex = 0
                 isVideoPlaying = true
@@ -966,7 +970,7 @@ extension OriginalNode {
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !post.stitchedPosts.isEmpty, scrollView == collectionNode.view {
+        if !posts.isEmpty, scrollView == collectionNode.view {
             // Check if it's a horizontal scroll
             if lastContentOffset != scrollView.contentOffset.x {
                 lastContentOffset = scrollView.contentOffset.x
@@ -998,7 +1002,7 @@ extension OriginalNode {
                     }
                 }
             
-            if !post.stitchedPosts[newPlayingIndex!].value!.muxPlaybackId.isEmpty {
+            if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                 foundVisibleVideo = true
                 //playTimeBar.isHidden = false
                 imageIndex = nil

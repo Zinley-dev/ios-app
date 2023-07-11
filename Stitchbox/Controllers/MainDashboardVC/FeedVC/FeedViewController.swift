@@ -260,9 +260,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 
                 self.refresh_request = false
-                for item in self.posts {
-                    item.stitchedPosts.removeAll()
-                }
                 self.posts.removeAll()
                 self.collectionNode.reloadData()
                 
@@ -567,7 +564,7 @@ extension FeedViewController {
             
             if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: 0, section: 0)) as? OriginalNode {
                 
-                if !currentCell.post.stitchedPosts[0].value!.muxPlaybackId.isEmpty {
+                if !currentCell.posts[0].muxPlaybackId.isEmpty {
                     currentIndex = 0
                     newPlayingIndex = 0
                     currentCell.currentIndex = 0
@@ -616,11 +613,11 @@ extension FeedViewController {
         }
         
         // Safe guard for Array Out-of-Bounds
-        guard newPlayingCell.currentIndex != nil && newPlayingCell.currentIndex! < newPlayingCell.post.stitchedPosts.count else {
+        guard newPlayingCell.currentIndex != nil && newPlayingCell.currentIndex! < newPlayingCell.posts.count else {
             return
         }
         
-        if !newPlayingCell.post.stitchedPosts[newPlayingCell.currentIndex!].value!.muxPlaybackId.isEmpty {
+        if !newPlayingCell.posts[newPlayingCell.currentIndex!].muxPlaybackId.isEmpty {
             foundVisibleVideo = true
             imageIndex = nil
         } else {

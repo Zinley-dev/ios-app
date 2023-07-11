@@ -83,7 +83,7 @@ class PostModel: Mappable {
   private(set) var estimatedCount: EstimatedCount?
   private(set) var metadata: PostMetadata?
         
-  var stitchedPosts: [Weak<PostModel>] = []
+ 
   private(set) var createdAt: Date?
     
   
@@ -124,10 +124,3 @@ extension PostModel: Hashable {
   }
 }
 
-struct Weak<Object: AnyObject> {
-    weak var value: Object?
-    
-    init (_ value: Object) {
-        self.value = value
-    }
-}
