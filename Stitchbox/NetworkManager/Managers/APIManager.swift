@@ -916,8 +916,8 @@ extension APIManager {
     }
   }
   
-  func getStitchPost(rootId: String, completion: @escaping APICompletion) {
-    postStitchManager.request(.getByRoot(rootId: rootId)) { result in
+  func getStitchPost(rootId: String, page: Int, completion: @escaping APICompletion) {
+    postStitchManager.request(.getByRoot(rootId: rootId, page: page)) { result in
       completion(result)
     }
   }
@@ -979,8 +979,8 @@ extension APIManager {
     }
   }
   
-  func getSavedPost(completion: @escaping APICompletion) {
-    userManager.request(.getSavedPost) { result in
+  func getSavedPost(page: Int, completion: @escaping APICompletion) {
+    userManager.request(.getSavedPost(page: page)) { result in
       completion(result)
     }
   }
@@ -993,6 +993,12 @@ extension APIManager {
   
   func getPostTrendingTag(page: Int = 1, completion: @escaping APICompletion) {
     postManager.request(.getTagTrending(page: page)) { result in
+      completion(result)
+    }
+  }
+  
+  func getStitchTo(pid: String, completion: @escaping APICompletion) {
+    postStitchManager.request(.getStitchTo(pid: pid)) { result in
       completion(result)
     }
   }

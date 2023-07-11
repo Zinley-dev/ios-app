@@ -370,7 +370,7 @@ public enum UserAPI {
     case getme
   case savePost (params: [String: Any])
   case unsavePost (params: [String: Any])
-  case getSavedPost
+  case getSavedPost (page: Int)
     case deleteMe
     case undoDelete
     case getUserInfo(userId: String)
@@ -407,8 +407,8 @@ extension UserAPI: EndPointType {
           return "/me/saved-post"
         case .unsavePost:
           return "/me/saved-post"
-        case .getSavedPost:
-          return "/me/saved-post"
+          case .getSavedPost(let page):
+          return "/me/saved-post?page=\(page)"
         case .getUserInfo(let userId):
             return "/\(userId)"
           case .deleteMe:
@@ -611,6 +611,8 @@ extension ContactAPI: EndPointType {
 
 public enum PostAPI {
     case getPost(pid: String)
+    case countSavedPost (pid: String)
+    case checkSavedPost (pid: String)
     case getRecommend
     case getUserFeed(limit: Int)
     case getHighTrending
@@ -632,14 +634,18 @@ extension PostAPI: EndPointType {
     
     var path: String {
         switch self {
-            case .create:
-                return "/"
-            case .update(let params):
-                return "/\(params["id"] ?? "")"
-            case .getMyPost(let page):
-                return "/me?page=\(page)&limit=10"
-            case .getHashtagPost(let tag, let page):
-                return "/hashtag/\(tag)?page=\(page)&limit=10"
+          case .create:
+              return "/"
+          case .update(let params):
+              return "/\(params["id"] ?? "")"
+          case .countSavedPost (let pid):
+            return "/count-saved/\(pid)"
+          case .checkSavedPost (let pid):
+            return "/count-saved/\(pid)/check"
+          case .getMyPost(let page):
+              return "/me?page=\(page)&limit=10"
+          case .getHashtagPost(let tag, let page):
+              return "/hashtag/\(tag)?page=\(page)&limit=10"
           case .lastSetting:
             return "/last-setting"
           case .getRecommend:
@@ -693,6 +699,10 @@ extension PostAPI: EndPointType {
             return .get
           case .getTagTrending:
             return .get
+          case .countSavedPost:
+            return .get
+          case .checkSavedPost:
+            return .get
         }
     }
     
@@ -725,6 +735,10 @@ extension PostAPI: EndPointType {
           case .getPostTrending:
             return .request
           case .getTagTrending:
+            return .request
+          case .countSavedPost:
+            return .request
+          case .checkSavedPost:
             return .request
         }
     }
@@ -1827,17 +1841,18 @@ public enum PostStitchApi {
   case unstitch(body: [String: Any])
   case accept(body: [String: Any])
   case denied(body: [String: Any])
-  case getByRoot(rootId: String)
+  case getByRoot(rootId: String, page: Int)
   case getMyStitch(page: Int)
   case getMyWaitlist(page: Int)
+  case getStitchTo(pid: String)
 }
 extension PostStitchApi: EndPointType {
   var path: String {
     switch self {
       case .stitch:
         return "/"
-      case .getByRoot(let rootId):
-        return "/\(rootId)"
+      case .getByRoot(let rootId, let page):
+        return "/\(rootId)?page=\(page)"
       case .unstitch:
         return "/un-stitch"
       case .accept:
@@ -1848,6 +1863,8 @@ extension PostStitchApi: EndPointType {
         return "/my-stitch?page=\(page)"
       case .getMyWaitlist(let page):
         return "/my-wait-list?page=\(page)"
+      case .getStitchTo(let pid):
+        return "/stitch-to/\(pid)"
     }
   }
   
@@ -1871,6 +1888,8 @@ extension PostStitchApi: EndPointType {
         return .get
       case .getMyWaitlist:
         return .get
+      case .getStitchTo:
+        return .get
     }
   }
   
@@ -1890,6 +1909,8 @@ extension PostStitchApi: EndPointType {
         return .request
       case .getMyWaitlist:
         return .request
+      case .getStitchTo:
+        return .request
     }
   }
   
@@ -1906,6 +1927,7 @@ extension PostStitchApi: EndPointType {
 public enum ShareApi {
   case createShare(body: [String: Any])
   case getByRoot(rootId: String)
+  case countByRoot(rootId: String)
 }
 extension ShareApi: EndPointType {
   var path: String {
@@ -1914,6 +1936,8 @@ extension ShareApi: EndPointType {
         return "/"
       case .getByRoot(let rootId):
         return "/\(rootId)"
+      case .countByRoot(let rootId):
+        return "/\(rootId)/count"
     }
   }
   
@@ -1927,6 +1951,8 @@ extension ShareApi: EndPointType {
         return .post
       case .getByRoot:
         return .get
+      case .countByRoot:
+        return .get
         
     }
   }
@@ -1936,6 +1962,8 @@ extension ShareApi: EndPointType {
       case .createShare(let body):
         return .requestParameters(parameters: body)
       case .getByRoot:
+        return .request
+      case .countByRoot:
         return .request
     }
   }
