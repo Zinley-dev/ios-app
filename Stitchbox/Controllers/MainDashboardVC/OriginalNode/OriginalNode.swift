@@ -335,6 +335,7 @@ extension OriginalNode {
                 if vc is FeedViewController || vc is SelectedPostVC {
                     self.insertNewRowsInCollectionNode(newPosts: newPosts)
                     context.completeBatchFetching(true)
+                    //self.cleanupPosts(collectionNode: collectionNode)
                 } else {
                     context.completeBatchFetching(true)
                 }
@@ -346,33 +347,11 @@ extension OriginalNode {
         }
     }
 
-    private func cleanupPosts(collectionNode: ASCollectionNode) {
-        let postThreshold = 55 // scale down from 100 to 55
-        let postsToRemove = 27 // scale down from 50 to 27
-        let startIndex = 8 // scale down from 15 to 8
+    func cleanupPosts(collectionNode: ASCollectionNode) {
 
-        if posts.count > postThreshold {
-            // check if we have enough posts to remove
-            if (startIndex + postsToRemove) <= posts.count {
-                
-                // generate the index paths for old posts
-                let indexPathsToRemove = Array(startIndex..<(startIndex + postsToRemove)).map { IndexPath(row: $0, section: 0) }
-                
-                // remove the posts from startIndex to startIndex + postsToRemove
-                posts.removeSubrange(startIndex..<(startIndex + postsToRemove))
-
-                // delete the old posts from collectionNode
-                collectionNode.performBatch(animated: false, updates: {
-                    collectionNode.deleteItems(at: indexPathsToRemove)
-                }, completion: nil)
-                
-                // delete the old posts from collectionView
-                selectPostCollectionView.collectionView.performBatchUpdates({
-                    selectPostCollectionView.collectionView.deleteItems(at: indexPathsToRemove)
-                }, completion: nil)
-            }
-        }
     }
+
+
 
 
     func addAnimatedLabelToTop() {
@@ -633,7 +612,8 @@ extension OriginalNode {
                     global_presetingRate = Double(0.75)
                     global_cornerRadius = 35
                     
-                    delay(0.1) {
+                    delay(0.1) { [weak self] in
+                        guard let self = self else { return }
                         update1.present(slideVC, animated: true, completion: nil)
                     }
                     
@@ -653,7 +633,8 @@ extension OriginalNode {
                     global_presetingRate = Double(0.75)
                     global_cornerRadius = 35
                     
-                    delay(0.1) {
+                    delay(0.1) { [weak self] in
+                        guard let self = self else { return }
                         update1.present(slideVC, animated: true, completion: nil)
                     }
                     
@@ -694,7 +675,8 @@ extension OriginalNode {
                         
                     }
                     
-                    delay(0.1) {
+                    delay(0.1) { [weak self] in
+                        guard let self = self else { return }
                         update1.present(ac, animated: true, completion: nil)
                     }
                     
@@ -719,7 +701,8 @@ extension OriginalNode {
                         
                     }
                     
-                    delay(0.1) {
+                    delay(0.1) { [weak self] in
+                        guard let self = self else { return }
                         update1.present(ac, animated: true, completion: nil)
                     }
                     
@@ -799,7 +782,8 @@ extension OriginalNode {
                 
                 if index == 0 {
                     
-                    delay(1) {
+                    delay(1) { [weak self] in
+                        guard let self = self else { return }
                         let nextIndex = index + 1
                         
                         if nextIndex < self.posts.count {
@@ -938,10 +922,28 @@ extension OriginalNode {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-        
-
+        if let currentIndex = currentIndex, abs(currentIndex - indexPath.row) > 1 {
+            var prev = IndexPath(item: currentIndex, section: 0)
+            
+            // If the user is moving forward
+            if indexPath.row > currentIndex {
+                prev = IndexPath(item: indexPath.row - 1, section: 0)
+            }
+            
+            // If the user is moving backward
+            if indexPath.row < currentIndex {
+                prev = IndexPath(item: indexPath.row + 1, section: 0)
+            }
+            
+            collectionNode.scrollToItem(at: prev, at: .centeredVertically, animated: false)
+            collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+            print("scroll: scroll1")
+        } else {
+            collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+            print("scroll: scroll2")
+        }
     }
+
     
 
 
@@ -1002,14 +1004,20 @@ extension OriginalNode {
                     }
                 }
             
-            if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
-                foundVisibleVideo = true
-                //playTimeBar.isHidden = false
-                imageIndex = nil
-            } else {
-                //playTimeBar.isHidden = true
-                imageIndex = newPlayingIndex
+            if newPlayingIndex! < posts.count {
+                
+                if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+                    foundVisibleVideo = true
+                    //playTimeBar.isHidden = false
+                    imageIndex = nil
+                } else {
+                    //playTimeBar.isHidden = true
+                    imageIndex = newPlayingIndex
+                }
+                
             }
+            
+            
             
             if foundVisibleVideo {
                 // Start playing the new video if it's different from the current playing video.

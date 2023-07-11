@@ -50,7 +50,8 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         setupButtons()
         setupCollectionNode()
         
-        delay(0.05) {
+        delay(0.05) { [weak self] in
+            guard let self = self else { return }
             self.loadPosts()
         }
         
@@ -357,7 +358,8 @@ extension SelectedPostVC {
                         
                         currentCell.isVideoPlaying = true
                         
-                        delay(0.25) {
+                        delay(0.25) { [weak self] in
+                            guard let self = self else { return }
                             currentCell.playVideo(index: 0)
                         }
                     }
@@ -530,7 +532,8 @@ extension SelectedPostVC {
                     print(error)
                     SwiftLoader.hide()
                     
-                    delay(0.1) {
+                    delay(0.1) { [weak self] in
+                        guard let self = self else { return }
                         Dispatch.main.async { [weak self] in
                             guard let self = self else { return }
                             self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
@@ -543,7 +546,8 @@ extension SelectedPostVC {
             
         } else {
             
-            delay(0.1) {
+            delay(0.1) { [weak self] in
+                guard let self = self else { return }
                 SwiftLoader.hide()
                 self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
             }
@@ -589,7 +593,8 @@ extension SelectedPostVC {
                 
             }
             
-            delay(0.1) {
+            delay(0.1) { [weak self] in
+                guard let self = self else { return }
                 self.present(ac, animated: true, completion: nil)
             }
             
@@ -608,7 +613,8 @@ extension SelectedPostVC {
             
             
             VVC.selected_item = editeddPost
-            delay(0.1) {
+            delay(0.1) { [weak self] in
+                guard let self = self else { return }
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
                 self.navigationController?.pushViewController(VVC, animated: true)
             }
@@ -835,8 +841,9 @@ extension SelectedPostVC {
                     //reloadAllCurrentHashtag()
                     
                     delay(0.75) { [weak self] in
-                        if indexPath < self?.posts.count ?? 0 {
-                            self?.playVideo(index: indexPath)
+                        guard let self = self else { return }
+                        if indexPath < self.posts.count {
+                            self.playVideo(index: indexPath)
                         }
                     }
                     
@@ -859,7 +866,8 @@ extension SelectedPostVC {
         global_presetingRate = Double(0.75)
         global_cornerRadius = 35
         
-        delay(0.1) {
+        delay(0.1) { [weak self] in
+            guard let self = self else { return }
             self.present(slideVC, animated: true, completion: nil)
         }
         
@@ -881,7 +889,8 @@ extension SelectedPostVC {
             
         }
         
-        delay(0.1) {
+        delay(0.1) { [weak self] in
+            guard let self = self else { return }
             self.present(ac, animated: true, completion: nil)
         }
         

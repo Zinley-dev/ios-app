@@ -20,6 +20,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     var lastContentOffsetY: CGFloat = 0
+    let threshold: CGFloat = 35 // Adjust this value as needed.
 
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var blurView: UIView!
@@ -179,7 +180,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        delay(0.25) {
+        delay(0.25) {[weak self] in
+            guard let self = self else { return }
             NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         }
     }
@@ -280,7 +282,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 self.pullControl.endRefreshing()
             }
             
-            self.delayItem.perform(after: 0.75) {
+            self.delayItem.perform(after: 0.75) { [weak self] in
+                guard let self = self else { return }
                 
                 
                 self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
@@ -345,7 +348,8 @@ extension FeedViewController {
             
         } else {
             
-            delayItem3.perform(after: 0.25) {
+            delayItem3.perform(after: 0.25) { [weak self] in
+                guard let self = self else { return }
                 self.clearAllData()
             }
             
@@ -572,7 +576,8 @@ extension FeedViewController {
                     
                     currentCell.isVideoPlaying = true
                     
-                    delay(0.25) {
+                    delay(0.25) { [weak self] in
+                        guard let self = self else { return }
                         currentCell.playVideo(index: 0)
                     }
                 }
@@ -602,7 +607,7 @@ extension FeedViewController {
             let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
             let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
             
-            if distanceFromCenter < minDistanceFromCenter {
+            if distanceFromCenter < minDistanceFromCenter, distanceFromCenter < threshold {
                 newPlayingIndex = cell.indexPath?.row
                 minDistanceFromCenter = distanceFromCenter
             }
@@ -628,6 +633,7 @@ extension FeedViewController {
             if currentIndex != newPlayingIndex {
                 if let currentIndex = currentCell.currentIndex {
                     currentCell.pauseVideo(index: currentIndex)
+                    currentCell.cleanupPosts(collectionNode: currentCell.collectionNode)
                 }
 
                 currentIndex = newPlayingIndex
@@ -714,6 +720,7 @@ extension FeedViewController: ASCollectionDataSource {
     }
 
     private func cleanupPosts(collectionNode: ASCollectionNode) {
+        /*
         let postThreshold = 100
         let postsToRemove = 50
         let startIndex = 15
@@ -732,7 +739,7 @@ extension FeedViewController: ASCollectionDataSource {
                     collectionNode.deleteItems(at: indexPathsToRemove)
                 }, completion: nil)
             }
-        }
+        } */
     }
 
 
@@ -970,7 +977,8 @@ extension FeedViewController {
         global_presetingRate = Double(0.75)
         global_cornerRadius = 35
         
-        delay(0.1) {
+        delay(0.1) {[weak self] in
+            guard let self = self else { return }
             self.present(slideVC, animated: true, completion: nil)
         }
         
@@ -992,7 +1000,8 @@ extension FeedViewController {
             
         }
         
-        delay(0.1) {
+        delay(0.1) {[weak self] in
+            guard let self = self else { return }
             self.present(ac, animated: true, completion: nil)
         }
         
