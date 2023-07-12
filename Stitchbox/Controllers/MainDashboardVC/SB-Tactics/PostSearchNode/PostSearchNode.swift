@@ -54,13 +54,13 @@ class PostSearchNode: ASCellNode {
     }()
     
     
-    private lazy var stitchNode: ASTextNode = {
+    private lazy var infoNode: ASTextNode = {
         let textNode = ASTextNode()
         //textNode.style.preferredSize.width = 70
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         textNode.attributedText = NSAttributedString(
-            string: "10 Stitches",
+            string: "",
             attributes: [
                 NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
                 NSAttributedString.Key.foregroundColor: UIColor.white,
@@ -111,6 +111,16 @@ class PostSearchNode: ASCellNode {
         imageNode.contentMode = .scaleAspectFill
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
         
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        infoNode.attributedText = NSAttributedString(
+            string: "@\(post.owner?.username ?? "")",
+            attributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ]
+        )
 
         
         countView(with: post)
@@ -137,7 +147,7 @@ class PostSearchNode: ASCellNode {
     
         
         let stitchCountInsets = UIEdgeInsets(top: 8, left: 4, bottom: .infinity, right: .infinity)
-        let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: stitchNode)
+        let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: infoNode)
 
         let overlayLayoutSpec = ASOverlayLayoutSpec(child: imageNode, overlay: videoCountInsetSpec)
         

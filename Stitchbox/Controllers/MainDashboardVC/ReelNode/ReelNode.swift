@@ -208,10 +208,16 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 self.headerView.createStitchView.isHidden = true
                 self.headerView.stichBtn.isHidden = true
             } else {
-                self.headerView.createStitchView.isHidden = false
-                self.headerView.stichBtn.isHidden = false
+                
+                if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
+                    self.headerView.createStitchView.isHidden = true
+                    self.headerView.stichBtn.isHidden = true
+                } else {
+                    self.headerView.createStitchView.isHidden = false
+                    self.headerView.stichBtn.isHidden = false
+                }
             }
-
+            
             self.buttonsView = ButtonsHeader()
             self.buttonNode.view.addSubview(self.buttonsView)
             self.buttonsView.translatesAutoresizingMaskIntoConstraints = false
@@ -396,17 +402,22 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             guard let self = self else { return }
             self.sideButtonsView = ButtonSideList()
             self.sideButtonsView.backgroundColor = .clear
-            self.sideButtonsView.frame = CGRect(origin: CGPoint(x:UIScreen.main.bounds.width - 60, y: -150), size: CGSize(width: 55, height: UIScreen.main.bounds.height))
+            self.sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
             self.view.addSubview(self.sideButtonsView)
             self.originalCenter = self.view.center
-            
+
+            NSLayoutConstraint.activate([
+                self.sideButtonsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
+                self.sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -64),
+                self.sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
+                self.sideButtonsView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
+            ])
+
             let viewStitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.viewStitchTapped))
             viewStitchTap.numberOfTapsRequired = 1
             self.sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
-            
-            
-           
         }
+
   
     }
     
@@ -1107,7 +1118,7 @@ extension ReelNode {
             switch result {
             case .success(let apiResponse):
                 
-                print(apiResponse)
+                print("Save check: \(apiResponse)")
                 
                 guard apiResponse.body?["message"] as? String == "success",
                       let CountFromQuery = apiResponse.body?["saved"] as? Int  else {
@@ -1116,6 +1127,7 @@ extension ReelNode {
                 
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
+                    self.saveCount = CountFromQuery
                     self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(CountFromQuery)))"
                 }
                
@@ -1128,31 +1140,31 @@ extension ReelNode {
     
     
     func shareCount() {
-        
-        APIManager.shared.getShare(postId: post.id) { [weak self] result in
+        APIManager.shared.countShare(postId: post.id) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success(let apiResponse):
-                
                 print("shareCheck: \(apiResponse)")
-               
-                guard apiResponse.body?["message"] as? String == "success",
-                      let CountFromQuery = apiResponse.body?["shared"] as? Int  else {
-                        return
+
+                guard let message = apiResponse.body?["message"] as? String,
+                      message == "success",
+                      let CountFromQuery = apiResponse.body?["data"] as? Int else {
+                    print("Error: Invalid or missing data in response")
+                    return
                 }
-                
+
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.buttonsView.shareCountLbl.text = "\(formatPoints(num: Double(CountFromQuery)))"
                 }
-               
+
             case .failure(let error):
-                print("SaveCount: \(error)")
+                print("shareCount Error: \(error)")
             }
         }
-        
     }
+
     
     @objc func shareTapped() {
     

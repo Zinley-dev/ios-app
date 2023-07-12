@@ -31,7 +31,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
 
     var page = 1
     var posts = [PostModel]()
-    let threshold: CGFloat = 35 // Adjust this value as needed.
+    //let threshold: CGFloat = 100 // Adjust this value as needed.
     var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
@@ -139,10 +139,8 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
                 cell.contentNode.isHidden = false
                 cell.buttonNode.isHidden = false
                 self.selectPostCollectionView.isHidden = true
+                cell.sideButtonsView.isHidden = false
                 
-                if posts.count > 1 {
-                    cell.sideButtonsView.isHidden = false
-                }
 
             }
         }
@@ -795,7 +793,7 @@ extension OriginalNode {
 
                 if let cell = selectPostCollectionView.collectionView.cellForItem(at: indexPath) as? ImageViewCell {
                     cell.layer.cornerRadius = 10
-                    cell.layer.borderWidth = 4
+                    cell.layer.borderWidth = 2
                     cell.layer.borderColor = UIColor.secondary.cgColor
                     cell.isSelected = true
                     selectPostCollectionView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
@@ -871,9 +869,7 @@ extension OriginalNode {
                     guard let sideButtonsView = cell.sideButtonsView else { return }
                     cell.headerNode.isHidden = false
                     cell.contentNode.isHidden = false
-                    if posts.count > 1 {
-                        cell.sideButtonsView.isHidden = false
-                    }
+                    cell.sideButtonsView.isHidden = false
                     cell.buttonNode.isHidden = false
      
                 }
@@ -881,15 +877,7 @@ extension OriginalNode {
                 
                 if cell.sideButtonsView != nil {
                     
-                    if index == 0 {
-                        if self.posts.count > 1 {
-                            cell.sideButtonsView.stitchCount.text = "\(index + 1)"
-                        } else {
-                            cell.sideButtonsView.isHidden = true
-                        }
-                    } else {
-                        cell.sideButtonsView.stitchCount.text = "\(index + 1)"
-                    }
+                    cell.sideButtonsView.stitchCount.text = "\(index + 1)"
                     
                     
                 }
@@ -1046,7 +1034,7 @@ extension OriginalNode {
                     
                     // Only switch video if the distance from center is less than the min distance
                     // and also less than the threshold.
-                    if distanceFromCenter < minDistanceFromCenter && distanceFromCenter < threshold {
+                    if distanceFromCenter < minDistanceFromCenter {
                         newPlayingIndex = cell.indexPath!.row
                         minDistanceFromCenter = distanceFromCenter
                     }

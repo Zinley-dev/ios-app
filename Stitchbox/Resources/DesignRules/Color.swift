@@ -20,13 +20,13 @@ extension UIColor{
         return UIColor.black
     }
   
-  class var secondary: UIColor{
-    return UIColor(red: (254.0/255.0), green: (138.0/255.0), blue: (92.0/255.0), alpha: 1.0)
-  }
-  
-  class var tertiary: UIColor{
-      return white
-  }
+      class var secondary: UIColor{
+        return UIColor(red: (253.0/255.0), green: (159.0/255.0), blue: (126.0/255.0), alpha: 1.0)
+      }
+      
+      class var tertiary: UIColor{
+          return white
+      }
     
     class var disableButtonBackground: UIColor{
         return UIColor(red: (131.0/255.0), green: (134.0/255.0), blue: 139.0/255.0, alpha: 1.0)

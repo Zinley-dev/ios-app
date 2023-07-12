@@ -23,39 +23,40 @@ import Alamofire
     var actionButtonContainerView: UIView!
     
     // TabBarButton – Setup Middle Button
-    func setupMiddleButton() {
-        // Configure button properties
-        button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 50, height: 50)), for: .normal)
-        button.backgroundColor = .clear
-        //button.backgroundColor = UIColor.tabbarbackground
- 
+      func setupMiddleButton() {
+          // Configure button properties
+          button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
+          button.backgroundColor = .clear
+          //button.backgroundColor = UIColor.tabbarbackground
+   
 
-        // Calculate position
-        let tabBarHeight = self.tabBar.frame.height
-        let buttonSize = CGSize(width: 50, height: 50)  // Change to desired size of the button
-        let buttonFrame = CGRect(x: (self.tabBar.frame.width / 2) - (buttonSize.width / 2),
-                                 y: (tabBarHeight - buttonSize.height) / 2,
-                                 width: buttonSize.width,
-                                 height: buttonSize.height)
+          // Calculate position
+          let tabBarHeight = self.tabBar.frame.height
+          let buttonSize = CGSize(width: 37.5, height: 37.5)  // Change to desired size of the button
+          let buttonFrame = CGRect(x: (self.tabBar.frame.width / 2) - (buttonSize.width / 2),
+                                   y: (tabBarHeight - buttonSize.height) / 2,
+                                   width: buttonSize.width,
+                                   height: buttonSize.height)
 
-        // Apply frame to button
-        button.frame = buttonFrame
+          // Apply frame to button
+          button.frame = buttonFrame
 
-        self.tabBar.addSubview(button)
+          self.tabBar.addSubview(button)
 
-        // Add target for button press
-        button.addTarget(self, action: #selector(pressedAction(_:)), for: .touchUpInside)
+          // Add target for button press
+          button.addTarget(self, action: #selector(pressedAction(_:)), for: .touchUpInside)
 
-        // Set button layer's z-position
-        button.layer.zPosition = 2500
+          // Set button layer's z-position
+          button.layer.zPosition = 2500
 
-        // If your button is larger than your tab bar, you will have to adjust the size or position accordingly
-        if buttonSize.height > tabBarHeight {
-            print("Warning: button size is larger than tab bar height. Button will not fit in tab bar.")
-        }
-        
-        
-    }
+          // If your button is larger than your tab bar, you will have to adjust the size or position accordingly
+          if buttonSize.height > tabBarHeight {
+              print("Warning: button size is larger than tab bar height. Button will not fit in tab bar.")
+          }
+          
+          
+      }
+
 
     
     @objc func pressedAction(_ sender: UIButton) {

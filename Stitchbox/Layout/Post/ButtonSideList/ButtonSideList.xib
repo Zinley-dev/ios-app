@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -52,7 +53,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" red="0.97350782160000005" green="0.50234621759999998" blue="0.35875061149999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" name="Secondary"/>
                             <constraints>
                                 <constraint firstItem="dqo-Lv-Gj7" firstAttribute="centerY" secondItem="7iW-rQ-Yzm" secondAttribute="centerY" id="1Id-Fb-L0F"/>
                                 <constraint firstAttribute="width" constant="40" id="7TS-Fd-72Z"/>
@@ -85,4 +86,9 @@
             <point key="canvasLocation" x="-129.71014492753625" y="114.50892857142857"/>
         </view>
     </objects>
+    <resources>
+        <namedColor name="Secondary">
+            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

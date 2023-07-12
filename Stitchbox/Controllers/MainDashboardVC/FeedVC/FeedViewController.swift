@@ -20,7 +20,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     var lastContentOffsetY: CGFloat = 0
-    let threshold: CGFloat = 35 // Adjust this value as needed.
+    //let threshold: CGFloat = 100 // Adjust this value as needed.
 
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var blurView: UIView!
@@ -607,7 +607,7 @@ extension FeedViewController {
             let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
             let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
             
-            if distanceFromCenter < minDistanceFromCenter, distanceFromCenter < threshold {
+            if distanceFromCenter < minDistanceFromCenter {
                 newPlayingIndex = cell.indexPath?.row
                 minDistanceFromCenter = distanceFromCenter
             }
