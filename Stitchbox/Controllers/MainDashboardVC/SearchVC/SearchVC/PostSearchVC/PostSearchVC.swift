@@ -177,7 +177,7 @@ extension PostSearchVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         
-        let size = self.collectionNode.view.layer.frame.width/3 - 2
+        let size = self.collectionNode.view.layer.frame.width/2 - 2
         let min = CGSize(width: size, height: size * 1.75)
         let max = CGSize(width: size, height: size * 1.75)
         
@@ -230,7 +230,6 @@ extension PostSearchVC: ASCollectionDataSource {
             context.completeBatchFetching(true)
         }
     }
-
 
 }
 

@@ -10,6 +10,7 @@ import ObjectMapper
 
 class Setting: Mappable {
    
+    private(set) var allowStitch: Bool = false
     private(set) var allowComment: Bool = false
     private(set) var isTitleGet: Bool = false
     private(set) var mode: Int = 0
@@ -21,6 +22,7 @@ class Setting: Mappable {
       }
       
       func mapping(map: ObjectMapper.Map) {
+          allowStitch <- map["allowStitch"]
           allowComment <- map["allowComment"]
           isTitleGet <- map["isTitleGet"]
           mode <- map["mode"]

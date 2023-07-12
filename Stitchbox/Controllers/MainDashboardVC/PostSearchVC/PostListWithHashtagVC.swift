@@ -322,9 +322,8 @@ extension PostListWithHashtagVC {
 extension PostListWithHashtagVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let spacing: CGFloat = 22 // adjust this as per your requirement
-        let totalWidth = self.collectionNode.view.layer.frame.width
-        let size = (totalWidth - spacing) / 3  // considering 1 spacing between 2 cells
+        
+        let size = self.collectionNode.view.layer.frame.width/2 - 2
         let min = CGSize(width: size, height: size * 1.75)
         let max = CGSize(width: size, height: size * 1.75)
         
@@ -387,6 +386,9 @@ extension PostListWithHashtagVC {
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
+        
+        flowLayout.minimumInteritemSpacing = 2 // Set minimum spacing between items to 0
+        flowLayout.minimumLineSpacing = 2 // Set minimum line spacing to 0
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true

@@ -586,21 +586,13 @@ func unmuteVideoIfNeed() {
                     
                     if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
                         
-                        
                         if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
                             
-                            
-                            if cell2.videoNode.isPlaying() {
-                                
-                                cell2.videoNode.muted = false
-                                shouldMute = false
-                                
-                                
-                            }
-                            
+                            cell2.videoNode.muted = false
+                            shouldMute = false
                         }
                         
-   
+                        
                     }
                     
                 }

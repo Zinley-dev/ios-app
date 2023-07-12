@@ -324,7 +324,7 @@ extension SavePostVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
 
-        let size = self.collectionNode.view.bounds.width/3 - 2
+        let size = self.collectionNode.view.bounds.width/2 - 2
         let min = CGSize(width: size, height: size * 13.5 / 9)
         let max = CGSize(width: size, height: size * 13.5 / 9)
         

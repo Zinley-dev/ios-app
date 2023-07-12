@@ -163,17 +163,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         
         commentBtn.setTitle("", for: .normal)
-        
-        cmtTxtView.delegate = self
-        placeholderLabel = UILabel()
-        placeholderLabel.text = "Add comment..."
-        placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
-        placeholderLabel.sizeToFit()
-        cmtTxtView.addSubview(placeholderLabel)
-        
-        placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
-        placeholderLabel.textColor = UIColor.white
-        placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+
+        setupPlaceholder()
         
         cmtTxtView.returnKeyType = .default
         
@@ -226,6 +217,38 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.reportRequest), name: (NSNotification.Name(rawValue: "notification_report_cmt")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.copyRequest), name: (NSNotification.Name(rawValue: "notification_copy_cmt")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.deleteRequest), name: (NSNotification.Name(rawValue: "notification_delete_cmt")), object: nil)
+        
+    }
+    
+    func setupPlaceholder() {
+        
+        if post.setting?.allowComment == true {
+            cmtTxtView.delegate = self
+            placeholderLabel = UILabel()
+            placeholderLabel.text = "Add comment..."
+            placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
+            placeholderLabel.sizeToFit()
+            cmtTxtView.addSubview(placeholderLabel)
+            commentBtn.isEnabled = true
+            placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
+            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+            cmtTxtView.isUserInteractionEnabled = true
+        } else {
+            cmtTxtView.delegate = self
+            placeholderLabel = UILabel()
+            placeholderLabel.text = "Comments are turned off"
+            placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
+            placeholderLabel.sizeToFit()
+            cmtTxtView.addSubview(placeholderLabel)
+            cmtTxtView.isUserInteractionEnabled = false
+            commentBtn.isEnabled = false
+            placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
+            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+        }
+        
+        
         
     }
     

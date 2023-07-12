@@ -204,7 +204,13 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
             self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
             
-            
+            if post.setting?.allowStitch == false {
+                self.headerView.createStitchView.isHidden = true
+                self.headerView.stichBtn.isHidden = true
+            } else {
+                self.headerView.createStitchView.isHidden = false
+                self.headerView.stichBtn.isHidden = false
+            }
 
             self.buttonsView = ButtonsHeader()
             self.buttonNode.view.addSubview(self.buttonsView)
@@ -280,6 +286,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.totalLikeCount()
             self.totalCmtCount()
             self.shareCount()
+            self.getSaveCount()
+            self.checkIfSave()
            
         }
        
@@ -762,17 +770,13 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             return
         }
 
-        // Set maximum value for the slider
         playTimeBar.maximumValue = Float(maxDurationSeconds)
-
-        // Reset slider to beginning if currentTime is 0 without animation
-      
-        if currentTime <= 0.5 {
-            playTimeBar.setValue(Float(currentTime), animated: false)
-        } else {
-            playTimeBar.setValue(Float(currentTime), animated: true)
-        }
+        playTimeBar.setValue(Float(currentTime), animated: true)
     }
+
+
+    
+    
 
 }
 
@@ -996,6 +1000,20 @@ extension ReelNode {
             
             
             unSaveAnimation()
+            
+            APIManager.shared.unsavePost(postId: post.id) { [weak self] result in
+                guard let self = self else { return }
+
+                switch result {
+                case .success(let apiResponse):
+                    print(apiResponse)
+                   
+                case .failure(let error):
+                    print("SaveCount: \(error)")
+                    isSave = true
+                    saveAnimation()
+                }
+            }
 
             
         } else {
@@ -1026,30 +1044,6 @@ extension ReelNode {
         
     }
     
-    func test() {
-        
-        APIManager.shared.getShare(postId: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                print("Share get: \(apiResponse)")
-                
-                
-            case .failure(let error):
-                print("SaveCount: \(error)")
-            }
-        }
-        
-    }
-    
-    func checkIfSave() {
-        
-        
-        
-    }
-    
-
     
     func unsave() {
         
@@ -1069,22 +1063,88 @@ extension ReelNode {
     }
     
     
-    func shareCount() {
+    func checkIfSave() {
         
-        
-        APIManager.shared.getShare(postId: post.id) { [weak self] result in
+        APIManager.shared.checkSavedPost(pid: post.id) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success(let apiResponse):
+
+                print("Save checked: \(apiResponse)")
+                
                 guard apiResponse.body?["message"] as? String == "success",
-                      let CountFromQuery = apiResponse.body?["shares"] as? Int  else {
+                      let getIsSaved = apiResponse.body?["saved"] as? Bool  else {
+                        return
+                }
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+            
+                    isSave = getIsSaved
+                    
+                    if isSave {
+                        saveAnimation()
+                    } else {
+                        unSaveAnimation()
+                    }
+                }
+            
+            case .failure(let error):
+                print("SaveCount: \(error)")
+                
+            }
+        }
+       
+        
+    }
+    
+    func getSaveCount() {
+        
+        APIManager.shared.countSavedPost(pid: post.id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+                guard apiResponse.body?["message"] as? String == "success",
+                      let CountFromQuery = apiResponse.body?["saved"] as? Int  else {
                         return
                 }
                 
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(CountFromQuery)))"
+                }
+               
+            case .failure(let error):
+                print("SaveCount: \(error)")
+            }
+        }
+        
+    }
+    
+    
+    func shareCount() {
+        
+        APIManager.shared.getShare(postId: post.id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                
+                print("shareCheck: \(apiResponse)")
+               
+                guard apiResponse.body?["message"] as? String == "success",
+                      let CountFromQuery = apiResponse.body?["shared"] as? Int  else {
+                        return
+                }
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.buttonsView.shareCountLbl.text = "\(formatPoints(num: Double(CountFromQuery)))"
                 }
                
             case .failure(let error):

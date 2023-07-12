@@ -57,7 +57,6 @@
 		390FD78629093EA00068B883 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD78529093EA00068B883 /* FeedViewController.swift */; };
 		390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD787290A856B0068B883 /* RedirectionHelper.swift */; };
 		390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD78A290A901F0068B883 /* SettingsBundleHelper.swift */; };
-		395477B1293FC524008EED97 /* bg.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 395477B0293FC524008EED97 /* bg.mp4 */; };
 		395477B32940ECB8008EED97 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 395477B22940ECB8008EED97 /* GoogleService-Info.plist */; };
 		395477B629425274008EED97 /* LoginCoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477B529425274008EED97 /* LoginCoordinatorProtocol.swift */; };
 		395477B829425318008EED97 /* AuthResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395477B729425318008EED97 /* AuthResult.swift */; };
@@ -72,6 +71,7 @@
 		39E8046C299A9A10002F13A5 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E8046B299A9A10002F13A5 /* NotificationService.swift */; };
 		39E80470299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 39E80469299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6A0B8B6C2996DC2D00E724B7 /* EditBirthdayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0B8B6B2996DC2D00E724B7 /* EditBirthdayVC.swift */; };
+		6A0C324B2A5F165900D2DE18 /* bg.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6A0C324A2A5F165900D2DE18 /* bg.mp4 */; };
 		6A0CF638296AABEC00155889 /* ResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF637296AABEC00155889 /* ResetPasswordVC.swift */; };
 		6A0CF63B296AAC1D00155889 /* PhoneResetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF63A296AAC1D00155889 /* PhoneResetVC.swift */; };
 		6A0CF63D296AAC2C00155889 /* EmailResetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF63C296AAC2C00155889 /* EmailResetVC.swift */; };
@@ -536,7 +536,6 @@
 		390FD78529093EA00068B883 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		390FD787290A856B0068B883 /* RedirectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedirectionHelper.swift; sourceTree = "<group>"; };
 		390FD78A290A901F0068B883 /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
-		395477B0293FC524008EED97 /* bg.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bg.mp4; sourceTree = "<group>"; };
 		395477B22940ECB8008EED97 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		395477B529425274008EED97 /* LoginCoordinatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinatorProtocol.swift; sourceTree = "<group>"; };
 		395477B729425318008EED97 /* AuthResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResult.swift; sourceTree = "<group>"; };
@@ -558,6 +557,7 @@
 		64CB948CE2F9E202AE619AA9 /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CA740C1F2C373D773F7863 /* Pods-Stitchbox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stitchbox.debug.xcconfig"; path = "Target Support Files/Pods-Stitchbox/Pods-Stitchbox.debug.xcconfig"; sourceTree = "<group>"; };
 		6A0B8B6B2996DC2D00E724B7 /* EditBirthdayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBirthdayVC.swift; sourceTree = "<group>"; };
+		6A0C324A2A5F165900D2DE18 /* bg.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bg.mp4; sourceTree = "<group>"; };
 		6A0CF637296AABEC00155889 /* ResetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordVC.swift; sourceTree = "<group>"; };
 		6A0CF63A296AAC1D00155889 /* PhoneResetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneResetVC.swift; sourceTree = "<group>"; };
 		6A0CF63C296AAC2C00155889 /* EmailResetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailResetVC.swift; sourceTree = "<group>"; };
@@ -1126,6 +1126,7 @@
 		390FD7362909264D0068B883 /* Stitchbox */ = {
 			isa = PBXGroup;
 			children = (
+				6A0C324A2A5F165900D2DE18 /* bg.mp4 */,
 				6A70D5082969F5BE008D80E6 /* CountryPickerView-master */,
 				6A1BD8502A32EF6300013E3E /* SpinnerNode */,
 				6A16F63C2A2DAB4900AC9502 /* UploadContentManager */,
@@ -1148,7 +1149,6 @@
 				395477B929479BBE008EED97 /* Stitchbox.entitlements */,
 				A540A8D0294720E70085CC45 /* SocialServices */,
 				395477B429425255008EED97 /* Protocols */,
-				395477B0293FC524008EED97 /* bg.mp4 */,
 				148C7103291B0C780046FC5D /* StyledComponents */,
 				143684302918C5B800FA87D7 /* Models */,
 				390FD767290927C90068B883 /* NetworkManager */,
@@ -3670,7 +3670,6 @@
 				6AF97349297B5A7500C76814 /* ProfilePostsHeaderView.xib in Resources */,
 				6A48DB282A25C1B2000AD355 /* InviteView.xib in Resources */,
 				6AF97346297B5A2A00C76814 /* BadgesHeaderView.xib in Resources */,
-				395477B1293FC524008EED97 /* bg.mp4 in Resources */,
 				6A80F1AB29BA78E70047595A /* GameListView.xib in Resources */,
 				6AAD7A6A294C69B1003E3AB6 /* README.md in Resources */,
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
@@ -3688,6 +3687,7 @@
 				6A307CC229ADB18500A89529 /* CommentSettings.xib in Resources */,
 				6A0D541C296E4E840059530C /* ChallengeCard.xib in Resources */,
 				6A286B6829CD5EB200C72718 /* UserSettingVC.xib in Resources */,
+				6A0C324B2A5F165900D2DE18 /* bg.mp4 in Resources */,
 				6AEA33FE298DCAC0005A4C5D /* HashtagCell.xib in Resources */,
 				6AC6DA0C29A8AAEB00B18139 /* reportCell.xib in Resources */,
 				6A6C3109296426F80070167A /* EditChannelDataModView.xib in Resources */,

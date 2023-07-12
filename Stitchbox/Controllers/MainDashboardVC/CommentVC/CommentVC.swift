@@ -579,16 +579,33 @@ extension CommentVC {
     
     func setupPlaceholder() {
         
-        cmtTxtView.delegate = self
-        placeholderLabel = UILabel()
-        placeholderLabel.text = "Add comment..."
-        placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
-        placeholderLabel.sizeToFit()
-        cmtTxtView.addSubview(placeholderLabel)
+        if post.setting?.allowComment == true {
+            cmtTxtView.delegate = self
+            placeholderLabel = UILabel()
+            placeholderLabel.text = "Add comment..."
+            placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
+            placeholderLabel.sizeToFit()
+            cmtTxtView.addSubview(placeholderLabel)
+            commentBtn.isEnabled = true
+            placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
+            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+            cmtTxtView.isUserInteractionEnabled = true
+        } else {
+            cmtTxtView.delegate = self
+            placeholderLabel = UILabel()
+            placeholderLabel.text = "Comments are turned off"
+            placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
+            placeholderLabel.sizeToFit()
+            cmtTxtView.addSubview(placeholderLabel)
+            cmtTxtView.isUserInteractionEnabled = false
+            commentBtn.isEnabled = false
+            placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
+            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+        }
         
-        placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
-        placeholderLabel.textColor = UIColor.white
-        placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+        
         
     }
     

@@ -250,12 +250,6 @@ extension OriginalNode  {
 
 extension OriginalNode {
     
-    func checkIfSave() {
-        
-       
-        
-    }
-    
     func getStitchTo() {
 
         APIManager.shared.getStitchTo(pid: post.id) { [weak self] result in

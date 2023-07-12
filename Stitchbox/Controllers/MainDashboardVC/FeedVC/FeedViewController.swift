@@ -815,7 +815,7 @@ extension FeedViewController {
                     self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data
-                    
+                
                     DispatchQueue.main.async {
                         block(items)
                     }
