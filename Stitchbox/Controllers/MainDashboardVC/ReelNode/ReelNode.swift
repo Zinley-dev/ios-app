@@ -762,11 +762,17 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             return
         }
 
+        // Set maximum value for the slider
         playTimeBar.maximumValue = Float(maxDurationSeconds)
-        playTimeBar.setValue(Float(currentTime), animated: true)
-    }
 
-    
+        // Reset slider to beginning if currentTime is 0 without animation
+      
+        if currentTime <= 0.5 {
+            playTimeBar.setValue(Float(currentTime), animated: false)
+        } else {
+            playTimeBar.setValue(Float(currentTime), animated: true)
+        }
+    }
 
 }
 

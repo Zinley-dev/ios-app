@@ -22,20 +22,20 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3Ez-1G-1gB">
-                    <rect key="frame" x="137" y="58" width="50" height="66"/>
+                    <rect key="frame" x="147" y="84" width="40" height="40"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5/10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bgh-n1-z5Z">
-                            <rect key="frame" x="0.0" y="0.0" width="50" height="18"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="50" id="pS5-a1-TxQ"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7iW-rQ-Yzm">
-                            <rect key="frame" x="5" y="26" width="40" height="40"/>
+                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                             <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bgh-n1-z5Z">
+                                    <rect key="frame" x="-5" y="11" width="50" height="18"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="50" id="pS5-a1-TxQ"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dqo-Lv-Gj7">
                                     <rect key="frame" x="-5" y="-5" width="50" height="50"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -44,7 +44,7 @@
                                         <constraint firstAttribute="height" constant="50" id="qAs-4z-5Me"/>
                                     </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" image="streamLinkBtn"/>
+                                    <buttonConfiguration key="configuration" style="plain"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                             <real key="value" value="25"/>
@@ -56,7 +56,9 @@
                             <constraints>
                                 <constraint firstItem="dqo-Lv-Gj7" firstAttribute="centerY" secondItem="7iW-rQ-Yzm" secondAttribute="centerY" id="1Id-Fb-L0F"/>
                                 <constraint firstAttribute="width" constant="40" id="7TS-Fd-72Z"/>
+                                <constraint firstItem="Bgh-n1-z5Z" firstAttribute="centerY" secondItem="7iW-rQ-Yzm" secondAttribute="centerY" id="EnZ-C2-wm4"/>
                                 <constraint firstAttribute="height" constant="40" id="J3o-17-rdW"/>
+                                <constraint firstItem="Bgh-n1-z5Z" firstAttribute="centerX" secondItem="7iW-rQ-Yzm" secondAttribute="centerX" id="gka-3T-OGW"/>
                                 <constraint firstItem="dqo-Lv-Gj7" firstAttribute="centerX" secondItem="7iW-rQ-Yzm" secondAttribute="centerX" id="hfN-WW-BGD"/>
                             </constraints>
                             <userDefinedRuntimeAttributes>
@@ -83,7 +85,4 @@
             <point key="canvasLocation" x="-129.71014492753625" y="114.50892857142857"/>
         </view>
     </objects>
-    <resources>
-        <image name="streamLinkBtn" width="16.5" height="17"/>
-    </resources>
 </document>

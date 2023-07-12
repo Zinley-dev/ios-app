@@ -393,7 +393,7 @@ public enum UserAPI {
     case updateGameChallengeCard(params: [String: Any])
     case updateFavoriteContent(params: [String: Any] )
     case deleteGameChallengeCard(params: [String: Any])
-    case updateFavoriteContent(params: [String: Any] )
+    
     
 }
 extension UserAPI: EndPointType {

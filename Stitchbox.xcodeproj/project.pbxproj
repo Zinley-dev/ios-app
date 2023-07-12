@@ -1272,7 +1272,6 @@
 			children = (
 				147187EC2920B0980039B89E /* ControllerType.swift */,
 				6A9E4C6829767FDC00B59176 /* MainDashboardVC */,
-				6A9E4C6729767FD000B59176 /* AnimationVC */,
 				6AAD79F9294C4BB5003E3AB6 /* LoginVC */,
 			);
 			path = Controllers;
@@ -2592,13 +2591,6 @@
 				6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */,
 			);
 			path = PushNotificationVC;
-			sourceTree = "<group>";
-		};
-		6A9E4C6729767FD000B59176 /* AnimationVC */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = AnimationVC;
 			sourceTree = "<group>";
 		};
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {

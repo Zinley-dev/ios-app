@@ -29,6 +29,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         print("OriginalNode is being deallocated.")
     }
 
+    var page = 1
     var posts = [PostModel]()
     let threshold: CGFloat = 35 // Adjust this value as needed.
     var animatedLabel: MarqueeLabel!
@@ -78,7 +79,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         self.collectionNode.delegate = self
         self.collectionNode.dataSource = self
         addSubCollection()
-
+        self.getStitchTo()
         
 
     }
@@ -136,9 +137,12 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
 
                 cell.headerNode.isHidden = false
                 cell.contentNode.isHidden = false
-                cell.sideButtonsView.isHidden = false
                 cell.buttonNode.isHidden = false
                 self.selectPostCollectionView.isHidden = true
+                
+                if posts.count > 1 {
+                    cell.sideButtonsView.isHidden = false
+                }
 
             }
         }
@@ -246,15 +250,52 @@ extension OriginalNode  {
 
 extension OriginalNode {
     
+    func checkIfSave() {
+        
+       
+        
+    }
+    
+    func getStitchTo() {
+
+        APIManager.shared.getStitchTo(pid: post.id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                guard let data = apiResponse.body?["data"] as? [String: Any],
+                      let originalPost = PostModel(JSON: data) else {
+                    print("Invalid data or PostModel initialization failed")
+                    return
+                }
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.posts.insert(originalPost, at: 0)
+                    let indexPath = IndexPath(item: 0, section: 0)
+                    self.collectionNode.insertItems(at: [indexPath])
+                    self.selectPostCollectionView.collectionView.insertItems(at: [indexPath])
+                }
+
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    print(error)
+                }
+
+            }
+        }
+
+    }
+
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getUserFeed { [weak self] result in
+        APIManager.shared.getStitchPost(rootId: post.id, page: page) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let apiResponse):
-                
+                print(apiResponse)
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
@@ -284,6 +325,8 @@ extension OriginalNode {
                 }
             }
         }
+        
+       
         
     }
     
@@ -723,13 +766,16 @@ extension OriginalNode {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
-
+            // Seek to the beginning of the video
+            cell.videoNode.player?.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
              
+            // Pause the video
             cell.videoNode.pause()
             
         }
         
     }
+
     
     
     func seekVideo(index: Int, time: CMTime) {
@@ -796,7 +842,7 @@ extension OriginalNode {
                             }
                            
                         } else {
-                            self.applyAnimationText(text: "Unknown!")
+                            self.applyAnimationText(text: "")
 
                         }
                     }
@@ -831,19 +877,27 @@ extension OriginalNode {
                     guard let sideButtonsView = cell.sideButtonsView else { return }
                     cell.headerNode.isHidden = false
                     cell.contentNode.isHidden = false
-                    sideButtonsView.isHidden = false
+                    if posts.count > 1 {
+                        cell.sideButtonsView.isHidden = false
+                    }
                     cell.buttonNode.isHidden = false
      
                 }
 
-
                 
                 if cell.sideButtonsView != nil {
-                    cell.sideButtonsView.viewStitchBtn.spin()
-                }
-                
-                if cell.sideButtonsView != nil {
-                    cell.sideButtonsView.stitchCount.text = "\(index + 1)/\(posts.count)"
+                    
+                    if index == 0 {
+                        if self.posts.count > 1 {
+                            cell.sideButtonsView.stitchCount.text = "\(index + 1)"
+                        } else {
+                            cell.sideButtonsView.isHidden = true
+                        }
+                    } else {
+                        cell.sideButtonsView.stitchCount.text = "\(index + 1)"
+                    }
+                    
+                    
                 }
                 
                 if let muteStatus = shouldMute {
