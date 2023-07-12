@@ -24,7 +24,9 @@ class PostVC: UIViewController {
         case video
     }
     
+    var stitchPost: PostModel!
     var itemList = [GameList]()
+    @IBOutlet weak var stitchView: UIView!
     @IBOutlet weak var categoryInput: UITextField!
     @IBOutlet weak var addLbl: UILabel!
     @IBOutlet weak var hashtagLbl: UILabel!
@@ -53,10 +55,12 @@ class PostVC: UIViewController {
     @IBOutlet weak var allowStitchSwitch: UISwitch!
    
     
+    
     var hashtagList = [String]()
-    var selectedGameId = ""
+    
     var mode = 0
     var isAllowComment = true
+    var isAllowStitch = true
     let backButton: UIButton = UIButton(type: .custom)
     var isKeyboardShow = false
     var mediaType = ""
@@ -84,6 +88,12 @@ class PostVC: UIViewController {
         setupGesture()
         loadPreviousSetting()
         loadAvatar()
+        
+        if stitchPost != nil {
+            stitchView.isHidden = false
+        } else {
+            stitchView.isHidden = true
+        }
        
     }
     
@@ -168,7 +178,23 @@ class PostVC: UIViewController {
     
     @IBAction func allowStitchSwitchPressed(_ sender: Any) {
         
-
+        if isAllowStitch == true {
+                  
+            isAllowStitch =  false
+            allowStitchSwitch.setOn(false, animated: true)
+            
+            print("Allow stitch: \(String(describing: self.isAllowStitch))")
+            
+            
+        } else {
+            
+            isAllowStitch = true
+            allowStitchSwitch.setOn(true, animated: true)
+            
+            print("Allow stitch: \(String(describing: self.isAllowStitch))")
+            
+        }
+        
         
     }
     
@@ -428,12 +454,9 @@ extension PostVC {
                         
                         Dispatch.background {
                             
-                            UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, gameID: self.selectedGameId)
+                            UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: "")
                             
                         }
-                        
-                        
-                        
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
@@ -472,7 +495,7 @@ extension PostVC {
                 Dispatch.background {
                     
                     print("Start uploading video to db")
-                    UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length, gameID: self.selectedGameId)
+                    UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length, isAllowStitch: self.isAllowStitch, stitchId: "")
                     
                 }
                 
@@ -774,13 +797,7 @@ extension PostVC {
     @objc func onClickPost(_ sender: AnyObject) {
         
         if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
-            
-            guard selectedGameId != ""  else {
-                showErrorAlert("Oops!", msg: "Please select your uploading game.")
-                return
-            }
-            
-            
+  
             if mediaType == "image" {
                 uploadImage()
             } else if mediaType == "video" {

@@ -99,6 +99,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
+        
         
         
         if let tabBarController = self.tabBarController {
@@ -1007,10 +1011,47 @@ extension FeedViewController {
         
     }
     
+    @objc func createPostForStitch() {
+        
+        if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
+            
+            // Customize the navigation bar appearance
+            PNVC.navigationBar.barTintColor = .black
+            PNVC.navigationBar.tintColor = .white
+            PNVC.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+            
+            
+            PNVC.modalPresentationStyle = .fullScreen
+            
+            delay(0.1) {
+                self.present(PNVC, animated: true)
+            }
+            
+        }
+        
+    }
+    
+    
+    @objc func stitchToExistingPost() {
+        
+        if let ASTEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddStitchToExistingVC") as? AddStitchToExistingVC {
+            
+            ASTEVC.hidesBottomBarWhenPushed = true
+            ASTEVC.post = editeddPost
+            hideMiddleBtn(vc: self)
+            
+            delay(0.1) {
+                self.navigationController?.pushViewController(ASTEVC, animated: true)
+            }
+            
+        }
+        
+        
+    }
+    
     func switchToProfileVC() {
     
         self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
-        
         
     }
     

@@ -208,11 +208,7 @@ extension OriginalNode: ASCollectionDelegate, ASCollectionDataSource {
 
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-
-            node.settingBtn = { [weak self] node in
-                self?.settingPost(item: post)
-            }
-
+            
             node.viewStitchBtn = { [weak self] node in
                 self?.viewStitchedPost(node: node as! ReelNode)
             }
@@ -220,11 +216,72 @@ extension OriginalNode: ASCollectionDelegate, ASCollectionDataSource {
             node.soundBtn = { [weak self] node in
                 self?.soundProcess(node: node as! ReelNode)
             }
+            
+            node.settingBtn = { [weak self] node in
+                self?.settingPost(item: post)
+            }
 
             return node
         }
     }
 
+    
+}
+
+extension OriginalNode {
+    
+    func settingPost(item: PostModel) {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            let newsFeedSettingVC = NewsFeedSettingVC()
+            newsFeedSettingVC.modalPresentationStyle = .custom
+            newsFeedSettingVC.transitioningDelegate = vc.self
+            
+            global_presetingRate = Double(0.35)
+            global_cornerRadius = 45
+            
+            if vc is FeedViewController {
+                
+                if let update1 = vc as? FeedViewController {
+                    
+                    if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
+                        newsFeedSettingVC.isOwner = true
+                    } else {
+                        newsFeedSettingVC.isOwner = false
+                    }
+                    
+                    update1.editeddPost = item
+                    vc.present(newsFeedSettingVC, animated: true, completion: nil)
+                    
+                }
+                
+            } else {
+                
+                if let update1 = vc as? SelectedPostVC {
+                    
+                    if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
+                        newsFeedSettingVC.isOwner = true
+                    } else {
+                        newsFeedSettingVC.isOwner = false
+                    }
+                    
+                    update1.editeddPost = item
+                    vc.present(newsFeedSettingVC, animated: true, completion: nil)
+                    
+                }
+                
+                
+                
+            }
+            
+            
+            
+            
+        }
+        
+        
+    } 
     
 }
 
@@ -474,284 +531,6 @@ extension OriginalNode {
             
         }
 
-       
-        
-        
-    }
-    
-    func settingPost(item: PostModel) {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            let newsFeedSettingVC = NewsFeedSettingVC()
-            newsFeedSettingVC.modalPresentationStyle = .custom
-            newsFeedSettingVC.transitioningDelegate = vc.self
-            
-            global_presetingRate = Double(0.35)
-            global_cornerRadius = 45
-            
-            if vc is FeedViewController {
-                
-                if let update1 = vc as? FeedViewController {
-                    
-                    if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
-                        newsFeedSettingVC.isOwner = true
-                    } else {
-                        newsFeedSettingVC.isOwner = false
-                    }
-                    
-                    update1.editeddPost = item
-                    vc.present(newsFeedSettingVC, animated: true, completion: nil)
-                    
-                }
-                
-            } else {
-                
-                if let update1 = vc as? SelectedPostVC {
-                    
-                    if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
-                        newsFeedSettingVC.isOwner = true
-                    } else {
-                        newsFeedSettingVC.isOwner = false
-                    }
-                    
-                    update1.editeddPost = item
-                    vc.present(newsFeedSettingVC, animated: true, completion: nil)
-                    
-                }
-                
-                
-                
-            }
-            
-            
-            
-            
-        }
-        
-        
-    }
-    
-    @objc func copyPost() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if vc is FeedViewController {
-                
-                if let update1 = vc as? FeedViewController {
-                    
-                    if let id = update1.editeddPost?.id {
-                        
-                        let link = "https://stitchbox.gg/app/post/?uid=\(id)"
-                        
-                        UIPasteboard.general.string = link
-                        showNote(text: "Post link is copied")
-                        
-                    } else {
-                        showNote(text: "Post link is unable to be copied")
-                    }
-                    
-                }
-                
-            } else {
-                
-                if let update1 = vc as? SelectedPostVC {
-                    
-                    if let id = update1.editeddPost?.id {
-                        
-                        let link = "https://stitchbox.gg/app/post/?uid=\(id)"
-                        
-                        UIPasteboard.general.string = link
-                        showNote(text: "Post link is copied")
-                        
-                    } else {
-                        showNote(text: "Post link is unable to be copied")
-                    }
-                    
-                }
-                
-                
-                
-            }
-            
-            
-            
-        }
-    
-    }
-    
-    @objc func copyProfile() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if vc is FeedViewController {
-                
-                if let update1 = vc as? FeedViewController {
-                    
-                    if let id = update1.editeddPost?.owner?.id {
-                        
-                        let link = "https://stitchbox.gg/app/account/?uid=\(id)"
-                        
-                        UIPasteboard.general.string = link
-                        showNote(text: "User profile link is copied")
-                        
-                    } else {
-                        showNote(text: "User profile link is unable to be copied")
-                    }
-                    
-                }
-                
-            } else {
-                
-                if let update1 = vc as? SelectedPostVC {
-                    
-                    if let id = update1.editeddPost?.owner?.id {
-                        
-                        let link = "https://stitchbox.gg/app/account/?uid=\(id)"
-                        
-                        UIPasteboard.general.string = link
-                        showNote(text: "User profile link is copied")
-                        
-                    } else {
-                        showNote(text: "User profile link is unable to be copied")
-                    }
-                    
-                }
-                
-                
-                
-            }
-            
-            
-            
-        }
-        
-    }
-
-    
-    @objc func reportPost() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if vc is FeedViewController {
-                
-                if let update1 = vc as? FeedViewController {
-                    
-                    
-                    let slideVC =  reportView()
-                    
-                    slideVC.post_report = true
-                    slideVC.postId = update1.editeddPost?.id ?? ""
-                    slideVC.modalPresentationStyle = .custom
-                    slideVC.transitioningDelegate = update1.self
-                    global_presetingRate = Double(0.75)
-                    global_cornerRadius = 35
-                    
-                    delay(0.1) { [weak self] in
-                        guard let self = self else { return }
-                        update1.present(slideVC, animated: true, completion: nil)
-                    }
-                    
-                }
-                
-            } else {
-                
-                if let update1 = vc as? SelectedPostVC {
-                    
-                    
-                    let slideVC =  reportView()
-                    
-                    slideVC.post_report = true
-                    slideVC.postId = update1.editeddPost?.id ?? ""
-                    slideVC.modalPresentationStyle = .custom
-                    slideVC.transitioningDelegate = update1.self
-                    global_presetingRate = Double(0.75)
-                    global_cornerRadius = 35
-                    
-                    delay(0.1) { [weak self] in
-                        guard let self = self else { return }
-                        update1.present(slideVC, animated: true, completion: nil)
-                    }
-                    
-                }
-                
-                
-                
-            }
-            
-            
-            
-        }
-    
-        
-    }
-    
-    @objc func sharePost() {
-        
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if vc is FeedViewController {
-                
-                if let update1 = vc as? FeedViewController {
-                    
-                    
-                    guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-                        print("Sendbird: Can't get userUID")
-                        return
-                    }
-                    
-                    let loadUsername = userDataSource.userName
-                    let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(update1.editeddPost?.id ?? "")")!]
-                    let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-                    
-                    ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
-                        
-                        
-                    }
-                    
-                    delay(0.1) { [weak self] in
-                        guard let self = self else { return }
-                        update1.present(ac, animated: true, completion: nil)
-                    }
-                    
-                }
-                
-            } else {
-                
-                if let update1 = vc as? SelectedPostVC {
-                    
-                    
-                    guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-                        print("Sendbird: Can't get userUID")
-                        return
-                    }
-                    
-                    let loadUsername = userDataSource.userName
-                    let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(update1.editeddPost?.id ?? "")")!]
-                    let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-                    
-                    ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
-                        
-                        
-                    }
-                    
-                    delay(0.1) { [weak self] in
-                        guard let self = self else { return }
-                        update1.present(ac, animated: true, completion: nil)
-                    }
-                    
-                }
-                
-                
-                
-            }
-            
-            
-            
-        }
-        
-        
     }
     
     func pauseVideo(index: Int) {

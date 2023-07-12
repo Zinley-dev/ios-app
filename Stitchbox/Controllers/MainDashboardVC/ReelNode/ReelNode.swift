@@ -408,7 +408,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
             NSLayoutConstraint.activate([
                 self.sideButtonsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
-                self.sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -64),
+                self.sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -55),
                 self.sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
                 self.sideButtonsView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
             ])
@@ -877,8 +877,7 @@ extension ReelNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
-                APIManager.shared.createView(post: post.id, watchTime: watchTime) { [weak self] result in
-                    guard let self = self else { return }
+                APIManager.shared.createView(post: post.id, watchTime: watchTime) { result in
                     
                     switch result {
                     case .success(let apiResponse):
@@ -909,8 +908,7 @@ extension ReelNode {
                 last_view_timestamp = NSDate().timeIntervalSince1970
                 isViewed = true
             
-                APIManager.shared.createView(post: id, watchTime: 0) { [weak self] result in
-                    guard let self = self else { return }
+                APIManager.shared.createView(post: id, watchTime: 0) { result in
                     
                     switch result {
                     case .success(let apiResponse):
@@ -951,8 +949,7 @@ extension ReelNode {
         imgView.startAnimating()
         
         // Optional: clear images after animation ends
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            guard let self = self else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             imgView.animationImages = nil
             imgView.removeFromSuperview()
         }
@@ -1058,9 +1055,7 @@ extension ReelNode {
     
     func unsave() {
         
-        APIManager.shared.unsavePost(postId: post.id) { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.unsavePost(postId: post.id) { result in
             switch result {
             case .success(let apiResponse):
                 print("Share get: \(apiResponse)")
@@ -1173,9 +1168,7 @@ extension ReelNode {
             return
         }
         
-        APIManager.shared.createShare(postId: post.id, userId: userUID) { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.createShare(postId: post.id, userId: userUID) { result in
             switch result {
             case .success(let apiResponse):
     
@@ -1231,7 +1224,25 @@ extension ReelNode {
     
     @objc func stitchTapped() {
         
-        print("Stitch")
+        if let vc = UIViewController.currentViewController() {
+            
+            general_vc = vc
+            
+            let slideVC = StitchSettingVC()
+            
+            if vc is FeedViewController {
+                slideVC.isFeed = true
+            } else {
+                slideVC.isFeed = false
+            }
+            
+            slideVC.modalPresentationStyle = .custom
+            slideVC.transitioningDelegate = vc.self
+            global_presetingRate = Double(0.35)
+            global_cornerRadius = 35
+            vc.present(slideVC, animated: true, completion: nil)
+            
+        }
          
     }
     
@@ -1282,9 +1293,7 @@ extension ReelNode {
         }
         
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             if imgView.alpha == 0 {
                 
                 imgView.removeFromSuperview()
@@ -1388,9 +1397,7 @@ extension ReelNode {
             self.isLike = true
         }
         
-        APIManager.shared.likePost(id: post.id) { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.likePost(id: post.id) { result in
             switch result {
             case .success(let apiResponse):
                print(apiResponse)
@@ -1412,8 +1419,7 @@ extension ReelNode {
             self.isLike = false
         }
         
-        APIManager.shared.unlikePost(id: post.id) { [weak self] result in
-            guard let self = self else { return }
+        APIManager.shared.unlikePost(id: post.id) { result in
 
             switch result {
             case .success(let apiResponse):
@@ -1790,16 +1796,14 @@ extension ReelNode: UIGestureRecognizerDelegate {
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body else {
-                    Dispatch.main.async { [weak self] in
-                        guard let self = self else { return }
+                    Dispatch.main.async {
                         SwiftLoader.hide()
                     }
                   return
                 }
                
                 if !data.isEmpty {
-                    Dispatch.main.async { [weak self] in
-                        guard let self = self else { return }
+                    Dispatch.main.async {
                         SwiftLoader.hide()
                         
                         if let post = PostModel(JSON: data) {
@@ -1840,16 +1844,14 @@ extension ReelNode: UIGestureRecognizerDelegate {
                     }
                     
                 } else {
-                    Dispatch.main.async { [weak self] in
-                        guard let self = self else { return }
+                    Dispatch.main.async {
                         SwiftLoader.hide()
                     }
                 }
 
             case .failure(let error):
                 print(error)
-                Dispatch.main.async { [weak self] in
-                    guard let self = self else { return }
+                Dispatch.main.async {
                     SwiftLoader.hide()
                 }
                 

@@ -1538,6 +1538,21 @@
             </objects>
             <point key="canvasLocation" x="-2415" y="3813"/>
         </scene>
+        <!--Add Stitch To ExistingVC-->
+        <scene sceneID="4Jg-5Y-uHG">
+            <objects>
+                <viewController storyboardIdentifier="AddStitchToExistingVC" id="NDz-ei-LdQ" customClass="AddStitchToExistingVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gWG-hK-ALS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="lse-ae-jQ9"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qal-Se-LEr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2382" y="4561"/>
+        </scene>
         <!--Save PostVC-->
         <scene sceneID="VIh-kY-bp3">
             <objects>
@@ -5516,7 +5531,7 @@
                                                                 <rect key="frame" x="302" y="4.6666666666666288" width="51" height="31"/>
                                                                 <color key="onTintColor" name="Secondary"/>
                                                                 <connections>
-                                                                    <action selector="changeGameBtnPressed:" destination="4y3-y0-ROG" eventType="valueChanged" id="jS4-rf-kuf"/>
+                                                                    <action selector="allowStitchSwitchPressed:" destination="4y3-y0-ROG" eventType="valueChanged" id="UJz-Lc-Kpm"/>
                                                                 </connections>
                                                             </switch>
                                                         </subviews>
@@ -5808,6 +5823,7 @@
                         <outlet property="publicLbl" destination="WKd-te-pMU" id="rFh-Tv-OIe"/>
                         <outlet property="settingViewHeight" destination="weg-zT-RVM" id="WuZ-jd-dFr"/>
                         <outlet property="stitchLbl" destination="Jq1-m7-aEm" id="qX3-LG-VXb"/>
+                        <outlet property="stitchView" destination="sDe-vH-vIh" id="Xio-H0-UuI"/>
                         <outlet property="streamingLinkBtn" destination="ccT-Zw-nnR" id="aAY-IV-NUl"/>
                     </connections>
                 </viewController>

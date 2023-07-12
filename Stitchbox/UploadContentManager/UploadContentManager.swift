@@ -15,7 +15,7 @@ class UploadContentManager {
     private init() {}
     
     
-    func uploadImageToDB(image: UIImage, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double = 0, gameID: String) {
+    func uploadImageToDB(image: UIImage, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double = 0, isAllowStitch: Bool, stitchId: String) {
         
         APIManager.shared.uploadImage(image: image) { [unowned self] result in
     
@@ -27,7 +27,7 @@ class UploadContentManager {
                         return
                 }
                 
-                self.writeContentImageToDB(imageUrl: url, hashtagList: hashtagList, selectedDescTxtView: selectedDescTxtView, isAllowComment: isAllowComment, mediaType: mediaType, mode: mode, origin_width: origin_width, origin_height: origin_height, length: length, gameID: gameID)
+                self.writeContentImageToDB(imageUrl: url, hashtagList: hashtagList, selectedDescTxtView: selectedDescTxtView, isAllowComment: isAllowComment, mediaType: mediaType, mode: mode, origin_width: origin_width, origin_height: origin_height, length: length, isAllowStitch: isAllowStitch, stitchId: stitchId)
 
 
             case .failure(let error):
@@ -42,7 +42,7 @@ class UploadContentManager {
     
     
     
-    func uploadVideoToDB(url: URL, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double, gameID: String) {
+    func uploadVideoToDB(url: URL, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double, isAllowStitch: Bool, stitchId: String) {
     
         let data = try! Data(contentsOf: url)
         
@@ -63,7 +63,7 @@ class UploadContentManager {
                 let downloadedUrl = videoInfo?.video_url ?? ""
                
                 if downloadedUrl != "" {
-                    self.writeContentVideoToDB(videoUrl: downloadedUrl, hashtagList: hashtagList, selectedDescTxtView: selectedDescTxtView, isAllowComment: isAllowComment, mediaType: mediaType, mode: mode, origin_width: origin_width, origin_height: origin_height, length: length, gameID: gameID)
+                    self.writeContentVideoToDB(videoUrl: downloadedUrl, hashtagList: hashtagList, selectedDescTxtView: selectedDescTxtView, isAllowComment: isAllowComment, mediaType: mediaType, mode: mode, origin_width: origin_width, origin_height: origin_height, length: length, isAllowStitch: isAllowStitch, stitchId: stitchId)
                 } else {
                     print("Couldn't get video url")
                 }
@@ -83,7 +83,7 @@ class UploadContentManager {
     }
     
     
-   private func writeContentImageToDB(imageUrl: String, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double, gameID: String) {
+   private func writeContentImageToDB(imageUrl: String, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double, isAllowStitch: Bool, stitchId: String) {
         
         guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
             print("Can't get userDataSource")
@@ -99,7 +99,7 @@ class UploadContentManager {
         var update_hashtaglist = [String]()
         
 
-        contentPost = ["content": selectedDescTxtView, "images": [imageUrl], "tags": [userUID], "hashtags": update_hashtaglist, "streamLink": global_fullLink, "gameId": gameID]
+        contentPost = ["content": selectedDescTxtView, "images": [imageUrl], "tags": [userUID], "hashtags": update_hashtaglist, "streamLink": global_fullLink]
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
         contentPost["metadata"] = ["width": origin_width, "height": origin_height, "length": length, "contentMode": 0]
         
@@ -122,7 +122,7 @@ class UploadContentManager {
     
     
     
-    private func writeContentVideoToDB(videoUrl: String, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double, gameID: String) {
+    private func writeContentVideoToDB(videoUrl: String, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double, isAllowStitch: Bool, stitchId: String) {
  
         guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
             print("Can't get userDataSource")
@@ -157,7 +157,7 @@ class UploadContentManager {
             
         }
         
-        contentPost = ["content": selectedDescTxtView, "video": videoData, "tags": [userUID], "streamLink": global_fullLink, "hashtags": update_hashtaglist, "gameId": gameID]
+        contentPost = ["content": selectedDescTxtView, "video": videoData, "tags": [userUID], "streamLink": global_fullLink, "hashtags": update_hashtaglist]
         contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
         contentPost["metadata"] = ["width": origin_width, "height": origin_height, "length": length, "contentMode": 0]
         
