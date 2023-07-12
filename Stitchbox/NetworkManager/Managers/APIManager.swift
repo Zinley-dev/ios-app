@@ -1002,4 +1002,16 @@ extension APIManager {
       completion(result)
     }
   }
+  
+  func checkSavedPost(pid: String, completion: @escaping APICompletion) {
+    postManager.request(.checkSavedPost(pid: pid)) { result in
+      completion(result)
+    }
+  }
+  
+  func countSavedPost(pid: String, completion: @escaping APICompletion) {
+    postManager.request(.countSavedPost(pid: pid)) { result in
+      completion(result)
+    }
+  }
 }
