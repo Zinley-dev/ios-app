@@ -965,6 +965,12 @@ extension APIManager {
     }
   }
   
+  func countShare(postId: String, completion: @escaping APICompletion) {
+    shareManager.request(.countByRoot(rootId: postId)) { result in
+      completion(result)
+    }
+  }
+  
   func savePost(postId: String, completion: @escaping APICompletion) {
     let params = ["postId": postId]
     userManager.request(.savePost(params: params)) { result in
