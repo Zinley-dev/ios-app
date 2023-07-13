@@ -1843,6 +1843,7 @@ public enum PostStitchApi {
   case denied(body: [String: Any])
   case getByRoot(rootId: String, page: Int)
   case getMyStitch(page: Int)
+  case getMyNonStitchPost(page: Int)
   case getMyWaitlist(page: Int)
   case getStitchTo(pid: String)
 }
@@ -1861,6 +1862,8 @@ extension PostStitchApi: EndPointType {
         return "/denied"
       case .getMyStitch(let page):
         return "/my-stitch?page=\(page)"
+      case .getMyNonStitchPost(let page):
+        return "/my-non-stitch?page=\(page)"
       case .getMyWaitlist(let page):
         return "/my-wait-list?page=\(page)"
       case .getStitchTo(let pid):
@@ -1886,6 +1889,8 @@ extension PostStitchApi: EndPointType {
         return .post
       case .getMyStitch:
         return .get
+      case .getMyNonStitchPost:
+        return .get
       case .getMyWaitlist:
         return .get
       case .getStitchTo:
@@ -1906,6 +1911,8 @@ extension PostStitchApi: EndPointType {
       case .denied(body: let body):
         return .requestParameters(parameters: body)
       case .getMyStitch:
+        return .request
+      case .getMyNonStitchPost:
         return .request
       case .getMyWaitlist:
         return .request
