@@ -39,7 +39,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var headerNode: ASDisplayNode
     var buttonNode: ASDisplayNode
     var toggleContentNode = ASTextNode()
-    var backgroundImage: GradientImageNode
     var shouldCountView = true
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
@@ -60,8 +59,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var pinchGestureRecognizer: UIPinchGestureRecognizer!
     var panGestureRecognizer: UIPanGestureRecognizer!
 
-    //var panGestureRecognizer: UIPanGestureRecognizer!
-    
     private let fireworkController = FountainFireworkController()
     private let fireworkController2 = ClassicFireworkController()
  
@@ -75,7 +72,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.roundedCornerNode = RoundedCornerNode()
         self.videoNode = RoundedCornerVideoNode()
         self.gradientNode = GradienView()
-        self.backgroundImage = GradientImageNode()
+        //self.backgroundImage = GradientImageNode()
         self.buttonNode = ASDisplayNode()
        
         super.init()
@@ -321,18 +318,18 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
                     self.videoNode.contentMode = .scaleAspectFit
                     self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                    self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
                 } else {
                     // Default contentMode, adjust as needed
                     self.videoNode.contentMode = .scaleAspectFit
                     self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                    self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
                 }
             } else {
                 // Default contentMode, adjust as needed
                 self.videoNode.contentMode = .scaleAspectFit
                 self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
             }
 
             
@@ -354,16 +351,16 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                     self.imageNode.contentMode = .scaleAspectFill
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
                     self.imageNode.contentMode = .scaleAspectFit
-                    self.backgroundImage.setGradientImage(with: post.imageUrl)
+                    //self.backgroundImage.setGradientImage(with: post.imageUrl)
                 } else {
                     // Default contentMode, adjust as needed
                     self.imageNode.contentMode = .scaleAspectFit
-                    self.backgroundImage.setGradientImage(with: post.imageUrl)
+                    //self.backgroundImage.setGradientImage(with: post.imageUrl)
                 }
             } else {
                 // Default contentMode, adjust as needed
                 self.imageNode.contentMode = .scaleAspectFit
-                self.backgroundImage.setGradientImage(with: post.imageUrl)
+                //self.backgroundImage.setGradientImage(with: post.imageUrl)
             }
             
 
@@ -1621,27 +1618,27 @@ extension ReelNode {
 
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         let textInsetSpec1 = ASInsetLayoutSpec(insets: inset, child: gradientNode)
-        let textInsetSpec2 = ASInsetLayoutSpec(insets: inset, child: backgroundImage)
+        //let textInsetSpec2 = ASInsetLayoutSpec(insets: inset, child: backgroundImage)
      
 
         if post.muxPlaybackId != "" {
             let textInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
             
             let backgroundSpec = ASBackgroundLayoutSpec(child: textInsetSpec, background: roundedCornerNode)
-            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: backgroundSpec)
+            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec1, overlay: backgroundSpec)
 
-            let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
-            let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
+            //let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
+            let thirdOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: relativeSpec)
 
             return thirdOverlay
         } else {
             let imageInsetSpec = ASInsetLayoutSpec(insets: inset, child: imageNode)
             
             let backgroundSpec = ASBackgroundLayoutSpec(child: imageInsetSpec, background: roundedCornerNode)
-            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: backgroundSpec)
+            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec1, overlay: backgroundSpec)
             
-            let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
-            let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
+           // let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
+            let thirdOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: relativeSpec)
 
             return thirdOverlay
         }

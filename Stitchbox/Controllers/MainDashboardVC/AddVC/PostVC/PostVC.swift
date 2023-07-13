@@ -464,7 +464,15 @@ extension PostVC {
                         
                         Dispatch.background {
                             
-                            UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: "")
+                            if self.stitchPost != nil {
+                                
+                                UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: self.stitchPost.id)
+                                
+                            } else {
+                                
+                                UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: "")
+                                
+                            }
                             
                         }
                         
@@ -505,7 +513,11 @@ extension PostVC {
                 Dispatch.background {
                     
                     print("Start uploading video to db")
-                    UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length, isAllowStitch: self.isAllowStitch, stitchId: "")
+                    if self.stitchPost != nil {
+                        UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length, isAllowStitch: self.isAllowStitch, stitchId: self.stitchPost.id)
+                    } else {
+                        UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length, isAllowStitch: self.isAllowStitch, stitchId: "")
+                    }
                     
                 }
                 

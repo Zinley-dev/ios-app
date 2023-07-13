@@ -100,8 +100,12 @@ class UploadContentManager {
         
 
         contentPost = ["content": selectedDescTxtView, "images": [imageUrl], "tags": [userUID], "hashtags": update_hashtaglist, "streamLink": global_fullLink]
-        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
+        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "isAllowStitch": isAllowStitch]
         contentPost["metadata"] = ["width": origin_width, "height": origin_height, "length": length, "contentMode": 0]
+       
+       if stitchId != "" {
+           contentPost["stitchId"] = stitchId
+       }
         
         APIManager.shared.createPost(params: contentPost) { result in
           
@@ -132,34 +136,16 @@ class UploadContentManager {
         
         let videoData =  ["rawUrl": videoUrl]
         
-        
-        let loadUsername = userDataSource.userName
-        
         var contentPost = [String: Any]()
         
         
-        
-        var update_hashtaglist = [String]()
-        
-        if hashtagList.isEmpty == true {
-            
-            update_hashtaglist = ["#\(loadUsername ?? "")"]
-            
-        } else {
-            
-            update_hashtaglist = hashtagList
-            if let username = loadUsername {
-                if !update_hashtaglist.contains("#\(username)") {
-                    update_hashtaglist.insert("#\(username)", at: 0)
-                }
-            }
-            
-            
-        }
-        
-        contentPost = ["content": selectedDescTxtView, "video": videoData, "tags": [userUID], "streamLink": global_fullLink, "hashtags": update_hashtaglist]
-        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType]
+        contentPost = ["content": selectedDescTxtView, "video": videoData, "tags": [userUID], "streamLink": global_fullLink, "hashtags": hashtagList]
+        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "isAllowStitch": isAllowStitch]
         contentPost["metadata"] = ["width": origin_width, "height": origin_height, "length": length, "contentMode": 0]
+        
+        if stitchId != "" {
+            contentPost["stitchId"] = stitchId
+        }
         
         APIManager.shared.createPost(params: contentPost) {  result in
            
