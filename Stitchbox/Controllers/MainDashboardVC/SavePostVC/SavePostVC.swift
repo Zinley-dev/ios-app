@@ -62,7 +62,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
         
         // Do any additional setup after loading the view.
         
-        navigationItem.title = "Save posts"
+        navigationItem.title = "Saved posts"
         
         
         //todo: customized search to search only in hashtag_list
@@ -324,9 +324,9 @@ extension SavePostVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
 
-        let size = self.collectionNode.view.bounds.width/2 - 7
-        let min = CGSize(width: size, height: size * 13.5 / 9)
-        let max = CGSize(width: size, height: size * 13.5 / 9)
+        let size = self.collectionNode.view.layer.frame.width/2 - 7
+        let min = CGSize(width: size, height: size * 1.75)
+        let max = CGSize(width: size, height: size * 1.75)
         
         return ASSizeRangeMake(min, max)
     }

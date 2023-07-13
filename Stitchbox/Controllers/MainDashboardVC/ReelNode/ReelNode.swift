@@ -30,8 +30,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var previousTimeStamp: TimeInterval = 0.0
     var totalWatchedTime: TimeInterval = 0.0
     var roundedCornerNode: RoundedCornerNode
-    weak var collectionNode: ASCollectionNode?
-    weak var post: PostModel!
+    var collectionNode: ASCollectionNode?
+    var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: RoundedCornerVideoNode
     var imageNode: RoundedCornerImageNode
@@ -286,7 +286,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             //-------------------------------------//
             
             
-            self.headerView.usernameLbl.text = post.owner?.username ?? ""
+            self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
             
             self.checkIfLike()
             self.totalLikeCount()
@@ -1244,7 +1244,7 @@ extension ReelNode {
             
             slideVC.modalPresentationStyle = .custom
             slideVC.transitioningDelegate = vc.self
-            global_presetingRate = Double(0.35)
+            global_presetingRate = Double(0.30)
             global_cornerRadius = 35
             vc.present(slideVC, animated: true, completion: nil)
             

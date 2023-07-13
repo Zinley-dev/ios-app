@@ -12,7 +12,7 @@ fileprivate let FontSize: CGFloat = 13
 
 class PostSearchNode: ASCellNode {
     
-    weak var post: PostModel!
+    var post: PostModel!
     
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
@@ -62,7 +62,7 @@ class PostSearchNode: ASCellNode {
         textNode.attributedText = NSAttributedString(
             string: "",
             attributes: [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: FontSize),
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
@@ -93,7 +93,7 @@ class PostSearchNode: ASCellNode {
         let ownerName = post.owner?.username ?? ""
         let hashtags = post.hashtags.joined(separator: " ")
         
-        let searchResults = [title, ownerName, hashtags].compactMap { searchString(in: $0, for: keyword, maxLength: 40) }
+        let searchResults = [title, ownerName, hashtags].compactMap { searchString(in: $0, for: keyword, maxLength: 60) }
         let highlightedKeyword = searchResults.first ?? ""
         
         let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles]
@@ -116,7 +116,7 @@ class PostSearchNode: ASCellNode {
         infoNode.attributedText = NSAttributedString(
             string: "@\(post.owner?.username ?? "")",
             attributes: [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: FontSize),
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]

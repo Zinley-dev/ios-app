@@ -45,19 +45,21 @@ class ImageViewCell: UICollectionViewCell {
         return label
     }()
     
-    lazy var stichLabel: UILabel = {
+    lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 13)
+        label.font = UIFont.boldSystemFont(ofSize: 13)
         label.numberOfLines = 1
         label.textColor = .white
         label.backgroundColor = .black
         label.text = "10 Stiches"
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        label.cornerRadius = 3
+        label.layer.cornerRadius = 3
+        label.clipsToBounds = true
         return label
     }()
+
 
 
     private lazy var stackView: UIStackView = {
@@ -130,7 +132,7 @@ class ImageViewCell: UICollectionViewCell {
 
         contentView.addSubview(stackView)
 
-        contentView.addSubview(stichLabel)
+        contentView.addSubview(infoLabel)
 
         stackView.addArrangedSubview(videoSignView)
         videoSignView.layer.cornerRadius = 10
@@ -151,8 +153,8 @@ class ImageViewCell: UICollectionViewCell {
             videoSignView.widthAnchor.constraint(equalToConstant: 30),
             videoSignView.heightAnchor.constraint(equalToConstant: 30),
 
-            stichLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            stichLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
+            infoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            infoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
 
             
         ])

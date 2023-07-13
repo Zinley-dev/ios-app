@@ -75,6 +75,7 @@
 		6A0C324F2A5F545000D2DE18 /* StitchSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0C324D2A5F544F00D2DE18 /* StitchSettingVC.swift */; };
 		6A0C32502A5F545000D2DE18 /* StitchSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A0C324E2A5F545000D2DE18 /* StitchSettingVC.xib */; };
 		6A0C32532A5F5B2300D2DE18 /* AddStitchToExistingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0C32522A5F5B2300D2DE18 /* AddStitchToExistingVC.swift */; };
+		6A0C32752A60734E00D2DE18 /* fox2.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6A0C32742A60734E00D2DE18 /* fox2.gif */; };
 		6A0CF638296AABEC00155889 /* ResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF637296AABEC00155889 /* ResetPasswordVC.swift */; };
 		6A0CF63B296AAC1D00155889 /* PhoneResetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF63A296AAC1D00155889 /* PhoneResetVC.swift */; };
 		6A0CF63D296AAC2C00155889 /* EmailResetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0CF63C296AAC2C00155889 /* EmailResetVC.swift */; };
@@ -345,10 +346,9 @@
 		6AC6D9F229A5C78C00B18139 /* fox3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9EA29A5C78A00B18139 /* fox3.gif */; };
 		6AC6D9F329A5C78C00B18139 /* load.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9EB29A5C78B00B18139 /* load.gif */; };
 		6AC6D9F429A5C78C00B18139 /* load2.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9EC29A5C78B00B18139 /* load2.gif */; };
-		6AC6D9F529A5C78C00B18139 /* fox2.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9ED29A5C78B00B18139 /* fox2.gif */; };
+		6AC6D9F529A5C78C00B18139 /* fox5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9ED29A5C78B00B18139 /* fox5.gif */; };
 		6AC6D9F629A5C78C00B18139 /* ball.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9EE29A5C78B00B18139 /* ball.gif */; };
 		6AC6D9F729A5C78C00B18139 /* logo3344556.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9EF29A5C78C00B18139 /* logo3344556.png */; };
-		6AC6D9F829A5C78C00B18139 /* fox1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9F029A5C78C00B18139 /* fox1.gif */; };
 		6AC6D9FC29A5C92700B18139 /* AutocompeteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC6D9FB29A5C92700B18139 /* AutocompeteViewController.swift */; };
 		6AC6DA0029A5CA1800B18139 /* CustomSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC6D9FE29A5CA1800B18139 /* CustomSearchCell.swift */; };
 		6AC6DA0129A5CA1800B18139 /* CustomSearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9FF29A5CA1800B18139 /* CustomSearchCell.xib */; };
@@ -564,6 +564,7 @@
 		6A0C324D2A5F544F00D2DE18 /* StitchSettingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StitchSettingVC.swift; sourceTree = "<group>"; };
 		6A0C324E2A5F545000D2DE18 /* StitchSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StitchSettingVC.xib; sourceTree = "<group>"; };
 		6A0C32522A5F5B2300D2DE18 /* AddStitchToExistingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStitchToExistingVC.swift; sourceTree = "<group>"; };
+		6A0C32742A60734E00D2DE18 /* fox2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fox2.gif; sourceTree = "<group>"; };
 		6A0CF637296AABEC00155889 /* ResetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordVC.swift; sourceTree = "<group>"; };
 		6A0CF63A296AAC1D00155889 /* PhoneResetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneResetVC.swift; sourceTree = "<group>"; };
 		6A0CF63C296AAC2C00155889 /* EmailResetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailResetVC.swift; sourceTree = "<group>"; };
@@ -832,10 +833,9 @@
 		6AC6D9EA29A5C78A00B18139 /* fox3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fox3.gif; sourceTree = "<group>"; };
 		6AC6D9EB29A5C78B00B18139 /* load.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = load.gif; sourceTree = "<group>"; };
 		6AC6D9EC29A5C78B00B18139 /* load2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = load2.gif; sourceTree = "<group>"; };
-		6AC6D9ED29A5C78B00B18139 /* fox2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fox2.gif; sourceTree = "<group>"; };
+		6AC6D9ED29A5C78B00B18139 /* fox5.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fox5.gif; sourceTree = "<group>"; };
 		6AC6D9EE29A5C78B00B18139 /* ball.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ball.gif; sourceTree = "<group>"; };
 		6AC6D9EF29A5C78C00B18139 /* logo3344556.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo3344556.png; sourceTree = "<group>"; };
-		6AC6D9F029A5C78C00B18139 /* fox1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fox1.gif; sourceTree = "<group>"; };
 		6AC6D9FB29A5C92700B18139 /* AutocompeteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompeteViewController.swift; sourceTree = "<group>"; };
 		6AC6D9FE29A5CA1800B18139 /* CustomSearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchCell.swift; sourceTree = "<group>"; };
 		6AC6D9FF29A5CA1800B18139 /* CustomSearchCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomSearchCell.xib; sourceTree = "<group>"; };
@@ -2135,9 +2135,9 @@
 		6A58EA5C294ED207005FA3CD /* LoadingGif */ = {
 			isa = PBXGroup;
 			children = (
+				6A0C32742A60734E00D2DE18 /* fox2.gif */,
 				6AC6D9EE29A5C78B00B18139 /* ball.gif */,
-				6AC6D9F029A5C78C00B18139 /* fox1.gif */,
-				6AC6D9ED29A5C78B00B18139 /* fox2.gif */,
+				6AC6D9ED29A5C78B00B18139 /* fox5.gif */,
 				6AC6D9EA29A5C78A00B18139 /* fox3.gif */,
 				6AC6D9EB29A5C78B00B18139 /* load.gif */,
 				6AC6D9EC29A5C78B00B18139 /* load2.gif */,
@@ -3685,6 +3685,7 @@
 				6AE1CE6F294D6A4A00B1C435 /* SelectedUserCollectionViewCell.xib in Resources */,
 				6AC6D9F229A5C78C00B18139 /* fox3.gif in Resources */,
 				6A0C32502A5F545000D2DE18 /* StitchSettingVC.xib in Resources */,
+				6A0C32752A60734E00D2DE18 /* fox2.gif in Resources */,
 				6A6C30F929640FA60070167A /* DismissOperatorModView.xib in Resources */,
 				6A6C30F629640F780070167A /* ModActionView.xib in Resources */,
 				395477B32940ECB8008EED97 /* GoogleService-Info.plist in Resources */,
@@ -3701,7 +3702,6 @@
 				390FD73F2909264D0068B883 /* Main.storyboard in Resources */,
 				6AEA33F0298CE4A6005A4C5D /* PostHeader.xib in Resources */,
 				6AEA3403298DDA04005A4C5D /* PostSettingVC.xib in Resources */,
-				6AC6D9F829A5C78C00B18139 /* fox1.gif in Resources */,
 				6AC6DA1429AD317600B18139 /* SideButton.xib in Resources */,
 				6AEA3410298F0E47005A4C5D /* CommentVC.xib in Resources */,
 				6AC6D9F629A5C78C00B18139 /* ball.gif in Resources */,
@@ -3727,7 +3727,7 @@
 				6AC6D9F329A5C78C00B18139 /* load.gif in Resources */,
 				6AC6DA0F29A8AAEB00B18139 /* reportView.xib in Resources */,
 				6A286B6329C980F000C72718 /* customizedMap.json in Resources */,
-				6AC6D9F529A5C78C00B18139 /* fox2.gif in Resources */,
+				6AC6D9F529A5C78C00B18139 /* fox5.gif in Resources */,
 				6AAD7A26294C65F6003E3AB6 /* ConnectionRestored.mp3 in Resources */,
 				6AAD7A25294C65F6003E3AB6 /* ConnectionLost.mp3 in Resources */,
 				147BDB682928B1E1003511C3 /* Colors.xcassets in Resources */,

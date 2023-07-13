@@ -717,13 +717,13 @@ extension OriginalNode {
         cell.configureWithUrl(with: item)
 
         if let username = item.owner?.username {
-            cell.stichLabel.text = "@\(username)"
+            cell.infoLabel.text = "@\(username)"
         } else {
-            cell.stichLabel.text = ""
+            cell.infoLabel.text = ""
         }
         
-
         return cell
+        
     }
 
     
