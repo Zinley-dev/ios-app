@@ -54,8 +54,6 @@ class PostVC: UIViewController {
     @IBOutlet weak var allowCmtSwitch: UISwitch!
     @IBOutlet weak var allowStitchSwitch: UISwitch!
    
-    
-    
     var hashtagList = [String]()
     
     var mode = 0
@@ -78,7 +76,7 @@ class PostVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
+        setupNavBar()
         global_fullLink = ""
         global_host = ""
         setupButtons()
@@ -97,10 +95,21 @@ class PostVC: UIViewController {
        
     }
     
+    func setupNavBar() {
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-
+        setupNavBar()
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -288,9 +297,12 @@ class PostVC: UIViewController {
     
     @IBAction func stitchBtnPressed(_ sender: Any) {
         
-        if let SCVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchControlVC") as? StitchControlVC {
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
             
-            self.navigationController?.pushViewController(SCVC, animated: true)
+            SPVC.selectedPost = [stitchPost]
+            SPVC.startIndex = 0
+            
+            self.navigationController?.pushViewController(SPVC, animated: true)
             
         }
         
@@ -324,11 +336,13 @@ extension PostVC {
                 
                 guard let data = apiResponse.body?["data"] as? [[String: Any]]  else {
                     print("Couldn't cast data")
+                    DispatchQueue.main.async {
+                        self.setDefaultMode()
+                    }
                     return
                 }
                 
-                print(apiResponse)
-                
+            
                 if let settings = data.first?["setting"] as? [String: Any] {
                     
                     if let allowcomment = settings["allowComment"] as? Bool {
@@ -339,8 +353,6 @@ extension PostVC {
                             DispatchQueue.main.async {
                                 self.allowCmtSwitch.setOn(true, animated: true)
                             }
-                            print("Allow comment: \(String(describing: self.isAllowComment))")
-                            
                             
                         } else {
                             
@@ -348,8 +360,6 @@ extension PostVC {
                             DispatchQueue.main.async {
                                 self.allowCmtSwitch.setOn(false, animated: true)
                             }
-                            
-                            print("Allow comment: \(String(describing: self.isAllowComment))")
                             
                         }
                         

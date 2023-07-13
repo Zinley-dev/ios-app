@@ -162,8 +162,14 @@ class UserProfileVC: UIViewController {
                     // display username
                     if let username = data.userName, username != "" {
                         cell.usernameLbl.text = username
-                        navigationItem.title = username
+                        
                         get_username = username
+                    }
+                    
+                   
+                    
+                    if let name = data.name, name != "" {
+                        navigationItem.title = name
                     }
 
                     // Avatar Image

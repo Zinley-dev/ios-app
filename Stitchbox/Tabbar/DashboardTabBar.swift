@@ -275,15 +275,9 @@ import Alamofire
         
         if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
             
-            
-            // Customize the navigation bar appearance
-            PNVC.navigationBar.barTintColor = .black
-            PNVC.navigationBar.tintColor = .white
-            PNVC.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-            
-            
             PNVC.modalPresentationStyle = .fullScreen
             self.present(PNVC, animated: true)
+            
         }
         
     }

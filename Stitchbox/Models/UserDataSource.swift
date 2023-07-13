@@ -180,10 +180,10 @@ class UserDataSource: Mappable {
       get { return _favoriteContent }
     }
     
-    private var _name : String = ""
-    var name: String {
-      set(newValue) { _name = newValue}
-      get { return _name }
+    private var _name : String? = ""
+    var name: String? {
+      set(newValue) { _name = newValue }
+      get { return _name}
     }
     private(set) var password: String = ""
     private var _cover: String = ""

@@ -918,26 +918,6 @@ extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDel
 
 extension FeedViewController {
     
-    func settingPost(item: PostModel) {
-        
-        let newsFeedSettingVC = NewsFeedSettingVC()
-        newsFeedSettingVC.modalPresentationStyle = .custom
-        newsFeedSettingVC.transitioningDelegate = self
-        
-        global_presetingRate = Double(0.35)
-        global_cornerRadius = 45
-        
-        if editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
-            newsFeedSettingVC.isOwner = true
-        } else {
-            newsFeedSettingVC.isOwner = false
-        }
-        
-        editeddPost = item
-        self.present(newsFeedSettingVC, animated: true, completion: nil)
-        
-    }
-    
     @objc func copyPost() {
         
         if let id = self.editeddPost?.id {
@@ -1015,15 +995,17 @@ extension FeedViewController {
         
         if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
             
-            // Customize the navigation bar appearance
-            PNVC.navigationBar.barTintColor = .black
-            PNVC.navigationBar.tintColor = .white
-            PNVC.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-            
             
             PNVC.modalPresentationStyle = .fullScreen
             
+            if let rootvc = PNVC.viewControllers[0] as? PostVC {
+                rootvc.stitchPost = editeddPost
+            } else {
+                printContent(PNVC.viewControllers[0])
+            }
+            
             delay(0.1) {
+                
                 self.present(PNVC, animated: true)
             }
             

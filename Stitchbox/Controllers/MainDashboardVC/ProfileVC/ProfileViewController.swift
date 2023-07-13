@@ -236,7 +236,12 @@ class ProfileViewController: UIViewController {
                 // display username
                 if let username = _AppCoreData.userDataSource.value?.userName, username != "" {
                     cell.usernameLbl.text = "@\(username)"
-                    navigationItem.title = username
+                    
+                }
+                
+                
+                if let name = _AppCoreData.userDataSource.value?.name, name != "" {
+                    navigationItem.title = name
                 }
                 
                 if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "", let url = URL(string: avatarUrl) {

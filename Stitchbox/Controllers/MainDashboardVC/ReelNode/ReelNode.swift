@@ -1226,6 +1226,12 @@ extension ReelNode {
         
         if let vc = UIViewController.currentViewController() {
             
+            if let update1 = vc as? FeedViewController {
+                update1.editeddPost = post
+            } else if let update1 = vc as? SelectedPostVC {
+                update1.editeddPost = post
+            }
+            
             general_vc = vc
             
             let slideVC = StitchSettingVC()

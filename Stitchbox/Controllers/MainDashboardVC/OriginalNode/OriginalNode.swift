@@ -93,8 +93,8 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             // Set collectionView layout scroll direction to horizontal
             if let layout = self.selectPostCollectionView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
                 layout.scrollDirection = .horizontal
-                layout.minimumLineSpacing = 5
-                layout.minimumInteritemSpacing = 5
+                layout.minimumLineSpacing = 12
+                layout.minimumInteritemSpacing = 12
             }
             
             self.view.addSubview(self.selectPostCollectionView)
@@ -244,14 +244,14 @@ extension OriginalNode {
             if vc is FeedViewController {
                 
                 if let update1 = vc as? FeedViewController {
-                    
+                    update1.editeddPost = item
                     if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
                         newsFeedSettingVC.isOwner = true
                     } else {
                         newsFeedSettingVC.isOwner = false
                     }
                     
-                    update1.editeddPost = item
+                  
                     vc.present(newsFeedSettingVC, animated: true, completion: nil)
                     
                 }
@@ -259,14 +259,13 @@ extension OriginalNode {
             } else {
                 
                 if let update1 = vc as? SelectedPostVC {
-                    
+                    update1.editeddPost = item
                     if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
                         newsFeedSettingVC.isOwner = true
                     } else {
                         newsFeedSettingVC.isOwner = false
                     }
                     
-                    update1.editeddPost = item
                     vc.present(newsFeedSettingVC, animated: true, completion: nil)
                     
                 }
@@ -633,6 +632,9 @@ extension OriginalNode {
                         
                         
                        
+                    } else {
+                        self.applyAnimationText(text: "")
+
                     }
                     
                 }
