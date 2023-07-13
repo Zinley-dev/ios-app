@@ -239,7 +239,6 @@ class ProfileViewController: UIViewController {
                     
                 }
                 
-                
                 if let name = _AppCoreData.userDataSource.value?.name, name != "" {
                     navigationItem.title = name
                 }

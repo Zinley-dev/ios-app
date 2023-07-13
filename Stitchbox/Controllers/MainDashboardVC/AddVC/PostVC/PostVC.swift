@@ -675,12 +675,12 @@ extension PostVC {
         createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
         createButton.setTitle("Post", for: .normal)
-        createButton.setTitleColor(.white, for: .normal)
+        createButton.setTitleColor(.primary, for: .normal)
         createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
-        createButton.backgroundColor = .primary
+        createButton.backgroundColor = .white
         createButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
         customView.addSubview(createButton)

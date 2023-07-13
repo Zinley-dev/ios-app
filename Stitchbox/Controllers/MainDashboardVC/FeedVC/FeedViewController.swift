@@ -1019,7 +1019,7 @@ extension FeedViewController {
         if let ASTEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddStitchToExistingVC") as? AddStitchToExistingVC {
             
             ASTEVC.hidesBottomBarWhenPushed = true
-            ASTEVC.post = editeddPost
+            ASTEVC.stitchedPost = editeddPost
             hideMiddleBtn(vc: self)
             
             delay(0.1) {

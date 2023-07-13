@@ -6,26 +6,98 @@
 //
 
 import UIKit
+import FLAnimatedImage
 import AsyncDisplayKit
+import AlamofireImage
+import Alamofire
 
-class AddStitchToExistingVC: UIViewController {
+class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate{
 
+    @IBOutlet weak var stitchHeight: NSLayoutConstraint!
+    @IBOutlet weak var stitchWidth: NSLayoutConstraint!
+
+    @IBOutlet weak var imgHeight: NSLayoutConstraint!
+    @IBOutlet weak var imgWidth: NSLayoutConstraint!
     let backButton: UIButton = UIButton(type: .custom)
-    var post: PostModel!
-    
+    var stitchedPost: PostModel!
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var contentView: UIView!
     var collectionNode: ASCollectionNode!
-    var collectionview: UICollectionView!
+   
+    @IBOutlet weak var originalImg: UIImageView!
+    @IBOutlet weak var stitchImg: UIImageView!
     
-    var selectedPost = [PostModel]()
+    @IBOutlet weak var originalUsername: UILabel!
+    @IBOutlet weak var stitchUsername: UILabel!
+    
+    @IBOutlet weak var originalView: UIView!
+    @IBOutlet weak var stitchView: UIView!
+    
+    var selectedPost: PostModel!
     var posts = [PostModel]()
+    var page = 1
+    var stitchId = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
         setupNavBar()
         setupButtons()
+        setupCollectionNode()
+        setupStitch()
+        
+        
+
+    
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        do {
+            
+            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+            let gifData = try NSData(contentsOfFile: path) as Data
+            let image = FLAnimatedImage(animatedGIFData: gifData)
+            
+            
+            self.loadingImage.animatedImage = image
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        loadingView.backgroundColor = self.view.backgroundColor
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        
+        delay(1.25) {
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                self.loadingView.alpha = 0
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
+                    
+                    self.loadingView.isHidden = true
+                    
+                }
+                
+            }
+            
+        }
+        
+        
+        setupNavBar()
         
     }
     
@@ -73,7 +145,7 @@ extension AddStitchToExistingVC {
         backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-        navigationItem.title = "Stitch to post"
+        navigationItem.title = "Let's stitch"
         
         self.navigationItem.leftBarButtonItem = backButtonBarButton
         
@@ -122,7 +194,7 @@ extension AddStitchToExistingVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = PostSearchNode(with: post, keyword: self.searchHashtag ?? "")
+            let node = OwnerPostSearchNode(with: post, isSave: false)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -133,14 +205,10 @@ extension AddStitchToExistingVC: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        if refresh_request == false {
-            retrieveNextPageWithCompletion { [weak self] (newPosts) in
-                guard let self = self else { return }
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-   
-                context.completeBatchFetching(true)
-            }
-        } else {
+        retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+
             context.completeBatchFetching(true)
         }
     }
@@ -152,10 +220,13 @@ extension AddStitchToExistingVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         
-        let size = self.collectionNode.view.layer.frame.width/2 - 7
-        let min = CGSize(width: size, height: size * 1.75)
-        let max = CGSize(width: size, height: size * 1.75)
         
+        let size = self.collectionNode.view.layer.frame.width/3 - 2
+        let height = size * 13.5 / 9
+        let min = CGSize(width: size, height: height)
+        let max = CGSize(width: size, height: height)
+        
+
         return ASSizeRangeMake(min, max)
     }
     
@@ -167,17 +238,6 @@ extension AddStitchToExistingVC: ASCollectionDelegate {
 
 
 extension AddStitchToExistingVC {
-    
-    func showErrorAlert(_ title: String, msg: String) {
-        
-        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(action)
-        
-        
-        present(alert, animated: true, completion: nil)
-        
-    }
     
     func swiftLoader(progress: String) {
         
@@ -211,11 +271,11 @@ extension AddStitchToExistingVC {
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
         
-        flowLayout.minimumInteritemSpacing = 7 // Set minimum spacing between items to 0
-        flowLayout.minimumLineSpacing = 7 // Set minimum line spacing to 0
+        flowLayout.minimumInteritemSpacing = 2 // Set minimum spacing between items to 0
+        flowLayout.minimumLineSpacing = 2 // Set minimum line spacing to 0
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
+        self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
         self.collectionNode.leadingScreensForBatching = 2.0
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         // Set the data source and delegate
@@ -226,7 +286,7 @@ extension AddStitchToExistingVC {
         self.contentView.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
         self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: -1).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
@@ -246,7 +306,7 @@ extension AddStitchToExistingVC {
         self.collectionNode.view.showsVerticalScrollIndicator = false
         self.collectionNode.view.allowsSelection = true
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
-        self.collectionNode.needsDisplayOnBoundsChange = true
+        self.collectionNode.needsDisplayOnBoundsChange = false
         
     }
     
@@ -257,17 +317,42 @@ extension AddStitchToExistingVC {
         
     }
     
+    
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
         
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let node = collectionNode.nodeForItem(at: indexPath as IndexPath) as? OwnerPostSearchNode {
             
-            SPVC.selectedPost = posts
-            SPVC.startIndex = indexPath.row
-
-            self.navigationController?.pushViewController(SPVC, animated: true)
+            if node.isSelected == true {
+                
+                node.layer.cornerRadius = 10
+                node.layer.borderWidth = 2
+                node.layer.borderColor = UIColor.secondary.cgColor
+            
+                if selectedPost == nil {
+                    selectedPost = posts[indexPath.row]
+                    setupStitch()
+                } else {
+                    if selectedPost.id != posts[indexPath.row].id {
+                        selectedPost = posts[indexPath.row]
+                        setupStitch()
+                    }
+                }
+                
+            }
+            
+           
         }
+    
+    }
+    
+    func collectionNode(_ collectionNode: ASCollectionNode, didDeselectItemAt indexPath: IndexPath) {
         
-        
+        if let node = collectionNode.nodeForItem(at: indexPath as IndexPath) as? OwnerPostSearchNode {
+            
+            node.layer.borderColor = UIColor.clear.cgColor
+            
+            
+        }
     }
 
     
@@ -280,55 +365,42 @@ extension AddStitchToExistingVC {
 
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        
-        if let hashtag = searchHashtag, hashtag != "" {
+        APIManager.shared.getMyPost(page: page) { [weak self] result in
+            guard let self = self else { return }
             
-            let finalTag = hashtag.dropFirst()
-            APIManager.shared.getHashtagPost(tag: String(finalTag), page: page) { [weak self] result in
-                guard let self = self else { return }
+            switch result {
+            case .success(let apiResponse):
                 
-                switch result {
-                case .success(let apiResponse):
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                    return
+                }
+                if !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
+                    self.page += 1
+                    let items = data
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
                     
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    if !data.isEmpty {
-                        print("Successfully retrieved \(data.count) posts.")
-                        self.page += 1
-                        let items = data
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                case .failure(let error):
-                    print(error)
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
                     }
                 }
+            case .failure(let error):
+                print(error)
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
+                }
             }
-            
-            
-        } else {
-            
-            let item = [[String: Any]]()
-            DispatchQueue.main.async {
-                block(item)
-            }
-            
         }
+        
         
     }
     
@@ -338,22 +410,6 @@ extension AddStitchToExistingVC {
         // checking empty
         guard newPosts.count > 0 else {
             return
-        }
-
-        if refresh_request {
-
-            refresh_request = false
-
-            if !self.posts.isEmpty {
-                var delete_indexPaths: [IndexPath] = []
-                for row in 0..<self.posts.count {
-                    let path = IndexPath(row: row, section: 0) // single indexpath
-                    delete_indexPaths.append(path) // append
-                }
-
-                self.posts.removeAll()
-                self.collectionNode.deleteItems(at: delete_indexPaths)
-            }
         }
 
         // Create new PostModel objects and append them to the current posts
@@ -379,5 +435,99 @@ extension AddStitchToExistingVC {
         }
     }
 
+    
+}
+
+extension AddStitchToExistingVC {
+    
+    func setupStitch() {
+        
+        let numberOfItemsInRow: CGFloat = 3
+        let spacing: CGFloat = 5
+        let width = (UIScreen.main.bounds.width - (numberOfItemsInRow + 1) * spacing) / numberOfItemsInRow
+        let height = width * 13.5 / 9  // This will give you an aspect ratio of 9:16
+        
+        
+        imgWidth.constant = width
+        imgHeight.constant = height
+        
+        stitchHeight.constant = height
+        stitchWidth.constant = width
+        
+        
+        if let stitch = selectedPost {
+            stitchImg.loadProfileContent(url: stitch.imageUrl, str: stitch.imageUrl.absoluteString)
+            stitchUsername.text = "@\(stitch.owner?.username ?? "")"
+            stitchView.isHidden = false
+            if self.navigationItem.rightBarButtonItem == nil {
+                createStitchBtn()
+            }
+            
+        } else {
+            stitchView.isHidden = true
+            
+            if let data = stitchedPost {
+                originalImg.loadProfileContent(url: data.imageUrl, str: data.imageUrl.absoluteString)
+                originalUsername.text = "@\(data.owner?.username ?? "")"
+            }
+        }
+        
+    }
+    
+    
+    func createStitchBtn() {
+    
+        let createButton = UIButton(type: .custom)
+        createButton.addTarget(self, action: #selector(onClickStitch(_:)), for: .touchUpInside)
+        createButton.semanticContentAttribute = .forceRightToLeft
+        createButton.setTitle("Stitch", for: .normal)
+        createButton.setTitleColor(.primary, for: .normal)
+        createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
+        createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
+        createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
+        createButton.backgroundColor = .white
+        createButton.cornerRadius = 15
+        let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
+        customView.addSubview(createButton)
+        createButton.center = customView.center
+        let createBarButton = UIBarButtonItem(customView: customView)
+
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+      
+        self.navigationItem.rightBarButtonItem = createBarButton
+         
+    }
+    
+    @objc func onClickStitch(_ sender: AnyObject) {
+        
+        print("onClickStitch")
+        
+        APIManager.shared.stitch(rootId: stitchedPost.id, memberId: selectedPost.id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                print(apiResponse)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    if let navigationController = self.navigationController {
+                        navigationController.popViewController(animated: true)
+                        showNote(text: "Stitched successfully")
+                    }
+                }
+
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    print(error)
+                    self.showErrorAlert("Oops!", msg: "Couldn't stitch now, please try again")
+                }
+
+            }
+        }
+       
+        
+    }
     
 }

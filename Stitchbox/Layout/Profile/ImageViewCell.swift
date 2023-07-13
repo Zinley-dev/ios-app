@@ -53,7 +53,7 @@ class ImageViewCell: UICollectionViewCell {
         label.numberOfLines = 1
         label.textColor = .white
         label.backgroundColor = .black
-        label.text = "10 Stiches"
+        label.text = ""
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         label.layer.cornerRadius = 3
         label.clipsToBounds = true
@@ -77,6 +77,7 @@ class ImageViewCell: UICollectionViewCell {
     }()
 
 
+    var viewCount: Int?
 
     
     override init(frame: CGRect) {
@@ -101,9 +102,11 @@ class ImageViewCell: UICollectionViewCell {
     }
   
     func configureWithUrl(with data: PostModel) {
-   
-        self.imageView.loadProfileContent(url: data.imageUrl, str: data.imageUrl.absoluteString)
         
+        if self.imageView.image == nil {
+            self.imageView.loadProfileContent(url: data.imageUrl, str: data.imageUrl.absoluteString)
+        }
+ 
         if !data.muxPlaybackId.isEmpty {
             
             stackView.isHidden = false
@@ -140,6 +143,7 @@ class ImageViewCell: UICollectionViewCell {
 
         stackView.addArrangedSubview(countLabel)
 
+        
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
@@ -156,8 +160,9 @@ class ImageViewCell: UICollectionViewCell {
             infoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             infoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
 
-            
         ])
+
+
     }
 
 
@@ -167,31 +172,41 @@ class ImageViewCell: UICollectionViewCell {
     
     func countView(with data: PostModel) {
         
-        APIManager.shared.getPostStats(postId: data.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-
-                guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
-                    print("Couldn't cast")
-                    return
-                }
+        if viewCount == nil {
             
-                do {
-                    let data = try JSONSerialization.data(withJSONObject: dataDictionary, options: .fragmentsAllowed)
-                    let decoder = JSONDecoder()
-                    let stats = try decoder.decode(Stats.self, from: data)
-                    DispatchQueue.main.async {
-                        self.countLabel.text = "\(stats.view.total)"
+            APIManager.shared.getPostStats(postId: data.id) { [weak self] result in
+                guard let self = self else { return }
+
+                switch result {
+                case .success(let apiResponse):
+
+                    guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
+                        print("Couldn't cast")
+                        self.viewCount = 0
+                        return
                     }
-                } catch {
-                    print("Error decoding JSON: \(error)")
+                
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: dataDictionary, options: .fragmentsAllowed)
+                        let decoder = JSONDecoder()
+                        let stats = try decoder.decode(Stats.self, from: data)
+                        DispatchQueue.main.async {
+                            self.viewCount = stats.view.total
+                            self.countLabel.text = "\(stats.view.total)"
+                        }
+                    } catch {
+                        print("Error decoding JSON: \(error)")
+                    }
+                case .failure(let error):
+                    print(error)
                 }
-            case .failure(let error):
-                print(error)
             }
+            
+        } else {
+            self.viewCount = 0
         }
+        
+        
         
     }
 
