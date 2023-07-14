@@ -353,6 +353,14 @@ extension SavePostVC: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
         
+        if self.posts.count == 0 {
+            
+            collectionNode.view.setEmptyMessage("No saved posts!")
+            
+        } else {
+            collectionNode.view.restore()
+        }
+        
         return self.posts.count
     }
     

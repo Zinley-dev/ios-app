@@ -13,6 +13,7 @@ import Alamofire
 
 class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate{
 
+    @IBOutlet weak var linkImg: UIImageView!
     @IBOutlet weak var stitchHeight: NSLayoutConstraint!
     @IBOutlet weak var stitchWidth: NSLayoutConstraint!
 
@@ -362,10 +363,9 @@ extension AddStitchToExistingVC {
 
 extension AddStitchToExistingVC {
     
-
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getMyPost(page: page) { [weak self] result in
+        APIManager.shared.getMyNonStitchPost(page: page) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -401,9 +401,7 @@ extension AddStitchToExistingVC {
             }
         }
         
-        
     }
-    
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
 
@@ -459,13 +457,14 @@ extension AddStitchToExistingVC {
             stitchImg.loadProfileContent(url: stitch.imageUrl, str: stitch.imageUrl.absoluteString)
             stitchUsername.text = "@\(stitch.owner?.username ?? "")"
             stitchView.isHidden = false
+            linkImg.isHidden = false
             if self.navigationItem.rightBarButtonItem == nil {
                 createStitchBtn()
             }
             
         } else {
             stitchView.isHidden = true
-            
+            linkImg.isHidden = true
             if let data = stitchedPost {
                 originalImg.loadProfileContent(url: data.imageUrl, str: data.imageUrl.absoluteString)
                 originalUsername.text = "@\(data.owner?.username ?? "")"

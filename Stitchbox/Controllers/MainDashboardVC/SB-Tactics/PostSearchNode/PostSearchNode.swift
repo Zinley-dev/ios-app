@@ -12,7 +12,7 @@ fileprivate let FontSize: CGFloat = 13
 
 class PostSearchNode: ASCellNode {
     
-    var post: PostModel!
+    weak var post: PostModel!
     
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!

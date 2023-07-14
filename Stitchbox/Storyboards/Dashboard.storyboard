@@ -1556,7 +1556,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="l5L-je-ob4">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="65" translatesAutoresizingMaskIntoConstraints="NO" id="l5L-je-ob4">
                                 <rect key="frame" x="112.66666666666669" y="82" width="150" height="200"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3rH-aL-fDL">
@@ -1623,6 +1623,13 @@
                                     </view>
                                 </subviews>
                             </stackView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="link" translatesAutoresizingMaskIntoConstraints="NO" id="DRo-1t-eZk">
+                                <rect key="frame" x="175" y="169.66666666666666" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="6aJ-XE-X5A"/>
+                                    <constraint firstAttribute="width" constant="25" id="x90-4j-ZtT"/>
+                                </constraints>
+                            </imageView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3l2-q1-4qV">
                                 <rect key="frame" x="0.0" y="50" width="375" height="762"/>
                                 <subviews>
@@ -1646,11 +1653,13 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="3l2-q1-4qV" secondAttribute="bottom" id="1c0-VS-JeD"/>
+                            <constraint firstItem="DRo-1t-eZk" firstAttribute="centerX" secondItem="l5L-je-ob4" secondAttribute="centerX" id="1wt-mu-RDy"/>
                             <constraint firstItem="l5L-je-ob4" firstAttribute="top" secondItem="lse-ae-jQ9" secondAttribute="top" constant="32" id="AT4-Va-Mrg"/>
                             <constraint firstItem="3l2-q1-4qV" firstAttribute="leading" secondItem="lse-ae-jQ9" secondAttribute="leading" id="Chd-Fy-JuL"/>
                             <constraint firstItem="ycH-Y1-r4b" firstAttribute="top" secondItem="HUw-30-NcT" secondAttribute="bottom" constant="16" id="O2j-AP-S7B"/>
                             <constraint firstItem="ycH-Y1-r4b" firstAttribute="leading" secondItem="lse-ae-jQ9" secondAttribute="leading" id="RK5-Af-Elg"/>
                             <constraint firstItem="HUw-30-NcT" firstAttribute="top" secondItem="l5L-je-ob4" secondAttribute="bottom" constant="16" id="SFN-VI-dK6"/>
+                            <constraint firstItem="DRo-1t-eZk" firstAttribute="centerY" secondItem="l5L-je-ob4" secondAttribute="centerY" id="ZVd-0r-Cus"/>
                             <constraint firstItem="3l2-q1-4qV" firstAttribute="top" secondItem="lse-ae-jQ9" secondAttribute="top" id="k0o-Yw-buO"/>
                             <constraint firstItem="l5L-je-ob4" firstAttribute="centerX" secondItem="gWG-hK-ALS" secondAttribute="centerX" id="kNt-9g-3jY"/>
                             <constraint firstItem="HUw-30-NcT" firstAttribute="leading" secondItem="lse-ae-jQ9" secondAttribute="leading" constant="8" id="kv4-vo-9rR"/>
@@ -1663,6 +1672,7 @@
                         <outlet property="contentView" destination="ycH-Y1-r4b" id="gnQ-Ty-eZv"/>
                         <outlet property="imgHeight" destination="wjk-MH-mrp" id="4Ty-nG-Bws"/>
                         <outlet property="imgWidth" destination="mnt-dF-up2" id="5ru-vk-Xgg"/>
+                        <outlet property="linkImg" destination="DRo-1t-eZk" id="BPK-kX-1z5"/>
                         <outlet property="loadingImage" destination="mSD-Jp-xqO" id="kW2-dY-iSm"/>
                         <outlet property="loadingView" destination="3l2-q1-4qV" id="XLz-2Z-A9c"/>
                         <outlet property="originalImg" destination="X30-QN-l8r" id="rQV-3i-oSb"/>

@@ -449,58 +449,7 @@ extension PostVC {
     }
     
     
-    func uploadImage() {
-        
-        if selectedImage != nil {
-            
-            print("Start exporting image")
-            self.exportImage(currentImage: self.selectedImage) {
-                
-                Dispatch.background {
-                    
-                    print("Start uploading")
-                    if let checkImage = self.renderedImage {
-
-                        
-                        Dispatch.background {
-                            
-                            if self.stitchPost != nil {
-                                
-                                UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: self.stitchPost.id)
-                                
-                            } else {
-                                
-                                UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: "")
-                                
-                            }
-                            
-                        }
-                        
-                        DispatchQueue.main.async {
-                            SwiftLoader.hide()
-                            showNote(text: "Thank you, your content is being uploaded!")
-                            self.dismiss(animated: true, completion: nil)
-                            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
-                        }
-                        
-                    } else {
-                        self.showErrorAlert("Oops!", msg: "We encountered error while getting your exported image, please try again!")
-                    }
-                    
-                }
-    
-            }
-             
-            
-        } else {
-            
-            showErrorAlert("Oops!", msg: "We encountered error while getting your selected image, please try again!")
-            
-        }
-        
-        
-        
-    }
+   
     
     func uploadVideo() {
         
@@ -821,7 +770,7 @@ extension PostVC {
         if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
   
             if mediaType == "image" {
-                uploadImage()
+                //uploadImage()
             } else if mediaType == "video" {
                 uploadVideo()
             } else {

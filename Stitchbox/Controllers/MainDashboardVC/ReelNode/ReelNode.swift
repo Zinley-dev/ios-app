@@ -32,7 +32,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var totalWatchedTime: TimeInterval = 0.0
     var roundedCornerNode: RoundedCornerNode
     var collectionNode: ASCollectionNode?
-    var post: PostModel!
+    weak var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: RoundedCornerVideoNode
     var imageNode: RoundedCornerImageNode

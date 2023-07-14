@@ -31,19 +31,19 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
 
     var page = 1
     var posts = [PostModel]()
-    //let threshold: CGFloat = 100 // Adjust this value as needed.
+    
     var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
     var collectionNode: ASCollectionNode
-    var post: PostModel
+    weak var post: PostModel!
     var currentIndex: Int?
     var isVideoPlaying = false
     var newPlayingIndex: Int?
     var imageTimerWorkItem: DispatchWorkItem?
     var isfirstLoad = true
     var imageIndex: Int?
-  
+    
     init(with post: PostModel) {
         self.post = post
         
@@ -79,7 +79,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         self.collectionNode.delegate = self
         self.collectionNode.dataSource = self
         addSubCollection()
-        self.getStitchTo()
+        //self.getStitchTo()
         
 
     }
@@ -151,8 +151,6 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
 }
 
 extension OriginalNode {
-    
-    
     
     func applyStyle() {
         
