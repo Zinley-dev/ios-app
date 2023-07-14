@@ -13,6 +13,10 @@ var oldTabbarFr: CGRect = .zero
 
 
 class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, UISearchBarDelegate {
+    
+    deinit {
+        print("MainMessageVC is being deallocated.")
+    }
 
    // @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!
@@ -41,22 +45,6 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
     }()
     
-    lazy var RequestVC: RequestVC = {
-        
-        
-        if let controller = UIStoryboard(name: "Dashboard", bundle: Bundle.main).instantiateViewController(withIdentifier: "RequestViewController") as? RequestVC {
-            
-    
-            self.addVCAsChildVC(childViewController: controller)
-            
-            return controller
-            
-        } else {
-            return UIViewController() as! RequestVC
-        }
-                
-        
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +60,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         // default load for 2 child views
         
         InboxVC.view.isHidden = false
-        RequestVC.view.isHidden = true
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(MainMessageVC.checkCallForLayout), name: (NSNotification.Name(rawValue: "checkCallForLayout")), object: nil)
         
@@ -144,6 +132,20 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         }
     }
 
+    
+    @objc func openChatBot(_ sender: AnyObject) {
+        if let SBCB = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ChatBot") as? SB_ChatBot {
+            
+            SBCB.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(SBCB, animated: true)
+            
+            
+        }
+    }
+
+    
+    
     //
      
     @objc func checkCallForLayout() {
@@ -197,6 +199,12 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         searchButton.addTarget(self, action: #selector(searchBarSetting(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let searchBarButton = UIBarButtonItem(customView: searchButton)
+        
+        let chatbotButton = UIButton(type: .custom)
+        chatbotButton.setImage(UIImage(named: "gpt_bot"), for: [])
+        chatbotButton.addTarget(self, action: #selector(openChatBot(_:)), for: .touchUpInside)
+        chatbotButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let chatbotBarButton = UIBarButtonItem(customView: chatbotButton)
 
         let voiceCallButton = UIButton(type: .custom)
         voiceCallButton.semanticContentAttribute = .forceRightToLeft
@@ -219,7 +227,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         fixedSpace.width = 2
         voiceCallButton.shake()
 
-        self.navigationItem.rightBarButtonItems = [searchBarButton, fixedSpace, createBarButton, fixedSpace, voiceCallBarButton]
+        self.navigationItem.rightBarButtonItems = [searchBarButton, fixedSpace, createBarButton, fixedSpace, chatbotBarButton, fixedSpace, voiceCallBarButton]
     }
 
 
@@ -244,8 +252,14 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
+        
+        let chatbotButton = UIButton(type: .custom)
+        chatbotButton.setImage(UIImage(named: "gpt_bot")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
+        chatbotButton.addTarget(self, action: #selector(openChatBot(_:)), for: .touchUpInside)
+        chatbotButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let chatbotBarButton = UIBarButtonItem(customView: chatbotButton)
 
-        self.navigationItem.rightBarButtonItems = [searchBarButton, fixedSpace, createBarButton]
+        self.navigationItem.rightBarButtonItems = [searchBarButton, fixedSpace, createBarButton, fixedSpace, chatbotBarButton]
         
         
     }
@@ -277,7 +291,8 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         
         InboxVC.view.isHidden = false
-        RequestVC.view.isHidden = true
+       
+        
         
         self.searchController?.searchBar.text = ""
         
@@ -295,7 +310,6 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         
         InboxVC.view.isHidden = true
-        RequestVC.view.isHidden = false
         
         self.searchController?.searchBar.text = ""
     }
@@ -370,18 +384,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
             
         }
         
-        
-        if RequestVC.view.isHidden == false {
-            
-            RequestVC.searchChannelList.removeAll()
-            RequestVC.inSearchMode = false
-            RequestVC.groupChannelsTableView.reloadData()
-            
-            return
-            
-        }
-        
-        
+       
         
     }
     
@@ -401,15 +404,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         }
         
         
-        if RequestVC.view.isHidden == false {
-            
-            RequestVC.searchChannelList = RequestVC.channels
-            RequestVC.inSearchMode = true
-            RequestVC.groupChannelsTableView.reloadData()
-            
-            return
-            
-        }
+
  
     }
     
@@ -424,24 +419,19 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     func clearSearchResults() {
         // Clear the search results for both view controllers
         InboxVC.searchChannelList.removeAll()
-        RequestVC.searchChannelList.removeAll()
 
         // Check which view controller is currently visible
         if !InboxVC.view.isHidden {
             // Set the searchChannelList variable of the InboxVC to the full list of channels and reload the table view
             InboxVC.searchChannelList = InboxVC.channels
             InboxVC.groupChannelsTableView.reloadData()
-        } else if !RequestVC.view.isHidden {
-            // Set the searchChannelList variable of the RequestVC to the full list of channels and reload the table view
-            RequestVC.searchChannelList = RequestVC.channels
-            RequestVC.groupChannelsTableView.reloadData()
         }
     }
 
 
     func searchChannels(for searchText: String) {
     
-        let channels = !InboxVC.view.isHidden ? InboxVC.channels : RequestVC.channels
+        let channels = InboxVC.channels
         let searchChannelList = channels.filter { channel in
             let finalChannelName = channel.name != "" && channel.name != "Group Channel" ? channel.name : getChannelName(channel: channel)
             return finalChannelName.range(of: searchText, options: .caseInsensitive) != nil ||
@@ -453,10 +443,8 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         if !InboxVC.view.isHidden {
             InboxVC.searchChannelList = searchChannelList
             InboxVC.groupChannelsTableView.reloadData()
-        } else {
-            RequestVC.searchChannelList = searchChannelList
-            RequestVC.groupChannelsTableView.reloadData()
         }
+        
     }
 
 

@@ -72,12 +72,15 @@ class EmailResetVC: UIViewController, ControllerType {
     }
     
     func bindAction(with viewModel: ResetPasswordViewModel) {
-      nextBtn.rx.tap.asObservable()
-        .withLatestFrom(emailTxtField.rx.text.orEmpty.asObservable()) {
-          return $1 }
-        .subscribe(vm.action.sendOTPViaEmailDidTap)
-        .disposed(by: disposeBag)
+        nextBtn.rx.tap.asObservable()
+            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance) // Avoid multiple taps
+            .withLatestFrom(emailTxtField.rx.text.orEmpty.asObservable()) {
+                return $1
+            }
+            .subscribe(viewModel.action.sendOTPViaEmailDidTap)
+            .disposed(by: disposeBag)
     }
+
 
 
 }

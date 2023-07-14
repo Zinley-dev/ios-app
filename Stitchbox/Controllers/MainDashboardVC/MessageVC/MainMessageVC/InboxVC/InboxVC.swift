@@ -12,6 +12,10 @@ import SendBirdCalls
 //import SwiftEntryKit
 
 class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBDChannelDelegate, SBDConnectionDelegate, GroupChannelsUpdateListDelegate, UINavigationBarDelegate, SBDUserEventDelegate, UINavigationControllerDelegate {
+    
+    deinit {
+        print("InboxVC is being deallocated.")
+    }
 
     @IBOutlet weak var groupChannelsTableView: UITableView!
     

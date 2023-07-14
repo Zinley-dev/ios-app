@@ -29,3 +29,10 @@ class GameList: Mappable {
     }
     
 }
+
+
+extension GameList: Equatable {
+    static func == (lhs: GameList, rhs: GameList) -> Bool {
+        return lhs._id == rhs._id
+    }
+}

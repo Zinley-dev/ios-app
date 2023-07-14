@@ -66,7 +66,9 @@ class ChatGPTAPI: @unchecked Sendable {
     
     private func appendToHistoryList(userText: String, responseText: String) {
         
-        let conversation = ["conversationId": "null", "prompt": userText, "response": responseText, "gameCategory": global_gameId]
+        
+        
+        let conversation = ["conversationId": "null", "prompt": userText, "response": responseText, "gameCategory": chatbot_id]
     
         if tokenManager.historyList.count <= 2 {
             
@@ -108,6 +110,7 @@ class ChatGPTAPI: @unchecked Sendable {
         
         tokenManager.appendMessageToHistory(userText: userText, responseText: responseText)
         
+        
     }
     
     private func countTokens(messages: String) -> Int {
@@ -119,7 +122,7 @@ class ChatGPTAPI: @unchecked Sendable {
         
         var urlRequest = self.urlRequest
 
-        let requestBodyText = global_gameName != "SB Chatbot" ? "Focus strictly on the \(global_gameName) game topic. Disregard unrelated questions. Query: \(text)" : text
+        let requestBodyText = text
         urlRequest.httpBody = try jsonBody(text: requestBodyText)
   
         let (result, response) = try await urlSession.bytes(for: urlRequest)
@@ -171,7 +174,8 @@ class ChatGPTAPI: @unchecked Sendable {
     func deleteHistoryList() {
         tokenManager.clearHistory()
         
-        APIManager.shared.clearGptConversation(gameId: global_gameId) { [weak self] result in
+        
+        APIManager.shared.clearGptConversation(gameId: chatbot_id) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -186,6 +190,8 @@ class ChatGPTAPI: @unchecked Sendable {
             
             
         }
+        
+        
         
     }
     

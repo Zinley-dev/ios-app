@@ -12,7 +12,7 @@ class ChatGPTTokenManager {
     
     private let tokenizer: GPTEncoder
     private(set) var historyList: [Message]
-    private var maxTokenCount: Int = 16000
+    private var maxTokenCount: Int = 16384
     
     init(tokenizer: GPTEncoder) {
  
@@ -30,7 +30,7 @@ class ChatGPTTokenManager {
         if global_gpt == "gpt-4-0613" {
             self.maxTokenCount = 8192
         } else {
-            self.maxTokenCount = 16000
+            self.maxTokenCount = 16384
         }
         
         let userMessage = Message(role: "user", content: userText)
@@ -64,7 +64,7 @@ class ChatGPTTokenManager {
         if global_gpt == "gpt-4-0613" {
             self.maxTokenCount = 8192
         } else {
-            self.maxTokenCount = 16000
+            self.maxTokenCount = 16384
         }
         
         historyList = messages

@@ -12,6 +12,10 @@ import FLAnimatedImage
 
 class UserSearchVC: UIViewController {
     
+    deinit {
+        print("UserSearchVC is being deallocated.")
+    }
+    
     struct SearchRecord {
         let keyWord: String
         let timeStamp: Double

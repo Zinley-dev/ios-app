@@ -14,6 +14,10 @@ import Photos
 
 class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
+    deinit {
+        print("ChannelSettingsVC is being deallocated.")
+    }
+    
     @IBOutlet weak var notiSwitch: UISwitch!
     @IBOutlet weak var channelName: UILabel!
     @IBOutlet weak var avatarView: UIView!

@@ -11,21 +11,12 @@ class UserProfileHeaderCell: UICollectionViewCell {
     
     @IBOutlet weak var descriptionLbl: UILabel!
     @IBOutlet weak var moreBtn: UIButton!
-    @IBOutlet weak var fistBumpedView: UIView!
-    @IBOutlet weak var discordView: UIView!
     @IBOutlet weak var messageBtn: UIButton!
-    @IBOutlet weak var FistBumpedBtn: UIButton!
     @IBOutlet weak var followersBtn: UIButton!
-    @IBOutlet weak var discordBtn: UIButton!
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet weak var numberOfFollowing: UILabel!
     @IBOutlet weak var numberOfFollowers: UILabel!
-    @IBOutlet weak var numberOfFistBumps: UILabel!
     @IBOutlet weak var avatarImage: UIImageView!
-    @IBOutlet weak var coverImage: UIImageView!
-    @IBOutlet weak var fistBumpImage: UIImageView!
-    @IBOutlet weak var discordLbl: UILabel!
-    @IBOutlet weak var discordChecked: UIImageView!
     //@IBOutlet weak var proImg: UIImageView!
     
     let kCONTENT_XIB_NAME = "ProfileView"
@@ -40,8 +31,7 @@ class UserProfileHeaderCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        discordBtn.setTitle("", for: .normal)
-        FistBumpedBtn.setTitle("", for: .normal)
+    
         moreBtn.setTitle("", for: .normal)
        
         followersBtn.setTitleColor(.white, for: .normal)
@@ -56,11 +46,7 @@ class UserProfileHeaderCell: UICollectionViewCell {
         super.layoutSubviews()
         
         avatarImage.layer.cornerRadius = avatarImage.bounds.height/2
-        
-        //followersBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        //messageBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        
-        
+      
     }
     
     

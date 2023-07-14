@@ -61,6 +61,7 @@ class LoginController: UIViewController, ControllerType {
               switch result {
                 case .normal:
                   RedirectionHelper.redirectToDashboard()
+                  
                 case .advance(let type, let value):
                   Dispatch.main.async {
                     let model = LoginByPhoneVerifyViewModel()
@@ -81,19 +82,23 @@ class LoginController: UIViewController, ControllerType {
         // binding Controller actions to View Model observer
         let userInputs = Observable.combineLatest(
             usernameTextfield.rx.text.orEmpty,
-            passwordTextfield.rx.text.orEmpty) { ($0, $1) 
-            }
+            passwordTextfield.rx.text.orEmpty) { ($0, $1) }
+
         signInButton.rx.tap.asObservable()
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
             .withLatestFrom(userInputs)
             .subscribe(viewModel.action.signInDidTap)
             .disposed(by: disposeBag)
         
-        signInButton.rx.tap.asObservable().subscribe { Void in
-          Dispatch.main.async {
-            presentSwiftLoader()
-          }
-        }.disposed(by: disposeBag)
+        signInButton.rx.tap.asObservable()
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
+            .subscribe { _ in
+                DispatchQueue.main.async {
+                    presentSwiftLoader()
+                }
+            }.disposed(by: disposeBag)
     }
+
   
     @objc func onClickForgot(_ sender: AnyObject) {
       if let navigationController = self.navigationController {

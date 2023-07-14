@@ -99,25 +99,38 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     }
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
-        if let request = buildRequest(from: route) {
-          print("Request URL --> \(request.url)")
-            task = session.dataTask(with: request, completionHandler: { data, response, error in
-              print("==============BBB+============")
-                print(error)
-              print(response)
-              print(data)
-              print("==============BBB+============")
-                if error != nil {
-                    completion(.failure(ErrorType.noInternet))
-                }
-                if let response = response as? HTTPURLResponse {
-                    let result = self.handleNetworkResponse(data, response)
-                    completion(result)
-                }
-            })
-            self.task?.resume()
+        guard let request = buildRequest(from: route) else {
+            DispatchQueue.main.async { completion(.failure(ErrorType.badRequest)) }
+            return
         }
+        
+        print("Request URL --> \(String(describing: request.url))")
+        
+        task = session.dataTask(with: request, completionHandler: { [weak self] data, response, error in
+            // Ensure we are on the main thread
+            DispatchQueue.main.async {
+                print("==============BBB+============")
+                print(error)
+                print(response)
+                print(data)
+                print("==============BBB+============")
+                
+                if let error = error {
+                    print(error.localizedDescription)
+                    completion(.failure(ErrorType.badRequest))
+                    return
+                }
+                guard let response = response as? HTTPURLResponse, let self = self else {
+                    completion(.failure(ErrorType.invalidResponse))
+                    return
+                }
+                let result = self.handleNetworkResponse(data, response)
+                completion(result)
+            }
+        })
+        self.task?.resume()
     }
+
     
     fileprivate func builđData(for image: UIImage, request: inout URLRequest) -> Data {
         let boundary = UUID().uuidString

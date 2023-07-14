@@ -9,12 +9,12 @@ import UIKit
 import AVFoundation
 import RxSwift
 import RxCocoa
-import Lottie
 import ZSWTappableLabel
 import ZSWTaggedString
 import SafariServices
 import AuthenticationServices
 import ObjectMapper
+import AppsFlyerLib
 
 class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
@@ -23,12 +23,12 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         return self.view.window!
     }
     
-  typealias ViewModelType = StartViewModel
+    typealias ViewModelType = StartViewModel
 
-  // MARK: - Properties
-//  private var viewModel: ViewModelType! = ViewModelType()
-  private lazy var vm: ViewModelType! = ViewModelType(vc: self)
-  private let disposeBag = DisposeBag()
+    // MARK: - Properties
+    //  private var viewModel: ViewModelType! = ViewModelType()
+    private lazy var vm: ViewModelType! = ViewModelType(vc: self)
+    private let disposeBag = DisposeBag()
   
   
     @IBOutlet weak var launchingView: UIView!
@@ -120,6 +120,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         self.loadNewestCoreData {
             self.loadSettings {
                 RedirectionHelper.redirectToDashboard()
+                
             }
         }
     
@@ -192,7 +193,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     
     vm.output.loginResultObservable.subscribe(onNext: { isTrue in
       if (isTrue) {
-        RedirectionHelper.redirectToDashboard()
+          RedirectionHelper.redirectToDashboard()
       }
     })
     .disposed(by: disposeBag)
@@ -372,7 +373,7 @@ extension StartViewController {
                 
                 if let data = response.body {
                     
-                    print(data)
+                  
                     
                     if !data.isEmpty {
                     

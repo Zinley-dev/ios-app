@@ -11,6 +11,9 @@ import SendBirdSDK
 
 class OperatorMemberVC: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
 
+    deinit {
+        print("OperatorMemberVC is being deallocated.")
+    }
     
     var channel: SBDGroupChannel?
     let backButton: UIButton = UIButton(type: .custom)

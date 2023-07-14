@@ -10,20 +10,28 @@ import PixelSDK
 import Alamofire
 import Photos
 import ObjectMapper
+import Cache
+import AlamofireImage
 
 class PostVC: UIViewController {
 
+    deinit {
+        print("PostVC is being deallocated.")
+    }
     
     enum updateMedia {
         case image
         case video
     }
     
-    
+    var stitchPost: PostModel!
+    var itemList = [GameList]()
+    @IBOutlet weak var stitchView: UIView!
+    @IBOutlet weak var categoryInput: UITextField!
     @IBOutlet weak var addLbl: UILabel!
     @IBOutlet weak var hashtagLbl: UILabel!
     @IBOutlet weak var hiddenHashTagTxtField: UITextField!
-    @IBOutlet weak var streamingLinkLbl: UILabel!
+    @IBOutlet weak var stitchLbl: UILabel!
     @IBOutlet weak var onlyMeLbl: UILabel!
     @IBOutlet weak var followLbl: UILabel!
     @IBOutlet weak var publicLbl: UILabel!
@@ -44,12 +52,14 @@ class PostVC: UIViewController {
     @IBOutlet weak var privateBtn: UIButton!
     @IBOutlet weak var hashtagBtn: UIButton!
     @IBOutlet weak var allowCmtSwitch: UISwitch!
-    
+    @IBOutlet weak var allowStitchSwitch: UISwitch!
+   
     var hashtagList = [String]()
+    
     var mode = 0
     var isAllowComment = true
+    var isAllowStitch = true
     let backButton: UIButton = UIButton(type: .custom)
-    let container = ContainerController(modes: [.library, .photo, .video])
     var isKeyboardShow = false
     var mediaType = ""
     var selectedVideo: SessionVideo!
@@ -60,12 +70,13 @@ class PostVC: UIViewController {
     var length: Double!
     var renderedImage: UIImage!
     var selectedDescTxtView = ""
+
  
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        container.editControllerDelegate = self
+        setupNavBar()
         global_fullLink = ""
         global_host = ""
         setupButtons()
@@ -75,16 +86,30 @@ class PostVC: UIViewController {
         setupGesture()
         loadPreviousSetting()
         loadAvatar()
+        
+        if stitchPost != nil {
+            stitchView.isHidden = false
+        } else {
+            stitchView.isHidden = true
+        }
+       
+    }
+    
+    func setupNavBar() {
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .background
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if global_host != "" {
-            streamingLinkLbl.text = "Streaming link added for \(global_host)"
-        } else {
-            streamingLinkLbl.text = "Streaming link"
-        }
+        setupNavBar()
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -103,15 +128,32 @@ class PostVC: UIViewController {
         
     }
     
+    
     @IBAction func addMediaBtnPressed(_ sender: Any) {
     
-        // Include only Image from the users drafts
-        container.libraryController.draftMediaTypes = [.image, .video]
         
+        presentCamera()
+        
+    }
+    
+    func presentCamera() {
+        
+        let container = ContainerController(modes: [.library, .video], initialMode: .video, restoresPreviousMode: false)
+        
+        container.editControllerDelegate = self
         container.libraryController.previewCropController.maxRatioForPortraitMedia = CGSize(width: 1, height: .max)
         container.libraryController.previewCropController.maxRatioForLandscapeMedia = CGSize(width: .max, height: 1)
         container.libraryController.previewCropController.defaultsToAspectFillForPortraitMedia = false
         container.libraryController.previewCropController.defaultsToAspectFillForLandscapeMedia = false
+        
+    
+        container.cameraController.aspectRatio = CGSize(width: 9, height: 16)
+
+        
+        // Include only videos from the users photo library
+        container.libraryController.fetchPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+        // Include only videos from the users drafts
+        container.libraryController.draftMediaTypes = [.video]
        
         
         let nav = UINavigationController(rootViewController: container)
@@ -142,6 +184,29 @@ class PostVC: UIViewController {
         
     }
     
+    
+    @IBAction func allowStitchSwitchPressed(_ sender: Any) {
+        
+        if isAllowStitch == true {
+                  
+            isAllowStitch =  false
+            allowStitchSwitch.setOn(false, animated: true)
+            
+            print("Allow stitch: \(String(describing: self.isAllowStitch))")
+            
+            
+        } else {
+            
+            isAllowStitch = true
+            allowStitchSwitch.setOn(true, animated: true)
+            
+            print("Allow stitch: \(String(describing: self.isAllowStitch))")
+            
+        }
+        
+        
+    }
+    
     @IBAction func hashtagBtnPressed(_ sender: Any) {
         
         if let HTVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "HashtagVC") as? HashtagVC {
@@ -152,14 +217,14 @@ class PostVC: UIViewController {
                 
                 if !text.findMHashtagText().isEmpty {
                     self.collectionHeight.constant = 50.0
-                    self.settingViewHeight.constant = 295
+                    self.settingViewHeight.constant = 335
                     self.collectionView.isHidden = false
                     self.hashtagLbl.text = "Hashtag added"
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList = text.findMHashtagText()
                 } else {
                     self.collectionHeight.constant = 0.0
-                    self.settingViewHeight.constant = 295 - 50
+                    self.settingViewHeight.constant = 335 - 50
                     self.collectionView.isHidden = true
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList.removeAll()
@@ -187,9 +252,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .secondary
-        followLbl.textColor = .lightGray
-        onlyMeLbl.textColor = .lightGray
+        publicLbl.textColor = .white
+        followLbl.textColor = .white
+        onlyMeLbl.textColor = .white
         
     }
     
@@ -202,9 +267,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .lightGray
-        followLbl.textColor = .secondary
-        onlyMeLbl.textColor = .lightGray
+        publicLbl.textColor = .white
+        followLbl.textColor = .white
+        onlyMeLbl.textColor = .white
     }
     
     @IBAction func privateBtnPressed(_ sender: Any) {
@@ -216,9 +281,9 @@ class PostVC: UIViewController {
         privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
         
         
-        publicLbl.textColor = .lightGray
-        followLbl.textColor = .lightGray
-        onlyMeLbl.textColor = .secondary
+        publicLbl.textColor = .white
+        followLbl.textColor = .white
+        onlyMeLbl.textColor = .white
         
         
     }
@@ -230,18 +295,20 @@ class PostVC: UIViewController {
         
     }
     
-    @IBAction func StreamingLinkBtnPressed(_ sender: Any) {
+    @IBAction func stitchBtnPressed(_ sender: Any) {
         
-        
-        if let SLVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingLinkVC") as? StreamingLinkVC {
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
             
-            self.navigationController?.pushViewController(SLVC, animated: true)
+            SPVC.selectedPost = [stitchPost]
+            SPVC.startIndex = 0
+            
+            self.navigationController?.pushViewController(SPVC, animated: true)
             
         }
         
+
+        
     }
-    
-    
     
     
 }
@@ -269,11 +336,13 @@ extension PostVC {
                 
                 guard let data = apiResponse.body?["data"] as? [[String: Any]]  else {
                     print("Couldn't cast data")
+                    DispatchQueue.main.async {
+                        self.setDefaultMode()
+                    }
                     return
                 }
                 
-                print(apiResponse)
-                
+            
                 if let settings = data.first?["setting"] as? [String: Any] {
                     
                     if let allowcomment = settings["allowComment"] as? Bool {
@@ -284,8 +353,6 @@ extension PostVC {
                             DispatchQueue.main.async {
                                 self.allowCmtSwitch.setOn(true, animated: true)
                             }
-                            print("Allow comment: \(String(describing: self.isAllowComment))")
-                            
                             
                         } else {
                             
@@ -293,8 +360,6 @@ extension PostVC {
                             DispatchQueue.main.async {
                                 self.allowCmtSwitch.setOn(false, animated: true)
                             }
-                            
-                            print("Allow comment: \(String(describing: self.isAllowComment))")
                             
                         }
                         
@@ -312,9 +377,9 @@ extension PostVC {
                                 self.followingBtn.setImage(UIImage(named: "following"), for: .normal)
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
-                                self.publicLbl.textColor = .secondary
-                                self.followLbl.textColor = .lightGray
-                                self.onlyMeLbl.textColor = .lightGray
+                                self.publicLbl.textColor = .white
+                                self.followLbl.textColor = .white
+                                self.onlyMeLbl.textColor = .white
                                 
                             }
    
@@ -328,9 +393,9 @@ extension PostVC {
                                 self.followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
-                                self.publicLbl.textColor = .lightGray
-                                self.followLbl.textColor = .secondary
-                                self.onlyMeLbl.textColor = .lightGray
+                                self.publicLbl.textColor = .white
+                                self.followLbl.textColor = .white
+                                self.onlyMeLbl.textColor = .white
                                 
                             }
                             
@@ -346,9 +411,9 @@ extension PostVC {
                                 self.privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
                                         
                                         
-                                self.publicLbl.textColor = .lightGray
-                                self.followLbl.textColor = .lightGray
-                                self.onlyMeLbl.textColor = .secondary
+                                self.publicLbl.textColor = .white
+                                self.followLbl.textColor = .white
+                                self.onlyMeLbl.textColor = .white
                                 
                             }
                             
@@ -373,30 +438,6 @@ extension PostVC {
                     
                 }
                 
-                
-                
-                if let streamUrl = data.first?["streamLink"] as? String {
-                    
-                    if let url = URL(string: streamUrl) {
-                        
-                        if let domain = url.host {
-                            
-                            if check_Url(host: domain) == true {
-                                
-                                global_host = domain
-                                global_fullLink = streamUrl
-                                DispatchQueue.main.async {
-                                    self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
-                                }
-    
-                            }
-                            
-                        }
-                    }
-
-                }
-
-
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.setDefaultMode()
@@ -423,12 +464,17 @@ extension PostVC {
                         
                         Dispatch.background {
                             
-                            UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height)
+                            if self.stitchPost != nil {
+                                
+                                UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: self.stitchPost.id)
+                                
+                            } else {
+                                
+                                UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: "")
+                                
+                            }
                             
                         }
-                        
-                        
-                        
                         
                         DispatchQueue.main.async {
                             SwiftLoader.hide()
@@ -467,7 +513,11 @@ extension PostVC {
                 Dispatch.background {
                     
                     print("Start uploading video to db")
-                    UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length)
+                    if self.stitchPost != nil {
+                        UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length, isAllowStitch: self.isAllowStitch, stitchId: self.stitchPost.id)
+                    } else {
+                        UploadContentManager.shared.uploadVideoToDB(url: self.exportedURL, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, length: self.length, isAllowStitch: self.isAllowStitch, stitchId: "")
+                    }
                     
                 }
                 
@@ -580,9 +630,9 @@ extension PostVC {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .secondary
-        followLbl.textColor = .lightGray
-        onlyMeLbl.textColor = .lightGray
+        publicLbl.textColor = .white
+        followLbl.textColor = .white
+        onlyMeLbl.textColor = .white
         
     }
     
@@ -625,12 +675,12 @@ extension PostVC {
         createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
         createButton.setTitle("Post", for: .normal)
-        createButton.setTitleColor(.white, for: .normal)
+        createButton.setTitleColor(.primary, for: .normal)
         createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
-        createButton.backgroundColor = .primary
+        createButton.backgroundColor = .white
         createButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
         customView.addSubview(createButton)
@@ -687,7 +737,7 @@ extension PostVC {
     func setupDefaultView() {
         
         collectionHeight.constant = 0.0
-        settingViewHeight.constant = 295 - 50
+        settingViewHeight.constant = 335 - 50
         
     }
 
@@ -736,7 +786,7 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
                 self.collectionHeight.constant = 0
                 self.collectionView.isHidden = true
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 295 - 50
+                self.settingViewHeight.constant = 335 - 50
                 
                 self.hiddenHashTagTxtField.text = ""
                 self.hashtagLbl.text = "Hashtag #"
@@ -769,6 +819,7 @@ extension PostVC {
     @objc func onClickPost(_ sender: AnyObject) {
         
         if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
+  
             if mediaType == "image" {
                 uploadImage()
             } else if mediaType == "video" {
@@ -852,7 +903,7 @@ extension PostVC: UITextViewDelegate {
         
         if textView == descTxtView {
             
-            if textView.text == "Hi, let's unleash your gameplay!" {
+            if textView.text == "Hi, let's share something fun!" {
                 
                 textView.text = ""
                 
@@ -867,7 +918,7 @@ extension PostVC: UITextViewDelegate {
             
             if textView.text == "" {
                 
-                textView.text = "Hi, let's unleash your gameplay!"
+                textView.text = "Hi, let's share something fun!"
                 
             } else {
                 selectedDescTxtView = textView.text

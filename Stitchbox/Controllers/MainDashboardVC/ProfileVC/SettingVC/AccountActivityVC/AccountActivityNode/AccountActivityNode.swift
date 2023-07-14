@@ -16,6 +16,9 @@ fileprivate let FontSize: CGFloat = 12
 
 class AccountActivityNode: ASCellNode {
     
+    deinit {
+        print("AccountActivityNode is being deallocated.")
+    }
     
     var activity: UserActivityModel
     var descriptionNode: ASTextNode!

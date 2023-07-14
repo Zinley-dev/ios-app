@@ -11,6 +11,9 @@ import SendBirdSDK
 
 class MutedMemberVC: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
+    deinit {
+        print("MutedMemberVC is being deallocated.")
+    }
     
     var channel: SBDGroupChannel?
     let backButton: UIButton = UIButton(type: .custom)

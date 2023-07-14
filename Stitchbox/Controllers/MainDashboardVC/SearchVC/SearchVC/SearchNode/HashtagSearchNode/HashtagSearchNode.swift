@@ -17,6 +17,10 @@ fileprivate let FontSize: CGFloat = 12
 
 class HashTagSearchNode: ASCellNode {
     
+    deinit {
+        print("HashTagSearchNode is being deallocated.")
+    }
+    
     weak var hashtag: HashtagsModel!
 
     var hashtagTextNode: ASTextNode!

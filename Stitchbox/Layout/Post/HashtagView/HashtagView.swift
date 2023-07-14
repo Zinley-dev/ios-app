@@ -14,6 +14,7 @@ class HashtagView: UIView {
     @IBOutlet weak var collectionLayout: UICollectionViewFlowLayout! {
         didSet {
             collectionLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+            collectionLayout.scrollDirection = .vertical
         }
     }
     

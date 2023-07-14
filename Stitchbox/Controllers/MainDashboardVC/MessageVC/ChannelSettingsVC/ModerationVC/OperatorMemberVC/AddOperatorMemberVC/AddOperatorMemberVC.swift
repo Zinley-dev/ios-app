@@ -11,6 +11,9 @@ import SendBirdUIKit
 
 class AddOperatorMemberVC: UIViewController, UISearchBarDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
     
+    deinit {
+        print("AddOperatorMemberVC is being deallocated.")
+    }
     
     var channel: SBDGroupChannel?
     var joinedUserIds: [String] = []

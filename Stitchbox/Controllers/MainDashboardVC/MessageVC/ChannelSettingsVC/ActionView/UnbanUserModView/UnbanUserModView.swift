@@ -9,6 +9,9 @@ import UIKit
 
 class UnbanUserModView: UIViewController{
     
+    deinit {
+        print("UnbanUserModView is being deallocated.")
+    }
     
     @IBOutlet weak var unbanBtn: UIButton!
     @IBOutlet weak var unbanLbl: UILabel!

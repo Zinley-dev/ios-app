@@ -163,17 +163,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         
         commentBtn.setTitle("", for: .normal)
-        
-        cmtTxtView.delegate = self
-        placeholderLabel = UILabel()
-        placeholderLabel.text = "Add comment..."
-        placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
-        placeholderLabel.sizeToFit()
-        cmtTxtView.addSubview(placeholderLabel)
-        
-        placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
-        placeholderLabel.textColor = UIColor.white
-        placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+
+        setupPlaceholder()
         
         cmtTxtView.returnKeyType = .default
         
@@ -229,6 +220,38 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
     }
     
+    func setupPlaceholder() {
+        
+        if post.setting?.allowComment == true {
+            cmtTxtView.delegate = self
+            placeholderLabel = UILabel()
+            placeholderLabel.text = "Add comment..."
+            placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
+            placeholderLabel.sizeToFit()
+            cmtTxtView.addSubview(placeholderLabel)
+            commentBtn.isEnabled = true
+            placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
+            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+            cmtTxtView.isUserInteractionEnabled = true
+        } else {
+            cmtTxtView.delegate = self
+            placeholderLabel = UILabel()
+            placeholderLabel.text = "Comments are turned off"
+            placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
+            placeholderLabel.sizeToFit()
+            cmtTxtView.addSubview(placeholderLabel)
+            cmtTxtView.isUserInteractionEnabled = false
+            commentBtn.isEnabled = false
+            placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
+            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+        }
+        
+        
+        
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -250,8 +273,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             print(error.localizedDescription)
         }
         
-        loadingView.backgroundColor = self.view.backgroundColor
-        
+        loadingView.backgroundColor = .black
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -287,12 +309,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     
                     if !update1.hasViewAppeared {
                         update1.PostSearchVC.viewWillAppear(true)
-                    }
-                    
-                } else if let update1 = vc as? ReelVC {
-                    
-                    if !update1.hasViewAppeared {
-                        update1.viewWillAppear(true)
                     }
                     
                 } else if let update1 = vc as? SelectedPostVC {
@@ -533,7 +549,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         self.tableNode.view.separatorStyle = .none
         self.tableNode.view.separatorColor = UIColor.lightGray
         self.tableNode.view.isPagingEnabled = false
-        self.tableNode.view.backgroundColor = UIColor.background
+        self.tableNode.view.backgroundColor = UIColor.black
         self.tableNode.view.showsVerticalScrollIndicator = false
         
         
@@ -924,7 +940,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         if let viewPost = self.post {
             
-            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
                 
                 let nav = UINavigationController(rootViewController: RVC)
                 

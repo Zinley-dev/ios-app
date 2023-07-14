@@ -13,6 +13,10 @@ import RxSwift
 
 class FollowingVC: UIViewController {
     
+    deinit {
+        print("FollowingVC is being deallocated.")
+    }
+    
     @IBOutlet weak var contentView: UIView!
     private var currPage = 1
     

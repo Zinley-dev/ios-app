@@ -9,6 +9,9 @@ import UIKit
 
 class UnmutedUserModView: UIViewController{
     
+    deinit {
+        print("UnmutedUserModView is being deallocated.")
+    }
     
     @IBOutlet weak var unmutedBtn: UIButton!
     @IBOutlet weak var unmutedLbl: UILabel!

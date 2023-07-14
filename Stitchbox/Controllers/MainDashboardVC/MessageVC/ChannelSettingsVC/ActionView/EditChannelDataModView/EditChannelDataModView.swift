@@ -9,6 +9,9 @@ import UIKit
 
 class EditChannelDataModView: UIViewController{
     
+    deinit {
+        print("EditChannelDataModView is being deallocated.")
+    }
     
     @IBOutlet weak var changeNameBtn: UIButton!
     @IBOutlet weak var changeAvatarBtn: UIButton!

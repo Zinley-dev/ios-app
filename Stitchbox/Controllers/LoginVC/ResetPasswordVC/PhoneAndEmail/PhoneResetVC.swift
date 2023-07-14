@@ -82,12 +82,15 @@ class PhoneResetVC: UIViewController, CountryPickerViewDelegate, CountryPickerVi
   
   
     func bindAction(with vm: ViewModelType) {
-      sendCodeButton.rx.tap.asObservable()
-        .withLatestFrom(phoneTextfield.rx.text.orEmpty.asObservable()) {
-          return ($1, self.cpv.selectedCountry.phoneCode) }
-        .subscribe(vm.action.sendOTPDidTap)
-        .disposed(by: disposeBag)
+        sendCodeButton.rx.tap.asObservable()
+            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance) // Avoid multiple taps
+            .withLatestFrom(phoneTextfield.rx.text.orEmpty.asObservable()) {
+                return ($1, self.cpv.selectedCountry.phoneCode)
+            }
+            .subscribe(vm.action.sendOTPDidTap)
+            .disposed(by: disposeBag)
     }
+
   
     func bindUI(with vm: ViewModelType) {
       // bind View Model outputs to Controller elements

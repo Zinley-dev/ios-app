@@ -10,6 +10,9 @@ import CountryPickerView
 
 class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerViewDataSource {
     
+    deinit {
+        print("EditPhoneVC is being deallocated.")
+    }
     
     let backButton: UIButton = UIButton(type: .custom)
     

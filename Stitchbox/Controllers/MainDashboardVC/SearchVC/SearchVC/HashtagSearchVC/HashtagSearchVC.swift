@@ -11,6 +11,10 @@ import AsyncDisplayKit
 
 class HashtagSearchVC: UIViewController {
 
+    deinit {
+        print("HashtagSearchVC is being deallocated.")
+    }
+    
     struct SearchRecord {
         let keyWord: String
         let timeStamp: Double

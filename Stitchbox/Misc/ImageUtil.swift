@@ -158,9 +158,7 @@ extension UIImageView {
                                print(error)
                                 self.image = UIImage.init(named: "empty")
                         }
-                    
-                    
-                                      
+                  
                   }
                 
             }

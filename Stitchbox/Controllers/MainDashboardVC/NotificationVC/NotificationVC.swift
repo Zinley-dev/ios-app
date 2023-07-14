@@ -11,6 +11,10 @@ import AsyncDisplayKit
 
 class NotificationVC: UIViewController {
     
+    deinit {
+        print("NotificationVC is being deallocated.")
+    }
+    
     let backButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var contentView: UIView!
@@ -350,7 +354,7 @@ extension NotificationVC {
     
     func openPost(post: PostModel) {
         
-        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
             
             let nav = UINavigationController(rootViewController: RVC)
             

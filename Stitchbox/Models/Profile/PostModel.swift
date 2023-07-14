@@ -10,6 +10,7 @@ import ObjectMapper
 
 class Setting: Mappable {
    
+    private(set) var allowStitch: Bool = false
     private(set) var allowComment: Bool = false
     private(set) var isTitleGet: Bool = false
     private(set) var mode: Int = 0
@@ -21,6 +22,7 @@ class Setting: Mappable {
       }
       
       func mapping(map: ObjectMapper.Map) {
+          allowStitch <- map["allowStitch"]
           allowComment <- map["allowComment"]
           isTitleGet <- map["isTitleGet"]
           mode <- map["mode"]
@@ -82,7 +84,10 @@ class PostModel: Mappable {
   private(set) var setting: Setting?
   private(set) var estimatedCount: EstimatedCount?
   private(set) var metadata: PostMetadata?
+        
+ 
   private(set) var createdAt: Date?
+    
   
   required init?(map: ObjectMapper.Map) {
     
@@ -105,7 +110,7 @@ class PostModel: Mappable {
     if image[0] != "" {
       imageUrl = URL(string: image[0])!
     } else {
-      imageUrl = URL(string: "https://image.mux.com/\(muxPlaybackId)/thumbnail.png?width=400&height=200&fit_mode=smartcrop&time=0.025")!
+      imageUrl = URL(string: "https://image.mux.com/\(muxPlaybackId)/thumbnail.png?width=267&height=475&fit_mode")!
     }
       
       //hashtags.append("SB-Tactics")
@@ -120,3 +125,4 @@ extension PostModel: Hashable {
     hasher.combine(id)
   }
 }
+

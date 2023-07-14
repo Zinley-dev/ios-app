@@ -9,6 +9,14 @@ import UIKit
 
 class VerifyCodeVC: UIViewController, UITextFieldDelegate {
     
+    
+    deinit {
+        print("VerifyCodeVC is being deallocated.")
+    }
+    
+
+
+    
     @IBOutlet weak var verifyButton: UIButton!
     @IBOutlet weak var sendCodeButton: UIButton!
     @IBOutlet weak var openKeyBoardBtn: UIButton!

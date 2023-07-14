@@ -12,6 +12,10 @@ import FLAnimatedImage
 
 class BlockedListVC: UIViewController {
     
+    deinit {
+        print("BlockedListVC is being deallocated.")
+    }
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     @IBOutlet weak var contentView: UIView!

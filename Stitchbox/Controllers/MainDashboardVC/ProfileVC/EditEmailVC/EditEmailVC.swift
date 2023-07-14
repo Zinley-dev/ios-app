@@ -9,6 +9,10 @@ import UIKit
 
 class EditEmailVC: UIViewController {
     
+    deinit {
+        print("EditEmailVC is being deallocated.")
+    }
+    
     let backButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var emailTxtField: UITextField!
     
@@ -46,6 +50,7 @@ class EditEmailVC: UIViewController {
         
         let lowercaseEmail = email.lowercased().stringByRemovingWhitespaces
         presentSwiftLoader()
+        
         
         APIManager.shared.updateEmail(email: lowercaseEmail) { [weak self] result in
             guard let self = self else { return }

@@ -10,6 +10,9 @@ import AsyncDisplayKit
 
 class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelegate {
     
+    deinit {
+        print("MainSearchVC is being deallocated.")
+    }
     
     struct SearchRecord {
         let keyWord: String
@@ -215,12 +218,10 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             userBtn.layer.addSublayer(userBorder)
             postBorder.removeFromSuperlayer()
             PostSearchVC.view.isHidden = true
-            if PostSearchVC.currentIndex != nil {
-                PostSearchVC.pauseVideo(index: PostSearchVC.currentIndex ?? 0)
-            }
+ 
             hashTagBorder.removeFromSuperlayer()
             HashtagSearchVC.view.isHidden = true
-            PostSearchVC.pauseVideo(index: PostSearchVC.currentIndex ?? 0)
+            
         case SearchMode.posts:
             postBtn.layer.addSublayer(postBorder)
             userBorder.removeFromSuperlayer()
@@ -228,22 +229,15 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             hashTagBorder.removeFromSuperlayer()
             HashtagSearchVC.view.isHidden = true
             
-            if self.PostSearchVC.currentIndex != nil {
-                //newPlayingIndex
-                self.PostSearchVC.playVideo(index: self.PostSearchVC.currentIndex ?? 0)
-              
-            }
-          
         case SearchMode.hashTags:
             hashtagBtn.layer.addSublayer(hashTagBorder)
             userBorder.removeFromSuperlayer()
             UserSearchVC.view.isHidden = true
             postBorder.removeFromSuperlayer()
             PostSearchVC.view.isHidden = true
-            if PostSearchVC.currentIndex != nil {
-                PostSearchVC.pauseVideo(index: PostSearchVC.currentIndex ?? 0)
-            }
+    
         }
+        
         sendSearchRequestToTargetVC()
     }
     

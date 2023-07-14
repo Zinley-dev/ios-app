@@ -208,11 +208,7 @@ class EditPostVC: UIViewController {
     @IBAction func StreamingLinkBtnPressed(_ sender: Any) {
         
         
-        if let SLVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StreamingLinkVC") as? StreamingLinkVC {
-            
-            self.navigationController?.pushViewController(SLVC, animated: true)
-            
-        }
+
         
     }
     
@@ -255,18 +251,31 @@ extension EditPostVC {
     
     func setupBackButton() {
         
-        // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
+        backButton.frame = back_frame
+        backButton.contentMode = .center
+        
+        if let backImage = UIImage(named: "back_icn_white") {
+            let imageSize = CGSize(width: 13, height: 23)
+            let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
+                                       left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
+                                       bottom: (back_frame.height - imageSize.height) / 2,
+                                       right: (back_frame.width - imageSize.width) / 2 + horizontalPadding)
+            backButton.imageEdgeInsets = padding
+            backButton.setImage(backImage, for: [])
+        }
+        
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.frame = CGRect(x: -10, y: 0, width: 15, height: 25)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("     Edit Post", for: .normal)
-        backButton.sizeToFit()
+        backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.title = "Edit Post"
         
         self.navigationItem.leftBarButtonItem = backButtonBarButton
         
+        
+        
     }
+    
     
     func setupGesture() {
         

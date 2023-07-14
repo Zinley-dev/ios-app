@@ -9,6 +9,9 @@ import UIKit
 
 class InviteView: UIViewController{
     
+    deinit {
+        print("InviteView is being deallocated.")
+    }
     
     @IBOutlet weak var createBtn: UIButton!
     @IBOutlet weak var inviteBtn: UIButton!

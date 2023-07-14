@@ -12,6 +12,12 @@ import Alamofire
 
 class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     
+    
+    deinit {
+        print("SelectedPostVC is being deallocated.")
+    }
+    
+    
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var timeLbl: UILabel!
@@ -31,8 +37,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
-    
-    var isfirstLoad = true
+  
     var onPresent = false
     var selectedIndex = 0
     var isVideoPlaying = false
@@ -44,7 +49,11 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         // Do any additional setup after loading the view.
         setupButtons()
         setupCollectionNode()
-        loadPosts()
+        
+        delay(0.05) { [weak self] in
+            guard let self = self else { return }
+            self.loadPosts()
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
@@ -60,7 +69,12 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
         
-      
+        setupNavBar()
+        
+        if let navigationController = self.navigationController {
+            navigationController.navigationBar.prefersLargeTitles = false
+            navigationController.navigationBar.isTranslucent = false
+        }
         
     }
     
@@ -75,13 +89,19 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-       
+        setupNavBar()
         
         if currentIndex != nil {
+            //newPlayingIndex
             
-            if posts[currentIndex].muxPlaybackId != "" {
-                playVideo(index: currentIndex)
+            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? OriginalNode {
+                
+                if node.currentIndex != nil {
+                    node.playVideo(index: node.currentIndex!)
+                }
+                
             }
+
             
         }
         
@@ -94,12 +114,39 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         hasViewAppeared = false
         
         if currentIndex != nil {
+            //newPlayingIndex
             
-            if posts[currentIndex].muxPlaybackId != "" {
-                pauseVideo(index: currentIndex)
+            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? OriginalNode {
+                
+                if node.currentIndex != nil {
+                    node.pauseVideo(index: node.currentIndex!)
+                }
+                
             }
-            
+                  
         }
+        
+    }
+    
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .clear
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundImage = UIImage()
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.shadowColor = .clear
+        navigationBarAppearance.backgroundEffect = nil
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.isTranslucent = true
+
+        
+        navigationController?.setNavigationBarHidden(false, animated: true)
         
     }
     
@@ -148,188 +195,81 @@ extension SelectedPostVC {
 
 extension SelectedPostVC {
     
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if !posts.isEmpty, scrollView == collectionNode.view {
-            
-            // Get the visible rect of the collection view.
-            let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-            
-            // Calculate the visible cells.
-            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? PostNode }
-            
-            // Find the index of the visible video that is closest to the center of the screen.
-            var minDistanceFromCenter = CGFloat.infinity
-            
-            var foundVisibleVideo = false
-            
-            for cell in visibleCells {
-                
-                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
-                if distanceFromCenter < minDistanceFromCenter {
-                    newPlayingIndex = cell.indexPath!.row
-                    minDistanceFromCenter = distanceFromCenter
-                }
-            }
-            
-            
-            if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
-                
-                foundVisibleVideo = true
-                playTimeBar.isHidden = false
-                imageIndex = nil
-            } else {
-                playTimeBar.isHidden = true
-                imageIndex = newPlayingIndex
-            }
-            
-            
-            if foundVisibleVideo {
-                
-                // Start playing the new video if it's different from the current playing video.
-                if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-                    // Pause the current video, if any.
-                    if let currentIndex = currentIndex {
-                        pauseVideo(index: currentIndex)
-                    }
-                    // Play the new video.
-                    currentIndex = newPlayingIndex
-                    playVideo(index: currentIndex!)
-                    isVideoPlaying = true
-                    
-                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? PostNode {
-                        
-                        resetView(cell: node)
-                        
-                    }
-                    
-                }
-                
-            } else {
-                
-                if let currentIndex = currentIndex {
-                    pauseVideo(index: currentIndex)
-                }
-                
-                imageTimerWorkItem?.cancel()
-                imageTimerWorkItem = DispatchWorkItem { [weak self] in
-                    guard let self = self else { return }
-                    if self.imageIndex != nil {
-                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? PostNode {
-                            if self.imageIndex == self.newPlayingIndex {
-                                resetView(cell: node)
-                                node.endImage(id: node.post.id)
-                            }
-                        }
-                    }
-                }
-                
-                if let imageTimerWorkItem = imageTimerWorkItem {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
-                }
-                
-                
-                // Reset the current playing index.
-                currentIndex = nil
-                
-            }
-            
-            
-            // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PostNode {
-                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                        cell.videoNode.player?.seek(to: currentTime)
-                    } else {
-                        cell.videoNode.player?.seek(to: CMTime.zero)
-                    }
-                }
-            }
-            
-            
-            // If there's no current playing video and no visible video, pause the last playing video, if any.
-            if !isVideoPlaying && currentIndex != nil {
-                pauseVideo(index: currentIndex!)
-                currentIndex = nil
-            }
-            
-        }
-        
-        
-    }
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        
-        if scrollView == collectionNode.view, posts.count > 3 {
-            
-            if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
-                navigationController?.setNavigationBarHidden(true, animated: true)
-                
-            } else {
-                navigationController?.setNavigationBarHidden(false, animated: true)
-            }
-            
-        }
-        
-    }
-    
+       func scrollViewDidScroll(_ scrollView: UIScrollView) {
+           guard !posts.isEmpty, scrollView == collectionNode.view else {
+               return
+           }
+
+           let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+           let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? OriginalNode }
+           
+           var minDistanceFromCenter = CGFloat.infinity
+           var newPlayingIndex: Int? = nil
+           var foundVisibleVideo = false
+
+           for cell in visibleCells {
+               let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+               let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+               let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+               
+               if distanceFromCenter < minDistanceFromCenter {
+                   newPlayingIndex = cell.indexPath?.row
+                   minDistanceFromCenter = distanceFromCenter
+               }
+           }
+
+           guard let newPlayingIndex = newPlayingIndex, let currentCell = collectionNode.nodeForItem(at: IndexPath(item: currentIndex ?? 0, section: 0)) as? OriginalNode, let newPlayingCell = collectionNode.nodeForItem(at: IndexPath(item: newPlayingIndex, section: 0)) as? OriginalNode else {
+               return
+           }
+           
+           // Safe guard for Array Out-of-Bounds
+           guard newPlayingCell.currentIndex != nil && newPlayingCell.currentIndex! < newPlayingCell.posts.count else {
+               return
+           }
+           
+           if !newPlayingCell.posts[newPlayingCell.currentIndex!].muxPlaybackId.isEmpty {
+               foundVisibleVideo = true
+               imageIndex = nil
+           } else {
+               imageIndex = newPlayingIndex
+           }
+
+           if foundVisibleVideo {
+               if currentIndex != newPlayingIndex {
+                   if let currentIndex = currentCell.currentIndex {
+                       currentCell.pauseVideo(index: currentIndex)
+                   }
+
+                   currentIndex = newPlayingIndex
+                   newPlayingCell.playVideo(index: newPlayingCell.currentIndex ?? 0)
+
+                   if let node = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(item: newPlayingCell.currentIndex ?? 0, section: 0)) as? ReelNode {
+                       resetView(cell: node)
+                   }
+               }
+           } else {
+               print("Couldn't find foundVisibleVideo")
+           }
+
+           if let currentIndex = newPlayingCell.currentIndex, let cell = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
+               if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                   if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                       cell.videoNode.player?.seek(to: currentTime)
+                   } else {
+                       cell.videoNode.player?.seek(to: CMTime.zero)
+                   }
+               }
+           }
+       }
+
 }
 
-extension SelectedPostVC: UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
-
-        // Check if collectionView.tag is within the range of the posts array
-        guard collectionView.tag < posts.count else {
-            print("Error: No post for tag \(collectionView.tag)")
-            cell.hashTagLabel.text = "Error: post not found"
-            return cell
-        }
-        
-        let item = posts[collectionView.tag]
-
-        // Check if indexPath.row is within the range of the hashtags array
-        guard indexPath.row < item.hashtags.count else {
-            print("Error: No hashtag for index \(indexPath.row)")
-            cell.hashTagLabel.text = "Error: hashtag not found"
-            return cell
-        }
-
-        cell.hashTagLabel.text = item.hashtags[indexPath.row]
-        return cell
-    }
-
-    
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView.tag < posts.count {
-            return posts[collectionView.tag].hashtags.count
-        } else {
-            // Handle the condition when there are no posts at the given index
-            return 0
-        }
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 1)
-    }
-    
-}
 
 extension SelectedPostVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let min = CGSize(width: self.view.layer.frame.width, height: 50);
-        let max = CGSize(width: self.view.layer.frame.width, height: view.bounds.height + 200);
+        let min = CGSize(width: self.contentView.layer.frame.width, height: 50);
+        let max = CGSize(width: self.contentView.layer.frame.width, height: contentView.frame.height);
         
         return ASSizeRangeMake(min, max);
     }
@@ -357,44 +297,16 @@ extension SelectedPostVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = PostNode(with: post)
+            let node = OriginalNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            node.isSelectedPost = true
             
-            node.settingBtn = { (node) in
-                
-                self.settingPost(item: post)
-                
-            }
+        
             
-            delay(0.3) {
-                if node.hashtagView != nil {
-                    node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-                    node.hashtagView.collectionView.reloadData()
-                }
-            }
-            
-            //
             return node
         }
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let selectedHashtag = posts[collectionView.tag].hashtags[indexPath.row]
-        
-        if let PLWHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-            
-            navigationController?.setNavigationBarHidden(false, animated: true)
-            PLWHVC.searchHashtag = selectedHashtag
-            self.navigationController?.pushViewController(PLWHVC, animated: true)
-            
-        }
-        
-        
-        
-    }
+
     
 }
 
@@ -430,17 +342,29 @@ extension SelectedPostVC {
         }
         
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100)) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100000)) { [weak self] in
             guard let self = self else { return }
             self.collectionNode.scrollToItem(at: IndexPath(row: self.startIndex, section: 0), at: .centeredVertically, animated: false)
             
             if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
-                
-                self.currentIndex = self.startIndex
-                self.newPlayingIndex = self.startIndex
-                self.playVideo(index: self.startIndex)
-                self.isVideoPlaying = true
-                self.playTimeBar.isHidden = false
+
+                if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: self.startIndex, section: 0)) as? OriginalNode {
+                    
+                    if !currentCell.posts[0].muxPlaybackId.isEmpty {
+                        currentIndex = 0
+                        newPlayingIndex = 0
+                        currentCell.currentIndex = 0
+                        currentCell.newPlayingIndex = 0
+                        
+                        currentCell.isVideoPlaying = true
+                        
+                        delay(0.25) { [weak self] in
+                            guard let self = self else { return }
+                            currentCell.playVideo(index: 0)
+                        }
+                    }
+                    
+                }
                 
             } else {
                 self.isVideoPlaying = false
@@ -456,31 +380,38 @@ extension SelectedPostVC {
 extension SelectedPostVC {
     
     func setupCollectionNode() {
-        
         let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 0.0
+        flowLayout.scrollDirection = .vertical
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        
-        flowLayout.minimumInteritemSpacing = 10.0
-        flowLayout.minimumLineSpacing = 10.0
-        
-        self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
-        
+        self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
+        self.collectionNode.leadingScreensForBatching = 2.0
+        self.collectionNode.view.contentInsetAdjustmentBehavior = .never
+        // Set the data source and delegate
+        self.collectionNode.dataSource = self
+        self.collectionNode.delegate = self
+        self.collectionNode.backgroundColor = .black
+        // Add the collection node's view as a subview and set constraints
         self.contentView.addSubview(collectionNode.view)
         self.collectionNode.view.translatesAutoresizingMaskIntoConstraints = false
         self.collectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
-        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: -1).isActive = true
+        self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
-        self.applyStyle()
-        self.wireDelegates()
+        //self.collectionNode.view.isScrollEnabled = false
         
+        self.applyStyle()
+        
+        // Reload the data on the collection node
+        self.collectionNode.reloadData()
     }
+    
     
     
     func applyStyle() {
         
-        self.collectionNode.view.isPagingEnabled = false
+        self.collectionNode.view.isPagingEnabled = true
         self.collectionNode.view.backgroundColor = UIColor.clear
         self.collectionNode.view.showsVerticalScrollIndicator = false
         self.collectionNode.view.allowsSelection = false
@@ -536,7 +467,7 @@ extension SelectedPostVC {
     
     func setupTitle() {
         
-        self.navigationItem.title = "Posts"
+        self.navigationItem.title = ""
         
         
     }
@@ -580,8 +511,8 @@ extension SelectedPostVC {
         
         if let id = editeddPost?.id, id != "" {
             
-            APIManager.shared.deleteMyPost(pid: id) { [weak self] result in
-                guard let self = self else { return }
+            APIManager.shared.deleteMyPost(pid: id) { result in
+                //guard let self = self else { return }
                 
                 switch result {
                 case .success(_):
@@ -589,7 +520,8 @@ extension SelectedPostVC {
                     
                     SwiftLoader.hide()
                     
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         
                         self.removePost()
                         
@@ -600,8 +532,10 @@ extension SelectedPostVC {
                     print(error)
                     SwiftLoader.hide()
                     
-                    delay(0.1) {
-                        Dispatch.main.async {
+                    delay(0.1) { [weak self] in
+                        guard let self = self else { return }
+                        Dispatch.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
                         }
                         
@@ -612,7 +546,8 @@ extension SelectedPostVC {
             
         } else {
             
-            delay(0.1) {
+            delay(0.1) { [weak self] in
+                guard let self = self else { return }
                 SwiftLoader.hide()
                 self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
             }
@@ -658,7 +593,8 @@ extension SelectedPostVC {
                 
             }
             
-            delay(0.1) {
+            delay(0.1) { [weak self] in
+                guard let self = self else { return }
                 self.present(ac, animated: true, completion: nil)
             }
             
@@ -677,7 +613,8 @@ extension SelectedPostVC {
             
             
             VVC.selected_item = editeddPost
-            delay(0.1) {
+            delay(0.1) { [weak self] in
+                guard let self = self else { return }
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
                 self.navigationController?.pushViewController(VVC, animated: true)
             }
@@ -755,14 +692,16 @@ extension SelectedPostVC {
                 }) { saved, error in
                     
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                     
                     if (error != nil) {
                         
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             print("Error: \(error!.localizedDescription)")
                             self.showErrorAlert("Oops!", msg: error!.localizedDescription)
                         }
@@ -770,7 +709,8 @@ extension SelectedPostVC {
                     } else {
                         
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             
                             let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
                             let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -898,11 +838,12 @@ extension SelectedPostVC {
                     }
                 } else {
                     collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                    reloadAllCurrentHashtag()
+                    //reloadAllCurrentHashtag()
                     
                     delay(0.75) { [weak self] in
-                        if indexPath < self?.posts.count ?? 0 {
-                            self?.playVideo(index: indexPath)
+                        guard let self = self else { return }
+                        if indexPath < self.posts.count {
+                            self.playVideo(index: indexPath)
                         }
                     }
                     
@@ -913,24 +854,7 @@ extension SelectedPostVC {
         
     }
     
-    
-    
-    func reloadAllCurrentHashtag() {
-        if !posts.isEmpty {
-            for index in 0..<posts.count {
-                let indexPath = IndexPath(item: index, section: 0) // Assuming there is only one section
-                if let node = collectionNode.nodeForItem(at: indexPath) as? PostNode {
-                    
-                    if node.hashtagView != nil {
-                        node.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-                        node.hashtagView.collectionView.reloadData()
-                    }
-                    
-                }
-            }
-        }
-    }
-    
+
     @objc func reportPost() {
         
         let slideVC = reportView()
@@ -942,7 +866,8 @@ extension SelectedPostVC {
         global_presetingRate = Double(0.75)
         global_cornerRadius = 35
         
-        delay(0.1) {
+        delay(0.1) { [weak self] in
+            guard let self = self else { return }
             self.present(slideVC, animated: true, completion: nil)
         }
         
@@ -964,7 +889,8 @@ extension SelectedPostVC {
             
         }
         
-        delay(0.1) {
+        delay(0.1) { [weak self] in
+            guard let self = self else { return }
             self.present(ac, animated: true, completion: nil)
         }
         
@@ -974,18 +900,7 @@ extension SelectedPostVC {
     
     func pauseVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
-            
-            if cell.sideButtonView != nil {
-                cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                
-                if !cell.buttonsView.streamView.isHidden {
-                    
-                    cell.buttonsView.streamView.stopSpin()
-                    
-                }
-            }
-            
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             cell.videoNode.pause()
             
         }
@@ -994,7 +909,7 @@ extension SelectedPostVC {
     
     func seekVideo(index: Int, time: CMTime) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             cell.videoNode.player?.seek(to: time)
             
@@ -1006,31 +921,13 @@ extension SelectedPostVC {
     func playVideo(index: Int) {
         
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PostNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             if !cell.videoNode.isPlaying() {
                 
-                if cell.buttonsView != nil {
-                    
-                    if !cell.buttonsView.streamView.isHidden {
-                        
-                        cell.buttonsView.streamView.spin()
-                        
-                    }
-                    
-                }
                 
                 if let muteStatus = shouldMute {
                     
-                    if cell.sideButtonView != nil {
-                        
-                        if muteStatus {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        } else {
-                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                        }
-                    }
-                   
                     if muteStatus {
                         cell.videoNode.muted = true
                     } else {
@@ -1041,14 +938,6 @@ extension SelectedPostVC {
                     
                 } else {
                     
-                    if cell.sideButtonView != nil {
-                        
-                        if globalIsSound {
-                            cell.sideButtonView.soundBtn.setImage(unmuteImage, for: .normal)
-                        } else {
-                            cell.sideButtonView.soundBtn.setImage(muteImage, for: .normal)
-                        }
-                    }
                    
                     if globalIsSound {
                         cell.videoNode.muted = false

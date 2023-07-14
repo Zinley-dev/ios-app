@@ -13,6 +13,12 @@ import Alamofire
 import RxSwift
 
 class ContactUsVC: UIViewController, ControllerType {
+    
+    deinit {
+        print("ContactUsVC is being deallocated.")
+    }
+    
+    
     typealias ViewModelType = ContactUsViewModel
     
     let backButton: UIButton = UIButton(type: .custom)

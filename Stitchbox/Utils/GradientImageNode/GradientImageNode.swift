@@ -13,9 +13,17 @@ class GradientImageNode: ASDisplayNode {
     
     private let gradientLayer = CAGradientLayer()
     
+    override func didLoad() {
+        super.didLoad()
+        view.layer.cornerRadius = 25
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+        view.clipsToBounds = true
+    }
+    
     override func layout() {
         super.layout()
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.gradientLayer.frame = self.bounds
         }
         
@@ -40,7 +48,8 @@ class GradientImageNode: ASDisplayNode {
     }
 
     func updateGradient(with image: UIImage) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
             let smallImage = image.resize(targetSize: CGSize(width: 250, height: 250))
             let palette = Vibrant.from(smallImage).getPalette()
 

@@ -15,6 +15,10 @@ fileprivate let FontSize: CGFloat = 12
 
 class NotificationNode: ASCellNode {
     
+    deinit {
+        print("NotificationNode is being deallocated.")
+    }
+    
     weak var notification: UserNotificationModel!
     var upperTextNode: ASTextNode!
     var timeNode: ASTextNode!

@@ -17,16 +17,16 @@ extension UIColor{
     }
     
     class var navigationBarColor: UIColor{
-        return UIColor.background
+        return UIColor.black
     }
   
-  class var secondary: UIColor{
-    return UIColor(red: (254.0/255.0), green: (138.0/255.0), blue: (92.0/255.0), alpha: 1.0)
-  }
-  
-  class var tertiary: UIColor{
-      return white
-  }
+      class var secondary: UIColor{
+        return UIColor(red: (253.0/255.0), green: (159.0/255.0), blue: (126.0/255.0), alpha: 1.0)
+      }
+      
+      class var tertiary: UIColor{
+          return white
+      }
     
     class var disableButtonBackground: UIColor{
         return UIColor(red: (131.0/255.0), green: (134.0/255.0), blue: 139.0/255.0, alpha: 1.0)
@@ -54,7 +54,7 @@ extension UIColor{
           //            case .light:
           //                return UIColor(red: (255.0/255.0), green: (255.0/255.0), blue: (255.0/255.0), alpha: 1.0)
         default:
-          return UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
+          return .black
       }
     }
   }
@@ -68,7 +68,7 @@ extension UIColor{
           //            case .light:
           //                return UIColor(red: (53.0/255.0), green: (46.0/255.0), blue: (113.0/255.0), alpha: 1.0)
         default:
-          return UIColor(red: (233.0/255.0), green: (230.0/255.0), blue: 1.0, alpha: 1.0)
+          return .black
       }
     }
   }
@@ -80,7 +80,7 @@ extension UIColor{
           //                case .light:
           //                    return UIColor(red: (255.0/255.0), green: (255.0/255.0), blue: (255.0/255.0), alpha: 1.0)
         default:
-          return UIColor(red: (0.0/255.0), green: (0.0/255.0), blue: (0.0/255.0), alpha: 1.0)
+          return .black
       }
     }
     //    class var gradientColor: CGGradient {

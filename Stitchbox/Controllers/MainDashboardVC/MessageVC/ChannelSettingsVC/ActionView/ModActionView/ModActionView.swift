@@ -9,6 +9,9 @@ import UIKit
 
 class ModActionView: UIViewController{
     
+    deinit {
+        print("ModActionView is being deallocated.")
+    }
     
     @IBOutlet weak var promoteBtn: UIButton!
     @IBOutlet weak var muteBtn: UIButton!

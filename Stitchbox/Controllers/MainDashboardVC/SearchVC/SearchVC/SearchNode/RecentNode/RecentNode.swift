@@ -17,6 +17,10 @@ fileprivate let FontSize: CGFloat = 13
 
 class RecentNode: ASCellNode {
     
+    deinit {
+        print("RecentNode is being deallocated.")
+    }
+    
     weak var item: RecentModel!
 
     var upperNameNode: ASTextNode!

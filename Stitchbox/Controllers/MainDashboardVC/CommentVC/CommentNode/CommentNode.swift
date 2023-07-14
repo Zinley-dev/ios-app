@@ -232,7 +232,6 @@ class CommentNode: ASCellNode {
                                                      
         textNode.frame = CGRect(x: 0, y: 30, width: 30, height: 20)
        
-        
         let button = ASButtonNode()
         button.frame = CGRect(x: 0, y: 0, width: 30, height: 60)
         button.backgroundColor = UIColor.clear
@@ -364,7 +363,7 @@ class CommentNode: ASCellNode {
                 if checkIsLike {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal)
+                        self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
                     }
                     
                     
@@ -374,7 +373,7 @@ class CommentNode: ASCellNode {
                 } else {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
+                        self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
                     }
             
                 }
@@ -382,7 +381,7 @@ class CommentNode: ASCellNode {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
+                    self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
                 }
                 print(error)
             }
@@ -712,7 +711,7 @@ class CommentNode: ASCellNode {
                         
                         if let post = PostModel(JSON: data) {
                             
-                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ReelVC") as? ReelVC {
+                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
                                 
                                 if let vc = UIViewController.currentViewController() {
                                 
@@ -846,7 +845,7 @@ extension CommentNode {
     func likeComment() {
         
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal)
+            self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -874,7 +873,7 @@ extension CommentNode {
 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
+                    self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -901,7 +900,7 @@ extension CommentNode {
     func unlikeComment() {
         
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "likeEmpty")?.withRenderingMode(.alwaysOriginal)
+            self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -928,7 +927,7 @@ extension CommentNode {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "liked")?.withRenderingMode(.alwaysOriginal)
+                    self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()

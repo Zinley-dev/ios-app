@@ -17,6 +17,10 @@ fileprivate let FontSize: CGFloat = 12
 
 class BlockNode: ASCellNode {
     
+    deinit {
+        print("BlockNode is being deallocated.")
+    }
+    
     weak var user: BlockUserModel!
     
     var userNameNode: ASTextNode!

@@ -74,7 +74,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     
     lazy var autocompleteVC: AutocompeteViewController = {
         let vc = AutocompeteViewController()
-        searchResultContainerView.backgroundColor = UIColor.background
+        searchResultContainerView.backgroundColor = UIColor.black
         
         
         self.searchResultContainerView.addSubview(vc.view)
@@ -259,7 +259,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                 print(error.localizedDescription)
             }
             
-            loadingView.backgroundColor = self.view.backgroundColor
+            loadingView.backgroundColor = .black
             
         }
         
@@ -300,12 +300,6 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                     
                     if !update1.hasViewAppeared {
                         update1.PostSearchVC.viewWillAppear(true)
-                    }
-                    
-                } else if let update1 = vc as? ReelVC {
-                    
-                    if !update1.hasViewAppeared {
-                        update1.viewWillAppear(true)
                     }
                     
                 } else if let update1 = vc as? SelectedPostVC {
@@ -579,22 +573,39 @@ extension CommentVC {
         self.tableNode.leadingScreensForBatching = 20
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
-        self.tableNode.view.backgroundColor = self.view.backgroundColor
+        self.tableNode.view.backgroundColor = .black
         
     }
     
     func setupPlaceholder() {
         
-        cmtTxtView.delegate = self
-        placeholderLabel = UILabel()
-        placeholderLabel.text = "Add comment..."
-        placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
-        placeholderLabel.sizeToFit()
-        cmtTxtView.addSubview(placeholderLabel)
+        if post.setting?.allowComment == true {
+            cmtTxtView.delegate = self
+            placeholderLabel = UILabel()
+            placeholderLabel.text = "Add comment..."
+            placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
+            placeholderLabel.sizeToFit()
+            cmtTxtView.addSubview(placeholderLabel)
+            commentBtn.isEnabled = true
+            placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
+            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+            cmtTxtView.isUserInteractionEnabled = true
+        } else {
+            cmtTxtView.delegate = self
+            placeholderLabel = UILabel()
+            placeholderLabel.text = "Comments are turned off"
+            placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
+            placeholderLabel.sizeToFit()
+            cmtTxtView.addSubview(placeholderLabel)
+            cmtTxtView.isUserInteractionEnabled = false
+            commentBtn.isEnabled = false
+            placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
+            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+        }
         
-        placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
-        placeholderLabel.textColor = UIColor.white
-        placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+        
         
     }
     

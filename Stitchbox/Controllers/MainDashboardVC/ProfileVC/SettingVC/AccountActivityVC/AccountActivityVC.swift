@@ -11,6 +11,10 @@ import FLAnimatedImage
 
 class AccountActivityVC: UIViewController {
     
+    deinit {
+        print("AccountActivityVC is being deallocated.")
+    }
+    
     let backButton: UIButton = UIButton(type: .custom)
     
     var UserActivityList = [UserActivityModel]()

@@ -12,6 +12,10 @@ import SendBirdUIKit
 
 class FollowerVC: UIViewController {
     
+    deinit {
+        print("FollowerVC is being deallocated.")
+    }
+    
     //typealias ViewModelType = ProfileViewModel
     // MARK: - Properties
     private var currPage = 1
