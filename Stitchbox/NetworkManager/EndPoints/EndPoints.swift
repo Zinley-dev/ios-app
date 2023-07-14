@@ -1851,6 +1851,7 @@ public enum PostStitchApi {
   case accept(body: [String: Any])
   case denied(body: [String: Any])
   case getByRoot(rootId: String, page: Int)
+  case countStitchWaitList(rootId: String)
   case getMyStitch(page: Int)
   case getMyNonStitchPost(page: Int)
   case getMyWaitlist(page: Int)
@@ -1863,6 +1864,8 @@ extension PostStitchApi: EndPointType {
         return "/"
       case .getByRoot(let rootId, let page):
         return "/\(rootId)?page=\(page)"
+      case .countStitchWaitList(let rootId):
+        return "/\(rootId)/count-wait-list"
       case .unstitch:
         return "/un-stitch"
       case .accept:
@@ -1890,6 +1893,8 @@ extension PostStitchApi: EndPointType {
         return .post
       case .getByRoot:
         return .get
+      case .countStitchWaitList:
+        return .get
       case .unstitch:
         return .post
       case .accept:
@@ -1912,6 +1917,8 @@ extension PostStitchApi: EndPointType {
       case .stitch(let body):
         return .requestParameters(parameters: body)
       case .getByRoot:
+        return .request
+      case .countStitchWaitList:
         return .request
       case .unstitch(let body):
         return .requestParameters(parameters: body)
