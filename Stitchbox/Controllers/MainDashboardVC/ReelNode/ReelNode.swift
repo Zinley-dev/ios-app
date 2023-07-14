@@ -24,8 +24,9 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     deinit {
         print("ReelNode is being deallocated.")
     }
-
     
+    var allowProcess = true
+    var isFollowingUser = false
     var isSave = false
     var previousTimeStamp: TimeInterval = 0.0
     var totalWatchedTime: TimeInterval = 0.0
@@ -206,16 +207,30 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             if post.setting?.allowStitch == false {
                 self.headerView.createStitchView.isHidden = true
+                self.headerView.createStitchStack.isHidden = true
                 self.headerView.stichBtn.isHidden = true
             } else {
                 
                 if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
                     self.headerView.createStitchView.isHidden = true
+                    self.headerView.createStitchStack.isHidden = true
                     self.headerView.stichBtn.isHidden = true
                 } else {
                     self.headerView.createStitchView.isHidden = false
                     self.headerView.stichBtn.isHidden = false
+                    self.headerView.createStitchStack.isHidden = false
                 }
+            }
+            
+            if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
+                
+                self.headerView.followBtn.isHidden = true
+                
+            } else {
+                
+                checkIfFollow()
+                // check
+                
             }
             
             self.buttonsView = ButtonsHeader()
@@ -498,6 +513,141 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
         }
 
+    
+    func checkIfFollow() {
+        
+        APIManager.shared.isFollowing(uid: post.owner?.id ?? "") { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let isFollowing = apiResponse.body?["data"] as? Bool else {
+                    hideFollowBtn()
+                    return
+                }
+                
+                if isFollowing {
+                    hideFollowBtn()
+                   
+                    
+                } else {
+                    
+                    setupFollowBtn()
+                    
+                }
+                
+            case .failure(let error):
+                print(error)
+                hideFollowBtn()
+                
+            }
+        }
+        
+    }
+    
+    func setupFollowBtn() {
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.headerView.followBtn.isHidden = false
+            self.isFollowingUser = false
+            let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.followTap))
+            followTap.numberOfTapsRequired = 1
+            self.headerView.followBtn.addGestureRecognizer(followTap)
+            
+        }
+    }
+    
+    func followUser() {
+        
+        if let userId = post.owner?.id {
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.headerView.followBtn.setTitle("Following", for: .normal)
+            }
+            
+            
+            APIManager.shared.insertFollows(params: ["FollowId": userId]) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(_):
+                    
+                    
+                    self.isFollowingUser = true
+                    self.allowProcess = true
+                    
+                    
+                case .failure(_):
+                    
+                    DispatchQueue.main.async {
+                        self.allowProcess = true
+                        showNote(text: "Something happened!")
+                    }
+                    
+                    
+                    DispatchQueue.main.async {
+                        self.headerView.followBtn.setTitle("Follow", for: .normal)
+                    }
+                }
+                
+            }
+            
+        }
+        
+        
+        
+        
+    }
+    
+    func unfollowUser() {
+        
+        if let userId = post.owner?.id {
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.headerView.followBtn.setTitle("Follow", for: .normal)
+            }
+
+            APIManager.shared.unFollow(params: ["FollowId":userId]) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(_):
+                    self.isFollowingUser = false
+                    needRecount = true
+                    self.allowProcess = true
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        self.allowProcess = true
+                        showNote(text: "Something happened!")
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.headerView.followBtn.setTitle("Following", for: .normal)
+                    }
+                    
+                    
+                    
+                }
+            }
+            
+        }
+        
+        
+    }
+    
+    
+    
+    func hideFollowBtn() {
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.headerView.followBtn.isHidden = true
+            self.isFollowingUser = true
+        }
+        
+    }
     
     func setupHideContent() {
             
@@ -1252,6 +1402,24 @@ extension ReelNode {
          
     }
     
+    @objc func followTap() {
+        
+        if allowProcess {
+            self.allowProcess = false
+            if isFollowingUser {
+                
+                unfollowUser()
+                
+            } else {
+                
+                followUser()
+            }
+            
+        }
+         
+    }
+    
+    
     @objc func likeTapped() {
         
         if isLike == false {
@@ -1585,7 +1753,7 @@ extension ReelNode {
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
          
         setupSpace(constrainedSize: constrainedSize)
-        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 70)
+        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
@@ -1604,10 +1772,10 @@ extension ReelNode {
         
         verticalStack.children = [headerInsetSpec]
         
-        if post.content != "" || !post.hashtags.isEmpty {
+        if !post.content.isEmpty || post.hashtags.contains(where: { !$0.isEmpty }) {
             verticalStack.children?.append(contentInsetSpec)
         }
-    
+
         verticalStack.children?.append(buttonsInsetSpec)
        
                 

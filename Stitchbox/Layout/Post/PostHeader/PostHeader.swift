@@ -8,12 +8,13 @@
 import UIKit
 
 class PostHeader: UIView {
-    
-    
+
+    @IBOutlet weak var createStitchStack: UIStackView!
     @IBOutlet weak var createStitchView: UIView!
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet var stichBtn: UIButton!
     @IBOutlet var contentView: UIView!
+    @IBOutlet var followBtn: UIButton!
 
     let kCONTENT_XIB_NAME = "PostHeader"
     

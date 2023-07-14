@@ -502,7 +502,7 @@ extension AddStitchToExistingVC {
     
     @objc func onClickStitch(_ sender: AnyObject) {
         
-        print("onClickStitch")
+        swiftLoader(progress: "Stitching...")
         
         APIManager.shared.stitch(rootId: stitchedPost.id, memberId: selectedPost.id) { [weak self] result in
             guard let self = self else { return }
@@ -513,6 +513,7 @@ extension AddStitchToExistingVC {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     if let navigationController = self.navigationController {
+                        SwiftLoader.hide()
                         navigationController.popViewController(animated: true)
                         showNote(text: "Stitched successfully")
                     }
@@ -521,6 +522,7 @@ extension AddStitchToExistingVC {
             case .failure(let error):
                 DispatchQueue.main.async {
                     print(error)
+                    SwiftLoader.hide()
                     self.showErrorAlert("Oops!", msg: "Couldn't stitch now, please try again")
                 }
 

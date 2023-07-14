@@ -311,6 +311,7 @@ extension OriginalNode {
 
             switch result {
             case .success(let apiResponse):
+                print("StitchTo: \(apiResponse)")
                 guard let data = apiResponse.body?["data"] as? [String: Any],
                       let originalPost = PostModel(JSON: data) else {
                     print("Invalid data or PostModel initialization failed")
@@ -327,7 +328,7 @@ extension OriginalNode {
 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    print(error)
+                    print("StitchTo: error \(error)")
                 }
 
             }

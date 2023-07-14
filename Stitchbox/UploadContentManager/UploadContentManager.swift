@@ -100,7 +100,7 @@ class UploadContentManager {
         
 
         contentPost = ["content": selectedDescTxtView, "images": [imageUrl], "tags": [userUID], "hashtags": update_hashtaglist, "streamLink": global_fullLink]
-        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "isAllowStitch": isAllowStitch]
+        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "allowStitch": isAllowStitch]
         contentPost["metadata"] = ["width": origin_width, "height": origin_height, "length": length, "contentMode": 0]
        
        if stitchId != "" {
@@ -140,7 +140,7 @@ class UploadContentManager {
         
         
         contentPost = ["content": selectedDescTxtView, "video": videoData, "tags": [userUID], "streamLink": global_fullLink, "hashtags": hashtagList]
-        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "isAllowStitch": isAllowStitch]
+        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "isHashtaged": true, "isTitleGet": false, "languageCode": Locale.current.languageCode!, "mediaType": mediaType, "allowStitch": isAllowStitch]
         contentPost["metadata"] = ["width": origin_width, "height": origin_height, "length": length, "contentMode": 0]
         
         if stitchId != "" {

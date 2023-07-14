@@ -62,7 +62,7 @@ class OwnerPostSearchNode: ASCellNode {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         textNode.attributedText = NSAttributedString(
-            string: "10 Stitches",
+            string: "",
             attributes: [
                 NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: FontSize),
                 NSAttributedString.Key.foregroundColor: UIColor.white,
