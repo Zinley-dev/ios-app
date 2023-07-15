@@ -337,81 +337,41 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
     
     func setupDefaultContent() {
-            
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = .left
-            
-            headerNode.backgroundColor = UIColor.clear
-           
-            let hashtagsText = post.hashtags.joined(separator: " ")
-            
-            if post.content == "" {
-                
-                if hashtagsText.count > maximumShowing, hashtagsText.count - maximumShowing >= 20 {
-                    
-                    let truncatedContent = hashtagsText.count <= maximumShowing ? hashtagsText : String(hashtagsText.prefix(maximumShowing))
-                    
-                    
-                    self.contentNode.attributedText = NSAttributedString(string: truncatedContent + " ..." + " *more", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-                    setNeedsLayout()
-                    layoutIfNeeded()
 
-                    label.attributedText = self.contentNode.attributedText
-                    self.label.removeFromSuperview()
-                    addActiveLabel()
-                   
-                } else {
-                        
-                    self.contentNode.attributedText = NSAttributedString(string: hashtagsText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-                    setNeedsLayout()
-                    layoutIfNeeded()
+        headerNode.backgroundColor = UIColor.clear
 
-                    label.attributedText = self.contentNode.attributedText
-                    self.label.removeFromSuperview()
-                    addActiveLabel()
-                  
-                }
-                
-                
-                
-            } else {
-                
-                let finalText = post.content + " " + hashtagsText
-                
-                let truncatedContent = finalText.count <= maximumShowing ? finalText : String(finalText.prefix(maximumShowing))
-                
-                if finalText.count > maximumShowing, finalText.count - maximumShowing >= 20 {
-                    
-                    
-                    
-                    self.contentNode.attributedText = NSAttributedString(string: truncatedContent + " ..." + " *more", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-                    setNeedsLayout()
-                    layoutIfNeeded()
-
-                    label.attributedText = self.contentNode.attributedText
-                    self.label.removeFromSuperview()
-                    addActiveLabel()
-                } else {
-                    
-                    
-                    
-                    
-                    self.contentNode.attributedText = NSAttributedString(string: finalText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-                    setNeedsLayout()
-                    layoutIfNeeded()
-
-                    label.attributedText = self.contentNode.attributedText
-                    self.label.removeFromSuperview()
-                    addActiveLabel()
-                    
-                }
-                
-                
-                
-            }
-            
-            
+        let hashtagsText = post.hashtags.joined(separator: " ")
+        let finalText = post.content + " " + hashtagsText
+        var truncatedText: String
+        
+        if post.content == "" {
+            truncatedText = truncateTextIfNeeded(hashtagsText)
+        } else {
+            truncatedText = truncateTextIfNeeded(finalText)
         }
+        
+        self.contentNode.attributedText = NSAttributedString(string: truncatedText, attributes: [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+            NSAttributedString.Key.foregroundColor: UIColor.white
+        ])
+        
+        setNeedsLayout()
+        layoutIfNeeded()
+
+        label.attributedText = self.contentNode.attributedText
+        self.label.removeFromSuperview()
+        addActiveLabel()
+    }
+
+    private func truncateTextIfNeeded(_ text: String) -> String {
+        if text.count > maximumShowing, text.count - maximumShowing >= 20 {
+            return String(text.prefix(maximumShowing)) + " ..." + " *more"
+        } else {
+            return text
+        }
+    }
+
+
 
     
     func checkIfFollow() {
@@ -550,80 +510,40 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
     
     func setupHideContent() {
-            
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = .left
-            
-            headerNode.backgroundColor = UIColor.clear
-           
-            let hashtagsText = post.hashtags.joined(separator: " ")
-            
-            if post.content == "" {
-                
-                if hashtagsText.count > maximumShowing {
-                    
-                    
-                  
-                    
-                    self.contentNode.attributedText = NSAttributedString(string: hashtagsText + " *hide", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-                    setNeedsLayout()
-                    layoutIfNeeded()
+        
+        headerNode.backgroundColor = UIColor.clear
+        
+        let hashtagsText = post.hashtags.joined(separator: " ")
+        let finalText = post.content + " " + hashtagsText
+        var contentText: String
 
-                    label.attributedText = self.contentNode.attributedText
-                    self.label.removeFromSuperview()
-                    addActiveLabel()
-                    
-                    
-                } else {
-                    
-                    
-                    self.contentNode.attributedText = NSAttributedString(string: hashtagsText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-                    setNeedsLayout()
-                    layoutIfNeeded()
-
-                    label.attributedText = self.contentNode.attributedText
-                    self.label.removeFromSuperview()
-                    addActiveLabel()
-                    
-                }
-                
-                
-                
-            } else {
-                
-                let finalText = post.content + " " + hashtagsText
-                
-                if finalText.count > maximumShowing {
-                    
-                    
-                   
-                    self.contentNode.attributedText = NSAttributedString(string: finalText + " *hide", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-                    setNeedsLayout()
-                    layoutIfNeeded()
-
-                    label.attributedText = self.contentNode.attributedText
-                    self.label.removeFromSuperview()
-                    addActiveLabel()
-                   
-                } else {
-                    
-                    
-                   
-                    self.contentNode.attributedText = NSAttributedString(string: finalText, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),NSAttributedString.Key.foregroundColor: UIColor.white])
-                    setNeedsLayout()
-                    layoutIfNeeded()
-
-                    label.attributedText = self.contentNode.attributedText
-                    self.label.removeFromSuperview()
-                    addActiveLabel()
-                    
-                }
-                
-                
-                
-            }
-            
+        if post.content == "" {
+            contentText = processTextForHiding(hashtagsText)
+        } else {
+            contentText = processTextForHiding(finalText)
         }
+        
+        self.contentNode.attributedText = NSAttributedString(string: contentText, attributes: [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+            NSAttributedString.Key.foregroundColor: UIColor.white
+        ])
+        
+        setNeedsLayout()
+        layoutIfNeeded()
+
+        label.attributedText = self.contentNode.attributedText
+        self.label.removeFromSuperview()
+        addActiveLabel()
+    }
+
+    private func processTextForHiding(_ text: String) -> String {
+        if text.count > maximumShowing {
+            return text + " *hide"
+        } else {
+            return text
+        }
+    }
+
 
 
     
