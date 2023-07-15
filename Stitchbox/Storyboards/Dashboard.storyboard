@@ -3579,7 +3579,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LXZ-FB-Sxr">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LXZ-FB-Sxr">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="728"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -3589,7 +3589,7 @@
                                 <color key="maximumTrackTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </slider>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mwn-u2-yvV">
+                            <view hidden="YES" alpha="0.60000002384185802" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mwn-u2-yvV">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="730"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -3629,6 +3629,79 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ysu-ml-KY1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5676" y="3082.7586206896553"/>
+        </scene>
+        <!--PendingVC-->
+        <scene sceneID="3FM-Bf-bbx">
+            <objects>
+                <viewController storyboardIdentifier="PendingVC" id="s9N-i0-HCL" customClass="PendingVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="e6B-Yl-ZnD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sb9-aI-gv8">
+                                <rect key="frame" x="0.0" y="82" width="375" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="IRa-On-PkO"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wait list" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2e-sG-Z7p">
+                                <rect key="frame" x="16" y="226" width="59" height="18"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F6i-zW-85a">
+                                <rect key="frame" x="0.0" y="260" width="375" height="518"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nca-DT-SBo">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Rvf-ts-QBl" customClass="FLAnimatedImageView">
+                                        <rect key="frame" x="150" y="368.66666666666669" width="75" height="75"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="75" id="Mtb-ld-QI7"/>
+                                            <constraint firstAttribute="height" constant="75" id="Z6v-fr-NdK"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="Rvf-ts-QBl" firstAttribute="centerY" secondItem="Nca-DT-SBo" secondAttribute="centerY" id="150-nM-xro"/>
+                                    <constraint firstItem="Rvf-ts-QBl" firstAttribute="centerX" secondItem="Nca-DT-SBo" secondAttribute="centerX" id="cph-bS-Wi2"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ebU-kP-02a"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ebU-kP-02a" firstAttribute="trailing" secondItem="F6i-zW-85a" secondAttribute="trailing" id="GOM-2P-epN"/>
+                            <constraint firstItem="Nca-DT-SBo" firstAttribute="top" secondItem="e6B-Yl-ZnD" secondAttribute="top" id="GrH-2V-Mey"/>
+                            <constraint firstItem="F6i-zW-85a" firstAttribute="leading" secondItem="ebU-kP-02a" secondAttribute="leading" id="LNA-sb-VIe"/>
+                            <constraint firstAttribute="bottom" secondItem="Nca-DT-SBo" secondAttribute="bottom" id="LrQ-mo-FI7"/>
+                            <constraint firstItem="F6i-zW-85a" firstAttribute="top" secondItem="o2e-sG-Z7p" secondAttribute="bottom" constant="16" id="Oa8-ka-702"/>
+                            <constraint firstItem="ebU-kP-02a" firstAttribute="bottom" secondItem="F6i-zW-85a" secondAttribute="bottom" id="PAZ-nN-T5Z"/>
+                            <constraint firstItem="sb9-aI-gv8" firstAttribute="top" secondItem="ebU-kP-02a" secondAttribute="top" constant="32" id="YQv-Qf-irE"/>
+                            <constraint firstItem="Nca-DT-SBo" firstAttribute="leading" secondItem="ebU-kP-02a" secondAttribute="leading" id="hkl-mw-VlT"/>
+                            <constraint firstItem="o2e-sG-Z7p" firstAttribute="top" secondItem="sb9-aI-gv8" secondAttribute="bottom" constant="16" id="nKx-IJ-2VE"/>
+                            <constraint firstItem="ebU-kP-02a" firstAttribute="trailing" secondItem="sb9-aI-gv8" secondAttribute="trailing" id="sM8-D1-lnB"/>
+                            <constraint firstItem="Nca-DT-SBo" firstAttribute="trailing" secondItem="ebU-kP-02a" secondAttribute="trailing" id="sQJ-xk-EAA"/>
+                            <constraint firstItem="sb9-aI-gv8" firstAttribute="leading" secondItem="ebU-kP-02a" secondAttribute="leading" id="wiG-n2-DrT"/>
+                            <constraint firstItem="o2e-sG-Z7p" firstAttribute="leading" secondItem="ebU-kP-02a" secondAttribute="leading" constant="16" id="yoA-JD-3mT"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="F6i-zW-85a" id="ZX9-Kc-W0N"/>
+                        <outlet property="loadingImage" destination="Rvf-ts-QBl" id="LK9-sQ-hfH"/>
+                        <outlet property="loadingView" destination="Nca-DT-SBo" id="AOz-hM-RaU"/>
+                        <outlet property="pendingView" destination="sb9-aI-gv8" id="vTL-3x-nuq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qFm-wD-Qc9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5676" y="3782.5123152709361"/>
         </scene>
         <!--Create ChannelVC-->
         <scene sceneID="se9-Bu-6kn">
@@ -3929,14 +4002,10 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" translucent="NO" id="tZV-8n-n2f">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" name="Tertiary"/>
-                        <color key="selectedImageTintColor" name="Tertiary"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <tabBarAppearance key="standardAppearance">
-                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                            <color key="shadowColor" name="Tertiary"/>
-                            <color key="selectionIndicatorTintColor" name="Tertiary"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tabBarAppearance>
                     </tabBar>
                     <connections>

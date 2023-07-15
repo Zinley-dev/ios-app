@@ -72,6 +72,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         self.refreshControl?.tintColor = .secondary
         self.groupChannelsTableView.addSubview(self.refreshControl!)
         
+        
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -98,6 +100,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
           }
         
     }
+    
+    
     
     
     // MARK: - Gesture Recognizers

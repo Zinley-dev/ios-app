@@ -35,7 +35,7 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
         setupButtons()
         setupCollectionNode()
         setupNavBar()
-        
+        blurView.isHidden = true
         delay(0.05) { [weak self] in
             guard let self = self else { return }
             self.loadPosts()

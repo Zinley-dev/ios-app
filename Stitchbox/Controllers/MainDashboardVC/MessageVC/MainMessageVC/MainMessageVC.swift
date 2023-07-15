@@ -34,7 +34,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         
         if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "InboxViewController") as? InboxVC {
-                    
+            
             self.addVCAsChildVC(childViewController: controller)
             
             return controller
@@ -45,22 +45,17 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-    
-        
-        setupInboxBtn()
+
         settingUpLayoutNavView()
         checkCallForLayout()
         setupSearchController()
         
         // default load for 2 child views
-        
+   
         InboxVC.view.isHidden = false
-        
         
         NotificationCenter.default.addObserver(self, selector: #selector(MainMessageVC.checkCallForLayout), name: (NSNotification.Name(rawValue: "checkCallForLayout")), object: nil)
         
@@ -69,7 +64,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
                     navigationController.navigationBar.prefersLargeTitles = false
                     navigationController.navigationBar.isTranslucent = false
                 }
-        
+         
     }
 
     
@@ -77,9 +72,10 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         super.viewWillAppear(animated)
 
         // tabbar
+        
         showMiddleBtn(vc: self)
         checkCallForLayout()
-        
+       
     
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -95,7 +91,9 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         }
 
         tabBar.isHidden = false
+         
     }
+    
     
     func setupSearchController() {
         self.searchController = UISearchController(searchResultsController: nil)
@@ -111,6 +109,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         self.searchController?.searchBar.isUserInteractionEnabled = true
         self.navigationItem.searchController = nil
         self.searchController?.searchBar.isHidden = true
+        self.searchController?.searchBar.text = ""
     }
  
 
@@ -277,27 +276,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
        
     }
-    
-    // Buttons controll
-    
-    func setupInboxBtn() {
-        
-        inboxBtn.setTitleColor(UIColor.white, for: .normal)
-        requestBtn.setTitleColor(UIColor.lightGray, for: .normal)
-        
-        
-        inboxBtn.backgroundColor = UIColor.primary
-        requestBtn.backgroundColor = UIColor.clear
-        
-        
-        InboxVC.view.isHidden = false
-       
-        
-        
-        self.searchController?.searchBar.text = ""
-        
-        
-    }
+
     
     func setupRequestBtn() {
         
@@ -318,13 +297,13 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     @IBAction func InboxBtnPressed(_ sender: Any) {
         
-        setupInboxBtn()
+       
         
     }
     
     @IBAction func requestBtnPressed(_ sender: Any) {
         
-        setupRequestBtn()
+       
         
     }
     

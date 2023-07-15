@@ -220,7 +220,7 @@ class ProfileViewController: UIViewController {
         
         let pendingButton = UIButton(type: .custom)
         pendingButton.setImage(UIImage(named: "pending-actions-icon-original"), for: [])
-        pendingButton.addTarget(self, action: #selector(saveTapped(_:)), for: .touchUpInside)
+        pendingButton.addTarget(self, action: #selector(pendingTapped(_:)), for: .touchUpInside)
         pendingButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let pendingBarButton = UIBarButtonItem(customView: pendingButton)
         
@@ -408,6 +408,20 @@ extension ProfileViewController {
             SVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
             self.navigationController?.pushViewController(SVC, animated: true)
+            
+        }
+        
+    }
+    
+    
+    
+    @objc func pendingTapped(_ sender: UIButton) {
+        
+        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PendingVC") as? PendingVC {
+            
+            PVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(PVC, animated: true)
             
         }
         

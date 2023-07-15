@@ -65,6 +65,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         // Do any additional setup after loading the view
         setupNavBar()
+        setupTabBar()
         syncSendbirdAccount()
         IAPManager.shared.configure()
         setupButtons()
@@ -142,11 +143,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         setupNavBar()
+        setupTabBar()
         checkNotification()
         showMiddleBtn(vc: self)
         loadFeed()
@@ -217,6 +218,18 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
         }
         
+        
+    }
+    
+    
+    func setupTabBar() {
+        
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = .black
+        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .black
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .black
+        self.tabBarController?.tabBar.standardAppearance = tabBarAppearance
         
     }
     
