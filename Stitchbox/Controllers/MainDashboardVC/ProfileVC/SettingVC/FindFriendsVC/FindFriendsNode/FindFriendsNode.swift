@@ -18,7 +18,7 @@ fileprivate let FontSize: CGFloat = 13
 
 class FindFriendsNode: ASCellNode {
     
-    weak var user: FindFriendsModel!
+    var user: FindFriendsModel!
     var followAction : ((ASCellNode) -> Void)?
     lazy var delayItem = workItem()
     var attemptCount = 0

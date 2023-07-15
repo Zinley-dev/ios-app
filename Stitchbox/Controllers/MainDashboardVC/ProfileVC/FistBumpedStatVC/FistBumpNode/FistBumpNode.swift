@@ -17,7 +17,7 @@ fileprivate let FontSize: CGFloat = 12
 
 class FistBumpNode: ASCellNode {
     
-    weak var user: FistBumpUserModel!
+    var user: FistBumpUserModel!
     var UnFistBumpAction : (() -> Void)?
     var FollowAction : (() -> Void)?
     var UnfollowAction : (() -> Void)?

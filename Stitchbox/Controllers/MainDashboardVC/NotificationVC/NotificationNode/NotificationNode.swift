@@ -19,7 +19,7 @@ class NotificationNode: ASCellNode {
         print("NotificationNode is being deallocated.")
     }
     
-    weak var notification: UserNotificationModel!
+    var notification: UserNotificationModel!
     var upperTextNode: ASTextNode!
     var timeNode: ASTextNode!
     var imageNode: ASNetworkImageNode!

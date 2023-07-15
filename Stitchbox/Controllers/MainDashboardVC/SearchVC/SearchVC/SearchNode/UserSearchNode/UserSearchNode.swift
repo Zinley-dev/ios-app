@@ -20,7 +20,7 @@ class UserSearchNode: ASCellNode {
         print("UserSearchNode is being deallocated.")
     }
     
-    weak var user: UserSearchModel!
+    var user: UserSearchModel!
 
     var userNameNode: ASTextNode!
     var gameNode: ASDisplayNode!

@@ -20,7 +20,7 @@ class FollowNode: ASCellNode {
         print("FollowNode is being deallocated.")
     }
     
-    weak var user: FollowModel!
+    var user: FollowModel!
     var followAction : ((FollowNode) -> Void)?
     lazy var delayItem = workItem()
     var attemptCount = 0

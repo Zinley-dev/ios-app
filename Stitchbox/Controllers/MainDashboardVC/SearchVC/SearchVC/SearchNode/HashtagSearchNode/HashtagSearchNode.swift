@@ -21,7 +21,7 @@ class HashTagSearchNode: ASCellNode {
         print("HashTagSearchNode is being deallocated.")
     }
     
-    weak var hashtag: HashtagsModel!
+    var hashtag: HashtagsModel!
 
     var hashtagTextNode: ASTextNode!
     var hashtagSymbolImg: ASTextNode!

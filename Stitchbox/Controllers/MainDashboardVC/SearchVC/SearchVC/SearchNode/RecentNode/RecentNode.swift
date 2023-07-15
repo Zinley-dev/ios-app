@@ -21,7 +21,7 @@ class RecentNode: ASCellNode {
         print("RecentNode is being deallocated.")
     }
     
-    weak var item: RecentModel!
+    var item: RecentModel!
 
     var upperNameNode: ASTextNode!
     var belowNameNode: ASTextNode!

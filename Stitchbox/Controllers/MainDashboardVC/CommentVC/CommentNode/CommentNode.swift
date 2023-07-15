@@ -21,7 +21,7 @@ class CommentNode: ASCellNode {
     var replyUsername = ""
     var finalText: NSAttributedString!
     var replyUID = ""
-    weak var post: CommentModel!
+    var post: CommentModel!
     var count = 0
     var userNameNode: ASTextNode!
     var cmtNode: ASTextNode!

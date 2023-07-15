@@ -15,7 +15,7 @@ import SendBirdCalls
 
 class GroupNode: ASCellNode {
     
-    weak var participant: Participant!
+    var participant: Participant!
     
     var AvatarNode: ASNetworkImageNode!
     var nameNode: ASTextNode!

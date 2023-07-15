@@ -35,8 +35,16 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
-    var collectionNode: ASCollectionNode
-    weak var post: PostModel!
+    lazy var collectionNode: ASCollectionNode = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 0.0
+        flowLayout.scrollDirection = .horizontal
+        let node = ASCollectionNode(collectionViewLayout: flowLayout)
+        // Perform any additional setup here.
+        return node
+    }()
+
+    var post: PostModel!
     var currentIndex: Int?
     var isVideoPlaying = false
     var newPlayingIndex: Int?
@@ -51,13 +59,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             posts.append(post)
         }
 
-    
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 0.0
-        flowLayout.scrollDirection = .horizontal
-        self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        // Set the data source and delegate
-       
+
         
         super.init()
        

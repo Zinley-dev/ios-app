@@ -21,7 +21,7 @@ class BlockNode: ASCellNode {
         print("BlockNode is being deallocated.")
     }
     
-    weak var user: BlockUserModel!
+    var user: BlockUserModel!
     
     var userNameNode: ASTextNode!
     var nameNode: ASTextNode!
