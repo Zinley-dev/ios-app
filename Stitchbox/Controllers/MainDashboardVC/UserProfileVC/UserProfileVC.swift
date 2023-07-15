@@ -161,7 +161,7 @@ class UserProfileVC: UIViewController {
                     
                     // display username
                     if let username = data.userName, username != "" {
-                        cell.usernameLbl.text = username
+                        cell.usernameLbl.text = "@\(username)"
                         
                         get_username = username
                     }

@@ -990,6 +990,17 @@ class CustomSlider: UISlider {
                 update1.timeLbl.isHidden = false
                 update1.blurView.isHidden = false
                 
+            } else if let update1 = vc as? PreviewVC {
+                
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+                
+                
             }
             
         }
@@ -1043,6 +1054,23 @@ class CustomSlider: UISlider {
                 
                 update1.timeLbl.isHidden = true
                 update1.blurView.isHidden = true
+                
+            } else if let update1 = vc as? PreviewVC {
+                
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+                    
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+                
                 
             }
             

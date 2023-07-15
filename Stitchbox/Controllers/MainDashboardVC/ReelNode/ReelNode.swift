@@ -895,8 +895,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
     
     func getVideoURLForRedundant_stream(post: PostModel) -> URL? {
-        
-        
+    
         if post.muxPlaybackId != "" {
             
             let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8"
@@ -907,7 +906,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             return nil
         }
 
-       
     }
     
     func setVideoProgress(rate: Float, currentTime: TimeInterval, maxDuration: CMTime) {
@@ -915,6 +913,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             if let update1 = vc as? FeedViewController {
                 updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.playTimeBar)
             } else if let update1 = vc as? SelectedPostVC {
+                updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.playTimeBar)
+            } else if let update1 = vc as? PreviewVC {
                 updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.playTimeBar)
             }
         }
@@ -944,8 +944,14 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 extension ReelNode {
     
     func didTap(_ videoNode: ASVideoNode) {
-        soundBtn?(self)
-        //soundProcess()
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is PreviewVC {
+                soundProcess()
+            } else {
+                soundBtn?(self)
+            }
+        }
     }
     
     

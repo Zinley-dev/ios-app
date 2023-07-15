@@ -98,9 +98,9 @@ class PostVC: UIViewController {
     func setupNavBar() {
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
         
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -252,9 +252,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .white
-        followLbl.textColor = .white
-        onlyMeLbl.textColor = .white
+        publicLbl.textColor = .black
+        followLbl.textColor = .black
+        onlyMeLbl.textColor = .black
         
     }
     
@@ -267,9 +267,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .white
-        followLbl.textColor = .white
-        onlyMeLbl.textColor = .white
+        publicLbl.textColor = .black
+        followLbl.textColor = .black
+        onlyMeLbl.textColor = .black
     }
     
     @IBAction func privateBtnPressed(_ sender: Any) {
@@ -281,9 +281,9 @@ class PostVC: UIViewController {
         privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
         
         
-        publicLbl.textColor = .white
-        followLbl.textColor = .white
-        onlyMeLbl.textColor = .white
+        publicLbl.textColor = .black
+        followLbl.textColor = .black
+        onlyMeLbl.textColor = .black
         
         
     }
@@ -297,7 +297,7 @@ class PostVC: UIViewController {
     
     @IBAction func stitchBtnPressed(_ sender: Any) {
         
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PreviewVC") as? PreviewVC {
             
             SPVC.selectedPost = [stitchPost]
             SPVC.startIndex = 0
@@ -377,9 +377,9 @@ extension PostVC {
                                 self.followingBtn.setImage(UIImage(named: "following"), for: .normal)
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
-                                self.publicLbl.textColor = .white
-                                self.followLbl.textColor = .white
-                                self.onlyMeLbl.textColor = .white
+                                self.publicLbl.textColor = .black
+                                self.followLbl.textColor = .black
+                                self.onlyMeLbl.textColor = .black
                                 
                             }
    
@@ -393,9 +393,9 @@ extension PostVC {
                                 self.followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
-                                self.publicLbl.textColor = .white
-                                self.followLbl.textColor = .white
-                                self.onlyMeLbl.textColor = .white
+                                self.publicLbl.textColor = .black
+                                self.followLbl.textColor = .black
+                                self.onlyMeLbl.textColor = .black
                                 
                             }
                             
@@ -411,9 +411,9 @@ extension PostVC {
                                 self.privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
                                         
                                         
-                                self.publicLbl.textColor = .white
-                                self.followLbl.textColor = .white
-                                self.onlyMeLbl.textColor = .white
+                                self.publicLbl.textColor = .black
+                                self.followLbl.textColor = .black
+                                self.onlyMeLbl.textColor = .black
                                 
                             }
                             
@@ -579,9 +579,9 @@ extension PostVC {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .white
-        followLbl.textColor = .white
-        onlyMeLbl.textColor = .white
+        publicLbl.textColor = .black
+        followLbl.textColor = .black
+        onlyMeLbl.textColor = .black
         
     }
     
@@ -599,12 +599,12 @@ extension PostVC {
         //createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
         createButton.setTitle("Post", for: .normal)
-        createButton.setTitleColor(.lightGray, for: .normal)
+        createButton.setTitleColor(.black, for: .normal)
         createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
-        createButton.backgroundColor = .disableButtonBackground
+        createButton.backgroundColor = .lightGray
         createButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
         customView.addSubview(createButton)
@@ -624,12 +624,12 @@ extension PostVC {
         createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
         createButton.setTitle("Post", for: .normal)
-        createButton.setTitleColor(.primary, for: .normal)
+        createButton.setTitleColor(.white, for: .normal)
         createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
-        createButton.backgroundColor = .white
+        createButton.backgroundColor = .red
         createButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
         customView.addSubview(createButton)

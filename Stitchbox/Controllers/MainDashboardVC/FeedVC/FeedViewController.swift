@@ -724,7 +724,7 @@ extension FeedViewController: ASCollectionDataSource {
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 
-                self.cleanupPosts(collectionNode: collectionNode)
+                
                 
                 context.completeBatchFetching(true)
             }
@@ -732,30 +732,6 @@ extension FeedViewController: ASCollectionDataSource {
             context.completeBatchFetching(true)
         }
     }
-
-    private func cleanupPosts(collectionNode: ASCollectionNode) {
-        /*
-        let postThreshold = 100
-        let postsToRemove = 50
-        let startIndex = 15
-
-        if self.posts.count > postThreshold {
-            // check if we have enough posts to remove
-            if (startIndex + postsToRemove) <= self.posts.count {
-                // remove the posts from startIndex to startIndex + postsToRemove
-                self.posts.removeSubrange(startIndex..<(startIndex + postsToRemove))
-
-                // generate the index paths for old posts
-                let indexPathsToRemove = Array(startIndex..<(startIndex + postsToRemove)).map { IndexPath(row: $0, section: 0) }
-
-                // delete the old posts from collectionNode
-                collectionNode.performBatchUpdates({
-                    collectionNode.deleteItems(at: indexPathsToRemove)
-                }, completion: nil)
-            }
-        } */
-    }
-
 
     
 }

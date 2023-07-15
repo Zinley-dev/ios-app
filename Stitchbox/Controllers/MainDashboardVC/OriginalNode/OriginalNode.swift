@@ -351,8 +351,6 @@ extension OriginalNode {
                 
                 if !data.isEmpty {
                     
-                    print(data)
-                    
                     if let post = PostModel(JSON: data) {
                         
                         print(post.id, post.content)
@@ -360,15 +358,6 @@ extension OriginalNode {
                     }
                 }
                 
-                
-                /*
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.posts.insert(originalPost, at: 0)
-                    self.collectionNode.insertItems(at: [IndexPath(item: 0, section: 0)])
-                    self.selectPostCollectionView.collectionView.reloadData()
-                }*/
-
             case .failure(let error):
                 DispatchQueue.main.async {
                     print("StitchTo: error \(error)")
