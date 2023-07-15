@@ -50,10 +50,6 @@ class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayou
         setupCollectionNode()
         setupStitch()
         
-        
-
-    
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

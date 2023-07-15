@@ -185,9 +185,9 @@ class ProfileViewController: UIViewController {
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
         
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -206,16 +206,23 @@ class ProfileViewController: UIViewController {
     func setupSettingButton() {
         
         let settingButton = UIButton(type: .custom)
-        settingButton.setImage(UIImage.init(named: "profile_setting")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
+        settingButton.setImage(UIImage.init(named: "settings black")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
         settingButton.addTarget(self, action: #selector(settingTapped(_:)), for: .touchUpInside)
         settingButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let settingButtonBar = UIBarButtonItem(customView: settingButton)
         
         let saveButton = UIButton(type: .custom)
-        saveButton.setImage(UIImage(named: "saved.filled"), for: [])
+        saveButton.setImage(UIImage(named: "save-black"), for: [])
         saveButton.addTarget(self, action: #selector(saveTapped(_:)), for: .touchUpInside)
         saveButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let saveBarButton = UIBarButtonItem(customView: saveButton)
+        
+        
+        let pendingButton = UIButton(type: .custom)
+        pendingButton.setImage(UIImage(named: "pending-actions-icon-original"), for: [])
+        pendingButton.addTarget(self, action: #selector(saveTapped(_:)), for: .touchUpInside)
+        pendingButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let pendingBarButton = UIBarButtonItem(customView: pendingButton)
         
         
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
@@ -224,6 +231,7 @@ class ProfileViewController: UIViewController {
         
         //let promotionBarButton = self.createPromotionButton()
         self.navigationItem.rightBarButtonItems = [settingButtonBar, fixedSpace, saveBarButton]
+        self.navigationItem.leftBarButtonItems = [pendingBarButton]
     
     }
     

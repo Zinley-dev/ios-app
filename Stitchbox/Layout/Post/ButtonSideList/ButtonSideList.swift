@@ -13,7 +13,7 @@ class ButtonSideList: UIView {
     @IBOutlet weak var viewStitchBtn: UIButton!
     @IBOutlet weak var stitchCount: UILabel!
    
-    
+    @IBOutlet weak var statusImg: UIImageView!
 
     let kCONTENT_XIB_NAME = "ButtonSideList"
     

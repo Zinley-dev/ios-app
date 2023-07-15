@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ButtonSideList" customModule="Stitchbox" customModuleProvider="target">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="HuV-ZM-cpb"/>
+                <outlet property="statusImg" destination="MFl-7s-crM" id="eFe-gA-nwg"/>
                 <outlet property="stitchCount" destination="Bgh-n1-z5Z" id="Zxw-AS-8I1"/>
                 <outlet property="viewStitchBtn" destination="dqo-Lv-Gj7" id="jB3-Ek-TIJ"/>
             </connections>
@@ -24,6 +25,13 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3Ez-1G-1gB">
                     <rect key="frame" x="140" y="69" width="55" height="55"/>
                     <subviews>
+                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star white" translatesAutoresizingMaskIntoConstraints="NO" id="MFl-7s-crM">
+                            <rect key="frame" x="10" y="0.0" width="35" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="LBv-Jc-7GT"/>
+                                <constraint firstAttribute="width" constant="35" id="z1T-NN-ync"/>
+                            </constraints>
+                        </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7iW-rQ-Yzm">
                             <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
                             <subviews>
@@ -87,6 +95,7 @@
         </view>
     </objects>
     <resources>
+        <image name="star white" width="36" height="36"/>
         <image name="stitch list" width="54" height="54"/>
     </resources>
 </document>

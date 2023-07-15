@@ -65,6 +65,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
@@ -555,10 +556,6 @@ extension SelectedPostVC {
         }
         
         
-        
-        
-        
-        
     }
     
     @objc func onClickEdit(_ sender: AnyObject) {
@@ -665,8 +662,7 @@ extension SelectedPostVC {
     }
     
     func downloadVideo(url: String, id: String) {
-        
-        
+         
         AF.request(url).downloadProgress(closure : { (progress) in
             
             self.swiftLoader(progress: "\(String(format:"%.2f", Float(progress.fractionCompleted) * 100))%")
@@ -692,8 +688,8 @@ extension SelectedPostVC {
                 }) { saved, error in
                     
                     
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
+                    DispatchQueue.main.async {
+                        
                         SwiftLoader.hide()
                     }
                     
@@ -837,16 +833,9 @@ extension SelectedPostVC {
                         navigationController?.popViewController(animated: true)
                     }
                 } else {
+                    
                     collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                    //reloadAllCurrentHashtag()
-                    
-                    delay(0.75) { [weak self] in
-                        guard let self = self else { return }
-                        if indexPath < self.posts.count {
-                            self.playVideo(index: indexPath)
-                        }
-                    }
-                    
+ 
                 }
             }
             

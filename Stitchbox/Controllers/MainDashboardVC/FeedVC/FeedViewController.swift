@@ -103,6 +103,14 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
         
         
         if let tabBarController = self.tabBarController {
@@ -562,34 +570,36 @@ extension FeedViewController {
 
 
 extension FeedViewController {
-    
-
 
     func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
         
         if isfirstLoad {
             isfirstLoad = false
             
-            if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: 0, section: 0)) as? OriginalNode {
+            if !posts.isEmpty {
                 
-                if !currentCell.posts[0].muxPlaybackId.isEmpty {
-                    currentIndex = 0
-                    newPlayingIndex = 0
-                    currentCell.currentIndex = 0
-                    currentCell.newPlayingIndex = 0
+                if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: 0, section: 0)) as? OriginalNode {
                     
-                    currentCell.isVideoPlaying = true
-                    
-                    delay(0.25) { [weak self] in
-                        guard let self = self else { return }
-                        currentCell.playVideo(index: 0)
+                    if !currentCell.posts[0].muxPlaybackId.isEmpty {
+                        currentIndex = 0
+                        newPlayingIndex = 0
+                        currentCell.currentIndex = 0
+                        currentCell.newPlayingIndex = 0
+                        
+                        currentCell.isVideoPlaying = true
+                        
+                        delay(0.25) { [weak self] in
+                            guard let self = self else { return }
+                            currentCell.playVideo(index: 0)
+                        }
                     }
+                    
                 }
+                
                 
             }
             
-            
-            
+    
         }
         
     }
@@ -917,6 +927,254 @@ extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDel
 }
 
 extension FeedViewController {
+    
+    @objc func onClickDelete(_ sender: AnyObject) {
+        
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is FeedViewController {
+                
+                presentSwiftLoader()
+                
+                if let id = editeddPost?.id, id != "" {
+                    
+                    
+                    APIManager.shared.deleteMyPost(pid: id) { result in
+                        switch result {
+                        case .success(_):
+                            needReloadPost = true
+                            
+                            SwiftLoader.hide()
+                            
+                            Dispatch.main.async {
+                                
+                                self.removePost()
+                                
+                            }
+                            
+                            
+                          case .failure(let error):
+                            print(error)
+                            SwiftLoader.hide()
+                            
+                            delay(0.1) {
+                                Dispatch.main.async {
+                                    self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
+                                }
+
+                            }
+                            
+                        }
+                      }
+                    
+                } else {
+                
+                    delay(0.1) {
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
+                    }
+                    
+                }
+                
+            }
+        }
+  
+
+    }
+    
+    @objc func removePost() {
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is FeedViewController {
+                
+                if let deletingPost = editeddPost {
+                   
+                    if let indexPath = posts.firstIndex(of: deletingPost) {
+                        
+                        posts.removeObject(deletingPost)
+
+                        // check if there are no more posts
+                        if posts.isEmpty {
+                            collectionNode.reloadData()
+                        } else {
+                            collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                           
+                        }
+                    }
+                    
+                }
+                
+                
+            }
+            
+        }
+        
+        
+    }
+    
+    @objc func onClickEdit(_ sender: AnyObject) {
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is FeedViewController {
+                
+                print("Edit requested")
+                if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC {
+                    
+                    navigationController?.setNavigationBarHidden(false, animated: true)
+                    EPVC.selectedPost = editeddPost
+                    self.navigationController?.pushViewController(EPVC, animated: true)
+                    
+                }
+                
+                
+            }
+            
+        }
+        
+        
+        
+    }
+    
+    @objc func onClickStats(_ sender: AnyObject) {
+        
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is FeedViewController {
+                
+                print("Stats requested")
+                if let VVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewVC") as? ViewVC {
+                    
+                    
+                    VVC.selected_item = editeddPost
+                    delay(0.1) {
+                        self.navigationController?.setNavigationBarHidden(false, animated: true)
+                        self.navigationController?.pushViewController(VVC, animated: true)
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        
+        
+    }
+    
+    @objc func onClickDownload(_ sender: AnyObject) {
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is FeedViewController {
+                
+                if let post = editeddPost {
+                    
+                    if post.muxPlaybackId != "" {
+                        
+                        let url = "https://stream.mux.com/\(post.muxPlaybackId)/high.mp4"
+                       
+                        downloadVideo(url: url, id: post.muxAssetId)
+                        
+                    } else {
+                        
+                        if let data = try? Data(contentsOf: post.imageUrl) {
+                            
+                            downloadImage(image: UIImage(data: data)!)
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        
+        
+       
+    }
+    
+    func downloadVideo(url: String, id: String) {
+        
+        
+        AF.request(url).downloadProgress(closure : { (progress) in
+       
+            self.swiftLoader(progress: "\(String(format:"%.2f", Float(progress.fractionCompleted) * 100))%")
+            
+        }).responseData{ (response) in
+            
+            switch response.result {
+            
+            case let .success(value):
+                
+                
+                let data = value
+                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                let videoURL = documentsURL.appendingPathComponent("\(id).mp4")
+                do {
+                    try data.write(to: videoURL)
+                } catch {
+                    print("Something went wrong!")
+                }
+          
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
+                }) { saved, error in
+                    
+                    
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                    }
+                    
+                    if (error != nil) {
+                        
+                        
+                        DispatchQueue.main.async {
+                            print("Error: \(error!.localizedDescription)")
+                            self.showErrorAlert("Oops!", msg: error!.localizedDescription)
+                        }
+                        
+                    } else {
+                        
+                        
+                        DispatchQueue.main.async {
+                        
+                            let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
+                            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alertController.addAction(defaultAction)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+     
+                        
+                    }
+                }
+                
+            case let .failure(error):
+                print(error)
+                
+        }
+           
+           
+        }
+        
+    }
+    
+    func downloadImage(image: UIImage) {
+        
+        let imageSaver = ImageSaver()
+        imageSaver.writeToPhotoAlbum(image: image)
+        
+    }
+    
+    
+    func writeToPhotoAlbum(image: UIImage) {
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
+        }
+
+        @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+            print("Save finished!")
+    }
     
     @objc func copyPost() {
         

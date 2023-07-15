@@ -69,7 +69,7 @@ class PostMetadata: Mappable {
 }
 
 class PostModel: Mappable {
-    var id: String = ""
+  var id: String = ""
   
   var imageUrl: URL = URL(string: "https://via.placeholder.com/150")!
   
