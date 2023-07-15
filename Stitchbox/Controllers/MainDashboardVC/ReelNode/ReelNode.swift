@@ -40,7 +40,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var headerNode: ASDisplayNode
     var buttonNode: ASDisplayNode
     var toggleContentNode = ASTextNode()
-    var backgroundImage: GradientImageNode
+   
     var shouldCountView = true
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
@@ -76,7 +76,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.roundedCornerNode = RoundedCornerNode()
         self.videoNode = RoundedCornerVideoNode()
         self.gradientNode = GradienView()
-        self.backgroundImage = GradientImageNode()
         self.buttonNode = ASDisplayNode()
        
         super.init()
@@ -87,15 +86,138 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            
             self.setupLabel()
-            self.setupGestureRecognizers()
-            self.setupViews()
             
             self.setupDefaultContent()
+            
             self.contentNode.backgroundColor = .clear
             
-            self.headerView.usernameLbl.text = "@\(self.post.owner?.username ?? "")"
-            self.updatePostStatistics()
+            let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+            self.view.addGestureRecognizer(pinchGestureRecognizer)
+            
+            
+            self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
+            self.panGestureRecognizer.delegate = self
+            self.panGestureRecognizer.minimumNumberOfTouches = 2
+            self.view.addGestureRecognizer(self.panGestureRecognizer)
+            
+            
+            
+            self.headerView = PostHeader()
+            self.headerNode.view.addSubview(self.headerView)
+
+            self.headerView.translatesAutoresizingMaskIntoConstraints = false
+            self.headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
+            self.headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
+            self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
+            self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
+            
+            if post.setting?.allowStitch == false {
+                self.headerView.createStitchView.isHidden = true
+                self.headerView.createStitchStack.isHidden = true
+                self.headerView.stichBtn.isHidden = true
+            } else {
+                
+                if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
+                    self.headerView.createStitchView.isHidden = true
+                    self.headerView.createStitchStack.isHidden = true
+                    self.headerView.stichBtn.isHidden = true
+                } else {
+                    self.headerView.createStitchView.isHidden = false
+                    self.headerView.stichBtn.isHidden = false
+                    self.headerView.createStitchStack.isHidden = false
+                }
+            }
+            
+            if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
+                
+                self.headerView.followBtn.isHidden = true
+                
+            } else {
+                
+                checkIfFollow()
+                // check
+                
+            }
+            
+            self.buttonsView = ButtonsHeader()
+            self.buttonNode.view.addSubview(self.buttonsView)
+            self.buttonsView.translatesAutoresizingMaskIntoConstraints = false
+            self.buttonsView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
+            self.buttonsView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
+            self.buttonsView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
+            self.buttonsView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
+
+            self.buttonsView.likeBtn.setTitle("", for: .normal)
+            self.buttonsView.commentBtn.setTitle("", for: .normal)
+            self.buttonsView.commentBtn.setImage(cmtImage, for: .normal)
+            self.buttonsView.shareBtn.setTitle("", for: .normal)
+            self.buttonsView.shareBtn.setImage(shareImage, for: .normal)
+            self.buttonsView.saveBtn.setImage(unsaveImage, for: .normal)
+            
+            let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
+            avatarTap.numberOfTapsRequired = 1
+          
+            let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
+            usernameTap.numberOfTapsRequired = 1
+            self.headerView.usernameLbl.isUserInteractionEnabled = true
+            self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
+            
+            
+            let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
+            username2Tap.numberOfTapsRequired = 1
+           
+
+            let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.shareTapped))
+            shareTap.numberOfTapsRequired = 1
+            self.buttonsView.shareBtn.addGestureRecognizer(shareTap)
+            
+            
+            let likeTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeTapped))
+            likeTap.numberOfTapsRequired = 1
+            self.buttonsView.likeBtn.addGestureRecognizer(likeTap)
+            
+            let stitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.stitchTapped))
+            stitchTap.numberOfTapsRequired = 1
+            self.headerView.stichBtn.addGestureRecognizer(stitchTap)
+            
+            
+            let saveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.onClickSave))
+            saveTap.numberOfTapsRequired = 1
+            self.buttonsView.saveBtn.addGestureRecognizer(saveTap)
+            
+            
+            let commentTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.cmtTapped))
+            commentTap.numberOfTapsRequired = 1
+            self.buttonsView.commentBtn.addGestureRecognizer(commentTap)
+            
+            
+            let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeHandle))
+            doubleTap.numberOfTapsRequired = 2
+            self.view.addGestureRecognizer(doubleTap)
+            
+            doubleTap.delaysTouchesBegan = true
+            
+            
+            let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ReelNode.settingTapped))
+            longPress.minimumPressDuration = 0.65
+            self.view.addGestureRecognizer(longPress)
+            
+            longPress.delaysTouchesBegan = true
+            
+            //-------------------------------------//
+            
+            
+            self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
+            
+            self.checkIfLike()
+            self.totalLikeCount()
+            self.totalCmtCount()
+            self.shareCount()
+            self.getSaveCount()
+            self.checkIfSave()
+           
         }
        
         
@@ -1587,13 +1709,11 @@ extension ReelNode {
         let headerInset = UIEdgeInsets(top: 0, left: 0, bottom: 2, right: 8)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
-      
         let contentInset = UIEdgeInsets(top: 2, left: 20, bottom: 2, right: 70)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
         
         let verticalStack = ASStackLayoutSpec.vertical()
         
-
         let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
         
         verticalStack.children = [headerInsetSpec]
@@ -1604,42 +1724,36 @@ extension ReelNode {
 
         verticalStack.children?.append(buttonsInsetSpec)
        
-                
         let verticalStackInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
-
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
-        
-   
-
-        let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
 
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        let textInsetSpec1 = ASInsetLayoutSpec(insets: inset, child: gradientNode)
-        let textInsetSpec2 = ASInsetLayoutSpec(insets: inset, child: backgroundImage)
-     
+        let gradientInsetSpec = ASInsetLayoutSpec(insets: inset, child: gradientNode)
 
         if post.muxPlaybackId != "" {
-            let textInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
+            let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
             
-            let backgroundSpec = ASBackgroundLayoutSpec(child: textInsetSpec, background: roundedCornerNode)
-            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: backgroundSpec)
+            let backgroundSpec = ASBackgroundLayoutSpec(child: videoInsetSpec, background: roundedCornerNode)
+            let overlay = ASOverlayLayoutSpec(child: backgroundSpec, overlay: gradientInsetSpec)
+            
+            let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
+            let finalOverlay = ASOverlayLayoutSpec(child: overlay, overlay: relativeSpec)
 
-            let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
-            let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
-
-            return thirdOverlay
+            return finalOverlay
         } else {
             let imageInsetSpec = ASInsetLayoutSpec(insets: inset, child: imageNode)
             
             let backgroundSpec = ASBackgroundLayoutSpec(child: imageInsetSpec, background: roundedCornerNode)
-            let firstOverlay = ASOverlayLayoutSpec(child: textInsetSpec2, overlay: backgroundSpec)
+            let overlay = ASOverlayLayoutSpec(child: backgroundSpec, overlay: gradientInsetSpec)
             
-            let secondOverlay = ASOverlayLayoutSpec(child: firstOverlay, overlay: textInsetSpec1)
-            let thirdOverlay = ASOverlayLayoutSpec(child: secondOverlay, overlay: relativeSpec)
+            let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
+            let finalOverlay = ASOverlayLayoutSpec(child: overlay, overlay: relativeSpec)
 
-            return thirdOverlay
+            return finalOverlay
         }
     }
+
+
 
     private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
         
