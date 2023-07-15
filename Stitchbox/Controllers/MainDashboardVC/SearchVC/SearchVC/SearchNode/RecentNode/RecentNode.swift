@@ -62,9 +62,9 @@ class RecentNode: ASCellNode {
                 
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
-                self.upperNameNode.attributedText = NSAttributedString(string: item.game_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                self.upperNameNode.attributedText = NSAttributedString(string: item.game_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
                 
-                self.belowNameNode.attributedText = NSAttributedString(string: item.game_shortName ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                self.belowNameNode.attributedText = NSAttributedString(string: item.game_shortName ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
 
                 
                 if item.coverUrl != "" {
@@ -102,9 +102,9 @@ class RecentNode: ASCellNode {
 
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
-                self.upperNameNode.attributedText = NSAttributedString(string: item.user_nickname ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                self.upperNameNode.attributedText = NSAttributedString(string: item.user_nickname ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
                 
-                self.belowNameNode.attributedText = NSAttributedString(string: item.user_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                self.belowNameNode.attributedText = NSAttributedString(string: item.user_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
 
                 if item.avatarUrl != "" {
                     
@@ -125,7 +125,7 @@ class RecentNode: ASCellNode {
             DispatchQueue.main.async {
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
-                self.upperNameNode.attributedText = NSAttributedString(string: item.text ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                self.upperNameNode.attributedText = NSAttributedString(string: item.text ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
 
                 self.imageNode.image = UIImage.init(named: "search")
                 self.imageNode.contentMode = .scaleAspectFit

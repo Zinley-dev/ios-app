@@ -121,7 +121,7 @@ class OwnerPostSearchNode: ASCellNode {
 
             let textAttributes: [NSAttributedString.Key: Any] = [
                 NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium),
-                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.foregroundColor: UIColor.black,
                 NSAttributedString.Key.paragraphStyle: paragraphStyles
             ]
 

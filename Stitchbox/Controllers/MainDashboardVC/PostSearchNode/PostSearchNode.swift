@@ -63,7 +63,7 @@ class PostSearchNode: ASCellNode {
             string: "",
             attributes: [
                 NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: FontSize),
-                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.foregroundColor: UIColor.black,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
         )
@@ -96,7 +96,7 @@ class PostSearchNode: ASCellNode {
         let searchResults = [title, ownerName, hashtags].compactMap { searchString(in: $0, for: keyword, maxLength: 60) }
         let highlightedKeyword = searchResults.first ?? ""
         
-        let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles]
+        let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles]
         
         let attributedString = NSMutableAttributedString(string: highlightedKeyword, attributes: textAttributes)
         if let range = highlightedKeyword.range(of: keyword, options: .caseInsensitive) {

@@ -494,7 +494,7 @@ extension UITableView {
     func setEmptyMessage(_ message: String) {
         let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width - 120, height: self.bounds.size.height))
         messageLabel.text = message
-        messageLabel.textColor = .white
+        messageLabel.textColor = .black
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
         messageLabel.font = UIFont.systemFont(ofSize: 15)
@@ -514,7 +514,7 @@ extension UICollectionView {
     func setEmptyMessage(_ message: String) {
         let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width - 120, height: self.bounds.size.height))
         messageLabel.text = message
-        messageLabel.textColor = .white
+        messageLabel.textColor = .black
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
         messageLabel.font = UIFont.systemFont(ofSize: 15)

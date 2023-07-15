@@ -103,10 +103,8 @@
 		6A1235AA295034FF004B612E /* GroupCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235A9295034FF004B612E /* GroupCallViewController.swift */; };
 		6A1235AC2950351C004B612E /* GroupNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1235AB2950351C004B612E /* GroupNode.swift */; };
 		6A136362299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A136361299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift */; };
-		6A136365299C6A6D00E70507 /* AddGameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A136364299C6A6D00E70507 /* AddGameVC.swift */; };
 		6A16F63E2A2DAB5E00AC9502 /* UploadContentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A16F63D2A2DAB5E00AC9502 /* UploadContentManager.swift */; };
 		6A1BD8522A32EF6D00013E3E /* SpinnerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BD8512A32EF6D00013E3E /* SpinnerNode.swift */; };
-		6A251CEE29EA003A00F6AC0D /* LOLProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A251CED29EA003A00F6AC0D /* LOLProfileHeaderCell.swift */; };
 		6A251CF129EA3DB200F6AC0D /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A251CF029EA3DB200F6AC0D /* ChatCell.swift */; };
 		6A26B82D2A4E891600C06ABF /* TabBarProfileView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A26B82C2A4E891600C06ABF /* TabBarProfileView.xib */; };
 		6A26B82F2A4E892400C06ABF /* TabBarProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A26B82E2A4E892400C06ABF /* TabBarProfileView.swift */; };
@@ -134,10 +132,8 @@
 		6A39C5562A56429A003873FF /* OwnerPostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A39C5542A564299003873FF /* OwnerPostHeaderView.swift */; };
 		6A39C5592A564735003873FF /* SavePostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A39C5582A564735003873FF /* SavePostVC.swift */; };
 		6A3F0A56297B6A9000366665 /* MainFollowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A55297B6A9000366665 /* MainFollowVC.swift */; };
-		6A3F0A59297B789400366665 /* EditSloganVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A58297B789400366665 /* EditSloganVC.swift */; };
 		6A3F0A5C297CB83F00366665 /* AddVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A5B297CB83F00366665 /* AddVC.swift */; };
 		6A3F0A5F297CBA5600366665 /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A5E297CBA5600366665 /* PostVC.swift */; };
-		6A3F0A61297F714D00366665 /* EditChallengeCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A60297F714D00366665 /* EditChallengeCardVC.swift */; };
 		6A3F0A63297F71B900366665 /* badgeThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A62297F71B800366665 /* badgeThumbnail.swift */; };
 		6A3F0A65297F74D400366665 /* FistBumpedStatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A64297F74D400366665 /* FistBumpedStatVC.swift */; };
 		6A3F0A69297F900900366665 /* PostNavVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A68297F900900366665 /* PostNavVC.swift */; };
@@ -155,8 +151,6 @@
 		6A467E5729AD8D0700214108 /* PostListWithHashtagVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A467E5629AD8D0700214108 /* PostListWithHashtagVC.swift */; };
 		6A467E5A29AD946D00214108 /* NewsFeedSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A467E5929AD946D00214108 /* NewsFeedSettingVC.swift */; };
 		6A467E5C29AD951600214108 /* NewsFeedSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A467E5B29AD951600214108 /* NewsFeedSettingVC.xib */; };
-		6A47AA7A2A17138200E3E1FF /* PromoteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA792A17138200E3E1FF /* PromoteNode.swift */; };
-		6A47AA7D2A17679300E3E1FF /* PromoteDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA7C2A17679300E3E1FF /* PromoteDetailVC.swift */; };
 		6A47AA8C2A1867C900E3E1FF /* ClassicFireworkAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA872A1867C900E3E1FF /* ClassicFireworkAnimator.swift */; };
 		6A47AA8D2A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA882A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift */; };
 		6A47AA8E2A1867C900E3E1FF /* ClassicFireworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A47AA892A1867C900E3E1FF /* ClassicFireworkController.swift */; };
@@ -195,7 +189,6 @@
 		6A58EA5E294ED210005FA3CD /* loading_typing.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6A58EA5D294ED210005FA3CD /* loading_typing.gif */; };
 		6A5C556229E89FC0006F51DD /* TacticsGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C556129E89FC0006F51DD /* TacticsGameModel.swift */; };
 		6A5C556529E8AC82006F51DD /* PostSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C556429E8AC82006F51DD /* PostSearchNode.swift */; };
-		6A5C556829E8EFB1006F51DD /* RiotSyncVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C556729E8EFB1006F51DD /* RiotSyncVC.swift */; };
 		6A5C556B29E8F7CA006F51DD /* RegionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C556A29E8F7CA006F51DD /* RegionModel.swift */; };
 		6A66277429655D2400A4488B /* Session+TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A66277329655D2400A4488B /* Session+TypeAlias.swift */; };
 		6A6627772965771400A4488B /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6627752965771400A4488B /* APIManager.swift */; };
@@ -234,15 +227,11 @@
 		6A7ED4A82A08EF0300C8204E /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4A72A08EF0300C8204E /* Markdown */; };
 		6A7ED4AB2A08F7FC00C8204E /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4AA2A08F7FC00C8204E /* GPTEncoder */; };
 		6A7ED4AD2A0B48AF00C8204E /* MetaDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4AC2A0B48AF00C8204E /* MetaDisplay.swift */; };
-		6A7ED4B02A0B519800C8204E /* SB-MetaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4AF2A0B519800C8204E /* SB-MetaVC.swift */; };
 		6A7ED4B52A0C962B00C8204E /* Qonversion in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4B42A0C962B00C8204E /* Qonversion */; };
 		6A7ED4B82A0D9A6900C8204E /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4B72A0D9A6900C8204E /* IAPManager.swift */; };
 		6A7ED4BA2A0DBA0E00C8204E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A7ED4B92A0DBA0E00C8204E /* StoreKit.framework */; };
 		6A7ED4BD2A0E067D00C8204E /* SubcriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4BC2A0E067D00C8204E /* SubcriptionVC.swift */; };
-		6A7ED4C02A0F791D00C8204E /* LineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4BF2A0F791D00C8204E /* LineCell.swift */; };
 		6A7ED4C32A1707C800C8204E /* PromoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4C22A1707C800C8204E /* PromoteModel.swift */; };
-		6A7ED4C62A170F3700C8204E /* PromoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4C52A170F3700C8204E /* PromoteVC.swift */; };
-		6A802CC529E22D7200099F53 /* IntroTacticsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */; };
 		6A80F1A129B6921D0047595A /* UserSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A029B6921D0047595A /* UserSearchNode.swift */; };
 		6A80F1A429B6934C0047595A /* HashtagSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A329B6934C0047595A /* HashtagSearchNode.swift */; };
 		6A80F1A729BA766C0047595A /* UserNotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1A629BA766C0047595A /* UserNotificationModel.swift */; };
@@ -251,19 +240,11 @@
 		6A80F1AF29BA87640047595A /* NotificationNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1AE29BA87640047595A /* NotificationNode.swift */; };
 		6A80F1B429C7B5560047595A /* CommentNotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80F1B329C7B5560047595A /* CommentNotificationVC.swift */; };
 		6A80F1B729C7B6EE0047595A /* CommentNotificationVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A80F1B629C7B6EE0047595A /* CommentNotificationVC.xib */; };
-		6A839B3829A0331E00BD0A9A /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3729A0331E00BD0A9A /* GameCell.swift */; };
-		6A839B3A29A0332600BD0A9A /* addNewGameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3929A0332500BD0A9A /* addNewGameCell.swift */; };
-		6A839B3D29A035DE00BD0A9A /* AddGameDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3C29A035DE00BD0A9A /* AddGameDetailVC.swift */; };
 		6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3F29A03C4A00BD0A9A /* GameList.swift */; };
 		6A839B4329A0424700BD0A9A /* GameStatsDomainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B4229A0424700BD0A9A /* GameStatsDomainModel.swift */; };
-		6A839B4629A0476E00BD0A9A /* GameDomainListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B4529A0476E00BD0A9A /* GameDomainListVC.swift */; };
-		6A839B4829A0479600BD0A9A /* GameDomainListVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A839B4729A0479600BD0A9A /* GameDomainListVC.xib */; };
-		6A839B4B29A048B300BD0A9A /* domainListNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B4A29A048B300BD0A9A /* domainListNode.swift */; };
 		6A9289C62A2454100092FD58 /* SlideAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9289C52A2454100092FD58 /* SlideAnimator.swift */; };
 		6A9E3AF129E913D2002B36D7 /* RiotAccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E3AF029E913D2002B36D7 /* RiotAccountModel.swift */; };
-		6A9E3AF429E91790002B36D7 /* RiotSearchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E3AF329E91790002B36D7 /* RiotSearchNode.swift */; };
 		6A9E3AF729E9D2D0002B36D7 /* SB-ChatBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E3AF629E9D2D0002B36D7 /* SB-ChatBot.swift */; };
-		6A9E3AFA29E9F1B2002B36D7 /* SB-ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E3AF929E9F1B2002B36D7 /* SB-ProfileVC.swift */; };
 		6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */; };
 		6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6329767ED500B59176 /* FindFriendsVC.swift */; };
 		6A9E4C6629767EE100B59176 /* MyReferralCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6529767EE100B59176 /* MyReferralCodeVC.swift */; };
@@ -364,7 +345,6 @@
 		6AC6DA1729AD33DE00B18139 /* GradienView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC6DA1629AD33DE00B18139 /* GradienView.swift */; };
 		6ACB10B929EB73C8009D054E /* RiotHistoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ACB10B729EB73C8009D054E /* RiotHistoryView.xib */; };
 		6ACB10BA29EB73C8009D054E /* RiotHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACB10B829EB73C8009D054E /* RiotHistoryView.swift */; };
-		6ACB10BD29EB790D009D054E /* In-gameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACB10BC29EB790D009D054E /* In-gameVC.swift */; };
 		6ACE2D2D2A57578A009FB902 /* OriginalNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACE2D2C2A57578A009FB902 /* OriginalNode.swift */; };
 		6ACE2D312A58B293009FB902 /* SelectPostCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACE2D2F2A58B292009FB902 /* SelectPostCollectionView.swift */; };
 		6ACE2D322A58B293009FB902 /* SelectPostCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ACE2D302A58B293009FB902 /* SelectPostCollectionView.xib */; };
@@ -593,10 +573,8 @@
 		6A1235A9295034FF004B612E /* GroupCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCallViewController.swift; sourceTree = "<group>"; };
 		6A1235AB2950351C004B612E /* GroupNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupNode.swift; sourceTree = "<group>"; };
 		6A136361299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfSheetPresentationControllerHeightProtocol.swift; sourceTree = "<group>"; };
-		6A136364299C6A6D00E70507 /* AddGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGameVC.swift; sourceTree = "<group>"; };
 		6A16F63D2A2DAB5E00AC9502 /* UploadContentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadContentManager.swift; sourceTree = "<group>"; };
 		6A1BD8512A32EF6D00013E3E /* SpinnerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerNode.swift; sourceTree = "<group>"; };
-		6A251CED29EA003A00F6AC0D /* LOLProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOLProfileHeaderCell.swift; sourceTree = "<group>"; };
 		6A251CF029EA3DB200F6AC0D /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		6A26B82C2A4E891600C06ABF /* TabBarProfileView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarProfileView.xib; sourceTree = "<group>"; };
 		6A26B82E2A4E892400C06ABF /* TabBarProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarProfileView.swift; sourceTree = "<group>"; };
@@ -624,10 +602,8 @@
 		6A39C5542A564299003873FF /* OwnerPostHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OwnerPostHeaderView.swift; sourceTree = "<group>"; };
 		6A39C5582A564735003873FF /* SavePostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavePostVC.swift; sourceTree = "<group>"; };
 		6A3F0A55297B6A9000366665 /* MainFollowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFollowVC.swift; sourceTree = "<group>"; };
-		6A3F0A58297B789400366665 /* EditSloganVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSloganVC.swift; sourceTree = "<group>"; };
 		6A3F0A5B297CB83F00366665 /* AddVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVC.swift; sourceTree = "<group>"; };
 		6A3F0A5E297CBA5600366665 /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
-		6A3F0A60297F714D00366665 /* EditChallengeCardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditChallengeCardVC.swift; sourceTree = "<group>"; };
 		6A3F0A62297F71B800366665 /* badgeThumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = badgeThumbnail.swift; sourceTree = "<group>"; };
 		6A3F0A64297F74D400366665 /* FistBumpedStatVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FistBumpedStatVC.swift; sourceTree = "<group>"; };
 		6A3F0A68297F900900366665 /* PostNavVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNavVC.swift; sourceTree = "<group>"; };
@@ -645,8 +621,6 @@
 		6A467E5629AD8D0700214108 /* PostListWithHashtagVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListWithHashtagVC.swift; sourceTree = "<group>"; };
 		6A467E5929AD946D00214108 /* NewsFeedSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedSettingVC.swift; sourceTree = "<group>"; };
 		6A467E5B29AD951600214108 /* NewsFeedSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsFeedSettingVC.xib; sourceTree = "<group>"; };
-		6A47AA792A17138200E3E1FF /* PromoteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteNode.swift; sourceTree = "<group>"; };
-		6A47AA7C2A17679300E3E1FF /* PromoteDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteDetailVC.swift; sourceTree = "<group>"; };
 		6A47AA872A1867C900E3E1FF /* ClassicFireworkAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassicFireworkAnimator.swift; sourceTree = "<group>"; };
 		6A47AA882A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassicSparkTrajectoryFactoryProtocol.swift; sourceTree = "<group>"; };
 		6A47AA892A1867C900E3E1FF /* ClassicFireworkController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassicFireworkController.swift; sourceTree = "<group>"; };
@@ -686,7 +660,6 @@
 		6A58EA5D294ED210005FA3CD /* loading_typing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading_typing.gif; sourceTree = "<group>"; };
 		6A5C556129E89FC0006F51DD /* TacticsGameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TacticsGameModel.swift; sourceTree = "<group>"; };
 		6A5C556429E8AC82006F51DD /* PostSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSearchNode.swift; sourceTree = "<group>"; };
-		6A5C556729E8EFB1006F51DD /* RiotSyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiotSyncVC.swift; sourceTree = "<group>"; };
 		6A5C556A29E8F7CA006F51DD /* RegionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionModel.swift; sourceTree = "<group>"; };
 		6A66277329655D2400A4488B /* Session+TypeAlias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Session+TypeAlias.swift"; sourceTree = "<group>"; };
 		6A6627752965771400A4488B /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
@@ -724,14 +697,10 @@
 		6A78486B29862931008B2263 /* StreamingDomainModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamingDomainModel.swift; sourceTree = "<group>"; };
 		6A7ED4A42A0895C900C8204E /* InfoDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDetailVC.swift; sourceTree = "<group>"; };
 		6A7ED4AC2A0B48AF00C8204E /* MetaDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDisplay.swift; sourceTree = "<group>"; };
-		6A7ED4AF2A0B519800C8204E /* SB-MetaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SB-MetaVC.swift"; sourceTree = "<group>"; };
 		6A7ED4B72A0D9A6900C8204E /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		6A7ED4B92A0DBA0E00C8204E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		6A7ED4BC2A0E067D00C8204E /* SubcriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubcriptionVC.swift; sourceTree = "<group>"; };
-		6A7ED4BF2A0F791D00C8204E /* LineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineCell.swift; sourceTree = "<group>"; };
 		6A7ED4C22A1707C800C8204E /* PromoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteModel.swift; sourceTree = "<group>"; };
-		6A7ED4C52A170F3700C8204E /* PromoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteVC.swift; sourceTree = "<group>"; };
-		6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroTacticsVC.swift; sourceTree = "<group>"; };
 		6A80F1A029B6921D0047595A /* UserSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchNode.swift; sourceTree = "<group>"; };
 		6A80F1A329B6934C0047595A /* HashtagSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagSearchNode.swift; sourceTree = "<group>"; };
 		6A80F1A629BA766C0047595A /* UserNotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationModel.swift; sourceTree = "<group>"; };
@@ -740,19 +709,11 @@
 		6A80F1AE29BA87640047595A /* NotificationNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNode.swift; sourceTree = "<group>"; };
 		6A80F1B329C7B5560047595A /* CommentNotificationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentNotificationVC.swift; sourceTree = "<group>"; };
 		6A80F1B629C7B6EE0047595A /* CommentNotificationVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentNotificationVC.xib; sourceTree = "<group>"; };
-		6A839B3729A0331E00BD0A9A /* GameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
-		6A839B3929A0332500BD0A9A /* addNewGameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addNewGameCell.swift; sourceTree = "<group>"; };
-		6A839B3C29A035DE00BD0A9A /* AddGameDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGameDetailVC.swift; sourceTree = "<group>"; };
 		6A839B3F29A03C4A00BD0A9A /* GameList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameList.swift; sourceTree = "<group>"; };
 		6A839B4229A0424700BD0A9A /* GameStatsDomainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatsDomainModel.swift; sourceTree = "<group>"; };
-		6A839B4529A0476E00BD0A9A /* GameDomainListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDomainListVC.swift; sourceTree = "<group>"; };
-		6A839B4729A0479600BD0A9A /* GameDomainListVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameDomainListVC.xib; sourceTree = "<group>"; };
-		6A839B4A29A048B300BD0A9A /* domainListNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = domainListNode.swift; sourceTree = "<group>"; };
 		6A9289C52A2454100092FD58 /* SlideAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideAnimator.swift; sourceTree = "<group>"; };
 		6A9E3AF029E913D2002B36D7 /* RiotAccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiotAccountModel.swift; sourceTree = "<group>"; };
-		6A9E3AF329E91790002B36D7 /* RiotSearchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiotSearchNode.swift; sourceTree = "<group>"; };
 		6A9E3AF629E9D2D0002B36D7 /* SB-ChatBot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SB-ChatBot.swift"; sourceTree = "<group>"; };
-		6A9E3AF929E9F1B2002B36D7 /* SB-ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SB-ProfileVC.swift"; sourceTree = "<group>"; };
 		6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationVC.swift; sourceTree = "<group>"; };
 		6A9E4C6329767ED500B59176 /* FindFriendsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsVC.swift; sourceTree = "<group>"; };
 		6A9E4C6529767EE100B59176 /* MyReferralCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReferralCodeVC.swift; sourceTree = "<group>"; };
@@ -852,7 +813,6 @@
 		6AC6DA1629AD33DE00B18139 /* GradienView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradienView.swift; sourceTree = "<group>"; };
 		6ACB10B729EB73C8009D054E /* RiotHistoryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RiotHistoryView.xib; sourceTree = "<group>"; };
 		6ACB10B829EB73C8009D054E /* RiotHistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiotHistoryView.swift; sourceTree = "<group>"; };
-		6ACB10BC29EB790D009D054E /* In-gameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "In-gameVC.swift"; sourceTree = "<group>"; };
 		6ACE2D2C2A57578A009FB902 /* OriginalNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginalNode.swift; sourceTree = "<group>"; };
 		6ACE2D2F2A58B292009FB902 /* SelectPostCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPostCollectionView.swift; sourceTree = "<group>"; };
 		6ACE2D302A58B293009FB902 /* SelectPostCollectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectPostCollectionView.xib; sourceTree = "<group>"; };
@@ -1430,7 +1390,6 @@
 				6A80F1B529C7B6E30047595A /* CommentNotificationVC */,
 				6A80F1A829BA78130047595A /* GameListView */,
 				6AC6DA0729A8AADB00B18139 /* ReportView */,
-				6A839B4429A0474E00BD0A9A /* GameDomainListVC */,
 				6AEA340E298F0E3E005A4C5D /* CommentVC */,
 				6AEA33FA298DCAB4005A4C5D /* HashtagCell */,
 				6AEA33EA298CE474005A4C5D /* Post */,
@@ -1549,18 +1508,6 @@
 			path = GroupNode;
 			sourceTree = "<group>";
 		};
-		6A136363299C6A5600E70507 /* AddGameVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A839B4929A0489B00BD0A9A /* domainListNode */,
-				6A839B3B29A035C600BD0A9A /* AddGameDetailVC */,
-				6A839B3629A0330D00BD0A9A /* AddNewGameCell */,
-				6A839B3529A032F900BD0A9A /* GameCell */,
-				6A136364299C6A6D00E70507 /* AddGameVC.swift */,
-			);
-			path = AddGameVC;
-			sourceTree = "<group>";
-		};
 		6A16F63C2A2DAB4900AC9502 /* UploadContentManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1619,14 +1566,6 @@
 				6A1BD8512A32EF6D00013E3E /* SpinnerNode.swift */,
 			);
 			path = SpinnerNode;
-			sourceTree = "<group>";
-		};
-		6A251CEC29EA001900F6AC0D /* LOLProfileHeaderCell */ = {
-			isa = PBXGroup;
-			children = (
-				6A251CED29EA003A00F6AC0D /* LOLProfileHeaderCell.swift */,
-			);
-			path = LOLProfileHeaderCell;
 			sourceTree = "<group>";
 		};
 		6A251CEF29EA3D9900F6AC0D /* ChatCell */ = {
@@ -1841,14 +1780,6 @@
 			path = FollowVC;
 			sourceTree = "<group>";
 		};
-		6A3F0A57297B787D00366665 /* EditSloganVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A3F0A58297B789400366665 /* EditSloganVC.swift */,
-			);
-			path = EditSloganVC;
-			sourceTree = "<group>";
-		};
 		6A3F0A5A297CB82800366665 /* AddVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -1976,22 +1907,6 @@
 				6A467E5929AD946D00214108 /* NewsFeedSettingVC.swift */,
 			);
 			path = NewsFeedSettingVC;
-			sourceTree = "<group>";
-		};
-		6A47AA782A17137400E3E1FF /* PromoteNode */ = {
-			isa = PBXGroup;
-			children = (
-				6A47AA792A17138200E3E1FF /* PromoteNode.swift */,
-			);
-			path = PromoteNode;
-			sourceTree = "<group>";
-		};
-		6A47AA7B2A17676000E3E1FF /* PromoteDetailVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A47AA7C2A17679300E3E1FF /* PromoteDetailVC.swift */,
-			);
-			name = PromoteDetailVC;
 			sourceTree = "<group>";
 		};
 		6A47AA802A18678700E3E1FF /* fireworks */ = {
@@ -2172,14 +2087,6 @@
 				6A5C556429E8AC82006F51DD /* PostSearchNode.swift */,
 			);
 			path = PostSearchNode;
-			sourceTree = "<group>";
-		};
-		6A5C556629E8EF9D006F51DD /* RiotSyncVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A5C556729E8EFB1006F51DD /* RiotSyncVC.swift */,
-			);
-			path = RiotSyncVC;
 			sourceTree = "<group>";
 		};
 		6A5C556929E8F7B7006F51DD /* RegionModel */ = {
@@ -2368,15 +2275,6 @@
 			path = InfoDetailVC;
 			sourceTree = "<group>";
 		};
-		6A7ED4AE2A0B518700C8204E /* SB-MetaVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A7ED4BE2A0F791300C8204E /* LineCell */,
-				6A7ED4AF2A0B519800C8204E /* SB-MetaVC.swift */,
-			);
-			path = "SB-MetaVC";
-			sourceTree = "<group>";
-		};
 		6A7ED4B62A0D9A4400C8204E /* PaymentControl */ = {
 			isa = PBXGroup;
 			children = (
@@ -2394,44 +2292,12 @@
 			path = SubcriptionVC;
 			sourceTree = "<group>";
 		};
-		6A7ED4BE2A0F791300C8204E /* LineCell */ = {
-			isa = PBXGroup;
-			children = (
-				6A7ED4BF2A0F791D00C8204E /* LineCell.swift */,
-			);
-			path = LineCell;
-			sourceTree = "<group>";
-		};
 		6A7ED4C12A1707B800C8204E /* PromoteModel */ = {
 			isa = PBXGroup;
 			children = (
 				6A7ED4C22A1707C800C8204E /* PromoteModel.swift */,
 			);
 			path = PromoteModel;
-			sourceTree = "<group>";
-		};
-		6A7ED4C42A170F2500C8204E /* PromoteVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A47AA7B2A17676000E3E1FF /* PromoteDetailVC */,
-				6A47AA782A17137400E3E1FF /* PromoteNode */,
-				6A7ED4C52A170F3700C8204E /* PromoteVC.swift */,
-			);
-			path = PromoteVC;
-			sourceTree = "<group>";
-		};
-		6A802CC329E22D5000099F53 /* SB-Tactics */ = {
-			isa = PBXGroup;
-			children = (
-				6A7ED4AE2A0B518700C8204E /* SB-MetaVC */,
-				6A9E3AF829E9F19B002B36D7 /* SB-ProfileVC */,
-				6A9E3AF529E9D2BB002B36D7 /* SB-ChatBot */,
-				6A9E3AF229E91780002B36D7 /* RiotSearchNode */,
-				6A5C556629E8EF9D006F51DD /* RiotSyncVC */,
-				6A5C556329E8AC6F006F51DD /* PostSearchNode */,
-				6A802CC429E22D7200099F53 /* IntroTacticsVC.swift */,
-			);
-			path = "SB-Tactics";
 			sourceTree = "<group>";
 		};
 		6A80F19E29B692010047595A /* SearchNode */ = {
@@ -2501,30 +2367,6 @@
 			path = CommentNotificationVC;
 			sourceTree = "<group>";
 		};
-		6A839B3529A032F900BD0A9A /* GameCell */ = {
-			isa = PBXGroup;
-			children = (
-				6A839B3729A0331E00BD0A9A /* GameCell.swift */,
-			);
-			path = GameCell;
-			sourceTree = "<group>";
-		};
-		6A839B3629A0330D00BD0A9A /* AddNewGameCell */ = {
-			isa = PBXGroup;
-			children = (
-				6A839B3929A0332500BD0A9A /* addNewGameCell.swift */,
-			);
-			path = AddNewGameCell;
-			sourceTree = "<group>";
-		};
-		6A839B3B29A035C600BD0A9A /* AddGameDetailVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A839B3C29A035DE00BD0A9A /* AddGameDetailVC.swift */,
-			);
-			path = AddGameDetailVC;
-			sourceTree = "<group>";
-		};
 		6A839B3E29A03C3D00BD0A9A /* GameList */ = {
 			isa = PBXGroup;
 			children = (
@@ -2539,23 +2381,6 @@
 				6A839B4229A0424700BD0A9A /* GameStatsDomainModel.swift */,
 			);
 			path = GameStatsDomainModel;
-			sourceTree = "<group>";
-		};
-		6A839B4429A0474E00BD0A9A /* GameDomainListVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A839B4729A0479600BD0A9A /* GameDomainListVC.xib */,
-				6A839B4529A0476E00BD0A9A /* GameDomainListVC.swift */,
-			);
-			path = GameDomainListVC;
-			sourceTree = "<group>";
-		};
-		6A839B4929A0489B00BD0A9A /* domainListNode */ = {
-			isa = PBXGroup;
-			children = (
-				6A839B4A29A048B300BD0A9A /* domainListNode.swift */,
-			);
-			path = domainListNode;
 			sourceTree = "<group>";
 		};
 		6A9289C42A2454070092FD58 /* SlideAnimator */ = {
@@ -2574,14 +2399,6 @@
 			path = RiotAccountModel;
 			sourceTree = "<group>";
 		};
-		6A9E3AF229E91780002B36D7 /* RiotSearchNode */ = {
-			isa = PBXGroup;
-			children = (
-				6A9E3AF329E91790002B36D7 /* RiotSearchNode.swift */,
-			);
-			path = RiotSearchNode;
-			sourceTree = "<group>";
-		};
 		6A9E3AF529E9D2BB002B36D7 /* SB-ChatBot */ = {
 			isa = PBXGroup;
 			children = (
@@ -2589,16 +2406,6 @@
 				6A9E3AF629E9D2D0002B36D7 /* SB-ChatBot.swift */,
 			);
 			path = "SB-ChatBot";
-			sourceTree = "<group>";
-		};
-		6A9E3AF829E9F19B002B36D7 /* SB-ProfileVC */ = {
-			isa = PBXGroup;
-			children = (
-				6ACB10BB29EB78F0009D054E /* In-gameVC */,
-				6A251CEC29EA001900F6AC0D /* LOLProfileHeaderCell */,
-				6A9E3AF929E9F1B2002B36D7 /* SB-ProfileVC.swift */,
-			);
-			path = "SB-ProfileVC";
 			sourceTree = "<group>";
 		};
 		6A9E4C5E29767E8500B59176 /* MyReferralCodeVC */ = {
@@ -2630,15 +2437,15 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A5C556329E8AC6F006F51DD /* PostSearchNode */,
+				6A9E3AF529E9D2BB002B36D7 /* SB-ChatBot */,
 				6A0C32762A621E0400D2DE18 /* PreviewVC */,
 				6ACE2D2B2A575779009FB902 /* OriginalNode */,
 				6A6FB08D29DA4270003FCF6E /* ReelNode */,
 				6A39C5572A564706003873FF /* SavePostVC */,
 				6A26B8332A54B7FC00C06ABF /* OwnerPostSearchNode */,
 				6A26B8302A521E7A00C06ABF /* StitchControlVC */,
-				6A7ED4C42A170F2500C8204E /* PromoteVC */,
 				6A7ED4A32A08959C00C8204E /* InfoDetailVC */,
-				6A802CC329E22D5000099F53 /* SB-Tactics */,
 				6A2B9A7F29D26AC100C2D9CD /* ViewVC */,
 				6A78485C2984D1E3008B2263 /* NotificationVC */,
 				6A467E5529AD8CEB00214108 /* PostSearchVC */,
@@ -3086,14 +2893,6 @@
 			path = RiotHistory;
 			sourceTree = "<group>";
 		};
-		6ACB10BB29EB78F0009D054E /* In-gameVC */ = {
-			isa = PBXGroup;
-			children = (
-				6ACB10BC29EB790D009D054E /* In-gameVC.swift */,
-			);
-			path = "In-gameVC";
-			sourceTree = "<group>";
-		};
 		6ACE2D2B2A575779009FB902 /* OriginalNode */ = {
 			isa = PBXGroup;
 			children = (
@@ -3283,7 +3082,6 @@
 				6AF6C4972997053200DD8D37 /* EditEmailVC */,
 				6AF6C4952997050F00DD8D37 /* EditPhoneVC */,
 				6A0B8B6A2996DC1200E724B7 /* EditBirthdayVC */,
-				6AF9733D297A321C00C76814 /* EditChallengeCardVC */,
 				6AF9733C297A320C00C76814 /* FistBumpedStatVC */,
 				6AF973392978FD9500C76814 /* EditBioVC */,
 				6AF973362978F97900C76814 /* EditGeneralInformationVC */,
@@ -3419,16 +3217,6 @@
 				14120DE82991CF0B00AE51E0 /* FistBumpeeVC.swift */,
 			);
 			path = FistBumpedStatVC;
-			sourceTree = "<group>";
-		};
-		6AF9733D297A321C00C76814 /* EditChallengeCardVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A136363299C6A5600E70507 /* AddGameVC */,
-				6A3F0A60297F714D00366665 /* EditChallengeCardVC.swift */,
-				6A3F0A57297B787D00366665 /* EditSloganVC */,
-			);
-			path = EditChallengeCardVC;
 			sourceTree = "<group>";
 		};
 		7314760A83549794B5D020AC /* Pods */ = {
@@ -3729,7 +3517,6 @@
 				6AC6DA0C29A8AAEB00B18139 /* reportCell.xib in Resources */,
 				6A6C3109296426F80070167A /* EditChannelDataModView.xib in Resources */,
 				6AB929D22A3D514D003E109E /* AddView.xib in Resources */,
-				6A839B4829A0479600BD0A9A /* GameDomainListVC.xib in Resources */,
 				6A6C30FF2964156E0070167A /* UnmutedUserModView.xib in Resources */,
 				390FD7842909375C0068B883 /* Dashboard.storyboard in Resources */,
 				6A0CF64D296E2F0200155889 /* ProfileView.xib in Resources */,
@@ -3969,7 +3756,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A3F0A61297F714D00366665 /* EditChallengeCardVC.swift in Sources */,
 				6A3F0A65297F74D400366665 /* FistBumpedStatVC.swift in Sources */,
 				6A9E4C832977B3C100B59176 /* AccountActivityNode.swift in Sources */,
 				14FADBD1297FBA4800E0A741 /* ContactUsViewModel.swift in Sources */,
@@ -3979,7 +3765,6 @@
 				6ABDDCB42A01024400CDAD39 /* ContentView.swift in Sources */,
 				6AAD7A43294C6642003E3AB6 /* UserDefaults+QuickStart.swift in Sources */,
 				6A6C310329641D4F0070167A /* UnbanUserModView.swift in Sources */,
-				6A7ED4C62A170F3700C8204E /* PromoteVC.swift in Sources */,
 				A540A8D4294726300085CC45 /* StartViewModel.swift in Sources */,
 				6A6FB08929DA01B9003FCF6E /* OneSignalNotiModel.swift in Sources */,
 				6A307CD129B6807300A89529 /* MainSearchVC.swift in Sources */,
@@ -4060,13 +3845,11 @@
 				6AAD7A02294C4D1C003E3AB6 /* MainMessageVC.swift in Sources */,
 				144022E5295966CA009B7A58 /* EditProfileViewModel.swift in Sources */,
 				6A286B6029C97F0100C72718 /* LogInfomationVC.swift in Sources */,
-				6A839B4629A0476E00BD0A9A /* GameDomainListVC.swift in Sources */,
 				6AAD7A49294C664D003E3AB6 /* NSUserActivity+QuickStart.swift in Sources */,
 				6A58EA50294EB280005FA3CD /* String+SendBird.swift in Sources */,
 				6ACE2D2D2A57578A009FB902 /* OriginalNode.swift in Sources */,
 				6A47AA8D2A1867C900E3E1FF /* ClassicSparkTrajectoryFactoryProtocol.swift in Sources */,
 				6A9E4C7D2977B2E100B59176 /* BlockUserModel.swift in Sources */,
-				6A251CEE29EA003A00F6AC0D /* LOLProfileHeaderCell.swift in Sources */,
 				6A6C30EB296408B20070167A /* AddOperatorMemberVC.swift in Sources */,
 				6AEA33EF298CE4A6005A4C5D /* PostHeader.swift in Sources */,
 				A59CB3F5294ADCA200D84D9A /* UserDataSource.swift in Sources */,
@@ -4096,7 +3879,6 @@
 				6A47AA8E2A1867C900E3E1FF /* ClassicFireworkController.swift in Sources */,
 				6AEA33FD298DCAC0005A4C5D /* HashtagCell.swift in Sources */,
 				6ABDDCB72A01024400CDAD39 /* MarkdownAttributedStringParser.swift in Sources */,
-				6A839B3D29A035DE00BD0A9A /* AddGameDetailVC.swift in Sources */,
 				6AAD7A05294C53EC003E3AB6 /* ModView.swift in Sources */,
 				6A6627822965773400A4488B /* EndPoints.swift in Sources */,
 				395477B629425274008EED97 /* LoginCoordinatorProtocol.swift in Sources */,
@@ -4121,7 +3903,6 @@
 				6A6C3108296426F80070167A /* EditChannelDataModView.swift in Sources */,
 				6A0CF63B296AAC1D00155889 /* PhoneResetVC.swift in Sources */,
 				A540A8DA294731320085CC45 /* AppleSignInService.swift in Sources */,
-				6A802CC529E22D7200099F53 /* IntroTacticsVC.swift in Sources */,
 				6A47AAAE2A1867E600E3E1FF /* ImageSparkViewFactory.swift in Sources */,
 				6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */,
 				6A286B5A29C90D4B00C72718 /* UserLoginActivityModel.swift in Sources */,
@@ -4130,9 +3911,7 @@
 				6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */,
 				6A0D54462974E9300059530C /* ChallengerCardProfileHeaderCell.swift in Sources */,
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
-				6A839B3829A0331E00BD0A9A /* GameCell.swift in Sources */,
 				6A58E1852A087B0F0002E5C8 /* ChatGPTTokenManager.swift in Sources */,
-				6A839B3A29A0332600BD0A9A /* addNewGameCell.swift in Sources */,
 				6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */,
 				6A47AA962A1867D200E3E1FF /* FountainFirework.swift in Sources */,
 				14FADBCD297B072100E0A741 /* ChangePasswordViewModel.swift in Sources */,
@@ -4162,7 +3941,6 @@
 				6AAD7A40294C6642003E3AB6 /* String+QuickStart.swift in Sources */,
 				6AAD7A6C294C69B1003E3AB6 /* Hashids.swift in Sources */,
 				6A47AA972A1867D200E3E1FF /* FountainFireworkAnimator.swift in Sources */,
-				6A136365299C6A6D00E70507 /* AddGameVC.swift in Sources */,
 				6A3F0A5F297CBA5600366665 /* PostVC.swift in Sources */,
 				6A47AAA22A1867DC00E3E1FF /* SparkTrajectory.swift in Sources */,
 				6AE1CE70294D6A4A00B1C435 /* SelectedUserCollectionViewCell.swift in Sources */,
@@ -4199,7 +3977,6 @@
 				6A286B5D29C90E1800C72718 /* LoginActivityNode.swift in Sources */,
 				1457CCD72945898F003C742F /* CardStackView.swift in Sources */,
 				6A58EA59294ECD5C005FA3CD /* SBUPendingMessageManager.swift in Sources */,
-				6A7ED4C02A0F791D00C8204E /* LineCell.swift in Sources */,
 				6A80F1AF29BA87640047595A /* NotificationNode.swift in Sources */,
 				6A7ED4B82A0D9A6900C8204E /* IAPManager.swift in Sources */,
 				6ABA61252977D946003BFB5B /* ResetPwdVC.swift in Sources */,
@@ -4210,7 +3987,6 @@
 				6AEA33E3298A2E33005A4C5D /* ProgressBar.swift in Sources */,
 				6AEA340D298F0B84005A4C5D /* CommentVC.swift in Sources */,
 				6A251CF129EA3DB200F6AC0D /* ChatCell.swift in Sources */,
-				6A9E3AFA29E9F1B2002B36D7 /* SB-ProfileVC.swift in Sources */,
 				6A48DB252A25C15C000AD355 /* InviteView.swift in Sources */,
 				6A1BD8522A32EF6D00013E3E /* SpinnerNode.swift in Sources */,
 				6AF9733B2978FDAC00C76814 /* EditBioVC.swift in Sources */,
@@ -4229,8 +4005,6 @@
 				6AAD7A65294C699E003E3AB6 /* PresentationController.swift in Sources */,
 				6A7ED4AD2A0B48AF00C8204E /* MetaDisplay.swift in Sources */,
 				6AEA33F4298CE4AB005A4C5D /* ButtonsHeader.swift in Sources */,
-				6A839B4B29A048B300BD0A9A /* domainListNode.swift in Sources */,
-				6A47AA7A2A17138200E3E1FF /* PromoteNode.swift in Sources */,
 				390FD78629093EA00068B883 /* FeedViewController.swift in Sources */,
 				147187ED2920B0980039B89E /* ControllerType.swift in Sources */,
 				6AC6DA0E29A8AAEB00B18139 /* reportView.swift in Sources */,
@@ -4247,7 +4021,6 @@
 				6AAD7A62294C699E003E3AB6 /* Array_compare.swift in Sources */,
 				14FADBCF297C44E800E0A741 /* BlockAccountViewModel.swift in Sources */,
 				6AAD7A60294C699E003E3AB6 /* UIViewController+Utils.swift in Sources */,
-				6ACB10BD29EB790D009D054E /* In-gameVC.swift in Sources */,
 				6A0CF63D296AAC2C00155889 /* EmailResetVC.swift in Sources */,
 				6A136362299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift in Sources */,
 				6A78485E2984D1F6008B2263 /* NotificationVC.swift in Sources */,
@@ -4256,7 +4029,6 @@
 				6A9E4C782977AF4500B59176 /* ContactUsVC.swift in Sources */,
 				6AAD7A42294C6642003E3AB6 /* ImageCache.swift in Sources */,
 				14C067682956EC4F002C79AE /* ReferralCodeViewController.swift in Sources */,
-				6A3F0A59297B789400366665 /* EditSloganVC.swift in Sources */,
 				6A3F0A6F297FA91200366665 /* HashtagsModel.swift in Sources */,
 				A59CB3ED294ADA4700D84D9A /* ApplicationMacros.swift in Sources */,
 				147187F32920D2830039B89E /* LoginByPhoneViewModel.swift in Sources */,
@@ -4264,7 +4036,6 @@
 				6AF97345297B5A2A00C76814 /* BadgesHeaderView.swift in Sources */,
 				6AF9734A297B5A7500C76814 /* ProfilePostsHeaderView.swift in Sources */,
 				6ACEE23C2A299F75006DFAC9 /* CustomSwipeBackConfiguration.swift in Sources */,
-				6A7ED4B02A0B519800C8204E /* SB-MetaVC.swift in Sources */,
 				6A0D545529750F8E0059530C /* PostModel.swift in Sources */,
 				390FD78B290A901F0068B883 /* SettingsBundleHelper.swift in Sources */,
 				6A47AA8F2A1867C900E3E1FF /* ClassicFirework.swift in Sources */,
@@ -4278,12 +4049,10 @@
 				390FD73A2909264D0068B883 /* SceneDelegate.swift in Sources */,
 				6A0C32532A5F5B2300D2DE18 /* AddStitchToExistingVC.swift in Sources */,
 				A5A5E40729375FF3004E9207 /* SButton.swift in Sources */,
-				6A9E3AF429E91790002B36D7 /* RiotSearchNode.swift in Sources */,
 				6A307CC829B6605200A89529 /* RecentNode.swift in Sources */,
 				A548E5AA2955AD7500E9C971 /* LastStepViewController.swift in Sources */,
 				6A3F0A912982458700366665 /* UserChallengerCardProfileHeaderCell.swift in Sources */,
 				6ABA61272977D999003BFB5B /* TwoFactorAuthVC.swift in Sources */,
-				6A47AA7D2A17679300E3E1FF /* PromoteDetailVC.swift in Sources */,
 				149F44F72956F8270084742A /* RoundedImageView.swift in Sources */,
 				6ABDDCCC2A0107F200CDAD39 /* XCAChatGPTApp.swift in Sources */,
 				6AEA74FA29680B53005C802B /* NormalLoginVC.swift in Sources */,
@@ -4311,7 +4080,6 @@
 				396F520029DB25DE00BF78BE /* DeeplinkCoordinator.swift in Sources */,
 				6A9E4C762977AF3700B59176 /* AccountActivityVC.swift in Sources */,
 				6AAD7A18294C65DD003E3AB6 /* AppDelegate+SoundEffects.swift in Sources */,
-				6A5C556829E8EFB1006F51DD /* RiotSyncVC.swift in Sources */,
 				6A80F1AC29BA78E70047595A /* GameListView.swift in Sources */,
 				6A1235AC2950351C004B612E /* GroupNode.swift in Sources */,
 				6A123596294EFA1B004B612E /* CustomActivityIndicatorView.swift in Sources */,

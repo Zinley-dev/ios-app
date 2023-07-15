@@ -52,7 +52,7 @@ extension InfoDetailVC {
     func setupBackButton() {
         
         // Do any additional setup after loading the view.
-        backButton.setImage(UIImage.init(named: "back_icn_white")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
+        backButton.setImage(UIImage.init(named: "back-black")?.resize(targetSize: CGSize(width: 13, height: 23)), for: [])
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.frame = back_frame
         backButton.setTitleColor(UIColor.white, for: .normal)
