@@ -68,6 +68,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
  
     let maximumShowing = 100
 
+    
     init(with post: PostModel) {
         self.post = post
         self.imageNode = RoundedCornerImageNode()
@@ -76,6 +77,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.roundedCornerNode = RoundedCornerNode()
         self.videoNode = RoundedCornerVideoNode()
         self.gradientNode = GradienView()
+        
         self.buttonNode = ASDisplayNode()
        
         super.init()
@@ -84,10 +86,101 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.gradientNode.isOpaque = false
         
         
+        
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            self.label = ActiveLabel()
+           
+            self.label.backgroundColor = .clear
+            self.contentNode.view.isUserInteractionEnabled = true
+        
+            self.label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            self.label.setContentHuggingPriority(.defaultLow, for: .vertical)
+            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+
             
-            self.setupLabel()
+
+            let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
+            self.label.customColor[customType] = .lightGray
+            self.label.numberOfLines = Int(self.contentNode.lineCount)
+            self.label.enabledTypes = [.hashtag, .url, customType]
+            self.label.attributedText = self.contentNode.attributedText
+            
+            
+                //self.label.mentionColor = .secondary
+            
+            self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+            self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+            
+            self.label.handleCustomTap(for: customType) { [weak self] element in
+                guard let self = self else { return }
+                if element == "*more" {
+                    self.seeMore()
+                } else if element == "*hide" {
+                    self.hideContent()
+                }
+            }
+
+            self.label.handleHashtagTap { [weak self] hashtag in
+                guard let self = self else { return }
+                var selectedHashtag = hashtag
+                selectedHashtag.insert("#", at: selectedHashtag.startIndex)
+                
+            
+                if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+                    
+                    if let vc = UIViewController.currentViewController() {
+                        
+                        let nav = UINavigationController(rootViewController: PLHVC)
+
+                        // Set the user ID, nickname, and onPresent properties of UPVC
+                        PLHVC.searchHashtag = selectedHashtag
+                        PLHVC.onPresent = true
+
+                        // Customize the navigation bar appearance
+                        nav.navigationBar.barTintColor = .background
+                        nav.navigationBar.tintColor = .white
+                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                        nav.modalPresentationStyle = .fullScreen
+                        vc.present(nav, animated: true, completion: nil)
+               
+                    }
+                }
+                
+                
+            }
+
+            self.label.handleURLTap { [weak self] string in
+                guard let self = self else { return }
+                let url = string.absoluteString
+                
+                if url.contains("https://stitchbox.gg/app/account/") {
+                    
+                    if let id = self.getUIDParameter(from: url) {
+                        self.moveToUserProfileVC(id: id)
+                    }
+        
+                } else if url.contains("https://stitchbox.gg/app/post/") {
+                
+                    if let id = self.getUIDParameter(from: url) {
+                        self.openPost(id: id)
+                    }
+
+                } else {
+                    
+                    guard let requestUrl = URL(string: url) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(requestUrl) {
+                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                    }
+                }
+                
+            }
+            
             
             self.setupDefaultContent()
             
@@ -224,18 +317,126 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         automaticallyManagesSubnodes = true
     
         if post.muxPlaybackId != "" {
-            configureVideoNode(for: post)
+            self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
+            self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
+            self.videoNode.shouldAutoplay = false
+            self.videoNode.shouldAutorepeat = true
+            
+            self.videoNode.muted = false
+            self.videoNode.delegate = self
+            
+            
+            if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
+                // Calculate aspect ratio
+                let aspectRatio = Float(width) / Float(height)
+             
+                // Set contentMode based on aspect ratio
+                if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
+                    self.videoNode.contentMode = .scaleAspectFill
+                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
+                    self.videoNode.contentMode = .scaleAspectFit
+                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                } else {
+                    // Default contentMode, adjust as needed
+                    self.videoNode.contentMode = .scaleAspectFit
+                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                }
+            } else {
+                // Default contentMode, adjust as needed
+                self.videoNode.contentMode = .scaleAspectFill
+                self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+            }
+
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
+            }
+            
+            
+            
+        } else {
+            
+            if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
+                // Calculate aspect ratio
+                let aspectRatio = Float(width) / Float(height)
+
+                // Set contentMode based on aspect ratio
+                if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
+                    self.imageNode.contentMode = .scaleAspectFill
+                } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
+                    self.imageNode.contentMode = .scaleAspectFit
+                    //self.backgroundImage.setGradientImage(with: post.imageUrl)
+                } else {
+                    // Default contentMode, adjust as needed
+                    self.imageNode.contentMode = .scaleAspectFit
+                    //self.backgroundImage.setGradientImage(with: post.imageUrl)
+                }
+            } else {
+                // Default contentMode, adjust as needed
+                self.imageNode.contentMode = .scaleAspectFill
+                //self.backgroundImage.setGradientImage(with: post.imageUrl)
+            }
+            
+
+            imageStorage.async.object(forKey: post.imageUrl.absoluteString) { result in
+                if case .value(let image) = result {
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.imageNode.image = image
+                    }
+                   
+                    
+                } else {
+                    
+                    AF.request(post.imageUrl).responseImage { response in
+                                          
+                       switch response.result {
+                        case let .success(value):
+                           self.imageNode.image = value
+                           try? imageStorage.setObject(value, forKey: post.imageUrl.absoluteString, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+                                              
+                               case let .failure(error):
+                                   print(error)
+                            }
+                                          
+                      }
+                    
+                }
+            }
+            
+            
         }
         
         
-        DispatchQueue.main.async { [weak self] in
+        DispatchQueue.main.async() { [weak self] in
             guard let self = self else { return }
-            self.setupSideButtonsView()
-            self.setupGestures()
+            self.sideButtonsView = ButtonSideList()
+            self.sideButtonsView.backgroundColor = .clear
+            self.sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
+            self.view.addSubview(self.sideButtonsView)
+            self.originalCenter = self.view.center
+
+            NSLayoutConstraint.activate([
+                self.sideButtonsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
+                self.sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -55),
+                self.sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
+                self.sideButtonsView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
+            ])
+
+            let viewStitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.viewStitchTapped))
+            viewStitchTap.numberOfTapsRequired = 1
+            self.sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
         }
 
   
     }
+    
     
     func setupLabel() {
         label = ActiveLabel()
@@ -422,14 +623,14 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
     
     private func configureVideoNode(for post: PostModel) {
-        self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
+       // self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
         self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
         self.videoNode.shouldAutoplay = false
         self.videoNode.shouldAutorepeat = true
         self.videoNode.muted = false
         self.videoNode.delegate = self
         
-        setNodeContentMode(for: post, node: self.videoNode, defaultContentMode: .scaleAspectFit)
+        setNodeContentMode(for: post, node: self.videoNode, defaultContentMode: .scaleAspectFill)
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
