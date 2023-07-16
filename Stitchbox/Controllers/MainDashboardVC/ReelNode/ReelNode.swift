@@ -30,11 +30,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var isSave = false
     var previousTimeStamp: TimeInterval = 0.0
     var totalWatchedTime: TimeInterval = 0.0
-    var roundedCornerNode: RoundedCornerNode
+   
     var collectionNode: ASCollectionNode?
     var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
-    var videoNode: RoundedCornerVideoNode
+    var videoNode: ASVideoNode
     
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
@@ -74,8 +74,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
       
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
-        self.roundedCornerNode = RoundedCornerNode()
-        self.videoNode = RoundedCornerVideoNode()
+      
+        self.videoNode = ASVideoNode()
         self.gradientNode = GradienView()
         
         self.buttonNode = ASDisplayNode()
@@ -354,6 +354,10 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
+                
+                self.videoNode.view.layer.cornerRadius = 25
+                self.videoNode.view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+                self.videoNode.view.clipsToBounds = true
             }
             
             
@@ -1827,7 +1831,7 @@ extension ReelNode {
 extension ReelNode {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-         
+        
         setupSpace(constrainedSize: constrainedSize)
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
         contentNode.maximumNumberOfLines = 0
@@ -1839,36 +1843,35 @@ extension ReelNode {
 
         let contentInset = UIEdgeInsets(top: 2, left: 20, bottom: 2, right: 70)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
-        
+
         let verticalStack = ASStackLayoutSpec.vertical()
-        
         let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
-        
+
         verticalStack.children = [headerInsetSpec]
-        
+
         if !post.content.isEmpty || post.hashtags.contains(where: { !$0.isEmpty }) {
             verticalStack.children?.append(contentInsetSpec)
         }
 
         verticalStack.children?.append(buttonsInsetSpec)
-       
+
         let verticalStackInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
 
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         let gradientInsetSpec = ASInsetLayoutSpec(insets: inset, child: gradientNode)
 
+        // Here we have removed the roundedCornerNode and using videoNode directly
         let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
-        
-        let backgroundSpec = ASBackgroundLayoutSpec(child: videoInsetSpec, background: roundedCornerNode)
-        let overlay = ASOverlayLayoutSpec(child: backgroundSpec, overlay: gradientInsetSpec)
-        
+
+        let overlay = ASOverlayLayoutSpec(child: videoInsetSpec, overlay: gradientInsetSpec)
+
         let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
         let finalOverlay = ASOverlayLayoutSpec(child: overlay, overlay: relativeSpec)
 
         return finalOverlay
-        
     }
+
 
 
 

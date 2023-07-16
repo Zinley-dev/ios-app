@@ -504,7 +504,7 @@ extension PendingVC {
     
     
     func retrieveNextPageForMyPostWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-      
+
         APIManager.shared.getMyWaitlist(page: myPage) { [weak self] result in
             guard let self = self else { return }
             

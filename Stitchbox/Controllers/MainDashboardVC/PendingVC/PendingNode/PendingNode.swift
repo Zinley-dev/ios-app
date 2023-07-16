@@ -30,11 +30,11 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     var isSave = false
     var previousTimeStamp: TimeInterval = 0.0
     var totalWatchedTime: TimeInterval = 0.0
-    var roundedCornerNode: PendingRoundedCornerNode
+   
     var collectionNode: ASCollectionNode?
     var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
-    var videoNode: PendingRoundedCornerVideoNode
+    var videoNode: ASVideoNode
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
    
@@ -76,8 +76,8 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
       
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
-        self.roundedCornerNode = PendingRoundedCornerNode()
-        self.videoNode = PendingRoundedCornerVideoNode()
+      
+        self.videoNode = ASVideoNode()
         self.gradientNode = GradienView()
         self.buttonNode = ASDisplayNode()
     
@@ -307,6 +307,8 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
+                self.videoNode.view.layer.cornerRadius = 25
+                self.videoNode.view.clipsToBounds = true
             }
             
             
@@ -1076,7 +1078,7 @@ extension PendingNode {
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-         
+        
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
@@ -1105,16 +1107,15 @@ extension PendingNode {
         let gradientInsetSpec = ASInsetLayoutSpec(insets: inset, child: gradientNode)
 
         let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
-        
-        let backgroundSpec = ASBackgroundLayoutSpec(child: videoInsetSpec, background: roundedCornerNode)
-        let overlay = ASOverlayLayoutSpec(child: backgroundSpec, overlay: gradientInsetSpec)
-        
+
+        let overlay = ASOverlayLayoutSpec(child: videoInsetSpec, overlay: gradientInsetSpec)
+
         let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
         let finalOverlay = ASOverlayLayoutSpec(child: overlay, overlay: relativeSpec)
 
         return finalOverlay
-        
     }
+
 
 
 
