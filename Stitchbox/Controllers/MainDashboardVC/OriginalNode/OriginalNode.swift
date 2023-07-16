@@ -106,11 +106,13 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             
             self.selectPostCollectionView.collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
             
+            let height =  UIScreen.main.bounds.height * 1 / 4.5
+          
             NSLayoutConstraint.activate([
                 self.selectPostCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
                 self.selectPostCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
                 self.selectPostCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -8),
-                self.selectPostCollectionView.heightAnchor.constraint(equalToConstant: 280)
+                self.selectPostCollectionView.heightAnchor.constraint(equalToConstant: height)
             ])
             
             self.selectPostCollectionView.collectionView.allowsMultipleSelection = false
@@ -167,15 +169,16 @@ extension OriginalNode {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == self.selectPostCollectionView.collectionView {
-            let numberOfItemsInRow: CGFloat = 3
-            let spacing: CGFloat = 5
-            let width = (UIScreen.main.bounds.width - (numberOfItemsInRow + 1) * spacing) / numberOfItemsInRow
-            let height = width * 13.5 / 9  // This will give you an aspect ratio of 9:16
+        
+            let height =  UIScreen.main.bounds.height * 1 / 4.5 - 70
+            let width = height * 9 / 13.5
             
-           
             return CGSize(width: width, height: height)
+            
         } else {
+            
             return CGSize(width: 0, height: 0)
+            
         }
     }
 

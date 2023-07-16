@@ -17,6 +17,7 @@ import ObjectMapper
 import AppTrackingTransparency
 import AdSupport
 import AppsFlyerLib
+import AsyncDisplayKit
 
 
 let saveImage = UIImage.init(named: "saved.filled")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
@@ -1119,5 +1120,81 @@ func requestTrackingAuthorization(userId: String) {
             // Handle other cases.
             print("Unknown case.")
         }
+    }
+}
+
+class RoundedCornerNode: ASDisplayNode {
+    override func didLoad() {
+        super.didLoad()
+        self.clipsToBounds = true
+        self.cornerRadius = 25
+        self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+    }
+}
+
+class PendingRoundedCornerNode: ASDisplayNode {
+    override init() {
+        super.init()
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.clipsToBounds = true
+            self.cornerRadius = 25
+        }
+    }
+}
+
+
+class RoundedCornerImageNode: ASNetworkImageNode {
+    override func didLoad() {
+        super.didLoad()
+        view.layer.cornerRadius = 25
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+        view.clipsToBounds = true
+    }
+}
+
+class RoundedCornerVideoNode: ASVideoNode {
+    override func didLoad() {
+        super.didLoad()
+        view.layer.cornerRadius = 25
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+        view.clipsToBounds = true
+    }
+}
+
+
+class PendingRoundedCornerImageNode: ASNetworkImageNode {
+    override func didLoad() {
+        super.didLoad()
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.view.layer.cornerRadius = 25
+            self.view.clipsToBounds = true
+        }
+    }
+}
+
+class PendingRoundedCornerVideoNode: ASVideoNode {
+    override func didLoad() {
+        super.didLoad()
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.view.layer.cornerRadius = 25
+            self.view.clipsToBounds = true
+        }
+    }
+}
+
+
+
+
+extension UIView {
+    func pinToSuperviewEdges() {
+        guard let superview = self.superview else { return }
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
+        self.bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
+        self.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
+        self.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
     }
 }

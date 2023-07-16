@@ -1,8 +1,8 @@
 //
-//  ReelNode.swift
+//  PendingNode.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 4/2/23.
+//  Created by Khoi Nguyen on 7/16/23.
 //
 
 import Foundation
@@ -19,10 +19,10 @@ fileprivate let FontSize: CGFloat = 14
 fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
-class ReelNode: ASCellNode, ASVideoNodeDelegate {
+class PendingNode: ASCellNode, ASVideoNodeDelegate {
     
     deinit {
-        print("ReelNode is being deallocated.")
+        print("PendingNode is being deallocated.")
     }
     
     var allowProcess = true
@@ -30,21 +30,19 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var isSave = false
     var previousTimeStamp: TimeInterval = 0.0
     var totalWatchedTime: TimeInterval = 0.0
-    var roundedCornerNode: RoundedCornerNode
+    var roundedCornerNode: PendingRoundedCornerNode
     var collectionNode: ASCollectionNode?
     var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
-    var videoNode: RoundedCornerVideoNode
-    
+    var videoNode: PendingRoundedCornerVideoNode
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
-    var buttonNode: ASDisplayNode
+   
     var toggleContentNode = ASTextNode()
    
     var shouldCountView = true
     var headerView: PostHeader!
-    var buttonsView: ButtonsHeader!
-    var sideButtonsView: ButtonSideList!
+   
     var gradientNode: GradienView
     var time = 0
     var likeCount = 0
@@ -60,13 +58,17 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var label: ActiveLabel!
     var pinchGestureRecognizer: UIPinchGestureRecognizer!
     var panGestureRecognizer: UIPanGestureRecognizer!
-
-    //var panGestureRecognizer: UIPanGestureRecognizer!
+    var buttonNode: ASDisplayNode
+    var pendingView: HandlePendingView!
+    //HandlePendingView
     
     private let fireworkController = FountainFireworkController()
     private let fireworkController2 = ClassicFireworkController()
  
     let maximumShowing = 100
+    
+    var approveBtn : ((ASCellNode) -> Void)?
+    var declineBtn : ((ASCellNode) -> Void)?
 
     
     init(with post: PostModel) {
@@ -74,21 +76,24 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
       
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
-        self.roundedCornerNode = RoundedCornerNode()
-        self.videoNode = RoundedCornerVideoNode()
+        self.roundedCornerNode = PendingRoundedCornerNode()
+        self.videoNode = PendingRoundedCornerVideoNode()
         self.gradientNode = GradienView()
-        
         self.buttonNode = ASDisplayNode()
+    
        
         super.init()
         
         self.gradientNode.isLayerBacked = true
         self.gradientNode.isOpaque = false
-        
-        
+    
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            
+            self.gradientNode.cornerRadius = 25
+            self.gradientNode.clipsToBounds = true
+            
             self.label = ActiveLabel()
            
             self.label.backgroundColor = .clear
@@ -123,6 +128,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             }
 
             self.label.handleHashtagTap { hashtag in
+                
                 var selectedHashtag = hashtag
                 selectedHashtag.insert("#", at: selectedHashtag.startIndex)
                 
@@ -205,22 +211,9 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
             self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
             
-            if post.setting?.allowStitch == false {
-                self.headerView.createStitchView.isHidden = true
-                self.headerView.createStitchStack.isHidden = true
-                self.headerView.stichBtn.isHidden = true
-            } else {
-                
-                if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
-                    self.headerView.createStitchView.isHidden = true
-                    self.headerView.createStitchStack.isHidden = true
-                    self.headerView.stichBtn.isHidden = true
-                } else {
-                    self.headerView.createStitchView.isHidden = false
-                    self.headerView.stichBtn.isHidden = false
-                    self.headerView.createStitchStack.isHidden = false
-                }
-            }
+            self.headerView.createStitchView.isHidden = true
+            self.headerView.createStitchStack.isHidden = true
+            self.headerView.stichBtn.isHidden = true
             
             if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
                 
@@ -232,84 +225,44 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 // check
                 
             }
-            
-            self.buttonsView = ButtonsHeader()
-            self.buttonNode.view.addSubview(self.buttonsView)
-            self.buttonsView.translatesAutoresizingMaskIntoConstraints = false
-            self.buttonsView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
-            self.buttonsView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
-            self.buttonsView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
-            self.buttonsView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
 
-            self.buttonsView.likeBtn.setTitle("", for: .normal)
-            self.buttonsView.commentBtn.setTitle("", for: .normal)
-            self.buttonsView.commentBtn.setImage(cmtImage, for: .normal)
-            self.buttonsView.shareBtn.setTitle("", for: .normal)
-            self.buttonsView.shareBtn.setImage(shareImage, for: .normal)
-            self.buttonsView.saveBtn.setImage(unsaveImage, for: .normal)
             
-            let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
+            let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
             avatarTap.numberOfTapsRequired = 1
           
-            let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
+            let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
             usernameTap.numberOfTapsRequired = 1
             self.headerView.usernameLbl.isUserInteractionEnabled = true
             self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
             
             
-            let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
+            let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
             username2Tap.numberOfTapsRequired = 1
-           
 
-            let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.shareTapped))
-            shareTap.numberOfTapsRequired = 1
-            self.buttonsView.shareBtn.addGestureRecognizer(shareTap)
-            
-            
-            let likeTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeTapped))
-            likeTap.numberOfTapsRequired = 1
-            self.buttonsView.likeBtn.addGestureRecognizer(likeTap)
-            
-            let stitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.stitchTapped))
-            stitchTap.numberOfTapsRequired = 1
-            self.headerView.stichBtn.addGestureRecognizer(stitchTap)
-            
-            
-            let saveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.onClickSave))
-            saveTap.numberOfTapsRequired = 1
-            self.buttonsView.saveBtn.addGestureRecognizer(saveTap)
-            
-            
-            let commentTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.cmtTapped))
-            commentTap.numberOfTapsRequired = 1
-            self.buttonsView.commentBtn.addGestureRecognizer(commentTap)
-            
-            
-            let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeHandle))
-            doubleTap.numberOfTapsRequired = 2
-            self.view.addGestureRecognizer(doubleTap)
-            
-            doubleTap.delaysTouchesBegan = true
-            
-            
-            let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ReelNode.settingTapped))
-            longPress.minimumPressDuration = 0.65
-            self.view.addGestureRecognizer(longPress)
-            
-            longPress.delaysTouchesBegan = true
-            
-            //-------------------------------------//
             
             
             self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
             
-            self.checkIfLike()
-            self.totalLikeCount()
-            self.totalCmtCount()
-            self.shareCount()
-            self.getSaveCount()
-            self.checkIfSave()
-           
+            
+            self.pendingView = HandlePendingView()
+            self.buttonNode.view.addSubview(self.pendingView)
+            self.pendingView.translatesAutoresizingMaskIntoConstraints = false
+            self.pendingView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
+            self.pendingView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
+            self.pendingView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
+            self.pendingView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
+            
+            
+            //
+            
+            let approveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.approveTapped))
+            approveTap.numberOfTapsRequired = 1
+            self.pendingView.approveBtn.addGestureRecognizer(approveTap)
+            
+            let declineTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.declineTapped))
+            declineTap.numberOfTapsRequired = 1
+            self.pendingView.declineBtn.addGestureRecognizer(declineTap)
+            
         }
        
         
@@ -360,92 +313,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
         }
         
-        
-        DispatchQueue.main.async() { [weak self] in
-            guard let self = self else { return }
-            self.sideButtonsView = ButtonSideList()
-            self.sideButtonsView.backgroundColor = .clear
-            self.sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
-            self.view.addSubview(self.sideButtonsView)
-            self.originalCenter = self.view.center
-
-            NSLayoutConstraint.activate([
-                self.sideButtonsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
-                self.sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -55),
-                self.sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
-                self.sideButtonsView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
-            ])
-
-            let viewStitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.viewStitchTapped))
-            viewStitchTap.numberOfTapsRequired = 1
-            self.sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
-        }
-
-  
-    }
-    
-    
-    func setupLabel() {
-        label = ActiveLabel()
-        label.backgroundColor = .clear
-        contentNode.view.isUserInteractionEnabled = true
-        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        label.setContentHuggingPriority(.defaultLow, for: .vertical)
-        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-
-        let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
-        label.customColor[customType] = .lightGray
-        label.numberOfLines = Int(contentNode.lineCount)
-        label.enabledTypes = [.hashtag, .url, customType]
-        label.attributedText = contentNode.attributedText
-
-        // Set custom colors
-        label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-        label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
-
-        label.handleCustomTap(for: customType) { [weak self] element in
-            guard let self = self else { return }
-            if element == "*more" {
-                self.seeMore()
-            } else if element == "*hide" {
-                self.hideContent()
-            }
-        }
-
-        label.handleHashtagTap { [weak self] hashtag in
-            guard let self = self else { return }
-            self.navigateToHashtag(hashtag)
-        }
-
-        label.handleURLTap { [weak self] string in
-            guard let self = self else { return }
-            self.navigateToHashtag(string.absoluteString)
-        }
-    }
-
-    func setupGestureRecognizers() {
-        view.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:))))
-        
-        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        panGestureRecognizer.delegate = self
-        panGestureRecognizer.minimumNumberOfTouches = 2
-        view.addGestureRecognizer(panGestureRecognizer)
-        
-        let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(likeHandle))
-        doubleTap.numberOfTapsRequired = 2
-        view.addGestureRecognizer(doubleTap)
-        doubleTap.delaysTouchesBegan = true
-
-        let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(settingTapped))
-        longPress.minimumPressDuration = 0.65
-        view.addGestureRecognizer(longPress)
-        longPress.delaysTouchesBegan = true
-    }
-
-    func setupViews() {
-        setupHeaderView()
-        setupButtonsView()
+       
     }
 
     func navigateToHashtag(_ hashtag: String) {
@@ -477,79 +345,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         }
         
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
-    }
-
-    
-    func setupHeaderView() {
-        headerView = PostHeader()
-        headerNode.view.addSubview(headerView)
-
-        headerView.pinToSuperviewEdges()
-        adjustHeaderViewVisibility()
-    }
-
-    func setupButtonsView() {
-        buttonsView = ButtonsHeader()
-        buttonNode.view.addSubview(buttonsView)
-
-        buttonsView.pinToSuperviewEdges()
-        setupButtons()
-    }
-
-    func adjustHeaderViewVisibility() {
-        let isOwnedByUser = _AppCoreData.userDataSource.value?.userID == post.owner?.id
-        let isStitchAllowed = post.setting?.allowStitch ?? false
-
-        headerView.followBtn.isHidden = isOwnedByUser
-        headerView.createStitchView.isHidden = isOwnedByUser || !isStitchAllowed
-        headerView.createStitchStack.isHidden = isOwnedByUser || !isStitchAllowed
-        headerView.stichBtn.isHidden = isOwnedByUser || !isStitchAllowed
-    }
-
-    func setupButtons() {
-        buttonsView.likeBtn.setImage(nil, for: .normal)
-        buttonsView.commentBtn.setImage(cmtImage, for: .normal)
-        buttonsView.shareBtn.setImage(shareImage, for: .normal)
-        buttonsView.saveBtn.setImage(unsaveImage, for: .normal)
-
-        setupButtonGestures()
-    }
-
-    func setupButtonGestures() {
-        let buttons = [
-            buttonsView.likeBtn,
-            buttonsView.shareBtn,
-            buttonsView.saveBtn,
-            buttonsView.commentBtn,
-            headerView.stichBtn
-        ]
-        
-        let selectors = [
-            #selector(likeTapped),
-            #selector(shareTapped),
-            #selector(onClickSave),
-            #selector(cmtTapped),
-            #selector(stitchTapped)
-        ]
-        
-        for (index, button) in buttons.enumerated() {
-            let tap = UITapGestureRecognizer(target: self, action: selectors[index])
-            tap.numberOfTapsRequired = 1
-            button?.addGestureRecognizer(tap)
-        }
-        
-        let labelTap = UITapGestureRecognizer(target: self, action: #selector(userTapped))
-        labelTap.numberOfTapsRequired = 1
-        headerView.usernameLbl.addGestureRecognizer(labelTap)
-    }
-
-    func updatePostStatistics() {
-        checkIfLike()
-        totalLikeCount()
-        totalCmtCount()
-        shareCount()
-        getSaveCount()
-        checkIfSave()
     }
     
     private func setNodeContentMode(for post: PostModel, node: ASNetworkImageNode, defaultContentMode: UIView.ContentMode) {
@@ -584,28 +379,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
         }
     }
-    
-    private func setupSideButtonsView() {
-        self.sideButtonsView = ButtonSideList()
-        self.sideButtonsView.backgroundColor = .clear
-        self.sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(self.sideButtonsView)
-        self.originalCenter = self.view.center
 
-        NSLayoutConstraint.activate([
-            self.sideButtonsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
-            self.sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -55),
-            self.sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
-            self.sideButtonsView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
-        ])
-    }
-
-    private func setupGestures() {
-        let viewStitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.viewStitchTapped))
-        viewStitchTap.numberOfTapsRequired = 1
-        self.sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
-    }
-    
     func setupDefaultContent() {
 
         headerNode.backgroundColor = UIColor.clear
@@ -681,7 +455,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             guard let self = self else { return }
             self.headerView.followBtn.isHidden = false
             self.isFollowingUser = false
-            let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.followTap))
+            let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.followTap))
             followTap.numberOfTapsRequired = 1
             self.headerView.followBtn.addGestureRecognizer(followTap)
             
@@ -919,7 +693,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 
             }
             
-            
         }
 
         if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
@@ -1011,7 +784,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
 }
 
-extension ReelNode {
+extension PendingNode {
     
     func didTap(_ videoNode: ASVideoNode) {
         
@@ -1185,7 +958,7 @@ extension ReelNode {
 }
 
 
-extension ReelNode {
+extension PendingNode {
     
     
     @objc func userTapped() {
@@ -1224,260 +997,7 @@ extension ReelNode {
  
         
     }
-    
-    @objc func onClickSave() {
-        
-        if isSave {
-            
-            isSave = false
-            self.saveCount -= 1
-            
-            
-            unSaveAnimation()
-            
-            APIManager.shared.unsavePost(postId: post.id) { [weak self] result in
-                guard let self = self else { return }
 
-                switch result {
-                case .success(let apiResponse):
-                    print(apiResponse)
-                   
-                case .failure(let error):
-                    print("SaveCount: \(error)")
-                    isSave = true
-                    saveAnimation()
-                }
-            }
-
-            
-        } else {
-            
-            self.saveCount += 1
-            isSave = true
-            
-            saveAnimation()
-            
-            APIManager.shared.savePost(postId: post.id) { [weak self] result in
-                guard let self = self else { return }
-
-                switch result {
-                case .success(let apiResponse):
-                    print(apiResponse)
-                   
-                case .failure(let error):
-                    print("SaveCount: \(error)")
-                    isSave = false
-                    unSaveAnimation()
-                }
-            }
-            
-        }
-        
-        
-        
-        
-    }
-    
-    
-    func unsave() {
-        
-        APIManager.shared.unsavePost(postId: post.id) { result in
-            switch result {
-            case .success(let apiResponse):
-                print("Share get: \(apiResponse)")
-                
-                
-            case .failure(let error):
-                print("SaveCount: \(error)")
-            }
-        }
-        
-    }
-    
-    
-    func checkIfSave() {
-        
-        APIManager.shared.checkSavedPost(pid: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-
-                print("Save checked: \(apiResponse)")
-                
-                guard apiResponse.body?["message"] as? String == "success",
-                      let getIsSaved = apiResponse.body?["saved"] as? Bool  else {
-                        return
-                }
-                
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-            
-                    isSave = getIsSaved
-                    
-                    if isSave {
-                        saveAnimation()
-                    } else {
-                        unSaveAnimation()
-                    }
-                }
-            
-            case .failure(let error):
-                print("SaveCount: \(error)")
-                
-            }
-        }
-       
-        
-    }
-    
-    func getSaveCount() {
-        
-        APIManager.shared.countSavedPost(pid: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                
-                print("Save check: \(apiResponse)")
-                
-                guard apiResponse.body?["message"] as? String == "success",
-                      let CountFromQuery = apiResponse.body?["saved"] as? Int  else {
-                        return
-                }
-                
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.saveCount = CountFromQuery
-                    self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(CountFromQuery)))"
-                }
-               
-            case .failure(let error):
-                print("SaveCount: \(error)")
-            }
-        }
-        
-    }
-    
-    
-    func shareCount() {
-        APIManager.shared.countShare(postId: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                print("shareCheck: \(apiResponse)")
-
-                guard let message = apiResponse.body?["message"] as? String,
-                      message == "success",
-                      let CountFromQuery = apiResponse.body?["data"] as? Int else {
-                    print("Error: Invalid or missing data in response")
-                    return
-                }
-
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.buttonsView.shareCountLbl.text = "\(formatPoints(num: Double(CountFromQuery)))"
-                }
-
-            case .failure(let error):
-                print("shareCount Error: \(error)")
-            }
-        }
-    }
-
-    
-    @objc func shareTapped() {
-    
-        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-            print("Sendbird: Can't get userUID")
-            return
-        }
-        
-        APIManager.shared.createShare(postId: post.id, userId: userUID) { result in
-            switch result {
-            case .success(let apiResponse):
-    
-                print(apiResponse)
-                
-            case .failure(let error):
-                print(error)
-            }
-        
-        }
-        
-        
-        let loadUsername = userDataSource.userName
-        
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(post.id)")!]
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        
-        ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
-            
-            
-        }
-        
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            vc.present(ac, animated: true, completion: nil)
-            
-        }
-        
-        
-    }
-    
-    
-    @objc func cmtTapped() {
-        
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            general_vc = vc
-            
-            let slideVC = CommentVC()
-            
-            slideVC.post = self.post
-            slideVC.modalPresentationStyle = .custom
-            slideVC.transitioningDelegate = vc.self
-            global_presetingRate = Double(0.75)
-            global_cornerRadius = 35
-            vc.present(slideVC, animated: true, completion: nil)
-            
-        }
-        
-    }
-    
-    @objc func stitchTapped() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if let update1 = vc as? FeedViewController {
-                update1.editeddPost = post
-            } else if let update1 = vc as? SelectedPostVC {
-                update1.editeddPost = post
-            }
-            
-            general_vc = vc
-            
-            let slideVC = StitchSettingVC()
-            
-            if vc is FeedViewController {
-                slideVC.isFeed = true
-            } else {
-                slideVC.isFeed = false
-            }
-            
-            slideVC.modalPresentationStyle = .custom
-            slideVC.transitioningDelegate = vc.self
-            global_presetingRate = Double(0.30)
-            global_cornerRadius = 35
-            vc.present(slideVC, animated: true, completion: nil)
-            
-        }
-         
-    }
-    
     @objc func followTap() {
         
         if allowProcess {
@@ -1494,69 +1014,9 @@ extension ReelNode {
         }
          
     }
+
+  
     
-    
-    @objc func likeTapped() {
-        
-        if isLike == false {
-            performLike()
-        } else {
-            performUnLike()
-        }
-         
-    }
-    
-    
-    @objc func settingTapped() {
-        
-        settingBtn?(self)
-        
-    }
-    
-    
-    @objc func viewStitchTapped() {
-        
-        viewStitchBtn?(self)
-        
-    }
-    
-    @objc func likeHandle() {
-        
-        
-        let imgView = UIImageView()
-        imgView.image = popupLikeImage
-        imgView.frame.size = CGSize(width: 120, height: 120)
-        imgView.contentMode = .scaleAspectFit
-        imgView.center = self.view.center
-        self.view.addSubview(imgView)
-        
-        
-        self.fireworkController.addFirework(sparks: 10, above: imgView)
-        self.fireworkController2.addFireworks(count: 10, sparks: 8, around: imgView)
-        
-        imgView.transform = CGAffineTransform.identity
-        
-        UIView.animate(withDuration: 0.5) {
-            
-            imgView.alpha = 0
-            
-        }
-        
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            if imgView.alpha == 0 {
-                
-                imgView.removeFromSuperview()
-                
-            }
-            
-        }
-        
-        if isLike == false {
-            performLike()
-        }
-        
-    }
     
     func animateMute() {
         let imgView = UIImageView(image: muteImage)
@@ -1603,247 +1063,34 @@ extension ReelNode {
     }
 
 
-    
-    func checkIfLike() {
-        
-        APIManager.shared.hasLikedPost(id: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-    
-                guard apiResponse.body?["message"] as? String == "success",
-                      let checkIsLike = apiResponse.body?["islike"] as? Bool  else {
-                        return
-                }
-                
-                self.isLike = checkIsLike
-                if self.isLike {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
-                    }
-                } else {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.buttonsView.likeBtn.setImage(emptyLikeImage!, for: .normal)
-                    }
-                }
-                
-            case .failure(let error):
-                print(error)
-            }
-        
-        }
-    }
-    
-    func performLike() {
-
-        self.likeCount += 1
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.likeAnimation()
-            self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
-            self.isLike = true
-        }
-        
-        APIManager.shared.likePost(id: post.id) { result in
-            switch result {
-            case .success(let apiResponse):
-               print(apiResponse)
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
-    }
-    
-    func performUnLike() {
-        
-        
-        self.likeCount -= 1
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.unlikeAnimation()
-            self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
-            self.isLike = false
-        }
-        
-        APIManager.shared.unlikePost(id: post.id) { result in
-
-            switch result {
-            case .success(let apiResponse):
-                print(apiResponse)
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    func likeAnimation() {
-        
-        UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.likeBtn.transform = self.buttonsView.likeBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
-            
-            
-            
-            
-            }, completion: { _ in
-              // Step 2
-              UIView.animate(withDuration: 0.1, animations: {
-                  self.buttonsView.likeBtn.transform = CGAffineTransform.identity
-              })
-        })
-        
-    }
-    
-    func saveAnimation() {
-        
-        
-        self.buttonsView.saveCountLbl.text =  "\(formatPoints(num: Double(self.saveCount)))"
-        
-        UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.saveBtn.transform = self.buttonsView.saveBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.saveBtn.setImage(saveImage!, for: .normal)
-            
-            
-            
-            
-            }, completion: { _ in
-              // Step 2
-              UIView.animate(withDuration: 0.1, animations: {
-                  self.buttonsView.saveBtn.transform = CGAffineTransform.identity
-              })
-        })
-        
-    }
-    
-    func unSaveAnimation() {
-        
-        self.buttonsView.saveCountLbl.text =  "\(formatPoints(num: Double(self.saveCount)))"
-        
-        UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.saveBtn.transform = self.buttonsView.saveBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.saveBtn.setImage(unsaveImage!, for: .normal)
-            }, completion: { _ in
-              // Step 2
-              UIView.animate(withDuration: 0.1, animations: {
-                  self.buttonsView.saveBtn.transform = CGAffineTransform.identity
-              })
-        })
-        
-    }
-    
-    func unlikeAnimation() {
-        
-        UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.likeBtn.transform = self.buttonsView.saveBtn.transform.scaledBy(x: 0.9, y: 0.9)
-            self.buttonsView.likeBtn.setImage(emptyLikeImage!, for: .normal)
-            }, completion: { _ in
-              // Step 2
-              UIView.animate(withDuration: 0.1, animations: {
-                  self.buttonsView.likeBtn.transform = CGAffineTransform.identity
-              })
-        })
-    }
-
 }
 
-extension ReelNode {
-    
-    func totalLikeCountFromLocal() {
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeLikes ?? 0)))"
-        }
-        
-    }
-    
-    func totalCmtCountFromLocal() {
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(self.post.estimatedCount?.sizeComments ?? 0)))"
-        }
-        
-    }
-    
-    func totalLikeCount() {
-        
-        APIManager.shared.countLikedPost(id: post.id) { [weak self] result in
-            guard let self = self else { return }
 
-            switch result {
-            case .success(let apiResponse):
+extension PendingNode {
     
-                guard apiResponse.body?["message"] as? String == "success",
-                      let likeCountFromQuery = apiResponse.body?["likes"] as? Int  else {
-                        return
-                }
-                
-                self.likeCount = likeCountFromQuery
-                
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(likeCountFromQuery)))"
-                }
-               
-            case .failure(let error):
-                print("LikeCount: \(error)")
-            }
-        }
+    private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
         
+        buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 55)
+        let buttonsInset = UIEdgeInsets(top: 10, left: 30, bottom: -10, right: 30)
+        return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
-    
-    func totalCmtCount() {
-        
-        APIManager.shared.countComment(post: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-             
-                guard apiResponse.body?["message"] as? String == "success",
-                      let commentsCountFromQuery = apiResponse.body?["comments"] as? Int  else {
-                        return
-                }
-                
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(commentsCountFromQuery)))"
-                }
-                
-            case .failure(let error):
-                print("CmtCount: \(error)")
-            }
-        }
-        
-    }
-    
-}
-
-extension ReelNode {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
          
-        setupSpace(constrainedSize: constrainedSize)
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
 
-        let headerInset = UIEdgeInsets(top: 0, left: 0, bottom: 2, right: 8)
+        let headerInset = UIEdgeInsets(top: 0, left: 32, bottom: 2, right: 40)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
-        let contentInset = UIEdgeInsets(top: 2, left: 20, bottom: 2, right: 70)
+        let contentInset = UIEdgeInsets(top: 2, left: 52, bottom: 2, right: 102)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
         
         let verticalStack = ASStackLayoutSpec.vertical()
         
         let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
-        
         verticalStack.children = [headerInsetSpec]
         
         if !post.content.isEmpty || post.hashtags.contains(where: { !$0.isEmpty }) {
@@ -1851,11 +1098,10 @@ extension ReelNode {
         }
 
         verticalStack.children?.append(buttonsInsetSpec)
-       
-        let verticalStackInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
+        let verticalStackInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
 
-        let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let inset = UIEdgeInsets(top: 0, left: 32, bottom: 0, right: 32)
         let gradientInsetSpec = ASInsetLayoutSpec(insets: inset, child: gradientNode)
 
         let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
@@ -1872,45 +1118,10 @@ extension ReelNode {
 
 
 
-    private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
-        
-        buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 45)
-        let buttonsInset = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
-        return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
-    }
-
-    private func setupSpace(constrainedSize: ASSizeRange) {
-        delay(0.25) { [weak self] in
-            guard let self = self else { return }
-            if let buttonsView = self.buttonsView {
-             
-                let leftAndRightPadding: CGFloat = 16 * 2 // Padding for both sides
-                let itemWidth: CGFloat = 60
-                let numberOfItems: CGFloat = 4 // Number of items in the stack view
-                let superViewWidth: CGFloat = constrainedSize.min.width // Assuming this is the superview's width
-                
-                // Calculate the total width of items
-                let totalItemWidth: CGFloat = numberOfItems * itemWidth
-                
-                // Calculate the total space we have left for spacing after subtracting the item widths and paddings
-                let totalSpacingWidth: CGFloat = superViewWidth - totalItemWidth - leftAndRightPadding
-                
-                // Calculate the spacing by dividing the total space by the number of spaces (which is 3, for 4 items)
-                let spacing: CGFloat = totalSpacingWidth / (numberOfItems - 1)
-                
-                // Set the calculated spacing
-                print(spacing)
-                buttonsView.stackView.spacing = spacing
-            }
-        }
-    }
-
-
-
 }
 
 
-extension ReelNode {
+extension PendingNode {
     
     func disableScroll() {
         
@@ -1954,7 +1165,7 @@ extension ReelNode {
     
 }
 
-extension ReelNode: UIGestureRecognizerDelegate {
+extension PendingNode: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UIPinchGestureRecognizer || otherGestureRecognizer is UIPinchGestureRecognizer {
@@ -2093,7 +1304,7 @@ extension ReelNode: UIGestureRecognizerDelegate {
     
 }
 
-extension ReelNode {
+extension PendingNode {
     
     func seeMore() {
         
@@ -2108,5 +1319,15 @@ extension ReelNode {
         setNeedsLayout()
     }
     
+    @objc func approveTapped() {
+        
+        approveBtn?(self)
+        
+    }
+    
+    @objc func declineTapped() {
+        
+        declineBtn?(self)
+        
+    }
 }
-
