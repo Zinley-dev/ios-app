@@ -392,7 +392,7 @@ extension EditGeneralInformationVC {
                 if verifyUrl(urlString: text) == true {
                     
                     
-                    saveBtn.backgroundColor = .primary
+                    saveBtn.backgroundColor = .secondary
                     saveBtn.titleLabel?.textColor = .white
                     
                 } else {
@@ -415,7 +415,7 @@ extension EditGeneralInformationVC {
                 
             } else {
                 
-                saveBtn.backgroundColor = .primary
+                saveBtn.backgroundColor = .secondary
                 saveBtn.titleLabel?.textColor = .white
                 
             }
@@ -461,7 +461,7 @@ extension EditGeneralInformationVC {
                         
                         DispatchQueue.main.async {
                             self.availaleUsernameLbl.isHidden = false
-                            self.saveBtn.backgroundColor = .primary
+                            self.saveBtn.backgroundColor = .secondary
                             self.saveBtn.titleLabel?.textColor = .white
                         }
                         

@@ -285,7 +285,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         
         inboxBtn.backgroundColor = UIColor.clear
-        requestBtn.backgroundColor = UIColor.primary
+        requestBtn.backgroundColor = UIColor.secondary
         
         
         InboxVC.view.isHidden = true

@@ -14,7 +14,7 @@ class LastStepViewController: UIViewController, ControllerType {
   @IBOutlet weak var usernameTextfield: UnderlineTextField!
   @IBOutlet weak var passwordTextfield: UnderlineTextField!
   @IBOutlet weak var refCodeTextfield: UnderlineTextField!
-  @IBOutlet weak var submitButton: SButton!
+  @IBOutlet weak var submitButton: UIButton!
   
   @IBOutlet weak var checkUsernameLabel: UILabel!
   @IBOutlet weak var checkPassLengthLabel: UILabel!

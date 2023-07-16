@@ -233,7 +233,7 @@ extension ContactUsVC: UITextViewDelegate {
             
             if ContactTxtView.text.count >= 35 {
                 
-                sendBtn.backgroundColor = .primary
+                sendBtn.backgroundColor = .secondary
                 sendBtn.titleLabel?.textColor = .white
                 
             } else {

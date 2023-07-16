@@ -19,7 +19,7 @@ class EmailResetVC: UIViewController, ControllerType {
     private let disposeBag = DisposeBag()
   
   
-    @IBOutlet weak var nextBtn: SButton!
+    @IBOutlet weak var nextBtn: UIButton!
     @IBOutlet weak var emailTxtField: UITextField!
     
     

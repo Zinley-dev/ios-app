@@ -201,7 +201,7 @@ extension EditBirthdayVC {
         
         if let text = birthdayTxtField.text, text != "" {
             
-            saveBtn.backgroundColor = .primary
+            saveBtn.backgroundColor = .secondary
             saveBtn.titleLabel?.textColor = .white
             
         } else {

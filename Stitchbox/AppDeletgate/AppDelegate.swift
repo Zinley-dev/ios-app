@@ -262,7 +262,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         
         SBUTheme.messageCellTheme.leftBackgroundColor = UIColor.lightGray
-        SBUTheme.messageCellTheme.rightBackgroundColor = UIColor.primary
+        SBUTheme.messageCellTheme.rightBackgroundColor = UIColor.secondary
         SBUTheme.messageCellTheme.userMessageLeftTextColor = UIColor.white
         SBUTheme.messageCellTheme.userMessageRightTextColor = UIColor.white
         SBUTheme.messageCellTheme.userMessageLeftEditTextColor = UIColor.black
@@ -633,27 +633,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func openFistBumpList() {
-        
-        if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
-            
-            if let vc = UIViewController.currentViewController() {
-                
-                let nav = UINavigationController(rootViewController: MFBVC)
-                
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                MFBVC.onPresent = true
-                
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-                
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-                
-                
-            }
-        }
+
         
         
     }

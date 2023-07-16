@@ -476,7 +476,7 @@ extension AddStitchToExistingVC {
         createButton.addTarget(self, action: #selector(onClickStitch(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
         createButton.setTitle("Stitch", for: .normal)
-        createButton.setTitleColor(.primary, for: .normal)
+        createButton.setTitleColor(.secondary, for: .normal)
         createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)

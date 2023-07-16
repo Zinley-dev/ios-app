@@ -13,7 +13,7 @@ class NewPasswordVC: UIViewController, ControllerType {
   
   @IBOutlet weak var enteredPasswordTextfield: UITextField!
   @IBOutlet weak var passwordTextfield: UITextField!
-  @IBOutlet weak var nextButton: SButton!
+  @IBOutlet weak var nextButton: UIButton!
   
   @IBOutlet weak var checkPasswordMatchLabel: UILabel!
   @IBOutlet weak var checkPassLengthLabel: UILabel!

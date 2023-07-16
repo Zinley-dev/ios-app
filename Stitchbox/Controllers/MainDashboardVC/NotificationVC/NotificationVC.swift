@@ -343,12 +343,7 @@ extension NotificationVC {
     
     func openFistBumpList() {
         
-        if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
-            
-            self.navigationController?.pushViewController(MFBVC, animated: true)
-            
-        }
-        
+      
         
     }
     

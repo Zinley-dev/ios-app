@@ -442,13 +442,7 @@ extension ProfileViewController {
     
     @objc func fistBumpedlistTapped(_ sender: UIButton) {
         
-        if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
-            
-            MFBVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(MFBVC, animated: true)
-            
-        }
+     
         
     }
     

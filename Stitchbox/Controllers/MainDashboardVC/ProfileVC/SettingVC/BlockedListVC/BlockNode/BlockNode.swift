@@ -79,7 +79,7 @@ class BlockNode: ASCellNode {
         if isBlock {
             
             DispatchQueue.main.async {
-                self.actionBtnNode.backgroundColor = .primary
+                self.actionBtnNode.backgroundColor = .secondary
                 self.actionBtnNode.layer.borderWidth = 1.0
                 self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                 self.actionBtnNode.layer.cornerRadius = 10.0
@@ -130,7 +130,7 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
             
         }
         
@@ -153,7 +153,7 @@ class BlockNode: ASCellNode {
                 
                 DispatchQueue.main.async {
                     self.isBlock = true
-                    self.actionBtnNode.backgroundColor = .primary
+                    self.actionBtnNode.backgroundColor = .secondary
                     self.actionBtnNode.layer.borderWidth = 1.0
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
@@ -172,7 +172,7 @@ class BlockNode: ASCellNode {
         
         DispatchQueue.main.async {
             self.isFollowingUser = true
-            self.actionBtnNode.backgroundColor = .primary
+            self.actionBtnNode.backgroundColor = .secondary
             self.actionBtnNode.layer.borderWidth = 1.0
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
@@ -208,7 +208,7 @@ class BlockNode: ASCellNode {
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                    self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                     
                 }
             }
@@ -229,7 +229,7 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
             
         }
         
@@ -249,7 +249,7 @@ class BlockNode: ASCellNode {
                 }
                 
                 DispatchQueue.main.async {
-                    self.actionBtnNode.backgroundColor = .primary
+                    self.actionBtnNode.backgroundColor = .secondary
                     self.actionBtnNode.layer.borderWidth = 1.0
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0

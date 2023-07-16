@@ -230,7 +230,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         cell.hashTagLabel.text = selectedUsers[indexPath.row].nickname
         cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
         cell.hashTagLabel.backgroundColor = .clear
-        cell.backgroundColor = .primary
+        cell.backgroundColor = .secondary
         return cell
     }
 

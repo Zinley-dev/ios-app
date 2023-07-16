@@ -175,7 +175,7 @@ extension EditBioVC: UITextViewDelegate {
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
-        createButton.backgroundColor = .primary
+        createButton.backgroundColor = .secondary
         createButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
         customView.addSubview(createButton)

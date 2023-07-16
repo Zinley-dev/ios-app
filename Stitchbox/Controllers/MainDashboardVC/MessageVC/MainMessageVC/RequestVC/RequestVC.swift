@@ -277,7 +277,7 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                         height: iconSize
                 ))
                 hideTypeView.layer.cornerRadius = iconSize/2
-                hideTypeView.backgroundColor = .primary
+                hideTypeView.backgroundColor = .secondary
                 hideTypeView.image = UIImage(named: "hide3x")
                 hideTypeView.contentMode = .center
                 
@@ -308,7 +308,7 @@ class RequestVC: UIViewController, UITableViewDelegate, UITableViewDataSource, S
                         height: iconSize
                 ))
                 leaveTypeView.layer.cornerRadius = iconSize/2
-                leaveTypeView.backgroundColor = .primary
+                leaveTypeView.backgroundColor = .secondary
                 leaveTypeView.image = UIImage(named: "leave3x")!.resize(targetSize: CGSize(width: 20, height: 20))
                 leaveTypeView.contentMode = .center
                 

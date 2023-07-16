@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 class FinalResetVC: UIViewController {
-    @IBOutlet weak var nextButton: SButton!
+    @IBOutlet weak var nextButton: UIButton!
     
     private let disposeBag = DisposeBag()
     private var isButtonEnabled = true // Track the button state

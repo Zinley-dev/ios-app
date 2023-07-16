@@ -12,7 +12,7 @@ import RxCocoa
 class ResetPwdVC: UIViewController, ControllerType {
     typealias ViewModelType = ChangePasswordViewModel
     
-    @IBOutlet weak var saveBtn: SButton!
+    @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var confirmNewPwdTextField: UITextField! {
         didSet {
             let redPlaceholderText = NSAttributedString(string: "Confirm your new password",

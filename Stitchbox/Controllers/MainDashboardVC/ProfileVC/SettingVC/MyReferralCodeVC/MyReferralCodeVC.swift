@@ -37,9 +37,7 @@ class MyReferralCodeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("DEBUG")
-        print(_AppCoreData.userDataSource.value?.toJSON())
-        // Do any additional setup after loading the view.
+     
         setupButtons()
         setupPolicyLabel()
         getDefaultCode()
@@ -85,9 +83,9 @@ extension MyReferralCodeVC: ZSWTappableLabelTapDelegate {
             
             return [
                 .tappableRegion: true,
-                .tappableHighlightedBackgroundColor: UIColor.lightGray,
-                .tappableHighlightedForegroundColor: UIColor.black,
-                .foregroundColor: UIColor.white,
+                .tappableHighlightedBackgroundColor: UIColor.darkGray,
+                .tappableHighlightedForegroundColor: UIColor.white,
+                .foregroundColor: UIColor.black,
                 .underlineStyle: NSUnderlineStyle.single.rawValue,
                 MyReferralCodeVC.URLAttributeName: type.URL
             ]

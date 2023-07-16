@@ -146,7 +146,7 @@ class FindFriendsNode: ASCellNode {
                 self.followBtnNode.layer.borderColor = UIColor.clear.cgColor
                 self.followBtnNode.layer.cornerRadius = 5.0
                 self.followBtnNode.clipsToBounds = true
-                self.followBtnNode.setTitle("Invite", with: UIFont.boldSystemFont(ofSize: FontSize), with: .primary, for: .normal)
+                self.followBtnNode.setTitle("Invite", with: UIFont.boldSystemFont(ofSize: FontSize), with: .secondary, for: .normal)
                 
             }
         

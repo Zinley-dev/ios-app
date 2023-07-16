@@ -8,10 +8,7 @@ import Foundation
 import UIKit
 
 extension UIColor{
-  class var primary: UIColor{
-    return UIColor(red: (53.0/255.0), green: (46.0/255.0), blue: (113.0/255.0), alpha: 1.0)
-  }
-    
+ 
     class var chatBackGround: UIColor{
         return UIColor(red: (51/255.0), green: (47.0/255.0), blue: (48.0/255.0), alpha: 1.0)
     }
@@ -21,7 +18,7 @@ extension UIColor{
     }
   
       class var secondary: UIColor{
-        return UIColor(red: (253.0/255.0), green: (159.0/255.0), blue: (126.0/255.0), alpha: 1.0)
+        return UIColor(red: (255.0/255.0), green: (69.0/255.0), blue: (0/255.0), alpha: 1.0)
       }
       
       class var tertiary: UIColor{

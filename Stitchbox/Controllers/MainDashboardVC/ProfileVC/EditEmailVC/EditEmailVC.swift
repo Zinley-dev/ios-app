@@ -16,7 +16,7 @@ class EditEmailVC: UIViewController {
     let backButton: UIButton = UIButton(type: .custom)
     @IBOutlet weak var emailTxtField: UITextField!
     
-    @IBOutlet weak var nextBtn: SButton!
+    @IBOutlet weak var nextBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         
