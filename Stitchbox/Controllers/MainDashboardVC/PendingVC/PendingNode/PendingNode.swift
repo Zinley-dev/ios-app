@@ -15,7 +15,7 @@ import AVKit
 import ActiveLabel
 
 
-fileprivate let FontSize: CGFloat = 14
+fileprivate let FontSize: CGFloat = 12
 fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
@@ -234,7 +234,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
             usernameTap.numberOfTapsRequired = 1
             self.headerView.usernameLbl.isUserInteractionEnabled = true
             self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
-            
+            self.headerView.usernameLbl.font = UIFont.boldSystemFont(ofSize: 12)
             
             let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
             username2Tap.numberOfTapsRequired = 1
@@ -456,6 +456,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         Dispatch.main.async { [weak self] in
             guard let self = self else { return }
             self.headerView.followBtn.isHidden = false
+            self.headerView.followBtn.titleLabel?.font = .systemFont(ofSize: 12.0, weight: .regular)
             self.isFollowingUser = false
             let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.followTap))
             followTap.numberOfTapsRequired = 1
@@ -1079,15 +1080,21 @@ extension PendingNode {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
+        let change = constrainedSize.max.width - ( constrainedSize.max.height * 9 / 16)
+        let padding = change / 2
+
+        
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
+        //videoNode.style.preferredSize = CGSize(width: constrainedSize.max.width - , height: constrainedSize.max.height)
+        
 
-        let headerInset = UIEdgeInsets(top: 0, left: 32, bottom: 2, right: 40)
+        let headerInset = UIEdgeInsets(top: 0, left: padding, bottom: 2, right: 8 + padding)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
 
-        let contentInset = UIEdgeInsets(top: 2, left: 52, bottom: 2, right: 102)
+        let contentInset = UIEdgeInsets(top: 2, left: 20 + padding, bottom: 2, right: 70 + padding)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
         
         let verticalStack = ASStackLayoutSpec.vertical()
@@ -1103,7 +1110,7 @@ extension PendingNode {
         let verticalStackInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
 
-        let inset = UIEdgeInsets(top: 0, left: 32, bottom: 0, right: 32)
+        let inset = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
         let gradientInsetSpec = ASInsetLayoutSpec(insets: inset, child: gradientNode)
 
         let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)

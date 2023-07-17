@@ -694,6 +694,7 @@ extension OriginalNode {
 
         if let username = item.owner?.username {
             cell.infoLabel.text = "@\(username)"
+            cell.infoLabel.font = UIFont.boldSystemFont(ofSize: 11)
         } else {
             cell.infoLabel.text = ""
         }

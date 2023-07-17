@@ -1837,6 +1837,7 @@ extension ReelNode {
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
+        videoNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.height)
 
         let headerInset = UIEdgeInsets(top: 0, left: 0, bottom: 2, right: 8)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)

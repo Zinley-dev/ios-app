@@ -691,11 +691,22 @@ extension FeedViewController {
 extension FeedViewController: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let min = CGSize(width: self.collectionNode.layer.frame.width, height: 50);
-        let max = CGSize(width: self.collectionNode.layer.frame.width, height: collectionNode.frame.height);
+        let frameWidth = self.collectionNode.frame.width
+        let frameHeight = self.collectionNode.frame.height
+        
+        // Check for excessively large sizes
+        guard frameWidth < CGFloat.greatestFiniteMagnitude,
+              frameHeight < CGFloat.greatestFiniteMagnitude else {
+            print("Frame width or height is too large")
+            return ASSizeRangeMake(CGSize.zero, CGSize.zero)
+        }
+        
+        let min = CGSize(width: frameWidth, height: 50);
+        let max = CGSize(width: frameWidth, height: frameHeight);
         
         return ASSizeRangeMake(min, max);
     }
+
     
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
         return true

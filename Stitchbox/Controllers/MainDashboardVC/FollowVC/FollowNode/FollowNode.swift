@@ -55,8 +55,8 @@ class FollowNode: ASCellNode {
         
         userNameNode.backgroundColor = UIColor.clear
         nameNode.backgroundColor = UIColor.clear
-        followBtnNode.backgroundColor = user.action == "following" ? UIColor.primary : UIColor.black
-        followBtnNode.tintColor  = UIColor.primary
+        followBtnNode.backgroundColor = user.action == "following" ? UIColor.secondary : UIColor.black
+        followBtnNode.tintColor  = UIColor.secondary
         
         //
         
@@ -102,7 +102,7 @@ class FollowNode: ASCellNode {
                         self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                         self.followBtnNode.layer.cornerRadius = 10.0
                         self.followBtnNode.clipsToBounds = true
-                        self.followBtnNode.setTitle("You", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                        self.followBtnNode.setTitle("You", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                     }
                     
                 } else {
@@ -111,7 +111,7 @@ class FollowNode: ASCellNode {
                         
                         DispatchQueue.main.async {
                             self.isFollowingUser = true
-                            self.followBtnNode.backgroundColor = .primary
+                            self.followBtnNode.backgroundColor = .secondary
                             self.followBtnNode.layer.borderWidth = 1.0
                             self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                             self.followBtnNode.layer.cornerRadius = 10.0
@@ -131,7 +131,7 @@ class FollowNode: ASCellNode {
                                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                                 self.followBtnNode.layer.cornerRadius = 10.0
                                 self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                                self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                             }
                             
                         } else {
@@ -143,7 +143,7 @@ class FollowNode: ASCellNode {
                                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                                 self.followBtnNode.layer.cornerRadius = 10.0
                                 self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                                self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                             }
                             
                         }
@@ -194,7 +194,7 @@ class FollowNode: ASCellNode {
                         
                         DispatchQueue.main.async {
                             self.isFollowingUser = true
-                            self.followBtnNode.backgroundColor = .primary
+                            self.followBtnNode.backgroundColor = .secondary
                             self.followBtnNode.layer.borderWidth = 1.0
                             self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                             self.followBtnNode.layer.cornerRadius = 10.0
@@ -213,7 +213,7 @@ class FollowNode: ASCellNode {
                                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                                 self.followBtnNode.layer.cornerRadius = 10.0
                                 self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                                self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                             }
                             
                         } else {
@@ -225,7 +225,7 @@ class FollowNode: ASCellNode {
                                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                                 self.followBtnNode.layer.cornerRadius = 10.0
                                 self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                                self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                             }
                             
                         }
@@ -270,7 +270,7 @@ class FollowNode: ASCellNode {
             
             DispatchQueue.main.async {
                 self.isFollowingUser = true
-                self.followBtnNode.backgroundColor = .primary
+                self.followBtnNode.backgroundColor = .secondary
                 self.followBtnNode.layer.borderWidth = 1.0
                 self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                 self.followBtnNode.layer.cornerRadius = 10.0
@@ -309,7 +309,7 @@ class FollowNode: ASCellNode {
                             self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                             self.followBtnNode.layer.cornerRadius = 10.0
                             self.followBtnNode.clipsToBounds = true
-                            self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                            self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                             self.updateTotal(isIncreased: false)
                         }
                         
@@ -322,7 +322,7 @@ class FollowNode: ASCellNode {
                             self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                             self.followBtnNode.layer.cornerRadius = 10.0
                             self.followBtnNode.clipsToBounds = true
-                            self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                            self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                             self.updateTotal(isIncreased: false)
                         }
                         
@@ -351,8 +351,8 @@ class FollowNode: ASCellNode {
                     self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.followBtnNode.layer.cornerRadius = 10.0
                     self.followBtnNode.clipsToBounds = true
-                    self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
-                    self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                    self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
+                    self.followBtnNode.setTitle("Follow back", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                     
                 }
                 
@@ -365,7 +365,7 @@ class FollowNode: ASCellNode {
                     self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.followBtnNode.layer.cornerRadius = 10.0
                     self.followBtnNode.clipsToBounds = true
-                    self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                    self.followBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
                     
                 }
                 
@@ -388,7 +388,7 @@ class FollowNode: ASCellNode {
                     }
                     
                     DispatchQueue.main.async {
-                        self.followBtnNode.backgroundColor = .primary
+                        self.followBtnNode.backgroundColor = .secondary
                         self.followBtnNode.layer.borderWidth = 1.0
                         self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                         self.followBtnNode.layer.cornerRadius = 10.0

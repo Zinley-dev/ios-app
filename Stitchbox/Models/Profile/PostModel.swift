@@ -110,7 +110,7 @@ class PostModel: Mappable {
     if image[0] != "" {
       imageUrl = URL(string: image[0])!
     } else {
-      imageUrl = URL(string: "https://image.mux.com/\(muxPlaybackId)/thumbnail.png?width=267&height=475&fit_mode")!
+      imageUrl = URL(string: "https://image.mux.com/\(muxPlaybackId)/thumbnail.png")!
     }
       
       //hashtags.append("SB-Tactics")
