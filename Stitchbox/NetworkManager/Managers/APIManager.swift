@@ -915,7 +915,12 @@ extension APIManager {
       completion(result)
     }
   }
-  func countStitchWaitList(rootId: String, page: Int, completion: @escaping APICompletion) {
+  func getStitchWaitList(rootId: String, page: Int, completion: @escaping APICompletion) {
+    postStitchManager.request(.getStitchWaitList(rootId: rootId, page: page)) { result in
+      completion(result)
+    }
+  }
+  func countStitchWaitList(rootId: String, completion: @escaping APICompletion) {
     postStitchManager.request(.countStitchWaitList(rootId: rootId)) { result in
       completion(result)
     }
