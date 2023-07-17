@@ -505,7 +505,7 @@ extension PendingVC {
     
     func retrieveNextPageForMyPostWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
 
-        APIManager.shared.getMyPost(page: myPage) { [weak self] result in
+        APIManager.shared.getMyWaitlist(page: myPage) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -549,7 +549,7 @@ extension PendingVC {
     
     func retrieveNextPageForWaitListWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getSavedPost(page: waitPage) { [weak self] result in
+        APIManager.shared.getStitchWaitList(rootId: rootPost.id, page: waitPage) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

@@ -234,7 +234,8 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
             usernameTap.numberOfTapsRequired = 1
             self.headerView.usernameLbl.isUserInteractionEnabled = true
             self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
-            self.headerView.usernameLbl.font = UIFont.boldSystemFont(ofSize: 12)
+            self.headerView.usernameLbl.font = FontManager.shared.roboto(.Bold, size: 12)
+
             
             let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
             username2Tap.numberOfTapsRequired = 1
@@ -397,9 +398,10 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         }
         
         self.contentNode.attributedText = NSAttributedString(string: truncatedText, attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
+
         
         setNeedsLayout()
         layoutIfNeeded()
@@ -456,7 +458,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         Dispatch.main.async { [weak self] in
             guard let self = self else { return }
             self.headerView.followBtn.isHidden = false
-            self.headerView.followBtn.titleLabel?.font = .systemFont(ofSize: 12.0, weight: .regular)
+            self.headerView.followBtn.titleLabel?.font = FontManager.shared.roboto(.Regular, size: 12.0)
             self.isFollowingUser = false
             let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.followTap))
             followTap.numberOfTapsRequired = 1
@@ -571,10 +573,10 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         }
         
         self.contentNode.attributedText = NSAttributedString(string: contentText, attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
-        
+
         setNeedsLayout()
         layoutIfNeeded()
 

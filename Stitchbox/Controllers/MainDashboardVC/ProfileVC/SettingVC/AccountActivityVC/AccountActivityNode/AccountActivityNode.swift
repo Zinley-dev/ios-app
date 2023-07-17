@@ -59,8 +59,17 @@ class AccountActivityNode: ASCellNode {
         let date = self.activity.createdAt
     
         
-        let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles]
-        let timeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.paragraphStyle: paragraphStyles]
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize),
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.paragraphStyle: paragraphStyles
+        ]
+        let timeAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize),
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            NSAttributedString.Key.paragraphStyle: paragraphStyles
+        ]
+
         
         let time = NSAttributedString(string: "\(timeAgoSinceDate(date!, numericDates: true))", attributes: timeAttributes)
     

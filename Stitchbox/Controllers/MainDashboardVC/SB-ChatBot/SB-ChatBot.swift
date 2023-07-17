@@ -39,11 +39,13 @@ class SB_ChatBot: UIViewController {
         presentSwiftLoader()
         setupWithoutMeta()
         
-        
+        setupNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        setupNavBar()
         
         if let passEligible = _AppCoreData.userDataSource.value?.passEligible {
             
@@ -67,6 +69,21 @@ class SB_ChatBot: UIViewController {
             
         }
     }
+    
+    
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+    }
+    
 
     func setupWithoutMeta() {
         
@@ -110,7 +127,7 @@ extension SB_ChatBot {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -158,7 +175,7 @@ extension SB_ChatBot {
                     
                     self?.gptButton.setTitle(self?.selectedGpt, for: .normal) // Change to "4" if you want to represent GPT-4
                     self?.gptButton.addTarget(self, action: #selector(self?.gptTapped), for: .touchUpInside)
-                    self?.gptButton.tintColor = .white
+                    self?.gptButton.tintColor = .black
                     self?.gptButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
                     
                     let stackView = UIStackView(arrangedSubviews: [self!.gptButton, clearButton])
@@ -234,8 +251,8 @@ extension SB_ChatBot {
         pickerView.backgroundColor = .white
 
         toolbar.sizeToFit()
-        toolbar.barTintColor = .black
-        toolbar.tintColor = .white
+        toolbar.barTintColor = .white
+        toolbar.tintColor = .black
 
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelPicker))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)

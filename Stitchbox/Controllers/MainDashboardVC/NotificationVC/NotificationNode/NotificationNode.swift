@@ -37,7 +37,7 @@ class NotificationNode: ASCellNode {
         
         if self.notification._isRead == false {
             
-            self.backgroundColor = UIColor.red
+            self.backgroundColor = UIColor.lightGray
             
         } else {
             
@@ -45,8 +45,18 @@ class NotificationNode: ASCellNode {
             
         }
         
-        let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles]
-        let timeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.darkGray, NSAttributedString.Key.paragraphStyle: paragraphStyles]
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
+            NSAttributedString.Key.foregroundColor: UIColor.black,
+            NSAttributedString.Key.paragraphStyle: paragraphStyles
+        ]
+
+        let timeAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
+            NSAttributedString.Key.foregroundColor: UIColor.darkGray,
+            NSAttributedString.Key.paragraphStyle: paragraphStyles
+        ]
+
         
         self.upperTextNode.attributedText = NSAttributedString(string: notification.content, attributes: textAttributes)
         

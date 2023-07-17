@@ -77,7 +77,15 @@ class FindFriendsNode: ASCellNode {
                 
                 if let username = user._username {
                     
-                    self.userNameNode.attributedText = NSAttributedString(string: "@\(username)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                    self.userNameNode.attributedText = NSAttributedString(
+                        string: "@\(username)",
+                        attributes: [
+                            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                            NSAttributedString.Key.foregroundColor: UIColor.white,
+                            NSAttributedString.Key.paragraphStyle: paragraphStyles
+                        ]
+                    )
+
                     
                 }
               
@@ -146,12 +154,26 @@ class FindFriendsNode: ASCellNode {
                 self.followBtnNode.layer.borderColor = UIColor.clear.cgColor
                 self.followBtnNode.layer.cornerRadius = 5.0
                 self.followBtnNode.clipsToBounds = true
-                self.followBtnNode.setTitle("Invite", with: UIFont.boldSystemFont(ofSize: FontSize), with: .secondary, for: .normal)
+                self.followBtnNode.setTitle(
+                    "Invite",
+                    with: FontManager.shared.roboto(.Bold, size: FontSize),
+                    with: .secondary,
+                    for: .normal
+                )
+
                 
             }
         
             
-            self.userNameNode.attributedText = NSAttributedString(string: "@None", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            self.userNameNode.attributedText = NSAttributedString(
+                string: "@None",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
+
             
         }
         
@@ -169,11 +191,27 @@ class FindFriendsNode: ASCellNode {
             }
             
         
-            self.NameNode.attributedText = NSAttributedString(string: "\(firstName) \(familyName)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            self.NameNode.attributedText = NSAttributedString(
+                string: "\(firstName) \(familyName)",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
+
             
         } else {
             
-            self.NameNode.attributedText = NSAttributedString(string: "None", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            self.NameNode.attributedText = NSAttributedString(
+                string: "None",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
+
             
         }
          

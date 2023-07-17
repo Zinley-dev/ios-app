@@ -58,7 +58,8 @@ class CommentNode: ASCellNode {
         super.init()
         
         self.backgroundColor = UIColor(red: 43, green: 43, blue: 43)
-        self.replyBtnNode.setTitle("Reply", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.lightGray, for: .normal)
+        self.replyBtnNode.setTitle("Reply", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.lightGray, for: .normal)
+
         self.replyBtnNode.addTarget(self, action: #selector(CommentNode.replyBtnPressed), forControlEvents: .touchUpInside)
         self.selectionStyle = .none
         avatarNode.contentMode = .scaleAspectFill
@@ -72,10 +73,16 @@ class CommentNode: ASCellNode {
         avatarNode.shouldRenderProgressImages = true
         
         
-        let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.white]
-        
-        
-        let timeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.lightGray]
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Light, size: FontSize), // Using the Roboto Light style
+            NSAttributedString.Key.foregroundColor: UIColor.white
+        ]
+
+        let timeAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Light, size: FontSize), // Using the Roboto Light style
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray
+        ]
+
         
         
         if self.post.reply_to != "" {
@@ -409,7 +416,12 @@ class CommentNode: ASCellNode {
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
                 
-                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+                let LikeAttributes: [NSAttributedString.Key: Any] = [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
+                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                ]
+
               
                 
                 self.count = likeCount
@@ -469,7 +481,14 @@ class CommentNode: ASCellNode {
         DispatchQueue.main.async {
         
             
-            self.replyToNode.attributedText = NSAttributedString(string: "\(self.replyUsername): ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.white])
+            self.replyToNode.attributedText = NSAttributedString(
+                string: "\(self.replyUsername): ",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Light, size: FontSize), // Using the Roboto Light style
+                    NSAttributedString.Key.foregroundColor: UIColor.white
+                ]
+            )
+
             let size = self.replyToNode.attributedText?.size()
             
             let userButton = ASButtonNode()
@@ -764,70 +783,64 @@ class CommentNode: ASCellNode {
     }
     
     func loadCmtCount() {
-        
         if self.post.has_reply == true {
-            
             if self.post.hasLoadedReplied {
-                
-                self.loadReplyBtnNode.setTitle("Show more", with: UIFont.systemFont(ofSize: FontSize, weight: .light), with: UIColor.lightGray, for: .normal)
+                self.loadReplyBtnNode.setTitle("Show more", with: FontManager.shared.roboto(.Light, size: FontSize), with: UIColor.lightGray, for: .normal)
                 self.loadReplyBtnNode.contentHorizontalAlignment = .left
-                
             } else {
-                
-                self.loadReplyBtnNode.setTitle("Replied (\(self.post.replyTotal ?? 0))", with: UIFont.systemFont(ofSize: FontSize, weight: .light), with: UIColor.lightGray, for: .normal)
+                self.loadReplyBtnNode.setTitle("Replied (\(self.post.replyTotal ?? 0))", with: FontManager.shared.roboto(.Light, size: FontSize), with: UIColor.lightGray, for: .normal)
                 self.loadReplyBtnNode.contentHorizontalAlignment = .left
                 self.post.hasLoadedReplied = true
-                
             }
-            
-            
-            
         }
-        
-        
     }
-    
+
     func loadInfo(uid: String ) {
-        
-        
         if post.comment_avatarUrl != "" {
             avatarNode.url = URL(string: post.comment_avatarUrl)
         } else {
             avatarNode.image = UIImage.init(named: "defaultuser")
         }
         
-        
         if self.post.comment_uid == self.post.owner_uid {
-            
             if self.post.is_pinned == true {
-                
-                UIFont.systemFont(ofSize: FontSize + 1, weight: .medium)
-                
-                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "") - author (pinned)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                
+                userNameNode.attributedText = NSAttributedString(
+                    string: "\(self.post.comment_username ?? "") - author (pinned)",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
+                        NSAttributedString.Key.foregroundColor: UIColor.lightGray
+                    ]
+                )
             } else {
-                
-                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "") - author", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                
+                userNameNode.attributedText = NSAttributedString(
+                    string: "\(self.post.comment_username ?? "") - author",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
+                        NSAttributedString.Key.foregroundColor: UIColor.lightGray
+                    ]
+                )
             }
-            
-            
         } else {
-            
             if self.post.is_pinned == true {
-                
-                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "") (pinned)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                
+                userNameNode.attributedText = NSAttributedString(
+                    string: "\(self.post.comment_username ?? "") (pinned)",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
+                        NSAttributedString.Key.foregroundColor: UIColor.lightGray
+                    ]
+                )
             } else {
-                
-                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "")", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                
+                userNameNode.attributedText = NSAttributedString(
+                    string: "\(self.post.comment_username ?? "")",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
+                        NSAttributedString.Key.foregroundColor: UIColor.lightGray
+                    ]
+                )
             }
-            
         }
-    
-        
     }
+
     
   
     
@@ -841,9 +854,8 @@ class CommentNode: ASCellNode {
 
 
 extension CommentNode {
-     
+    
     func likeComment() {
-        
         DispatchQueue.main.async {
             self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
         }
@@ -851,9 +863,11 @@ extension CommentNode {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         
-        let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-        
-       
+        let LikeAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.paragraphStyle: paragraphStyle
+        ]
         
         self.count += 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
@@ -866,10 +880,8 @@ extension CommentNode {
 
             switch result {
             case .success(let apiResponse):
-            
                 print(apiResponse)
                 self.isLiked = true
-                
 
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -879,9 +891,11 @@ extension CommentNode {
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
                 
-                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                
-               
+                let LikeAttributes: [NSAttributedString.Key: Any] = [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
+                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                ]
                 
                 self.count -= 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
@@ -892,13 +906,10 @@ extension CommentNode {
                 print("CmtCount: \(error)")
             }
         }
-        
-        
     }
-    
+
     
     func unlikeComment() {
-        
         DispatchQueue.main.async {
             self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
         }
@@ -906,7 +917,11 @@ extension CommentNode {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         
-        let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+        let LikeAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.paragraphStyle: paragraphStyle
+        ]
         
         self.count -= 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
@@ -920,11 +935,9 @@ extension CommentNode {
 
             switch result {
             case .success(let apiResponse):
-                
                 print(apiResponse)
-                
                 self.isLiked = false
-                
+
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
@@ -933,9 +946,11 @@ extension CommentNode {
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
                 
-                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                
-               
+                let LikeAttributes: [NSAttributedString.Key: Any] = [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
+                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                ]
                 
                 self.count += 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
@@ -946,9 +961,8 @@ extension CommentNode {
                 print("CmtCount: \(error)")
             }
         }
-        
-        
     }
+
     
     func addReplyNodes(_ nodes: [CommentNode]) {
             for node in nodes {

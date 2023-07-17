@@ -625,9 +625,10 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         }
         
         self.contentNode.attributedText = NSAttributedString(string: truncatedText, attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
+
         
         setNeedsLayout()
         layoutIfNeeded()
@@ -798,9 +799,10 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         }
         
         self.contentNode.attributedText = NSAttributedString(string: contentText, attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
+
         
         setNeedsLayout()
         layoutIfNeeded()

@@ -491,7 +491,7 @@ extension OriginalNode {
         animatedLabel.trailingBuffer = 10.0
         animatedLabel.animationDelay = 0.0
         animatedLabel.textAlignment = .center
-        animatedLabel.font = UIFont.boldSystemFont(ofSize: 16) // Use a bold font for emphasis
+        animatedLabel.font = FontManager.shared.roboto(.Bold, size: 16)
         animatedLabel.textColor = UIColor.white
         animatedLabel.layer.masksToBounds = true
         animatedLabel.layer.cornerRadius = 10 // Round the corners for a cleaner look
@@ -694,7 +694,8 @@ extension OriginalNode {
 
         if let username = item.owner?.username {
             cell.infoLabel.text = "@\(username)"
-            cell.infoLabel.font = UIFont.boldSystemFont(ofSize: 11)
+            cell.infoLabel.font = FontManager.shared.roboto(.Bold, size: 11)
+
         } else {
             cell.infoLabel.text = ""
         }

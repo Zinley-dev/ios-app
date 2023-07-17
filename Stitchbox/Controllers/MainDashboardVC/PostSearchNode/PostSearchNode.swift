@@ -44,11 +44,12 @@ class PostSearchNode: ASCellNode {
         textNode.attributedText = NSAttributedString(
             string: "0",
             attributes: [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
         )
+
         textNode.maximumNumberOfLines = 1
         return textNode
     }()
@@ -62,11 +63,12 @@ class PostSearchNode: ASCellNode {
         textNode.attributedText = NSAttributedString(
             string: "",
             attributes: [
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: FontSize),
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
                 NSAttributedString.Key.foregroundColor: UIColor.black,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
         )
+
         textNode.backgroundColor = .black // set the background color to dark gray
         textNode.maximumNumberOfLines = 1
 
@@ -96,7 +98,12 @@ class PostSearchNode: ASCellNode {
         let searchResults = [title, ownerName, hashtags].compactMap { searchString(in: $0, for: keyword, maxLength: 60) }
         let highlightedKeyword = searchResults.first ?? ""
         
-        let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles]
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
+            NSAttributedString.Key.foregroundColor: UIColor.black,
+            NSAttributedString.Key.paragraphStyle: paragraphStyles
+        ]
+
         
         let attributedString = NSMutableAttributedString(string: highlightedKeyword, attributes: textAttributes)
         if let range = highlightedKeyword.range(of: keyword, options: .caseInsensitive) {
@@ -116,11 +123,12 @@ class PostSearchNode: ASCellNode {
         infoNode.attributedText = NSAttributedString(
             string: "@\(post.owner?.username ?? "")",
             attributes: [
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: FontSize),
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
         )
+
 
         
         countView(with: post)
@@ -203,11 +211,12 @@ class PostSearchNode: ASCellNode {
                         self.countNode.attributedText = NSAttributedString(
                             string: "\(stats.view.total)",
                             attributes: [
-                                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+                                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style
                                 NSAttributedString.Key.foregroundColor: UIColor.white,
                                 NSAttributedString.Key.paragraphStyle: paragraphStyle
                             ]
                         )
+
                     }
                 } catch {
                     print("Error decoding JSON: \(error)")

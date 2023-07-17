@@ -71,36 +71,45 @@ class UserSearchNode: ASCellNode {
          
         
         DispatchQueue.main.async {
-            
             let paragraphStyles = NSMutableParagraphStyle()
             paragraphStyles.alignment = .left
-            self.userNameNode.attributedText = NSAttributedString(string: user.user_nickname ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            self.userNameNode.attributedText = NSAttributedString(
+                string: user.user_nickname ?? "@",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
             
             if user.user_name == "" {
-                
-                self.nameNode.attributedText = NSAttributedString(string: "None", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
-                
+                self.nameNode.attributedText = NSAttributedString(
+                    string: "None",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                        NSAttributedString.Key.foregroundColor: UIColor.black,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyles
+                    ]
+                )
             } else {
-                
-                self.nameNode.attributedText = NSAttributedString(string: user.user_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
-                
-                
+                self.nameNode.attributedText = NSAttributedString(
+                    string: user.user_name ?? "@",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                        NSAttributedString.Key.foregroundColor: UIColor.black,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyles
+                    ]
+                )
             }
-            
             
             if user.avatarUrl != "" {
-                
                 self.imageNode.url = URL(string: user.avatarUrl)
                 self.cacheUrlIfNeed(url: user.avatarUrl)
-                
             } else {
-                
                 self.imageNode.image = UIImage.init(named: "defaultuser")
-                
             }
-
-          
         }
+
         
     }
     

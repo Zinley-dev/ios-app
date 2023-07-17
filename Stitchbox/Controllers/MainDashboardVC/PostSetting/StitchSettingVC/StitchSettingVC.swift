@@ -44,7 +44,7 @@ class StitchSettingVC: UIViewController {
         if isFeed {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
         } else {
-            
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "create_new_for_stitch_selected")), object: nil)
         }
       
        
@@ -57,7 +57,7 @@ class StitchSettingVC: UIViewController {
         if isFeed {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
         } else {
-            
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stitch_to_exist_one_selected")), object: nil)
         }
         
         self.dismiss(animated: true)

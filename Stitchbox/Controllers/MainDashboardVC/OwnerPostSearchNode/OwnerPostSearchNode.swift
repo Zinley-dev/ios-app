@@ -46,11 +46,12 @@ class OwnerPostSearchNode: ASCellNode {
         textNode.attributedText = NSAttributedString(
             string: "0",
             attributes: [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
         )
+
         textNode.maximumNumberOfLines = 1
         return textNode
     }()
@@ -64,11 +65,12 @@ class OwnerPostSearchNode: ASCellNode {
         textNode.attributedText = NSAttributedString(
             string: "",
             attributes: [
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: FontSize),
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
         )
+
         textNode.backgroundColor = .black // set the background color to dark gray
         textNode.maximumNumberOfLines = 1
 
@@ -104,11 +106,12 @@ class OwnerPostSearchNode: ASCellNode {
                 infoNode.attributedText = NSAttributedString(
                     string: "@\(username)",
                     attributes: [
-                        NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: FontSize),
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
                         NSAttributedString.Key.foregroundColor: UIColor.white,
                         NSAttributedString.Key.paragraphStyle: paragraphStyle
                     ]
                 )
+
                 
             }
             
@@ -120,10 +123,11 @@ class OwnerPostSearchNode: ASCellNode {
             let textToDisplay = String(combinedString.prefix(60))
 
             let textAttributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium),
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
                 NSAttributedString.Key.foregroundColor: UIColor.black,
                 NSAttributedString.Key.paragraphStyle: paragraphStyles
             ]
+
 
             let attributedString = NSMutableAttributedString(string: textToDisplay, attributes: textAttributes)
 
@@ -256,11 +260,12 @@ class OwnerPostSearchNode: ASCellNode {
                         self.countNode.attributedText = NSAttributedString(
                             string: "\(stats.view.total)",
                             attributes: [
-                                NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize),
+                                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style
                                 NSAttributedString.Key.foregroundColor: UIColor.white,
                                 NSAttributedString.Key.paragraphStyle: paragraphStyle
                             ]
                         )
+
                     }
                 } catch {
                     print("Error decoding JSON: \(error)")

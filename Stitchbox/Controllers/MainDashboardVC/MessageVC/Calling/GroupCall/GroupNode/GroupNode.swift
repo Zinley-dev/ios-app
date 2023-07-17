@@ -73,7 +73,15 @@ class GroupNode: ASCellNode {
         let nickname = participant.user.nickname!
         paragraphStyles.alignment = .center
         nameNode.backgroundColor = UIColor.clear
-        nameNode.attributedText = NSAttributedString(string: nickname, attributes: [.font: UIFont.boldSystemFont(ofSize: 13), .foregroundColor: UIColor.white, .paragraphStyle: paragraphStyles])
+        nameNode.attributedText = NSAttributedString(
+            string: nickname,
+            attributes: [
+                .font: FontManager.shared.roboto(.Bold, size: 13),
+                .foregroundColor: UIColor.white,
+                .paragraphStyle: paragraphStyles
+            ]
+        )
+
 
         // Set the image of the mute icon based on the participant's audio enabled status
         muteIcon.image = participant.isAudioEnabled ? UIImage(named: "btnAudioOff") : UIImage(named: "btnAudioOffSelected")
@@ -103,7 +111,8 @@ class GroupNode: ASCellNode {
             
             let estimated = UILabel()
             estimated.text = self.participant.user.nickname!
-            estimated.font = UIFont.boldSystemFont(ofSize: 13)
+            estimated.font = FontManager.shared.roboto(.Bold, size: 13)
+
             let estimatedSize = estimated.textWidth()
             
             self.nameNode.frame = CGRect(x: constrainedSize.min.width / 2 - (estimatedSize/2), y: 20, width: estimatedSize, height: 20)

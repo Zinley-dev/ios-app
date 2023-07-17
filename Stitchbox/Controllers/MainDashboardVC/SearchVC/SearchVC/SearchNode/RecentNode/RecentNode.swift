@@ -59,28 +59,36 @@ class RecentNode: ASCellNode {
             imageNode.isLayerBacked = true
             
             DispatchQueue.main.async {
-                
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
-                self.upperNameNode.attributedText = NSAttributedString(string: item.game_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                self.upperNameNode.attributedText = NSAttributedString(
+                    string: item.game_name ?? "@",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                        NSAttributedString.Key.foregroundColor: UIColor.black,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyles
+                    ]
+                )
                 
-                self.belowNameNode.attributedText = NSAttributedString(string: item.game_shortName ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
-
+                self.belowNameNode.attributedText = NSAttributedString(
+                    string: item.game_shortName ?? "@",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                        NSAttributedString.Key.foregroundColor: UIColor.black,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyles
+                    ]
+                )
                 
                 if item.coverUrl != "" {
-                    
                     self.imageNode.url = URL(string: item.coverUrl)
                 } else {
-                    
                     self.imageNode.image = UIImage.init(named: "search")
-                    
                 }
-                
                 
                 self.imageNode.contentMode = .scaleAspectFit
                 self.imageNode.backgroundColor = .clear
-                
             }
+
         } else if item.type == "user" {
             
             imageNode.cornerRadius = OrganizerImageSize/2
@@ -89,7 +97,6 @@ class RecentNode: ASCellNode {
             imageNode.isLayerBacked = true
             
             DispatchQueue.main.async {
-                     
                 self.gameListView = GameListView()
                 self.gameNode.view.addSubview(self.gameListView)
                 
@@ -98,26 +105,36 @@ class RecentNode: ASCellNode {
                 self.gameListView.bottomAnchor.constraint(equalTo: self.gameNode.view.bottomAnchor, constant: 0).isActive = true
                 self.gameListView.leadingAnchor.constraint(equalTo: self.gameNode.view.leadingAnchor, constant: 0).isActive = true
                 self.gameListView.trailingAnchor.constraint(equalTo: self.gameNode.view.trailingAnchor, constant: 0).isActive = true
-                
 
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
-                self.upperNameNode.attributedText = NSAttributedString(string: item.user_nickname ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                self.upperNameNode.attributedText = NSAttributedString(
+                    string: item.user_nickname ?? "@",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                        NSAttributedString.Key.foregroundColor: UIColor.black,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyles
+                    ]
+                )
                 
-                self.belowNameNode.attributedText = NSAttributedString(string: item.user_name ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                self.belowNameNode.attributedText = NSAttributedString(
+                    string: item.user_name ?? "@",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                        NSAttributedString.Key.foregroundColor: UIColor.black,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyles
+                    ]
+                )
 
                 if item.avatarUrl != "" {
-                    
                     self.imageNode.url = URL(string: item.avatarUrl)
                 } else {
-                    
                     self.imageNode.image = UIImage.init(named: "defaultuser")
-                    
                 }
-    
-                
+
                 self.loadGameIfNeed()
             }
+
             
 
         } else if item.type == "text" {
@@ -125,11 +142,19 @@ class RecentNode: ASCellNode {
             DispatchQueue.main.async {
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
-                self.upperNameNode.attributedText = NSAttributedString(string: item.text ?? "@", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                self.upperNameNode.attributedText = NSAttributedString(
+                    string: item.text ?? "@",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                        NSAttributedString.Key.foregroundColor: UIColor.black,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyles
+                    ]
+                )
 
                 self.imageNode.image = UIImage.init(named: "search")
                 self.imageNode.contentMode = .scaleAspectFit
             }
+
             
         }
 

@@ -84,7 +84,8 @@ class BlockNode: ASCellNode {
                 self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                 self.actionBtnNode.layer.cornerRadius = 10.0
                 self.actionBtnNode.clipsToBounds = true
-                self.actionBtnNode.setTitle("Unblock", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.white, for: .normal)
+                self.actionBtnNode.setTitle("Unblock", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+               
             }
             
         }
@@ -130,8 +131,8 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
-            
+            self.actionBtnNode.setTitle("Follow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+        
         }
         
         APIManager.shared.deleteBlocks(params: ["blockId": user.blockId]) { [weak self] result in
@@ -158,7 +159,8 @@ class BlockNode: ASCellNode {
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Unblock", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.white, for: .normal)
+                    self.actionBtnNode.setTitle("Unblock", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.white, for: .normal)
+
                 }
             }
             
@@ -177,7 +179,8 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.white, for: .normal)
+            self.actionBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.white, for: .normal)
+
         }
         
         
@@ -208,7 +211,8 @@ class BlockNode: ASCellNode {
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
+                    self.actionBtnNode.setTitle("Follow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+
                     
                 }
             }
@@ -229,7 +233,8 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.secondary, for: .normal)
+            self.actionBtnNode.setTitle("Follow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+
             
         }
         
@@ -254,7 +259,9 @@ class BlockNode: ASCellNode {
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.white, for: .normal)
+                    self.actionBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+
+
                     
                 }
                 

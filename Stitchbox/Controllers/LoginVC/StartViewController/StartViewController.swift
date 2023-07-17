@@ -108,7 +108,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             ]
         })
         
-      let string = NSLocalizedString("By using any of these login option above.               You agree to our <link type='TOU'>Terms of Use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
+      let string = NSLocalizedString("By using any of these login option above. You agree to our <link type='TOU'>Terms of Use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
         
       termOfUseLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         

@@ -9,7 +9,7 @@ import SwiftUI
 import Markdown
 
 enum HighlighterConstants {
-    static let color = Color(red: 38/255, green: 38/255, blue: 38/255)
+    static let color = Color(red: 244/255, green: 244/255, blue: 244/255) // Light Gray
 }
 
 struct CodeBlockView: View {
@@ -22,14 +22,16 @@ struct CodeBlockView: View {
             header
                 .padding(.horizontal)
                 .padding(.vertical, 8)
-                .background(Color.black)
+                .background(Color.white)
                 .font(.system(size: 15)) // And here
+                .foregroundColor(.black)
             
             ScrollView(.horizontal, showsIndicators: true) {
                 Text(parserResult.attributedString)
                     .padding(.horizontal, 16)
                     .textSelection(.enabled)
                     .font(.system(size: 15)) // And here
+                    .foregroundColor(.black)
             }
         }
         .background(HighlighterConstants.color)
@@ -41,7 +43,7 @@ struct CodeBlockView: View {
             if let codeBlockLanguage = parserResult.codeBlockLanguage {
                 Text(codeBlockLanguage.capitalized)
                     .font(.headline.monospaced())
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
             }
             Spacer()
             button
@@ -53,7 +55,7 @@ struct CodeBlockView: View {
         if isCopied {
             HStack {
                 Text("Copied")
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                     .font(.subheadline.monospaced().bold())
                 Image(systemName: "checkmark.circle.fill")
                     .imageScale(.large)
@@ -75,7 +77,7 @@ struct CodeBlockView: View {
             } label: {
                 Image(systemName: "doc.on.doc")
             }
-            .foregroundColor(.white)
+            .foregroundColor(.black)
         }
     }
 }
@@ -109,5 +111,4 @@ struct CodeBlockView_Previews: PreviewProvider {
         CodeBlockView(parserResult: parserResult)
     }
 }
-
 

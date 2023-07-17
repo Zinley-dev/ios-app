@@ -70,6 +70,11 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
         
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch_selected")), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one_selected")), object: nil)
+        
         setupNavBar()
         
         if let navigationController = self.navigationController {
@@ -495,7 +500,9 @@ extension SelectedPostVC {
             NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
             NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
             
-            
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "create_new_for_stitch_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "stitch_to_exist_one_selected")), object: nil)
+           
             if onPresent {
                 self.dismiss(animated: true)
             } else {
@@ -944,5 +951,45 @@ extension SelectedPostVC {
         }
         
     }
+    
+    @objc func createPostForStitch() {
+        
+        if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
+            
+            
+            PNVC.modalPresentationStyle = .fullScreen
+            
+            if let rootvc = PNVC.viewControllers[0] as? PostVC {
+                rootvc.stitchPost = editeddPost
+            } else {
+                printContent(PNVC.viewControllers[0])
+            }
+            
+            delay(0.1) {
+                
+                self.present(PNVC, animated: true)
+            }
+            
+        }
+        
+    }
+    
+    
+    @objc func stitchToExistingPost() {
+        
+        if let ASTEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddStitchToExistingVC") as? AddStitchToExistingVC {
+            
+            ASTEVC.hidesBottomBarWhenPushed = true
+            ASTEVC.stitchedPost = editeddPost
+            
+            delay(0.1) {
+                self.navigationController?.pushViewController(ASTEVC, animated: true)
+            }
+            
+        }
+        
+        
+    }
+    
     
 }
