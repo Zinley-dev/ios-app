@@ -791,13 +791,8 @@ extension PendingNode {
     
     func didTap(_ videoNode: ASVideoNode) {
         
-        if let vc = UIViewController.currentViewController() {
-            if vc is PreviewVC {
-                soundProcess()
-            } else {
-                soundBtn?(self)
-            }
-        }
+        soundProcess()
+        
     }
     
     
@@ -1038,24 +1033,8 @@ extension PendingNode {
     func animateUnmute() {
         let imgView = UIImageView(image: unmuteImage)
         imgView.frame.size = CGSize(width: 45, height: 45)
-
-        if let vc = UIViewController.currentViewController() {
-            
-            if let update1 = vc as? FeedViewController {
-                                
-                imgView.center = update1.view.center
-                update1.view.addSubview(imgView)
-                                
-            } else if let update1 = vc as? SelectedPostVC {
-                                
-                imgView.center = update1.view.center
-                update1.view.addSubview(imgView)
-                                
-            }
-            
-            
-           
-        }
+        imgView.center = self.view.center
+        self.view.addSubview(imgView)
 
         UIView.animate(withDuration: 0.5, animations: {
             imgView.alpha = 0

@@ -25,7 +25,7 @@ import Alamofire
     // TabBarButton – Setup Middle Button
       func setupMiddleButtonForBlackTabBar() {
           // Configure button properties
-          button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
+         
           button.backgroundColor = .clear
           //button.backgroundColor = UIColor.tabbarbackground
    
@@ -126,6 +126,7 @@ import Alamofire
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .black
         self.tabBar.standardAppearance = tabBarAppearance
         setupImageForTabbar()
+        button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
     }
 
    
@@ -137,6 +138,7 @@ import Alamofire
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .white
         self.tabBar.standardAppearance = tabBarAppearance
         setupImageForLightTabbar()
+        button.setImage(UIImage(named: "Add 3")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
     }
     
     func setupImageForTabbar() {
