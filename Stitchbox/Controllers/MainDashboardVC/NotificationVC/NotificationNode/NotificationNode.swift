@@ -37,7 +37,7 @@ class NotificationNode: ASCellNode {
         
         if self.notification._isRead == false {
             
-            self.backgroundColor = UIColor.lightGray
+            self.backgroundColor = .normalButtonBackground
             
         } else {
             

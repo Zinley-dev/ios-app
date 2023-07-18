@@ -35,9 +35,9 @@ class UserProfileHeaderCell: UICollectionViewCell {
         moreBtn.setTitle("", for: .normal)
        
         followersBtn.setTitleColor(.white, for: .normal)
-        messageBtn.setTitleColor(.secondary, for: .normal)
+        messageBtn.setTitleColor(.black, for: .normal)
         
-        messageBtn.tintColor = .secondary
+        messageBtn.tintColor = .black
         followersBtn.tintColor = .white
         
     }

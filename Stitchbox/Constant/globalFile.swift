@@ -101,7 +101,7 @@ func showNote(text: String) {
     
     var attributes = EKAttributes.topNote
     attributes.popBehavior = .animated(animation: .init(translate: .init(duration: 0.1), scale: .init(from: 1, to: 0.7, duration: 0.2)))
-    attributes.entryBackground = .color(color: .musicBackground)
+    attributes.entryBackground = .color(color: .noteBackground)
     attributes.shadow = .active(with: .init(color: .black, opacity: 0.5, radius: 10, offset: .zero))
     attributes.statusBar = .dark
     attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
@@ -109,7 +109,7 @@ func showNote(text: String) {
     
     
     let style = EKProperty.LabelStyle(
-        font: UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium),
+        font: FontManager.shared.roboto(.Medium, size: 15),
         color: .white,
         alignment: .center
     )
@@ -1132,4 +1132,18 @@ extension UIView {
         self.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
         self.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
     }
+}
+
+
+class ShadowedView: UIView {
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.5
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowRadius = 5
+        self.layer.masksToBounds = false
+    }
+
 }

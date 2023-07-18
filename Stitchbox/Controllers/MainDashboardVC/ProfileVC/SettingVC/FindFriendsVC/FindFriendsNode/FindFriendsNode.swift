@@ -81,7 +81,7 @@ class FindFriendsNode: ASCellNode {
                         string: "@\(username)",
                         attributes: [
                             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                            NSAttributedString.Key.foregroundColor: UIColor.white,
+                            NSAttributedString.Key.foregroundColor: UIColor.black,
                             NSAttributedString.Key.paragraphStyle: paragraphStyles
                         ]
                     )
@@ -91,48 +91,7 @@ class FindFriendsNode: ASCellNode {
               
             }
             
-            /*
-            if user._userUID != Auth.auth().currentUser?.uid {
-                
-                if !global_block_list.contains(user._userUID) {
-                    
-                    checkIfFollowing(uid: user._userUID)
-                    
-                } else {
-                    
-                    DispatchQueue.main.async {
-                        
-                        self.followBtnNode.backgroundColor = UIColor.clear
-                        self.followBtnNode.layer.borderWidth = 1.0
-                        self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
-                        self.followBtnNode.layer.cornerRadius = 3.0
-                        self.followBtnNode.clipsToBounds = true
-                        self.followBtnNode.setTitle("Blocked", with: UIFont(name:"Roboto-Regular",size: FontSize), with: UIColor.white, for: .normal)
-                        
-                    }
-                    
-                }
-                
-              
-                
-            } else {
-                
-                
-                DispatchQueue.main.async {
-                    
-                    self.followBtnNode.backgroundColor = UIColor.clear
-                    self.followBtnNode.layer.borderWidth = 1.0
-                    self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
-                    self.followBtnNode.layer.cornerRadius = 3.0
-                    self.followBtnNode.clipsToBounds = true
-                    self.followBtnNode.setTitle("You", with: UIFont(name:"Roboto-Regular",size: FontSize), with: UIColor.white, for: .normal)
-                    
-                }
-                
-                
-            } */
-            
-    
+  
         } else {
             
             AvatarNode.url = nil
@@ -195,7 +154,7 @@ class FindFriendsNode: ASCellNode {
                 string: "\(firstName) \(familyName)",
                 attributes: [
                     NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
                     NSAttributedString.Key.paragraphStyle: paragraphStyles
                 ]
             )
@@ -207,7 +166,7 @@ class FindFriendsNode: ASCellNode {
                 string: "None",
                 attributes: [
                     NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
                     NSAttributedString.Key.paragraphStyle: paragraphStyles
                 ]
             )

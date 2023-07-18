@@ -45,7 +45,7 @@ class SettingVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
-        
+        setupNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,6 +53,19 @@ class SettingVC: UIViewController {
         
         loadSettings()
         checkAccountStatus()
+        setupNavBar()
+    }
+    
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
     }
     
