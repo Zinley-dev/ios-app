@@ -61,7 +61,26 @@ class NormalLoginVC: UIViewController {
         LoginController.view.isHidden = true
         LoginByPhoneSendCodeController.view.isHidden = false
         
+        setupNavBar()
         
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setupNavBar()
+    }
+    
+    func setupNavBar() {
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
     }
     
     func setupBackButton() {
@@ -69,7 +88,7 @@ class NormalLoginVC: UIViewController {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -80,10 +99,10 @@ class NormalLoginVC: UIViewController {
         }
 
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.setTitleColor(UIColor.white, for: .normal)
+
         backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
-
+        navigationItem.title = "Let's get started"
         self.navigationItem.leftBarButtonItem = backButtonBarButton
 
 
@@ -136,7 +155,7 @@ class NormalLoginVC: UIViewController {
     func setupUsernameBtn() {
         
         usernameBtn.setTitleColor(UIColor.white, for: .normal)
-        phoneBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        phoneBtn.setTitleColor(UIColor.darkGray, for: .normal)
         
         
         usernameBtn.backgroundColor = UIColor.secondary
@@ -152,7 +171,7 @@ class NormalLoginVC: UIViewController {
     
     func setupPhoneBtn() {
         
-        usernameBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        usernameBtn.setTitleColor(UIColor.darkGray, for: .normal)
         phoneBtn.setTitleColor(UIColor.white, for: .normal)
         
         

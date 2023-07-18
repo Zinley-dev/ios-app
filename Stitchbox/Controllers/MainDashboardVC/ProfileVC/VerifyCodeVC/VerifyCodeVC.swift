@@ -40,7 +40,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
     
     
     var selectedColor = UIColor.secondary
-    var emptyColor = UIColor.white
+    var emptyColor = UIColor.black
     
     
     let backButton: UIButton = UIButton(type: .custom)

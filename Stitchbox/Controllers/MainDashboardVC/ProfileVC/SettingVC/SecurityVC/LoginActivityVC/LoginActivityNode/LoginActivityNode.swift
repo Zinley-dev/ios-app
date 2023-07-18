@@ -56,12 +56,12 @@ class LoginActivityNode: ASCellNode {
         
         let textAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize),
-            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.foregroundColor: UIColor.black,
             NSAttributedString.Key.paragraphStyle: paragraphStyles
         ]
         let timeAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize),
-            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            NSAttributedString.Key.foregroundColor: UIColor.darkGray,
             NSAttributedString.Key.paragraphStyle: paragraphStyles
         ]
 

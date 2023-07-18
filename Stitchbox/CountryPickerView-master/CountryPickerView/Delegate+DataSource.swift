@@ -100,16 +100,18 @@ public extension CountryPickerViewDataSource {
     }
     
     func sectionTitleLabelFont(in countryPickerView: CountryPickerView) -> UIFont {
-        return UIFont.boldSystemFont(ofSize: 17)
+        return FontManager.shared.roboto(.Bold, size: 14)
     }
+
 
     func sectionTitleLabelColor(in countryPickerView: CountryPickerView) -> UIColor? {
         return nil
     }
     
     func cellLabelFont(in countryPickerView: CountryPickerView) -> UIFont {
-        return UIFont.systemFont(ofSize: 17)
+        return FontManager.shared.roboto(.Bold, size: 14)
     }
+
     
     func cellLabelColor(in countryPickerView: CountryPickerView) -> UIColor? {
         return nil

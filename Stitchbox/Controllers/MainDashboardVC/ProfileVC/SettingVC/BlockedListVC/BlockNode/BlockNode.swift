@@ -302,7 +302,7 @@ class BlockNode: ASCellNode {
     }
     
     func loadInfo(uid: String ) {
-        userNameNode.attributedText = NSAttributedString(string: user.blockUser.userName)
+        userNameNode.attributedText = NSAttributedString(string: "@\(user.blockUser.userName)")
         nameNode.attributedText = NSAttributedString(string: user.blockUser.name)
         
         if user.blockUser.avatarURL != "" {

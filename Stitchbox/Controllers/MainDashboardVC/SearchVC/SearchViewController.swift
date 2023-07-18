@@ -218,8 +218,8 @@ extension SearchViewController {
         self.searchController?.searchBar.searchBarStyle = .minimal
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
-        self.searchController?.searchBar.tintColor = .white
-        self.searchController?.searchBar.searchTextField.textColor = .white
+        self.searchController?.searchBar.tintColor = .black
+        self.searchController?.searchBar.searchTextField.textColor = .black
         self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search for anything", attributes: [.foregroundColor: UIColor.lightGray])
         
     }

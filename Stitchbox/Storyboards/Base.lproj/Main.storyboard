@@ -232,9 +232,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="regBg" translatesAutoresizingMaskIntoConstraints="NO" id="RCR-ri-JNM">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="0pV-Vc-ega">
                                 <rect key="frame" x="60" y="107.5" width="255" height="40"/>
                                 <subviews>
@@ -298,13 +295,9 @@
                         <viewLayoutGuide key="safeArea" id="oYF-JV-OMs"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="RCR-ri-JNM" firstAttribute="leading" secondItem="tTy-Zj-vRn" secondAttribute="leading" id="0Ka-MS-dNn"/>
                             <constraint firstItem="oYF-JV-OMs" firstAttribute="trailing" secondItem="6qR-pU-Qm6" secondAttribute="trailing" constant="16" id="5qm-ei-qWM"/>
                             <constraint firstItem="oYF-JV-OMs" firstAttribute="trailing" secondItem="6qR-pU-Qm6" secondAttribute="trailing" constant="16" id="DZX-T3-Y1v"/>
                             <constraint firstItem="glN-0O-4Qu" firstAttribute="centerX" secondItem="tTy-Zj-vRn" secondAttribute="centerX" id="EIF-bn-ogD"/>
-                            <constraint firstItem="RCR-ri-JNM" firstAttribute="top" secondItem="tTy-Zj-vRn" secondAttribute="top" id="GAp-AC-5sn"/>
-                            <constraint firstAttribute="bottom" secondItem="RCR-ri-JNM" secondAttribute="bottom" id="IqQ-Uz-Tfv"/>
-                            <constraint firstAttribute="trailing" secondItem="RCR-ri-JNM" secondAttribute="trailing" id="NAF-sZ-jvz"/>
                             <constraint firstItem="oYF-JV-OMs" firstAttribute="bottom" secondItem="6qR-pU-Qm6" secondAttribute="bottom" constant="16" id="NQ0-YG-ReQ"/>
                             <constraint firstItem="6qR-pU-Qm6" firstAttribute="leading" secondItem="oYF-JV-OMs" secondAttribute="leading" constant="16" id="QZJ-cC-Bjh"/>
                             <constraint firstItem="0pV-Vc-ega" firstAttribute="top" secondItem="tqQ-uF-KgB" secondAttribute="bottom" constant="32" id="Qhm-o9-kGw"/>
@@ -816,9 +809,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="regBg" translatesAutoresizingMaskIntoConstraints="NO" id="zfM-Be-mYR">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="Wos-qb-0fw">
                                 <rect key="frame" x="32" y="155.5" width="311" height="35"/>
                                 <subviews>
@@ -971,13 +961,9 @@
                             <constraint firstItem="fLI-mM-6TK" firstAttribute="width" secondItem="Wos-qb-0fw" secondAttribute="width" id="1Te-00-Wep"/>
                             <constraint firstItem="jtN-NS-ShK" firstAttribute="top" secondItem="wul-2L-2Yq" secondAttribute="bottom" constant="30" id="30l-ss-C3x"/>
                             <constraint firstItem="kif-pq-8Dk" firstAttribute="bottom" secondItem="mCM-ue-AD8" secondAttribute="bottom" id="6gv-zB-6rT"/>
-                            <constraint firstItem="zfM-Be-mYR" firstAttribute="top" secondItem="Rl2-2D-ziW" secondAttribute="top" id="7ga-lD-Kfz"/>
                             <constraint firstItem="fLI-mM-6TK" firstAttribute="height" secondItem="Wos-qb-0fw" secondAttribute="height" id="8Mm-CU-uMU"/>
-                            <constraint firstAttribute="trailing" secondItem="zfM-Be-mYR" secondAttribute="trailing" id="Gnf-xc-e5a"/>
-                            <constraint firstItem="zfM-Be-mYR" firstAttribute="leading" secondItem="Rl2-2D-ziW" secondAttribute="leading" id="JHh-X0-eYP"/>
                             <constraint firstItem="Wos-qb-0fw" firstAttribute="leading" secondItem="kif-pq-8Dk" secondAttribute="leading" constant="32" id="Nh6-dd-lnl"/>
                             <constraint firstItem="jtN-NS-ShK" firstAttribute="centerX" secondItem="Rl2-2D-ziW" secondAttribute="centerX" id="XXG-yL-30A"/>
-                            <constraint firstAttribute="bottom" secondItem="zfM-Be-mYR" secondAttribute="bottom" id="bp6-Sa-YH8"/>
                             <constraint firstItem="wul-2L-2Yq" firstAttribute="top" secondItem="Wos-qb-0fw" secondAttribute="bottom" constant="40" id="daZ-et-pdI"/>
                             <constraint firstItem="aN1-Qo-jZ4" firstAttribute="leading" secondItem="kif-pq-8Dk" secondAttribute="leading" constant="32" id="e78-BV-Oiz"/>
                             <constraint firstItem="fLI-mM-6TK" firstAttribute="centerX" secondItem="Wos-qb-0fw" secondAttribute="centerX" id="hjf-tG-jxg"/>
@@ -1016,9 +1002,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="regBg" translatesAutoresizingMaskIntoConstraints="NO" id="DTn-3S-3TZ">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bG4-CS-dnF">
                                 <rect key="frame" x="32" y="52" width="300" height="41.5"/>
                                 <subviews>
@@ -1191,16 +1174,12 @@
                         <viewLayoutGuide key="safeArea" id="cLN-2S-WLk"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="DTn-3S-3TZ" firstAttribute="leading" secondItem="cLN-2S-WLk" secondAttribute="leading" id="205-xr-a4V"/>
-                            <constraint firstAttribute="bottom" secondItem="DTn-3S-3TZ" secondAttribute="bottom" id="API-nI-gJy"/>
                             <constraint firstItem="FnM-TD-jg3" firstAttribute="leading" secondItem="cLN-2S-WLk" secondAttribute="leading" constant="32" id="CUg-Nq-U2I"/>
                             <constraint firstItem="bG4-CS-dnF" firstAttribute="leading" secondItem="cLN-2S-WLk" secondAttribute="leading" constant="32" id="NBS-JL-eVV"/>
                             <constraint firstItem="vVK-GS-M7L" firstAttribute="top" secondItem="FnM-TD-jg3" secondAttribute="bottom" constant="40" id="NNw-Pt-dVM"/>
-                            <constraint firstAttribute="trailing" secondItem="DTn-3S-3TZ" secondAttribute="trailing" id="NUR-XT-aUP"/>
                             <constraint firstItem="bG4-CS-dnF" firstAttribute="top" secondItem="cLN-2S-WLk" secondAttribute="top" constant="32" id="PbW-vb-Qx1"/>
                             <constraint firstItem="cLN-2S-WLk" firstAttribute="trailing" secondItem="FnM-TD-jg3" secondAttribute="trailing" constant="32" id="RvG-kZ-ZVT"/>
                             <constraint firstItem="vVK-GS-M7L" firstAttribute="centerX" secondItem="zTo-BG-54I" secondAttribute="centerX" id="hA0-XN-xZl"/>
-                            <constraint firstItem="DTn-3S-3TZ" firstAttribute="top" secondItem="zTo-BG-54I" secondAttribute="top" id="j5q-el-Bok"/>
                             <constraint firstItem="FnM-TD-jg3" firstAttribute="top" secondItem="bG4-CS-dnF" secondAttribute="bottom" constant="32" id="tUx-DE-Md9"/>
                         </constraints>
                     </view>
@@ -1229,9 +1208,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="regBg" translatesAutoresizingMaskIntoConstraints="NO" id="pg5-0e-dQX">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="lTn-Yf-FSb">
                                 <rect key="frame" x="32" y="52" width="311" height="55"/>
                                 <subviews>
@@ -1370,14 +1346,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="lTn-Yf-FSb" firstAttribute="leading" secondItem="IvM-Ia-JFj" secondAttribute="leading" constant="32" id="9yA-fU-JWT"/>
-                            <constraint firstAttribute="bottom" secondItem="pg5-0e-dQX" secondAttribute="bottom" id="AFb-Tf-AIO"/>
                             <constraint firstItem="Dlf-TU-NMz" firstAttribute="top" secondItem="7AR-gn-ZLp" secondAttribute="bottom" constant="40" id="ALf-Zc-d9Y"/>
                             <constraint firstItem="IvM-Ia-JFj" firstAttribute="trailing" secondItem="7AR-gn-ZLp" secondAttribute="trailing" constant="32" id="Bpl-Wv-ujj"/>
                             <constraint firstItem="7AR-gn-ZLp" firstAttribute="top" secondItem="lTn-Yf-FSb" secondAttribute="bottom" constant="32" id="CcA-9t-Wuw"/>
-                            <constraint firstItem="pg5-0e-dQX" firstAttribute="top" secondItem="7CK-LZ-Yb7" secondAttribute="top" id="EB5-6k-cKf"/>
-                            <constraint firstAttribute="trailing" secondItem="pg5-0e-dQX" secondAttribute="trailing" id="SVS-Qk-fon"/>
                             <constraint firstItem="IvM-Ia-JFj" firstAttribute="trailing" secondItem="lTn-Yf-FSb" secondAttribute="trailing" constant="32" id="Tbf-2j-cZq"/>
-                            <constraint firstItem="pg5-0e-dQX" firstAttribute="leading" secondItem="7CK-LZ-Yb7" secondAttribute="leading" id="cHN-f0-nUU"/>
                             <constraint firstItem="lTn-Yf-FSb" firstAttribute="top" secondItem="IvM-Ia-JFj" secondAttribute="top" constant="32" id="cdL-DA-Dvq"/>
                             <constraint firstItem="Dlf-TU-NMz" firstAttribute="centerX" secondItem="7CK-LZ-Yb7" secondAttribute="centerX" id="iu2-Bs-m4i"/>
                             <constraint firstItem="7AR-gn-ZLp" firstAttribute="leading" secondItem="IvM-Ia-JFj" secondAttribute="leading" constant="32" id="vvl-23-RLh"/>
@@ -1407,9 +1379,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="regBg" translatesAutoresizingMaskIntoConstraints="NO" id="Nv3-mh-EUX">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="MoI-xH-XZ6">
                                 <rect key="frame" x="59.5" y="52" width="256.5" height="55"/>
                                 <subviews>
@@ -1456,12 +1425,8 @@
                         <constraints>
                             <constraint firstItem="pkL-H8-rYU" firstAttribute="centerX" secondItem="LOh-Mp-J20" secondAttribute="centerX" id="8DH-fI-Rza"/>
                             <constraint firstItem="pkL-H8-rYU" firstAttribute="top" secondItem="MoI-xH-XZ6" secondAttribute="bottom" constant="40" id="AMf-WT-FdY"/>
-                            <constraint firstItem="Nv3-mh-EUX" firstAttribute="trailing" secondItem="LOh-Mp-J20" secondAttribute="trailing" id="gj0-fB-Y5f"/>
                             <constraint firstItem="MoI-xH-XZ6" firstAttribute="top" secondItem="ito-F9-otv" secondAttribute="top" constant="32" id="iVt-S4-jPW"/>
-                            <constraint firstItem="Nv3-mh-EUX" firstAttribute="top" secondItem="LOh-Mp-J20" secondAttribute="top" id="kGf-Nh-89I"/>
-                            <constraint firstItem="Nv3-mh-EUX" firstAttribute="leading" secondItem="LOh-Mp-J20" secondAttribute="leading" id="pqR-0u-DOT"/>
                             <constraint firstItem="MoI-xH-XZ6" firstAttribute="centerX" secondItem="LOh-Mp-J20" secondAttribute="centerX" id="qjE-Nq-ySC"/>
-                            <constraint firstItem="Nv3-mh-EUX" firstAttribute="bottom" secondItem="LOh-Mp-J20" secondAttribute="bottom" id="yW8-7K-6lG"/>
                         </constraints>
                     </view>
                     <connections>
@@ -1621,7 +1586,7 @@
                                                 <integer key="value" value="3"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
                                         </userDefinedRuntimeAttributes>
@@ -1637,7 +1602,7 @@
                                                 <integer key="value" value="3"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="NO"/>
                                         </userDefinedRuntimeAttributes>
@@ -1672,10 +1637,10 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Gg7-RF-gNg"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Forgot">
-                                    <color key="titleColor" name="Tertiary"/>
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
                         </subviews>
@@ -1721,7 +1686,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="DPX-0V-H1x"/>
                                         </constraints>
-                                        <color key="textColor" name="Text"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <userDefinedRuntimeAttributes>
@@ -1729,7 +1694,7 @@
                                                 <integer key="value" value="3"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                                 <color key="value" name="Tertiary"/>
@@ -1746,7 +1711,7 @@
                                                     <constraint firstAttribute="height" constant="45" id="60H-IH-SNI"/>
                                                     <constraint firstAttribute="width" constant="50" id="FOh-MC-LwX"/>
                                                 </constraints>
-                                                <color key="textColor" name="Text"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                                 <userDefinedRuntimeAttributes>
@@ -1754,7 +1719,7 @@
                                                         <integer key="value" value="3"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                        <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                                         <color key="value" name="Tertiary"/>
@@ -1770,7 +1735,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="45" id="je6-3K-OUK"/>
                                                 </constraints>
-                                                <color key="textColor" name="Text"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="phonePad" textContentType="tel"/>
                                                 <userDefinedRuntimeAttributes>
@@ -1778,7 +1743,7 @@
                                                         <integer key="value" value="3"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                        <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                                         <color key="value" name="Tertiary"/>
@@ -1846,9 +1811,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="regBg" translatesAutoresizingMaskIntoConstraints="NO" id="ig6-8n-PJd">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9ba-xA-xCe">
                                 <rect key="frame" x="16" y="134" width="343" height="517"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1897,21 +1859,17 @@
                                     <constraint firstAttribute="height" constant="20" id="LiH-kV-W4t"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="HxV-0T-Yfx"/>
-                        <color key="backgroundColor" name="Background"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="9ba-xA-xCe" firstAttribute="top" secondItem="AZP-Xl-kHt" secondAttribute="bottom" constant="16" id="0sI-WG-Jgi"/>
                             <constraint firstItem="HxV-0T-Yfx" firstAttribute="bottom" secondItem="9ba-xA-xCe" secondAttribute="bottom" constant="16" id="8aL-Gd-hes"/>
                             <constraint firstItem="HxV-0T-Yfx" firstAttribute="trailing" secondItem="bnl-Pk-deq" secondAttribute="trailing" constant="60" id="9nu-vq-Dfy"/>
                             <constraint firstItem="9ba-xA-xCe" firstAttribute="leading" secondItem="HxV-0T-Yfx" secondAttribute="leading" constant="16" id="Axv-pJ-zn0"/>
-                            <constraint firstItem="ig6-8n-PJd" firstAttribute="top" secondItem="7zg-oT-feY" secondAttribute="top" id="G93-SP-9EY"/>
-                            <constraint firstAttribute="bottom" secondItem="ig6-8n-PJd" secondAttribute="bottom" id="MGR-iH-nYb"/>
-                            <constraint firstItem="ig6-8n-PJd" firstAttribute="leading" secondItem="7zg-oT-feY" secondAttribute="leading" id="X1l-IM-2xN"/>
-                            <constraint firstAttribute="trailing" secondItem="ig6-8n-PJd" secondAttribute="trailing" id="Z6o-nn-rtW"/>
                             <constraint firstItem="bnl-Pk-deq" firstAttribute="leading" secondItem="HxV-0T-Yfx" secondAttribute="leading" constant="60" id="dGL-Yd-Klf"/>
                             <constraint firstItem="bnl-Pk-deq" firstAttribute="top" secondItem="HxV-0T-Yfx" secondAttribute="top" constant="32" id="jn1-2V-os6"/>
                             <constraint firstItem="AZP-Xl-kHt" firstAttribute="centerX" secondItem="7zg-oT-feY" secondAttribute="centerX" id="nqS-0d-Fm1"/>
@@ -1944,7 +1902,6 @@
         <image name="gg" width="64" height="52"/>
         <image name="loginBg" width="390" height="844"/>
         <image name="normal" width="53" height="52"/>
-        <image name="regBg" width="390" height="844"/>
         <image name="ttw" width="53" height="53"/>
         <namedColor name="Background">
             <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

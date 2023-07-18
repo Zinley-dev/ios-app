@@ -242,7 +242,7 @@ extension LoginActivityVC {
         self.tableNode.view.separatorStyle = .none
         self.tableNode.view.separatorColor = UIColor.lightGray
         self.tableNode.view.isPagingEnabled = false
-        self.tableNode.view.backgroundColor = .background
+        self.tableNode.view.backgroundColor = .white
         self.tableNode.view.showsVerticalScrollIndicator = false
         
     }

@@ -74,7 +74,7 @@ class UserSearchNode: ASCellNode {
             let paragraphStyles = NSMutableParagraphStyle()
             paragraphStyles.alignment = .left
             self.userNameNode.attributedText = NSAttributedString(
-                string: user.user_nickname ?? "@",
+                string: "@\(user.user_nickname ?? "@")",
                 attributes: [
                     NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
                     NSAttributedString.Key.foregroundColor: UIColor.black,
