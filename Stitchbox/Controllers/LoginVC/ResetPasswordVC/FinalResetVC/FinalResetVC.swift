@@ -17,8 +17,9 @@ class FinalResetVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        nextButton.rx.tap.asObservable().subscribe { [unowned self] _ in
-            guard self.isButtonEnabled else {
+        self.navigationItem.rightBarButtonItem = nil
+        nextButton.rx.tap.asObservable().subscribe { [weak self] _ in
+            guard let self = self, self.isButtonEnabled else {
                 return
             }
             
@@ -26,8 +27,11 @@ class FinalResetVC: UIViewController {
             self.isButtonEnabled = false
             self.nextButton.isEnabled = false
             
-            DispatchQueue.main.async {
+            // Call redirection and re-enable the button afterward
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 RedirectionHelper.redirectToDashboard()
+                self.enableButton()
             }
         }.disposed(by: disposeBag)
     }
@@ -43,3 +47,4 @@ class FinalResetVC: UIViewController {
         nextButton.isEnabled = true
     }
 }
+

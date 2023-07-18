@@ -62,7 +62,7 @@ class ResetPasswordVC: UIViewController {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -132,7 +132,7 @@ class ResetPasswordVC: UIViewController {
         phoneBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
         
-        emailBtn.backgroundColor = UIColor.secondary
+        emailBtn.backgroundColor = UIColor.darkGray
         phoneBtn.backgroundColor = UIColor.clear
         
         descLbl.text = "Enter your email"
@@ -150,7 +150,7 @@ class ResetPasswordVC: UIViewController {
         
         
         emailBtn.backgroundColor = UIColor.clear
-        phoneBtn.backgroundColor = UIColor.secondary
+        phoneBtn.backgroundColor = UIColor.darkGray
         
         descLbl.text = "Select a country and enter your phone number"
         

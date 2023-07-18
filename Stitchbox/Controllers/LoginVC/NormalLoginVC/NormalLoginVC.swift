@@ -158,7 +158,7 @@ class NormalLoginVC: UIViewController {
         phoneBtn.setTitleColor(UIColor.darkGray, for: .normal)
         
         
-        usernameBtn.backgroundColor = UIColor.secondary
+        usernameBtn.backgroundColor = UIColor.darkGray
         phoneBtn.backgroundColor = UIColor.clear
         
         descLbl.text = "Enter your username and password"
@@ -176,7 +176,7 @@ class NormalLoginVC: UIViewController {
         
         
         usernameBtn.backgroundColor = UIColor.clear
-        phoneBtn.backgroundColor = UIColor.secondary
+        phoneBtn.backgroundColor = UIColor.darkGray
         
         descLbl.text = "Select a country and enter your phone number"
         

@@ -334,7 +334,7 @@ extension MainFollowVC {
         followingBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
         
-        followerBtn.backgroundColor = UIColor.secondary
+        followerBtn.backgroundColor = UIColor.darkGray
         followingBtn.backgroundColor = UIColor.clear
         
         
@@ -352,7 +352,7 @@ extension MainFollowVC {
         
         
         followerBtn.backgroundColor = UIColor.clear
-        followingBtn.backgroundColor = UIColor.secondary
+        followingBtn.backgroundColor = UIColor.darkGray
         
         
         FollowerVC.view.isHidden = true

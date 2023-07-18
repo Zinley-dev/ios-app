@@ -35,11 +35,11 @@ class PhoneResetVC: UIViewController, CountryPickerViewDelegate, CountryPickerVi
     func countryPickerView(_ countryPickerView: CountryPickerView, willShow viewController: CountryPickerViewController) {
         
         viewController.navigationController?.modalPresentationStyle = .fullScreen
-        viewController.navigationController?.navigationBar.tintColor = UIColor.white
-        viewController.navigationController?.navigationBar.barTintColor = UIColor.background
-        viewController.navigationController?.navigationBar.backgroundColor = UIColor.background
-        viewController.navigationController?.navigationBar.bottomBorderColor = UIColor.black
-        viewController.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        viewController.navigationController?.navigationBar.tintColor = UIColor.black
+        viewController.navigationController?.navigationBar.barTintColor = UIColor.white
+        viewController.navigationController?.navigationBar.backgroundColor = UIColor.white
+        viewController.navigationController?.navigationBar.bottomBorderColor = UIColor.white
+        viewController.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
     
     }
 
@@ -50,7 +50,7 @@ class PhoneResetVC: UIViewController, CountryPickerViewDelegate, CountryPickerVi
         cpv.hostViewController = self
         cpv.showCountryNameInView = true
         cpv.showPhoneCodeInView = false
-        cpv.textColor = .white
+        cpv.textColor = .black
         
 
         countryCodeNameTextfield.leftView = cpv
@@ -83,7 +83,7 @@ class PhoneResetVC: UIViewController, CountryPickerViewDelegate, CountryPickerVi
   
     func bindAction(with vm: ViewModelType) {
         sendCodeButton.rx.tap.asObservable()
-            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance) // Avoid multiple taps
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
             .withLatestFrom(phoneTextfield.rx.text.orEmpty.asObservable()) {
                 return ($1, self.cpv.selectedCountry.phoneCode)
             }

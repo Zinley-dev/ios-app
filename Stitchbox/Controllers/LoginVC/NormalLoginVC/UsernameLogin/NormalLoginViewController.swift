@@ -40,18 +40,29 @@ class LoginController: UIViewController, ControllerType {
         
     }
     
+    func showErrorAlert(_ title: String, msg: String) {
+        
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
     // MARK: - Functions
     func bindUI(with: ViewModelType) {
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
             .subscribe(onNext: { (error) in
                 
-                DispatchQueue.main.async {
-                    
-                   presentSwiftLoader()
-                    
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
-                
+               
                 
             })
             .disposed(by: disposeBag)
@@ -60,10 +71,12 @@ class LoginController: UIViewController, ControllerType {
             .subscribe(onNext: { result in
               switch result {
                 case .normal:
+                  SwiftLoader.hide()
                   RedirectionHelper.redirectToDashboard()
                   
                 case .advance(let type, let value):
-                  Dispatch.main.async {
+                  Dispatch.main.async { [weak self] in
+                      guard let self = self else { return }
                     let model = LoginByPhoneVerifyViewModel()
                     model.output.type = type ?? ""
                     model.output.phoneNumber = value ?? ""
@@ -79,25 +92,43 @@ class LoginController: UIViewController, ControllerType {
     }
     
     func bindAction(with viewModel: LoginControllerViewModel) {
-        // binding Controller actions to View Model observer
         let userInputs = Observable.combineLatest(
             usernameTextfield.rx.text.orEmpty,
             passwordTextfield.rx.text.orEmpty) { ($0, $1) }
 
         signInButton.rx.tap.asObservable()
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
-            .withLatestFrom(userInputs)
-            .subscribe(viewModel.action.signInDidTap)
-            .disposed(by: disposeBag)
-        
-        signInButton.rx.tap.asObservable()
-            .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
-            .subscribe { _ in
+            .do(onNext: { _ in // Added this block
                 DispatchQueue.main.async {
                     presentSwiftLoader()
                 }
-            }.disposed(by: disposeBag)
+            })
+            .withLatestFrom(userInputs)
+            .subscribe(onNext: { username, password in
+          
+                if username.isEmpty {
+                    // Handle empty username here
+                    print("Username is empty")
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                        // Show error message if necessary
+                    }
+                } else if password.isEmpty {
+                    // Handle empty password here
+                    print("Password is empty")
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                        // Show error message if necessary
+                    }
+                } else {
+                    viewModel.action.signInDidTap.onNext((username, password))
+                }
+            })
+            .disposed(by: disposeBag)
     }
+
+
+
 
   
     @objc func onClickForgot(_ sender: AnyObject) {

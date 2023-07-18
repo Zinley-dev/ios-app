@@ -3022,7 +3022,7 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="13Z-bo-nkG">
                                 <rect key="frame" x="127.66666666666669" y="282" width="120" height="44"/>
-                                <color key="backgroundColor" name="Primary"/>
+                                <color key="backgroundColor" name="Secondary"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="SYq-93-TMx"/>
                                     <constraint firstAttribute="height" constant="44" id="bLC-2a-9Y7"/>
@@ -4508,9 +4508,9 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LoH-Az-krb" customClass="SButton" customModule="Stitchbox" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LoH-Az-krb">
                                 <rect key="frame" x="127.66666666666669" y="582" width="120" height="44"/>
-                                <color key="backgroundColor" red="0.51372551919999998" green="0.52549022440000004" blue="0.54509806630000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" name="Secondary"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="Nvs-Qi-QsL"/>
                                     <constraint firstAttribute="height" constant="44" id="zPs-VV-lVN"/>
@@ -4521,7 +4521,7 @@
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="20"/>
+                                        <real key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="size">
                                         <integer key="value" value="2"/>
@@ -7932,7 +7932,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oCK-8i-kzD">
                                 <rect key="frame" x="127.66666666666669" y="227" width="120" height="44"/>
-                                <color key="backgroundColor" name="Primary"/>
+                                <color key="backgroundColor" name="Secondary"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="49n-pX-DhX"/>
                                     <constraint firstAttribute="width" constant="120" id="ngD-hj-UDd"/>
@@ -8031,7 +8031,7 @@
                                         </subviews>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mAD-lJ-eeR"/>
@@ -8093,7 +8093,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Resend code">
                                             <fontDescription key="titleFontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
-                                            <color key="baseForegroundColor" name="Secondary"/>
+                                            <color key="baseForegroundColor" systemColor="systemBlueColor"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="resendBtnPressed:" destination="SHZ-ab-jOY" eventType="touchUpInside" id="ngQ-42-T25"/>
@@ -8134,7 +8134,7 @@
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ndo-RW-FbN">
                                 <rect key="frame" x="127.66666666666669" y="265.66666666666669" width="120" height="44"/>
-                                <color key="backgroundColor" name="Primary"/>
+                                <color key="backgroundColor" name="Secondary"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="Ftz-Es-7L5"/>
                                     <constraint firstAttribute="width" constant="120" id="gB2-M1-ceD"/>
@@ -8166,43 +8166,43 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="vSI-qg-BnK"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="25"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xr6-Hk-fJy">
                                         <rect key="frame" x="53" y="0.0" width="46" height="35"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="25"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8jV-a9-d1L">
                                         <rect key="frame" x="106" y="0.0" width="46" height="35"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="25"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4YE-G0-dWm">
                                         <rect key="frame" x="159" y="0.0" width="46" height="35"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="25"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zM7-Up-27X">
                                         <rect key="frame" x="212" y="0.0" width="46" height="35"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="25"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ijw-8d-Qy8">
                                         <rect key="frame" x="265" y="0.0" width="46" height="35"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="25"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -8285,7 +8285,7 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ASU-jX-Q9U">
                                 <rect key="frame" x="127.66666666666669" y="156" width="120" height="44"/>
-                                <color key="backgroundColor" name="Primary"/>
+                                <color key="backgroundColor" name="Secondary"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="ITg-9E-z39"/>
                                     <constraint firstAttribute="height" constant="44" id="k08-ZL-fwY"/>
@@ -8299,6 +8299,9 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="size">
                                         <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -8573,6 +8576,9 @@
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
