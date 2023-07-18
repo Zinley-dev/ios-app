@@ -105,7 +105,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.label.customColor[customType] = .lightGray
             self.label.numberOfLines = Int(self.contentNode.lineCount)
             self.label.enabledTypes = [.hashtag, .url, customType]
-            self.label.attributedText = self.contentNode.attributedText
+            //self.label.attributedText = self.contentNode.attributedText
             
             
                 //self.label.mentionColor = .secondary
@@ -624,16 +624,23 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             truncatedText = truncateTextIfNeeded(finalText)
         }
         
-        self.contentNode.attributedText = NSAttributedString(string: truncatedText, attributes: [
+        let attr1 = NSAttributedString(string: truncatedText, attributes: [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
+            NSAttributedString.Key.foregroundColor: UIColor.clear
+        ])
+            
+        let attr2 = NSAttributedString(string: truncatedText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
-
         
+        self.contentNode.attributedText = attr1
+      
         setNeedsLayout()
         layoutIfNeeded()
 
-        label.attributedText = self.contentNode.attributedText
+        label.attributedText = attr2
+        
         self.label.removeFromSuperview()
         addActiveLabel()
     }
@@ -798,16 +805,25 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             contentText = processTextForHiding(finalText)
         }
         
-        self.contentNode.attributedText = NSAttributedString(string: contentText, attributes: [
+        
+        let attr1 = NSAttributedString(string: contentText, attributes: [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
+            NSAttributedString.Key.foregroundColor: UIColor.clear
+        ])
+            
+        let attr2 = NSAttributedString(string: contentText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
+        
+        
+        self.contentNode.attributedText = attr1
 
         
         setNeedsLayout()
         layoutIfNeeded()
 
-        label.attributedText = self.contentNode.attributedText
+        label.attributedText = attr2
         self.label.removeFromSuperview()
         addActiveLabel()
     }

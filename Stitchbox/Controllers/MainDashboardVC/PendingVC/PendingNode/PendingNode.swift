@@ -397,16 +397,23 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
             truncatedText = truncateTextIfNeeded(finalText)
         }
         
-        self.contentNode.attributedText = NSAttributedString(string: truncatedText, attributes: [
+        let attr1 = NSAttributedString(string: truncatedText, attributes: [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
+            NSAttributedString.Key.foregroundColor: UIColor.clear
+        ])
+            
+        let attr2 = NSAttributedString(string: truncatedText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
+        
+        self.contentNode.attributedText = attr1
 
         
         setNeedsLayout()
         layoutIfNeeded()
 
-        label.attributedText = self.contentNode.attributedText
+        label.attributedText = attr2
         self.label.removeFromSuperview()
         addActiveLabel()
     }
@@ -572,15 +579,23 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
             contentText = processTextForHiding(finalText)
         }
         
-        self.contentNode.attributedText = NSAttributedString(string: contentText, attributes: [
+        
+        let attr1 = NSAttributedString(string: contentText, attributes: [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
+            NSAttributedString.Key.foregroundColor: UIColor.clear
+        ])
+            
+        let attr2 = NSAttributedString(string: contentText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
+        
+        self.contentNode.attributedText = attr1
 
         setNeedsLayout()
         layoutIfNeeded()
 
-        label.attributedText = self.contentNode.attributedText
+        label.attributedText = attr2
         self.label.removeFromSuperview()
         addActiveLabel()
     }
