@@ -368,6 +368,7 @@ extension AccountAPI: EndPointType {
 
 public enum UserAPI {
     case getme
+  case suggestUser(page: Int)
   case savePost (params: [String: Any])
   case unsavePost (params: [String: Any])
   case getSavedPost (page: Int)
@@ -405,6 +406,8 @@ extension UserAPI: EndPointType {
         switch self {
         case .getme:
             return "/me"
+          case .suggestUser(let page):
+            return "/suggest?page=\(page)"
         case .savePost:
           return "/me/saved-post"
         case .unsavePost:
@@ -465,6 +468,8 @@ extension UserAPI: EndPointType {
         switch self {
         case .getme:
             return .get
+          case .suggestUser:
+            return .get
           case .savePost:
             return .post
           case .unsavePost:
@@ -523,6 +528,8 @@ extension UserAPI: EndPointType {
     var task: HTTPTask {
         switch self {
         case .getme:
+            return .request
+          case .suggestUser:
             return .request
           case .savePost(let params):
             return .requestParameters(parameters: params)

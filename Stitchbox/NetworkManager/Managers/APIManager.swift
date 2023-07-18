@@ -1039,4 +1039,9 @@ extension APIManager {
       completion(result)
     }
   }
+  func suggestUser(page: Int, completion: @escaping APICompletion) {
+    userManager.request(.suggestUser(page: page)) { result in
+      completion(result)
+    }
+  }
 }
