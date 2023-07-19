@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FLAnimatedImage
+import AsyncDisplayKit
 
 class TrendingVC: UIViewController {
     
@@ -18,10 +20,32 @@ class TrendingVC: UIViewController {
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var postBtn: UIButton!
     @IBOutlet weak var hashtagBtn: UIButton!
+    @IBOutlet weak var friendRecBtn: UIButton!
     
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
+    
+    
+    var friendBorder = CALayer()
     var postBorder = CALayer()
     var hashTagBorder = CALayer()
     var selectedTrendingMode = TrendingMode.posts
+    
+    
+    lazy var SuggestFollowVC: SuggestFollowVC = {
+        
+        
+        if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SuggestFollowVC") as? SuggestFollowVC {
+            
+            self.addVCAsChildVC(childViewController: controller)
+            
+            return controller
+        } else {
+            return UIViewController() as! SuggestFollowVC
+        }
+       
+        
+    }()
     
     lazy var TrendingPostVC: TrendingPostVC = {
         
@@ -62,7 +86,8 @@ class TrendingVC: UIViewController {
         setupNavBar()
         setupLayers()
         
-        postBtn.setTitleColor(UIColor.black, for: .normal)
+        friendRecBtn.setTitleColor(UIColor.black, for: .normal)
+        postBtn.setTitleColor(UIColor.lightGray, for: .normal)
         hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
         
@@ -71,6 +96,44 @@ class TrendingVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavBar()
+        
+        do {
+            
+            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+            let gifData = try NSData(contentsOfFile: path) as Data
+            let image = FLAnimatedImage(animatedGIFData: gifData)
+            
+            
+            self.loadingImage.animatedImage = image
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        loadingView.backgroundColor = self.view.backgroundColor
+        navigationController?.setNavigationBarHidden(false, animated: true)
+  
+        
+        delay(1.25) {
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                self.loadingView.alpha = 0
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
+                    
+                    self.loadingView.isHidden = true
+                    
+                }
+                
+            }
+            
+        }
     }
     
     func setupNavBar() {
@@ -88,14 +151,16 @@ class TrendingVC: UIViewController {
     
     func setupLayers() {
         
-
-        postBorder = postBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (180/375))
-        hashTagBorder = hashtagBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (180/375))
+        friendBorder = friendRecBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (120/375))
+        postBorder = postBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (120/375))
+        hashTagBorder = hashtagBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (120/375))
         
-        postBtn.layer.addSublayer(postBorder)
+        friendRecBtn.layer.addSublayer(friendBorder)
         hashTagBorder.removeFromSuperlayer()
+        postBorder.removeFromSuperlayer()
         TrendingHashtagVC.view.isHidden = true
-        TrendingPostVC.view.isHidden = false
+        TrendingPostVC.view.isHidden = true
+        SuggestFollowVC.view.isHidden = false
         
     }
     
@@ -104,22 +169,45 @@ class TrendingVC: UIViewController {
       
         postBtn.setTitleColor(UIColor.black, for: .normal)
         hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        friendRecBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        
+        
         
         postBtn.layer.addSublayer(postBorder)
         hashTagBorder.removeFromSuperlayer()
+        friendBorder.removeFromSuperlayer()
         TrendingHashtagVC.view.isHidden = true
         TrendingPostVC.view.isHidden = false
+        SuggestFollowVC.view.isHidden = true
     }
     
     @IBAction func hashtagBtnPressed(_ sender: Any) {
         
         hashtagBtn.setTitleColor(UIColor.black, for: .normal)
         postBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        friendRecBtn.setTitleColor(UIColor.lightGray, for: .normal)
   
         hashtagBtn.layer.addSublayer(hashTagBorder)
         postBorder.removeFromSuperlayer()
+        friendBorder.removeFromSuperlayer()
         TrendingPostVC.view.isHidden = true
         TrendingHashtagVC.view.isHidden = false
+        SuggestFollowVC.view.isHidden = true
+    }
+    
+    @IBAction func friendRecBtnPressed(_ sender: Any) {
+        
+        hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        postBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        friendRecBtn.setTitleColor(UIColor.black, for: .normal)
+  
+        friendRecBtn.layer.addSublayer(friendBorder)
+        postBorder.removeFromSuperlayer()
+        hashTagBorder.removeFromSuperlayer()
+        TrendingPostVC.view.isHidden = true
+        TrendingHashtagVC.view.isHidden = true
+        SuggestFollowVC.view.isHidden = false
+       
     }
     
 

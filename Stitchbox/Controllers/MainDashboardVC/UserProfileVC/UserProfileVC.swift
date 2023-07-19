@@ -49,13 +49,13 @@ class UserProfileVC: UIViewController {
     var pullControl = UIRefreshControl()
     var onPresent = false
     var allowProcess = true
-    var allowFistBumped = true
+    
     var followerCount = 0
     var followingCount = 0
-    var fistBumpedCount = 0
+  
     var firstAnimated = true
     var isFollow = false
-    var isFistBump = false
+   
     
     var demoProfileData: ProfileHeaderData {
         return ProfileHeaderData(name: "", username: "", accountType: "", postCount: 0)
@@ -292,9 +292,7 @@ extension UserProfileVC {
                     self.allowProcess = true
                     self.isFollow = true
                     needRecount = true
-                    Dispatch.main.async {
-                        self.reloadPost()
-                    }
+                   
                     
                     
                 case .failure(let error):
@@ -339,10 +337,7 @@ extension UserProfileVC {
                     self.isFollow = false
                     needRecount = true
                     self.allowProcess = true
-                    
-                    Dispatch.main.async {
-                        self.reloadPost()
-                    }
+                  
                     
                 case .failure(let error):
                     
@@ -469,116 +464,7 @@ extension UserProfileVC {
         
     }
 
-    
-    func giveFistBump() {
-        
-        if allowFistBumped {
-            
-            fistBumpedAnimation()
-            self.allowFistBumped = false
-            self.isFistBump = true
-            fistBumpedCount += 1
-            self.applyUIChange()
-            
-            APIManager.shared.addFistBump(userID: self.userId!) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(_):
-                    
-                    self.isFistBump = true
-                    self.allowFistBumped = true
-                    
-                case .failure(_):
-                    DispatchQueue.main.async {
-                        self.isFistBump = false
-                        self.allowFistBumped = true
-                        self.fistBumpedCount -= 1
-                        self.applyUIChange()
-                        showNote(text: "Something happened!")
-                    }
-                    
-                    
-                }
-            }
-            
-            
-        }
-        
-        
-    }
-    
-    func unfistBump() {
-        
-        
-        if allowFistBumped {
-            
-            
-            self.isFistBump = false
-            self.allowFistBumped = false
-            fistBumpedCount -= 1
-            self.applyUIChange()
-            
-            APIManager.shared.deleteFistBump(userID: self.userId!) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(_):
-                    
-                    self.isFistBump = false
-                    self.allowFistBumped = true
-                    
-                case .failure(_):
-                    DispatchQueue.main.async {
-                        self.allowFistBumped = true
-                        self.isFistBump = true
-                        self.fistBumpedCount += 1
-                        self.applyUIChange()
-                        showNote(text: "Something happened!")
-                    }
-                    
-                    
-                }
-            }
-            
-            
-        }
-        
-        
-        
-    }
-    
-    func fistBumpedAnimation() {
-        
-        let imgView = UIImageView()
-        imgView.image = UIImage(named: "fistBumpedStats")
-        imgView.frame.size = CGSize(width: 200, height: 120)
-        
-        imgView.center = self.view.center
-        self.view.addSubview(imgView)
-        addfireWork(imgView: imgView)
-        
-        imgView.transform = CGAffineTransform.identity
-        
-        UIView.animate(withDuration: 1.0) {
-            
-            imgView.alpha = 0
-            
-        }
-        
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            
-            if imgView.alpha == 0 {
-                
-                imgView.removeFromSuperview()
-                
-            }
-            
-        }
-        
-    }
-    
+ 
     
 }
 
@@ -996,17 +882,17 @@ extension UserProfileVC {
         reloadPost()
         
         checkIfFollow()
-        checkIfFistBump()
+       
         
         reloadUserInformation {
             self.reloadGetFollowers {
                 self.reloadUserInformation {
-                    self.reloadGetFistBumperCount {
+                    
                         self.applyAllChange()
                         Dispatch.main.async {
                             self.pullControl.endRefreshing()
                         }
-                    }
+                    
                 }
             }
         }
@@ -1049,11 +935,11 @@ extension UserProfileVC {
                 self.applyUIChange()
                 self.hideAnimation()
                 
-                self.countFistBumped()
+               
                 self.countFollowings()
                 self.countFollowers()
                 self.checkIfFollow()
-                self.checkIfFistBump()
+               
                 
                 self.getUserPost { (newPosts) in
                     
@@ -1129,43 +1015,7 @@ extension UserProfileVC {
         
     }
     
-    func countFistBumped() {
-        
-        APIManager.shared.getFistBumperCount(userID: userId ?? ""){ [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let response):
-                
-                guard response.body?["message"] as? String == "success",
-                      let data = response.body?["count"] as? [[String: Any]] else {
-                    self.fistBumpedCount = 0
-                    return
-                }
-                
-                var foundCount = false
-                for item in data {
-                    if let fistBumpedGet = item["count"] as? Int {
-                        self.fistBumpedCount = fistBumpedGet
-                        foundCount = true
-                        break
-                    }
-                }
-                
-                if !foundCount {
-                    self.fistBumpedCount = 0
-                }
-                
-                self.applyUIChange()
-                
-            case .failure(let error):
-                print("Error loading fistbumpers: ", error)
-                self.fistBumpedCount = 0
-            }
-        }
-    }
-    
-    
+ 
     
     func getUserPost(block: @escaping ([[String: Any]]) -> Void) {
         
@@ -1229,30 +1079,7 @@ extension UserProfileVC {
         }
         
     }
-    
-    func checkIfFistBump() {
-        
-        
-        APIManager.shared.isFistBumpee(userID: userId ?? "") { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let apiResponse):
-                
-                guard let isFistBump = apiResponse.body?["data"] as? Bool else {
-                    return
-                }
-                
-                self.isFistBump = isFistBump
-                self.applyHeaderChange()
-                
-            case .failure(let error):
-                print(error)
-                
-            }
-        }
-        
-    }
+
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
         
@@ -1383,36 +1210,7 @@ extension UserProfileVC {
             }
         }
     }
-    func reloadGetFistBumperCount(completed: @escaping DownloadComplete) {
-        
-        APIManager.shared.getFistBumperCount(userID: userId ?? ""){ [weak self]result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let response):
-                
-                guard response.body?["message"] as? String == "success",
-                      let data = response.body?["paging"] as? [String: Any] else {
-                    self.fistBumpedCount = 0
-                    completed()
-                    return
-                }
-                
-                if let fistBumpedGet = data["total"] as? Int {
-                    self.fistBumpedCount = fistBumpedGet
-                } else {
-                    self.fistBumpedCount = 0
-                }
-                
-                completed()
-                
-            case .failure(let error):
-                print("Error loading fistbumpers: ", error)
-                self.fistBumpedCount = 0
-                completed()
-            }
-        }
-    }
+  
     
     func showErrorAlert(_ title: String, msg: String) {
         

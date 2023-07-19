@@ -14,6 +14,7 @@ class TrendingHashtagVC: UIViewController {
 
         // Do any additional setup after loading the view.
         getHastag()
+        getSuggestUser()
     }
 
 
@@ -32,6 +33,25 @@ class TrendingHashtagVC: UIViewController {
                 
             }
         }
+        
+    }
+    
+    func getSuggestUser() {
+        
+        APIManager.shared.suggestUser(page: 1) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                print("SuggestUser: \(apiResponse)")
+                
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
+        
         
     }
 

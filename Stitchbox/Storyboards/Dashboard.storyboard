@@ -270,8 +270,27 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Qbk-dP-JXR">
                                 <rect key="frame" x="8" y="94" width="359" height="34"/>
                                 <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CjX-qr-wXj">
+                                        <rect key="frame" x="0.0" y="0.0" width="119.66666666666667" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="OH8-8J-gjZ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Friend-Rec">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="18"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="friendRecBtnPressed:" destination="fKf-fz-GNV" eventType="touchUpInside" id="m5f-4k-ymT"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Tp-9A-zwE">
-                                        <rect key="frame" x="0.0" y="0.0" width="179.66666666666666" height="34"/>
+                                        <rect key="frame" x="119.66666666666666" y="0.0" width="119.66666666666666" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="lAQ-eF-Ql0"/>
                                         </constraints>
@@ -286,13 +305,11 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="InboxBtnPressed:" destination="KzE-0Q-kOw" eventType="touchUpInside" id="ia7-Pd-1Lr"/>
-                                            <action selector="postBtnPressed:" destination="JnO-8K-KqH" eventType="touchUpInside" id="OdS-Tv-EFy"/>
                                             <action selector="postBtnPressed:" destination="fKf-fz-GNV" eventType="touchUpInside" id="nm5-Yz-DF4"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ivn-6t-JUE">
-                                        <rect key="frame" x="179.66666666666663" y="0.0" width="179.33333333333337" height="34"/>
+                                        <rect key="frame" x="239.33333333333334" y="0.0" width="119.66666666666666" height="34"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -306,8 +323,6 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="hashtagBtnPressed:" destination="fKf-fz-GNV" eventType="touchUpInside" id="6rH-BU-TFh"/>
-                                            <action selector="hashtagBtnPressed:" destination="JnO-8K-KqH" eventType="touchUpInside" id="QqS-b6-RbY"/>
-                                            <action selector="requestBtnPressed:" destination="KzE-0Q-kOw" eventType="touchUpInside" id="2PX-eK-5hP"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -316,25 +331,50 @@
                                 <rect key="frame" x="0.0" y="144" width="375" height="585"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FDr-GT-7wb">
+                                <rect key="frame" x="0.0" y="94" width="375" height="635"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jyS-Xo-new" customClass="FLAnimatedImageView">
+                                        <rect key="frame" x="150" y="280" width="75" height="75"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="75" id="nAu-PB-kv4"/>
+                                            <constraint firstAttribute="width" constant="75" id="nnV-nk-vMw"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="jyS-Xo-new" firstAttribute="centerY" secondItem="FDr-GT-7wb" secondAttribute="centerY" id="abz-rf-zdp"/>
+                                    <constraint firstItem="jyS-Xo-new" firstAttribute="centerX" secondItem="FDr-GT-7wb" secondAttribute="centerX" id="stC-wp-wKT"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Kr1-VJ-hL7"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="ACv-8E-XGx" firstAttribute="top" secondItem="Qbk-dP-JXR" secondAttribute="bottom" constant="16" id="1Jw-bw-szL"/>
+                            <constraint firstItem="FDr-GT-7wb" firstAttribute="leading" secondItem="GWk-SY-sD6" secondAttribute="leading" id="5Lx-uD-4iv"/>
                             <constraint firstItem="Qbk-dP-JXR" firstAttribute="top" secondItem="Kr1-VJ-hL7" secondAttribute="top" id="Jfm-jr-bBy"/>
                             <constraint firstItem="ACv-8E-XGx" firstAttribute="leading" secondItem="Kr1-VJ-hL7" secondAttribute="leading" id="KEL-OU-5BT"/>
+                            <constraint firstAttribute="bottom" secondItem="FDr-GT-7wb" secondAttribute="bottom" id="MBt-yh-mD1"/>
+                            <constraint firstItem="FDr-GT-7wb" firstAttribute="top" secondItem="Kr1-VJ-hL7" secondAttribute="top" id="O3x-va-hp8"/>
                             <constraint firstItem="Kr1-VJ-hL7" firstAttribute="trailing" secondItem="ACv-8E-XGx" secondAttribute="trailing" id="PIM-71-zAn"/>
                             <constraint firstItem="ACv-8E-XGx" firstAttribute="top" secondItem="Qbk-dP-JXR" secondAttribute="bottom" constant="16" id="WNd-VU-HfT"/>
                             <constraint firstItem="Qbk-dP-JXR" firstAttribute="leading" secondItem="Kr1-VJ-hL7" secondAttribute="leading" constant="8" id="a5C-bC-D7w"/>
                             <constraint firstItem="Kr1-VJ-hL7" firstAttribute="bottom" secondItem="ACv-8E-XGx" secondAttribute="bottom" id="cZA-GM-8P0"/>
                             <constraint firstItem="Kr1-VJ-hL7" firstAttribute="trailing" secondItem="Qbk-dP-JXR" secondAttribute="trailing" constant="8" id="nub-n7-Ykr"/>
+                            <constraint firstAttribute="trailing" secondItem="FDr-GT-7wb" secondAttribute="trailing" id="p4u-nj-PQM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="DDh-Ja-4q3"/>
                     <connections>
                         <outlet property="buttonStackView" destination="Qbk-dP-JXR" id="MxQ-Be-hUb"/>
                         <outlet property="contentView" destination="ACv-8E-XGx" id="o3f-ip-pnK"/>
+                        <outlet property="friendRecBtn" destination="CjX-qr-wXj" id="IOC-Xl-tDo"/>
                         <outlet property="hashtagBtn" destination="ivn-6t-JUE" id="Gwf-yo-n9F"/>
+                        <outlet property="loadingImage" destination="jyS-Xo-new" id="6ng-WL-Yx4"/>
+                        <outlet property="loadingView" destination="FDr-GT-7wb" id="cIw-ye-nVR"/>
                         <outlet property="postBtn" destination="5Tp-9A-zwE" id="s5Y-Kq-FSB"/>
                     </connections>
                 </viewController>
@@ -968,7 +1008,6 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="InboxBtnPressed:" destination="KzE-0Q-kOw" eventType="touchUpInside" id="AAl-E2-vCt"/>
                                             <action selector="userBtnPressed:" destination="JnO-8K-KqH" eventType="touchUpInside" id="o5l-Fo-mN9"/>
                                         </connections>
                                     </button>
@@ -988,7 +1027,6 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="InboxBtnPressed:" destination="KzE-0Q-kOw" eventType="touchUpInside" id="t6k-gh-GUP"/>
                                             <action selector="postBtnPressed:" destination="JnO-8K-KqH" eventType="touchUpInside" id="2O3-cZ-D08"/>
                                         </connections>
                                     </button>
@@ -1007,7 +1045,6 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="hashtagBtnPressed:" destination="JnO-8K-KqH" eventType="touchUpInside" id="eUs-fx-qcO"/>
-                                            <action selector="requestBtnPressed:" destination="KzE-0Q-kOw" eventType="touchUpInside" id="Ro3-yC-ndq"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1571,6 +1608,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j3Q-l9-dhU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-4890" y="3798"/>
+        </scene>
+        <!--Suggest FollowVC-->
+        <scene sceneID="gnb-rY-zBM">
+            <objects>
+                <viewController storyboardIdentifier="SuggestFollowVC" id="ZkC-Gl-Qhl" customClass="SuggestFollowVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gOH-O4-x94">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="ZVR-41-mYb"/>
+                        <color key="backgroundColor" systemColor="systemYellowColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hLP-UU-Opr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4890" y="4561"/>
         </scene>
         <!--Trending HashtagVC-->
         <scene sceneID="HW9-Rc-qVw">
@@ -8607,6 +8659,9 @@
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
