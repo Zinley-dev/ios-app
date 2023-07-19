@@ -44,7 +44,7 @@ class HashTagSearchNode: ASCellNode {
         hashtagTextNode.backgroundColor = UIColor.clear
         
         automaticallyManagesSubnodes = true
-        
+        0
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .right
         
@@ -54,7 +54,7 @@ class HashTagSearchNode: ASCellNode {
                 string: "#",
                 attributes: [
                     NSAttributedString.Key.font:  FontManager.shared.roboto(.Regular, size: FontSize + 5),
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
                     NSAttributedString.Key.paragraphStyle: paragraphStyles
                 ]
             )
@@ -63,7 +63,7 @@ class HashTagSearchNode: ASCellNode {
                 string: String(self.hashtag.keyword.dropFirst(1)),
                 attributes: [
                     NSAttributedString.Key.font:  FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
                     NSAttributedString.Key.paragraphStyle: paragraphStyles
                 ]
             )
@@ -72,7 +72,7 @@ class HashTagSearchNode: ASCellNode {
                 string: "\(formatPoints(num: Double(hashtag.count))) posts",
                 attributes: [
                     NSAttributedString.Key.font:  FontManager.shared.roboto(.Medium, size: FontSize + 1),
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
                     NSAttributedString.Key.paragraphStyle: paragraphStyles
                 ]
             )

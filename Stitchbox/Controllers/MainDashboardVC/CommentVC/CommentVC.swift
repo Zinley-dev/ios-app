@@ -74,7 +74,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
     
     lazy var autocompleteVC: AutocompeteViewController = {
         let vc = AutocompeteViewController()
-        searchResultContainerView.backgroundColor = UIColor.black
+        searchResultContainerView.backgroundColor = UIColor.white
         
         
         self.searchResultContainerView.addSubview(vc.view)
@@ -573,7 +573,7 @@ extension CommentVC {
         self.tableNode.leadingScreensForBatching = 20
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
-        self.tableNode.view.backgroundColor = .black
+        self.tableNode.view.backgroundColor = .white
         
     }
     
@@ -588,7 +588,7 @@ extension CommentVC {
             cmtTxtView.addSubview(placeholderLabel)
             commentBtn.isEnabled = true
             placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
-            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.textColor = UIColor.black
             placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
             cmtTxtView.isUserInteractionEnabled = true
         } else {
@@ -601,7 +601,7 @@ extension CommentVC {
             cmtTxtView.isUserInteractionEnabled = false
             commentBtn.isEnabled = false
             placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
-            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.textColor = UIColor.black
             placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
         }
         
@@ -612,7 +612,7 @@ extension CommentVC {
     func applyStyle() {
         
         self.tableNode.view.separatorStyle = .none
-        self.tableNode.view.separatorColor = UIColor.lightGray
+        self.tableNode.view.separatorColor = UIColor.darkGray
         self.tableNode.view.isPagingEnabled = false
         self.tableNode.view.backgroundColor = UIColor.clear
         self.tableNode.view.showsVerticalScrollIndicator = false
@@ -758,6 +758,11 @@ extension CommentVC: ASTableDelegate, ASTableDataSource {
     
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
         
+        if CommentList.isEmpty {
+            tableNode.view.setEmptyMessage("No comment found")
+        } else {
+            tableNode.view.restore()
+        }
         
         return self.CommentList.count
         

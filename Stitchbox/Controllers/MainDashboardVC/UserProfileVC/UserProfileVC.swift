@@ -936,7 +936,7 @@ extension UserProfileVC {
         shareButton.frame = back_frame
         shareButton.contentMode = .center
         
-        if let backImage = UIImage(named: "share") {
+        if let backImage = UIImage(named: "share-lightmode") {
             let imageSize = CGSize(width: 23, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 + horizontalPadding,

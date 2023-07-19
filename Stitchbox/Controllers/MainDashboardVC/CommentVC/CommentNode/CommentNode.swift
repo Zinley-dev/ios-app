@@ -57,8 +57,7 @@ class CommentNode: ASCellNode {
         
         super.init()
         
-        self.backgroundColor = UIColor(red: 43, green: 43, blue: 43)
-        self.replyBtnNode.setTitle("Reply", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.lightGray, for: .normal)
+        self.replyBtnNode.setTitle("Reply", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.darkGray, for: .normal)
 
         self.replyBtnNode.addTarget(self, action: #selector(CommentNode.replyBtnPressed), forControlEvents: .touchUpInside)
         self.selectionStyle = .none
@@ -74,13 +73,13 @@ class CommentNode: ASCellNode {
         
         
         let textAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Light, size: FontSize), // Using the Roboto Light style
-            NSAttributedString.Key.foregroundColor: UIColor.white
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
+            NSAttributedString.Key.foregroundColor: UIColor.black
         ]
 
         let timeAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Light, size: FontSize), // Using the Roboto Light style
-            NSAttributedString.Key.foregroundColor: UIColor.lightGray
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
+            NSAttributedString.Key.foregroundColor: UIColor.darkGray
         ]
 
         
@@ -217,7 +216,7 @@ class CommentNode: ASCellNode {
         }
         
         DispatchQueue.main.async {
-            self.view.backgroundColor = .background
+            self.view.backgroundColor = .white
         }
        
         infoNode.backgroundColor = UIColor.clear
@@ -294,9 +293,9 @@ class CommentNode: ASCellNode {
                     UPVC.onPresent = true
 
                     // Customize the navigation bar appearance
-                    nav.navigationBar.barTintColor = .background
-                    nav.navigationBar.tintColor = .white
-                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                    nav.navigationBar.barTintColor = .white
+                    nav.navigationBar.tintColor = .black
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                     nav.modalPresentationStyle = .fullScreen
                     vc.present(nav, animated: true, completion: nil)
@@ -327,9 +326,9 @@ class CommentNode: ASCellNode {
                     UPVC.onPresent = true
 
                     // Customize the navigation bar appearance
-                    nav.navigationBar.barTintColor = .background
-                    nav.navigationBar.tintColor = .white
-                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                    nav.navigationBar.barTintColor = .white
+                    nav.navigationBar.tintColor = .black
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                     nav.modalPresentationStyle = .fullScreen
                     vc.present(nav, animated: true, completion: nil)
@@ -418,7 +417,7 @@ class CommentNode: ASCellNode {
                 
                 let LikeAttributes: [NSAttributedString.Key: Any] = [
                     NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
                     NSAttributedString.Key.paragraphStyle: paragraphStyle
                 ]
 
@@ -484,8 +483,8 @@ class CommentNode: ASCellNode {
             self.replyToNode.attributedText = NSAttributedString(
                 string: "\(self.replyUsername): ",
                 attributes: [
-                    NSAttributedString.Key.font: FontManager.shared.roboto(.Light, size: FontSize), // Using the Roboto Light style
-                    NSAttributedString.Key.foregroundColor: UIColor.white
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
+                    NSAttributedString.Key.foregroundColor: UIColor.black
                 ]
             )
 
@@ -580,9 +579,9 @@ class CommentNode: ASCellNode {
                                             UPVC.onPresent = true
 
                                             // Customize the navigation bar appearance
-                                            nav.navigationBar.barTintColor = .background
-                                            nav.navigationBar.tintColor = .white
-                                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                                            nav.navigationBar.barTintColor = .white
+                                            nav.navigationBar.tintColor = .black
+                                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                                             nav.modalPresentationStyle = .fullScreen
                                             vc.present(nav, animated: true, completion: nil)
@@ -621,9 +620,9 @@ class CommentNode: ASCellNode {
                             PLHVC.onPresent = true
 
                             // Customize the navigation bar appearance
-                            nav.navigationBar.barTintColor = .background
-                            nav.navigationBar.tintColor = .white
-                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                            nav.navigationBar.barTintColor = .white
+                            nav.navigationBar.tintColor = .black
+                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                             nav.modalPresentationStyle = .fullScreen
                             vc.present(nav, animated: true, completion: nil)
@@ -696,9 +695,9 @@ class CommentNode: ASCellNode {
                 UPVC.onPresent = true
 
                 // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                nav.navigationBar.barTintColor = .white
+                nav.navigationBar.tintColor = .black
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                 nav.modalPresentationStyle = .fullScreen
                 vc.present(nav, animated: true, completion: nil)
@@ -750,9 +749,9 @@ class CommentNode: ASCellNode {
                                     RVC.posts = [post]
                                    
                                     // Customize the navigation bar appearance
-                                    nav.navigationBar.barTintColor = .background
-                                    nav.navigationBar.tintColor = .white
-                                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                                    nav.navigationBar.barTintColor = .white
+                                    nav.navigationBar.tintColor = .black
+                                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                                     nav.modalPresentationStyle = .fullScreen
                                     
@@ -785,10 +784,10 @@ class CommentNode: ASCellNode {
     func loadCmtCount() {
         if self.post.has_reply == true {
             if self.post.hasLoadedReplied {
-                self.loadReplyBtnNode.setTitle("Show more", with: FontManager.shared.roboto(.Light, size: FontSize), with: UIColor.lightGray, for: .normal)
+                self.loadReplyBtnNode.setTitle("Show more", with: FontManager.shared.roboto(.Regular, size: FontSize), with: UIColor.darkGray, for: .normal)
                 self.loadReplyBtnNode.contentHorizontalAlignment = .left
             } else {
-                self.loadReplyBtnNode.setTitle("Replied (\(self.post.replyTotal ?? 0))", with: FontManager.shared.roboto(.Light, size: FontSize), with: UIColor.lightGray, for: .normal)
+                self.loadReplyBtnNode.setTitle("Replied (\(self.post.replyTotal ?? 0))", with: FontManager.shared.roboto(.Regular, size: FontSize), with: UIColor.darkGray, for: .normal)
                 self.loadReplyBtnNode.contentHorizontalAlignment = .left
                 self.post.hasLoadedReplied = true
             }
@@ -805,36 +804,36 @@ class CommentNode: ASCellNode {
         if self.post.comment_uid == self.post.owner_uid {
             if self.post.is_pinned == true {
                 userNameNode.attributedText = NSAttributedString(
-                    string: "\(self.post.comment_username ?? "") - author (pinned)",
+                    string: "@\(self.post.comment_username ?? "") - author (pinned)",
                     attributes: [
                         NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
-                        NSAttributedString.Key.foregroundColor: UIColor.lightGray
+                        NSAttributedString.Key.foregroundColor: UIColor.darkGray
                     ]
                 )
             } else {
                 userNameNode.attributedText = NSAttributedString(
-                    string: "\(self.post.comment_username ?? "") - author",
+                    string: "@\(self.post.comment_username ?? "") - author",
                     attributes: [
                         NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
-                        NSAttributedString.Key.foregroundColor: UIColor.lightGray
+                        NSAttributedString.Key.foregroundColor: UIColor.darkGray
                     ]
                 )
             }
         } else {
             if self.post.is_pinned == true {
                 userNameNode.attributedText = NSAttributedString(
-                    string: "\(self.post.comment_username ?? "") (pinned)",
+                    string: "@\(self.post.comment_username ?? "") (pinned)",
                     attributes: [
                         NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
-                        NSAttributedString.Key.foregroundColor: UIColor.lightGray
+                        NSAttributedString.Key.foregroundColor: UIColor.darkGray
                     ]
                 )
             } else {
                 userNameNode.attributedText = NSAttributedString(
-                    string: "\(self.post.comment_username ?? "")",
+                    string: "@\(self.post.comment_username ?? "")",
                     attributes: [
                         NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
-                        NSAttributedString.Key.foregroundColor: UIColor.lightGray
+                        NSAttributedString.Key.foregroundColor: UIColor.darkGray
                     ]
                 )
             }
@@ -865,7 +864,7 @@ extension CommentNode {
         
         let LikeAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
-            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.foregroundColor: UIColor.black,
             NSAttributedString.Key.paragraphStyle: paragraphStyle
         ]
         
@@ -893,7 +892,7 @@ extension CommentNode {
                 
                 let LikeAttributes: [NSAttributedString.Key: Any] = [
                     NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
                     NSAttributedString.Key.paragraphStyle: paragraphStyle
                 ]
                 
@@ -919,7 +918,7 @@ extension CommentNode {
         
         let LikeAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
-            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.foregroundColor: UIColor.black,
             NSAttributedString.Key.paragraphStyle: paragraphStyle
         ]
         
@@ -948,7 +947,7 @@ extension CommentNode {
                 
                 let LikeAttributes: [NSAttributedString.Key: Any] = [
                     NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
                     NSAttributedString.Key.paragraphStyle: paragraphStyle
                 ]
                 
