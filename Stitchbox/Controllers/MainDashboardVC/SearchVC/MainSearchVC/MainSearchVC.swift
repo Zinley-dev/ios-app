@@ -128,22 +128,22 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             
             setCurrentBorderAndShowView(currentSelected: SearchMode.users)
             userBtn.setTitleColor(UIColor.black, for: .normal)
-            postBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            hashtagBtn.setTitleColor(UIColor.darkGray, for: .normal)
+            postBtn.setTitleColor(UIColor.lightGray, for: .normal)
+            hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
             
         } else if self.initialType == "post" {
             
             setCurrentBorderAndShowView(currentSelected: SearchMode.posts)
             postBtn.setTitleColor(UIColor.black, for: .normal)
-            userBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            hashtagBtn.setTitleColor(UIColor.darkGray, for: .normal)
+            userBtn.setTitleColor(UIColor.lightGray, for: .normal)
+            hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
             
         } else if self.initialType == "hashtag" {
             
             setCurrentBorderAndShowView(currentSelected: SearchMode.hashTags)
             hashtagBtn.setTitleColor(UIColor.black, for: .normal)
-            postBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            userBtn.setTitleColor(UIColor.darkGray, for: .normal)
+            postBtn.setTitleColor(UIColor.lightGray, for: .normal)
+            userBtn.setTitleColor(UIColor.lightGray, for: .normal)
             
         }
         
@@ -179,8 +179,8 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         
         setCurrentBorderAndShowView(currentSelected: SearchMode.users)
         userBtn.setTitleColor(UIColor.black, for: .normal)
-        postBtn.setTitleColor(UIColor.darkGray, for: .normal)
-        hashtagBtn.setTitleColor(UIColor.darkGray, for: .normal)
+        postBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
         searchType = "user"
         
@@ -190,8 +190,8 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         
         setCurrentBorderAndShowView(currentSelected: SearchMode.posts)
         postBtn.setTitleColor(UIColor.black, for: .normal)
-        userBtn.setTitleColor(UIColor.darkGray, for: .normal)
-        hashtagBtn.setTitleColor(UIColor.darkGray, for: .normal)
+        userBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
         searchType = "post"
         
@@ -201,8 +201,8 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         
         setCurrentBorderAndShowView(currentSelected: SearchMode.hashTags)
         hashtagBtn.setTitleColor(UIColor.black, for: .normal)
-        postBtn.setTitleColor(UIColor.darkGray, for: .normal)
-        userBtn.setTitleColor(UIColor.darkGray, for: .normal)
+        postBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        userBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
         searchType = "hashtag"
         

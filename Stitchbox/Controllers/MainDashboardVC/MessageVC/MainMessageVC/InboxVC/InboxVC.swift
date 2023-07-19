@@ -289,10 +289,10 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             if channel.unreadMessageCount > 0 {
                 cell.unreadMessageCountContainerView.isHidden = false
                 cell.unreadMessageCountLabel.text = (channel.unreadMessageCount > 99) ? "+99" : String(channel.unreadMessageCount)
-                cell.lastMessageLabel.textColor = UIColor.white
+                cell.lastMessageLabel.textColor = UIColor.black
             } else {
                 cell.unreadMessageCountContainerView.isHidden = true
-                cell.lastMessageLabel.textColor = UIColor.lightGray
+                cell.lastMessageLabel.textColor = UIColor.darkGray
             }
 
             if channel.memberCount > 2 {
@@ -489,7 +489,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 leaveTypeView.contentMode = .center
                 
                 leaveAction.image = leaveTypeView.asImage()
-                leaveAction.backgroundColor = UIColor.background
+                leaveAction.backgroundColor = .white
                 
                 
                 
@@ -544,7 +544,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 alarmTypeView.layer.cornerRadius = iconSize/2
                 
                 alarmAction.image = alarmTypeView.asImage()
-                alarmAction.backgroundColor = UIColor.background
+                alarmAction.backgroundColor = .white
                 
    
                 return UISwipeActionsConfiguration(actions: [leaveAction, alarmAction])

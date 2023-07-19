@@ -246,10 +246,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         SBUTheme.set(theme: .light)
         
-        
-        SBUTheme.channelListTheme.navigationBarTintColor = UIColor.background
-        
-        
         //SBUStringSet.Empty_No_Channels = "No messages"
         SBUStringSet.User_No_Name = "Stitchbox user"
         SBUStringSet.User_Operator = "Leader"
@@ -260,41 +256,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUGlobals.imageResizingSize = CGSize(width: 480, height: 480)
         SBUTheme.componentTheme.barItemTintColor = UIColor.black
         
-        
-        SBUTheme.messageCellTheme.leftBackgroundColor = UIColor.lightGray
-        SBUTheme.messageCellTheme.rightBackgroundColor = UIColor.secondary
+        SBUTheme.messageCellTheme.leftBackgroundColor = UIColor(red: 51, green: 51, blue: 51)
+        SBUTheme.messageCellTheme.rightBackgroundColor = UIColor(red: 53, green: 46, blue: 113)
         SBUTheme.messageCellTheme.userMessageLeftTextColor = UIColor.white
         SBUTheme.messageCellTheme.userMessageRightTextColor = UIColor.white
-        SBUTheme.messageCellTheme.userMessageLeftEditTextColor = UIColor.black
-        SBUTheme.messageCellTheme.userMessageRightEditTextColor = UIColor.black
-        SBUTheme.messageInputTheme.backgroundColor = UIColor.background
-        SBUTheme.messageInputTheme.buttonTintColor = UIColor.white
-        
-        
-        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.black
-        SBUTheme.channelSettingsTheme.rightBarButtonTintColor = UIColor.black
-        SBUTheme.channelSettingsTheme.leftBarButtonTintColor = UIColor.black
-        SBUTheme.channelSettingsTheme.cellArrowIconTintColor = UIColor.black
-        SBUTheme.channelSettingsTheme.cellSwitchColor = UIColor.black
-        SBUTheme.channelSettingsTheme.cellTypeIconTintColor = UIColor.white
-        SBUTheme.channelSettingsTheme.backgroundColor = .background
-        
-        
-        SBUTheme.userListTheme.navigationBarTintColor = UIColor.white
-        
-        
-        SBUTheme.messageSearchTheme.backgroundColor = .white
-        SBUTheme.userListTheme.statusBarStyle = .lightContent
-        
         SBUTheme.overlayTheme.componentTheme.backgroundColor = .white
         SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = .white
-        
-        SBUTheme.userProfileTheme.backgroundColor = .white
-        SBUTheme.userProfileTheme.usernameTextColor = UIColor.black
-        SBUTheme.messageSearchResultCellTheme.backgroundColor = .white
-        
-        SBUTheme.userCellTheme.backgroundColor = .white
-        
         
         SBUTheme.channelTheme.navigationBarTintColor = UIColor.white
         SBUTheme.channelTheme.backgroundColor = .white
@@ -306,11 +273,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.componentTheme.addReactionTintColor = UIColor.secondary
         SBUTheme.componentTheme.loadingSpinnerColor = UIColor.secondary
         
-        SBUTheme.componentTheme.emptyViewBackgroundColor = .white
-        SBUTheme.componentTheme.backgroundColor = .white
+        SBUTheme.messageInputTheme.buttonTintColor = .black
+
         
-        //SBUFontSet.body1 = UIFont.systemFont(ofSize: 20)
+        SBUFontSet.body1 = FontManager.shared.roboto(.Regular, size: 16)
+        SBUFontSet.body2 = FontManager.shared.roboto(.Medium, size: 14)
+        SBUFontSet.body3 = FontManager.shared.roboto(.Regular, size: 14)
+        SBUFontSet.caption1 = FontManager.shared.roboto(.Bold, size: 12)
+        SBUFontSet.caption2 = FontManager.shared.roboto(.Regular, size: 12)
+        SBUFontSet.caption3 = FontManager.shared.roboto(.Medium, size: 11)
+        SBUFontSet.caption4 = FontManager.shared.roboto(.Regular, size: 11)
         
+        SBUFontSet.button1 = FontManager.shared.roboto(.Medium, size: 18)
+        SBUFontSet.button2 = FontManager.shared.roboto(.Medium, size: 16)
+        SBUFontSet.button3 = FontManager.shared.roboto(.Medium, size: 14)
+        
+        SBUFontSet.h1 = FontManager.shared.roboto(.Bold, size: 18)
+        SBUFontSet.h2 = FontManager.shared.roboto(.Medium, size: 18)
+        SBUFontSet.h3 = FontManager.shared.roboto(.Bold, size: 16)
+        
+        SBUFontSet.subtitle1 = FontManager.shared.roboto(.Medium, size: 16)
+        SBUFontSet.subtitle2 = FontManager.shared.roboto(.Regular, size: 16)
+   
     }
     
     // MARK: UISceneSession Lifecycle
