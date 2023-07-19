@@ -364,6 +364,8 @@
 		6AE3BED82A68787200AAA5DD /* TrendingPostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BED72A68787200AAA5DD /* TrendingPostVC.swift */; };
 		6AE3BEDB2A68788C00AAA5DD /* TrendingHashtagVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEDA2A68788C00AAA5DD /* TrendingHashtagVC.swift */; };
 		6AE3BEDE2A68831900AAA5DD /* SuggestFollowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEDD2A68831900AAA5DD /* SuggestFollowVC.swift */; };
+		6AE3BEE12A68875F00AAA5DD /* SuggestFollowNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEE02A68875F00AAA5DD /* SuggestFollowNode.swift */; };
+		6AE3BEE42A688DE700AAA5DD /* FriendSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEE32A688DE700AAA5DD /* FriendSuggestionModel.swift */; };
 		6AEA33E2298A2E33005A4C5D /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E0298A2E32005A4C5D /* Timer.swift */; };
 		6AEA33E3298A2E33005A4C5D /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E1298A2E33005A4C5D /* ProgressBar.swift */; };
 		6AEA33E6298AA152005A4C5D /* VideoPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E5298AA152005A4C5D /* VideoPostModel.swift */; };
@@ -850,6 +852,8 @@
 		6AE3BED72A68787200AAA5DD /* TrendingPostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingPostVC.swift; sourceTree = "<group>"; };
 		6AE3BEDA2A68788C00AAA5DD /* TrendingHashtagVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingHashtagVC.swift; sourceTree = "<group>"; };
 		6AE3BEDD2A68831900AAA5DD /* SuggestFollowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestFollowVC.swift; sourceTree = "<group>"; };
+		6AE3BEE02A68875F00AAA5DD /* SuggestFollowNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestFollowNode.swift; sourceTree = "<group>"; };
+		6AE3BEE32A688DE700AAA5DD /* FriendSuggestionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSuggestionModel.swift; sourceTree = "<group>"; };
 		6AEA33E0298A2E32005A4C5D /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		6AEA33E1298A2E33005A4C5D /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		6AEA33E5298AA152005A4C5D /* VideoPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPostModel.swift; sourceTree = "<group>"; };
@@ -973,6 +977,7 @@
 		143684302918C5B800FA87D7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6AE3BEE22A688DB100AAA5DD /* FriendSuggestionModel */,
 				6A47AAB32A19EB2F00E3E1FF /* StatsModel */,
 				6A7ED4C12A1707B800C8204E /* PromoteModel */,
 				6ABDDC7D29F8948300CDAD39 /* CurrentChampionStatsModel */,
@@ -3052,9 +3057,26 @@
 		6AE3BEDC2A68830E00AAA5DD /* SuggestFollowVC */ = {
 			isa = PBXGroup;
 			children = (
+				6AE3BEDF2A68874900AAA5DD /* SuggestFollowNode */,
 				6AE3BEDD2A68831900AAA5DD /* SuggestFollowVC.swift */,
 			);
 			path = SuggestFollowVC;
+			sourceTree = "<group>";
+		};
+		6AE3BEDF2A68874900AAA5DD /* SuggestFollowNode */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEE02A68875F00AAA5DD /* SuggestFollowNode.swift */,
+			);
+			path = SuggestFollowNode;
+			sourceTree = "<group>";
+		};
+		6AE3BEE22A688DB100AAA5DD /* FriendSuggestionModel */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEE32A688DE700AAA5DD /* FriendSuggestionModel.swift */,
+			);
+			path = FriendSuggestionModel;
 			sourceTree = "<group>";
 		};
 		6AEA33DF298A2E2B005A4C5D /* CustomProgressBar */ = {
@@ -4025,6 +4047,7 @@
 				A540A8DA294731320085CC45 /* AppleSignInService.swift in Sources */,
 				6A47AAAE2A1867E600E3E1FF /* ImageSparkViewFactory.swift in Sources */,
 				6A9E4C6429767ED500B59176 /* FindFriendsVC.swift in Sources */,
+				6AE3BEE12A68875F00AAA5DD /* SuggestFollowNode.swift in Sources */,
 				6A286B5A29C90D4B00C72718 /* UserLoginActivityModel.swift in Sources */,
 				6A3F0A8C2982331F00366665 /* UserProfileVC.swift in Sources */,
 				6AAD7A0D294C6453003E3AB6 /* AppKey.swift in Sources */,
@@ -4195,6 +4218,7 @@
 				A5D1E9DF2984422800839311 /* FollowerModel.swift in Sources */,
 				6A9E4C6E29768BE100B59176 /* FindFriendsNode.swift in Sources */,
 				6ABDDCBB2A01024400CDAD39 /* ViewModel.swift in Sources */,
+				6AE3BEE42A688DE700AAA5DD /* FriendSuggestionModel.swift in Sources */,
 				6A47AAA62A1867DC00E3E1FF /* Firework.swift in Sources */,
 				396F520029DB25DE00BF78BE /* DeeplinkCoordinator.swift in Sources */,
 				6A9E4C762977AF3700B59176 /* AccountActivityVC.swift in Sources */,

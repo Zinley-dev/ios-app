@@ -96,7 +96,7 @@ class TrendingVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavBar()
-        
+        showMiddleBtn(vc: self)
         do {
             
             let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
