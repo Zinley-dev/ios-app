@@ -925,6 +925,11 @@ extension APIManager {
       completion(result)
     }
   }
+  func isStitchedByMe(rootId: String, completion: @escaping APICompletion) {
+    postStitchManager.request(.isStitchByMe(rootId: rootId)) { result in
+      completion(result)
+    }
+  }
   func getStitchPost(rootId: String, page: Int, completion: @escaping APICompletion) {
     postStitchManager.request(.getByRoot(rootId: rootId, page: page)) { result in
       completion(result)
