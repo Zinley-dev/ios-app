@@ -925,6 +925,11 @@ extension APIManager {
       completion(result)
     }
   }
+  func isStitchedByMe(rootId: String, completion: @escaping APICompletion) {
+    postStitchManager.request(.isStitchByMe(rootId: rootId)) { result in
+      completion(result)
+    }
+  }
   func getStitchPost(rootId: String, page: Int, completion: @escaping APICompletion) {
     postStitchManager.request(.getByRoot(rootId: rootId, page: page)) { result in
       completion(result)
@@ -1036,6 +1041,11 @@ extension APIManager {
   }
   func getMyPostInWaitList(page: Int, completion: @escaping APICompletion) {
     postStitchManager.request(.getMyPostInWaitlist(page: page)) { result in
+      completion(result)
+    }
+  }
+  func suggestUser(page: Int, completion: @escaping APICompletion) {
+    userManager.request(.suggestUser(page: page)) { result in
       completion(result)
     }
   }
