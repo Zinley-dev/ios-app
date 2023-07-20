@@ -366,6 +366,8 @@
 		6AE3BEDE2A68831900AAA5DD /* SuggestFollowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEDD2A68831900AAA5DD /* SuggestFollowVC.swift */; };
 		6AE3BEE12A68875F00AAA5DD /* SuggestFollowNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEE02A68875F00AAA5DD /* SuggestFollowNode.swift */; };
 		6AE3BEE42A688DE700AAA5DD /* FriendSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEE32A688DE700AAA5DD /* FriendSuggestionModel.swift */; };
+		6AE3BEE72A69ADFA00AAA5DD /* TrendingHashtag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEE62A69ADFA00AAA5DD /* TrendingHashtag.swift */; };
+		6AE3BEEA2A69AE5900AAA5DD /* TrendingHashtagNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEE92A69AE5900AAA5DD /* TrendingHashtagNode.swift */; };
 		6AEA33E2298A2E33005A4C5D /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E0298A2E32005A4C5D /* Timer.swift */; };
 		6AEA33E3298A2E33005A4C5D /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E1298A2E33005A4C5D /* ProgressBar.swift */; };
 		6AEA33E6298AA152005A4C5D /* VideoPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E5298AA152005A4C5D /* VideoPostModel.swift */; };
@@ -854,6 +856,8 @@
 		6AE3BEDD2A68831900AAA5DD /* SuggestFollowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestFollowVC.swift; sourceTree = "<group>"; };
 		6AE3BEE02A68875F00AAA5DD /* SuggestFollowNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestFollowNode.swift; sourceTree = "<group>"; };
 		6AE3BEE32A688DE700AAA5DD /* FriendSuggestionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSuggestionModel.swift; sourceTree = "<group>"; };
+		6AE3BEE62A69ADFA00AAA5DD /* TrendingHashtag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingHashtag.swift; sourceTree = "<group>"; };
+		6AE3BEE92A69AE5900AAA5DD /* TrendingHashtagNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingHashtagNode.swift; sourceTree = "<group>"; };
 		6AEA33E0298A2E32005A4C5D /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		6AEA33E1298A2E33005A4C5D /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		6AEA33E5298AA152005A4C5D /* VideoPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPostModel.swift; sourceTree = "<group>"; };
@@ -977,6 +981,7 @@
 		143684302918C5B800FA87D7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6AE3BEE52A69ADF200AAA5DD /* TrendingHashtag */,
 				6AE3BEE22A688DB100AAA5DD /* FriendSuggestionModel */,
 				6A47AAB32A19EB2F00E3E1FF /* StatsModel */,
 				6A7ED4C12A1707B800C8204E /* PromoteModel */,
@@ -3079,6 +3084,23 @@
 			path = FriendSuggestionModel;
 			sourceTree = "<group>";
 		};
+		6AE3BEE52A69ADF200AAA5DD /* TrendingHashtag */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEE82A69AE4D00AAA5DD /* TrendingHashtagNode */,
+				6AE3BEE62A69ADFA00AAA5DD /* TrendingHashtag.swift */,
+			);
+			path = TrendingHashtag;
+			sourceTree = "<group>";
+		};
+		6AE3BEE82A69AE4D00AAA5DD /* TrendingHashtagNode */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEE92A69AE5900AAA5DD /* TrendingHashtagNode.swift */,
+			);
+			path = TrendingHashtagNode;
+			sourceTree = "<group>";
+		};
 		6AEA33DF298A2E2B005A4C5D /* CustomProgressBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -4013,6 +4035,7 @@
 				148C7109291B11270046FC5D /* OTPTextField.swift in Sources */,
 				A540A8D6294730C40085CC45 /* FacebookSignInService.swift in Sources */,
 				6A6C30E42964032C0070167A /* MutedMemberVC.swift in Sources */,
+				6AE3BEE72A69ADFA00AAA5DD /* TrendingHashtag.swift in Sources */,
 				6A47AAA82A1867DC00E3E1FF /* SparkViewAnimator.swift in Sources */,
 				A5DF81F7295C244A00E8DDB8 /* GroupChannelsUpdateListDelegate.swift in Sources */,
 				6A0D544A2974F3F10059530C /* ChallengeCardHeaderData.swift in Sources */,
@@ -4094,6 +4117,7 @@
 				3962E496299FE50700047977 /* NewPasswordViewModel.swift in Sources */,
 				A540A8D8294731120085CC45 /* TwitterSignInService.swift in Sources */,
 				6A12359A294EFC58004B612E /* globalFile.swift in Sources */,
+				6AE3BEEA2A69AE5900AAA5DD /* TrendingHashtagNode.swift in Sources */,
 				6AB929D32A3D514D003E109E /* AddView.swift in Sources */,
 				6AE3BEDE2A68831900AAA5DD /* SuggestFollowVC.swift in Sources */,
 				6A0D54482974EDE30059530C /* ProfileHeaderData.swift in Sources */,

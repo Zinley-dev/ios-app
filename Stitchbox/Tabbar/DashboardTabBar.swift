@@ -150,8 +150,8 @@ import Alamofire
             let thirdTabBarItem = items[3]
             
             
-            let homeImg = UIImage.init(named: "home")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
-            let homefilledImg = UIImage.init(named: "home.filled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let homeImg = UIImage.init(named: "home")?.resize(targetSize: CGSize(width: 30, height: 30)).withRenderingMode(.alwaysOriginal)
+            let homefilledImg = UIImage.init(named: "home.filled")?.resize(targetSize: CGSize(width: 30, height: 30)).withRenderingMode(.alwaysOriginal)
             
             let trendingImg = UIImage.init(named: "trendingWhite")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
             let trendingfilledImg = UIImage.init(named: "trendingFilled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
@@ -180,8 +180,8 @@ import Alamofire
             let thirdTabBarItem = items[3]
             
             
-            let homeImg = UIImage.init(named: "home-unfill-black")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
-            let homefilledImg = UIImage.init(named: "home-filled-black")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let homeImg = UIImage.init(named: "home-unfill-black")?.resize(targetSize: CGSize(width: 30, height: 30)).withRenderingMode(.alwaysOriginal)
+            let homefilledImg = UIImage.init(named: "home-filled-black")?.resize(targetSize: CGSize(width: 30, height: 30)).withRenderingMode(.alwaysOriginal)
             
             let trendingImg = UIImage.init(named: "trending-unfilled-black")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
             let trendingfilledImg = UIImage.init(named: "trending-filled-black")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
