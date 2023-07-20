@@ -2659,7 +2659,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IN7-gU-0YZ">
                                         <rect key="frame" x="38" y="64.666666666666671" width="176" height="20"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="0.88" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="vMb-QV-cRp">
@@ -2715,13 +2715,13 @@
                                             <constraint firstAttribute="height" constant="23" id="KGg-Ns-NeY"/>
                                             <constraint firstAttribute="width" constant="13" id="r2U-Z7-GWD"/>
                                         </constraints>
-                                        <state key="normal" image="back_icn_white"/>
+                                        <state key="normal" image="back-black"/>
                                         <connections>
                                             <action selector="back2BtnPressed:" destination="m7q-To-Va9" eventType="touchUpInside" id="9iA-cc-HBV"/>
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="jyA-ng-Pk7" firstAttribute="leading" secondItem="2eg-X1-5k0" secondAttribute="leading" constant="12" id="6u8-PD-LB4"/>
                                     <constraint firstItem="IN7-gU-0YZ" firstAttribute="centerY" secondItem="HlJ-zK-3ld" secondAttribute="centerY" id="Hdn-NZ-6dz"/>
@@ -2736,14 +2736,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8TE-CX-HdF">
-                                <rect key="frame" x="0.0" y="112" width="375" height="700"/>
+                                <rect key="frame" x="0.0" y="104" width="375" height="708"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yyb-D0-9y4">
-                                        <rect key="frame" x="16" y="16" width="343" height="668"/>
+                                        <rect key="frame" x="16" y="16" width="343" height="676"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="Yyb-D0-9y4" firstAttribute="leading" secondItem="8TE-CX-HdF" secondAttribute="leading" constant="16" id="5L5-Eg-5GJ"/>
                                     <constraint firstItem="Yyb-D0-9y4" firstAttribute="top" secondItem="8TE-CX-HdF" secondAttribute="top" constant="16" id="R12-bx-Dlw"/>
@@ -2752,10 +2752,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d3F-Ii-qmn">
-                                <rect key="frame" x="0.0" y="102" width="375" height="10"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="0.0" y="102" width="375" height="2"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="10" id="Rre-7c-euJ"/>
+                                    <constraint firstAttribute="height" constant="2" id="Rre-7c-euJ"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -4881,7 +4881,7 @@
                                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="osn-83-iig">
                                                                         <rect key="frame" x="16" y="5" width="88.666666666666671" height="30"/>
                                                                         <subviews>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="partner white" translatesAutoresizingMaskIntoConstraints="NO" id="IVN-Vg-W5W">
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tier-2-black" translatesAutoresizingMaskIntoConstraints="NO" id="IVN-Vg-W5W">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" constant="30" id="kjP-c3-jBf"/>
@@ -5339,7 +5339,7 @@
                                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="DmI-Wh-SBs">
                                                                         <rect key="frame" x="20" y="5" width="92" height="30"/>
                                                                         <subviews>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="Ucf-9K-1ph">
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logout-icon" translatesAutoresizingMaskIntoConstraints="NO" id="Ucf-9K-1ph">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="25" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="height" constant="30" id="0jr-Zq-a62"/>
@@ -8610,14 +8610,13 @@
         <image name="Pro" width="54" height="28"/>
         <image name="Sheild" width="30" height="30"/>
         <image name="Users 1" width="26" height="26"/>
-        <image name="Vector" width="21" height="20"/>
         <image name="addReportImage" width="28" height="23"/>
-        <image name="back_icn_white" width="22" height="38"/>
+        <image name="back-black" width="22" height="38"/>
         <image name="blackMore" width="17.5" height="5"/>
         <image name="btnAudioOff" width="78" height="76"/>
         <image name="btnCallEnd" width="78" height="76"/>
         <image name="btnSpeaker" width="78" height="76"/>
-        <image name="call 1" width="25" height="26"/>
+        <image name="call 1" width="32" height="32"/>
         <image name="checkmark_2" width="26" height="26"/>
         <image name="defaultuser" width="278" height="278"/>
         <image name="following" width="30" height="30"/>
@@ -8626,16 +8625,17 @@
         <image name="leave3x" width="67" height="61"/>
         <image name="link" width="25" height="25"/>
         <image name="loadImage" width="50" height="38"/>
+        <image name="logout-icon" width="24" height="24"/>
         <image name="member" width="60" height="61"/>
         <image name="mod" width="42" height="46"/>
         <image name="onlyme" width="17" height="23"/>
-        <image name="partner white" width="37" height="37"/>
         <image name="play" width="89" height="71"/>
         <image name="public" width="30" height="30"/>
         <image name="push noti" width="26" height="27"/>
         <image name="rightMove" width="15" height="25"/>
         <image name="searchInChannel" width="61" height="60"/>
         <image name="sound 1" width="27" height="25"/>
+        <image name="tier-2-black" width="37" height="37"/>
         <namedColor name="Background">
             <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

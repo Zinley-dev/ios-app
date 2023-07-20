@@ -35,7 +35,7 @@ class GroupNode: ASCellNode {
         super.init()
 
         // Set the background color and border of the node's view
-        view.backgroundColor = .chatBackGround
+        view.backgroundColor = .darkGray
         view.layer.borderWidth = 3
         
         

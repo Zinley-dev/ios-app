@@ -227,7 +227,7 @@ class CommentNode: ASCellNode {
         userNameNode.backgroundColor = UIColor.clear
         
         imageView.contentMode = .scaleAspectFit
-        imageView.frame = CGRect(x: 0.0, y: 2, width: 32, height: 25)
+        imageView.frame = CGRect(x: 2, y: 2, width: 25, height: 25)
     
     
         textNode.isLayerBacked = true
@@ -369,7 +369,7 @@ class CommentNode: ASCellNode {
                 if checkIsLike {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                        self.imageView.image = likeImage
                     }
                     
                     
@@ -379,7 +379,7 @@ class CommentNode: ASCellNode {
                 } else {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                        self.imageView.image = emptyLikeImageLM
                     }
             
                 }
@@ -387,7 +387,7 @@ class CommentNode: ASCellNode {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                    self.imageView.image = emptyLikeImageLM
                 }
                 print(error)
             }
@@ -856,7 +856,7 @@ extension CommentNode {
     
     func likeComment() {
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+            self.imageView.image = likeImage
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -884,7 +884,7 @@ extension CommentNode {
 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                    self.imageView.image = emptyLikeImageLM
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -910,7 +910,7 @@ extension CommentNode {
     
     func unlikeComment() {
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+            self.imageView.image = emptyLikeImageLM
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -939,7 +939,7 @@ extension CommentNode {
 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                    self.imageView.image = likeImage
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()

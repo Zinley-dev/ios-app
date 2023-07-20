@@ -23,7 +23,8 @@ import AsyncDisplayKit
 let saveImage = UIImage.init(named: "saved.filled")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 let unsaveImage = UIImage.init(named: "save")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 
-
+//heart-darkmode
+let emptyLikeImageLM = UIImage.init(named: "heart-lightmode")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
 let cmtImage = UIImage.init(named: "cmt")?.resize(targetSize: CGSize(width: 23, height: 23))
 let shareImage = UIImage.init(named: "share")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
 let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 25, height: 20.3125))

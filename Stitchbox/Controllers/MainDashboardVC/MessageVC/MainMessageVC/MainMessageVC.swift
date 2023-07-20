@@ -188,19 +188,19 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     func setupWithCall() {
         let createButton = UIButton(type: .custom)
-        createButton.setImage(UIImage(named: "4x_add"), for: [])
+        createButton.setImage(UIImage(named: "plus-lightmode")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
         createButton.addTarget(self, action: #selector(showCreateChannel(_:)), for: .touchUpInside)
         createButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let createBarButton = UIBarButtonItem(customView: createButton)
 
         let searchButton = UIButton(type: .custom)
-        searchButton.setImage(UIImage(named: "search"), for: [])
+        searchButton.setImage(UIImage(named: "search-lightmode")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
         searchButton.addTarget(self, action: #selector(searchBarSetting(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let searchBarButton = UIBarButtonItem(customView: searchButton)
         
         let chatbotButton = UIButton(type: .custom)
-        chatbotButton.setImage(UIImage(named: "gpt_bot"), for: [])
+        chatbotButton.setImage(UIImage(named: "gpt_bot")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
         chatbotButton.addTarget(self, action: #selector(openChatBot(_:)), for: .touchUpInside)
         chatbotButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let chatbotBarButton = UIBarButtonItem(customView: chatbotButton)
@@ -238,12 +238,12 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         let searchButton: UIButton = UIButton(type: .custom)
         
         // Do any additional setup after loading the view.
-        createButton.setImage(UIImage(named: "4x_add"), for: [])
+        createButton.setImage(UIImage(named: "plus-lightmode")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
         createButton.addTarget(self, action: #selector(showCreateChannel(_:)), for: .touchUpInside)
         createButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let createBarButton = UIBarButtonItem(customView: createButton)
       
-        searchButton.setImage(UIImage(named: "search"), for: [])
+        searchButton.setImage(UIImage(named: "search-lightmode")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
         searchButton.addTarget(self, action: #selector(searchBarSetting(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         
