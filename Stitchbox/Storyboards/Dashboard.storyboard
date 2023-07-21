@@ -1601,13 +1601,28 @@
                     <view key="view" contentMode="scaleToFill" id="C67-yd-NyK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="24O-gV-cYf">
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="FB4-35-YWm"/>
-                        <color key="backgroundColor" systemColor="systemGreenColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="FB4-35-YWm" firstAttribute="trailing" secondItem="24O-gV-cYf" secondAttribute="trailing" id="Rhq-I4-dTt"/>
+                            <constraint firstItem="24O-gV-cYf" firstAttribute="leading" secondItem="FB4-35-YWm" secondAttribute="leading" id="U6U-Cm-0g1"/>
+                            <constraint firstItem="FB4-35-YWm" firstAttribute="bottom" secondItem="24O-gV-cYf" secondAttribute="bottom" id="ivD-Hs-0Xs"/>
+                            <constraint firstItem="24O-gV-cYf" firstAttribute="top" secondItem="FB4-35-YWm" secondAttribute="top" id="yi8-8D-3yC"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="contentView" destination="24O-gV-cYf" id="c6G-OW-dG5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j3Q-l9-dhU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4890" y="3798"/>
+            <point key="canvasLocation" x="-4890.3999999999996" y="3797.2906403940888"/>
         </scene>
         <!--Suggest FollowVC-->
         <scene sceneID="gnb-rY-zBM">
@@ -1754,7 +1769,7 @@
                                     </view>
                                 </subviews>
                             </stackView>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="link" translatesAutoresizingMaskIntoConstraints="NO" id="DRo-1t-eZk">
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tier-2-black" translatesAutoresizingMaskIntoConstraints="NO" id="DRo-1t-eZk">
                                 <rect key="frame" x="175" y="169.66666666666666" width="25" height="25"/>
                                 <color key="backgroundColor" name="Primary"/>
                                 <constraints>
@@ -8638,7 +8653,6 @@
         <image name="img_icon_nofi_off" width="36" height="36"/>
         <image name="img_toast_check" width="40" height="32"/>
         <image name="leave3x" width="67" height="61"/>
-        <image name="link" width="25" height="25"/>
         <image name="loadImage" width="50" height="38"/>
         <image name="logout-icon" width="24" height="24"/>
         <image name="member" width="60" height="61"/>

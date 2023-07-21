@@ -190,7 +190,7 @@ extension TrendingHashtagVC: ASTableDelegate {
             
             PLWHVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
-            PLWHVC.searchHashtag = String(selectedHashtag.hashtag.dropFirst(1))
+            PLWHVC.searchHashtag = selectedHashtag.hashtag
             self.navigationController?.pushViewController(PLWHVC, animated: true)
             
         }
