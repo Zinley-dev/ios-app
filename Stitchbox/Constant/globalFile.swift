@@ -986,6 +986,35 @@ class CustomSlider: UISlider {
                
                 if update1.currentIndex != nil {
                     update1.pauseVideo(index: update1.currentIndex!)
+                } else if update1.startIndex != nil {
+                    update1.pauseVideo(index: update1.startIndex!)
+                }
+                
+                if update1.currentIndex != nil {
+                    //update1.pauseVideo(index: update1.currentIndex!)
+                    
+                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
+                        
+                        currentCell.pauseVideo(index: currentCell.currentIndex!)
+                        
+                        
+                    }
+                    
+                } else {
+                    
+                    if update1.startIndex != nil {
+                        //update1.pauseVideo(index: update1.currentIndex!)
+                        
+                        if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.startIndex!, section: 0)) as? OriginalNode {
+                            
+                            currentCell.pauseVideo(index: currentCell.currentIndex!)
+                            
+                            
+                        }
+                        
+                    }
+                    
+                    
                 }
                 
                 update1.timeLbl.text = processTime()
@@ -1047,10 +1076,31 @@ class CustomSlider: UISlider {
                     //newPlayingIndex
                     
                     let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-
                     
-                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
-                    update1.playVideo(index: update1.currentIndex!)
+                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
+                        
+                        currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
+                        currentCell.playVideo(index: currentCell.currentIndex!)
+                        
+                        
+                    }
+
+                } else {
+                    
+                    if update1.startIndex != nil {
+                        //newPlayingIndex
+                        
+                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+                        
+                        if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.startIndex!, section: 0)) as? OriginalNode {
+                            
+                            currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
+                            currentCell.playVideo(index: currentCell.currentIndex!)
+                            
+                            
+                        }
+
+                    }
                     
                 }
                 

@@ -82,7 +82,7 @@ class RecentNode: ASCellNode {
                 if item.coverUrl != "" {
                     self.imageNode.url = URL(string: item.coverUrl)
                 } else {
-                    self.imageNode.image = UIImage.init(named: "search")
+                    self.imageNode.image = UIImage.init(named: "search-lightmode")
                 }
                 
                 self.imageNode.contentMode = .scaleAspectFit
@@ -151,7 +151,7 @@ class RecentNode: ASCellNode {
                     ]
                 )
 
-                self.imageNode.image = UIImage.init(named: "search")
+                self.imageNode.image = UIImage.init(named: "search-lightmode")
                 self.imageNode.contentMode = .scaleAspectFit
             }
 

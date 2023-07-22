@@ -16,7 +16,7 @@ class ProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var descriptionLbl: UILabel!
     @IBOutlet weak var editProfileBtn: UIButton!
    
-    @IBOutlet weak var fistBumpedListBtn: UIButton!
+    @IBOutlet weak var insightBtn: UIButton!
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet weak var numberOfFollowing: UILabel!
     @IBOutlet weak var numberOfFollowers: UILabel!
@@ -35,10 +35,12 @@ class ProfileHeaderCell: UICollectionViewCell {
         super.awakeFromNib()
         
         editProfileBtn.setTitleColor(.white, for: .normal)
-        fistBumpedListBtn.setTitleColor(.black, for: .normal)
+        insightBtn.setTitleColor(.black, for: .normal)
         
         editProfileBtn.tintColor = .white
-        fistBumpedListBtn.tintColor = .black
+        insightBtn.tintColor = .black
+        
+        insightBtn.backgroundColor = .normalButtonBackground
     
     }
     

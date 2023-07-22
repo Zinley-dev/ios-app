@@ -227,8 +227,8 @@ extension EditPhofileVC {
     
     func colorButtonLabel() {
         
-        changeProfilePhotoBtn.titleLabel?.textColor = .secondary
-        morePersonalInfoBtn.titleLabel?.textColor = .secondary
+        //changeProfilePhotoBtn.titleLabel?.textColor = .secondary
+        //morePersonalInfoBtn.titleLabel?.textColor = .secondary
         
     }
 

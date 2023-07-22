@@ -58,10 +58,7 @@ class TrendingPostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAd
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
-        navigationItem.title = "Saved posts"
-        
-        
+    
         //todo: customized search to search only in hashtag_list
         setupCollectionNode()
         pullControl.tintColor = UIColor.systemOrange
@@ -119,7 +116,7 @@ class TrendingPostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAd
                 
                 if self.posts.isEmpty == true {
                     
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                    self.collectionNode.view.setEmptyMessage("No trending video found")
                     
                     
                 } else {
@@ -227,7 +224,7 @@ extension TrendingPostVC: ASCollectionDataSource {
         
         if self.posts.count == 0 {
             
-            collectionNode.view.setEmptyMessage("No saved posts!")
+            collectionNode.view.setEmptyMessage("No trending video found")
             
         } else {
             collectionNode.view.restore()

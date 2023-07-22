@@ -372,7 +372,7 @@ extension MainFollowVC {
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.searchController?.searchBar.tintColor = .white
         self.searchController?.searchBar.searchTextField.textColor = .white
-        self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [.foregroundColor: UIColor.lightGray])
+        self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "search-lightmode", attributes: [.foregroundColor: UIColor.lightGray])
         self.searchController!.searchBar.searchTextField.leftView?.tintColor = .lightGray
         self.searchController?.searchBar.isUserInteractionEnabled = true
         self.navigationItem.searchController = nil

@@ -279,7 +279,7 @@ class ProfileViewController: UIViewController {
          
                 
                 // add buttons target
-                cell.fistBumpedListBtn.addTarget(self, action: #selector(fistBumpedlistTapped), for: .touchUpInside)
+                cell.insightBtn.addTarget(self, action: #selector(insightTapped), for: .touchUpInside)
              
 
                 cell.editProfileBtn.addTarget(self, action: #selector(editProfileTapped), for: .touchUpInside)
@@ -440,7 +440,7 @@ extension ProfileViewController {
     }
     
     
-    @objc func fistBumpedlistTapped(_ sender: UIButton) {
+    @objc func insightTapped(_ sender: UIButton) {
         
      
         

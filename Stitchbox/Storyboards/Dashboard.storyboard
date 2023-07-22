@@ -396,7 +396,7 @@
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XYB-ud-WDz">
                                 <rect key="frame" x="0.0" y="50" width="375" height="728"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sch-8c-VWR">
                                 <rect key="frame" x="0.0" y="50" width="375" height="728"/>
@@ -1603,15 +1603,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="24O-gV-cYf">
-                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
+                                <rect key="frame" x="1" y="50" width="373" height="728"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="FB4-35-YWm"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="FB4-35-YWm" firstAttribute="trailing" secondItem="24O-gV-cYf" secondAttribute="trailing" id="Rhq-I4-dTt"/>
-                            <constraint firstItem="24O-gV-cYf" firstAttribute="leading" secondItem="FB4-35-YWm" secondAttribute="leading" id="U6U-Cm-0g1"/>
+                            <constraint firstItem="FB4-35-YWm" firstAttribute="trailing" secondItem="24O-gV-cYf" secondAttribute="trailing" constant="1" id="Rhq-I4-dTt"/>
+                            <constraint firstItem="24O-gV-cYf" firstAttribute="leading" secondItem="FB4-35-YWm" secondAttribute="leading" constant="1" id="U6U-Cm-0g1"/>
                             <constraint firstItem="FB4-35-YWm" firstAttribute="bottom" secondItem="24O-gV-cYf" secondAttribute="bottom" id="ivD-Hs-0Xs"/>
                             <constraint firstItem="24O-gV-cYf" firstAttribute="top" secondItem="FB4-35-YWm" secondAttribute="top" id="yi8-8D-3yC"/>
                         </constraints>
@@ -1771,7 +1771,7 @@
                             </stackView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tier-2-black" translatesAutoresizingMaskIntoConstraints="NO" id="DRo-1t-eZk">
                                 <rect key="frame" x="175" y="169.66666666666666" width="25" height="25"/>
-                                <color key="backgroundColor" name="Primary"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="6aJ-XE-X5A"/>
                                     <constraint firstAttribute="width" constant="25" id="x90-4j-ZtT"/>
@@ -2831,10 +2831,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="780"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fdc-kx-tyV">
-                                                <rect key="frame" x="95.666666666666686" y="32" width="184" height="185.33333333333334"/>
+                                                <rect key="frame" x="100" y="32" width="175" height="181"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jug-jN-09H">
-                                                        <rect key="frame" x="41.999999999999986" y="0.0" width="100.00000000000001" height="100"/>
+                                                        <rect key="frame" x="37.666666666666657" y="0.0" width="100" height="100"/>
                                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="100" id="Ldp-yj-Osl"/>
@@ -2847,16 +2847,19 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LR6-d0-vux">
-                                                        <rect key="frame" x="0.0" y="108" width="184" height="34.333333333333343"/>
-                                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" title="Change profile photo"/>
+                                                        <rect key="frame" x="18" y="108" width="139" height="30"/>
+                                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                                                        <color key="tintColor" name="Secondary"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal" title="Change profile photo">
+                                                            <color key="titleColor" name="Secondary"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="changeProfileImageOnTap:" destination="eFE-jL-EIl" eventType="touchUpInside" id="Ea1-N9-MfT"/>
                                                         </connections>
                                                     </button>
                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Username" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bbA-uP-ADp">
-                                                        <rect key="frame" x="4.3333333333333286" y="150.33333333333334" width="175" height="35"/>
+                                                        <rect key="frame" x="0.0" y="146" width="175" height="35"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="35" id="faw-qJ-YTn"/>
@@ -2870,7 +2873,7 @@
                                                                 <real key="value" value="1"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
-                                                                <color key="value" name="BorderColor"/>
+                                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                 <real key="value" value="15"/>
@@ -2883,7 +2886,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Xdz-gD-xNP">
-                                                <rect key="frame" x="32" y="237.33333333333334" width="311" height="350.33333333333326"/>
+                                                <rect key="frame" x="32" y="233" width="311" height="346"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NYf-eT-KkT">
                                                         <rect key="frame" x="0.0" y="0.0" width="311" height="300"/>
@@ -2983,7 +2986,7 @@
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Your bio information" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZdU-Gj-QMv">
-                                                                                        <rect key="frame" x="0.0" y="23" width="271" height="30"/>
+                                                                                        <rect key="frame" x="0.0" y="22.999999999999943" width="271" height="30"/>
                                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="30" id="MwK-Zh-8oF"/>
@@ -3027,10 +3030,13 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="drP-kA-Dng">
-                                                        <rect key="frame" x="41.666666666666686" y="316.00000000000006" width="228" height="34.333333333333314"/>
-                                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" title="More personal information "/>
+                                                        <rect key="frame" x="65" y="316" width="181" height="30"/>
+                                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                                                        <color key="tintColor" name="Secondary"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal" title="More personal information ">
+                                                            <color key="titleColor" name="Secondary"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="MoreInfoOnTap:" destination="eFE-jL-EIl" eventType="touchUpInside" id="kuA-iq-MEy"/>
                                                         </connections>
@@ -4097,9 +4103,9 @@
                                             <outlet property="avatarImage" destination="B1B-ma-e4c" id="eR0-tX-9k1"/>
                                             <outlet property="descriptionLbl" destination="THi-3n-7ng" id="7Kb-0i-dLc"/>
                                             <outlet property="editProfileBtn" destination="Y18-um-T0h" id="L4M-eq-57H"/>
-                                            <outlet property="fistBumpedListBtn" destination="fah-qR-IIG" id="JuD-mk-bw4"/>
                                             <outlet property="followerStack" destination="hab-Bb-f7q" id="Dba-l5-FrY"/>
                                             <outlet property="followingStack" destination="72y-uC-Cd9" id="jMW-7Z-EYZ"/>
+                                            <outlet property="insightBtn" destination="fah-qR-IIG" id="rSA-nL-X2D"/>
                                             <outlet property="numberOfFollowers" destination="va1-A6-Mok" id="iFe-6g-LgB"/>
                                             <outlet property="numberOfFollowing" destination="fiL-Ja-IPg" id="mAk-Gb-i61"/>
                                             <outlet property="usernameLbl" destination="vnK-Bb-OAW" id="LWN-br-Yds"/>
@@ -8640,7 +8646,7 @@
         <image name="Pro" width="54" height="28"/>
         <image name="Sheild" width="30" height="30"/>
         <image name="Users 1" width="26" height="26"/>
-        <image name="addReportImage" width="28" height="23"/>
+        <image name="addReportImage" width="24" height="24"/>
         <image name="back-black" width="22" height="38"/>
         <image name="blackMore" width="17.5" height="5"/>
         <image name="btnAudioOff" width="78" height="76"/>
@@ -8670,9 +8676,6 @@
         </namedColor>
         <namedColor name="BorderColor">
             <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-        </namedColor>
-        <namedColor name="Primary">
-            <color red="0.20784313725490197" green="0.17647058823529413" blue="0.4392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Secondary">
             <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
