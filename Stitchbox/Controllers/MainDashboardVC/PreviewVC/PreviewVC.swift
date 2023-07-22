@@ -46,7 +46,7 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if newPlayingIndex != nil, currentIndex != nil {
+        if newPlayingIndex != nil {
             
             pauseVideo(index: currentIndex!)
             
@@ -59,7 +59,7 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
         super.viewWillAppear(animated)
         
         
-        if currentIndex != nil, currentIndex != nil {
+        if currentIndex != nil {
             //newPlayingIndex
             playVideo(index: currentIndex!)
             

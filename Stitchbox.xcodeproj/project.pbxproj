@@ -369,6 +369,10 @@
 		6AE3BEE72A69ADFA00AAA5DD /* TrendingHashtag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEE62A69ADFA00AAA5DD /* TrendingHashtag.swift */; };
 		6AE3BEEA2A69AE5900AAA5DD /* TrendingHashtagNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEE92A69AE5900AAA5DD /* TrendingHashtagNode.swift */; };
 		6AE3BEED2A6AF6FE00AAA5DD /* TrendingPostNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEEC2A6AF6FE00AAA5DD /* TrendingPostNode.swift */; };
+		6AE3BEF12A6C724100AAA5DD /* StitchDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEF02A6C724100AAA5DD /* StitchDashboardVC.swift */; };
+		6AE3BEF52A6C726700AAA5DD /* ApprovedStitchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEF42A6C726700AAA5DD /* ApprovedStitchVC.swift */; };
+		6AE3BEF72A6C727300AAA5DD /* StitchToVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEF62A6C727300AAA5DD /* StitchToVC.swift */; };
+		6AE3BEFA2A6C7B8100AAA5DD /* StitchControlNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEF92A6C7B8100AAA5DD /* StitchControlNode.swift */; };
 		6AEA33E2298A2E33005A4C5D /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E0298A2E32005A4C5D /* Timer.swift */; };
 		6AEA33E3298A2E33005A4C5D /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E1298A2E33005A4C5D /* ProgressBar.swift */; };
 		6AEA33E6298AA152005A4C5D /* VideoPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E5298AA152005A4C5D /* VideoPostModel.swift */; };
@@ -860,6 +864,10 @@
 		6AE3BEE62A69ADFA00AAA5DD /* TrendingHashtag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingHashtag.swift; sourceTree = "<group>"; };
 		6AE3BEE92A69AE5900AAA5DD /* TrendingHashtagNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingHashtagNode.swift; sourceTree = "<group>"; };
 		6AE3BEEC2A6AF6FE00AAA5DD /* TrendingPostNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingPostNode.swift; sourceTree = "<group>"; };
+		6AE3BEF02A6C724100AAA5DD /* StitchDashboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchDashboardVC.swift; sourceTree = "<group>"; };
+		6AE3BEF42A6C726700AAA5DD /* ApprovedStitchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovedStitchVC.swift; sourceTree = "<group>"; };
+		6AE3BEF62A6C727300AAA5DD /* StitchToVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchToVC.swift; sourceTree = "<group>"; };
+		6AE3BEF92A6C7B8100AAA5DD /* StitchControlNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchControlNode.swift; sourceTree = "<group>"; };
 		6AEA33E0298A2E32005A4C5D /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		6AEA33E1298A2E33005A4C5D /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		6AEA33E5298AA152005A4C5D /* VideoPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPostModel.swift; sourceTree = "<group>"; };
@@ -2544,8 +2552,8 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6AE3BEEE2A6C721900AAA5DD /* StitchDashboard */,
 				6AE3BEDC2A68830E00AAA5DD /* SuggestFollowVC */,
-				6A6071FA2A633200003538EF /* PendingVC */,
 				6A6071F72A631FBE003538EF /* TrendingVC */,
 				6A5C556329E8AC6F006F51DD /* PostSearchNode */,
 				6A9E3AF529E9D2BB002B36D7 /* SB-ChatBot */,
@@ -3110,6 +3118,50 @@
 				6AE3BEEC2A6AF6FE00AAA5DD /* TrendingPostNode.swift */,
 			);
 			path = TrendingPostNode;
+			sourceTree = "<group>";
+		};
+		6AE3BEEE2A6C721900AAA5DD /* StitchDashboard */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEF82A6C7B6500AAA5DD /* StitchControlNode */,
+				6AE3BEF32A6C725400AAA5DD /* StitchToVC */,
+				6AE3BEF22A6C724900AAA5DD /* ApprovedStitchVC */,
+				6A6071FA2A633200003538EF /* PendingVC */,
+				6AE3BEEF2A6C722400AAA5DD /* StitchDashboardVC */,
+			);
+			path = StitchDashboard;
+			sourceTree = "<group>";
+		};
+		6AE3BEEF2A6C722400AAA5DD /* StitchDashboardVC */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEF02A6C724100AAA5DD /* StitchDashboardVC.swift */,
+			);
+			path = StitchDashboardVC;
+			sourceTree = "<group>";
+		};
+		6AE3BEF22A6C724900AAA5DD /* ApprovedStitchVC */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEF42A6C726700AAA5DD /* ApprovedStitchVC.swift */,
+			);
+			path = ApprovedStitchVC;
+			sourceTree = "<group>";
+		};
+		6AE3BEF32A6C725400AAA5DD /* StitchToVC */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEF62A6C727300AAA5DD /* StitchToVC.swift */,
+			);
+			path = StitchToVC;
+			sourceTree = "<group>";
+		};
+		6AE3BEF82A6C7B6500AAA5DD /* StitchControlNode */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEF92A6C7B8100AAA5DD /* StitchControlNode.swift */,
+			);
+			path = StitchControlNode;
 			sourceTree = "<group>";
 		};
 		6AEA33DF298A2E2B005A4C5D /* CustomProgressBar */ = {
@@ -3935,6 +3987,7 @@
 				6A9E4C832977B3C100B59176 /* AccountActivityNode.swift in Sources */,
 				14FADBD1297FBA4800E0A741 /* ContactUsViewModel.swift in Sources */,
 				6AAD7A17294C65DD003E3AB6 /* AppDelegate+VoIPPush.swift in Sources */,
+				6AE3BEF52A6C726700AAA5DD /* ApprovedStitchVC.swift in Sources */,
 				6A0C32782A621EED00D2DE18 /* PreviewVC.swift in Sources */,
 				6A0CF638296AABEC00155889 /* ResetPasswordVC.swift in Sources */,
 				6ABDDCB42A01024400CDAD39 /* ContentView.swift in Sources */,
@@ -4111,8 +4164,10 @@
 				6A3F0A5C297CB83F00366665 /* AddVC.swift in Sources */,
 				6A0CF643296AB19200155889 /* NewPasswordVC.swift in Sources */,
 				6AEA33F9298DC8E1005A4C5D /* HashtagView.swift in Sources */,
+				6AE3BEF12A6C724100AAA5DD /* StitchDashboardVC.swift in Sources */,
 				6A3F0A832980C50B00366665 /* UserActionModel.swift in Sources */,
 				6AAD7A64294C699E003E3AB6 /* GifImageConfig.swift in Sources */,
+				6AE3BEFA2A6C7B8100AAA5DD /* StitchControlNode.swift in Sources */,
 				6AEC690629518021000393D8 /* UIColor+Utils.swift in Sources */,
 				6AE3BED82A68787200AAA5DD /* TrendingPostVC.swift in Sources */,
 				6AAD7A5E294C699E003E3AB6 /* workItem.swift in Sources */,
@@ -4182,6 +4237,7 @@
 				6A5C556529E8AC82006F51DD /* PostSearchNode.swift in Sources */,
 				6A9E4C742977AF2700B59176 /* BlockedListVC.swift in Sources */,
 				6AAD7A65294C699E003E3AB6 /* PresentationController.swift in Sources */,
+				6AE3BEF72A6C727300AAA5DD /* StitchToVC.swift in Sources */,
 				6A7ED4AD2A0B48AF00C8204E /* MetaDisplay.swift in Sources */,
 				6AEA33F4298CE4AB005A4C5D /* ButtonsHeader.swift in Sources */,
 				390FD78629093EA00068B883 /* FeedViewController.swift in Sources */,

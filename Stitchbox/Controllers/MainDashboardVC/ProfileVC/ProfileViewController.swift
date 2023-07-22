@@ -417,7 +417,7 @@ extension ProfileViewController {
     
     @objc func pendingTapped(_ sender: UIButton) {
         
-        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PendingVC") as? PendingVC {
+        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchDashboardVC") as? StitchDashboardVC {
             
             PVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
