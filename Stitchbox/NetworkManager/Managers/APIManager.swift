@@ -946,7 +946,7 @@ extension APIManager {
     }
   }
   func getMyWaitlist(page: Int, completion: @escaping APICompletion) {
-    postStitchManager.request(.getMyStitch(page: page)) { result in
+    postStitchManager.request(.getMyWaitlist(page: page)) { result in
       completion(result)
     }
   }
