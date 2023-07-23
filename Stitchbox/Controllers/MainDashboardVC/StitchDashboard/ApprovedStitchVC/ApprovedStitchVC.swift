@@ -185,7 +185,6 @@ extension ApprovedStitchVC: ASCollectionDataSource {
         }
         
         
-        
     }
 
     

@@ -133,7 +133,7 @@ extension StitchToVC: ASCollectionDataSource {
         } else {
             
             let post = self.waitPost[indexPath.row]
-            
+           
             return {
                 let node = StitchControlForRemoveNode(with: post)
                 node.neverShowPlaceholders = true
@@ -325,7 +325,7 @@ extension StitchToVC {
     
     func retrieveNextPageForMyPostWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
 
-        APIManager.shared.getMyPost(page: myPage) { [weak self] result in
+        APIManager.shared.getMyStitch(page: myPage) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -384,6 +384,7 @@ extension StitchToVC {
                 }
                 
                 if !data.isEmpty {
+                   
                     DispatchQueue.main.async {
                         block([data])
                     }

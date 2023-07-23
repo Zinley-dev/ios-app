@@ -9,7 +9,8 @@ import ObjectMapper
 
 
 class Setting: Mappable {
-   
+    
+
     private(set) var allowStitch: Bool = false
     private(set) var allowComment: Bool = false
     private(set) var isTitleGet: Bool = false
@@ -73,6 +74,7 @@ class PostModel: Mappable {
   
   var imageUrl: URL = URL(string: "https://via.placeholder.com/150")!
   
+  private(set) var isApproved: Bool = false
   private(set) var content: String = ""
   private(set) var image: [String] = [""]
   private(set) var hashtags: [String] = [""]
@@ -106,7 +108,8 @@ class PostModel: Mappable {
     metadata <- map["metadata"]
     estimatedCount <- map["estimatedCount"]
     createdAt <- (map["createdAt"], ISODateTransform())
-    
+    isApproved <- map["isApproved"]
+      
     if image[0] != "" {
       imageUrl = URL(string: image[0])!
     } else {
