@@ -3833,13 +3833,47 @@
                     <view key="view" contentMode="scaleToFill" id="RLP-JF-cY9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ncy-7x-tzh">
+                                <rect key="frame" x="2" y="50" width="373" height="150"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="J4z-bj-YiV"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stitched videos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WGs-yD-niv">
+                                <rect key="frame" x="15.999999999999993" y="216" width="104.33333333333331" height="18"/>
+                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LQc-yp-YW3">
+                                <rect key="frame" x="0.0" y="250" width="375" height="528"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="HcV-WT-vif"/>
-                        <color key="backgroundColor" systemColor="systemGreenColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="HcV-WT-vif" firstAttribute="trailing" secondItem="ncy-7x-tzh" secondAttribute="trailing" id="3us-Vx-GDu"/>
+                            <constraint firstItem="ncy-7x-tzh" firstAttribute="top" secondItem="HcV-WT-vif" secondAttribute="top" id="VsQ-FG-sPF"/>
+                            <constraint firstItem="HcV-WT-vif" firstAttribute="trailing" secondItem="LQc-yp-YW3" secondAttribute="trailing" id="jm1-1q-5Tb"/>
+                            <constraint firstItem="HcV-WT-vif" firstAttribute="bottom" secondItem="LQc-yp-YW3" secondAttribute="bottom" id="l7w-KU-yXf"/>
+                            <constraint firstItem="LQc-yp-YW3" firstAttribute="top" secondItem="WGs-yD-niv" secondAttribute="bottom" constant="16" id="mPw-gj-3RC"/>
+                            <constraint firstItem="WGs-yD-niv" firstAttribute="top" secondItem="ncy-7x-tzh" secondAttribute="bottom" constant="16" id="qQF-6U-96M"/>
+                            <constraint firstItem="ncy-7x-tzh" firstAttribute="leading" secondItem="HcV-WT-vif" secondAttribute="leading" constant="2" id="qe1-PA-jIP"/>
+                            <constraint firstItem="WGs-yD-niv" firstAttribute="leading" secondItem="HcV-WT-vif" secondAttribute="leading" constant="16" id="rHP-md-1u5"/>
+                            <constraint firstItem="LQc-yp-YW3" firstAttribute="leading" secondItem="HcV-WT-vif" secondAttribute="leading" id="sk9-Ma-ULQ"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="contentView" destination="ncy-7x-tzh" id="vDo-k6-Hpd"/>
+                        <outlet property="stitchedView" destination="LQc-yp-YW3" id="DdR-Sy-cq6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dEh-Zg-57V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5676" y="4530"/>
+            <point key="canvasLocation" x="5676" y="4528.8177339901476"/>
         </scene>
         <!--Stitch ToVC-->
         <scene sceneID="isP-zo-ibY">
@@ -3848,13 +3882,47 @@
                     <view key="view" contentMode="scaleToFill" id="9jL-oU-PDh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3wH-xc-YOi">
+                                <rect key="frame" x="2" y="50" width="373" height="150"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="esT-aa-kB4"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stitched to videos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aId-72-QMX">
+                                <rect key="frame" x="15.999999999999993" y="216" width="121.33333333333331" height="18"/>
+                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6yv-Yp-H77">
+                                <rect key="frame" x="0.0" y="250" width="375" height="528"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Vzw-1I-2ew"/>
-                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="3wH-xc-YOi" firstAttribute="leading" secondItem="Vzw-1I-2ew" secondAttribute="leading" constant="2" id="3J8-4k-oey"/>
+                            <constraint firstItem="6yv-Yp-H77" firstAttribute="top" secondItem="aId-72-QMX" secondAttribute="bottom" constant="16" id="8mY-mh-ue1"/>
+                            <constraint firstItem="Vzw-1I-2ew" firstAttribute="trailing" secondItem="3wH-xc-YOi" secondAttribute="trailing" id="IWd-tE-erF"/>
+                            <constraint firstItem="6yv-Yp-H77" firstAttribute="leading" secondItem="Vzw-1I-2ew" secondAttribute="leading" id="aDK-bH-aHL"/>
+                            <constraint firstItem="3wH-xc-YOi" firstAttribute="top" secondItem="Vzw-1I-2ew" secondAttribute="top" id="dIu-hs-CIq"/>
+                            <constraint firstItem="aId-72-QMX" firstAttribute="top" secondItem="3wH-xc-YOi" secondAttribute="bottom" constant="16" id="pYR-TD-YNK"/>
+                            <constraint firstItem="Vzw-1I-2ew" firstAttribute="bottom" secondItem="6yv-Yp-H77" secondAttribute="bottom" id="pa0-xK-yP9"/>
+                            <constraint firstItem="aId-72-QMX" firstAttribute="leading" secondItem="Vzw-1I-2ew" secondAttribute="leading" constant="16" id="tKD-O0-2AS"/>
+                            <constraint firstItem="Vzw-1I-2ew" firstAttribute="trailing" secondItem="6yv-Yp-H77" secondAttribute="trailing" id="yvi-gx-HmD"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="contentView" destination="3wH-xc-YOi" id="JWn-Ef-W0V"/>
+                        <outlet property="stitchToView" destination="6yv-Yp-H77" id="oqP-VE-jGs"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YU1-Kc-sDa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6746" y="4530"/>
+            <point key="canvasLocation" x="6744.8000000000002" y="4528.8177339901476"/>
         </scene>
         <!--Stitch DashboardVC-->
         <scene sceneID="5UB-Mg-vpO">
@@ -4566,7 +4634,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="RPd-eq-H2m"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="DVO-lF-iBp" secondAttribute="bottom" id="32o-TJ-4DB"/>
                             <constraint firstItem="ndm-BN-J1u" firstAttribute="leading" secondItem="hJi-gI-fNy" secondAttribute="leading" id="CDx-iI-naz"/>
@@ -8826,9 +8894,6 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

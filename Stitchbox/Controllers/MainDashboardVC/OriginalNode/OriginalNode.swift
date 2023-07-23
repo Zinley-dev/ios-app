@@ -81,7 +81,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         self.collectionNode.delegate = self
         self.collectionNode.dataSource = self
         addSubCollection()
-        self.getStitchTo()
+        //self.getStitchTo()
         
 
     }

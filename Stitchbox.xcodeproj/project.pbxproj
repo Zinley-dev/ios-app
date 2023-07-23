@@ -373,6 +373,7 @@
 		6AE3BEF52A6C726700AAA5DD /* ApprovedStitchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEF42A6C726700AAA5DD /* ApprovedStitchVC.swift */; };
 		6AE3BEF72A6C727300AAA5DD /* StitchToVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEF62A6C727300AAA5DD /* StitchToVC.swift */; };
 		6AE3BEFA2A6C7B8100AAA5DD /* StitchControlNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEF92A6C7B8100AAA5DD /* StitchControlNode.swift */; };
+		6AE3BEFD2A6D4B7800AAA5DD /* StitchControlForRemoveNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3BEFC2A6D4B7800AAA5DD /* StitchControlForRemoveNode.swift */; };
 		6AEA33E2298A2E33005A4C5D /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E0298A2E32005A4C5D /* Timer.swift */; };
 		6AEA33E3298A2E33005A4C5D /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E1298A2E33005A4C5D /* ProgressBar.swift */; };
 		6AEA33E6298AA152005A4C5D /* VideoPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEA33E5298AA152005A4C5D /* VideoPostModel.swift */; };
@@ -868,6 +869,7 @@
 		6AE3BEF42A6C726700AAA5DD /* ApprovedStitchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovedStitchVC.swift; sourceTree = "<group>"; };
 		6AE3BEF62A6C727300AAA5DD /* StitchToVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchToVC.swift; sourceTree = "<group>"; };
 		6AE3BEF92A6C7B8100AAA5DD /* StitchControlNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchControlNode.swift; sourceTree = "<group>"; };
+		6AE3BEFC2A6D4B7800AAA5DD /* StitchControlForRemoveNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchControlForRemoveNode.swift; sourceTree = "<group>"; };
 		6AEA33E0298A2E32005A4C5D /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		6AEA33E1298A2E33005A4C5D /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		6AEA33E5298AA152005A4C5D /* VideoPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPostModel.swift; sourceTree = "<group>"; };
@@ -3123,6 +3125,7 @@
 		6AE3BEEE2A6C721900AAA5DD /* StitchDashboard */ = {
 			isa = PBXGroup;
 			children = (
+				6AE3BEFB2A6D4B6200AAA5DD /* StitchControlForRemoveNode */,
 				6AE3BEF82A6C7B6500AAA5DD /* StitchControlNode */,
 				6AE3BEF32A6C725400AAA5DD /* StitchToVC */,
 				6AE3BEF22A6C724900AAA5DD /* ApprovedStitchVC */,
@@ -3162,6 +3165,14 @@
 				6AE3BEF92A6C7B8100AAA5DD /* StitchControlNode.swift */,
 			);
 			path = StitchControlNode;
+			sourceTree = "<group>";
+		};
+		6AE3BEFB2A6D4B6200AAA5DD /* StitchControlForRemoveNode */ = {
+			isa = PBXGroup;
+			children = (
+				6AE3BEFC2A6D4B7800AAA5DD /* StitchControlForRemoveNode.swift */,
+			);
+			path = StitchControlForRemoveNode;
 			sourceTree = "<group>";
 		};
 		6AEA33DF298A2E2B005A4C5D /* CustomProgressBar */ = {
@@ -4142,6 +4153,7 @@
 				6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */,
 				6A0D54462974E9300059530C /* ChallengerCardProfileHeaderCell.swift in Sources */,
 				147187E92920AD520039B89E /* LogInViewModel.swift in Sources */,
+				6AE3BEFD2A6D4B7800AAA5DD /* StitchControlForRemoveNode.swift in Sources */,
 				6A58E1852A087B0F0002E5C8 /* ChatGPTTokenManager.swift in Sources */,
 				6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */,
 				6A47AA962A1867D200E3E1FF /* FountainFirework.swift in Sources */,

@@ -108,7 +108,7 @@ class FindFriendsNode: ASCellNode {
             
             DispatchQueue.main.async {
                 
-                self.followBtnNode.backgroundColor = .tertiary
+                self.followBtnNode.backgroundColor = .normalButtonBackground
                 self.followBtnNode.layer.borderWidth = 0.0
                 self.followBtnNode.layer.borderColor = UIColor.clear.cgColor
                 self.followBtnNode.layer.cornerRadius = 5.0
@@ -116,7 +116,7 @@ class FindFriendsNode: ASCellNode {
                 self.followBtnNode.setTitle(
                     "Invite",
                     with: FontManager.shared.roboto(.Bold, size: FontSize),
-                    with: .secondary,
+                    with: .black,
                     for: .normal
                 )
 
@@ -128,7 +128,7 @@ class FindFriendsNode: ASCellNode {
                 string: "@None",
                 attributes: [
                     NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
                     NSAttributedString.Key.paragraphStyle: paragraphStyles
                 ]
             )

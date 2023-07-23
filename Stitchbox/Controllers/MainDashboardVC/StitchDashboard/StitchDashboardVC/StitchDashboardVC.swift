@@ -27,6 +27,7 @@ class StitchDashboardVC: UIViewController {
     var approvedBorder = CALayer()
     var stitchToBorder = CALayer()
   
+    var firstload = true
     
     
     lazy var PendingVC: PendingVC = {
@@ -132,6 +133,59 @@ class StitchDashboardVC: UIViewController {
             }
             
         }
+        
+        if firstload {
+            firstload = false
+        } else {
+            
+            if PendingVC.view.isHidden == false {
+                
+                if PendingVC.currentIndex != nil {
+                    PendingVC.playVideo(index: PendingVC.currentIndex!)
+                }
+                
+            } else if StitchToVC.view.isHidden == false {
+                
+                if StitchToVC.currentIndex != nil {
+                    StitchToVC.playVideo(index: StitchToVC.currentIndex!)
+                }
+                
+            } else if ApprovedStitchVC.view.isHidden == false {
+                
+                if ApprovedStitchVC.currentIndex != nil {
+                    ApprovedStitchVC.playVideo(index: ApprovedStitchVC.currentIndex!)
+                }
+                
+            }
+            
+            
+        }
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if PendingVC.view.isHidden == false {
+            
+            if PendingVC.currentIndex != nil {
+                PendingVC.pauseVideo(index: PendingVC.currentIndex!)
+            }
+            
+        } else if StitchToVC.view.isHidden == false {
+            
+            if StitchToVC.currentIndex != nil {
+                StitchToVC.pauseVideo(index: StitchToVC.currentIndex!)
+            }
+            
+        } else if ApprovedStitchVC.view.isHidden == false {
+            
+            if ApprovedStitchVC.currentIndex != nil {
+                ApprovedStitchVC.pauseVideo(index: ApprovedStitchVC.currentIndex!)
+            }
+            
+        }
+        
     }
     
     func setupNavBar() {
@@ -186,6 +240,14 @@ class StitchDashboardVC: UIViewController {
             PendingVC.playVideo(index: PendingVC.currentIndex!)
         }
         
+        if ApprovedStitchVC.currentIndex != nil {
+            ApprovedStitchVC.pauseVideo(index: ApprovedStitchVC.currentIndex!)
+        }
+        
+        if StitchToVC.currentIndex != nil {
+            StitchToVC.pauseVideo(index: StitchToVC.currentIndex!)
+        }
+        
     }
     
     @IBAction func approvedBtnPressed(_ sender: Any) {
@@ -204,6 +266,14 @@ class StitchDashboardVC: UIViewController {
         
         if PendingVC.currentIndex != nil {
             PendingVC.pauseVideo(index: PendingVC.currentIndex!)
+        }
+        
+        if ApprovedStitchVC.currentIndex != nil {
+            ApprovedStitchVC.playVideo(index: ApprovedStitchVC.currentIndex!)
+        }
+        
+        if StitchToVC.currentIndex != nil {
+            StitchToVC.pauseVideo(index: StitchToVC.currentIndex!)
         }
         
         
@@ -228,6 +298,15 @@ class StitchDashboardVC: UIViewController {
         if PendingVC.currentIndex != nil {
             PendingVC.pauseVideo(index: PendingVC.currentIndex!)
         }
+        
+        if ApprovedStitchVC.currentIndex != nil {
+            ApprovedStitchVC.pauseVideo(index: ApprovedStitchVC.currentIndex!)
+        }
+        
+        if StitchToVC.currentIndex != nil {
+            StitchToVC.playVideo(index: StitchToVC.currentIndex!)
+        }
+        
         
        
     }

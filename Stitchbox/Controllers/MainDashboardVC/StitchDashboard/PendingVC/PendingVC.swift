@@ -38,49 +38,9 @@ class PendingVC: UIViewController, UINavigationBarDelegate, UINavigationControll
 
         // Do any additional setup after loading the view.
         
-      
-        setupNavBar()
         setupCollectionNode()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
 
-        if currentIndex != nil {
-            //newPlayingIndex
-            playVideo(index: currentIndex!)
-            
-        }
-        
-        setupNavBar()
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        if newPlayingIndex != nil {
-            
-            pauseVideo(index: currentIndex!)
-            
-        }
-        
-    }
-    
-    
-    func setupNavBar() {
-        
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .white
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-        
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-        
-    }
-    
 }
 
 
