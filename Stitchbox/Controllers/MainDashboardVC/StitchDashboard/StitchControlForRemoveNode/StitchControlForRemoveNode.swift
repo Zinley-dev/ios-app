@@ -64,12 +64,35 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     let maximumShowing = 100
     
     var unstitchBtn : ((ASCellNode) -> Void)?
-   
+    var stitchTo: Bool
 
+    private lazy var infoNode: ASTextNode = {
+        let textNode = ASTextNode()
+        //textNode.style.preferredSize.width = 70
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        textNode.attributedText = NSAttributedString(
+            string: "",
+            attributes: [
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ]
+        )
+
+        textNode.backgroundColor = .black // set the background color to dark gray
+        textNode.maximumNumberOfLines = 1
+
+        DispatchQueue.main.async {
+            textNode.view.cornerRadius = 3
+        }
+        
+        return textNode
+    }()
     
-    init(with post: PostModel) {
+    init(with post: PostModel, stitchTo: Bool) {
         self.post = post
-      
+        self.stitchTo = stitchTo
         self.contentNode = ASTextNode()
         self.headerNode = ASDisplayNode()
       
@@ -305,7 +328,37 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
                 self.videoNode.view.clipsToBounds = true
             }
             
-            
+            if stitchTo {
+                infoNode.cornerRadius = 3
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = .center
+                
+                if post.isApproved {
+                    
+                    infoNode.attributedText = NSAttributedString(
+                        string: "Approved",
+                        attributes: [
+                            NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
+                            NSAttributedString.Key.foregroundColor: UIColor.white,
+                            NSAttributedString.Key.paragraphStyle: paragraphStyle
+                        ]
+                    )
+                    
+                } else {
+                    
+                    infoNode.attributedText = NSAttributedString(
+                        string: "Pending",
+                        attributes: [
+                            NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
+                            NSAttributedString.Key.foregroundColor: UIColor.white,
+                            NSAttributedString.Key.paragraphStyle: paragraphStyle
+                        ]
+                    )
+                    
+                }
+                
+                
+            }
             
         }
         
@@ -1066,23 +1119,22 @@ extension StitchControlForRemoveNode {
         let buttonsInset = UIEdgeInsets(top: 10, left: 30, bottom: -10, right: 30)
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
-
+    
+    
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        
+            
         let change = constrainedSize.max.width - ( constrainedSize.max.height * 9 / 16)
         let padding = change / 2
-
         
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
         contentNode.style.flexShrink = 1
-        //videoNode.style.preferredSize = CGSize(width: constrainedSize.max.width - , height: constrainedSize.max.height)
+      
         
-
         let headerInset = UIEdgeInsets(top: 0, left: padding, bottom: 2, right: 8 + padding)
         let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
-
+        
         let contentInset = UIEdgeInsets(top: 2, left: 20 + padding, bottom: 2, right: 70 + padding)
         let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
         
@@ -1096,6 +1148,7 @@ extension StitchControlForRemoveNode {
         }
 
         verticalStack.children?.append(buttonsInsetSpec)
+        
         let verticalStackInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
 
@@ -1104,16 +1157,21 @@ extension StitchControlForRemoveNode {
 
         let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
 
-        let overlay = ASOverlayLayoutSpec(child: videoInsetSpec, overlay: gradientInsetSpec)
+        var overlay = ASOverlayLayoutSpec(child: videoInsetSpec, overlay: gradientInsetSpec)
 
+        if stitchTo {
+            infoNode.style.preferredSize = CGSize(width: 75, height: 15)
+            let stitchCountInsets = UIEdgeInsets(top: 8, left: 8 + padding, bottom: .infinity, right: .infinity)
+            let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: infoNode)
+            let overlay2 = ASOverlayLayoutSpec(child: overlay, overlay: stitchCountInsetSpec)
+            overlay = overlay2
+        }
+        
         let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
         let finalOverlay = ASOverlayLayoutSpec(child: overlay, overlay: relativeSpec)
 
         return finalOverlay
     }
-
-
-
 
 }
 

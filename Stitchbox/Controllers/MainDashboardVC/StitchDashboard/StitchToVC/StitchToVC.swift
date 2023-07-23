@@ -135,7 +135,7 @@ extension StitchToVC: ASCollectionDataSource {
             let post = self.waitPost[indexPath.row]
             
             return {
-                let node = StitchControlForRemoveNode(with: post)
+                let node = StitchControlForRemoveNode(with: post, stitchTo: true)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
                 
