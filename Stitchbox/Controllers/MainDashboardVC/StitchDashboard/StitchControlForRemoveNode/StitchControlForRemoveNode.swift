@@ -59,16 +59,12 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     var pinchGestureRecognizer: UIPinchGestureRecognizer!
     var panGestureRecognizer: UIPanGestureRecognizer!
     var buttonNode: ASDisplayNode
-    var pendingView: HandlePendingView!
-    //HandlePendingView
-    
-    private let fireworkController = FountainFireworkController()
-    private let fireworkController2 = ClassicFireworkController()
- 
+    var stitchView: UnStitchView!
+   
     let maximumShowing = 100
     
-    var approveBtn : ((ASCellNode) -> Void)?
-    var declineBtn : ((ASCellNode) -> Void)?
+    var unstitchBtn : ((ASCellNode) -> Void)?
+   
 
     
     init(with post: PostModel) {
@@ -245,25 +241,22 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
             self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
             
             
-            self.pendingView = HandlePendingView()
-            self.buttonNode.view.addSubview(self.pendingView)
-            self.pendingView.translatesAutoresizingMaskIntoConstraints = false
-            self.pendingView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
-            self.pendingView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
-            self.pendingView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
-            self.pendingView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
+            self.stitchView = UnStitchView()
+            self.buttonNode.view.addSubview(self.stitchView)
+            self.stitchView.translatesAutoresizingMaskIntoConstraints = false
+            self.stitchView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
+            self.stitchView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
+            self.stitchView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
+            self.stitchView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
             
             
             //
             
-            let approveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.approveTapped))
-            approveTap.numberOfTapsRequired = 1
-            self.pendingView.approveBtn.addGestureRecognizer(approveTap)
+            let unstitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.unstitchBtnTapped))
+            unstitchTap.numberOfTapsRequired = 1
+            self.stitchView.unstitchBtn.addGestureRecognizer(unstitchTap)
             
-            let declineTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.declineTapped))
-            declineTap.numberOfTapsRequired = 1
-            self.pendingView.declineBtn.addGestureRecognizer(declineTap)
-            
+      
         }
        
         
@@ -1323,15 +1316,11 @@ extension StitchControlForRemoveNode {
         setNeedsLayout()
     }
     
-    @objc func approveTapped() {
+    @objc func unstitchBtnTapped() {
         
-        approveBtn?(self)
+        unstitchBtn?(self)
         
     }
     
-    @objc func declineTapped() {
-        
-        declineBtn?(self)
-        
-    }
+   
 }

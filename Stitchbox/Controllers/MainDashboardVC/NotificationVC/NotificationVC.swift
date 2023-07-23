@@ -289,14 +289,6 @@ extension NotificationVC {
                     self.showErrorAlert("Oops!", msg: "This content is not available")
                 }
                 
-            case "NEW_FISTBUMP_1":
-                if let userId = notification.userId, let username = notification.username {
-                    openUser(userId: userId, username: username)
-                } else {
-                    showErrorAlert("Oops!", msg: "Can't open this notification content")
-                }
-            case "NEW_FISTBUMP_2":
-                openFistBumpList()
             case "NEW_FOLLOW_1":
                 
                 if let userId = notification.userId, let username = notification.username {
@@ -327,6 +319,9 @@ extension NotificationVC {
                 } else {
                     showErrorAlert("Oops!", msg: "Can't open this notification content")
                 }
+            case "NEW_STITCH":
+                moveToStichDashboard()
+                
             default:
                 print(notification.template)
                 
@@ -341,8 +336,13 @@ extension NotificationVC {
 extension NotificationVC {
     
     
-    func openFistBumpList() {
+    func moveToStichDashboard() {
         
+        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchDashboardVC") as? StitchDashboardVC {
+            
+            self.navigationController?.pushViewController(PVC, animated: true)
+            
+        }
       
         
     }

@@ -139,14 +139,10 @@ extension StitchToVC: ASCollectionDataSource {
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
                 
-                node.approveBtn = { [weak self] node in
-                    self?.approvePost(node: node as! PendingNode, post: post)
+                node.unstitchBtn = { [weak self] node in
+                    self?.unstitchPost(node: node as! StitchControlForRemoveNode, post: post)
                 }
 
-                node.declineBtn = { [weak self] node in
-                    self?.declinePost(node: node as! PendingNode, post: post)
-                }
-                
                 //
                 return node
             }
@@ -527,7 +523,7 @@ extension StitchToVC {
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
             
             // Calculate the visible cells.
-            let visibleCells = waitCollectionNode.visibleNodes.compactMap { $0 as? PendingNode }
+            let visibleCells = waitCollectionNode.visibleNodes.compactMap { $0 as? StitchControlForRemoveNode }
             
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
@@ -583,7 +579,7 @@ extension StitchToVC {
             }
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = waitCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PendingNode {
+            if let currentIndex = currentIndex, let cell = waitCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? StitchControlForRemoveNode {
                 if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
                     if let currentTime = cell.videoNode.currentItem?.currentTime() {
                         cell.videoNode.player?.seek(to: currentTime)
@@ -603,7 +599,7 @@ extension StitchToVC {
     
     func pauseVideo(index: Int) {
         
-        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PendingNode {
+        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? StitchControlForRemoveNode {
             
             // Seek to the beginning of the video
             cell.videoNode.player?.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
@@ -619,7 +615,7 @@ extension StitchToVC {
     
     func seekVideo(index: Int, time: CMTime) {
         
-        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PendingNode {
+        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? StitchControlForRemoveNode {
             
             cell.videoNode.player?.seek(to: time)
             
@@ -630,7 +626,7 @@ extension StitchToVC {
     
     func playVideo(index: Int) {
         
-        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PendingNode {
+        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? StitchControlForRemoveNode {
             
             cell.videoNode.muted = shouldMute ?? !globalIsSound
             cell.videoNode.play()
@@ -641,19 +637,14 @@ extension StitchToVC {
     }
     
     
-    func approvePost(node: PendingNode, post: PostModel) {
+    func unstitchPost(node: StitchControlForRemoveNode, post: PostModel) {
         
 
 
     }
     
     
-    func declinePost(node: PendingNode, post: PostModel) {
-        
-
-        
-    
-    }
+ 
     
     func showErrorAlert(_ title: String, msg: String) {
         

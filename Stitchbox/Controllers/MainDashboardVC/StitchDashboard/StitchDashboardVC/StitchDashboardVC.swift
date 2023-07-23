@@ -113,7 +113,7 @@ class StitchDashboardVC: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
   
         
-        delay(1.25) {
+        delay(1.5) {
             
             UIView.animate(withDuration: 0.5) {
                 

@@ -18,14 +18,14 @@ class PushNotificationVC: UIViewController {
     @IBOutlet weak var MentionSwitch: UISwitch!
     @IBOutlet weak var FollowSwitch: UISwitch!
     @IBOutlet weak var MessageSwitch: UISwitch!
-    
+    @IBOutlet weak var StitchSwitch: UISwitch!
     
     var isCommentNoti = false
     var isMessageNoti = false
     var isPostNoti = false
     var isFollowNoti = false
     var isMentionNoti = false
-    
+    var isStitchNoti = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,6 +99,51 @@ class PushNotificationVC: UIViewController {
         }
         
         
+        if globalSetting.Notifications?.Stitch == true {
+            
+            StitchSwitch.setOn(true, animated: true)
+            isStitchNoti = true
+            
+        } else {
+            
+            StitchSwitch.setOn(false, animated: true)
+            isStitchNoti = false
+            
+        }
+        
+        
+        
+        
+    }
+    
+    @IBAction func StitchSwitchPressed(_ sender: Any) {
+        
+        var params = ["notifications": ["stitch": false]]
+        
+        if isStitchNoti {
+            
+            params = ["notifications": ["stitch": false]]
+            isStitchNoti = false
+            
+        } else {
+            
+            params = ["notifications": ["stitch": true]]
+            isStitchNoti = true
+        }
+        
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+            case.failure(let error):
+                DispatchQueue.main.async {
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
         
         
     }

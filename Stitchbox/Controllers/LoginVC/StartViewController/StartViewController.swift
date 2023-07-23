@@ -367,17 +367,17 @@ extension StartViewController {
             
                 guard let data = apiResponse.body else {
                     completed()
-                        return
+                    return
                 }
-
+                
                 let settings =  Mapper<SettingModel>().map(JSONObject: data)
                 globalSetting = settings
                 globalIsSound = settings?.AutoPlaySound ?? false
                 
                 completed()
                 
-            case .failure(_):
-            
+            case .failure(let error):
+                print(error)
                 completed()
                
             }

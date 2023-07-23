@@ -5130,7 +5130,7 @@
                                                                         <rect key="frame" x="238" y="5" width="51" height="30"/>
                                                                         <color key="onTintColor" name="Secondary"/>
                                                                         <connections>
-                                                                            <action selector="StreamingLinkSwitchPressed:" destination="a9W-Jf-Y3W" eventType="valueChanged" id="Brr-NE-VwT"/>
+                                                                            <action selector="StitchSwitchPressed:" destination="a9W-Jf-Y3W" eventType="valueChanged" id="McX-NF-9Bd"/>
                                                                         </connections>
                                                                     </switch>
                                                                 </subviews>
@@ -5674,7 +5674,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="SoundSwitch" destination="ttX-5c-fUC" id="k9P-Ju-Eir"/>
-                        <outlet property="StreamingLinkSwitch" destination="TlV-he-pQO" id="0Cb-Cg-xRy"/>
+                        <outlet property="StitchSwitch" destination="TlV-he-pQO" id="GXh-uA-8Y8"/>
                         <outlet property="TermOfServiceBtn" destination="54n-58-fr9" id="fiG-Za-Iv3"/>
                         <outlet property="accountActivityBtn" destination="xdI-eG-Moa" id="JdS-rA-3oK"/>
                         <outlet property="accountViewHeight" destination="kUK-zO-NYK" id="qa5-2X-oDU"/>
@@ -7734,6 +7734,9 @@
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ldj-ki-1UA">
                                                         <rect key="frame" x="270" y="4.6666666666666714" width="51" height="31"/>
                                                         <color key="onTintColor" name="Secondary"/>
+                                                        <connections>
+                                                            <action selector="StitchSwitchPressed:" destination="itT-dx-brX" eventType="valueChanged" id="Nqo-ZJ-9qj"/>
+                                                        </connections>
                                                     </switch>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -7940,6 +7943,7 @@
                         <outlet property="MentionSwitch" destination="Alk-7a-Vfr" id="SP8-aS-r0X"/>
                         <outlet property="MessageSwitch" destination="d1S-1F-iqG" id="qMR-4x-Kks"/>
                         <outlet property="PostsSwitch" destination="gJy-2P-TcH" id="aLb-x8-1MQ"/>
+                        <outlet property="StitchSwitch" destination="ldj-ki-1UA" id="lv8-NY-vCX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SXB-ca-RlB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -31,14 +31,14 @@ class SettingVC: UIViewController {
     @IBOutlet weak var proBtn: UIButton!
     
     @IBOutlet weak var SoundSwitch: UISwitch!
-    @IBOutlet weak var StreamingLinkSwitch: UISwitch!
+    @IBOutlet weak var StitchSwitch: UISwitch!
     @IBOutlet weak var proView: UIView!
     
     
     @IBOutlet weak var mainViewHeight: NSLayoutConstraint!
     @IBOutlet weak var accountViewHeight: NSLayoutConstraint!
     
-    var isStreamLink = false
+    var isStitch = false
     var isSound = false
     var isPrivate = false
     
@@ -215,19 +215,19 @@ class SettingVC: UIViewController {
         
     }
     
-    @IBAction func StreamingLinkSwitchPressed(_ sender: Any) {
+    @IBAction func StitchSwitchPressed(_ sender: Any) {
         
-        var params = ["allowStreamingLink": false]
+        var params = ["allowStitch": false]
         
-        if isStreamLink {
+        if isStitch {
             
-            params = ["allowStreamingLink": false]
-            isStreamLink = false
+            params = ["allowStitch": false]
+            isStitch = false
             
         } else {
             
-            params = ["allowStreamingLink": true]
-            isStreamLink = true
+            params = ["allowStitch": true]
+            isStitch = true
         }
         
         APIManager.shared.updateSettings(params: params) { [weak self] result in
@@ -355,12 +355,12 @@ extension SettingVC {
                 isSound = false
             }
             
-            if globalSetting.AllowStreamingLink == true {
-                self.StreamingLinkSwitch.setOn(true, animated: true)
-                isStreamLink = true
+            if globalSetting.AllowStitch == true {
+                self.StitchSwitch.setOn(true, animated: true)
+                isStitch = true
             } else {
-                self.StreamingLinkSwitch.setOn(false, animated: true)
-                isStreamLink = false
+                self.StitchSwitch.setOn(false, animated: true)
+                isStitch = false
             }
             
         }

@@ -184,6 +184,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
                             self.openUser(userId: userId, username: username)
                         }
+                    case "NEW_STITCH":
+                        self.moveToStichDashboard()
                     default:
                         print("None")
                         
@@ -613,6 +615,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 
             }
         }
+        
+    }
+    
+    func moveToStichDashboard() {
+        
+        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchDashboardVC") as? StitchDashboardVC {
+            
+            
+            if let vc = UIViewController.currentViewController() {
+                
+                
+                if vc is FeedViewController || vc is TrendingVC || vc is MainMessageVC || vc is ProfileViewController {
+                    
+                    if let nav = vc.navigationController {
+                        
+                        PVC.hidesBottomBarWhenPushed = true
+                        hideMiddleBtn(vc: vc.self)
+                        nav.pushViewController(PVC, animated: true)
+                        
+                    }
+                    
+                    
+                } else {
+                    
+                    if let nav = vc.navigationController {
+                        
+                        nav.pushViewController(PVC, animated: true)
+                        
+                    }
+                    
+                    
+                }
+                
+                
+                
+            }
+           
+            
+        }
+      
         
     }
     

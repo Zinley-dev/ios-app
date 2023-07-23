@@ -35,17 +35,17 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l1S-6a-NKz">
                     <rect key="frame" x="171.5" y="64" width="51.5" height="20"/>
                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vZG-p0-F2d">
                     <rect key="frame" x="8" y="136" width="378" height="443"/>
-                    <color key="backgroundColor" name="Background"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Why are you reporting this account ?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s0n-ZD-gf7">
                     <rect key="frame" x="58.5" y="100" width="277" height="20"/>
                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6m8-za-wuM">
@@ -54,7 +54,7 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thanks for letting us know" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7b9-3a-DYC">
                             <rect key="frame" x="96" y="94" width="202" height="20"/>
                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fistBumpedStats" translatesAutoresizingMaskIntoConstraints="NO" id="wfI-og-ds6">
@@ -70,11 +70,11 @@
                                 <constraint firstAttribute="height" constant="100" id="IxH-mC-qfm"/>
                             </constraints>
                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
-                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" name="Background"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="wfI-og-ds6" firstAttribute="centerX" secondItem="6m8-za-wuM" secondAttribute="centerX" id="88F-Am-qgS"/>
                         <constraint firstItem="2wO-zw-o44" firstAttribute="leading" secondItem="6m8-za-wuM" secondAttribute="leading" constant="32" id="Jhv-F4-8Th"/>
@@ -95,7 +95,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="150" id="W9P-AO-RnK"/>
                             </constraints>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             <userDefinedRuntimeAttributes>
@@ -141,7 +141,7 @@
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOe-9C-Qqt">
                                     <rect key="frame" x="179" y="0.0" width="120" height="35"/>
-                                    <color key="backgroundColor" name="Primary"/>
+                                    <color key="backgroundColor" name="Secondary"/>
                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                     <state key="normal" title="Submit">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -168,7 +168,7 @@
                             </constraints>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" name="Background"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="snx-wh-kbo" firstAttribute="leading" secondItem="fh7-By-y2I" secondAttribute="leading" constant="8" id="10T-ey-Awf"/>
                         <constraint firstItem="VC2-I4-sHU" firstAttribute="centerX" secondItem="fh7-By-y2I" secondAttribute="centerX" id="Imd-w0-NUC"/>
@@ -179,7 +179,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <color key="backgroundColor" name="Background"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="l1S-6a-NKz" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="16" id="2wH-ua-gEg"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="6m8-za-wuM" secondAttribute="trailing" id="86I-J7-n8e"/>
@@ -207,8 +207,8 @@
         <namedColor name="Background">
             <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="Primary">
-            <color red="0.20784313725490197" green="0.17647058823529413" blue="0.4392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="Secondary">
+            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Tertiary">
             <color red="0.9137254901960784" green="0.90196078431372551" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
