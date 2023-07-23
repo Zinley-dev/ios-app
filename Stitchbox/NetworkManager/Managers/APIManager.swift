@@ -950,6 +950,11 @@ extension APIManager {
       completion(result)
     }
   }
+  func getMyPostHasStitched(page: Int, completion: @escaping APICompletion) {
+    postStitchManager.request(.getMyPostsHasStitched(page: page)) { result in
+      completion(result)
+    }
+  }
   
   func unstitch(rootId: String, memberId: String, completion: @escaping APICompletion) {
     let params = ["rootId": rootId, "member": memberId]
