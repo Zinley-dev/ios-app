@@ -324,7 +324,7 @@ extension ApprovedStitchVC {
     
     func retrieveNextPageForMyPostWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
 
-        APIManager.shared.getMyPost(page: myPage) { [weak self] result in
+        APIManager.shared.getMyPostHasStitched(page: myPage) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

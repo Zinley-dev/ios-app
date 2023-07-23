@@ -133,7 +133,7 @@ extension StitchToVC: ASCollectionDataSource {
         } else {
             
             let post = self.waitPost[indexPath.row]
-           
+            
             return {
                 let node = StitchControlForRemoveNode(with: post)
                 node.neverShowPlaceholders = true
