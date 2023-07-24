@@ -1394,7 +1394,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Srk-Oe-yKe"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="Bce-QT-LYi" secondAttribute="bottom" id="Atz-Ce-jSr"/>
                             <constraint firstItem="Bce-QT-LYi" firstAttribute="top" secondItem="Srk-Oe-yKe" secondAttribute="top" id="B4l-5I-fbd"/>
@@ -1438,7 +1438,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="M3I-63-Oee"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="pcx-De-tlz" firstAttribute="leading" secondItem="M3I-63-Oee" secondAttribute="leading" id="2OG-Pn-bfY"/>
                             <constraint firstItem="bvq-nz-OMQ" firstAttribute="leading" secondItem="M3I-63-Oee" secondAttribute="leading" id="5cV-Cw-DMI"/>
@@ -2260,7 +2260,7 @@
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Operators" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j3Z-uS-zm7">
                                                                 <rect key="frame" x="55" y="0.0" width="66" height="25"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
@@ -2310,7 +2310,7 @@
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Muted Members" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wNr-DR-nzz">
                                                                 <rect key="frame" x="55" y="0.0" width="110" height="25"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
@@ -2371,7 +2371,7 @@
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Banned Members" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J2E-L0-1M8">
                                                                 <rect key="frame" x="55.000000000000007" y="0.0" width="117.66666666666669" height="25"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
@@ -2421,7 +2421,7 @@
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Freeze Channel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E98-un-r9H">
                                                                 <rect key="frame" x="54.999999999999993" y="0.0" width="102.33333333333331" height="25"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
@@ -2448,7 +2448,7 @@
                                         </subviews>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="Tlu-sn-bJo" firstAttribute="leading" secondItem="0Nw-dT-6NP" secondAttribute="leading" id="3Dl-Fc-Tea"/>
                                     <constraint firstAttribute="height" constant="220" id="81g-nJ-X7S"/>
@@ -2456,15 +2456,12 @@
                                     <constraint firstItem="Tlu-sn-bJo" firstAttribute="centerX" secondItem="0Nw-dT-6NP" secondAttribute="centerX" id="Kur-Bq-nSv"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="30"/>
-                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="NO"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="eSN-CC-ai5"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="0Nw-dT-6NP" firstAttribute="top" secondItem="eSN-CC-ai5" secondAttribute="top" constant="16" id="8np-K0-wjO"/>
                             <constraint firstItem="0Nw-dT-6NP" firstAttribute="leading" secondItem="eSN-CC-ai5" secondAttribute="leading" constant="16" id="RCr-rG-dKY"/>
@@ -4411,7 +4408,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="goH-7b-QO5"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Pa3-Xz-M62" firstAttribute="leading" secondItem="goH-7b-QO5" secondAttribute="leading" id="AYZ-Tj-uMe"/>
                             <constraint firstItem="Pa3-Xz-M62" firstAttribute="top" secondItem="goH-7b-QO5" secondAttribute="top" id="HXr-PX-Vuh"/>

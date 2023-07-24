@@ -60,7 +60,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -107,10 +107,10 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         self.searchController?.searchBar.searchBarStyle = .minimal
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
-        self.searchController?.searchBar.tintColor = .white
-        self.searchController?.searchBar.searchTextField.textColor = .white
+        self.searchController?.searchBar.tintColor = .black
+        self.searchController?.searchBar.searchTextField.textColor = .black
         self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [.foregroundColor: UIColor.lightGray])
-        self.searchController!.searchBar.searchTextField.leftView?.tintColor = .lightGray
+        self.searchController!.searchBar.searchTextField.leftView?.tintColor = .darkGray
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -148,9 +148,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -228,7 +228,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
         cell.hashTagLabel.text = selectedUsers[indexPath.row].nickname
-        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.font = FontManager.shared.roboto(.Regular, size: 12)
         cell.hashTagLabel.backgroundColor = .clear
         cell.backgroundColor = .secondary
         return cell
@@ -258,7 +258,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         cell.selectionStyle = .none
         let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
         cell.configure(type: .createChannel, user: user, isChecked: selectedUsers.contains(user))
-        cell.theme.backgroundColor = UIColor.clear
+        cell.theme = .light
         return cell
     }
     
