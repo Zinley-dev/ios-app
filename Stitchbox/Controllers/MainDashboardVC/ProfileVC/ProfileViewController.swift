@@ -202,7 +202,7 @@ class ProfileViewController: UIViewController {
         
     }
     
-    
+
     func setupSettingButton() {
         
         let settingButton = UIButton(type: .custom)
@@ -212,7 +212,7 @@ class ProfileViewController: UIViewController {
         let settingButtonBar = UIBarButtonItem(customView: settingButton)
         
         let saveButton = UIButton(type: .custom)
-        saveButton.setImage(UIImage(named: "save-black"), for: [])
+        saveButton.setImage(UIImage(named: "save-unfill")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
         saveButton.addTarget(self, action: #selector(saveTapped(_:)), for: .touchUpInside)
         saveButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let saveBarButton = UIBarButtonItem(customView: saveButton)
@@ -442,7 +442,15 @@ extension ProfileViewController {
     
     @objc func insightTapped(_ sender: UIButton) {
         
-     
+  
+        
+        if let SSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchStatVC") as? StitchStatVC {
+            
+            SSVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(SSVC, animated: true)
+            
+        }
         
     }
     

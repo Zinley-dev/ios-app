@@ -67,9 +67,9 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -240,7 +240,7 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
             editButton.addTarget(self, action: #selector(onClickEdit(_:)), for: .touchUpInside)
             editButton.frame = CGRect(x: -1, y: 0, width: 15, height: 25)
             editButton.setTitle("Edit", for: .normal)
-            editButton.setTitleColor(UIColor.white, for: .normal)
+            editButton.setTitleColor(UIColor.black, for: .normal)
             editButton.sizeToFit()
             let editButtonBarButton = UIBarButtonItem(customView: editButton)
             
@@ -356,7 +356,7 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,

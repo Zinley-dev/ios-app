@@ -10,7 +10,7 @@ import ObjectMapper
 import FLAnimatedImage
 
 
-class FistBumpedStatVC: UIViewController {
+class StitchStatVC: UIViewController {
 
   @IBOutlet weak var avgLbl: UILabel!
   @IBOutlet weak var totalWeekLbl: UILabel!
@@ -19,7 +19,6 @@ class FistBumpedStatVC: UIViewController {
   @IBOutlet weak var percentDay: UILabel!
   @IBOutlet weak var percent3DayLbl: UILabel!
   @IBOutlet weak var percentWeekLbl: UILabel!
-  @IBOutlet weak var fistBumpListBtn: UIButton!
   @IBOutlet weak var percentAvgLbl: UILabel!
   @IBOutlet weak var fromLbl: UILabel!
   
@@ -36,8 +35,7 @@ class FistBumpedStatVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupButtons()
-        fistBumpListBtn.tintColor = .white
-        fistBumpListBtn.setTitleColor(.white, for: .normal)
+    
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -73,12 +71,11 @@ class FistBumpedStatVC: UIViewController {
 
 }
 
-extension FistBumpedStatVC {
+extension StitchStatVC {
     
     func setupButtons() {
         setupBackButton()
-        fistBumpListBtn.titleLabel?.textColor = .white
-    
+      
     }
     
     func loadInsightData() {
@@ -159,7 +156,7 @@ extension FistBumpedStatVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -171,7 +168,7 @@ extension FistBumpedStatVC {
 
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton.setTitleColor(UIColor.white, for: .normal)
-        navigationItem.title = "Fistbump Stats"
+        navigationItem.title = "Stitch Insights"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
@@ -217,7 +214,6 @@ extension FistBumpedStatVC {
     
     
     SwiftLoader.show(title: "", animated: true)
-    
     
     
   }
