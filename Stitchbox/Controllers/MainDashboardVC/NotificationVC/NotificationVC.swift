@@ -321,6 +321,10 @@ extension NotificationVC {
                 }
             case "NEW_STITCH":
                 moveToStichDashboard()
+            case  "APPROVED_STITCH":
+                moveToStichDashboard()
+            case "DENIED_STITCH":
+                moveToStichDashboard()
                 
             default:
                 print(notification.template)

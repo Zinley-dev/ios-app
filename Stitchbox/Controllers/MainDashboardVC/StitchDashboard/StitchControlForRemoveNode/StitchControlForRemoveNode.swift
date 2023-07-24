@@ -1115,8 +1115,11 @@ extension StitchControlForRemoveNode {
     
     private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
         
+        let change = constrainedSize.max.width - ( constrainedSize.max.height * 9 / 16)
+        let padding = change / 2
+        
         buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 55)
-        let buttonsInset = UIEdgeInsets(top: 10, left: 30, bottom: -10, right: 30)
+        let buttonsInset = UIEdgeInsets(top: 10, left: padding, bottom: -10, right: padding)
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
     

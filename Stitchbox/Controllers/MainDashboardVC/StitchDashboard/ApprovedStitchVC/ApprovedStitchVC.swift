@@ -639,6 +639,51 @@ extension ApprovedStitchVC {
     
     func unstitchPost(node: StitchControlForRemoveNode, post: PostModel) {
         
+        if rootPost != nil {
+            
+            presentSwiftLoader()
+            
+            APIManager.shared.unstitch(rootId: rootPost.id, memberId: post.id) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                    
+                case .success(let apiResponse):
+                    
+                    Dispatch.main.async { [weak self]  in
+                        guard let self = self else { return }
+                        SwiftLoader.hide()
+                        if let indexPath = waitPost.firstIndex(of: post) {
+                            
+                            waitPost.removeObject(post)
+                            
+                            waitCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                            
+                            // return the next index if it exists
+                            if indexPath < waitPost.count {
+                                playVideo(index: indexPath)
+                            }
+                            
+                        }
+                    }
+                   
+                case .failure(let error):
+                    Dispatch.main.async { [weak self]  in
+                        guard let self = self else { return }
+                        
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "Couldn't remove stitch at this time, please try again. \(error.localizedDescription)")
+                        
+                    }
+                    
+                }
+            }
+            
+        } else {
+            
+            showErrorAlert("Oops!", msg: "Couldn't remove stitch at this time, please try again")
+            
+        }
 
 
     }

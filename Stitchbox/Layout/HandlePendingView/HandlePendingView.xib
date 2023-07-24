@@ -76,7 +76,7 @@
                             <rect key="frame" x="391.5" y="0.0" width="392.5" height="165"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="80k-t2-E5c">
-                                    <rect key="frame" x="155" y="70" width="83" height="25"/>
+                                    <rect key="frame" x="154.5" y="70" width="84" height="25"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="approve" translatesAutoresizingMaskIntoConstraints="NO" id="tRu-KT-QkI">
                                             <rect key="frame" x="0.0" y="0.0" width="25" height="25"/>
@@ -86,7 +86,7 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Approve" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kqb-U8-hTK">
-                                            <rect key="frame" x="35" y="5" width="48" height="15.5"/>
+                                            <rect key="frame" x="35" y="5" width="49" height="15.5"/>
                                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="13"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>

@@ -164,20 +164,20 @@ extension SB_ChatBot {
     private func setupClearAndGptButtons() {
         Publishers.CombineLatest(toolbarActions.$clearAction, toolbarActions.$isClearActionDisabled)
             .sink { [weak self] clearAction, isDisabled in
-                if let clearImage = UIImage(named: "1024x") {
-                    let imageSize = CGSize(width: 23, height: 23)
+                if let clearImage = UIImage(named: "x-lightmode")?.resize(targetSize: CGSize(width: 15, height: 15)) {
+                    let imageSize = CGSize(width: 15, height: 15)
                     let resizedImage = clearImage.resize(targetSize: imageSize)
                     let clearButton = UIButton(type: .system)
                     clearButton.setImage(resizedImage, for: [])
                     clearButton.addTarget(self, action: #selector(self?.clearTapped), for: .touchUpInside)
                     clearButton.isEnabled = !isDisabled
-                    clearButton.tintColor = .white
+                    
                     
                     self?.gptButton.setTitle(self?.selectedGpt, for: .normal) // Change to "4" if you want to represent GPT-4
                     self?.gptButton.addTarget(self, action: #selector(self?.gptTapped), for: .touchUpInside)
-                    self?.gptButton.tintColor = .black
-                    self?.gptButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-                    
+                    self?.gptButton.titleLabel?.font = FontManager.shared.roboto(.Medium, size: 15)
+                    self?.gptButton.setTitleColor(.black, for: .normal)
+
                     let stackView = UIStackView(arrangedSubviews: [self!.gptButton, clearButton])
                     stackView.axis = .horizontal
                     stackView.spacing = 8
@@ -211,8 +211,8 @@ extension SB_ChatBot: UIPickerViewDelegate, UIPickerViewDataSource {
         var pickerLabel: UILabel? = (view as? UILabel)
         if pickerLabel == nil {
             pickerLabel = UILabel()
-            pickerLabel?.backgroundColor = UIColor.darkGray
-            pickerLabel?.font = UIFont.systemFont(ofSize: 15)
+            pickerLabel?.backgroundColor = UIColor.lightGray // change to light gray
+            pickerLabel?.font = FontManager.shared.roboto(.Regular, size: 15)
             pickerLabel?.textAlignment = .center
         }
         if pickerData[row] != "" {
@@ -220,13 +220,12 @@ extension SB_ChatBot: UIPickerViewDelegate, UIPickerViewDataSource {
         } else {
             pickerLabel?.text = "Error loading"
         }
-        
-       
-     
-        pickerLabel?.textColor = UIColor.white
+
+        pickerLabel?.textColor = UIColor.black // change to black
 
         return pickerLabel!
     }
+
 
     
 }
@@ -248,11 +247,11 @@ extension SB_ChatBot {
         pickerView = UIPickerView()
         pickerView.delegate = self
         pickerView.dataSource = self
-        pickerView.backgroundColor = .white
+        pickerView.backgroundColor = .white // Picker view background for light mode
 
         toolbar.sizeToFit()
-        toolbar.barTintColor = .white
-        toolbar.tintColor = .black
+        toolbar.barTintColor = .white // Toolbar color for light mode
+        toolbar.tintColor = .black // Toolbar item color for light mode
 
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelPicker))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -267,7 +266,6 @@ extension SB_ChatBot {
         // Add constraints for pickerView and toolbar
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         toolbar.translatesAutoresizingMaskIntoConstraints = false
-        pickerView.backgroundColor = .background
 
         NSLayoutConstraint.activate([
             pickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -282,6 +280,7 @@ extension SB_ChatBot {
         self.pickerView.alpha = 1
         self.toolbar.alpha = 1
     }
+
 
     @objc private func cancelPicker() {
         
