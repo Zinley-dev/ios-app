@@ -30,7 +30,7 @@ class ChannelViewController: SBUChannelViewController {
     
     var getRoom: Room!
     var currentRoomID = ""
-    var shouldUnhide = false
+    //var shouldUnhide = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,9 +46,9 @@ class ChannelViewController: SBUChannelViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        changeTabBar(hidden: true)
-        self.tabBarController?.tabBar.isTranslucent = true
-        hideMiddleBtn(vc: self)
+        //changeTabBar(hidden: true)
+        //self.tabBarController?.tabBar.isTranslucent = true
+        //hideMiddleBtn(vc: self)
     
     }
     

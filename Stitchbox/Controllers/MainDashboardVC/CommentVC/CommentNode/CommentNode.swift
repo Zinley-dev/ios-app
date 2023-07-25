@@ -83,7 +83,6 @@ class CommentNode: ASCellNode {
         ]
 
         
-        
         if self.post.reply_to != "" {
            
             if let username = self.post.reply_to_username {
@@ -580,7 +579,6 @@ class CommentNode: ASCellNode {
 
                                             // Customize the navigation bar appearance
                                             nav.navigationBar.barTintColor = .white
-                                            nav.navigationBar.tintColor = .black
                                             nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                                             nav.modalPresentationStyle = .fullScreen
@@ -621,7 +619,6 @@ class CommentNode: ASCellNode {
 
                             // Customize the navigation bar appearance
                             nav.navigationBar.barTintColor = .white
-                            nav.navigationBar.tintColor = .black
                             nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                             nav.modalPresentationStyle = .fullScreen
@@ -696,7 +693,6 @@ class CommentNode: ASCellNode {
 
                 // Customize the navigation bar appearance
                 nav.navigationBar.barTintColor = .white
-                nav.navigationBar.tintColor = .black
                 nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                 nav.modalPresentationStyle = .fullScreen
@@ -750,7 +746,6 @@ class CommentNode: ASCellNode {
                                    
                                     // Customize the navigation bar appearance
                                     nav.navigationBar.barTintColor = .white
-                                    nav.navigationBar.tintColor = .black
                                     nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                                     nav.modalPresentationStyle = .fullScreen

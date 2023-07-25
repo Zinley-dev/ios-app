@@ -122,8 +122,6 @@ class FollowNode: ASCellNode {
         
         if user.name != " " {
             
-            print("name: \(user.name)")
-            
             self.nameNode.attributedText = NSAttributedString(string: user.name ?? "None", attributes: [NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
             
         } else {

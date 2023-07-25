@@ -62,7 +62,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickCopyLink), name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)

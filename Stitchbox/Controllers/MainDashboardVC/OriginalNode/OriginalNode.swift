@@ -344,9 +344,8 @@ extension OriginalNode  {
 extension OriginalNode {
     
     func getStitchTo() {
-        APIManager.shared.getStitchTo(pid: post.id) { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.getStitchTo(pid: post.id) { result in
+           
             switch result {
             case .success(let apiResponse):
               

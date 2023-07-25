@@ -35,7 +35,7 @@ class GroupNode: ASCellNode {
         super.init()
 
         // Set the background color and border of the node's view
-        view.backgroundColor = .darkGray
+        view.backgroundColor = .normalButtonBackground
         view.layer.borderWidth = 3
         
         
@@ -77,7 +77,7 @@ class GroupNode: ASCellNode {
             string: nickname,
             attributes: [
                 .font: FontManager.shared.roboto(.Bold, size: 13),
-                .foregroundColor: UIColor.white,
+                .foregroundColor: UIColor.black,
                 .paragraphStyle: paragraphStyles
             ]
         )

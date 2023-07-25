@@ -28,29 +28,29 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3Ez-1G-1gB">
-                    <rect key="frame" x="140" y="69" width="55" height="55"/>
+                    <rect key="frame" x="150" y="79" width="45" height="45"/>
                     <subviews>
                         <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star white" translatesAutoresizingMaskIntoConstraints="NO" id="MFl-7s-crM">
-                            <rect key="frame" x="10" y="0.0" width="35" height="40"/>
+                            <rect key="frame" x="5" y="0.0" width="35" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="LBv-Jc-7GT"/>
                                 <constraint firstAttribute="width" constant="35" id="z1T-NN-ync"/>
                             </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7iW-rQ-Yzm">
-                            <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
+                            <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stitch list" translatesAutoresizingMaskIntoConstraints="NO" id="zpD-Vx-OOL">
-                                    <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bgh-n1-z5Z">
-                                    <rect key="frame" x="0.0" y="0.0" width="52" height="50"/>
-                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="42" height="40"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="10"/>
                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dqo-Lv-Gj7">
-                                    <rect key="frame" x="2.5" y="2.5" width="50" height="50"/>
+                                    <rect key="frame" x="-2.5" y="-2.5" width="50" height="50"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="50" id="0MG-ED-SeI"/>
@@ -68,13 +68,13 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstItem="dqo-Lv-Gj7" firstAttribute="centerY" secondItem="7iW-rQ-Yzm" secondAttribute="centerY" id="1Id-Fb-L0F"/>
-                                <constraint firstAttribute="width" constant="55" id="7TS-Fd-72Z"/>
+                                <constraint firstAttribute="width" constant="45" id="7TS-Fd-72Z"/>
                                 <constraint firstItem="Bgh-n1-z5Z" firstAttribute="leading" secondItem="7iW-rQ-Yzm" secondAttribute="leading" id="8mD-Ol-XXx"/>
                                 <constraint firstAttribute="bottom" secondItem="zpD-Vx-OOL" secondAttribute="bottom" id="9B3-mt-2xX"/>
                                 <constraint firstItem="zpD-Vx-OOL" firstAttribute="leading" secondItem="7iW-rQ-Yzm" secondAttribute="leading" id="CQL-Hr-P8J"/>
                                 <constraint firstAttribute="trailing" secondItem="zpD-Vx-OOL" secondAttribute="trailing" id="Dg1-PV-WvD"/>
                                 <constraint firstItem="zpD-Vx-OOL" firstAttribute="top" secondItem="7iW-rQ-Yzm" secondAttribute="top" id="Gr0-LG-Nqs"/>
-                                <constraint firstAttribute="height" constant="55" id="J3o-17-rdW"/>
+                                <constraint firstAttribute="height" constant="45" id="J3o-17-rdW"/>
                                 <constraint firstAttribute="bottom" secondItem="Bgh-n1-z5Z" secondAttribute="bottom" constant="5" id="J3p-V2-fjj"/>
                                 <constraint firstAttribute="trailing" secondItem="Bgh-n1-z5Z" secondAttribute="trailing" constant="3" id="gwI-sE-nmA"/>
                                 <constraint firstItem="dqo-Lv-Gj7" firstAttribute="centerX" secondItem="7iW-rQ-Yzm" secondAttribute="centerX" id="hfN-WW-BGD"/>

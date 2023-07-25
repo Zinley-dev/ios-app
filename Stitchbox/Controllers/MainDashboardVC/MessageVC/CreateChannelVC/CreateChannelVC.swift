@@ -69,15 +69,19 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     }()
     
     private lazy var _rightBarButton: UIBarButtonItem = {
-            let rightItem =  UIBarButtonItem(
-                title: "Create",
-                style: .plain,
-                target: self,
-                action: #selector(createChannel)
-            )
-        rightItem.setTitleTextAttributes([.font : SBUFontSet.button2], for: .normal)
+        let rightItem =  UIBarButtonItem(
+            title: "Create",
+            style: .plain,
+            target: self,
+            action: #selector(createChannel)
+        )
+        rightItem.setTitleTextAttributes([
+            .font : SBUFontSet.button2,
+            .foregroundColor: UIColor.black
+        ], for: .normal)
         return rightItem
     }()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -200,7 +204,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         cell.hashTagLabel.text = selectedUsers[indexPath.row].nickname
         cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
         cell.hashTagLabel.backgroundColor = .clear
-        cell.backgroundColor = .secondary
+        cell.backgroundColor = .lightGray
         return cell
     }
 
@@ -446,14 +450,45 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
             }
 
             let userIDs = self.selectedUsers.map { $0.userId }
-            checkForChannelInvitation(channelUrl: channelUrl, user_ids: userIDs)
+            self.checkForChannelInvitation(channelUrl: channelUrl, user_ids: userIDs)
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
-            channelVC.shouldUnhide = true
-            self.navigationController?.pushViewController(channelVC, animated: true)
-            self.navigationController?.viewControllers.remove(at: 1)
+            
+            if let navController = self.navigationController {
+                var viewControllers = navController.viewControllers
+                // Assuming self is the viewController to remove.
+                viewControllers = viewControllers.filter { $0 !== self }
+                viewControllers.append(channelVC) // Adding the new viewController
+                
+                // Set the new viewControllers array.
+                navController.setViewControllers(viewControllers, animated: false)
+            }
         }
+
     }
 
+    
+    func checkForChannelInvitation(channelUrl: String, user_ids: [String]) {
+        
+        
+        APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
+            switch result {
+            case .success(let apiResponse):
+                // Check if the request was successful
+                guard apiResponse.body?["message"] as? String == "success",
+                    let data = apiResponse.body?["data"] as? [String: Any] else {
+                        return
+                }
+                
+                print(data)
+                
+               
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        
+    }
 
 }

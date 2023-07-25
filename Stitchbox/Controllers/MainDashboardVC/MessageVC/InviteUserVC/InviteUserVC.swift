@@ -459,7 +459,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                        // Filter out current user's UID
                        let ids = loadList.filter { $0 != userUID }
                        // Call checkForChannelInvitation function
-                       checkForChannelInvitation(channelUrl: url, user_ids: ids)
+                       self.checkForChannelInvitation(channelUrl: url, user_ids: ids)
                    }
                }
 
@@ -468,12 +468,35 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                // Create an instance of ChannelViewController
                let channelVC = ChannelViewController(channelUrl: channelUrl!, messageListParams: nil)
                // Push ChannelViewController onto the navigation stack
-               channelVC.shouldUnhide = true
+               //channelVC.shouldUnhide = true
                self.navigationController?.pushViewController(channelVC, animated: true)
                // Remove view controllers in the stack after it
                self.navigationController?.viewControllers.removeSubrange(1...4)
            }
        }
+    }
+    
+    func checkForChannelInvitation(channelUrl: String, user_ids: [String]) {
+        
+        
+        APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
+            switch result {
+            case .success(let apiResponse):
+                // Check if the request was successful
+                guard apiResponse.body?["message"] as? String == "success",
+                    let data = apiResponse.body?["data"] as? [String: Any] else {
+                        return
+                }
+                
+                print(data)
+                
+               
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        
     }
 
     

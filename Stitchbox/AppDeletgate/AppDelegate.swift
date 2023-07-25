@@ -61,7 +61,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         attemptRegisterForNotifications(application: application)
         setupStyle()
         setupOneSignal(launchOptions: launchOptions)
-        getGameList()
         activeSpeaker()
         setupVolumeObserver()
         sentrySetup()
@@ -102,7 +101,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let audioSession = AVAudioSession.sharedInstance()
         let currentVolume = audioSession.outputVolume
         
-        if currentVolume > previousVolume {
+        if currentVolume >= 1.0 {
+            consecutiveVolumeDownPresses = 0
+            unmuteVideoIfNeed()
+        } else if currentVolume > previousVolume {
             consecutiveVolumeDownPresses = 0
             unmuteVideoIfNeed()
         } else if currentVolume < previousVolume {
@@ -115,6 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         previousVolume = currentVolume
     }
+
     
     
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
@@ -547,7 +550,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let mlsp = SBDMessageListParams()
         let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
-        channelVC.shouldUnhide = true
+        //channelVC.shouldUnhide = true
         nav.pushViewController(channelVC, animated: true)
         
     }
@@ -569,35 +572,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         vc.present(navigationController, animated: true, completion: nil)
         
     }
-    
-    func getGameList() {
-        
-        global_suppport_game_list.removeAll()
-        
-        APIManager.shared.getGames { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let apiResponse):
-                
-                guard apiResponse.body?["message"] as? String == "success",
-                      let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    
-                    return
-                }
-                
-                let list = data.compactMap { GameList(JSON: $0) }
-                let filteredList = list.filter { $0.name != "Other" }
-                global_suppport_game_list += filteredList
-                
-            case .failure(let error):
-                print(error)
-                
-            }
-        }
-        
-    }
-    
+
     func moveToStichDashboard() {
         
         if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchDashboardVC") as? StitchDashboardVC {

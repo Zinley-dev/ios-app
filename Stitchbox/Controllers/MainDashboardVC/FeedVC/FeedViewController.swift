@@ -97,7 +97,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
@@ -601,8 +601,8 @@ extension FeedViewController {
                         
                         currentCell.isVideoPlaying = true
                         
-                        delay(0.25) { [weak self] in
-                            guard let self = self else { return }
+                        delay(0.25) {
+
                             currentCell.playVideo(index: 0)
                         }
                     }
@@ -982,27 +982,19 @@ extension FeedViewController {
     
     @objc func removePost() {
         
-        if let vc = UIViewController.currentViewController() {
-            if vc is FeedViewController {
+        if let deletingPost = editeddPost {
+           
+            if let indexPath = posts.firstIndex(of: deletingPost) {
                 
-                if let deletingPost = editeddPost {
-                   
-                    if let indexPath = posts.firstIndex(of: deletingPost) {
-                        
-                        posts.removeObject(deletingPost)
+                posts.removeObject(deletingPost)
 
-                        // check if there are no more posts
-                        if posts.isEmpty {
-                            collectionNode.reloadData()
-                        } else {
-                            collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                           
-                        }
-                    }
-                    
+                // check if there are no more posts
+                if posts.isEmpty {
+                    collectionNode.reloadData()
+                } else {
+                    collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                   
                 }
-                
-                
             }
             
         }
@@ -1334,9 +1326,8 @@ extension FeedViewController {
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getSettings { [weak self] result in
-            guard let self = self else { return }
-            
+        APIManager.shared.getSettings {  result in
+           
             switch result {
             case .success(let apiResponse):
                 
@@ -1363,8 +1354,7 @@ extension FeedViewController {
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getme { [weak self] result in
-            guard let self = self else { return }
+        APIManager.shared.getme { result in
             
             switch result {
             case .success(let response):

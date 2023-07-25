@@ -826,9 +826,8 @@ extension ProfileViewController {
     
     func reloadUserInformation(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getme { [weak self] result in
-            guard let self = self else { return }
-            
+        APIManager.shared.getme { result in
+           
             switch result {
             case .success(let response):
                 

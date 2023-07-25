@@ -378,20 +378,39 @@ extension UserProfileVC {
                 return
             }
             
-            checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
+            self.checkForChannelInvitation(channelUrl: channelUrl, user_ids: [self.userId ?? ""])
             
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
             
-            
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-            hideMiddleBtn(vc: self)
-            channelVC.shouldUnhide = true
             self.navigationController?.pushViewController(channelVC, animated: true)
             
         }
         
     }
     
+    
+    func checkForChannelInvitation(channelUrl: String, user_ids: [String]) {
+        
+        
+        APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
+            switch result {
+            case .success(let apiResponse):
+                // Check if the request was successful
+                guard apiResponse.body?["message"] as? String == "success",
+                    let data = apiResponse.body?["data"] as? [String: Any] else {
+                        return
+                }
+                
+                print(data)
+                
+               
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        
+    }
     
     @objc func moreTapped(_ sender: UIButton) {
         
@@ -438,32 +457,6 @@ extension UserProfileVC {
         
     }
     
-    
-    @objc func discordTapped(_ sender: UIButton) {
-        
-        if let discord = userData?.discordUrl, discord != "" {
-            
-            if let username = _AppCoreData.userDataSource.value?.userName {
-                
-                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                
-                // add the actions (buttons)
-                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                    
-                    
-                    self.openLink(link: discord)
-                    
-                }))
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
-            }
-            
-        }
-        
-    }
-
  
     
 }
@@ -486,141 +479,7 @@ extension UserProfileVC {
         }
         
     }
-    
-    @objc func game1Tapped(_ sender: UIButton) {
-        // make sure to check if any game is added unless peform adding game for +
-        
-        if let card = userData?.challengeCard
-        {
-            
-            if card.games.isEmpty == true {
-                
-            } else {
-                
-                let game = card.games[0]
-                
-                if let username = _AppCoreData.userDataSource.value?.userName {
-                    
-                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                    
-                    // add the actions (buttons)
-                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                        
-                        
-                        self.openLink(link: game.link)
-                        
-                    }))
-                    
-                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
-    
-    @objc func game2Tapped(_ sender: UIButton) {
-        
-        if let card = userData?.challengeCard
-        {
-            
-            if card.games.count >= 2 {
-                
-                let game = card.games[1]
-                
-                if let username = _AppCoreData.userDataSource.value?.userName {
-                    
-                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                    
-                    // add the actions (buttons)
-                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                        
-                        
-                        self.openLink(link: game.link)
-                        
-                    }))
-                    
-                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
-    
-    @objc func game3Tapped(_ sender: UIButton) {
-        
-        if let card = userData?.challengeCard
-        {
-            
-            if card.games.count >= 3 {
-                
-                let game = card.games[2]
-                
-                if let username = _AppCoreData.userDataSource.value?.userName {
-                    
-                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                    
-                    // add the actions (buttons)
-                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                        
-                        
-                        self.openLink(link: game.link)
-                        
-                    }))
-                    
-                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
-    
-    @objc func game4Tapped(_ sender: UIButton) {
-        
-        if let card = userData?.challengeCard
-        {
-            
-            if card.games.count >= 4 {
-                
-                let game = card.games[3]
-                
-                if let username = _AppCoreData.userDataSource.value?.userName {
-                    
-                    let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                    
-                    // add the actions (buttons)
-                    alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                        
-                        
-                        self.openLink(link: game.link)
-                        
-                    }))
-                    
-                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
+
     
     func openLink(link: String) {
         
@@ -786,7 +645,7 @@ extension UserProfileVC {
         
         setupBackButton()
         setupShareButton()
-        setupTitle()
+        
     }
     
     

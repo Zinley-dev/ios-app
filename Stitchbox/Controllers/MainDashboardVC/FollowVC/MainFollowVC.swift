@@ -131,7 +131,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         loadingView.backgroundColor = self.view.backgroundColor
         
         
-        delay(1.0) {
+        delay(0.75) {
             
             UIView.animate(withDuration: 0.5) {
                 
@@ -295,12 +295,12 @@ extension MainFollowVC {
             if loadUsername != "" {
                 self.navigationItem.title = loadUsername
             } else {
-                self.navigationItem.title = "Follow"
+                self.navigationItem.title = ""
             }
             
         } else {
             
-            self.navigationItem.title = self.username ?? "Follow"
+            self.navigationItem.title = self.username ?? ""
             
         }
         

@@ -102,8 +102,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     }
     
     
-    
-    
     // MARK: - Gesture Recognizers
     
     @objc func longPressChannel(_ recognizer: UILongPressGestureRecognizer) {
@@ -310,17 +308,24 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                         switch pushOption {
                         case .all, .default, .mentionOnly:
                             cell.notiOffIconImageView.isHidden = true
+                            cell.notiOffIconImageView.image = SBUIconSet.iconNotificationFilled.resize(targetSize: CGSize(width: 12, height: 12)).withTintColor(UIColor.black)
+                           
                             break
                         case .off:
                             cell.notiOffIconImageView.isHidden = false
+                            cell.notiOffIconImageView.image = SBUIconSet.iconNotificationOffFilled.resize(targetSize: CGSize(width: 12, height: 12)).withTintColor(UIColor.black)
+                           
                             break
                         @unknown default:
                             cell.notiOffIconImageView.isHidden = true
+                            cell.notiOffIconImageView.image = SBUIconSet.iconNotificationOffFilled.resize(targetSize: CGSize(width: 12, height: 12)).withTintColor(UIColor.black)
+                    
                             break
                         }
             
             
             cell.frozenImageView.isHidden = !channel.isFrozen
+            cell.frozenImageView.image = SBUIconSet.iconFreeze.resize(targetSize: CGSize(width: 20, height: 20)).withTintColor(UIColor.black)
 
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -434,9 +439,19 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         let mslp = SBDMessageListParams()
         
         let channelVC = ChannelViewController(channelUrl: channel.channelUrl, messageListParams: mslp)
-        hideMiddleBtn(vc: self)
-        channelVC.shouldUnhide = true
-        self.navigationController?.pushViewController(channelVC, animated: true)
+        
+        let nav = UINavigationController(rootViewController: channelVC)
+
+     
+        // Customize the navigation bar appearance
+        nav.navigationBar.barTintColor = .white
+        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+        nav.modalPresentationStyle = .fullScreen
+ 
+       // self.navigationController?.pushViewController(channelVC, animated: true)
+        nav.modalPresentationStyle = .fullScreen
+        self.present(nav, animated: true)
          
     }
 
@@ -484,8 +499,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                         height: iconSize
                 ))
                 leaveTypeView.layer.cornerRadius = iconSize/2
-                leaveTypeView.backgroundColor = UIColor.secondary
-                leaveTypeView.image = UIImage(named: "leave3x")!.resize(targetSize: CGSize(width: 20, height: 20))
+                leaveTypeView.backgroundColor = UIColor.normalButtonBackground
+                leaveTypeView.image = SBUIconSet.iconLeave.resize(targetSize: CGSize(width: 20, height: 20)).withTintColor(UIColor.black)
                 leaveTypeView.contentMode = .center
                 
                 leaveAction.image = leaveTypeView.asImage()
@@ -533,11 +548,13 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 let alarmIcon: UIImage
                 
                 if pushOption == .off {
-                    alarmTypeView.backgroundColor = UIColor.secondary
-                    alarmIcon = UIImage(named: "Noti3x")!.resize(targetSize: CGSize(width: 30, height: 30))
+                    alarmTypeView.backgroundColor = UIColor.normalButtonBackground
+                    alarmIcon = SBUIconSet.iconNotificationFilled.resize(targetSize: CGSize(width: 20, height: 20)).withTintColor(UIColor.black)
+                  
+                    
                 } else {
-                    alarmTypeView.backgroundColor = UIColor.secondary
-                    alarmIcon  = UIImage(named: "muted")!.resize(targetSize: CGSize(width: 30, height: 30))
+                    alarmTypeView.backgroundColor = UIColor.normalButtonBackground
+                    alarmIcon  =  SBUIconSet.iconNotificationOffFilled.resize(targetSize: CGSize(width: 20, height: 20)).withTintColor(UIColor.black)
                 }
                 alarmTypeView.image = alarmIcon
                 alarmTypeView.contentMode = .center
