@@ -1233,7 +1233,7 @@ extension UserProfileVC {
         
         if let id = self.userId {
             
-            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
+            let link = "https://stitchbox.net/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")

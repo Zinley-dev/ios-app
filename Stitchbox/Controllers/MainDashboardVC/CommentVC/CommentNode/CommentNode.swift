@@ -640,13 +640,13 @@ class CommentNode: ASCellNode {
                     
                     let url = string.absoluteString
                     
-                    if url.contains("https://stitchbox.gg/app/account/") {
+                    if url.contains("https://stitchbox.net/app/account/") {
                         
                         if let id = self?.getUIDParameter(from: url) {
                             self?.moveToUserProfileVC(id: id)
                         }
             
-                    } else if url.contains("https://stitchbox.gg/app/post/") {
+                    } else if url.contains("https://stitchbox.net/app/post/") {
                     
                         if let id = self?.getUIDParameter(from: url) {
                             self?.openPost(id: id)

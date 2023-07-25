@@ -367,7 +367,6 @@ extension OriginalNode {
                 DispatchQueue.main.async {
                     print("StitchTo: error \(error)")
                     
-
                 }
 
             }

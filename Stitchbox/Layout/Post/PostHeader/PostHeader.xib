@@ -26,6 +26,7 @@
                 <outlet property="createStitchView" destination="cM4-9B-opX" id="Yyt-8L-kMT"/>
                 <outlet property="followBtn" destination="bQB-3X-6Av" id="l52-ue-0rL"/>
                 <outlet property="stichBtn" destination="al0-EY-6tL" id="qo1-Wf-htW"/>
+                <outlet property="stitchLbl" destination="ntp-fA-FBJ" id="ysa-F9-2ry"/>
                 <outlet property="usernameLbl" destination="nAq-It-wTT" id="lAv-hK-YyV"/>
             </connections>
         </placeholder>

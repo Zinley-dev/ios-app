@@ -852,11 +852,12 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
 
 extension StitchControlForRemoveNode {
     
+    /*
     func didTap(_ videoNode: ASVideoNode) {
         
         soundProcess()
         
-    }
+    } */
     
     
     @objc func soundProcess() {

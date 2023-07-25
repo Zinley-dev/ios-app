@@ -4609,6 +4609,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stitchbox require location to provide more precise result";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone access is needed so you can record video with sound and calling feature";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need your permission to change your avatar profile or send image from your library in message";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use your data to provide you with a personalized experience.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -4653,6 +4654,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stitchbox require location to provide more precise result";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone access is needed so you can record video with sound and calling feature";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need your permission to change your avatar profile or send image from your library in message";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use your data to provide you with a personalized experience.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

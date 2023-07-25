@@ -9,6 +9,8 @@ import UIKit
 
 class PostHeader: UIView {
 
+    
+    @IBOutlet weak var stitchLbl: UILabel!
     @IBOutlet weak var createStitchStack: UIStackView!
     @IBOutlet weak var createStitchView: UIView!
     @IBOutlet weak var usernameLbl: UILabel!

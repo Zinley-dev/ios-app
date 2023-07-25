@@ -1180,7 +1180,7 @@ extension FeedViewController {
         
         if let id = self.editeddPost?.id {
             
-            let link = "https://stitchbox.gg/app/post/?uid=\(id)"
+            let link = "https://stitchbox.net/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -1195,7 +1195,7 @@ extension FeedViewController {
         
         if let id = self.editeddPost?.owner?.id {
             
-            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
+            let link = "https://stitchbox.net/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")
@@ -1234,7 +1234,7 @@ extension FeedViewController {
         }
         
         let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(editeddPost?.id ?? "")")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.net/app/post/?uid=\(editeddPost?.id ?? "")")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in

@@ -30,7 +30,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var isSave = false
     var previousTimeStamp: TimeInterval = 0.0
     var totalWatchedTime: TimeInterval = 0.0
-   
+    var isStitched = false
     var collectionNode: ASCollectionNode?
     var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
@@ -155,13 +155,13 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 guard let self = self else { return }
                 let url = string.absoluteString
                 
-                if url.contains("https://stitchbox.gg/app/account/") {
+                if url.contains("https://stitchbox.net/app/account/") {
                     
                     if let id = self.getUIDParameter(from: url) {
                         self.moveToUserProfileVC(id: id)
                     }
         
-                } else if url.contains("https://stitchbox.gg/app/post/") {
+                } else if url.contains("https://stitchbox.net/app/post/") {
                 
                     if let id = self.getUIDParameter(from: url) {
                         self.openPost(id: id)
@@ -309,7 +309,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.shareCount()
             self.getSaveCount()
             self.checkIfSave()
-           
+            self.checkIsStitched()
         }
        
         
@@ -1028,15 +1028,15 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
 
 
-    
-    
 
 }
 
 extension ReelNode {
-    
+
+  
     func didTap(_ videoNode: ASVideoNode) {
         
+       
         if let vc = UIViewController.currentViewController() {
             if vc is PreviewVC {
                 soundProcess()
@@ -1044,11 +1044,20 @@ extension ReelNode {
                 soundBtn?(self)
             }
         }
+        
+        
     }
     
     
     @objc func soundProcess() {
         
+        if videoNode.isPlaying() {
+            videoNode.pause()
+        } else {
+            videoNode.play()
+        }
+        
+        /*
         if videoNode.muted == true {
             videoNode.muted = false
             shouldMute = false
@@ -1058,9 +1067,49 @@ extension ReelNode {
             videoNode.muted = true
             shouldMute = true
             animateMute()
-        }
+        } */
         
     }
+    
+    func checkIsStitched() {
+        
+        APIManager.shared.isStitchedByMe(rootId: post.id) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+    
+                guard apiResponse.body?["message"] as? String == "success",
+                      let isStitchedGet = apiResponse.body?["data"] as? Bool else {
+                        return
+                }
+                
+                if isStitchedGet == false {
+                    
+                    self.isStitched = false
+                    headerView.stichBtn.isUserInteractionEnabled = true
+                    headerView.stitchLbl.text = "Create Stitch"
+                } else {
+                    
+                    self.isStitched = true
+                    headerView.stichBtn.isUserInteractionEnabled = false
+                    headerView.createStitchStack.isUserInteractionEnabled = false
+                    headerView.stitchLbl.text = "Stitched"
+                }
+                
+  
+            case .failure(let error):
+                self.isStitched = true
+                print(error)
+            }
+        
+        }
+        
+        
+    }
+    
+    
+    
     
     
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
@@ -1431,7 +1480,7 @@ extension ReelNode {
         
         let loadUsername = userDataSource.userName
         
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(post.id)")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.net/app/post/?uid=\(post.id)")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in

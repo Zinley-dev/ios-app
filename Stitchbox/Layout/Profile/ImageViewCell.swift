@@ -159,8 +159,9 @@ class ImageViewCell: UICollectionViewCell {
 
             infoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             infoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
-
+            infoLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -4),  // Add this line
         ])
+
 
 
     }

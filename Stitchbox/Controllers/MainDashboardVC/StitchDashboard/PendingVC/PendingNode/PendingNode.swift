@@ -806,11 +806,12 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
 
 extension PendingNode {
     
+    /*
     func didTap(_ videoNode: ASVideoNode) {
         
         soundProcess()
         
-    }
+    } */
     
     
     @objc func soundProcess() {

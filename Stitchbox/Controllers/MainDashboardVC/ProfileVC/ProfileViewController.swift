@@ -219,7 +219,7 @@ class ProfileViewController: UIViewController {
         
         
         let pendingButton = UIButton(type: .custom)
-        pendingButton.setImage(UIImage(named: "pending-actions-icon-original"), for: [])
+        pendingButton.setImage(UIImage(named: "pending-actions-icon-original")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
         pendingButton.addTarget(self, action: #selector(pendingTapped(_:)), for: .touchUpInside)
         pendingButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let pendingBarButton = UIBarButtonItem(customView: pendingButton)
