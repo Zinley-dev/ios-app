@@ -680,7 +680,6 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
                 
-                SPVC.setupNavBar()
                 SPVC.selectedPost = selectedPost
                 SPVC.startIndex = indexPath.row
                 SPVC.hidesBottomBarWhenPushed = true

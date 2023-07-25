@@ -35,7 +35,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var post: PostModel!
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: ASVideoNode
-    
+    var allowStitch = false
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
     var buttonNode: ASDisplayNode
@@ -229,6 +229,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             } else {
                 
                 checkIfFollow()
+                checkIfFollowedMe()
                 // check
                 
             }
@@ -654,6 +655,37 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
 
 
+    func checkIfFollowedMe() {
+        
+        APIManager.shared.isFollower(uid: post.owner?.id ?? "") { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let isFollowing = apiResponse.body?["data"] as? Bool else {
+                    
+                    return
+                }
+                
+                if isFollowing {
+                    
+                    self.allowStitch = true
+                    
+                } else {
+                    
+                    self.allowStitch = false
+                    
+                }
+                
+            case .failure(let error):
+                print(error)
+                self.allowStitch = false
+                
+            }
+        }
+        
+    }
 
     
     func checkIfFollow() {
@@ -1057,18 +1089,7 @@ extension ReelNode {
             videoNode.play()
         }
         
-        /*
-        if videoNode.muted == true {
-            videoNode.muted = false
-            shouldMute = false
-            animateUnmute()
     
-        } else {
-            videoNode.muted = true
-            shouldMute = true
-            animateMute()
-        } */
-        
     }
     
     func checkIsStitched() {
@@ -1521,29 +1542,52 @@ extension ReelNode {
     
     @objc func stitchTapped() {
         
-        if let vc = UIViewController.currentViewController() {
+        if let vc = UIViewController.currentViewController()  {
             
-            if let update1 = vc as? FeedViewController {
-                update1.editeddPost = post
-            } else if let update1 = vc as? SelectedPostVC {
-                update1.editeddPost = post
-            }
-            
-            general_vc = vc
-            
-            let slideVC = StitchSettingVC()
-            
-            if vc is FeedViewController {
-                slideVC.isFeed = true
+            if allowStitch {
+                
+                if let update1 = vc as? FeedViewController {
+                    update1.editeddPost = post
+                } else if let update1 = vc as? SelectedPostVC {
+                    update1.editeddPost = post
+                }
+                
+                general_vc = vc
+                
+                let slideVC = StitchSettingVC()
+                
+                if vc is FeedViewController {
+                    slideVC.isFeed = true
+                } else {
+                    slideVC.isFeed = false
+                }
+                
+                slideVC.modalPresentationStyle = .custom
+                slideVC.transitioningDelegate = vc.self
+                global_presetingRate = Double(0.30)
+                global_cornerRadius = 35
+                vc.present(slideVC, animated: true, completion: nil)
+                
             } else {
-                slideVC.isFeed = false
+                
+                if let update1 = vc as? FeedViewController {
+                    
+                    if let username = post.owner?.username {
+                        update1.showErrorAlert("Oops!", msg: "@\(username) have to follow you to enable stitch")
+                    }
+                    
+                } else if let update1 = vc as? SelectedPostVC {
+                    
+                    if let username = post.owner?.username {
+                        update1.showErrorAlert("Oops!", msg: "@\(username) have to follow you to enable stitch")
+                    }
+                    
+                }
+                
+                
             }
             
-            slideVC.modalPresentationStyle = .custom
-            slideVC.transitioningDelegate = vc.self
-            global_presetingRate = Double(0.30)
-            global_cornerRadius = 35
-            vc.present(slideVC, animated: true, completion: nil)
+            
             
         }
          

@@ -9,6 +9,7 @@ import UIKit
 import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
+import FLAnimatedImage
 
 class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
@@ -16,6 +17,9 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var blurView: UIView!
     @IBOutlet weak var playTimeBar: CustomSlider!
+    
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
 
     let backButton: UIButton = UIButton(type: .custom)
     var currentIndex: Int?
@@ -57,6 +61,44 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        do {
+            
+            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+            let gifData = try NSData(contentsOfFile: path) as Data
+            let image = FLAnimatedImage(animatedGIFData: gifData)
+            
+            
+            self.loadingImage.animatedImage = image
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        loadingView.backgroundColor = .white
+        navigationController?.setNavigationBarHidden(false, animated: true)
+  
+        
+        delay(1) {
+            
+            UIView.animate(withDuration: 0.5) {
+                
+                self.loadingView.alpha = 0
+                
+            }
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                
+                if self.loadingView.alpha == 0 {
+                    
+                    self.loadingView.isHidden = true
+                    
+                }
+                
+            }
+            
+        }
         
         
         if currentIndex != nil {
@@ -165,7 +207,7 @@ extension PreviewVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back-black") {
+        if let backImage = UIImage(named: "back_icn_white") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,

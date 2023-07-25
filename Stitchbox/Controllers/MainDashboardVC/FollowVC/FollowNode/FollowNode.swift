@@ -139,6 +139,8 @@ class FollowNode: ASCellNode {
         } else {
             avatarNode.image = UIImage.init(named: "defaultuser")
         }
+        
+        
     }
 
     

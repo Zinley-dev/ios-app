@@ -305,8 +305,7 @@ class PostVC: UIViewController {
             self.navigationController?.pushViewController(SPVC, animated: true)
             
         }
-        
-
+    
         
     }
     
