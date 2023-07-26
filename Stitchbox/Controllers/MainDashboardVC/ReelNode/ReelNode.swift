@@ -230,6 +230,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 
                 checkIfFollow()
                 checkIfFollowedMe()
+                checkIsStitched()
                 // check
                 
             }
@@ -310,7 +311,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.shareCount()
             self.getSaveCount()
             self.checkIfSave()
-            self.checkIsStitched()
         }
        
         

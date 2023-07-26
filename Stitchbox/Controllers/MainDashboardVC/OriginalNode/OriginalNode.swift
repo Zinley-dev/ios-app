@@ -473,13 +473,7 @@ extension OriginalNode {
         }
     }
 
-    func cleanupPosts(collectionNode: ASCollectionNode) {
-
-    }
-
-
-
-
+   
     func addAnimatedLabelToTop() {
         animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
         animatedLabel.translatesAutoresizingMaskIntoConstraints = false

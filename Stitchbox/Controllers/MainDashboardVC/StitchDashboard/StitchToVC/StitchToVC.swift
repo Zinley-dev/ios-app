@@ -643,7 +643,7 @@ extension StitchToVC {
             
             presentSwiftLoader()
             
-            APIManager.shared.unstitch(rootId: rootPost.id, memberId: post.id) { [weak self] result in
+            APIManager.shared.unstitch(rootId: post.id, memberId: rootPost.id) { [weak self] result in
                 guard let self = self else { return }
                 
                 switch result {

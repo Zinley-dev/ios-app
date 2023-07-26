@@ -660,7 +660,7 @@ extension FeedViewController {
             if currentIndex != newPlayingIndex {
                 if let currentIndex = currentCell.currentIndex {
                     currentCell.pauseVideo(index: currentIndex)
-                    currentCell.cleanupPosts(collectionNode: currentCell.collectionNode)
+                    //currentCell.cleanupPosts(collectionNode: currentCell.collectionNode)
                 }
 
                 currentIndex = newPlayingIndex
