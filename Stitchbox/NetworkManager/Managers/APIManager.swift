@@ -1054,4 +1054,14 @@ extension APIManager {
       completion(result)
     }
   }
+  func countPostStitch(pid: String, completion: @escaping APICompletion) {
+    postStitchManager.request(.countRootStitch(rootId: pid)) { result in
+      completion(result)
+    }
+  }
+  func countMyStitch(completion: @escaping APICompletion) {
+    postStitchManager.request(.countMyStitch) { result in
+      completion(result)
+    }
+  }
 }
