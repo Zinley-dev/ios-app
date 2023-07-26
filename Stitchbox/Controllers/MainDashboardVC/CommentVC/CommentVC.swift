@@ -150,6 +150,9 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         commentBtn.setTitle("", for: .normal)
         getInitCmt()
         
+        cmtTxtView.backgroundColor = .white
+        cmtTxtView.textColor = .black
+        
         //
         
         NotificationCenter.default.addObserver(self, selector: #selector(CommentVC.pinRequest), name: (NSNotification.Name(rawValue: "pin_cmt")), object: nil)
@@ -259,7 +262,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                 print(error.localizedDescription)
             }
             
-            loadingView.backgroundColor = .black
+            loadingView.backgroundColor = .white
             
         }
         
@@ -584,6 +587,8 @@ extension CommentVC {
             placeholderLabel = UILabel()
             placeholderLabel.text = "Add comment..."
             placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
+            placeholderLabel.backgroundColor = .white
+            placeholderLabel.textColor = .black
             placeholderLabel.sizeToFit()
             cmtTxtView.addSubview(placeholderLabel)
             commentBtn.isEnabled = true
@@ -597,6 +602,8 @@ extension CommentVC {
             placeholderLabel.text = "Comments are turned off"
             placeholderLabel.font = UIFont.systemFont(ofSize: (cmtTxtView.font?.pointSize)!)
             placeholderLabel.sizeToFit()
+            placeholderLabel.backgroundColor = .white
+            placeholderLabel.textColor = .black
             cmtTxtView.addSubview(placeholderLabel)
             cmtTxtView.isUserInteractionEnabled = false
             commentBtn.isEnabled = false

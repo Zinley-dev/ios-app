@@ -119,7 +119,7 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
     
     func setupAddButton() {
         
-        addButton.setImage(UIImage.init(named: "4x_add"), for: [])
+        addButton.setImage(UIImage.init(named: "plus-lightmode")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
         addButton.addTarget(self, action: #selector(onInviteUser(_:)), for: .touchUpInside)
         addButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
        

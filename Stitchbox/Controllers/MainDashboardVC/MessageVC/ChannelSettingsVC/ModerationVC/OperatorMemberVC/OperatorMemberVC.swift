@@ -51,9 +51,9 @@ class OperatorMemberVC: UIViewController, UINavigationControllerDelegate, UITabl
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -104,7 +104,7 @@ class OperatorMemberVC: UIViewController, UINavigationControllerDelegate, UITabl
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -129,7 +129,7 @@ class OperatorMemberVC: UIViewController, UINavigationControllerDelegate, UITabl
     
     func setupAddButton() {
         
-        addButton.setImage(UIImage.init(named: "4x_add"), for: [])
+        addButton.setImage(UIImage(named: "plus-lightmode")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
         addButton.addTarget(self, action: #selector(onPromoteUsers(_:)), for: .touchUpInside)
         addButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
        
@@ -178,8 +178,8 @@ class OperatorMemberVC: UIViewController, UINavigationControllerDelegate, UITabl
         }
 
         cell.configure(type: .channelMembers, user: user, operatorMode: self.channel?.myRole == .operator)
-        cell.theme = .dark
-        cell.contentView.backgroundColor = self.view.backgroundColor
+        cell.theme = .light
+        cell.contentView.backgroundColor = .white
         cell.selectionStyle = .none
         cell.moreButton.addTarget(self, action: #selector(actionButtonPressed(sender:)), for: .touchUpInside)
         cell.moreButton.tag = indexPath.row

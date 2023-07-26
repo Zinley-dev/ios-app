@@ -24,6 +24,7 @@ class PostVC: UIViewController {
         case video
     }
     
+    @IBOutlet weak var addView: UIView!
     var stitchPost: PostModel!
     var itemList = [GameList]()
     @IBOutlet weak var stitchView: UIView!
@@ -76,6 +77,7 @@ class PostVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        addView.backgroundColor = .normalButtonBackground
         setupNavBar()
         global_fullLink = ""
         global_host = ""
@@ -253,8 +255,8 @@ class PostVC: UIViewController {
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
         publicLbl.textColor = .black
-        followLbl.textColor = .black
-        onlyMeLbl.textColor = .black
+        followLbl.textColor = .lightGray
+        onlyMeLbl.textColor = .lightGray
         
     }
     
@@ -267,9 +269,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .black
+        publicLbl.textColor = .lightGray
         followLbl.textColor = .black
-        onlyMeLbl.textColor = .black
+        onlyMeLbl.textColor = .lightGray
     }
     
     @IBAction func privateBtnPressed(_ sender: Any) {
@@ -281,8 +283,8 @@ class PostVC: UIViewController {
         privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
         
         
-        publicLbl.textColor = .black
-        followLbl.textColor = .black
+        publicLbl.textColor = .lightGray
+        followLbl.textColor = .lightGray
         onlyMeLbl.textColor = .black
         
         
@@ -377,8 +379,8 @@ extension PostVC {
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
                                 self.publicLbl.textColor = .black
-                                self.followLbl.textColor = .black
-                                self.onlyMeLbl.textColor = .black
+                                self.followLbl.textColor = .lightGray
+                                self.onlyMeLbl.textColor = .lightGray
                                 
                             }
    
@@ -392,9 +394,9 @@ extension PostVC {
                                 self.followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
-                                self.publicLbl.textColor = .black
+                                self.publicLbl.textColor = .lightGray
                                 self.followLbl.textColor = .black
-                                self.onlyMeLbl.textColor = .black
+                                self.onlyMeLbl.textColor = .lightGray
                                 
                             }
                             
@@ -410,8 +412,8 @@ extension PostVC {
                                 self.privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
                                         
                                         
-                                self.publicLbl.textColor = .black
-                                self.followLbl.textColor = .black
+                                self.publicLbl.textColor = .lightGray
+                                self.followLbl.textColor = .lightGray
                                 self.onlyMeLbl.textColor = .black
                                 
                             }
@@ -578,9 +580,9 @@ extension PostVC {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .black
-        followLbl.textColor = .black
-        onlyMeLbl.textColor = .black
+        publicLbl.textColor = .lightGray
+        followLbl.textColor = .lightGray
+        onlyMeLbl.textColor = .lightGray
         
     }
     
@@ -628,7 +630,7 @@ extension PostVC {
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
-        createButton.backgroundColor = .red
+        createButton.backgroundColor = .secondary
         createButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
         customView.addSubview(createButton)
@@ -717,9 +719,9 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
   
         cell.hashTagLabel.text = hashtagList[indexPath.row]
-        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.font = FontManager.shared.roboto(.Regular, size: 12)
         cell.hashTagLabel.backgroundColor = .clear
-        cell.backgroundColor = .secondary
+        cell.backgroundColor = hashtagPurple
         
         return cell
         

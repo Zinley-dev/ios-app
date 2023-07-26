@@ -75,16 +75,15 @@ class FollowerVC: UIViewController {
         removeView.layer.masksToBounds = true
         //removeView.layer.borderWidth = 1
         removeView.layer.cornerRadius = iconSize/2
-        removeView.backgroundColor =  .secondary
-        removeView.image = xBtn
+        removeView.backgroundColor =  .clear
+        removeView.image = SBUIconSet.iconRemove.resize(targetSize: CGSize(width: 22, height: 22)).withTintColor(.black)
         removeView.contentMode = .center
         
         removeAction.image = removeView.asImage()
-        removeAction.backgroundColor = .background
-        
+        removeAction.backgroundColor = .white
+       
         
         return UISwipeActionsConfiguration(actions: [removeAction])
-        
         
         
     }

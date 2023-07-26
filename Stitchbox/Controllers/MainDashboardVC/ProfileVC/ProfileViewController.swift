@@ -112,7 +112,7 @@ class ProfileViewController: UIViewController {
         
         //refreshFollow
         collectionView.delegate = self
-        
+        collectionView.backgroundColor = .white
         
         pullControl.tintColor = UIColor.secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)

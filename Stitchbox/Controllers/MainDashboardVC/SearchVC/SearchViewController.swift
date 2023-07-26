@@ -8,6 +8,7 @@
 import UIKit
 import AsyncDisplayKit
 import FLAnimatedImage
+import SendBirdUIKit
 
 class SearchViewController: UIViewController, UINavigationControllerDelegate, UISearchBarDelegate {
     
@@ -119,6 +120,7 @@ extension SearchViewController {
                     actionHandler(true)
                 }
                 
+                
                 let removeView = UIImageView(
                     frame: CGRect(
                         x: (size-iconSize)/2,
@@ -130,12 +132,12 @@ extension SearchViewController {
                 removeView.layer.masksToBounds = true
                 //removeView.layer.borderWidth = 1
                 removeView.layer.cornerRadius = iconSize/2
-                removeView.backgroundColor =  .secondary
-                removeView.image = xBtn
+                removeView.backgroundColor =  .clear
+                removeView.image = SBUIconSet.iconRemove.resize(targetSize: CGSize(width: 22, height: 22)).withTintColor(.black)
                 removeView.contentMode = .center
                 
                 removeAction.image = removeView.asImage()
-                removeAction.backgroundColor = .background
+                removeAction.backgroundColor = .white
                
                 
                 return UISwipeActionsConfiguration(actions: [removeAction])

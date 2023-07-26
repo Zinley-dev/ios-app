@@ -20,6 +20,10 @@ import AppsFlyerLib
 import AsyncDisplayKit
 
 
+let incomingCallGreen = UIColor(red: 76.0/255.0, green: 217.0/255.0, blue: 100.0/255.0, alpha: 1.0)
+let hashtagPurple = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1.0)
+
+
 let saveImage = UIImage.init(named: "saved.filled")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 let unsaveImage = UIImage.init(named: "save")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 
@@ -859,6 +863,7 @@ class CustomSlider: UISlider {
     @IBInspectable var highlightedTrackHeight: CGFloat = 7.0
     @IBInspectable var thumbRadius: CGFloat = 3
     @IBInspectable var highlightedThumbRadius: CGFloat = 10
+    @IBInspectable var hitBoxSize: CGFloat = 40 // Size of hit box area
     
     private lazy var thumbView: UIView = {
         let thumb = UIView()
@@ -876,15 +881,24 @@ class CustomSlider: UISlider {
         self.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
     }
     
-    private func thumbImage(radius: CGFloat) -> UIImage {
-        thumbView.frame = CGRect(x: 0, y: radius / 2, width: radius * 2, height: radius * 2)
-        thumbView.layer.cornerRadius = radius
-        
-        let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
-        return renderer.image { rendererContext in
-            thumbView.layer.render(in: rendererContext.cgContext)
-        }
+    
+    // Override hit test to expand touch area
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let expandedBounds = bounds.insetBy(dx: -(hitBoxSize / 2 - thumbRadius), dy: -(hitBoxSize / 2 - thumbRadius))
+        return expandedBounds.contains(point)
     }
+
+    
+    private func thumbImage(radius: CGFloat) -> UIImage {
+            thumbView.frame = CGRect(x: 0, y: radius / 2, width: radius * 2, height: radius * 2)
+            thumbView.layer.cornerRadius = radius
+            
+            let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
+            return renderer.image { rendererContext in
+                thumbView.layer.render(in: rendererContext.cgContext)
+            }
+        }
+
     
     @objc func sliderDidStartSliding() {
         processOnSliding()
@@ -897,16 +911,21 @@ class CustomSlider: UISlider {
     }
     
     func startLayout() {
-        setThumbImage(thumbImage(radius: highlightedThumbRadius), for: .normal)
+        let thumb = thumbImage(radius: highlightedThumbRadius)
+        setThumbImage(thumb, for: .normal)
         trackHeight = highlightedTrackHeight
+        hitBoxSize = highlightedThumbRadius * 2 + 40 // You might want to adjust this value
         setNeedsDisplay()
     }
-    
+
     func endLayout() {
-        setThumbImage(thumbImage(radius: thumbRadius), for: .normal)
+        let thumb = thumbImage(radius: thumbRadius)
+        setThumbImage(thumb, for: .normal)
         trackHeight = 2
+        hitBoxSize = thumbRadius * 2 + 40 // You might want to adjust this value
         setNeedsDisplay()
     }
+
     
     override func trackRect(forBounds bounds: CGRect) -> CGRect {
         var newRect = super.trackRect(forBounds: bounds)

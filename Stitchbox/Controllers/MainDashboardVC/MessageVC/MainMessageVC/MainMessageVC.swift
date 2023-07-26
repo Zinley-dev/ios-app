@@ -215,7 +215,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
         voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
         voiceCallButton.frame = CGRect(x: 0, y: 0, width: 70, height: 30)
-        voiceCallButton.backgroundColor = .secondary
+        voiceCallButton.backgroundColor = incomingCallGreen
         voiceCallButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 70, height: 30))
         customView.addSubview(voiceCallButton)

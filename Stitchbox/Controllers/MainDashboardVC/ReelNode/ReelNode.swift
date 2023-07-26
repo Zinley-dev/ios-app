@@ -1573,13 +1573,25 @@ extension ReelNode {
                 if let update1 = vc as? FeedViewController {
                     
                     if let username = post.owner?.username {
-                        update1.showErrorAlert("Oops!", msg: "@\(username) have to follow you to enable stitch")
+                        
+                        if let myUsername = _AppCoreData.userDataSource.value?.userName {
+                            update1.showErrorAlert("Hi \(myUsername)!", msg: "@\(username) have to follow you to enable stitch")
+                        } else {
+                            update1.showErrorAlert("Oops!", msg: "@\(username) have to follow you to enable stitch.")
+                        }
+                        
                     }
                     
                 } else if let update1 = vc as? SelectedPostVC {
                     
                     if let username = post.owner?.username {
-                        update1.showErrorAlert("Oops!", msg: "@\(username) have to follow you to enable stitch")
+                        
+                        if let myUsername = _AppCoreData.userDataSource.value?.userName {
+                            update1.showErrorAlert("Hi \(myUsername)!", msg: "@\(username) have to follow you to enable stitch")
+                        } else {
+                            update1.showErrorAlert("Oops!", msg: "@\(username) have to follow you to enable stitch")
+                        }
+                        
                     }
                     
                 }

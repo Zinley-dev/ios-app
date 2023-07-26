@@ -202,9 +202,9 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
         cell.hashTagLabel.text = selectedUsers[indexPath.row].nickname
-        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.font = FontManager.shared.roboto(.Regular, size: 12)
         cell.hashTagLabel.backgroundColor = .clear
-        cell.backgroundColor = .lightGray
+        cell.backgroundColor = hashtagPurple
         return cell
     }
 

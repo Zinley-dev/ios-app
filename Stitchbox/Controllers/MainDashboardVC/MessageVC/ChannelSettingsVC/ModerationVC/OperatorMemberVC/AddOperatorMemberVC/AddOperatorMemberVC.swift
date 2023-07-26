@@ -65,7 +65,7 @@ class AddOperatorMemberVC: UIViewController, UISearchBarDelegate, UINavigationCo
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -76,8 +76,6 @@ class AddOperatorMemberVC: UIViewController, UISearchBarDelegate, UINavigationCo
         }
         
         backButton.addTarget(self, action: #selector(onClickBack), for: .touchUpInside)
-        backButton.setTitleColor(UIColor.white, for: .normal)
-        backButton.setTitle("", for: .normal)
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
         
         self.navigationItem.leftBarButtonItem = backButtonBarButton
@@ -92,7 +90,10 @@ class AddOperatorMemberVC: UIViewController, UISearchBarDelegate, UINavigationCo
                 target: self,
                 action: #selector(PromoteUsers)
             )
-        rightItem.setTitleTextAttributes([.font : SBUFontSet.button2], for: .normal)
+        rightItem.setTitleTextAttributes([
+            .font : SBUFontSet.button2,
+            .foregroundColor: UIColor.black
+        ], for: .normal)
         return rightItem
     }()
     
@@ -142,9 +143,9 @@ class AddOperatorMemberVC: UIViewController, UISearchBarDelegate, UINavigationCo
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -218,10 +219,12 @@ class AddOperatorMemberVC: UIViewController, UISearchBarDelegate, UINavigationCo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelectedUserCollectionViewCell.cellReuseIdentifier(), for: indexPath) as! SelectedUserCollectionViewCell
         cell.nicknameLabel.text = selectedUsers[indexPath.row].nickname
+        cell.nicknameLabel.font = FontManager.shared.roboto(.Regular, size: 12)
+        cell.nicknameLabel.backgroundColor = .clear
+        cell.backgroundColor = .lightGray
         return cell
     }
 
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.selectedUsers.remove(at: indexPath.row)
         self.rightBarButton?.isEnabled = !self.selectedUsers.isEmpty

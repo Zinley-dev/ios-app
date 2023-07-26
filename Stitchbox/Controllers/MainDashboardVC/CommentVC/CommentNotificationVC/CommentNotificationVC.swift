@@ -168,6 +168,9 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         cmtTxtView.returnKeyType = .default
         
+        cmtTxtView.backgroundColor = .white
+        cmtTxtView.textColor = .black
+        
         //
         
         tView.addSubview(tableNode.view)
@@ -233,6 +236,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
             placeholderLabel.textColor = UIColor.black
             placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+            placeholderLabel.backgroundColor = .white
+            placeholderLabel.textColor = .black
             cmtTxtView.isUserInteractionEnabled = true
         } else {
             cmtTxtView.delegate = self
@@ -245,6 +250,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             commentBtn.isEnabled = false
             placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
             placeholderLabel.textColor = UIColor.black
+            placeholderLabel.backgroundColor = .white
+            placeholderLabel.textColor = .black
             placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
         }
         
@@ -273,7 +280,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             print(error.localizedDescription)
         }
         
-        loadingView.backgroundColor = .black
+        loadingView.backgroundColor = .white
     }
     
     override func viewDidDisappear(_ animated: Bool) {

@@ -255,10 +255,10 @@ class ChannelViewController: SBUChannelViewController {
             voiceCallButton.setTitle("Join ", for: .normal)
             voiceCallButton.setTitleColor(.white, for: .normal)
             voiceCallButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-            voiceCallButton.setImage(UIImage(named: "call 1")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
+            voiceCallButton.setImage(UIImage(named: "icCallFilled")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
             voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
             voiceCallButton.frame = CGRect(x: 0, y: 0, width: 70, height: 30)
-            voiceCallButton.backgroundColor = .secondary
+            voiceCallButton.backgroundColor = .green
             voiceCallButton.cornerRadius = 15
 
             let customView = UIView(frame: CGRect(x: 0, y: 0, width: 70, height: 30))

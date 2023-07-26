@@ -88,7 +88,10 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 target: self,
                 action: #selector(InviteUsers)
             )
-        rightItem.setTitleTextAttributes([.font : SBUFontSet.button2], for: .normal)
+        rightItem.setTitleTextAttributes([
+            .font : SBUFontSet.button2,
+            .foregroundColor: UIColor.black
+        ], for: .normal)
         return rightItem
     }()
     
@@ -230,7 +233,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         cell.hashTagLabel.text = selectedUsers[indexPath.row].nickname
         cell.hashTagLabel.font = FontManager.shared.roboto(.Regular, size: 12)
         cell.hashTagLabel.backgroundColor = .clear
-        cell.backgroundColor = .secondary
+        cell.backgroundColor = hashtagPurple
         return cell
     }
 
