@@ -2738,7 +2738,7 @@
                                                 <rect key="frame" x="0.0" y="55" width="343" height="40"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="tSn-Wd-rvW">
-                                                        <rect key="frame" x="15.999999999999993" y="5" width="123.33333333333331" height="30"/>
+                                                        <rect key="frame" x="16.000000000000007" y="5" width="119.66666666666669" height="30"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="moderator" translatesAutoresizingMaskIntoConstraints="NO" id="H6y-Fk-BbU">
                                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
@@ -2747,8 +2747,8 @@
                                                                     <constraint firstAttribute="height" constant="30" id="ahS-q9-nwt"/>
                                                                 </constraints>
                                                             </imageView>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Moderatior" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cb6-Q4-EDQ">
-                                                                <rect key="frame" x="49.999999999999993" y="0.0" width="73.333333333333314" height="30"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Moderator" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cb6-Q4-EDQ">
+                                                                <rect key="frame" x="50.000000000000007" y="0.0" width="69.666666666666686" height="30"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
@@ -9248,7 +9248,7 @@
         <image name="logout-icon" width="24" height="24"/>
         <image name="logout-lightmode-123" width="24" height="24"/>
         <image name="members-icon" width="32" height="32"/>
-        <image name="moderator" width="24" height="24"/>
+        <image name="moderator" width="21" height="21"/>
         <image name="notifications-icon" width="512" height="512"/>
         <image name="onlyme" width="17" height="23"/>
         <image name="play" width="89" height="71"/>
