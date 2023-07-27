@@ -1864,6 +1864,7 @@ public enum PostStitchApi {
   case isStitchByMe(rootId: String)
   case getStitchWaitList(rootId: String, page: Int)
   case getMyStitch(page: Int)
+  case getSuggestStitch(page: Int)
   case getMyPostInWaitlist(page: Int)
   case getMyNonStitchPost(page: Int)
   case getMyWaitlist(page: Int)
@@ -1895,6 +1896,8 @@ extension PostStitchApi: EndPointType {
         return "/denied"
       case .getMyStitch(let page):
         return "/my-stitch?page=\(page)"
+      case .getSuggestStitch(let page):
+        return "/suggest-stitch?page=\(page)"
       case .getMyNonStitchPost(let page):
         return "/my-non-stitch?page=\(page)"
       case .getMyPostInWaitlist(let page):
@@ -1936,6 +1939,8 @@ extension PostStitchApi: EndPointType {
         return .post
       case .getMyStitch:
         return .get
+      case .getSuggestStitch:
+        return .get
       case .getMyNonStitchPost:
         return .get
       case .getMyWaitlist:
@@ -1972,6 +1977,8 @@ extension PostStitchApi: EndPointType {
       case .denied(body: let body):
         return .requestParameters(parameters: body)
       case .getMyStitch:
+        return .request
+      case .getSuggestStitch:
         return .request
       case .getMyNonStitchPost:
         return .request
@@ -2037,6 +2044,53 @@ extension ShareApi: EndPointType {
         return .request
       case .countByRoot:
         return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+    
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-Client-Timezone": "\(secondsFromGMT)"]
+  }
+  
+}
+
+public enum UserContactApi {
+  case create(body: [String: Any])
+  case createBulk(body: [[String: Any]])
+}
+extension UserContactApi: EndPointType {
+  var path: String {
+    switch self {
+      case .create:
+        return "/"
+      case .createBulk:
+        return "/bulk"
+      
+    }
+  }
+  
+  var module: String {
+    return "/user-contact"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .create:
+        return .post
+      case .createBulk:
+        return .post
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .create(let body):
+        return .requestParameters(parameters: body)
+      case .createBulk(let body):
+        return .requestParameters(parameters: body)
     }
   }
   
