@@ -74,6 +74,7 @@ class AccountActivityNode: ASCellNode {
         let time = NSAttributedString(string: "\(timeAgoSinceDate(date!, numericDates: true))", attributes: timeAttributes)
     
         timeNode.attributedText = time
+        
 
         if activity.content == "follows an account" {
             
@@ -144,6 +145,21 @@ class AccountActivityNode: ASCellNode {
             
             descriptionNode.attributedText = NSAttributedString(string: "You just uploaded a new video", attributes: textAttributes)
             
+        } else if activity.content == "Accept stitch" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You just accepted a stitch", attributes: textAttributes)
+            
+        } else if activity.content == "Create new stitch" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You just stitched to other content", attributes: textAttributes)
+            
+        } else if activity.content == "Denied stitch" {
+            
+            descriptionNode.attributedText = NSAttributedString(string: "You just denied a stitch", attributes: textAttributes)
+            
+        } else {
+        
+            descriptionNode.attributedText = NSAttributedString(string: "\(activity.content ?? "Unknown")", attributes: textAttributes)
         }
         
         
