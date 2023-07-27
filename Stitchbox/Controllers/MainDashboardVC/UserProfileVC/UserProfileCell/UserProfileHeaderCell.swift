@@ -19,6 +19,9 @@ class UserProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var avatarImage: UIImageView!
     //@IBOutlet weak var proImg: UIImageView!
     
+    @IBOutlet weak var linkStackView: UIStackView!
+    @IBOutlet weak var linkLbl: UILabel!
+    
     let kCONTENT_XIB_NAME = "ProfileView"
     
     @IBOutlet weak var followerStack: UIStackView!

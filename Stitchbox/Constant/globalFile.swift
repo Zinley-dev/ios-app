@@ -608,6 +608,76 @@ func unmuteVideoIfNeed() {
                 
             }
             
+        } else if vc is PreviewVC {
+            
+            if let update1 = vc as? PreviewVC {
+                
+                if update1.currentIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                        
+                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
+                            
+                            cell2.videoNode.muted = false
+                            shouldMute = false
+                        }
+                        
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        } else if vc is StitchDashboardVC {
+            
+            if let update1 = vc as? StitchDashboardVC {
+                
+                
+                if update1.PendingVC.view.isHidden == false {
+                    
+                    
+                    if update1.PendingVC.currentIndex != nil {
+                        
+                        if let cell = update1.PendingVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.PendingVC.currentIndex!, section: 0)) as? PendingNode {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                        }
+                        
+                    }
+                    
+                } else if update1.StitchToVC.view.isHidden == false {
+                    
+                    if update1.StitchToVC.currentIndex != nil {
+                        
+                        if let cell = update1.StitchToVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.StitchToVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                        }
+                        
+                    }
+                    
+                } else if update1.ApprovedStitchVC.view.isHidden == false {
+                    
+                    
+                    if update1.ApprovedStitchVC.currentIndex != nil {
+                        
+                        if let cell = update1.ApprovedStitchVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.ApprovedStitchVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
         }
              
         

@@ -454,15 +454,23 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
             
-            if let navController = self.navigationController {
-                var viewControllers = navController.viewControllers
-                // Assuming self is the viewController to remove.
-                viewControllers = viewControllers.filter { $0 !== self }
-                viewControllers.append(channelVC) // Adding the new viewController
-                
-                // Set the new viewControllers array.
-                navController.setViewControllers(viewControllers, animated: false)
-            }
+            let nav = UINavigationController(rootViewController: channelVC)
+
+         
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+            nav.modalPresentationStyle = .fullScreen
+     
+           // self.navigationController?.pushViewController(channelVC, animated: true)
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true)
+            
+            self.navigationController?.popViewController(animated: true)
+            
+            
+            
         }
 
     }

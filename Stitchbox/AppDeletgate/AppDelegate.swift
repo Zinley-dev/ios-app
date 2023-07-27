@@ -241,9 +241,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUGlobals.imageResizingSize = CGSize(width: 480, height: 480)
         SBUTheme.componentTheme.barItemTintColor = UIColor.black
         
-        SBUTheme.messageCellTheme.leftBackgroundColor = UIColor(red: 51, green: 51, blue: 51)
+        SBUTheme.messageCellTheme.leftBackgroundColor = .normalButtonBackground
         SBUTheme.messageCellTheme.rightBackgroundColor = UIColor(red: 53, green: 46, blue: 113)
-        SBUTheme.messageCellTheme.userMessageLeftTextColor = UIColor.white
+        SBUTheme.messageCellTheme.userMessageLeftTextColor = UIColor.black
         SBUTheme.messageCellTheme.userMessageRightTextColor = UIColor.white
         SBUTheme.overlayTheme.componentTheme.backgroundColor = .white
         SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = .white
@@ -529,11 +529,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     nav.popBack(4)
                 } else {
                     
-                    if currentVC is FeedViewController || currentVC is TrendingVC || currentVC is ProfileViewController || currentVC is MainMessageVC {
-                        self.presentChatWithNavAndHideBar(nav: nav, channelUrl: channelUrl)
-                    } else {
-                        self.presentChatWithNav(nav: nav, channelUrl: channelUrl)
-                    }
+                    self.presentChatWithoutNav(vc: currentVC, channelUrl: channelUrl)
                     
                 }
                 
@@ -545,31 +541,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         
     }
+
     
-    func presentChatWithNavAndHideBar(nav: UINavigationController, channelUrl: String) {
-        
-        let mlsp = SBDMessageListParams()
-        let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
-        //channelVC.shouldUnhide = true
-        nav.pushViewController(channelVC, animated: true)
-        
-    }
-    
-    func presentChatWithNav(nav: UINavigationController, channelUrl: String) {
-        
-        let mlsp = SBDMessageListParams()
-        let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
-        nav.pushViewController(channelVC, animated: true)
-        
-    }
     
     func presentChatWithoutNav(vc: UIViewController, channelUrl: String) {
         
         let mlsp = SBDMessageListParams()
         let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
-        let navigationController = UINavigationController(rootViewController: channelVC)
-        navigationController.modalPresentationStyle = .fullScreen
-        vc.present(navigationController, animated: true, completion: nil)
+        
+        
+        let nav = UINavigationController(rootViewController: channelVC)
+
+     
+        // Customize the navigation bar appearance
+        nav.navigationBar.barTintColor = .white
+        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+        nav.modalPresentationStyle = .fullScreen
+ 
+       // self.navigationController?.pushViewController(channelVC, animated: true)
+        nav.modalPresentationStyle = .fullScreen
+        vc.present(nav, animated: true)
         
     }
 

@@ -15,7 +15,8 @@ class ProfileHeaderCell: UICollectionViewCell {
     
     @IBOutlet weak var descriptionLbl: UILabel!
     @IBOutlet weak var editProfileBtn: UIButton!
-   
+    @IBOutlet weak var linkStackView: UIStackView!
+    @IBOutlet weak var linkLbl: UILabel!
     @IBOutlet weak var insightBtn: UIButton!
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet weak var numberOfFollowing: UILabel!

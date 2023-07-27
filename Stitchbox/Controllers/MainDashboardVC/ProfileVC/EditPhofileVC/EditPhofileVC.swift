@@ -93,7 +93,7 @@ class EditPhofileVC: UIViewController {
         
         if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
             
-            EGIVC.type = "Discord Link"
+            EGIVC.type = "Personal Link"
             self.navigationController?.pushViewController(EGIVC, animated: true)
             
         }

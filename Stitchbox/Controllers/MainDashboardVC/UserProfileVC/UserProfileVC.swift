@@ -10,6 +10,7 @@ import ObjectMapper
 import SendBirdSDK
 import FLAnimatedImage
 import SendBirdUIKit
+import SafariServices
 
 class UserProfileVC: UIViewController {
     
@@ -194,6 +195,20 @@ class UserProfileVC: UIViewController {
                         let descriptionTap = UITapGestureRecognizer(target: self, action: #selector(UserProfileVC.descTapped))
                         cell.descriptionLbl.isUserInteractionEnabled = true
                         cell.descriptionLbl.addGestureRecognizer(descriptionTap)
+                    }
+                    
+                    
+                    if data.discordUrl != "" {
+                        cell.linkStackView.isHidden = false
+                        cell.linkLbl.text = data.discordUrl
+                        
+                        
+                        let linkTap = UITapGestureRecognizer(target: self, action: #selector(UserProfileVC.linkTapped))
+                        cell.linkStackView.isUserInteractionEnabled = true
+                        cell.linkStackView.addGestureRecognizer(linkTap)
+                        
+                    } else {
+                        cell.linkStackView.isHidden = true
                     }
                  
                     
@@ -386,7 +401,18 @@ extension UserProfileVC {
             
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
             
-            self.navigationController?.pushViewController(channelVC, animated: true)
+            let nav = UINavigationController(rootViewController: channelVC)
+
+         
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+            nav.modalPresentationStyle = .fullScreen
+     
+           // self.navigationController?.pushViewController(channelVC, animated: true)
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true)
             
         }
         
@@ -461,6 +487,59 @@ extension UserProfileVC {
         
     }
     
+    
+    @objc func linkTapped(_ sender: UIButton) {
+        
+        if let discord = userData?.discordUrl, discord != "" {
+            
+            if let username = _AppCoreData.userDataSource.value?.userName {
+                
+                let alert = UIAlertController(title: "Hi \(username),", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
+                
+                // add the actions (buttons)
+                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
+                    
+                    
+                    self.openLink(link: discord)
+                    
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                
+            }
+            
+        }
+        
+    }
+    
+    
+    func openLink(link: String) {
+        
+        if link != ""
+        {
+            guard let requestUrl = URL(string: link) else {
+                return
+            }
+            
+            if UIApplication.shared.canOpenURL(requestUrl) {
+                
+                let SF = SFSafariViewController(url: requestUrl)
+                SF.modalPresentationStyle = .fullScreen
+                self.present(SF, animated: true)
+                
+                
+            } else {
+                showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(link)")
+            }
+            
+        } else {
+            
+            showErrorAlert("Oops!", msg: "Can't open this link")
+            
+        }
+        
+    }
  
     
 }
@@ -484,28 +563,6 @@ extension UserProfileVC {
         
     }
 
-    
-    func openLink(link: String) {
-        
-        if link != ""
-        {
-            guard let requestUrl = URL(string: link) else {
-                return
-            }
-            
-            if UIApplication.shared.canOpenURL(requestUrl) {
-                UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-            } else {
-                showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(link)")
-            }
-            
-        } else {
-            
-            showErrorAlert("Oops!", msg: "Can't open this link")
-            
-        }
-        
-    }
     
 }
 

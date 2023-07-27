@@ -7,6 +7,7 @@
 
 import UIKit
 import ObjectMapper
+import SafariServices
 
 class ProfileViewController: UIViewController {
     
@@ -273,6 +274,19 @@ class ProfileViewController: UIViewController {
                     
                 }
                 
+                
+                if let link = _AppCoreData.userDataSource.value?.discordUrl, link != "" {
+                    cell.linkStackView.isHidden = false
+                    cell.linkLbl.text = link
+                    
+                    
+                    let linkTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.linkTapped))
+                    cell.linkStackView.isUserInteractionEnabled = true
+                    cell.linkStackView.addGestureRecognizer(linkTap)
+                    
+                } else {
+                    cell.linkStackView.isHidden = true
+                }
 
                 cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
                 cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
@@ -515,38 +529,17 @@ extension ProfileViewController {
         
     }
     
-    @objc func discordTapped(_ sender: UIButton) {
+    
+    @objc func linkTapped(_ sender: UIButton) {
         
         if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
             
-            if let username = _AppCoreData.userDataSource.value?.userName {
-                
-                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                
-                // add the actions (buttons)
-                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                    
-                    
-                    self.openLink(link: discord)
-                    
-                }))
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
-            }
+            self.openLink(link: discord)
             
-        } else {
-            
-            if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
-                EPVC.hidesBottomBarWhenPushed = true
-                hideMiddleBtn(vc: self)
-                self.navigationController?.pushViewController(EPVC, animated: true)
-                
-            }
         }
         
     }
+
 
     
 }
@@ -563,7 +556,12 @@ extension ProfileViewController {
             }
             
             if UIApplication.shared.canOpenURL(requestUrl) {
-                UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                
+                let SF = SFSafariViewController(url: requestUrl)
+                SF.modalPresentationStyle = .fullScreen
+                self.present(SF, animated: true)
+                
+                
             } else {
                 showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(link)")
             }
