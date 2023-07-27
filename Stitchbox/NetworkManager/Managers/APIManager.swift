@@ -1076,7 +1076,7 @@ extension APIManager {
     }
   }
   func createUserContactBulk(contacts: [[String: Any]], completion: @escaping APICompletion) {
-    userContactManager.request(.createBulk(body: contact)) { result in
+    userContactManager.request(.createBulk(body: contacts)) { result in
       completion(result)
     }
   }
