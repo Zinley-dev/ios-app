@@ -45,7 +45,8 @@ class BlockedListVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadingView.isHidden = true
+        /*
         do {
             
             let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
@@ -60,7 +61,7 @@ class BlockedListVC: UIViewController {
         }
         
         loadingView.backgroundColor = self.view.backgroundColor
-        
+        */
         
         if firstAnimated {
             

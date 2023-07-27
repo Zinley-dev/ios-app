@@ -107,7 +107,7 @@ extension TrendingHashtagVC {
                 
                 if self.hashtagList.isEmpty == true {
                     
-                    self.tableNode.view.setEmptyMessage("No hashtag found")
+                    self.tableNode.view.setEmptyMessage("Trending hashtags will be shown here")
                     
                 } else {
                     
@@ -210,7 +210,7 @@ extension TrendingHashtagVC: ASTableDataSource {
         
         if array.count == 0 {
             
-            tableNode.view.setEmptyMessage("No hashtag found")
+            tableNode.view.setEmptyMessage("Trending hashtags will be shown here")
             
         } else {
             tableNode.view.restore()

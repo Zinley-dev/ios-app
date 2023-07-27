@@ -10,6 +10,7 @@ import FLAnimatedImage
 import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
+import SCLAlertView
 
 class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate{
 
@@ -45,10 +46,19 @@ class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayou
 
         // Do any additional setup after loading the view.
         
+        
         setupNavBar()
         setupButtons()
         setupCollectionNode()
         setupStitch()
+        
+        let userDefaults = UserDefaults.standard
+        
+        if userDefaults.bool(forKey: "hasAlertContentBefore") == false {
+            
+            acceptTermStitch()
+            
+        }
         
     }
     
@@ -524,6 +534,65 @@ extension AddStitchToExistingVC {
             }
         }
        
+        
+    }
+    
+    
+    func acceptTermStitch() {
+        
+        if let username = _AppCoreData.userDataSource.value?.userName {
+           
+            let appearance = SCLAlertView.SCLAppearance(
+                kTitleFont: FontManager.shared.roboto(.Medium, size: 15),
+                kTextFont: FontManager.shared.roboto(.Regular, size: 13),
+                kButtonFont: FontManager.shared.roboto(.Medium, size: 13),
+                showCloseButton: false,
+                dynamicAnimatorActive: true,
+                buttonsLayout: .horizontal
+            )
+            
+            let alert = SCLAlertView(appearance: appearance)
+            
+            _ = alert.addButton("Decline", backgroundColor: .normalButtonBackground, textColor: .black) {
+                
+                showNote(text: "Thank you and feel feel free to enjoy other videos at Stitchbox!")
+                
+                if let navigationController = self.navigationController {
+                    navigationController.popViewController(animated: true)
+                } else {
+                    self.dismiss(animated: true)
+                }
+             
+            }
+            
+            
+
+            _ = alert.addButton("Agree", backgroundColor: UIColor.secondary, textColor: .white) {
+                
+                let userDefaults = UserDefaults.standard
+                
+                userDefaults.set(true, forKey: "hasAlertContentBefore")
+                userDefaults.synchronize() // This forces the app to update userDefaults
+                
+                showNote(text: "Thank you and enjoy Stitch!")
+                
+            }
+            
+           
+            
+            let terms = """
+                        Ensure your content maintains relevance to the original topic.
+                        Exhibit respect towards the original author in your content.
+                        Abide by our terms of use and guidelines in the creation of your content.
+                        """
+                    
+                    let icon = UIImage(named:"Logo")
+                    
+                    _ = alert.showCustom("Hi \(username),", subTitle: terms, color: UIColor.white, icon: icon!)
+            
+        }
+        
+        
         
     }
     

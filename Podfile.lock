@@ -161,6 +161,7 @@ PODS:
   - RxRelay (6.5.0):
     - RxSwift (= 6.5.0)
   - RxSwift (6.5.0)
+  - SCLAlertView (0.8)
   - SendBirdCalls (1.9.7):
     - SendBirdWebRTC (~> 1.6.0)
   - SendBirdSDK (3.1.48)
@@ -231,6 +232,7 @@ DEPENDENCIES:
   - RSKImageCropper
   - RxCocoa (~> 6.5.0)
   - RxSwift (~> 6.5.0)
+  - SCLAlertView
   - SendBirdCalls (~> 1.9.7)
   - SendBirdSDK (~> 3.1.37)
   - SendBirdUIKit (~> 2.2.11)
@@ -289,6 +291,7 @@ SPEC REPOS:
     - RxCocoa
     - RxRelay
     - RxSwift
+    - SCLAlertView
     - SendBirdCalls
     - SendBirdSDK
     - SendBirdUIKit
@@ -356,6 +359,7 @@ SPEC CHECKSUMS:
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SendBirdCalls: 738efdd2a21e3ff0cf058477f1c612d59cd73510
   SendBirdSDK: 8021d9afea643cf7a9768b50c1a36ef51297b28a
   SendBirdUIKit: 0f3d085f0aa42fc1be87140eb33d0d6d5dd844ee
@@ -374,6 +378,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 1b88b713a614ec2b00a0afb6e81b53a75714eb87
+PODFILE CHECKSUM: 1d86ec14b78d279fc89cd5a2a82e8e3ff4975a5a
 
 COCOAPODS: 1.12.1

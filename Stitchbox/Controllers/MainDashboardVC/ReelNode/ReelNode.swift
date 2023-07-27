@@ -1575,7 +1575,7 @@ extension ReelNode {
                     if let username = post.owner?.username {
                         
                         if let myUsername = _AppCoreData.userDataSource.value?.userName {
-                            update1.showErrorAlert("Hi \(myUsername)!", msg: "@\(username) have to follow you to enable stitch")
+                            update1.showErrorAlert("Hi \(myUsername),", msg: "@\(username) have to follow you to enable stitch")
                         } else {
                             update1.showErrorAlert("Oops!", msg: "@\(username) have to follow you to enable stitch.")
                         }
@@ -1587,7 +1587,7 @@ extension ReelNode {
                     if let username = post.owner?.username {
                         
                         if let myUsername = _AppCoreData.userDataSource.value?.userName {
-                            update1.showErrorAlert("Hi \(myUsername)!", msg: "@\(username) have to follow you to enable stitch")
+                            update1.showErrorAlert("Hi \(myUsername),", msg: "@\(username) have to follow you to enable stitch")
                         } else {
                             update1.showErrorAlert("Oops!", msg: "@\(username) have to follow you to enable stitch")
                         }

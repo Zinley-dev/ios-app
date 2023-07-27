@@ -73,7 +73,8 @@ class LoginActivityVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadingView.isHidden = true
+        /*
         do {
             
             let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
@@ -86,7 +87,7 @@ class LoginActivityVC: UIViewController {
         } catch {
             print(error.localizedDescription)
         }
-        
+        */
         loadingView.backgroundColor = self.view.backgroundColor
         
         

@@ -16,6 +16,7 @@ import AuthenticationServices
 import ObjectMapper
 import AppsFlyerLib
 
+
 class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
     
@@ -52,9 +53,9 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     var URL: Foundation.URL {
         switch self {
         case .Privacy:
-            return Foundation.URL(string: "https://stitchbox.gg/public-policy")!
+            return Foundation.URL(string: "https://stitchbox.net/public-policy")!
         case .TermsOfUse:
-            return Foundation.URL(string: "https://stitchbox.gg/term-of-use")!
+            return Foundation.URL(string: "https://stitchbox.net/term-of-use")!
            
         }
     }

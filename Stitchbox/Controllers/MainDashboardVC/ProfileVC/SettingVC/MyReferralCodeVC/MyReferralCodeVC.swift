@@ -29,7 +29,7 @@ class MyReferralCodeVC: UIViewController {
         var URL: Foundation.URL {
             switch self {
             case .Privacy:
-                return Foundation.URL(string: "https://stitchbox.gg")!
+                return Foundation.URL(string: "https://stitchbox.net")!
             }
         }
         

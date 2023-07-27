@@ -116,7 +116,7 @@ class TrendingPostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAd
                 
                 if self.posts.isEmpty == true {
                     
-                    self.collectionNode.view.setEmptyMessage("No trending video found")
+                    self.collectionNode.view.setEmptyMessage("Trending video will be shown here")
                     
                     
                 } else {
@@ -224,7 +224,7 @@ extension TrendingPostVC: ASCollectionDataSource {
         
         if self.posts.count == 0 {
             
-            collectionNode.view.setEmptyMessage("No trending video found")
+            collectionNode.view.setEmptyMessage("Trending video will be shown here")
             
         } else {
             collectionNode.view.restore()

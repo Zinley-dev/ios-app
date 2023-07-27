@@ -68,7 +68,7 @@ extension UIColor {
 extension EKColor {
     
     static var noteBackground: EKColor {
-        return EKColor(UIColor.by(r: 173, g: 216, b: 230)) // Light blue in RGB
+        return EKColor(UIColor.by(r: 3, g: 152, b: 252)) // Light blue in RGB
     }
 
     static var segmentedControlTint: EKColor {

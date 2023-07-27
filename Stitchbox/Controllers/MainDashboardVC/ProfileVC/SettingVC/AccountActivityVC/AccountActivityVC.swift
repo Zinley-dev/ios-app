@@ -66,7 +66,8 @@ class AccountActivityVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadingView.isHidden = true
+        /*
         do {
             
             let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
@@ -81,7 +82,7 @@ class AccountActivityVC: UIViewController {
         }
         
         loadingView.backgroundColor = self.view.backgroundColor
-        
+        */
         
         delay(1.0) {
             

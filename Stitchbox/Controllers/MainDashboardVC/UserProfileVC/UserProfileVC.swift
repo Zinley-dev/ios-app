@@ -107,6 +107,10 @@ class UserProfileVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.report), name: (NSNotification.Name(rawValue: "report_user")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.block), name: (NSNotification.Name(rawValue: "block_user")), object: nil)
         
+        
+        self.loadingView.isHidden = true
+        
+        /*
         if !loadingView.isHidden {
             
             do {
@@ -124,7 +128,7 @@ class UserProfileVC: UIViewController {
             
             loadingView.backgroundColor = self.view.backgroundColor
             
-        }
+        } */
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()

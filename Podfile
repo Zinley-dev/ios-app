@@ -60,6 +60,7 @@ target 'Stitchbox' do
   pod "SwipeTransitionAutoSwipeBack"      # if needed
   pod "SwipeTransitionAutoSwipeToDismiss" # if needed
   pod 'AppsFlyerFramework'
+  pod 'SCLAlertView'
   
   target 'StitchboxTests' do
     inherit! :search_paths

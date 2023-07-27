@@ -76,7 +76,8 @@ class NotificationVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadingView.isHidden = true
+        /*
         if firstAnimated {
             
             do {
@@ -94,7 +95,7 @@ class NotificationVC: UIViewController {
             
             loadingView.backgroundColor = self.view.backgroundColor
             
-        }
+        } */
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()

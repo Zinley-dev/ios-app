@@ -35,9 +35,9 @@ class SubcriptionVC: UIViewController, ZSWTappableLabelTapDelegate {
       var URL: Foundation.URL {
           switch self {
           case .Privacy:
-              return Foundation.URL(string: "https://stitchbox.gg/public-policy")!
+              return Foundation.URL(string: "https://stitchbox.net/public-policy")!
           case .TermsOfUse:
-              return Foundation.URL(string: "https://stitchbox.gg/term-of-use")!
+              return Foundation.URL(string: "https://stitchbox.net/term-of-use")!
              
           }
       }
@@ -60,9 +60,9 @@ class SubcriptionVC: UIViewController, ZSWTappableLabelTapDelegate {
               
               return [
                   .tappableRegion: true,
-                  .tappableHighlightedBackgroundColor: UIColor.lightGray,
+                  .tappableHighlightedBackgroundColor: UIColor.darkGray,
                   .tappableHighlightedForegroundColor: UIColor.black,
-                  .foregroundColor: UIColor.white,
+                  .foregroundColor: UIColor.black,
                   .underlineStyle: NSUnderlineStyle.single.rawValue,
                   StartViewController.URLAttributeName: type.URL
               ]
@@ -84,9 +84,9 @@ class SubcriptionVC: UIViewController, ZSWTappableLabelTapDelegate {
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -148,7 +148,7 @@ extension SubcriptionVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -193,7 +193,7 @@ extension SubcriptionVC {
 extension SubcriptionVC {
 
     func setupDefaultPlan() {
-        annualView.backgroundColor = .black
+        annualView.backgroundColor = .lightGray
         sixMonthsView.backgroundColor = .clear
         monthlyView.backgroundColor = .clear
     }
@@ -211,19 +211,19 @@ extension SubcriptionVC {
     @objc func handleSubscriptionTap(_ sender: UITapGestureRecognizer) {
         switch sender.view {
         case annualView:
-            annualView.backgroundColor = .black
+            annualView.backgroundColor = .lightGray
             sixMonthsView.backgroundColor = .clear
             monthlyView.backgroundColor = .clear
             selectedIndex = 2
         case sixMonthsView:
             annualView.backgroundColor = .clear
-            sixMonthsView.backgroundColor = .black
+            sixMonthsView.backgroundColor = .lightGray
             monthlyView.backgroundColor = .clear
             selectedIndex = 1
         case monthlyView:
             annualView.backgroundColor = .clear
             sixMonthsView.backgroundColor = .clear
-            monthlyView.backgroundColor = .black
+            monthlyView.backgroundColor = .lightGray
             selectedIndex = 0
         default:
             break

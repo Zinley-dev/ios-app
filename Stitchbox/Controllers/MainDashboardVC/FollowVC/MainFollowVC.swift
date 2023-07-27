@@ -114,7 +114,8 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        self.loadingView.isHidden = true
+        /*
         do {
             
             let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
@@ -150,7 +151,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
                 
             }
             
-        }
+        } */
         
         
         let navigationBarAppearance = UINavigationBarAppearance()
