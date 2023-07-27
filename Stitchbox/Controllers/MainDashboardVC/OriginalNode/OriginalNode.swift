@@ -599,6 +599,8 @@ extension OriginalNode {
         guard let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode, !cell.videoNode.isPlaying() else {
             return
         }
+        
+        
 
         // Cell selection/deselection logic
         let indexPath = IndexPath(row: index, section: 0)
@@ -624,6 +626,15 @@ extension OriginalNode {
             }
         } else {
             self.handleAnimationTextAndImage(for: index, cell: cell)
+        }
+        
+        if index == 0 {
+            delay(1) { [weak self] in
+                guard let self = self else { return }
+                self.processStichGuideline()
+            }
+        } else {
+            processStichGuideline()
         }
 
         let isHidden = !selectPostCollectionView.isHidden
@@ -869,7 +880,34 @@ extension OriginalNode {
         }
     }
 
+    func processStichGuideline() {
+        
+        let userDefaults = UserDefaults.standard
+        if userDefaults.bool(forKey: "hasShowStitched") == false {
+            
+            if posts.count > 1, currentIndex == 0 {
+                
+                
+                userDefaults.set(true, forKey: "hasShowStitched")
+                userDefaults.synchronize() // This forces the app to update userDefaults
+                
+                
+                // Scroll slightly to the next item.
+                let nextOffset = collectionNode.contentOffset.x + collectionNode.frame.width * 0.2
+                collectionNode.setContentOffset(CGPoint(x: nextOffset, y: 0), animated: true)
+
+                // Delay the scroll back by 1 second.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    // Scroll back to the original item.
+                    let currentIndexPath = IndexPath(item: self.currentIndex!, section: 0)
+                    self.collectionNode.scrollToItem(at: currentIndexPath, at: .left, animated: true)
+                }
+            }
+            
+        }
+        
+        
+    }
 
 
-    
 }
