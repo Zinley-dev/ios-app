@@ -59,6 +59,7 @@ struct APIManager {
     let openLinkManager = Manager<OpenLinkLogApi>()
     let postStitchManager = Manager<PostStitchApi>()
     let shareManager = Manager<ShareApi>()
+  let userContactManager = Manager<UserContactApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -1061,6 +1062,21 @@ extension APIManager {
   }
   func countMyStitch(completion: @escaping APICompletion) {
     postStitchManager.request(.countMyStitch) { result in
+      completion(result)
+    }
+  }
+  func getSuggestStitch(page: Int, completion: @escaping APICompletion) {
+    postStitchManager.request(.getSuggestStitch(page: page)) { result in
+      completion(result)
+    }
+  }
+  func createUserContact(contact: [String: Any], completion: @escaping APICompletion) {
+    userContactManager.request(.create(body: contact)) { result in
+      completion(result)
+    }
+  }
+  func createUserContactBulk(contacts: [[String: Any]], completion: @escaping APICompletion) {
+    userContactManager.request(.createBulk(body: contact)) { result in
       completion(result)
     }
   }
