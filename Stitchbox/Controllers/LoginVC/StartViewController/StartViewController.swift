@@ -16,6 +16,7 @@ import AuthenticationServices
 import ObjectMapper
 import AppsFlyerLib
 
+
 class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
     
@@ -52,9 +53,9 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     var URL: Foundation.URL {
         switch self {
         case .Privacy:
-            return Foundation.URL(string: "https://stitchbox.gg/public-policy")!
+            return Foundation.URL(string: "https://stitchbox.net/public-policy")!
         case .TermsOfUse:
-            return Foundation.URL(string: "https://stitchbox.gg/term-of-use")!
+            return Foundation.URL(string: "https://stitchbox.net/term-of-use")!
            
         }
     }
@@ -108,7 +109,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             ]
         })
         
-      let string = NSLocalizedString("By using any of these login option above.               You agree to our <link type='TOU'>Terms of Use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
+      let string = NSLocalizedString("By using any of these login option above. You agree to our <link type='TOU'>Terms of Use</link> and <link type='Privacy'>Privacy Policy</link>.", comment: "")
         
       termOfUseLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         
@@ -126,8 +127,30 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     
     }
       
-    
+      setupNavBar()
   }
+    
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .clear
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundImage = UIImage()
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.shadowColor = .clear
+        navigationBarAppearance.backgroundEffect = nil
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.isTranslucent = true
+
+        
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -142,7 +165,8 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
         }
         
-
+        setupNavBar()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -344,17 +368,17 @@ extension StartViewController {
             
                 guard let data = apiResponse.body else {
                     completed()
-                        return
+                    return
                 }
-
+                
                 let settings =  Mapper<SettingModel>().map(JSONObject: data)
                 globalSetting = settings
                 globalIsSound = settings?.AutoPlaySound ?? false
                 
                 completed()
                 
-            case .failure(_):
-            
+            case .failure(let error):
+                print(error)
                 completed()
                
             }

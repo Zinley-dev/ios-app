@@ -7,6 +7,7 @@
 
 import UIKit
 import ObjectMapper
+import SafariServices
 
 class ProfileViewController: UIViewController {
     
@@ -112,7 +113,7 @@ class ProfileViewController: UIViewController {
         
         //refreshFollow
         collectionView.delegate = self
-        
+        collectionView.backgroundColor = .white
         
         pullControl.tintColor = UIColor.secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
@@ -185,9 +186,9 @@ class ProfileViewController: UIViewController {
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
         
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -202,20 +203,27 @@ class ProfileViewController: UIViewController {
         
     }
     
-    
+
     func setupSettingButton() {
         
         let settingButton = UIButton(type: .custom)
-        settingButton.setImage(UIImage.init(named: "profile_setting")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
+        settingButton.setImage(UIImage.init(named: "settings black")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
         settingButton.addTarget(self, action: #selector(settingTapped(_:)), for: .touchUpInside)
         settingButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let settingButtonBar = UIBarButtonItem(customView: settingButton)
         
         let saveButton = UIButton(type: .custom)
-        saveButton.setImage(UIImage(named: "saved.filled"), for: [])
+        saveButton.setImage(UIImage(named: "save-unfill")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
         saveButton.addTarget(self, action: #selector(saveTapped(_:)), for: .touchUpInside)
         saveButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let saveBarButton = UIBarButtonItem(customView: saveButton)
+        
+        
+        let pendingButton = UIButton(type: .custom)
+        pendingButton.setImage(UIImage(named: "pending-actions-icon-original")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
+        pendingButton.addTarget(self, action: #selector(pendingTapped(_:)), for: .touchUpInside)
+        pendingButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let pendingBarButton = UIBarButtonItem(customView: pendingButton)
         
         
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
@@ -224,6 +232,7 @@ class ProfileViewController: UIViewController {
         
         //let promotionBarButton = self.createPromotionButton()
         self.navigationItem.rightBarButtonItems = [settingButtonBar, fixedSpace, saveBarButton]
+        self.navigationItem.leftBarButtonItems = [pendingBarButton]
     
     }
     
@@ -265,13 +274,26 @@ class ProfileViewController: UIViewController {
                     
                 }
                 
+                
+                if let link = _AppCoreData.userDataSource.value?.discordUrl, link != "" {
+                    cell.linkStackView.isHidden = false
+                    cell.linkLbl.text = link
+                    
+                    
+                    let linkTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.linkTapped))
+                    cell.linkStackView.isUserInteractionEnabled = true
+                    cell.linkStackView.addGestureRecognizer(linkTap)
+                    
+                } else {
+                    cell.linkStackView.isHidden = true
+                }
 
                 cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
                 cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
          
                 
                 // add buttons target
-                cell.fistBumpedListBtn.addTarget(self, action: #selector(fistBumpedlistTapped), for: .touchUpInside)
+                cell.insightBtn.addTarget(self, action: #selector(insightTapped), for: .touchUpInside)
              
 
                 cell.editProfileBtn.addTarget(self, action: #selector(editProfileTapped), for: .touchUpInside)
@@ -405,6 +427,20 @@ extension ProfileViewController {
         
     }
     
+    
+    
+    @objc func pendingTapped(_ sender: UIButton) {
+        
+        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchDashboardVC") as? StitchDashboardVC {
+            
+            PVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(PVC, animated: true)
+            
+        }
+        
+    }
+    
     @objc func saveTapped(_ sender: UIButton) {
         
         if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SavePostVC") as? SavePostVC {
@@ -418,13 +454,15 @@ extension ProfileViewController {
     }
     
     
-    @objc func fistBumpedlistTapped(_ sender: UIButton) {
+    @objc func insightTapped(_ sender: UIButton) {
         
-        if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
+  
+        
+        if let SSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchStatVC") as? StitchStatVC {
             
-            MFBVC.hidesBottomBarWhenPushed = true
+            SSVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(MFBVC, animated: true)
+            self.navigationController?.pushViewController(SSVC, animated: true)
             
         }
         
@@ -491,38 +529,17 @@ extension ProfileViewController {
         
     }
     
-    @objc func discordTapped(_ sender: UIButton) {
+    
+    @objc func linkTapped(_ sender: UIButton) {
         
         if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
             
-            if let username = _AppCoreData.userDataSource.value?.userName {
-                
-                let alert = UIAlertController(title: "Hey \(username)!", message: "We've verified all the attached links for validity and authenticity. Your device's default browser will protect you from harmful links. We're committed to keeping the community safe and urge you to report any attempts to harm you or other users through this method.", preferredStyle: UIAlertController.Style.actionSheet)
-                
-                // add the actions (buttons)
-                alert.addAction(UIAlertAction(title: "Confirm to open", style: UIAlertAction.Style.default, handler: { action in
-                    
-                    
-                    self.openLink(link: discord)
-                    
-                }))
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
-            }
+            self.openLink(link: discord)
             
-        } else {
-            
-            if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPhofileVC") as? EditPhofileVC {
-                EPVC.hidesBottomBarWhenPushed = true
-                hideMiddleBtn(vc: self)
-                self.navigationController?.pushViewController(EPVC, animated: true)
-                
-            }
         }
         
     }
+
 
     
 }
@@ -539,7 +556,12 @@ extension ProfileViewController {
             }
             
             if UIApplication.shared.canOpenURL(requestUrl) {
-                UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                
+                let SF = SFSafariViewController(url: requestUrl)
+                SF.modalPresentationStyle = .fullScreen
+                self.present(SF, animated: true)
+                
+                
             } else {
                 showErrorAlert("Oops!", msg: "canOpenURL: failed for URL: \(link)")
             }
@@ -656,7 +678,6 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
                 
-                SPVC.setupNavBar()
                 SPVC.selectedPost = selectedPost
                 SPVC.startIndex = indexPath.row
                 SPVC.hidesBottomBarWhenPushed = true
@@ -803,9 +824,8 @@ extension ProfileViewController {
     
     func reloadUserInformation(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getme { [weak self] result in
-            guard let self = self else { return }
-            
+        APIManager.shared.getme { result in
+           
             switch result {
             case .success(let response):
                 

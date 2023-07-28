@@ -9,7 +9,8 @@ import ObjectMapper
 
 
 class Setting: Mappable {
-   
+    
+
     private(set) var allowStitch: Bool = false
     private(set) var allowComment: Bool = false
     private(set) var isTitleGet: Bool = false
@@ -69,10 +70,11 @@ class PostMetadata: Mappable {
 }
 
 class PostModel: Mappable {
-    var id: String = ""
+  var id: String = ""
   
   var imageUrl: URL = URL(string: "https://via.placeholder.com/150")!
   
+  private(set) var isApproved: Bool = false
   private(set) var content: String = ""
   private(set) var image: [String] = [""]
   private(set) var hashtags: [String] = [""]
@@ -106,11 +108,12 @@ class PostModel: Mappable {
     metadata <- map["metadata"]
     estimatedCount <- map["estimatedCount"]
     createdAt <- (map["createdAt"], ISODateTransform())
-    
+    isApproved <- map["isApproved"]
+      
     if image[0] != "" {
       imageUrl = URL(string: image[0])!
     } else {
-      imageUrl = URL(string: "https://image.mux.com/\(muxPlaybackId)/thumbnail.png?width=267&height=475&fit_mode")!
+      imageUrl = URL(string: "https://image.mux.com/\(muxPlaybackId)/thumbnail.png")!
     }
       
       //hashtags.append("SB-Tactics")

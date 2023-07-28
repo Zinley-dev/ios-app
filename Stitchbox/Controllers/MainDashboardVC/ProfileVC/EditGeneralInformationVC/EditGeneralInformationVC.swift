@@ -78,7 +78,7 @@ class EditGeneralInformationVC: UIViewController, UITextFieldDelegate {
                 showErrorAlert("Oops!", msg: "Please type your new username and get it verified to be available and try again")
             }
             
-        } else if type == "Discord Link" {
+        } else if type == "Personal Link" {
             
             processDiscord()
             
@@ -103,45 +103,34 @@ extension EditGeneralInformationVC {
                 
                 if let domain = url.host {
                     
-                    if discord_verify(host: domain) == true {
+                    self.view.endEditing(true)
+                    presentSwiftLoader()
+                    APIManager.shared.updateme(params: ["discordLink": urlString]) { [weak self] result in
+                        guard let self = self else { return }
                         
-                        self.view.endEditing(true)
-                        presentSwiftLoader()
-                        APIManager.shared.updateme(params: ["discordLink": urlString]) { [weak self] result in
-                            guard let self = self else { return }
+                        switch result {
+                        case .success(let apiResponse):
                             
-                            switch result {
-                            case .success(let apiResponse):
-                                
-                                guard apiResponse.body?["message"] as? String == "success" else {
-                                    return
-                                }
-                                
-                                DispatchQueue.main {
-                                    SwiftLoader.hide()
-                                    self.infoTxtField.text = ""
-                                    self.infoTxtField.placeholder = urlString
-                                    NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
-                                    showNote(text: "Updated successfully")
-                                    
-                                }
-                                
-                            case .failure(let error):
-                                DispatchQueue.main {
-                                    SwiftLoader.hide()
-                                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
-                                }
+                            guard apiResponse.body?["message"] as? String == "success" else {
+                                return
+                            }
+                            
+                            DispatchQueue.main {
+                                SwiftLoader.hide()
+                                self.infoTxtField.text = ""
+                                self.infoTxtField.placeholder = urlString
+                                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
+                                showNote(text: "Updated successfully")
                                 
                             }
+                            
+                        case .failure(let error):
+                            DispatchQueue.main {
+                                SwiftLoader.hide()
+                                self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                            }
+                            
                         }
-                        
-                    } else {
-                        
-                        
-                        self.infoTxtField.text = ""
-                        self.showErrorAlert("Oops!", msg: "Your current discord link isn't valid/supported now, please check and correct it.")
-                        return
-                        
                     }
                     
                 }
@@ -298,7 +287,7 @@ extension EditGeneralInformationVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -345,12 +334,12 @@ extension EditGeneralInformationVC {
                 infoTxtField.placeholder = username
             }
             
-        } else if type == "Discord Link" {
+        } else if type == "Personal Link" {
             
             if let discord = _AppCoreData.userDataSource.value?.discordUrl, discord != "" {
                 infoTxtField.placeholder = discord
             } else {
-                infoTxtField.placeholder = "https://discord.gg/TFD4Y8yt"
+                infoTxtField.placeholder = "https://stitchbox.net/"
             }
             
         } else if type == "Email" {
@@ -387,12 +376,12 @@ extension EditGeneralInformationVC {
         
         if let text = infoTxtField.text, text != "" {
             
-            if type == "Discord Link" {
+            if type == "Personal Link" {
                 
                 if verifyUrl(urlString: text) == true {
                     
                     
-                    saveBtn.backgroundColor = .primary
+                    saveBtn.backgroundColor = .secondary
                     saveBtn.titleLabel?.textColor = .white
                     
                 } else {
@@ -415,7 +404,7 @@ extension EditGeneralInformationVC {
                 
             } else {
                 
-                saveBtn.backgroundColor = .primary
+                saveBtn.backgroundColor = .secondary
                 saveBtn.titleLabel?.textColor = .white
                 
             }
@@ -461,7 +450,7 @@ extension EditGeneralInformationVC {
                         
                         DispatchQueue.main.async {
                             self.availaleUsernameLbl.isHidden = false
-                            self.saveBtn.backgroundColor = .primary
+                            self.saveBtn.backgroundColor = .secondary
                             self.saveBtn.titleLabel?.textColor = .white
                         }
                         

@@ -23,7 +23,44 @@ import Alamofire
     var actionButtonContainerView: UIView!
     
     // TabBarButton – Setup Middle Button
-      func setupMiddleButton() {
+      func setupMiddleButtonForBlackTabBar() {
+          // Configure button properties
+         
+          button.backgroundColor = .clear
+          //button.backgroundColor = UIColor.tabbarbackground
+   
+
+          // Calculate position
+          let tabBarHeight = self.tabBar.frame.height
+          let buttonSize = CGSize(width: 37.5, height: 37.5)  // Change to desired size of the button
+          let buttonFrame = CGRect(x: (self.tabBar.frame.width / 2) - (buttonSize.width / 2),
+                                   y: (tabBarHeight - buttonSize.height) / 2,
+                                   width: buttonSize.width,
+                                   height: buttonSize.height)
+
+          // Apply frame to button
+          button.frame = buttonFrame
+
+          self.tabBar.addSubview(button)
+
+          // Add target for button press
+          button.addTarget(self, action: #selector(pressedAction(_:)), for: .touchUpInside)
+
+          // Set button layer's z-position
+          button.layer.zPosition = 2500
+
+          // If your button is larger than your tab bar, you will have to adjust the size or position accordingly
+          if buttonSize.height > tabBarHeight {
+              print("Warning: button size is larger than tab bar height. Button will not fit in tab bar.")
+          }
+          
+          
+      }
+    
+    
+    
+    // TabBarButton – Setup Middle Button
+      func setupMiddleButtonForWhiteTabBar() {
           // Configure button properties
           button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
           button.backgroundColor = .clear
@@ -72,26 +109,98 @@ import Alamofire
         //setupView()
         
         self.delegate = self
-        setupMiddleButton()
+        
         SBDMain.add(self, identifier: self.sbu_className)
-        
-        
-        // Remove border line
-        self.tabBar.shadowImage = UIImage()
-        self.tabBar.backgroundImage = UIImage.from(color: .black)  // Assuming .tabbarbackground is your desired color
-        self.tabBar.isTranslucent = false
-        
-        let layer = CALayer()
-        layer.backgroundColor = UIColor.black.cgColor // Use your tabBar color here
-        layer.frame = CGRect(x: 0, y: -1, width: self.tabBar.frame.width, height: 1)
-        self.tabBar.layer.addSublayer(layer)
+
         setUserProfileImageOnTabbar()
-        setupImageForTabbar()
-       
         
+        setupMiddleButtonForBlackTabBar()
+        setupBlackTabBar()
+    }
+    
+    func setupBlackTabBar() {
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = .black
+        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .black
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .black
+        self.tabBar.standardAppearance = tabBarAppearance
+        setupImageForTabbar()
+        button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
+    }
+
+   
+    func setupWhiteTabBar() {
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = .white
+        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .white
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .white
+        self.tabBar.standardAppearance = tabBarAppearance
+        setupImageForLightTabbar()
+        button.setImage(UIImage(named: "Add 3")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
     }
     
     func setupImageForTabbar() {
+        guard let items = tabBar.items else { return }
+        
+        if items.count > 1 {
+            let firstTabBarItem = items[0]
+            let secondTabBarItem = items[1]
+            let thirdTabBarItem = items[3]
+            
+            
+            let homeImg = UIImage.init(named: "home")?.resize(targetSize: CGSize(width: 30, height: 30)).withRenderingMode(.alwaysOriginal)
+            let homefilledImg = UIImage.init(named: "home.filled")?.resize(targetSize: CGSize(width: 30, height: 30)).withRenderingMode(.alwaysOriginal)
+            
+            let trendingImg = UIImage.init(named: "trendingWhite")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let trendingfilledImg = UIImage.init(named: "trendingFilled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            
+            let chatImg = UIImage.init(named: "chat")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let chatfilledImg = UIImage.init(named: "chat.filled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            
+            firstTabBarItem.image = homeImg
+            firstTabBarItem.selectedImage = homefilledImg
+            
+            secondTabBarItem.image = trendingImg
+            secondTabBarItem.selectedImage = trendingfilledImg
+            
+            thirdTabBarItem.image = chatImg
+            thirdTabBarItem.selectedImage = chatfilledImg
+        }
+    }
+    
+    
+    func setupImageForLightTabbar() {
+        guard let items = tabBar.items else { return }
+        
+        if items.count > 1 {
+            let firstTabBarItem = items[0]
+            let secondTabBarItem = items[1]
+            let thirdTabBarItem = items[3]
+            
+            
+            let homeImg = UIImage.init(named: "home-unfill-black")?.resize(targetSize: CGSize(width: 30, height: 30)).withRenderingMode(.alwaysOriginal)
+            let homefilledImg = UIImage.init(named: "home-filled-black")?.resize(targetSize: CGSize(width: 30, height: 30)).withRenderingMode(.alwaysOriginal)
+            
+            let trendingImg = UIImage.init(named: "trending-unfilled-black")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let trendingfilledImg = UIImage.init(named: "trending-filled-black")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            
+            let chatImg = UIImage.init(named: "chat-black")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let chatfilledImg = UIImage.init(named: "chat-filled-black")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            
+            firstTabBarItem.image = homeImg
+            firstTabBarItem.selectedImage = homefilledImg
+            
+            secondTabBarItem.image = trendingImg
+            secondTabBarItem.selectedImage = trendingfilledImg
+            
+            thirdTabBarItem.image = chatImg
+            thirdTabBarItem.selectedImage = chatfilledImg
+        }
+    }
+    
+    func setupImageForTabbarLightMode() {
         guard let items = tabBar.items else { return }
         
         if items.count > 1 {
@@ -256,8 +365,11 @@ import Alamofire
             if tabBarIndex == 0 {
                 
                 NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
-                
+                setupBlackTabBar()
+            } else {
+                setupWhiteTabBar()
             }
+                  
             
         }
         

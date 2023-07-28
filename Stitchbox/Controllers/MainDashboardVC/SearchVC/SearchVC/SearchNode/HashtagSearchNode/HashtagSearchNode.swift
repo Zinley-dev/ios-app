@@ -21,7 +21,7 @@ class HashTagSearchNode: ASCellNode {
         print("HashTagSearchNode is being deallocated.")
     }
     
-    weak var hashtag: HashtagsModel!
+    var hashtag: HashtagsModel!
 
     var hashtagTextNode: ASTextNode!
     var hashtagSymbolImg: ASTextNode!
@@ -44,22 +44,40 @@ class HashTagSearchNode: ASCellNode {
         hashtagTextNode.backgroundColor = UIColor.clear
         
         automaticallyManagesSubnodes = true
-        
+        0
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .right
         
         
         if !hashtag.keyword.isEmpty {
-            
-            hashtagSymbolImg.attributedText = NSAttributedString(string: "#", attributes: [NSAttributedString.Key.font:  UIFont.systemFont(ofSize: FontSize + 5), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
-            
+            hashtagSymbolImg.attributedText = NSAttributedString(
+                string: "#",
+                attributes: [
+                    NSAttributedString.Key.font:  FontManager.shared.roboto(.Regular, size: FontSize + 5),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
 
-            hashtagTextNode.attributedText = NSAttributedString(string: String(self.hashtag.keyword.dropFirst(1)), attributes: [NSAttributedString.Key.font:  UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
-            
-           
-            self.coutNode.attributedText = NSAttributedString(string: "\(formatPoints(num: Double(hashtag.count))) posts", attributes: [NSAttributedString.Key.font:  UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
-            
+            hashtagTextNode.attributedText = NSAttributedString(
+                string: String(self.hashtag.keyword.dropFirst(1)),
+                attributes: [
+                    NSAttributedString.Key.font:  FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
+
+            self.coutNode.attributedText = NSAttributedString(
+                string: "\(formatPoints(num: Double(hashtag.count))) posts",
+                attributes: [
+                    NSAttributedString.Key.font:  FontManager.shared.roboto(.Medium, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
         }
+
         
         coutNode.backgroundColor = UIColor.clear
         

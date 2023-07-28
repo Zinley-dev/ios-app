@@ -16,7 +16,7 @@ extension UIImage {
         
         case btnVideoOffSelected
         case btnVideoOff
-        
+
         case btnBluetoothSelected
         case btnSpeakerSelected
         case btnSpeaker
@@ -35,6 +35,7 @@ extension UIImage {
     }
     
     static func audio(isOn: Bool) -> UIImage? {
+        //print(QuickStart.btnAudioOff.image?.description, QuickStart.btnAudioOffSelected.image?.description)
         (isOn ? QuickStart.btnAudioOffSelected : QuickStart.btnAudioOff).image
     }
     

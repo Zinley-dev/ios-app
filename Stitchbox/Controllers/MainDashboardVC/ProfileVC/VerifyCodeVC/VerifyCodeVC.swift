@@ -40,7 +40,7 @@ class VerifyCodeVC: UIViewController, UITextFieldDelegate {
     
     
     var selectedColor = UIColor.secondary
-    var emptyColor = UIColor.white
+    var emptyColor = UIColor.black
     
     
     let backButton: UIButton = UIButton(type: .custom)
@@ -691,7 +691,7 @@ extension VerifyCodeVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,

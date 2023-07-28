@@ -21,7 +21,7 @@ class LeaveView: UIViewController {
         super.viewDidLoad()
 
         leaveBtn.setTitleColor(UIColor.white, for: .normal)
-        cancelBtn.setTitleColor(UIColor.primary, for: .normal)
+        cancelBtn.setTitleColor(UIColor.secondary, for: .normal)
         
     }
     

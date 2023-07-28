@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UnStitchView" customModule="Stitchbox" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="iN0-l3-epB" id="z6h-cB-2KT"/>
+                <outlet property="unstitchBtn" destination="rhA-Fq-fjI" id="4Cm-sN-DWw"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="784" height="247"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="-1" translatesAutoresizingMaskIntoConstraints="NO" id="TYz-0A-DTP">
+                    <rect key="frame" x="0.0" y="48" width="784" height="165"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Klk-2p-F9U">
+                            <rect key="frame" x="0.0" y="0.0" width="784" height="165"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Aba-cv-3aY">
+                                    <rect key="frame" x="350.5" y="70" width="83.5" height="25"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unstitch-lightmode" translatesAutoresizingMaskIntoConstraints="NO" id="clL-pw-Rr3">
+                                            <rect key="frame" x="0.0" y="0.0" width="25" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="25" id="KTC-Ee-ejl"/>
+                                                <constraint firstAttribute="height" constant="25" id="Tty-AY-R2g"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unstitch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cn0-KU-h3O">
+                                            <rect key="frame" x="35" y="5" width="48.5" height="15.5"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="13"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rhA-Fq-fjI">
+                                    <rect key="frame" x="0.0" y="0.0" width="784" height="165"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="rhA-Fq-fjI" firstAttribute="top" secondItem="Klk-2p-F9U" secondAttribute="top" id="8X5-yw-ACB"/>
+                                <constraint firstItem="Aba-cv-3aY" firstAttribute="centerX" secondItem="Klk-2p-F9U" secondAttribute="centerX" id="J2x-UI-enj"/>
+                                <constraint firstAttribute="bottom" secondItem="rhA-Fq-fjI" secondAttribute="bottom" id="MsH-SV-WY3"/>
+                                <constraint firstItem="Aba-cv-3aY" firstAttribute="centerY" secondItem="Klk-2p-F9U" secondAttribute="centerY" id="cJV-YR-lvR"/>
+                                <constraint firstAttribute="trailing" secondItem="rhA-Fq-fjI" secondAttribute="trailing" id="dOG-fF-bav"/>
+                                <constraint firstItem="rhA-Fq-fjI" firstAttribute="leading" secondItem="Klk-2p-F9U" secondAttribute="leading" id="wH6-ey-tJy"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidths">
+                                    <real key="value" value="1"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="borderColors">
+                                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="TYz-0A-DTP" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="4bc-nx-igC"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="TYz-0A-DTP" secondAttribute="bottom" id="QKb-Aa-589"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="TYz-0A-DTP" secondAttribute="trailing" id="dQ9-xV-5KR"/>
+                <constraint firstItem="TYz-0A-DTP" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="qoZ-Ws-EIx"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-395.6521739130435" y="-246.76339285714283"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="unstitch-lightmode" width="30" height="30"/>
+    </resources>
+</document>

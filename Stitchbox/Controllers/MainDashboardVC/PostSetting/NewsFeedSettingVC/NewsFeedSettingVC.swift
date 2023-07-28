@@ -61,14 +61,8 @@ class NewsFeedSettingVC: UIViewController {
     
     @IBAction func copyProfileBtnPressed(_ sender: Any) {
         
-        if isSearch {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_search")), object: nil)
-        } else if isHashtag {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_hashtag")), object: nil)
-        } else if isSelected {
+        if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_selected")), object: nil)
-        } else if isReels {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile_reel")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
         }
@@ -79,15 +73,9 @@ class NewsFeedSettingVC: UIViewController {
     
     @IBAction func copyPostBtnPressed(_ sender: Any) {
         
-        if isSearch {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_search")), object: nil)
-        } else if isHashtag {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_hashtag")), object: nil)
-        } else if isSelected {
+        if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
-        } else if isReels {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_reel")), object: nil)
-        } else {
+        }  else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
         }
         
@@ -103,14 +91,8 @@ class NewsFeedSettingVC: UIViewController {
     
     @IBAction func reportBtnPressed(_ sender: Any) {
         
-        if isSearch {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_search")), object: nil)
-        } else if isHashtag {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_hashtag")), object: nil)
-        } else if isSelected {
+        if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_selected")), object: nil)
-        } else if isReels {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post_reel")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "report_post")), object: nil)
         }
@@ -122,15 +104,8 @@ class NewsFeedSettingVC: UIViewController {
     
     @IBAction func removeBtnPressed(_ sender: Any) {
         
-        if isSearch {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_search")), object: nil)
-            
-        } else if isHashtag {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_hashtag")), object: nil)
-        } else if isSelected {
+        if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
-        } else if isReels {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post_reel")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
         }
@@ -143,15 +118,8 @@ class NewsFeedSettingVC: UIViewController {
     
     @IBAction func sendBtnPressed(_ sender: Any) {
         
-        if isSearch {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_search")), object: nil)
-            
-        } else if isHashtag {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_hashtag")), object: nil)
-        } else if isSelected {
+        if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
-        } else if isReels {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_reel")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         }

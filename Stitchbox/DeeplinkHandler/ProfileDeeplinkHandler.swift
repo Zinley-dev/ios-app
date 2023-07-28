@@ -48,9 +48,9 @@ final class ProfileDeeplinkHandler: DeeplinkHandlerProtocol {
                                           UPVC.onPresent = true
 
                                           // Customize the navigation bar appearance
-                                          nav.navigationBar.barTintColor = .background
-                                          nav.navigationBar.tintColor = .white
-                                          nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                                          nav.navigationBar.barTintColor = .white
+                                          nav.navigationBar.tintColor = .black
+                                          nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                                           nav.modalPresentationStyle = .fullScreen
                                           vc.present(nav, animated: true, completion: nil)

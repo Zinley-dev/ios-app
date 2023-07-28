@@ -124,7 +124,7 @@ class GroupCallViewController: UIViewController {
         
         guard let output = AVAudioSession.sharedInstance().currentRoute.outputs.first else { return }
         speakerButton.setBackgroundImage(output.portType.rawValue == "BluetoothHFP" ? UIImage(named: "airpod") : .audio(output: output.portType), for: .normal)
-        
+
     }
     
     

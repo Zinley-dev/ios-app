@@ -66,7 +66,8 @@ class AccountActivityVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadingView.isHidden = true
+        /*
         do {
             
             let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
@@ -81,7 +82,7 @@ class AccountActivityVC: UIViewController {
         }
         
         loadingView.backgroundColor = self.view.backgroundColor
-        
+        */
         
         delay(1.0) {
             
@@ -231,7 +232,7 @@ extension AccountActivityVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,

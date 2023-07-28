@@ -21,7 +21,7 @@ class BlockNode: ASCellNode {
         print("BlockNode is being deallocated.")
     }
     
-    weak var user: BlockUserModel!
+    var user: BlockUserModel!
     
     var userNameNode: ASTextNode!
     var nameNode: ASTextNode!
@@ -79,12 +79,13 @@ class BlockNode: ASCellNode {
         if isBlock {
             
             DispatchQueue.main.async {
-                self.actionBtnNode.backgroundColor = .primary
+                self.actionBtnNode.backgroundColor = .secondary
                 self.actionBtnNode.layer.borderWidth = 1.0
                 self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                 self.actionBtnNode.layer.cornerRadius = 10.0
                 self.actionBtnNode.clipsToBounds = true
-                self.actionBtnNode.setTitle("Unblock", with: UIFont.systemFont(ofSize: FontSize), with: UIColor.white, for: .normal)
+                self.actionBtnNode.setTitle("Unblock", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+               
             }
             
         }
@@ -130,8 +131,8 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
-            
+            self.actionBtnNode.setTitle("Follow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+        
         }
         
         APIManager.shared.deleteBlocks(params: ["blockId": user.blockId]) { [weak self] result in
@@ -153,12 +154,13 @@ class BlockNode: ASCellNode {
                 
                 DispatchQueue.main.async {
                     self.isBlock = true
-                    self.actionBtnNode.backgroundColor = .primary
+                    self.actionBtnNode.backgroundColor = .secondary
                     self.actionBtnNode.layer.borderWidth = 1.0
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Unblock", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.white, for: .normal)
+                    self.actionBtnNode.setTitle("Unblock", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.white, for: .normal)
+
                 }
             }
             
@@ -172,12 +174,13 @@ class BlockNode: ASCellNode {
         
         DispatchQueue.main.async {
             self.isFollowingUser = true
-            self.actionBtnNode.backgroundColor = .primary
+            self.actionBtnNode.backgroundColor = .secondary
             self.actionBtnNode.layer.borderWidth = 1.0
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.white, for: .normal)
+            self.actionBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.white, for: .normal)
+
         }
         
         
@@ -208,7 +211,8 @@ class BlockNode: ASCellNode {
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+                    self.actionBtnNode.setTitle("Follow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+
                     
                 }
             }
@@ -229,7 +233,8 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Follow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.primary, for: .normal)
+            self.actionBtnNode.setTitle("Follow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+
             
         }
         
@@ -249,12 +254,14 @@ class BlockNode: ASCellNode {
                 }
                 
                 DispatchQueue.main.async {
-                    self.actionBtnNode.backgroundColor = .primary
+                    self.actionBtnNode.backgroundColor = .secondary
                     self.actionBtnNode.layer.borderWidth = 1.0
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Unfollow", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.white, for: .normal)
+                    self.actionBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.secondary, for: .normal)
+
+
                     
                 }
                 
@@ -295,7 +302,7 @@ class BlockNode: ASCellNode {
     }
     
     func loadInfo(uid: String ) {
-        userNameNode.attributedText = NSAttributedString(string: user.blockUser.userName)
+        userNameNode.attributedText = NSAttributedString(string: "@\(user.blockUser.userName)")
         nameNode.attributedText = NSAttributedString(string: user.blockUser.name)
         
         if user.blockUser.avatarURL != "" {

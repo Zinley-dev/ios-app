@@ -93,7 +93,7 @@ class EditPhofileVC: UIViewController {
         
         if let EGIVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditGeneralInformationVC") as? EditGeneralInformationVC {
             
-            EGIVC.type = "Discord Link"
+            EGIVC.type = "Personal Link"
             self.navigationController?.pushViewController(EGIVC, animated: true)
             
         }
@@ -189,7 +189,7 @@ extension EditPhofileVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -227,8 +227,8 @@ extension EditPhofileVC {
     
     func colorButtonLabel() {
         
-        changeProfilePhotoBtn.titleLabel?.textColor = .secondary
-        morePersonalInfoBtn.titleLabel?.textColor = .secondary
+        //changeProfilePhotoBtn.titleLabel?.textColor = .secondary
+        //morePersonalInfoBtn.titleLabel?.textColor = .secondary
         
     }
 

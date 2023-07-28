@@ -17,7 +17,7 @@ public struct MarkdownAttributedStringParser: MarkupVisitor {
     let baseFontSize: CGFloat = 15.0
     let highlighter: Highlighter = {
         let highlighter = Highlighter()!
-        highlighter.setTheme("stackoverflow-dark")
+        highlighter.setTheme("xcode")
         return highlighter
     }()
     

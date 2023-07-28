@@ -21,7 +21,7 @@ class CommentNode: ASCellNode {
     var replyUsername = ""
     var finalText: NSAttributedString!
     var replyUID = ""
-    weak var post: CommentModel!
+    var post: CommentModel!
     var count = 0
     var userNameNode: ASTextNode!
     var cmtNode: ASTextNode!
@@ -57,8 +57,8 @@ class CommentNode: ASCellNode {
         
         super.init()
         
-        self.backgroundColor = UIColor(red: 43, green: 43, blue: 43)
-        self.replyBtnNode.setTitle("Reply", with: UIFont.systemFont(ofSize: FontSize, weight: .medium), with: UIColor.lightGray, for: .normal)
+        self.replyBtnNode.setTitle("Reply", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.darkGray, for: .normal)
+
         self.replyBtnNode.addTarget(self, action: #selector(CommentNode.replyBtnPressed), forControlEvents: .touchUpInside)
         self.selectionStyle = .none
         avatarNode.contentMode = .scaleAspectFill
@@ -72,11 +72,16 @@ class CommentNode: ASCellNode {
         avatarNode.shouldRenderProgressImages = true
         
         
-        let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.white]
-        
-        
-        let timeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.lightGray]
-        
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
+            NSAttributedString.Key.foregroundColor: UIColor.black
+        ]
+
+        let timeAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
+            NSAttributedString.Key.foregroundColor: UIColor.darkGray
+        ]
+
         
         if self.post.reply_to != "" {
            
@@ -210,7 +215,7 @@ class CommentNode: ASCellNode {
         }
         
         DispatchQueue.main.async {
-            self.view.backgroundColor = .background
+            self.view.backgroundColor = .white
         }
        
         infoNode.backgroundColor = UIColor.clear
@@ -221,7 +226,7 @@ class CommentNode: ASCellNode {
         userNameNode.backgroundColor = UIColor.clear
         
         imageView.contentMode = .scaleAspectFit
-        imageView.frame = CGRect(x: 0.0, y: 2, width: 32, height: 25)
+        imageView.frame = CGRect(x: 2, y: 2, width: 25, height: 25)
     
     
         textNode.isLayerBacked = true
@@ -287,9 +292,9 @@ class CommentNode: ASCellNode {
                     UPVC.onPresent = true
 
                     // Customize the navigation bar appearance
-                    nav.navigationBar.barTintColor = .background
-                    nav.navigationBar.tintColor = .white
-                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                    nav.navigationBar.barTintColor = .white
+                    nav.navigationBar.tintColor = .black
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                     nav.modalPresentationStyle = .fullScreen
                     vc.present(nav, animated: true, completion: nil)
@@ -320,9 +325,9 @@ class CommentNode: ASCellNode {
                     UPVC.onPresent = true
 
                     // Customize the navigation bar appearance
-                    nav.navigationBar.barTintColor = .background
-                    nav.navigationBar.tintColor = .white
-                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                    nav.navigationBar.barTintColor = .white
+                    nav.navigationBar.tintColor = .black
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                     nav.modalPresentationStyle = .fullScreen
                     vc.present(nav, animated: true, completion: nil)
@@ -363,7 +368,7 @@ class CommentNode: ASCellNode {
                 if checkIsLike {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                        self.imageView.image = likeImage
                     }
                     
                     
@@ -373,7 +378,7 @@ class CommentNode: ASCellNode {
                 } else {
                     
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                        self.imageView.image = emptyLikeImageLM
                     }
             
                 }
@@ -381,7 +386,7 @@ class CommentNode: ASCellNode {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                    self.imageView.image = emptyLikeImageLM
                 }
                 print(error)
             }
@@ -409,7 +414,12 @@ class CommentNode: ASCellNode {
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
                 
-                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+                let LikeAttributes: [NSAttributedString.Key: Any] = [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                ]
+
               
                 
                 self.count = likeCount
@@ -469,7 +479,14 @@ class CommentNode: ASCellNode {
         DispatchQueue.main.async {
         
             
-            self.replyToNode.attributedText = NSAttributedString(string: "\(self.replyUsername): ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .light),NSAttributedString.Key.foregroundColor: UIColor.white])
+            self.replyToNode.attributedText = NSAttributedString(
+                string: "\(self.replyUsername): ",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
+                    NSAttributedString.Key.foregroundColor: UIColor.black
+                ]
+            )
+
             let size = self.replyToNode.attributedText?.size()
             
             let userButton = ASButtonNode()
@@ -561,9 +578,8 @@ class CommentNode: ASCellNode {
                                             UPVC.onPresent = true
 
                                             // Customize the navigation bar appearance
-                                            nav.navigationBar.barTintColor = .background
-                                            nav.navigationBar.tintColor = .white
-                                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                                            nav.navigationBar.barTintColor = .white
+                                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                                             nav.modalPresentationStyle = .fullScreen
                                             vc.present(nav, animated: true, completion: nil)
@@ -602,9 +618,8 @@ class CommentNode: ASCellNode {
                             PLHVC.onPresent = true
 
                             // Customize the navigation bar appearance
-                            nav.navigationBar.barTintColor = .background
-                            nav.navigationBar.tintColor = .white
-                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                            nav.navigationBar.barTintColor = .white
+                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                             nav.modalPresentationStyle = .fullScreen
                             vc.present(nav, animated: true, completion: nil)
@@ -622,13 +637,13 @@ class CommentNode: ASCellNode {
                     
                     let url = string.absoluteString
                     
-                    if url.contains("https://stitchbox.gg/app/account/") {
+                    if url.contains("https://stitchbox.net/app/account/") {
                         
                         if let id = self?.getUIDParameter(from: url) {
                             self?.moveToUserProfileVC(id: id)
                         }
             
-                    } else if url.contains("https://stitchbox.gg/app/post/") {
+                    } else if url.contains("https://stitchbox.net/app/post/") {
                     
                         if let id = self?.getUIDParameter(from: url) {
                             self?.openPost(id: id)
@@ -677,9 +692,8 @@ class CommentNode: ASCellNode {
                 UPVC.onPresent = true
 
                 // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                nav.navigationBar.barTintColor = .white
+                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                 nav.modalPresentationStyle = .fullScreen
                 vc.present(nav, animated: true, completion: nil)
@@ -731,9 +745,8 @@ class CommentNode: ASCellNode {
                                     RVC.posts = [post]
                                    
                                     // Customize the navigation bar appearance
-                                    nav.navigationBar.barTintColor = .background
-                                    nav.navigationBar.tintColor = .white
-                                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                                    nav.navigationBar.barTintColor = .white
+                                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                                     nav.modalPresentationStyle = .fullScreen
                                     
@@ -764,70 +777,64 @@ class CommentNode: ASCellNode {
     }
     
     func loadCmtCount() {
-        
         if self.post.has_reply == true {
-            
             if self.post.hasLoadedReplied {
-                
-                self.loadReplyBtnNode.setTitle("Show more", with: UIFont.systemFont(ofSize: FontSize, weight: .light), with: UIColor.lightGray, for: .normal)
+                self.loadReplyBtnNode.setTitle("Show more", with: FontManager.shared.roboto(.Regular, size: FontSize), with: UIColor.darkGray, for: .normal)
                 self.loadReplyBtnNode.contentHorizontalAlignment = .left
-                
             } else {
-                
-                self.loadReplyBtnNode.setTitle("Replied (\(self.post.replyTotal ?? 0))", with: UIFont.systemFont(ofSize: FontSize, weight: .light), with: UIColor.lightGray, for: .normal)
+                self.loadReplyBtnNode.setTitle("Replied (\(self.post.replyTotal ?? 0))", with: FontManager.shared.roboto(.Regular, size: FontSize), with: UIColor.darkGray, for: .normal)
                 self.loadReplyBtnNode.contentHorizontalAlignment = .left
                 self.post.hasLoadedReplied = true
-                
             }
-            
-            
-            
         }
-        
-        
     }
-    
+
     func loadInfo(uid: String ) {
-        
-        
         if post.comment_avatarUrl != "" {
             avatarNode.url = URL(string: post.comment_avatarUrl)
         } else {
             avatarNode.image = UIImage.init(named: "defaultuser")
         }
         
-        
         if self.post.comment_uid == self.post.owner_uid {
-            
             if self.post.is_pinned == true {
-                
-                UIFont.systemFont(ofSize: FontSize + 1, weight: .medium)
-                
-                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "") - author (pinned)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                
+                userNameNode.attributedText = NSAttributedString(
+                    string: "@\(self.post.comment_username ?? "") - author (pinned)",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
+                        NSAttributedString.Key.foregroundColor: UIColor.darkGray
+                    ]
+                )
             } else {
-                
-                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "") - author", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                
+                userNameNode.attributedText = NSAttributedString(
+                    string: "@\(self.post.comment_username ?? "") - author",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
+                        NSAttributedString.Key.foregroundColor: UIColor.darkGray
+                    ]
+                )
             }
-            
-            
         } else {
-            
             if self.post.is_pinned == true {
-                
-                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "") (pinned)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                
+                userNameNode.attributedText = NSAttributedString(
+                    string: "@\(self.post.comment_username ?? "") (pinned)",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
+                        NSAttributedString.Key.foregroundColor: UIColor.darkGray
+                    ]
+                )
             } else {
-                
-                userNameNode.attributedText = NSAttributedString(string: "\(self.post.comment_username ?? "")", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                
+                userNameNode.attributedText = NSAttributedString(
+                    string: "@\(self.post.comment_username ?? "")",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), // Using the Roboto Medium style
+                        NSAttributedString.Key.foregroundColor: UIColor.darkGray
+                    ]
+                )
             }
-            
         }
-    
-        
     }
+
     
   
     
@@ -841,19 +848,20 @@ class CommentNode: ASCellNode {
 
 
 extension CommentNode {
-     
+    
     func likeComment() {
-        
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+            self.imageView.image = likeImage
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         
-        let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-        
-       
+        let LikeAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
+            NSAttributedString.Key.foregroundColor: UIColor.black,
+            NSAttributedString.Key.paragraphStyle: paragraphStyle
+        ]
         
         self.count += 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
@@ -866,22 +874,22 @@ extension CommentNode {
 
             switch result {
             case .success(let apiResponse):
-            
                 print(apiResponse)
                 self.isLiked = true
-                
 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                    self.imageView.image = emptyLikeImageLM
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
                 
-                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                
-               
+                let LikeAttributes: [NSAttributedString.Key: Any] = [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                ]
                 
                 self.count -= 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
@@ -892,21 +900,22 @@ extension CommentNode {
                 print("CmtCount: \(error)")
             }
         }
-        
-        
     }
-    
+
     
     func unlikeComment() {
-        
         DispatchQueue.main.async {
-            self.imageView.image = UIImage(named: "likeEmpty")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+            self.imageView.image = emptyLikeImageLM
         }
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         
-        let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
+        let LikeAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
+            NSAttributedString.Key.foregroundColor: UIColor.black,
+            NSAttributedString.Key.paragraphStyle: paragraphStyle
+        ]
         
         self.count -= 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
@@ -920,22 +929,22 @@ extension CommentNode {
 
             switch result {
             case .success(let apiResponse):
-                
                 print(apiResponse)
-                
                 self.isLiked = false
-                
+
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage(named: "liked")?.resize(targetSize: CGSize(width: 10, height: 10)).withRenderingMode(.alwaysOriginal)
+                    self.imageView.image = likeImage
                 }
                 
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .center
                 
-                let LikeAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                
-               
+                let LikeAttributes: [NSAttributedString.Key: Any] = [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Use Roboto Medium style
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                ]
                 
                 self.count += 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
@@ -946,9 +955,8 @@ extension CommentNode {
                 print("CmtCount: \(error)")
             }
         }
-        
-        
     }
+
     
     func addReplyNodes(_ nodes: [CommentNode]) {
             for node in nodes {

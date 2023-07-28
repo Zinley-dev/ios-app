@@ -32,12 +32,12 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
     func countryPickerView(_ countryPickerView: CountryPickerView, willShow viewController: CountryPickerViewController) {
         
         viewController.navigationController?.modalPresentationStyle = .fullScreen
-        viewController.navigationController?.navigationBar.tintColor = UIColor.white
-        viewController.navigationController?.navigationBar.barTintColor = UIColor.background
-        viewController.navigationController?.navigationBar.backgroundColor = UIColor.background
-        viewController.navigationController?.navigationBar.bottomBorderColor = UIColor.black
-        viewController.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        
+        viewController.navigationController?.navigationBar.tintColor = UIColor.black
+        viewController.navigationController?.navigationBar.barTintColor = UIColor.white
+        viewController.navigationController?.navigationBar.backgroundColor = UIColor.white
+        viewController.navigationController?.navigationBar.bottomBorderColor = UIColor.white
+        viewController.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+    
     }
     
     override func viewDidLoad() {
@@ -47,7 +47,7 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
         cpv.hostViewController = self
         cpv.showCountryNameInView = true
         cpv.showPhoneCodeInView = false
-        cpv.textColor = .white
+        cpv.textColor = .black
         
         
         countryCodeNameTextfield.leftView = cpv
@@ -173,7 +173,7 @@ extension EditPhoneVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,

@@ -145,26 +145,4 @@ func sendbirdLogout() {
 }
 
 
-func checkForChannelInvitation(channelUrl: String, user_ids: [String]) {
-    
-    
-    APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
-        switch result {
-        case .success(let apiResponse):
-            // Check if the request was successful
-            guard apiResponse.body?["message"] as? String == "success",
-                let data = apiResponse.body?["data"] as? [String: Any] else {
-                    return
-            }
-            
-            print(data)
-            
-           
-        case .failure(let error):
-            print(error)
-        }
-    }
-    
-    
-}
 

@@ -143,9 +143,9 @@ struct MessageRowView: View {
                 
             }
         }
-        .foregroundColor(.white)
+        .foregroundColor(isUser ? .white : .black)
         .padding()
-        .background(isUser ? Color(red: (53.0/255.0), green: (46.0/255.0), blue: (113.0/255.0)): Color(red: 51/255, green: 51/255, blue: 51/255))
+        .background(isUser ? Color(red: (53.0/255.0), green: (46.0/255.0), blue: (113.0/255.0)): .normalButtonBackground)
         .cornerRadius(16)
         .font(.system(size: 14)) // Set font here
         

@@ -18,7 +18,7 @@ fileprivate let FontSize: CGFloat = 13
 
 class FindFriendsNode: ASCellNode {
     
-    weak var user: FindFriendsModel!
+    var user: FindFriendsModel!
     var followAction : ((ASCellNode) -> Void)?
     lazy var delayItem = workItem()
     var attemptCount = 0
@@ -77,54 +77,21 @@ class FindFriendsNode: ASCellNode {
                 
                 if let username = user._username {
                     
-                    self.userNameNode.attributedText = NSAttributedString(string: "@\(username)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+                    self.userNameNode.attributedText = NSAttributedString(
+                        string: "@\(username)",
+                        attributes: [
+                            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                            NSAttributedString.Key.foregroundColor: UIColor.black,
+                            NSAttributedString.Key.paragraphStyle: paragraphStyles
+                        ]
+                    )
+
                     
                 }
               
             }
             
-            /*
-            if user._userUID != Auth.auth().currentUser?.uid {
-                
-                if !global_block_list.contains(user._userUID) {
-                    
-                    checkIfFollowing(uid: user._userUID)
-                    
-                } else {
-                    
-                    DispatchQueue.main.async {
-                        
-                        self.followBtnNode.backgroundColor = UIColor.clear
-                        self.followBtnNode.layer.borderWidth = 1.0
-                        self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
-                        self.followBtnNode.layer.cornerRadius = 3.0
-                        self.followBtnNode.clipsToBounds = true
-                        self.followBtnNode.setTitle("Blocked", with: UIFont(name:"Roboto-Regular",size: FontSize), with: UIColor.white, for: .normal)
-                        
-                    }
-                    
-                }
-                
-              
-                
-            } else {
-                
-                
-                DispatchQueue.main.async {
-                    
-                    self.followBtnNode.backgroundColor = UIColor.clear
-                    self.followBtnNode.layer.borderWidth = 1.0
-                    self.followBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
-                    self.followBtnNode.layer.cornerRadius = 3.0
-                    self.followBtnNode.clipsToBounds = true
-                    self.followBtnNode.setTitle("You", with: UIFont(name:"Roboto-Regular",size: FontSize), with: UIColor.white, for: .normal)
-                    
-                }
-                
-                
-            } */
-            
-    
+  
         } else {
             
             AvatarNode.url = nil
@@ -141,17 +108,31 @@ class FindFriendsNode: ASCellNode {
             
             DispatchQueue.main.async {
                 
-                self.followBtnNode.backgroundColor = .tertiary
+                self.followBtnNode.backgroundColor = .normalButtonBackground
                 self.followBtnNode.layer.borderWidth = 0.0
                 self.followBtnNode.layer.borderColor = UIColor.clear.cgColor
                 self.followBtnNode.layer.cornerRadius = 5.0
                 self.followBtnNode.clipsToBounds = true
-                self.followBtnNode.setTitle("Invite", with: UIFont.boldSystemFont(ofSize: FontSize), with: .primary, for: .normal)
+                self.followBtnNode.setTitle(
+                    "Invite",
+                    with: FontManager.shared.roboto(.Bold, size: FontSize),
+                    with: .black,
+                    for: .normal
+                )
+
                 
             }
         
             
-            self.userNameNode.attributedText = NSAttributedString(string: "@None", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            self.userNameNode.attributedText = NSAttributedString(
+                string: "@None",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
+
             
         }
         
@@ -169,11 +150,27 @@ class FindFriendsNode: ASCellNode {
             }
             
         
-            self.NameNode.attributedText = NSAttributedString(string: "\(firstName) \(familyName)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            self.NameNode.attributedText = NSAttributedString(
+                string: "\(firstName) \(familyName)",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
+
             
         } else {
             
-            self.NameNode.attributedText = NSAttributedString(string: "None", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.paragraphStyle: paragraphStyles])
+            self.NameNode.attributedText = NSAttributedString(
+                string: "None",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
+
             
         }
          

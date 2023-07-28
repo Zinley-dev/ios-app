@@ -47,9 +47,8 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
         
           presentSwiftLoader()
 
-          APIManager.shared.getPostDetail(postId: id) { [weak self] result in
-              guard let self = self else { return }
-
+          APIManager.shared.getPostDetail(postId: id) { result in
+           
               switch result {
               case .success(let apiResponse):
                   guard let data = apiResponse.body else {
@@ -82,9 +81,9 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
                                       RVC.posts = [post]
                                      
                                       // Customize the navigation bar appearance
-                                      nav.navigationBar.barTintColor = .background
-                                      nav.navigationBar.tintColor = .white
-                                      nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+                                      nav.navigationBar.barTintColor = .white
+                                      nav.navigationBar.tintColor = .black
+                                      nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                                       nav.modalPresentationStyle = .fullScreen
                                       vc.present(nav, animated: true, completion: nil)

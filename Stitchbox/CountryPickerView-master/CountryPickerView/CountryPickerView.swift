@@ -75,11 +75,12 @@ public class CountryPickerView: NibView {
     }
     
     /// Change the font of phone code
-    public var font = UIFont.systemFont(ofSize: 17.0) {
+    public var font = FontManager.shared.roboto(.Bold, size: 14.0) {
         didSet { setup() }
     }
+
     /// Change the text color of phone code
-    public var textColor = UIColor.black {
+    public var textColor = UIColor.white {
         didSet { setup() }
     }
     

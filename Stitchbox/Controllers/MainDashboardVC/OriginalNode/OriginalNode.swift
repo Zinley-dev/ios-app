@@ -31,19 +31,27 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
 
     var page = 1
     var posts = [PostModel]()
-    //let threshold: CGFloat = 100 // Adjust this value as needed.
+    
     var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
-    var collectionNode: ASCollectionNode
-    var post: PostModel
+    lazy var collectionNode: ASCollectionNode = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 0.0
+        flowLayout.scrollDirection = .horizontal
+        let node = ASCollectionNode(collectionViewLayout: flowLayout)
+        // Perform any additional setup here.
+        return node
+    }()
+
+    var post: PostModel!
     var currentIndex: Int?
     var isVideoPlaying = false
     var newPlayingIndex: Int?
     var imageTimerWorkItem: DispatchWorkItem?
     var isfirstLoad = true
     var imageIndex: Int?
-  
+    
     init(with post: PostModel) {
         self.post = post
         
@@ -51,13 +59,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             posts.append(post)
         }
 
-    
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 0.0
-        flowLayout.scrollDirection = .horizontal
-        self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        // Set the data source and delegate
-       
+
         
         super.init()
        
@@ -79,7 +81,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         self.collectionNode.delegate = self
         self.collectionNode.dataSource = self
         addSubCollection()
-        self.getStitchTo()
+        //self.getStitchTo()
         
 
     }
@@ -104,11 +106,13 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             
             self.selectPostCollectionView.collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
             
+            let height =  UIScreen.main.bounds.height * 1 / 4.5
+          
             NSLayoutConstraint.activate([
                 self.selectPostCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
                 self.selectPostCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
                 self.selectPostCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -8),
-                self.selectPostCollectionView.heightAnchor.constraint(equalToConstant: 280)
+                self.selectPostCollectionView.heightAnchor.constraint(equalToConstant: height)
             ])
             
             self.selectPostCollectionView.collectionView.allowsMultipleSelection = false
@@ -152,8 +156,6 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
 
 extension OriginalNode {
     
-    
-    
     func applyStyle() {
         
         self.collectionNode.view.isPagingEnabled = true
@@ -167,15 +169,16 @@ extension OriginalNode {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == self.selectPostCollectionView.collectionView {
-            let numberOfItemsInRow: CGFloat = 3
-            let spacing: CGFloat = 5
-            let width = (UIScreen.main.bounds.width - (numberOfItemsInRow + 1) * spacing) / numberOfItemsInRow
-            let height = width * 13.5 / 9  // This will give you an aspect ratio of 9:16
+        
+            let height =  UIScreen.main.bounds.height * 1 / 4.5 - 70
+            let width = height * 9 / 13.5
             
-           
             return CGSize(width: width, height: height)
+            
         } else {
+            
             return CGSize(width: 0, height: 0)
+            
         }
     }
 
@@ -234,48 +237,84 @@ extension OriginalNode {
         
         if let vc = UIViewController.currentViewController() {
             
-            let newsFeedSettingVC = NewsFeedSettingVC()
-            newsFeedSettingVC.modalPresentationStyle = .custom
-            newsFeedSettingVC.transitioningDelegate = vc.self
-            
             global_presetingRate = Double(0.35)
             global_cornerRadius = 45
             
-            if vc is FeedViewController {
+            if item.owner?.id == _AppCoreData.userDataSource.value?.userID {
                 
-                if let update1 = vc as? FeedViewController {
-                    update1.editeddPost = item
-                    if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
-                        newsFeedSettingVC.isOwner = true
-                    } else {
-                        newsFeedSettingVC.isOwner = false
+                let postSettingVC = PostSettingVC()
+                postSettingVC.modalPresentationStyle = .custom
+                postSettingVC.transitioningDelegate = vc.self
+                
+                if vc is FeedViewController {
+                    
+                    if let update1 = vc as? FeedViewController {
+                        update1.editeddPost = item
+                            
+                        global_presetingRate = Double(0.35)
+                        global_cornerRadius = 45
+                        update1.editeddPost = item
+                        vc.present(postSettingVC, animated: true, completion: nil)
+                        
                     }
                     
-                  
-                    vc.present(newsFeedSettingVC, animated: true, completion: nil)
+                } else {
+                    
+                    if let update1 = vc as? SelectedPostVC {
+                        update1.editeddPost = item
+                            
+                        global_presetingRate = Double(0.35)
+                        global_cornerRadius = 45
+                        update1.editeddPost = item
+                        vc.present(postSettingVC, animated: true, completion: nil)
+                        
+                    }
+                    
+                    
                     
                 }
                 
             } else {
                 
-                if let update1 = vc as? SelectedPostVC {
-                    update1.editeddPost = item
-                    if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
-                        newsFeedSettingVC.isOwner = true
-                    } else {
-                        newsFeedSettingVC.isOwner = false
+                let newsFeedSettingVC = NewsFeedSettingVC()
+                newsFeedSettingVC.modalPresentationStyle = .custom
+                newsFeedSettingVC.transitioningDelegate = vc.self
+                
+                if vc is FeedViewController {
+                    
+                    if let update1 = vc as? FeedViewController {
+                        update1.editeddPost = item
+                        if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
+                            newsFeedSettingVC.isOwner = true
+                        } else {
+                            newsFeedSettingVC.isOwner = false
+                        }
+                        
+                      
+                        vc.present(newsFeedSettingVC, animated: true, completion: nil)
+                        
                     }
                     
-                    vc.present(newsFeedSettingVC, animated: true, completion: nil)
+                } else {
+                    
+                    if let update1 = vc as? SelectedPostVC {
+                        update1.editeddPost = item
+                        if update1.editeddPost?.owner?.id == _AppCoreData.userDataSource.value?.userID {
+                            newsFeedSettingVC.isOwner = true
+                        } else {
+                            newsFeedSettingVC.isOwner = false
+                        }
+                        
+                        vc.present(newsFeedSettingVC, animated: true, completion: nil)
+                        
+                    }
+                    
+                    
                     
                 }
                 
-                
-                
             }
-            
-            
-            
+
             
         }
         
@@ -305,42 +344,37 @@ extension OriginalNode  {
 extension OriginalNode {
     
     func getStitchTo() {
-
-        APIManager.shared.getStitchTo(pid: post.id) { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.getStitchTo(pid: post.id) { result in
+           
             switch result {
             case .success(let apiResponse):
-                print("StitchTo: \(apiResponse)")
-                guard let data = apiResponse.body?["data"] as? [String: Any],
-                      let originalPost = PostModel(JSON: data) else {
-                    print("Invalid data or PostModel initialization failed")
+              
+                guard let data = apiResponse.body?["data"] as? [String: Any] else {
                     return
                 }
                 
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.posts.insert(originalPost, at: 0)
-                    let indexPath = IndexPath(item: 0, section: 0)
-                    self.collectionNode.insertItems(at: [indexPath])
-                    self.selectPostCollectionView.collectionView.insertItems(at: [indexPath])
+                if !data.isEmpty {
+                    
+                    if let post = PostModel(JSON: data) {
+                        
+                        print(post.id, post.content)
+                        
+                    }
                 }
-
+                
             case .failure(let error):
                 DispatchQueue.main.async {
                     print("StitchTo: error \(error)")
+                    
                 }
 
             }
         }
-
     }
 
-    
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getStitchPost(rootId: post.id, page: page) { [weak self] result in
-            guard let self = self else { return }
+        APIManager.shared.getStitchPost(rootId: post.id, page: page) {  result in
             
             switch result {
             case .success(let apiResponse):
@@ -439,13 +473,7 @@ extension OriginalNode {
         }
     }
 
-    func cleanupPosts(collectionNode: ASCollectionNode) {
-
-    }
-
-
-
-
+   
     func addAnimatedLabelToTop() {
         animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
         animatedLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -455,7 +483,7 @@ extension OriginalNode {
         animatedLabel.trailingBuffer = 10.0
         animatedLabel.animationDelay = 0.0
         animatedLabel.textAlignment = .center
-        animatedLabel.font = UIFont.boldSystemFont(ofSize: 16) // Use a bold font for emphasis
+        animatedLabel.font = FontManager.shared.roboto(.Bold, size: 16)
         animatedLabel.textColor = UIColor.white
         animatedLabel.layer.masksToBounds = true
         animatedLabel.layer.cornerRadius = 10 // Round the corners for a cleaner look
@@ -560,139 +588,89 @@ extension OriginalNode {
     }
     
     
+    func updateCellAppearance(_ cell: ImageViewCell, isSelected: Bool) {
+        cell.layer.cornerRadius = 10
+        cell.layer.borderWidth = isSelected ? 2 : 0
+        cell.layer.borderColor = isSelected ? UIColor.secondary.cgColor : UIColor.clear.cgColor
+        cell.isSelected = isSelected
+    }
+
     func playVideo(index: Int) {
-        
-        
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
-            
-            if !cell.videoNode.isPlaying() {
-                
-                
-                let indexPath = IndexPath(row: index, section: 0)
-
-                if let cell = selectPostCollectionView.collectionView.cellForItem(at: indexPath) as? ImageViewCell {
-                    cell.layer.cornerRadius = 10
-                    cell.layer.borderWidth = 2
-                    cell.layer.borderColor = UIColor.secondary.cgColor
-                    cell.isSelected = true
-                    selectPostCollectionView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-                    
-                    self.selectPostCollectionView.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-                    
-
-                    // Deselect all other cells
-                    for i in 0..<selectPostCollectionView.collectionView.numberOfItems(inSection: 0) {
-                        if i != index {
-                            selectPostCollectionView.collectionView.deselectItem(at: IndexPath(row: i, section: 0), animated: false)
-                            
-                            if let otherCell = selectPostCollectionView.collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? ImageViewCell {
-                                otherCell.layer.borderWidth = 0
-                                //cell.layer.borderColor = UIColor.clear.cgColor
-                                otherCell.isSelected = false
-                            }
-                        }
-                    }
-                    
-                } else {
-                    print("Couldn't cast ?")
-                }
-                
-                if index == 0 {
-                    
-                    delay(1) { [weak self] in
-                        guard let self = self else { return }
-                        let nextIndex = index + 1
-                        
-                        if nextIndex < self.posts.count {
-                            
-                            let item = self.posts[nextIndex]
-                            
-                            if let nextUsername = item.owner?.username {
-                                self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
-
-                            }
-                           
-                        } else {
-                            self.applyAnimationText(text: "")
-
-                        }
-                    }
-                    
-                } else {
-                    
-                    let nextIndex = index + 1
-                    
-                    if nextIndex < posts.count {
-                        
-                        let item = posts[nextIndex]
-                        
-                        if let nextUsername = item.owner?.username {
-                            self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
-
-                        }
-                        
-                        
-                       
-                    } else {
-                        self.applyAnimationText(text: "")
-
-                    }
-                    
-                }
-                   
-                if selectPostCollectionView.isHidden == false {
-                    guard let sideButtonsView = cell.sideButtonsView else { return }
-                    cell.headerNode.isHidden = true
-                    cell.contentNode.isHidden = true
-                    sideButtonsView.isHidden = true
-                    cell.buttonNode.isHidden = true
-       
-                } else {
-                    guard let sideButtonsView = cell.sideButtonsView else { return }
-                    cell.headerNode.isHidden = false
-                    cell.contentNode.isHidden = false
-                    cell.sideButtonsView.isHidden = false
-                    cell.buttonNode.isHidden = false
-     
-                }
-
-                
-                if cell.sideButtonsView != nil {
-                    
-                    cell.sideButtonsView.stitchCount.text = "\(index + 1)"
-                    
-                    
-                }
-                
-                if let muteStatus = shouldMute {
-                    
-                    
-                    if muteStatus {
-                        cell.videoNode.muted = true
-                    } else {
-                        cell.videoNode.muted = false
-                    }
-                    
-                    cell.videoNode.play()
-                    
-                } else {
-
-                    
-                    if globalIsSound {
-                        cell.videoNode.muted = false
-                    } else {
-                        cell.videoNode.muted = true
-                    }
-                    
-                    cell.videoNode.play()
-                    
-                }
-                
-                
-            }
-            
+        guard let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode, !cell.videoNode.isPlaying() else {
+            return
         }
         
+        
+
+        // Cell selection/deselection logic
+        let indexPath = IndexPath(row: index, section: 0)
+        if let imgCell = selectPostCollectionView.collectionView.cellForItem(at: indexPath) as? ImageViewCell {
+            updateCellAppearance(imgCell, isSelected: true)
+            selectPostCollectionView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+            self.selectPostCollectionView.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+
+            // Deselect all other cells
+            for i in 0..<selectPostCollectionView.collectionView.numberOfItems(inSection: 0) {
+                if i != index, let otherCell = selectPostCollectionView.collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? ImageViewCell {
+                    updateCellAppearance(otherCell, isSelected: false)
+                }
+            }
+        } else {
+            print("Couldn't cast ?")
+        }
+
+        if index == 0 && self.posts.count <= 1 {
+            delay(1) { [weak self] in
+                guard let self = self else { return }
+                self.handleAnimationTextAndImage(for: index, cell: cell)
+            }
+        } else {
+            self.handleAnimationTextAndImage(for: index, cell: cell)
+        }
+        
+        if index == 0 {
+            delay(1) { [weak self] in
+                guard let self = self else { return }
+                self.processStichGuideline()
+            }
+        } else {
+            processStichGuideline()
+        }
+
+        let isHidden = !selectPostCollectionView.isHidden
+        cell.headerNode.isHidden = isHidden
+        cell.contentNode.isHidden = isHidden
+        cell.sideButtonsView?.isHidden = isHidden
+        cell.buttonNode.isHidden = isHidden
+
+        if let sideButtonsView = cell.sideButtonsView {
+            sideButtonsView.stitchCount.text = "\(index + 1)"
+        }
+
+        cell.videoNode.muted = shouldMute ?? !globalIsSound
+        cell.videoNode.play()
+    }
+
+    
+    func handleAnimationTextAndImage(for index: Int, cell: ReelNode) {
+        let nextIndex = index + 1
+        let postCount = self.posts.count
+        
+        if nextIndex < postCount {
+            let item = self.posts[nextIndex]
+            if let nextUsername = item.owner?.username {
+                self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
+            }
+        } else {
+            self.applyAnimationText(text: "")
+        }
+        
+        if postCount > 1 {
+            cell.sideButtonsView.statusImg.isHidden = false
+            cell.sideButtonsView.statusImg.image = UIImage.init(named: index == 0 ? "star white" : "partner white")
+        } else {
+            cell.sideButtonsView.statusImg.isHidden = true
+        }
     }
 
     
@@ -719,6 +697,8 @@ extension OriginalNode {
 
         if let username = item.owner?.username {
             cell.infoLabel.text = "@\(username)"
+            cell.infoLabel.font = FontManager.shared.roboto(.Bold, size: 11)
+
         } else {
             cell.infoLabel.text = ""
         }
@@ -900,7 +880,34 @@ extension OriginalNode {
         }
     }
 
+    func processStichGuideline() {
+        
+        let userDefaults = UserDefaults.standard
+        if userDefaults.bool(forKey: "hasShowStitched") == false {
+            
+            if posts.count > 1, currentIndex == 0 {
+                
+                
+                userDefaults.set(true, forKey: "hasShowStitched")
+                userDefaults.synchronize() // This forces the app to update userDefaults
+                
+                
+                // Scroll slightly to the next item.
+                let nextOffset = collectionNode.contentOffset.x + collectionNode.frame.width * 0.2
+                collectionNode.setContentOffset(CGPoint(x: nextOffset, y: 0), animated: true)
+
+                // Delay the scroll back by 1 second.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    // Scroll back to the original item.
+                    let currentIndexPath = IndexPath(item: self.currentIndex!, section: 0)
+                    self.collectionNode.scrollToItem(at: currentIndexPath, at: .left, animated: true)
+                }
+            }
+            
+        }
+        
+        
+    }
 
 
-    
 }

@@ -13,7 +13,7 @@ class NewPasswordVC: UIViewController, ControllerType {
   
   @IBOutlet weak var enteredPasswordTextfield: UITextField!
   @IBOutlet weak var passwordTextfield: UITextField!
-  @IBOutlet weak var nextButton: SButton!
+  @IBOutlet weak var nextButton: UIButton!
   
   @IBOutlet weak var checkPasswordMatchLabel: UILabel!
   @IBOutlet weak var checkPassLengthLabel: UILabel!
@@ -117,7 +117,7 @@ class NewPasswordVC: UIViewController, ControllerType {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,

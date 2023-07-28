@@ -48,7 +48,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -69,15 +69,19 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     }()
     
     private lazy var _rightBarButton: UIBarButtonItem = {
-            let rightItem =  UIBarButtonItem(
-                title: "Create",
-                style: .plain,
-                target: self,
-                action: #selector(createChannel)
-            )
-        rightItem.setTitleTextAttributes([.font : SBUFontSet.button2], for: .normal)
+        let rightItem =  UIBarButtonItem(
+            title: "Create",
+            style: .plain,
+            target: self,
+            action: #selector(createChannel)
+        )
+        rightItem.setTitleTextAttributes([
+            .font : SBUFontSet.button2,
+            .foregroundColor: UIColor.black
+        ], for: .normal)
         return rightItem
     }()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,9 +105,9 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -127,9 +131,9 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         self.searchController?.searchBar.searchBarStyle = .minimal
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
-        self.searchController?.searchBar.tintColor = .white
-        self.searchController?.searchBar.searchTextField.textColor = .white
-        self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [.foregroundColor: UIColor.lightGray])
+        self.searchController?.searchBar.tintColor = .black
+        self.searchController?.searchBar.searchTextField.textColor = .black
+        self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [.foregroundColor: UIColor.darkGray])
         
         self.searchController!.searchBar.searchTextField.leftView?.tintColor = .lightGray
     }
@@ -198,9 +202,9 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
         cell.hashTagLabel.text = selectedUsers[indexPath.row].nickname
-        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.font = FontManager.shared.roboto(.Regular, size: 12)
         cell.hashTagLabel.backgroundColor = .clear
-        cell.backgroundColor = .primary
+        cell.backgroundColor = hashtagPurple
         return cell
     }
 
@@ -230,7 +234,7 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
             user: user,
             isChecked: self.selectedUsers.contains(user)
         )
-        cell?.theme = .dark
+        cell?.theme = .light
         cell?.contentView.backgroundColor = self.view.backgroundColor
         cell?.selectionStyle = .none
         return cell ?? UITableViewCell()
@@ -446,14 +450,53 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
             }
 
             let userIDs = self.selectedUsers.map { $0.userId }
-            checkForChannelInvitation(channelUrl: channelUrl, user_ids: userIDs)
+            self.checkForChannelInvitation(channelUrl: channelUrl, user_ids: userIDs)
 
             let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: nil)
-            channelVC.shouldUnhide = true
-            self.navigationController?.pushViewController(channelVC, animated: true)
-            self.navigationController?.viewControllers.remove(at: 1)
+            
+            let nav = UINavigationController(rootViewController: channelVC)
+
+         
+            // Customize the navigation bar appearance
+            nav.navigationBar.barTintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+            nav.modalPresentationStyle = .fullScreen
+     
+           // self.navigationController?.pushViewController(channelVC, animated: true)
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true)
+            
+            self.navigationController?.popViewController(animated: true)
+            
+            
+            
         }
+
     }
 
+    
+    func checkForChannelInvitation(channelUrl: String, user_ids: [String]) {
+        
+        
+        APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
+            switch result {
+            case .success(let apiResponse):
+                // Check if the request was successful
+                guard apiResponse.body?["message"] as? String == "success",
+                    let data = apiResponse.body?["data"] as? [String: Any] else {
+                        return
+                }
+                
+                print(data)
+                
+               
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        
+    }
 
 }

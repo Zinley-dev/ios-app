@@ -34,7 +34,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         
         if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "InboxViewController") as? InboxVC {
-                    
+            
             self.addVCAsChildVC(childViewController: controller)
             
             return controller
@@ -45,22 +45,17 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-    
-        
-        setupInboxBtn()
+
         settingUpLayoutNavView()
         checkCallForLayout()
         setupSearchController()
         
         // default load for 2 child views
-        
+   
         InboxVC.view.isHidden = false
-        
         
         NotificationCenter.default.addObserver(self, selector: #selector(MainMessageVC.checkCallForLayout), name: (NSNotification.Name(rawValue: "checkCallForLayout")), object: nil)
         
@@ -69,7 +64,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
                     navigationController.navigationBar.prefersLargeTitles = false
                     navigationController.navigationBar.isTranslucent = false
                 }
-        
+         
     }
 
     
@@ -77,15 +72,16 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         super.viewWillAppear(animated)
 
         // tabbar
+        
         showMiddleBtn(vc: self)
         checkCallForLayout()
-        
+       
     
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -95,7 +91,9 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         }
 
         tabBar.isHidden = false
+         
     }
+    
     
     func setupSearchController() {
         self.searchController = UISearchController(searchResultsController: nil)
@@ -111,6 +109,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         self.searchController?.searchBar.isUserInteractionEnabled = true
         self.navigationItem.searchController = nil
         self.searchController?.searchBar.isHidden = true
+        self.searchController?.searchBar.text = ""
     }
  
 
@@ -181,27 +180,27 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     func createLeftTitleItem(text: String) -> UIBarButtonItem {
         let titleLabel = UILabel()
         titleLabel.text = text
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        titleLabel.textColor = UIColor.white
+        titleLabel.font = FontManager.shared.roboto(.Bold, size: 18)
+        titleLabel.textColor = UIColor.black
         return UIBarButtonItem.init(customView: titleLabel)
     }
         
     
     func setupWithCall() {
         let createButton = UIButton(type: .custom)
-        createButton.setImage(UIImage(named: "4x_add"), for: [])
+        createButton.setImage(UIImage(named: "plus-lightmode")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
         createButton.addTarget(self, action: #selector(showCreateChannel(_:)), for: .touchUpInside)
         createButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let createBarButton = UIBarButtonItem(customView: createButton)
 
         let searchButton = UIButton(type: .custom)
-        searchButton.setImage(UIImage(named: "search"), for: [])
+        searchButton.setImage(UIImage(named: "search-lightmode")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
         searchButton.addTarget(self, action: #selector(searchBarSetting(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let searchBarButton = UIBarButtonItem(customView: searchButton)
         
         let chatbotButton = UIButton(type: .custom)
-        chatbotButton.setImage(UIImage(named: "gpt_bot"), for: [])
+        chatbotButton.setImage(UIImage(named: "gpt_bot")?.resize(targetSize: CGSize(width: 25, height: 25)), for: [])
         chatbotButton.addTarget(self, action: #selector(openChatBot(_:)), for: .touchUpInside)
         chatbotButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let chatbotBarButton = UIBarButtonItem(customView: chatbotButton)
@@ -216,7 +215,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
         voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
         voiceCallButton.frame = CGRect(x: 0, y: 0, width: 70, height: 30)
-        voiceCallButton.backgroundColor = .secondary
+        voiceCallButton.backgroundColor = incomingCallGreen
         voiceCallButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 70, height: 30))
         customView.addSubview(voiceCallButton)
@@ -239,12 +238,12 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         let searchButton: UIButton = UIButton(type: .custom)
         
         // Do any additional setup after loading the view.
-        createButton.setImage(UIImage(named: "4x_add"), for: [])
+        createButton.setImage(UIImage(named: "plus-lightmode")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
         createButton.addTarget(self, action: #selector(showCreateChannel(_:)), for: .touchUpInside)
         createButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let createBarButton = UIBarButtonItem(customView: createButton)
       
-        searchButton.setImage(UIImage(named: "search"), for: [])
+        searchButton.setImage(UIImage(named: "search-lightmode")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
         searchButton.addTarget(self, action: #selector(searchBarSetting(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         
@@ -277,27 +276,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
        
     }
-    
-    // Buttons controll
-    
-    func setupInboxBtn() {
-        
-        inboxBtn.setTitleColor(UIColor.white, for: .normal)
-        requestBtn.setTitleColor(UIColor.lightGray, for: .normal)
-        
-        
-        inboxBtn.backgroundColor = UIColor.primary
-        requestBtn.backgroundColor = UIColor.clear
-        
-        
-        InboxVC.view.isHidden = false
-       
-        
-        
-        self.searchController?.searchBar.text = ""
-        
-        
-    }
+
     
     func setupRequestBtn() {
         
@@ -306,7 +285,7 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         
         
         inboxBtn.backgroundColor = UIColor.clear
-        requestBtn.backgroundColor = UIColor.primary
+        requestBtn.backgroundColor = UIColor.secondary
         
         
         InboxVC.view.isHidden = true
@@ -318,13 +297,13 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
     
     @IBAction func InboxBtnPressed(_ sender: Any) {
         
-        setupInboxBtn()
+       
         
     }
     
     @IBAction func requestBtnPressed(_ sender: Any) {
         
-        setupRequestBtn()
+       
         
     }
     

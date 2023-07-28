@@ -60,7 +60,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -88,7 +88,10 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                 target: self,
                 action: #selector(InviteUsers)
             )
-        rightItem.setTitleTextAttributes([.font : SBUFontSet.button2], for: .normal)
+        rightItem.setTitleTextAttributes([
+            .font : SBUFontSet.button2,
+            .foregroundColor: UIColor.black
+        ], for: .normal)
         return rightItem
     }()
     
@@ -107,10 +110,10 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         self.searchController?.searchBar.searchBarStyle = .minimal
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
-        self.searchController?.searchBar.tintColor = .white
-        self.searchController?.searchBar.searchTextField.textColor = .white
+        self.searchController?.searchBar.tintColor = .black
+        self.searchController?.searchBar.searchTextField.textColor = .black
         self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [.foregroundColor: UIColor.lightGray])
-        self.searchController!.searchBar.searchTextField.leftView?.tintColor = .lightGray
+        self.searchController!.searchBar.searchTextField.leftView?.tintColor = .darkGray
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -148,9 +151,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -228,9 +231,9 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HashtagCell.cellReuseIdentifier(), for: indexPath) as! HashtagCell
         cell.hashTagLabel.text = selectedUsers[indexPath.row].nickname
-        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.font = FontManager.shared.roboto(.Regular, size: 12)
         cell.hashTagLabel.backgroundColor = .clear
-        cell.backgroundColor = .primary
+        cell.backgroundColor = hashtagPurple
         return cell
     }
 
@@ -258,7 +261,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
         cell.selectionStyle = .none
         let user = inSearchMode ? searchUserList[indexPath.row] : userList[indexPath.row]
         cell.configure(type: .createChannel, user: user, isChecked: selectedUsers.contains(user))
-        cell.theme.backgroundColor = UIColor.clear
+        cell.theme = .light
         return cell
     }
     
@@ -459,7 +462,7 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                        // Filter out current user's UID
                        let ids = loadList.filter { $0 != userUID }
                        // Call checkForChannelInvitation function
-                       checkForChannelInvitation(channelUrl: url, user_ids: ids)
+                       self.checkForChannelInvitation(channelUrl: url, user_ids: ids)
                    }
                }
 
@@ -468,12 +471,35 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
                // Create an instance of ChannelViewController
                let channelVC = ChannelViewController(channelUrl: channelUrl!, messageListParams: nil)
                // Push ChannelViewController onto the navigation stack
-               channelVC.shouldUnhide = true
+               //channelVC.shouldUnhide = true
                self.navigationController?.pushViewController(channelVC, animated: true)
                // Remove view controllers in the stack after it
                self.navigationController?.viewControllers.removeSubrange(1...4)
            }
        }
+    }
+    
+    func checkForChannelInvitation(channelUrl: String, user_ids: [String]) {
+        
+        
+        APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
+            switch result {
+            case .success(let apiResponse):
+                // Check if the request was successful
+                guard apiResponse.body?["message"] as? String == "success",
+                    let data = apiResponse.body?["data"] as? [String: Any] else {
+                        return
+                }
+                
+                print(data)
+                
+               
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        
     }
 
     

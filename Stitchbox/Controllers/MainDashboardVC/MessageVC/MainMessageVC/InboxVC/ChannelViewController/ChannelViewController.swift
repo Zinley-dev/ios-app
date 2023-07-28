@@ -30,7 +30,7 @@ class ChannelViewController: SBUChannelViewController {
     
     var getRoom: Room!
     var currentRoomID = ""
-    var shouldUnhide = false
+    //var shouldUnhide = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,20 +46,10 @@ class ChannelViewController: SBUChannelViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        changeTabBar(hidden: true)
-        self.tabBarController?.tabBar.isTranslucent = true
-        hideMiddleBtn(vc: self)
+        //changeTabBar(hidden: true)
+        //self.tabBarController?.tabBar.isTranslucent = true
+        //hideMiddleBtn(vc: self)
     
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -248,7 +238,7 @@ class ChannelViewController: SBUChannelViewController {
     
     func callLayout() {
         let settingButton = UIButton(type: .custom)
-        settingButton.setImage(UIImage(named: "img_btn_channel_settings"), for: [])
+        settingButton.setImage(UIImage(named: "settings black")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
         settingButton.addTarget(self, action: #selector(showChannelSetting(_:)), for: .touchUpInside)
         settingButton.frame = CGRect(x: 0, y: 0, width: 40, height: 30)
         let settingBarButton = UIBarButtonItem(customView: settingButton)
@@ -265,10 +255,10 @@ class ChannelViewController: SBUChannelViewController {
             voiceCallButton.setTitle("Join ", for: .normal)
             voiceCallButton.setTitleColor(.white, for: .normal)
             voiceCallButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-            voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
+            voiceCallButton.setImage(UIImage(named: "icCallFilled")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
             voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
             voiceCallButton.frame = CGRect(x: 0, y: 0, width: 70, height: 30)
-            voiceCallButton.backgroundColor = .secondary
+            voiceCallButton.backgroundColor = .green
             voiceCallButton.cornerRadius = 15
 
             let customView = UIView(frame: CGRect(x: 0, y: 0, width: 70, height: 30))
@@ -281,7 +271,7 @@ class ChannelViewController: SBUChannelViewController {
         } else {
             voiceCallButton = UIButton(type: .custom)
             voiceCallButton.setTitle("", for: .normal)
-            voiceCallButton.setImage(UIImage(named: "icCallFilled"), for: [])
+            voiceCallButton.setImage(UIImage(named: "call 1")?.resize(targetSize: CGSize(width: 22, height: 22)), for: [])
             voiceCallButton.addTarget(self, action: #selector(clickVoiceCallBarButton(_:)), for: .touchUpInside)
             voiceCallButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
             voiceCallButton.backgroundColor = .clear

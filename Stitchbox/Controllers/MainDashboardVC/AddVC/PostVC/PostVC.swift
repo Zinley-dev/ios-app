@@ -12,6 +12,7 @@ import Photos
 import ObjectMapper
 import Cache
 import AlamofireImage
+import SCLAlertView
 
 class PostVC: UIViewController {
 
@@ -24,6 +25,7 @@ class PostVC: UIViewController {
         case video
     }
     
+    @IBOutlet weak var addView: UIView!
     var stitchPost: PostModel!
     var itemList = [GameList]()
     @IBOutlet weak var stitchView: UIView!
@@ -76,6 +78,7 @@ class PostVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        addView.backgroundColor = .normalButtonBackground
         setupNavBar()
         global_fullLink = ""
         global_host = ""
@@ -89,6 +92,13 @@ class PostVC: UIViewController {
         
         if stitchPost != nil {
             stitchView.isHidden = false
+            let userDefaults = UserDefaults.standard
+            if userDefaults.bool(forKey: "hasAlertContentBefore") == false {
+                
+                acceptTermStitch()
+                
+            }
+            
         } else {
             stitchView.isHidden = true
         }
@@ -98,9 +108,9 @@ class PostVC: UIViewController {
     func setupNavBar() {
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
         
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -252,9 +262,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .white
-        followLbl.textColor = .white
-        onlyMeLbl.textColor = .white
+        publicLbl.textColor = .black
+        followLbl.textColor = .lightGray
+        onlyMeLbl.textColor = .lightGray
         
     }
     
@@ -267,9 +277,9 @@ class PostVC: UIViewController {
         followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .white
-        followLbl.textColor = .white
-        onlyMeLbl.textColor = .white
+        publicLbl.textColor = .lightGray
+        followLbl.textColor = .black
+        onlyMeLbl.textColor = .lightGray
     }
     
     @IBAction func privateBtnPressed(_ sender: Any) {
@@ -281,9 +291,9 @@ class PostVC: UIViewController {
         privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
         
         
-        publicLbl.textColor = .white
-        followLbl.textColor = .white
-        onlyMeLbl.textColor = .white
+        publicLbl.textColor = .lightGray
+        followLbl.textColor = .lightGray
+        onlyMeLbl.textColor = .black
         
         
     }
@@ -297,7 +307,7 @@ class PostVC: UIViewController {
     
     @IBAction func stitchBtnPressed(_ sender: Any) {
         
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PreviewVC") as? PreviewVC {
             
             SPVC.selectedPost = [stitchPost]
             SPVC.startIndex = 0
@@ -305,8 +315,7 @@ class PostVC: UIViewController {
             self.navigationController?.pushViewController(SPVC, animated: true)
             
         }
-        
-
+    
         
     }
     
@@ -377,9 +386,9 @@ extension PostVC {
                                 self.followingBtn.setImage(UIImage(named: "following"), for: .normal)
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
-                                self.publicLbl.textColor = .white
-                                self.followLbl.textColor = .white
-                                self.onlyMeLbl.textColor = .white
+                                self.publicLbl.textColor = .black
+                                self.followLbl.textColor = .lightGray
+                                self.onlyMeLbl.textColor = .lightGray
                                 
                             }
    
@@ -393,9 +402,9 @@ extension PostVC {
                                 self.followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
                                 self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
                                         
-                                self.publicLbl.textColor = .white
-                                self.followLbl.textColor = .white
-                                self.onlyMeLbl.textColor = .white
+                                self.publicLbl.textColor = .lightGray
+                                self.followLbl.textColor = .black
+                                self.onlyMeLbl.textColor = .lightGray
                                 
                             }
                             
@@ -411,9 +420,9 @@ extension PostVC {
                                 self.privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
                                         
                                         
-                                self.publicLbl.textColor = .white
-                                self.followLbl.textColor = .white
-                                self.onlyMeLbl.textColor = .white
+                                self.publicLbl.textColor = .lightGray
+                                self.followLbl.textColor = .lightGray
+                                self.onlyMeLbl.textColor = .black
                                 
                             }
                             
@@ -449,58 +458,7 @@ extension PostVC {
     }
     
     
-    func uploadImage() {
-        
-        if selectedImage != nil {
-            
-            print("Start exporting image")
-            self.exportImage(currentImage: self.selectedImage) {
-                
-                Dispatch.background {
-                    
-                    print("Start uploading")
-                    if let checkImage = self.renderedImage {
-
-                        
-                        Dispatch.background {
-                            
-                            if self.stitchPost != nil {
-                                
-                                UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: self.stitchPost.id)
-                                
-                            } else {
-                                
-                                UploadContentManager.shared.uploadImageToDB(image: checkImage, hashtagList: self.hashtagList, selectedDescTxtView: self.selectedDescTxtView, isAllowComment: self.isAllowComment, mediaType: self.mediaType, mode: self.mode, origin_width: self.origin_width, origin_height: self.origin_height, isAllowStitch: self.isAllowStitch, stitchId: "")
-                                
-                            }
-                            
-                        }
-                        
-                        DispatchQueue.main.async {
-                            SwiftLoader.hide()
-                            showNote(text: "Thank you, your content is being uploaded!")
-                            self.dismiss(animated: true, completion: nil)
-                            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "switchvc")), object: nil)
-                        }
-                        
-                    } else {
-                        self.showErrorAlert("Oops!", msg: "We encountered error while getting your exported image, please try again!")
-                    }
-                    
-                }
-    
-            }
-             
-            
-        } else {
-            
-            showErrorAlert("Oops!", msg: "We encountered error while getting your selected image, please try again!")
-            
-        }
-        
-        
-        
-    }
+   
     
     func uploadVideo() {
         
@@ -630,9 +588,9 @@ extension PostVC {
         followingBtn.setImage(UIImage(named: "following"), for: .normal)
         privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
         
-        publicLbl.textColor = .white
-        followLbl.textColor = .white
-        onlyMeLbl.textColor = .white
+        publicLbl.textColor = .lightGray
+        followLbl.textColor = .lightGray
+        onlyMeLbl.textColor = .lightGray
         
     }
     
@@ -650,12 +608,12 @@ extension PostVC {
         //createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
         createButton.setTitle("Post", for: .normal)
-        createButton.setTitleColor(.lightGray, for: .normal)
+        createButton.setTitleColor(.black, for: .normal)
         createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
-        createButton.backgroundColor = .disableButtonBackground
+        createButton.backgroundColor = .lightGray
         createButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
         customView.addSubview(createButton)
@@ -675,12 +633,12 @@ extension PostVC {
         createButton.addTarget(self, action: #selector(onClickPost(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
         createButton.setTitle("Post", for: .normal)
-        createButton.setTitleColor(.primary, for: .normal)
+        createButton.setTitleColor(.white, for: .normal)
         createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
         createButton.frame = CGRect(x: 0, y: 0, width: 80, height: 30)
-        createButton.backgroundColor = .white
+        createButton.backgroundColor = .secondary
         createButton.cornerRadius = 15
         let customView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 30))
         customView.addSubview(createButton)
@@ -700,7 +658,7 @@ extension PostVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -769,9 +727,9 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
   
         cell.hashTagLabel.text = hashtagList[indexPath.row]
-        cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
+        cell.hashTagLabel.font = FontManager.shared.roboto(.Regular, size: 12)
         cell.hashTagLabel.backgroundColor = .clear
-        cell.backgroundColor = .primary
+        cell.backgroundColor = hashtagPurple
         
         return cell
         
@@ -821,7 +779,7 @@ extension PostVC {
         if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
   
             if mediaType == "image" {
-                uploadImage()
+                //uploadImage()
             } else if mediaType == "video" {
                 uploadVideo()
             } else {
@@ -973,6 +931,61 @@ extension PostVC {
         
         
         SwiftLoader.show(title: progress, animated: true)
+        
+    }
+    
+    
+    func acceptTermStitch() {
+        
+        if let username = _AppCoreData.userDataSource.value?.userName {
+           
+            let appearance = SCLAlertView.SCLAppearance(
+                kTitleFont: FontManager.shared.roboto(.Medium, size: 15),
+                kTextFont: FontManager.shared.roboto(.Regular, size: 13),
+                kButtonFont: FontManager.shared.roboto(.Medium, size: 13),
+                showCloseButton: false,
+                dynamicAnimatorActive: true,
+                buttonsLayout: .horizontal
+            )
+            
+            let alert = SCLAlertView(appearance: appearance)
+            
+            _ = alert.addButton("Decline", backgroundColor: .normalButtonBackground, textColor: .black) {
+                
+                showNote(text: "Thank you and feel feel free to enjoy other videos at Stitchbox!")
+                
+                self.dismiss(animated: true)
+             
+            }
+            
+            
+
+            _ = alert.addButton("Agree", backgroundColor: UIColor.secondary, textColor: .white) {
+                
+                let userDefaults = UserDefaults.standard
+                
+                userDefaults.set(true, forKey: "hasAlertContentBefore")
+                userDefaults.synchronize() // This forces the app to update userDefaults
+                
+                showNote(text: "Thank you and enjoy Stitch!")
+                
+            }
+            
+           
+            
+            let terms = """
+                        Ensure your content maintains relevance to the original topic.
+                        Exhibit respect towards the original author in your content.
+                        Abide by our terms of use and guidelines in the creation of your content.
+                        """
+                    
+                    let icon = UIImage(named:"Logo")
+                    
+                    _ = alert.showCustom("Hi \(username),", subTitle: terms, color: UIColor.white, icon: icon!)
+            
+        }
+        
+        
         
     }
     

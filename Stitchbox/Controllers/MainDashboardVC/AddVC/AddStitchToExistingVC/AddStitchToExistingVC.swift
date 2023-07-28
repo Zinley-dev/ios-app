@@ -10,9 +10,11 @@ import FLAnimatedImage
 import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
+import SCLAlertView
 
 class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate{
 
+    @IBOutlet weak var linkImg: UIImageView!
     @IBOutlet weak var stitchHeight: NSLayoutConstraint!
     @IBOutlet weak var stitchWidth: NSLayoutConstraint!
 
@@ -44,14 +46,19 @@ class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayou
 
         // Do any additional setup after loading the view.
         
+        
         setupNavBar()
         setupButtons()
         setupCollectionNode()
         setupStitch()
         
+        let userDefaults = UserDefaults.standard
         
-
-    
+        if userDefaults.bool(forKey: "hasAlertContentBefore") == false {
+            
+            acceptTermStitch()
+            
+        }
         
     }
     
@@ -104,9 +111,9 @@ class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayou
     func setupNavBar() {
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
         
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -131,7 +138,7 @@ extension AddStitchToExistingVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -362,10 +369,9 @@ extension AddStitchToExistingVC {
 
 extension AddStitchToExistingVC {
     
-
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getMyPost(page: page) { [weak self] result in
+        APIManager.shared.getMyNonStitchPost(page: page) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -401,9 +407,7 @@ extension AddStitchToExistingVC {
             }
         }
         
-        
     }
-    
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
 
@@ -459,13 +463,14 @@ extension AddStitchToExistingVC {
             stitchImg.loadProfileContent(url: stitch.imageUrl, str: stitch.imageUrl.absoluteString)
             stitchUsername.text = "@\(stitch.owner?.username ?? "")"
             stitchView.isHidden = false
+            linkImg.isHidden = false
             if self.navigationItem.rightBarButtonItem == nil {
                 createStitchBtn()
             }
             
         } else {
             stitchView.isHidden = true
-            
+            linkImg.isHidden = true
             if let data = stitchedPost {
                 originalImg.loadProfileContent(url: data.imageUrl, str: data.imageUrl.absoluteString)
                 originalUsername.text = "@\(data.owner?.username ?? "")"
@@ -481,7 +486,7 @@ extension AddStitchToExistingVC {
         createButton.addTarget(self, action: #selector(onClickStitch(_:)), for: .touchUpInside)
         createButton.semanticContentAttribute = .forceRightToLeft
         createButton.setTitle("Stitch", for: .normal)
-        createButton.setTitleColor(.primary, for: .normal)
+        createButton.setTitleColor(.secondary, for: .normal)
         createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         createButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         createButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 2)
@@ -529,6 +534,65 @@ extension AddStitchToExistingVC {
             }
         }
        
+        
+    }
+    
+    
+    func acceptTermStitch() {
+        
+        if let username = _AppCoreData.userDataSource.value?.userName {
+           
+            let appearance = SCLAlertView.SCLAppearance(
+                kTitleFont: FontManager.shared.roboto(.Medium, size: 15),
+                kTextFont: FontManager.shared.roboto(.Regular, size: 13),
+                kButtonFont: FontManager.shared.roboto(.Medium, size: 13),
+                showCloseButton: false,
+                dynamicAnimatorActive: true,
+                buttonsLayout: .horizontal
+            )
+            
+            let alert = SCLAlertView(appearance: appearance)
+            
+            _ = alert.addButton("Decline", backgroundColor: .normalButtonBackground, textColor: .black) {
+                
+                showNote(text: "Thank you and feel feel free to enjoy other videos at Stitchbox!")
+                
+                if let navigationController = self.navigationController {
+                    navigationController.popViewController(animated: true)
+                } else {
+                    self.dismiss(animated: true)
+                }
+             
+            }
+            
+            
+
+            _ = alert.addButton("Agree", backgroundColor: UIColor.secondary, textColor: .white) {
+                
+                let userDefaults = UserDefaults.standard
+                
+                userDefaults.set(true, forKey: "hasAlertContentBefore")
+                userDefaults.synchronize() // This forces the app to update userDefaults
+                
+                showNote(text: "Thank you and enjoy Stitch!")
+                
+            }
+            
+           
+            
+            let terms = """
+                        Ensure your content maintains relevance to the original topic.
+                        Exhibit respect towards the original author in your content.
+                        Abide by our terms of use and guidelines in the creation of your content.
+                        """
+                    
+                    let icon = UIImage(named:"Logo")
+                    
+                    _ = alert.showCustom("Hi \(username),", subTitle: terms, color: UIColor.white, icon: icon!)
+            
+        }
+        
+        
         
     }
     

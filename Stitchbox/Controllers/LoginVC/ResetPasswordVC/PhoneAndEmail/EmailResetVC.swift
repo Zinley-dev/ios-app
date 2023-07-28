@@ -19,7 +19,7 @@ class EmailResetVC: UIViewController, ControllerType {
     private let disposeBag = DisposeBag()
   
   
-    @IBOutlet weak var nextBtn: SButton!
+    @IBOutlet weak var nextBtn: UIButton!
     @IBOutlet weak var emailTxtField: UITextField!
     
     
@@ -73,7 +73,7 @@ class EmailResetVC: UIViewController, ControllerType {
     
     func bindAction(with viewModel: ResetPasswordViewModel) {
         nextBtn.rx.tap.asObservable()
-            .debounce(.milliseconds(5000), scheduler: MainScheduler.instance) // Avoid multiple taps
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Avoid multiple taps
             .withLatestFrom(emailTxtField.rx.text.orEmpty.asObservable()) {
                 return $1
             }

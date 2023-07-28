@@ -65,6 +65,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         // Do any additional setup after loading the view
         setupNavBar()
+        setupTabBar()
         syncSendbirdAccount()
         IAPManager.shared.configure()
         setupButtons()
@@ -96,13 +97,21 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
         
         
         if let tabBarController = self.tabBarController {
@@ -134,11 +143,11 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         setupNavBar()
+        setupTabBar()
         checkNotification()
         showMiddleBtn(vc: self)
         loadFeed()
@@ -209,6 +218,18 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
         }
         
+        
+    }
+    
+    
+    func setupTabBar() {
+        
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = .black
+        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .black
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .black
+        self.tabBarController?.tabBar.standardAppearance = tabBarAppearance
         
     }
     
@@ -562,34 +583,36 @@ extension FeedViewController {
 
 
 extension FeedViewController {
-    
-
 
     func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
         
         if isfirstLoad {
             isfirstLoad = false
             
-            if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: 0, section: 0)) as? OriginalNode {
+            if !posts.isEmpty {
                 
-                if !currentCell.posts[0].muxPlaybackId.isEmpty {
-                    currentIndex = 0
-                    newPlayingIndex = 0
-                    currentCell.currentIndex = 0
-                    currentCell.newPlayingIndex = 0
+                if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: 0, section: 0)) as? OriginalNode {
                     
-                    currentCell.isVideoPlaying = true
-                    
-                    delay(0.25) { [weak self] in
-                        guard let self = self else { return }
-                        currentCell.playVideo(index: 0)
+                    if !currentCell.posts[0].muxPlaybackId.isEmpty {
+                        currentIndex = 0
+                        newPlayingIndex = 0
+                        currentCell.currentIndex = 0
+                        currentCell.newPlayingIndex = 0
+                        
+                        currentCell.isVideoPlaying = true
+                        
+                        delay(0.25) {
+
+                            currentCell.playVideo(index: 0)
+                        }
                     }
+                    
                 }
+                
                 
             }
             
-            
-            
+    
         }
         
     }
@@ -637,7 +660,7 @@ extension FeedViewController {
             if currentIndex != newPlayingIndex {
                 if let currentIndex = currentCell.currentIndex {
                     currentCell.pauseVideo(index: currentIndex)
-                    currentCell.cleanupPosts(collectionNode: currentCell.collectionNode)
+                    //currentCell.cleanupPosts(collectionNode: currentCell.collectionNode)
                 }
 
                 currentIndex = newPlayingIndex
@@ -668,11 +691,22 @@ extension FeedViewController {
 extension FeedViewController: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let min = CGSize(width: self.collectionNode.layer.frame.width, height: 50);
-        let max = CGSize(width: self.collectionNode.layer.frame.width, height: collectionNode.frame.height);
+        let frameWidth = self.collectionNode.frame.width
+        let frameHeight = self.collectionNode.frame.height
+        
+        // Check for excessively large sizes
+        guard frameWidth < CGFloat.greatestFiniteMagnitude,
+              frameHeight < CGFloat.greatestFiniteMagnitude else {
+            print("Frame width or height is too large")
+            return ASSizeRangeMake(CGSize.zero, CGSize.zero)
+        }
+        
+        let min = CGSize(width: frameWidth, height: 50);
+        let max = CGSize(width: frameWidth, height: frameHeight);
         
         return ASSizeRangeMake(min, max);
     }
+
     
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
         return true
@@ -700,9 +734,7 @@ extension FeedViewController: ASCollectionDataSource {
             let node = OriginalNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            
-        
-            
+              
             return node
         }
     }
@@ -714,7 +746,7 @@ extension FeedViewController: ASCollectionDataSource {
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 
-                self.cleanupPosts(collectionNode: collectionNode)
+                
                 
                 context.completeBatchFetching(true)
             }
@@ -722,30 +754,6 @@ extension FeedViewController: ASCollectionDataSource {
             context.completeBatchFetching(true)
         }
     }
-
-    private func cleanupPosts(collectionNode: ASCollectionNode) {
-        /*
-        let postThreshold = 100
-        let postsToRemove = 50
-        let startIndex = 15
-
-        if self.posts.count > postThreshold {
-            // check if we have enough posts to remove
-            if (startIndex + postsToRemove) <= self.posts.count {
-                // remove the posts from startIndex to startIndex + postsToRemove
-                self.posts.removeSubrange(startIndex..<(startIndex + postsToRemove))
-
-                // generate the index paths for old posts
-                let indexPathsToRemove = Array(startIndex..<(startIndex + postsToRemove)).map { IndexPath(row: $0, section: 0) }
-
-                // delete the old posts from collectionNode
-                collectionNode.performBatchUpdates({
-                    collectionNode.deleteItems(at: indexPathsToRemove)
-                }, completion: nil)
-            }
-        } */
-    }
-
 
     
 }
@@ -918,11 +926,251 @@ extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDel
 
 extension FeedViewController {
     
+    @objc func onClickDelete(_ sender: AnyObject) {
+        
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is FeedViewController {
+                
+                presentSwiftLoader()
+                
+                if let id = editeddPost?.id, id != "" {
+                    
+                    
+                    APIManager.shared.deleteMyPost(pid: id) { result in
+                        switch result {
+                        case .success(_):
+                            needReloadPost = true
+                            
+                            SwiftLoader.hide()
+                            
+                            Dispatch.main.async {
+                                
+                                self.removePost()
+                                
+                            }
+                            
+                            
+                          case .failure(let error):
+                            print(error)
+                            SwiftLoader.hide()
+                            
+                            delay(0.1) {
+                                Dispatch.main.async {
+                                    self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
+                                }
+
+                            }
+                            
+                        }
+                      }
+                    
+                } else {
+                
+                    delay(0.1) {
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
+                    }
+                    
+                }
+                
+            }
+        }
+  
+
+    }
+    
+    @objc func removePost() {
+        
+        if let deletingPost = editeddPost {
+           
+            if let indexPath = posts.firstIndex(of: deletingPost) {
+                
+                posts.removeObject(deletingPost)
+
+                // check if there are no more posts
+                if posts.isEmpty {
+                    collectionNode.reloadData()
+                } else {
+                    collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                   
+                }
+            }
+            
+        }
+        
+        
+    }
+    
+    @objc func onClickEdit(_ sender: AnyObject) {
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is FeedViewController {
+                
+                print("Edit requested")
+                if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC {
+                    
+                    navigationController?.setNavigationBarHidden(false, animated: true)
+                    EPVC.selectedPost = editeddPost
+                    self.navigationController?.pushViewController(EPVC, animated: true)
+                    
+                }
+                
+                
+            }
+            
+        }
+        
+        
+        
+    }
+    
+    @objc func onClickStats(_ sender: AnyObject) {
+        
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is FeedViewController {
+                
+                print("Stats requested")
+                if let VVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewVC") as? ViewVC {
+                    
+                    
+                    VVC.selected_item = editeddPost
+                    delay(0.1) {
+                        self.navigationController?.setNavigationBarHidden(false, animated: true)
+                        self.navigationController?.pushViewController(VVC, animated: true)
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        
+        
+    }
+    
+    @objc func onClickDownload(_ sender: AnyObject) {
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is FeedViewController {
+                
+                if let post = editeddPost {
+                    
+                    if post.muxPlaybackId != "" {
+                        
+                        let url = "https://stream.mux.com/\(post.muxPlaybackId)/high.mp4"
+                       
+                        downloadVideo(url: url, id: post.muxAssetId)
+                        
+                    } else {
+                        
+                        if let data = try? Data(contentsOf: post.imageUrl) {
+                            
+                            downloadImage(image: UIImage(data: data)!)
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        
+        
+       
+    }
+    
+    func downloadVideo(url: String, id: String) {
+        
+        
+        AF.request(url).downloadProgress(closure : { (progress) in
+       
+            self.swiftLoader(progress: "\(String(format:"%.2f", Float(progress.fractionCompleted) * 100))%")
+            
+        }).responseData{ (response) in
+            
+            switch response.result {
+            
+            case let .success(value):
+                
+                
+                let data = value
+                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                let videoURL = documentsURL.appendingPathComponent("\(id).mp4")
+                do {
+                    try data.write(to: videoURL)
+                } catch {
+                    print("Something went wrong!")
+                }
+          
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
+                }) { saved, error in
+                    
+                    
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                    }
+                    
+                    if (error != nil) {
+                        
+                        
+                        DispatchQueue.main.async {
+                            print("Error: \(error!.localizedDescription)")
+                            self.showErrorAlert("Oops!", msg: error!.localizedDescription)
+                        }
+                        
+                    } else {
+                        
+                        
+                        DispatchQueue.main.async {
+                        
+                            let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
+                            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alertController.addAction(defaultAction)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+     
+                        
+                    }
+                }
+                
+            case let .failure(error):
+                print(error)
+                
+        }
+           
+           
+        }
+        
+    }
+    
+    func downloadImage(image: UIImage) {
+        
+        let imageSaver = ImageSaver()
+        imageSaver.writeToPhotoAlbum(image: image)
+        
+    }
+    
+    
+    func writeToPhotoAlbum(image: UIImage) {
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
+        }
+
+        @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+            print("Save finished!")
+    }
+    
     @objc func copyPost() {
         
         if let id = self.editeddPost?.id {
             
-            let link = "https://stitchbox.gg/app/post/?uid=\(id)"
+            let link = "https://stitchbox.net/app/post/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "Post link is copied")
@@ -937,7 +1185,7 @@ extension FeedViewController {
         
         if let id = self.editeddPost?.owner?.id {
             
-            let link = "https://stitchbox.gg/app/account/?uid=\(id)"
+            let link = "https://stitchbox.net/app/account/?uid=\(id)"
             
             UIPasteboard.general.string = link
             showNote(text: "User profile link is copied")
@@ -976,7 +1224,7 @@ extension FeedViewController {
         }
         
         let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.gg/app/post/?uid=\(editeddPost?.id ?? "")")!]
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.net/app/post/?uid=\(editeddPost?.id ?? "")")!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
@@ -1078,9 +1326,8 @@ extension FeedViewController {
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getSettings { [weak self] result in
-            guard let self = self else { return }
-            
+        APIManager.shared.getSettings {  result in
+           
             switch result {
             case .success(let apiResponse):
                 
@@ -1107,8 +1354,7 @@ extension FeedViewController {
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getme { [weak self] result in
-            guard let self = self else { return }
+        APIManager.shared.getme { result in
             
             switch result {
             case .success(let response):

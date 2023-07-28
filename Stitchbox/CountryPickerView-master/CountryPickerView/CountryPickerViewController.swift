@@ -34,8 +34,8 @@ public class CountryPickerViewController: UITableViewController, UINavigationBar
         super.viewDidLoad()
         
         
-        self.view.backgroundColor = UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
-        self.tableView.backgroundColor = UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
+        self.view.backgroundColor = .white
+        self.tableView.backgroundColor = .white
        
         prepareTableItems()
         prepareNavItem()
@@ -105,14 +105,14 @@ extension CountryPickerViewController {
         searchController?.definesPresentationContext = true
         searchController?.searchBar.delegate = self
         searchController?.delegate = self
-        searchController?.searchBar.tintColor = .white
-        searchController?.searchBar.backgroundColor = UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
-        searchController?.searchBar.barTintColor = UIColor(red: (58.0/255.0), green: (60.0/255.0), blue: (64.0/255.0), alpha: 1.0)
+        searchController?.searchBar.tintColor = .black
+        searchController?.searchBar.backgroundColor = .white
+        searchController?.searchBar.barTintColor = .white
        
         
         if #available(iOS 13.0, *) {
             
-            searchController?.searchBar.searchTextField.textColor = .white
+            searchController?.searchBar.searchTextField.textColor = .black
             
         } else {
             // Fallback on earlier versions
@@ -178,7 +178,7 @@ extension CountryPickerViewController {
         
         cell.textLabel?.text = name
         cell.textLabel?.font = dataSource.cellLabelFont
-        cell.textLabel?.textColor = .white
+        cell.textLabel?.textColor = .black
         cell.accessoryType = country == countryPickerView.selectedCountry &&
             dataSource.showCheckmarkInList ? .checkmark : .none
         cell.separatorInset = .zero
@@ -213,7 +213,7 @@ extension CountryPickerViewController {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.font = dataSource.sectionTitleLabelFont
             if let color = dataSource.sectionTitleLabelColor {
-                header.textLabel?.textColor = .white
+                header.textLabel?.textColor = .black
             }
         }
     }

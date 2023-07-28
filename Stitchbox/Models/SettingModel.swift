@@ -13,6 +13,7 @@ class NotificationModel: Mappable {
     private(set) var Mention: Bool?
     private(set) var Follow: Bool?
     private(set) var Message: Bool?
+    private(set) var Stitch: Bool?
     
     
     required init?(map: Map) {
@@ -20,11 +21,12 @@ class NotificationModel: Mappable {
     }
     
     func mapping(map: Map) {
-        Posts <- map["Posts"]
-        Comment <- map["Comment"]
-        Mention <- map["Mention"]
-        Follow <- map["Follow"]
-        Message <- map["Message"]
+        Posts <- map["posts"]
+        Comment <- map["comment"]
+        Mention <- map["mention"]
+        Follow <- map["follow"]
+        Message <- map["message"]
+        Stitch <- map["stitch"]
     }
 }
 class SettingModel: Mappable {
@@ -34,18 +36,18 @@ class SettingModel: Mappable {
     private(set) var EnableEmailTwoFactor: Bool?
     private(set) var EnablePhoneTwoFactor: Bool?
     private(set) var Notifications: NotificationModel?
-    private(set) var AllowStreamingLink: Bool?
+    private(set) var AllowStitch: Bool?
     
     required init?(map: Map) {
         //
     }
 
     func mapping(map: Map) {
-        AutoPlaySound <- map["AutoPlaySound"]
-        PrivateAccount <- map["PrivateAccount"]
-        AllowStreamingLink <- map["AllowStreamingLink"]
-        Notifications <- map["Notifications"]
-        EnablePhoneTwoFactor <- map["EnablePhoneTwoFactor"]
-        EnableEmailTwoFactor <- map["EnableEmailTwoFactor"]
+        AutoPlaySound <- map["autoPlaySound"]
+        PrivateAccount <- map["privateAccount"]
+        AllowStitch <- map["allowStitch"]
+        Notifications <- map["notifications"]
+        EnablePhoneTwoFactor <- map["enablePhoneTwoFactor"]
+        EnableEmailTwoFactor <- map["enableEmailTwoFactor"]
     }
 }

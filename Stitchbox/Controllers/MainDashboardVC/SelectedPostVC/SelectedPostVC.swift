@@ -9,6 +9,7 @@ import UIKit
 import AsyncDisplayKit
 import AlamofireImage
 import Alamofire
+import FLAnimatedImage
 
 class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     
@@ -37,11 +38,14 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
-  
+    var firstAnimated = true
     var onPresent = false
     var selectedIndex = 0
     var isVideoPlaying = false
     var newPlayingIndex: Int?
+    
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,24 +54,27 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         setupButtons()
         setupCollectionNode()
         
-        delay(0.05) { [weak self] in
-            guard let self = self else { return }
-            self.loadPosts()
-        }
-        
+        loadPosts()
+       
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickShare), name: (NSNotification.Name(rawValue: "share")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.onClickCopyLink), name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile_selected")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.copyPost), name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.reportPost), name: (NSNotification.Name(rawValue: "report_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.removePost), name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.sharePost), name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch_selected")), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectedPostVC.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one_selected")), object: nil)
         
         setupNavBar()
         
@@ -85,9 +92,57 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        setupNavBar()
+    }
+    
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if firstAnimated {
+            firstAnimated = false
+            do {
+                
+                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
+                let gifData = try NSData(contentsOfFile: path) as Data
+                let image = FLAnimatedImage(animatedGIFData: gifData)
+                
+                
+                self.loadingImage.animatedImage = image
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            loadingView.backgroundColor = .white
+            navigationController?.setNavigationBarHidden(false, animated: true)
+      
+            
+            delay(1) {
+                
+                UIView.animate(withDuration: 0.5) {
+                    
+                    self.loadingView.alpha = 0
+                    
+                }
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    
+                    if self.loadingView.alpha == 0 {
+                        
+                        self.loadingView.isHidden = true
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
         
         setupNavBar()
         
@@ -313,67 +368,54 @@ extension SelectedPostVC: ASCollectionDataSource {
 extension SelectedPostVC {
     
     func loadPosts() {
-        // 1. Check if the `selectedPost` array has any items. If it does not, return immediately.
-        guard selectedPost.count > 0 else {
+        // Ensure that there are posts to load
+        guard !selectedPost.isEmpty else {
             return
         }
-        
-        // 3. Append the `selectedPost` items to the `posts` array, and update the `indexPaths` array with the new index paths.
-        let section = 0
-        var items = [PostModel]()
-        var indexPaths: [IndexPath] = []
-        let total = self.posts.count + selectedPost.count
-        
-        for row in self.posts.count...total-1 {
-            let path = IndexPath(row: row, section: section)
-            indexPaths.append(path)
-        }
-        
-        for item in selectedPost {
-            items.append(item)
-        }
-        
-        self.posts.append(contentsOf: items)
-        self.collectionNode.reloadData()
-        
-        // 4. If the `startIndex` is not `nil`, scroll to the item at the `startIndex` index path, and delay the play of the video for 0.25 seconds.
-        guard startIndex != nil else {
-            return
-        }
-        
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(100000)) { [weak self] in
-            guard let self = self else { return }
-            self.collectionNode.scrollToItem(at: IndexPath(row: self.startIndex, section: 0), at: .centeredVertically, animated: false)
-            
-            if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
 
-                if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: self.startIndex, section: 0)) as? OriginalNode {
-                    
-                    if !currentCell.posts[0].muxPlaybackId.isEmpty {
-                        currentIndex = 0
-                        newPlayingIndex = 0
-                        currentCell.currentIndex = 0
-                        currentCell.newPlayingIndex = 0
-                        
-                        currentCell.isVideoPlaying = true
-                        
-                        delay(0.25) { [weak self] in
-                            guard let self = self else { return }
-                            currentCell.playVideo(index: 0)
-                        }
-                    }
-                    
-                }
-                
-            } else {
+        // Append the `selectedPost` items to the `posts` array and update the `indexPaths` array with the new index paths.
+        let indexPaths = selectedPost.enumerated().map { index, _ in
+            return IndexPath(row: self.posts.count + index, section: 0)
+        }
+        self.posts.append(contentsOf: selectedPost)
+
+        // It's better to insert items rather than reloading the whole collectionNode
+        // If you are using UICollectionView, the method should be insertItems(at:)
+        self.collectionNode.performBatchUpdates({
+            self.collectionNode.insertItems(at: indexPaths)
+        }, completion: nil)
+        
+        // If the `startIndex` is not `nil`, scroll to the item at the `startIndex` index path, and delay the play of the video for 0.25 seconds.
+        guard let startIndex = self.startIndex else {
+            return
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) { [weak self] in
+            guard let self = self else { return }
+            let indexPath = IndexPath(row: startIndex, section: 0)
+            self.collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+
+            guard let currentCell = self.collectionNode.nodeForItem(at: indexPath) as? OriginalNode, !currentCell.posts[0].muxPlaybackId.isEmpty else {
                 self.isVideoPlaying = false
                 self.playTimeBar.isHidden = true
+                return
             }
-            
+
+            // Update the playing status of the cell
+            currentIndex = 0
+            newPlayingIndex = 0
+            currentCell.currentIndex = 0
+            currentCell.newPlayingIndex = 0
+            currentCell.isVideoPlaying = true
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+                currentCell.playVideo(index: 0)
+            }
         }
-    
+
     }
+
+
     
 }
 
@@ -494,7 +536,9 @@ extension SelectedPostVC {
             NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "remove_post_selected")), object: nil)
             NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
             
-            
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "create_new_for_stitch_selected")), object: nil)
+            NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "stitch_to_exist_one_selected")), object: nil)
+           
             if onPresent {
                 self.dismiss(animated: true)
             } else {
@@ -553,10 +597,6 @@ extension SelectedPostVC {
             }
             
         }
-        
-        
-        
-        
         
         
     }
@@ -665,8 +705,7 @@ extension SelectedPostVC {
     }
     
     func downloadVideo(url: String, id: String) {
-        
-        
+         
         AF.request(url).downloadProgress(closure : { (progress) in
             
             self.swiftLoader(progress: "\(String(format:"%.2f", Float(progress.fractionCompleted) * 100))%")
@@ -692,8 +731,8 @@ extension SelectedPostVC {
                 }) { saved, error in
                     
                     
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
+                    DispatchQueue.main.async {
+                        
                         SwiftLoader.hide()
                     }
                     
@@ -837,16 +876,9 @@ extension SelectedPostVC {
                         navigationController?.popViewController(animated: true)
                     }
                 } else {
+                    
                     collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                    //reloadAllCurrentHashtag()
-                    
-                    delay(0.75) { [weak self] in
-                        guard let self = self else { return }
-                        if indexPath < self.posts.count {
-                            self.playVideo(index: indexPath)
-                        }
-                    }
-                    
+ 
                 }
             }
             
@@ -955,5 +987,45 @@ extension SelectedPostVC {
         }
         
     }
+    
+    @objc func createPostForStitch() {
+        
+        if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
+            
+            
+            PNVC.modalPresentationStyle = .fullScreen
+            
+            if let rootvc = PNVC.viewControllers[0] as? PostVC {
+                rootvc.stitchPost = editeddPost
+            } else {
+                printContent(PNVC.viewControllers[0])
+            }
+            
+            delay(0.1) {
+                
+                self.present(PNVC, animated: true)
+            }
+            
+        }
+        
+    }
+    
+    
+    @objc func stitchToExistingPost() {
+        
+        if let ASTEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddStitchToExistingVC") as? AddStitchToExistingVC {
+            
+            ASTEVC.hidesBottomBarWhenPushed = true
+            ASTEVC.stitchedPost = editeddPost
+            
+            delay(0.1) {
+                self.navigationController?.pushViewController(ASTEVC, animated: true)
+            }
+            
+        }
+        
+        
+    }
+    
     
 }

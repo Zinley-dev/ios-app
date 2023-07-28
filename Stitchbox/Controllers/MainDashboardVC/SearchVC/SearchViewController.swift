@@ -8,6 +8,7 @@
 import UIKit
 import AsyncDisplayKit
 import FLAnimatedImage
+import SendBirdUIKit
 
 class SearchViewController: UIViewController, UINavigationControllerDelegate, UISearchBarDelegate {
     
@@ -75,9 +76,9 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
        
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -119,6 +120,7 @@ extension SearchViewController {
                     actionHandler(true)
                 }
                 
+                
                 let removeView = UIImageView(
                     frame: CGRect(
                         x: (size-iconSize)/2,
@@ -130,12 +132,12 @@ extension SearchViewController {
                 removeView.layer.masksToBounds = true
                 //removeView.layer.borderWidth = 1
                 removeView.layer.cornerRadius = iconSize/2
-                removeView.backgroundColor =  .secondary
-                removeView.image = xBtn
+                removeView.backgroundColor =  .clear
+                removeView.image = SBUIconSet.iconRemove.resize(targetSize: CGSize(width: 22, height: 22)).withTintColor(.black)
                 removeView.contentMode = .center
                 
                 removeAction.image = removeView.asImage()
-                removeAction.backgroundColor = .background
+                removeAction.backgroundColor = .white
                
                 
                 return UISwipeActionsConfiguration(actions: [removeAction])
@@ -218,8 +220,8 @@ extension SearchViewController {
         self.searchController?.searchBar.searchBarStyle = .minimal
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
-        self.searchController?.searchBar.tintColor = .white
-        self.searchController?.searchBar.searchTextField.textColor = .white
+        self.searchController?.searchBar.tintColor = .black
+        self.searchController?.searchBar.searchTextField.textColor = .black
         self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search for anything", attributes: [.foregroundColor: UIColor.lightGray])
         
     }
@@ -251,7 +253,7 @@ extension SearchViewController {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,

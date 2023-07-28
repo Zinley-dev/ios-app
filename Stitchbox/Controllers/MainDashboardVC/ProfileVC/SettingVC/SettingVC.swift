@@ -31,21 +31,21 @@ class SettingVC: UIViewController {
     @IBOutlet weak var proBtn: UIButton!
     
     @IBOutlet weak var SoundSwitch: UISwitch!
-    @IBOutlet weak var StreamingLinkSwitch: UISwitch!
+    @IBOutlet weak var StitchSwitch: UISwitch!
     @IBOutlet weak var proView: UIView!
     
     
     @IBOutlet weak var mainViewHeight: NSLayoutConstraint!
     @IBOutlet weak var accountViewHeight: NSLayoutConstraint!
     
-    var isStreamLink = false
+    var isStitch = false
     var isSound = false
     var isPrivate = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
-        
+        setupNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,6 +53,19 @@ class SettingVC: UIViewController {
         
         loadSettings()
         checkAccountStatus()
+        setupNavBar()
+    }
+    
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
     }
     
@@ -202,19 +215,19 @@ class SettingVC: UIViewController {
         
     }
     
-    @IBAction func StreamingLinkSwitchPressed(_ sender: Any) {
+    @IBAction func StitchSwitchPressed(_ sender: Any) {
         
-        var params = ["allowStreamingLink": false]
+        var params = ["allowStitch": false]
         
-        if isStreamLink {
+        if isStitch {
             
-            params = ["allowStreamingLink": false]
-            isStreamLink = false
+            params = ["allowStitch": false]
+            isStitch = false
             
         } else {
             
-            params = ["allowStreamingLink": true]
-            isStreamLink = true
+            params = ["allowStitch": true]
+            isStitch = true
         }
         
         APIManager.shared.updateSettings(params: params) { [weak self] result in
@@ -271,7 +284,7 @@ extension SettingVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -342,12 +355,12 @@ extension SettingVC {
                 isSound = false
             }
             
-            if globalSetting.AllowStreamingLink == true {
-                self.StreamingLinkSwitch.setOn(true, animated: true)
-                isStreamLink = true
+            if globalSetting.AllowStitch == true {
+                self.StitchSwitch.setOn(true, animated: true)
+                isStitch = true
             } else {
-                self.StreamingLinkSwitch.setOn(false, animated: true)
-                isStreamLink = false
+                self.StitchSwitch.setOn(false, animated: true)
+                isStitch = false
             }
             
         }

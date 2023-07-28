@@ -17,12 +17,19 @@ import ObjectMapper
 import AppTrackingTransparency
 import AdSupport
 import AppsFlyerLib
+import AsyncDisplayKit
+
+
+let incomingCallGreen = UIColor(red: 76.0/255.0, green: 217.0/255.0, blue: 100.0/255.0, alpha: 1.0)
+let hashtagPurple = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1.0)
+let alertColor = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
 
 
 let saveImage = UIImage.init(named: "saved.filled")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 let unsaveImage = UIImage.init(named: "save")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 
-
+//heart-darkmode
+let emptyLikeImageLM = UIImage.init(named: "heart-lightmode")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
 let cmtImage = UIImage.init(named: "cmt")?.resize(targetSize: CGSize(width: 23, height: 23))
 let shareImage = UIImage.init(named: "share")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
 let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
@@ -100,7 +107,7 @@ func showNote(text: String) {
     
     var attributes = EKAttributes.topNote
     attributes.popBehavior = .animated(animation: .init(translate: .init(duration: 0.1), scale: .init(from: 1, to: 0.7, duration: 0.2)))
-    attributes.entryBackground = .color(color: .musicBackground)
+    attributes.entryBackground = .color(color: .noteBackground)
     attributes.shadow = .active(with: .init(color: .black, opacity: 0.5, radius: 10, offset: .zero))
     attributes.statusBar = .dark
     attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
@@ -108,7 +115,7 @@ func showNote(text: String) {
     
     
     let style = EKProperty.LabelStyle(
-        font: UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium),
+        font: FontManager.shared.roboto(.Medium, size: 15),
         color: .white,
         alignment: .center
     )
@@ -601,6 +608,76 @@ func unmuteVideoIfNeed() {
                 
             }
             
+        } else if vc is PreviewVC {
+            
+            if let update1 = vc as? PreviewVC {
+                
+                if update1.currentIndex != nil {
+                    
+                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                        
+                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
+                            
+                            cell2.videoNode.muted = false
+                            shouldMute = false
+                        }
+                        
+                        
+                    }
+                    
+                }
+                
+               
+                
+            }
+            
+        } else if vc is StitchDashboardVC {
+            
+            if let update1 = vc as? StitchDashboardVC {
+                
+                
+                if update1.PendingVC.view.isHidden == false {
+                    
+                    
+                    if update1.PendingVC.currentIndex != nil {
+                        
+                        if let cell = update1.PendingVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.PendingVC.currentIndex!, section: 0)) as? PendingNode {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                        }
+                        
+                    }
+                    
+                } else if update1.StitchToVC.view.isHidden == false {
+                    
+                    if update1.StitchToVC.currentIndex != nil {
+                        
+                        if let cell = update1.StitchToVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.StitchToVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                        }
+                        
+                    }
+                    
+                } else if update1.ApprovedStitchVC.view.isHidden == false {
+                    
+                    
+                    if update1.ApprovedStitchVC.currentIndex != nil {
+                        
+                        if let cell = update1.ApprovedStitchVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.ApprovedStitchVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
+                            
+                            cell.videoNode.muted = false
+                            shouldMute = false
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
         }
              
         
@@ -857,6 +934,7 @@ class CustomSlider: UISlider {
     @IBInspectable var highlightedTrackHeight: CGFloat = 7.0
     @IBInspectable var thumbRadius: CGFloat = 3
     @IBInspectable var highlightedThumbRadius: CGFloat = 10
+    @IBInspectable var hitBoxSize: CGFloat = 40 // Size of hit box area
     
     private lazy var thumbView: UIView = {
         let thumb = UIView()
@@ -874,15 +952,24 @@ class CustomSlider: UISlider {
         self.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
     }
     
-    private func thumbImage(radius: CGFloat) -> UIImage {
-        thumbView.frame = CGRect(x: 0, y: radius / 2, width: radius * 2, height: radius * 2)
-        thumbView.layer.cornerRadius = radius
-        
-        let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
-        return renderer.image { rendererContext in
-            thumbView.layer.render(in: rendererContext.cgContext)
-        }
+    
+    // Override hit test to expand touch area
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let expandedBounds = bounds.insetBy(dx: -(hitBoxSize / 2 - thumbRadius), dy: -(hitBoxSize / 2 - thumbRadius))
+        return expandedBounds.contains(point)
     }
+
+    
+    private func thumbImage(radius: CGFloat) -> UIImage {
+            thumbView.frame = CGRect(x: 0, y: radius / 2, width: radius * 2, height: radius * 2)
+            thumbView.layer.cornerRadius = radius
+            
+            let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
+            return renderer.image { rendererContext in
+                thumbView.layer.render(in: rendererContext.cgContext)
+            }
+        }
+
     
     @objc func sliderDidStartSliding() {
         processOnSliding()
@@ -895,16 +982,21 @@ class CustomSlider: UISlider {
     }
     
     func startLayout() {
-        setThumbImage(thumbImage(radius: highlightedThumbRadius), for: .normal)
+        let thumb = thumbImage(radius: highlightedThumbRadius)
+        setThumbImage(thumb, for: .normal)
         trackHeight = highlightedTrackHeight
+        hitBoxSize = highlightedThumbRadius * 2 + 40 // You might want to adjust this value
         setNeedsDisplay()
     }
-    
+
     func endLayout() {
-        setThumbImage(thumbImage(radius: thumbRadius), for: .normal)
+        let thumb = thumbImage(radius: thumbRadius)
+        setThumbImage(thumb, for: .normal)
         trackHeight = 2
+        hitBoxSize = thumbRadius * 2 + 40 // You might want to adjust this value
         setNeedsDisplay()
     }
+
     
     override func trackRect(forBounds bounds: CGRect) -> CGRect {
         var newRect = super.trackRect(forBounds: bounds)
@@ -984,11 +1076,51 @@ class CustomSlider: UISlider {
                
                 if update1.currentIndex != nil {
                     update1.pauseVideo(index: update1.currentIndex!)
+                } else if update1.startIndex != nil {
+                    update1.pauseVideo(index: update1.startIndex!)
+                }
+                
+                if update1.currentIndex != nil {
+                    //update1.pauseVideo(index: update1.currentIndex!)
+                    
+                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
+                        
+                        currentCell.pauseVideo(index: currentCell.currentIndex!)
+                        
+                        
+                    }
+                    
+                } else {
+                    
+                    if update1.startIndex != nil {
+                        //update1.pauseVideo(index: update1.currentIndex!)
+                        
+                        if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.startIndex!, section: 0)) as? OriginalNode {
+                            
+                            currentCell.pauseVideo(index: currentCell.currentIndex!)
+                            
+                            
+                        }
+                        
+                    }
+                    
+                    
                 }
                 
                 update1.timeLbl.text = processTime()
                 update1.timeLbl.isHidden = false
                 update1.blurView.isHidden = false
+                
+            } else if let update1 = vc as? PreviewVC {
+                
+                if update1.currentIndex != nil {
+                    update1.pauseVideo(index: update1.currentIndex!)
+                }
+                
+                update1.timeLbl.text = processTime()
+                update1.timeLbl.isHidden = false
+                update1.blurView.isHidden = false
+                
                 
             }
             
@@ -1034,6 +1166,43 @@ class CustomSlider: UISlider {
                     //newPlayingIndex
                     
                     let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+                    
+                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
+                        
+                        currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
+                        currentCell.playVideo(index: currentCell.currentIndex!)
+                        
+                        
+                    }
+
+                } else {
+                    
+                    if update1.startIndex != nil {
+                        //newPlayingIndex
+                        
+                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+                        
+                        if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.startIndex!, section: 0)) as? OriginalNode {
+                            
+                            currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
+                            currentCell.playVideo(index: currentCell.currentIndex!)
+                            
+                            
+                        }
+
+                    }
+                    
+                }
+                
+                update1.timeLbl.isHidden = true
+                update1.blurView.isHidden = true
+                
+            } else if let update1 = vc as? PreviewVC {
+                
+                if update1.currentIndex != nil {
+                    //newPlayingIndex
+                    
+                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
 
                     
                     update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
@@ -1043,6 +1212,7 @@ class CustomSlider: UISlider {
                 
                 update1.timeLbl.isHidden = true
                 update1.blurView.isHidden = true
+                
                 
             }
             
@@ -1092,4 +1262,29 @@ func requestTrackingAuthorization(userId: String) {
             print("Unknown case.")
         }
     }
+}
+
+extension UIView {
+    func pinToSuperviewEdges() {
+        guard let superview = self.superview else { return }
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
+        self.bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
+        self.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
+        self.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
+    }
+}
+
+
+class ShadowedView: UIView {
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.5
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowRadius = 5
+        self.layer.masksToBounds = false
+    }
+
 }

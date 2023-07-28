@@ -51,9 +51,9 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -97,7 +97,7 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -119,7 +119,7 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
     
     func setupAddButton() {
         
-        addButton.setImage(UIImage.init(named: "4x_add"), for: [])
+        addButton.setImage(UIImage.init(named: "plus-lightmode")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
         addButton.addTarget(self, action: #selector(onInviteUser(_:)), for: .touchUpInside)
         addButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
        
@@ -185,7 +185,7 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
         }
 
         cell.configure(type: .channelMembers, user: user, operatorMode: self.channel?.myRole == .operator)
-        cell.theme = .dark
+        cell.theme = .light
         cell.contentView.backgroundColor = self.view.backgroundColor
         cell.selectionStyle = .none
         cell.moreButton.addTarget(self, action: #selector(actionButtonPressed(sender:)), for: .touchUpInside)
@@ -234,9 +234,9 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
             UPVC.onPresent = true
 
             // Customize the navigation bar appearance
-            nav.navigationBar.barTintColor = .background
-            nav.navigationBar.tintColor = .white
-            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+            nav.navigationBar.barTintColor = .white
+            nav.navigationBar.tintColor = .black
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
             nav.modalPresentationStyle = .fullScreen
             self.present(nav, animated: true, completion: nil)

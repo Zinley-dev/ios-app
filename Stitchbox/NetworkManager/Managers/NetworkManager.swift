@@ -43,10 +43,10 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     
     
     func upload(_ route: EndPoint, image: UIImage, completion: @escaping APICompletion) {
+        
         if var request = buildRequest(from: route) {
             
             let uploadData = builđData(for: image, request: &request)
-            
             
             task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
                 if error != nil {
@@ -57,16 +57,17 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                     completion(result)
                 }
             })
+            
             self.task?.resume()
         }
     }
     
     func upload(_ route: EndPoint, images: [UIImage], content: String, completion: @escaping APICompletion) {
+        
         if var request = buildRequest(from: route) {
             
             let uploadData = builđData(for: images, for: content, request: &request)
             
-            
             task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
@@ -76,15 +77,20 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                     completion(result)
                 }
             })
+            
             self.task?.resume()
+            
         }
     }
     
     func upload(_ route: EndPoint, video: Data, completion: @escaping APICompletion, inprogress: @escaping UploadInprogress) {
+        
         if var request = buildRequest(from: route) {
             
             let uploadData = builđData(for: video, request: &request)
+            
             requestDelegate.process = inprogress
+            
             task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
@@ -94,11 +100,14 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                     completion(result)
                 }
             })
+            
             self.task?.resume()
+            
         }
     }
     
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
+        
         guard let request = buildRequest(from: route) else {
             DispatchQueue.main.async { completion(.failure(ErrorType.badRequest)) }
             return
@@ -106,29 +115,36 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         
         print("Request URL --> \(String(describing: request.url))")
         
-        task = session.dataTask(with: request, completionHandler: { [weak self] data, response, error in
+        self.task = session.dataTask(with: request, completionHandler: { [weak self] data, response, error in
+            guard let self = self else { return }
+            // Now use `strongSelf` instead of `self` inside the closure.
             // Ensure we are on the main thread
             DispatchQueue.main.async {
+                
                 print("==============BBB+============")
                 print(error)
                 print(response)
                 print(data)
                 print("==============BBB+============")
-                
+
                 if let error = error {
                     print(error.localizedDescription)
                     completion(.failure(ErrorType.badRequest))
                     return
                 }
-                guard let response = response as? HTTPURLResponse, let self = self else {
+                
+                guard let response = response as? HTTPURLResponse else {
                     completion(.failure(ErrorType.invalidResponse))
                     return
                 }
+                
                 let result = self.handleNetworkResponse(data, response)
                 completion(result)
             }
         })
+
         self.task?.resume()
+
     }
 
     
@@ -226,16 +242,19 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         }
         return request
     }
+    
     fileprivate func configureParameters(parameters: [String: Any]?, request: inout URLRequest) {
         let jsonData = try? JSONSerialization.data(withJSONObject: parameters ?? Data())
         request.httpBody = jsonData
     }
+    
     fileprivate func addAdditionalHeaders(_ additionalHeaders: [String: String]?, request: inout URLRequest) {
         guard let headers = additionalHeaders else { return }
         for (key, value) in headers {
             request.setValue(value, forHTTPHeaderField: key)
         }
     }
+    
     fileprivate func handleNetworkResponse(_ data: Data?, _ response: HTTPURLResponse) -> Result {
         switch response.statusCode {
         case 200...299: return .success(getAPIResponseFor(data, response))
@@ -245,6 +264,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         default: return .failure(ErrorType.requestFailed(body: getAPIResponseFor(data, response).body))
         }
     }
+    
     fileprivate func getAPIResponseFor(_ data: Data?, _ response: HTTPURLResponse) -> APIResponse {
         do {
             guard let responseData = data else {
@@ -258,6 +278,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             return getAPIResponseWithErrorMessage(errorMessage: error.debugDescription)
         }
     }
+    
     fileprivate func getAPIResponseWithErrorMessage(errorMessage: String) -> APIResponse {
         let apiResponse = APIResponse(body: nil, header: nil, statusCode: nil, errorMessage: errorMessage)
         return apiResponse

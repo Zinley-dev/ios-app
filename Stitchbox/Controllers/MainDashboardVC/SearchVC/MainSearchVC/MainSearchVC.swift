@@ -127,21 +127,21 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         if self.initialType == "user" {
             
             setCurrentBorderAndShowView(currentSelected: SearchMode.users)
-            userBtn.setTitleColor(UIColor.white, for: .normal)
+            userBtn.setTitleColor(UIColor.black, for: .normal)
             postBtn.setTitleColor(UIColor.lightGray, for: .normal)
             hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
             
         } else if self.initialType == "post" {
             
             setCurrentBorderAndShowView(currentSelected: SearchMode.posts)
-            postBtn.setTitleColor(UIColor.white, for: .normal)
+            postBtn.setTitleColor(UIColor.black, for: .normal)
             userBtn.setTitleColor(UIColor.lightGray, for: .normal)
             hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
             
         } else if self.initialType == "hashtag" {
             
             setCurrentBorderAndShowView(currentSelected: SearchMode.hashTags)
-            hashtagBtn.setTitleColor(UIColor.white, for: .normal)
+            hashtagBtn.setTitleColor(UIColor.black, for: .normal)
             postBtn.setTitleColor(UIColor.lightGray, for: .normal)
             userBtn.setTitleColor(UIColor.lightGray, for: .normal)
             
@@ -156,9 +156,9 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
 
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -178,7 +178,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
     @IBAction func userBtnPressed(_ sender: Any) {
         
         setCurrentBorderAndShowView(currentSelected: SearchMode.users)
-        userBtn.setTitleColor(UIColor.white, for: .normal)
+        userBtn.setTitleColor(UIColor.black, for: .normal)
         postBtn.setTitleColor(UIColor.lightGray, for: .normal)
         hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
@@ -189,7 +189,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
     @IBAction func postBtnPressed(_ sender: Any) {
         
         setCurrentBorderAndShowView(currentSelected: SearchMode.posts)
-        postBtn.setTitleColor(UIColor.white, for: .normal)
+        postBtn.setTitleColor(UIColor.black, for: .normal)
         userBtn.setTitleColor(UIColor.lightGray, for: .normal)
         hashtagBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
@@ -200,7 +200,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
     @IBAction func hashtagBtnPressed(_ sender: Any) {
         
         setCurrentBorderAndShowView(currentSelected: SearchMode.hashTags)
-        hashtagBtn.setTitleColor(UIColor.white, for: .normal)
+        hashtagBtn.setTitleColor(UIColor.black, for: .normal)
         postBtn.setTitleColor(UIColor.lightGray, for: .normal)
         userBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
@@ -315,7 +315,7 @@ extension MainSearchVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -326,7 +326,6 @@ extension MainSearchVC {
         }
 
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        backButton.setTitleColor(UIColor.white, for: .normal)
         backButton.setTitle("", for: .normal)
         navigationItem.title = "Search"
         let backButtonBarButton = UIBarButtonItem(customView: backButton)
@@ -346,8 +345,8 @@ extension MainSearchVC {
         self.searchController?.searchBar.searchBarStyle = .minimal
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
-        self.searchController?.searchBar.tintColor = .white
-        self.searchController?.searchBar.searchTextField.textColor = .white
+        self.searchController?.searchBar.tintColor = .black
+        self.searchController?.searchBar.searchTextField.textColor = .black
         self.searchController!.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search for anything", attributes: [.foregroundColor: UIColor.lightGray])
         
         if currentSearchText != "" {

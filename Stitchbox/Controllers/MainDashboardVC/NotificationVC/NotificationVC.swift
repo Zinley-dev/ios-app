@@ -76,7 +76,8 @@ class NotificationVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadingView.isHidden = true
+        /*
         if firstAnimated {
             
             do {
@@ -94,13 +95,13 @@ class NotificationVC: UIViewController {
             
             loadingView.backgroundColor = self.view.backgroundColor
             
-        }
+        } */
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .background
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
         
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
@@ -189,7 +190,7 @@ extension NotificationVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
         
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,
@@ -242,7 +243,7 @@ extension NotificationVC {
         self.tableNode.view.separatorStyle = .none
         self.tableNode.view.separatorColor = UIColor.lightGray
         self.tableNode.view.isPagingEnabled = false
-        self.tableNode.view.backgroundColor = .background
+        self.tableNode.view.backgroundColor = .white
         self.tableNode.view.showsVerticalScrollIndicator = false
         
     }
@@ -289,14 +290,6 @@ extension NotificationVC {
                     self.showErrorAlert("Oops!", msg: "This content is not available")
                 }
                 
-            case "NEW_FISTBUMP_1":
-                if let userId = notification.userId, let username = notification.username {
-                    openUser(userId: userId, username: username)
-                } else {
-                    showErrorAlert("Oops!", msg: "Can't open this notification content")
-                }
-            case "NEW_FISTBUMP_2":
-                openFistBumpList()
             case "NEW_FOLLOW_1":
                 
                 if let userId = notification.userId, let username = notification.username {
@@ -327,6 +320,13 @@ extension NotificationVC {
                 } else {
                     showErrorAlert("Oops!", msg: "Can't open this notification content")
                 }
+            case "NEW_STITCH":
+                moveToStichDashboard()
+            case  "APPROVED_STITCH":
+                moveToStichDashboard()
+            case "DENIED_STITCH":
+                moveToStichDashboard()
+                
             default:
                 print(notification.template)
                 
@@ -341,14 +341,14 @@ extension NotificationVC {
 extension NotificationVC {
     
     
-    func openFistBumpList() {
+    func moveToStichDashboard() {
         
-        if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
+        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchDashboardVC") as? StitchDashboardVC {
             
-            self.navigationController?.pushViewController(MFBVC, animated: true)
+            self.navigationController?.pushViewController(PVC, animated: true)
             
         }
-        
+      
         
     }
     

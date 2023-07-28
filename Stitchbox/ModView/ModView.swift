@@ -494,10 +494,10 @@ extension UITableView {
     func setEmptyMessage(_ message: String) {
         let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width - 120, height: self.bounds.size.height))
         messageLabel.text = message
-        messageLabel.textColor = .white
+        messageLabel.textColor = .black
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
-        messageLabel.font = UIFont.systemFont(ofSize: 15)
+        messageLabel.font = FontManager.shared.roboto(.Regular, size: 15)
         messageLabel.sizeToFit()
 
         self.backgroundView = messageLabel
@@ -514,10 +514,10 @@ extension UICollectionView {
     func setEmptyMessage(_ message: String) {
         let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width - 120, height: self.bounds.size.height))
         messageLabel.text = message
-        messageLabel.textColor = .white
+        messageLabel.textColor = .black
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
-        messageLabel.font = UIFont.systemFont(ofSize: 15)
+        messageLabel.font = FontManager.shared.roboto(.Regular, size: 15)
         messageLabel.sizeToFit()
 
         self.backgroundView = messageLabel
@@ -874,7 +874,7 @@ extension UIViewController {
         // Accessing buttons tintcolor :
         alert.view.tintColor = UIColor.white
         
-        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.white]
+        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font:FontManager.shared.roboto(.Regular, size: 13), NSAttributedString.Key.foregroundColor: UIColor.white]
         
         let subtitleString = NSMutableAttributedString(string: subtitle!, attributes: custom)
         
@@ -919,7 +919,7 @@ extension UIViewController {
         // Accessing buttons tintcolor :
         alert.view.tintColor = UIColor.white
         
-        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.white]
+        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: 13), NSAttributedString.Key.foregroundColor: UIColor.white]
         
         let subtitleString = NSMutableAttributedString(string: subtitle!, attributes: custom)
         
@@ -963,7 +963,7 @@ extension UIViewController {
         
         let alert = UIAlertController(title: title, message: subtitle, preferredStyle: .alert)
         
-        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont(name: "Avenir-Light", size: 13)!, NSAttributedString.Key.foregroundColor: UIColor.white]
+        let custom: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: 13), NSAttributedString.Key.foregroundColor: UIColor.white]
         
         let subtitleString = NSMutableAttributedString(string: subtitle!, attributes: custom)
         
@@ -1144,7 +1144,7 @@ extension UITextField {
         let bottomLine = CALayer()
         
         bottomLine.frame = CGRect(x: 0.0, y: self.bounds.height + 3, width: self.bounds.width, height: 1.5)
-        bottomLine.backgroundColor = UIColor.tertiary.cgColor
+        bottomLine.backgroundColor = UIColor.lightGray.cgColor
         
         self.borderStyle = UITextField.BorderStyle.none
         self.layer.addSublayer(bottomLine)

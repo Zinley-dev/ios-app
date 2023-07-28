@@ -19,6 +19,9 @@ class UserProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var avatarImage: UIImageView!
     //@IBOutlet weak var proImg: UIImageView!
     
+    @IBOutlet weak var linkStackView: UIStackView!
+    @IBOutlet weak var linkLbl: UILabel!
+    
     let kCONTENT_XIB_NAME = "ProfileView"
     
     @IBOutlet weak var followerStack: UIStackView!
@@ -35,9 +38,9 @@ class UserProfileHeaderCell: UICollectionViewCell {
         moreBtn.setTitle("", for: .normal)
        
         followersBtn.setTitleColor(.white, for: .normal)
-        messageBtn.setTitleColor(.primary, for: .normal)
+        messageBtn.setTitleColor(.black, for: .normal)
         
-        messageBtn.tintColor = .primary
+        messageBtn.tintColor = .black
         followersBtn.tintColor = .white
         
     }

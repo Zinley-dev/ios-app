@@ -77,7 +77,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     
     lazy var autocompleteVC: AutocompeteViewController = {
         let vc = AutocompeteViewController()
-        searchResultContainerView.backgroundColor = UIColor.black
+        searchResultContainerView.backgroundColor = UIColor.white
         
         
         self.searchResultContainerView.addSubview(vc.view)
@@ -168,6 +168,9 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         cmtTxtView.returnKeyType = .default
         
+        cmtTxtView.backgroundColor = .white
+        cmtTxtView.textColor = .black
+        
         //
         
         tView.addSubview(tableNode.view)
@@ -231,8 +234,10 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             cmtTxtView.addSubview(placeholderLabel)
             commentBtn.isEnabled = true
             placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
-            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.textColor = UIColor.black
             placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
+            placeholderLabel.backgroundColor = .white
+            placeholderLabel.textColor = .black
             cmtTxtView.isUserInteractionEnabled = true
         } else {
             cmtTxtView.delegate = self
@@ -244,7 +249,9 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             cmtTxtView.isUserInteractionEnabled = false
             commentBtn.isEnabled = false
             placeholderLabel.frame = CGRect(x: 5, y: (cmtTxtView.font?.pointSize)! / 2 - 5, width: 200, height: 30)
-            placeholderLabel.textColor = UIColor.white
+            placeholderLabel.textColor = UIColor.black
+            placeholderLabel.backgroundColor = .white
+            placeholderLabel.textColor = .black
             placeholderLabel.isHidden = !cmtTxtView.text.isEmpty
         }
         
@@ -273,7 +280,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             print(error.localizedDescription)
         }
         
-        loadingView.backgroundColor = .black
+        loadingView.backgroundColor = .white
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -549,7 +556,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         self.tableNode.view.separatorStyle = .none
         self.tableNode.view.separatorColor = UIColor.lightGray
         self.tableNode.view.isPagingEnabled = false
-        self.tableNode.view.backgroundColor = UIColor.black
+        self.tableNode.view.backgroundColor = UIColor.white
         self.tableNode.view.showsVerticalScrollIndicator = false
         
         

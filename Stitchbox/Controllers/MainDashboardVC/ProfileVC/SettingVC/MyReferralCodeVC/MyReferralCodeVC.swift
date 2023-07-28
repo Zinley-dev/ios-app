@@ -29,7 +29,7 @@ class MyReferralCodeVC: UIViewController {
         var URL: Foundation.URL {
             switch self {
             case .Privacy:
-                return Foundation.URL(string: "https://stitchbox.gg")!
+                return Foundation.URL(string: "https://stitchbox.net")!
             }
         }
         
@@ -37,9 +37,7 @@ class MyReferralCodeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("DEBUG")
-        print(_AppCoreData.userDataSource.value?.toJSON())
-        // Do any additional setup after loading the view.
+     
         setupButtons()
         setupPolicyLabel()
         getDefaultCode()
@@ -85,9 +83,9 @@ extension MyReferralCodeVC: ZSWTappableLabelTapDelegate {
             
             return [
                 .tappableRegion: true,
-                .tappableHighlightedBackgroundColor: UIColor.lightGray,
-                .tappableHighlightedForegroundColor: UIColor.black,
-                .foregroundColor: UIColor.white,
+                .tappableHighlightedBackgroundColor: UIColor.darkGray,
+                .tappableHighlightedForegroundColor: UIColor.white,
+                .foregroundColor: UIColor.black,
                 .underlineStyle: NSUnderlineStyle.single.rawValue,
                 MyReferralCodeVC.URLAttributeName: type.URL
             ]
@@ -133,7 +131,7 @@ extension MyReferralCodeVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,

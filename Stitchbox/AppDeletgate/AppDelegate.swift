@@ -61,7 +61,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         attemptRegisterForNotifications(application: application)
         setupStyle()
         setupOneSignal(launchOptions: launchOptions)
-        getGameList()
         activeSpeaker()
         setupVolumeObserver()
         sentrySetup()
@@ -102,7 +101,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let audioSession = AVAudioSession.sharedInstance()
         let currentVolume = audioSession.outputVolume
         
-        if currentVolume > previousVolume {
+        if currentVolume >= 1.0 {
+            consecutiveVolumeDownPresses = 0
+            unmuteVideoIfNeed()
+        } else if currentVolume > previousVolume {
             consecutiveVolumeDownPresses = 0
             unmuteVideoIfNeed()
         } else if currentVolume < previousVolume {
@@ -115,6 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         previousVolume = currentVolume
     }
+
     
     
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
@@ -184,6 +187,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
                             self.openUser(userId: userId, username: username)
                         }
+                    case "NEW_STITCH":
+                        self.moveToStichDashboard()
+                    case  "APPROVED_STITCH":
+                        self.moveToStichDashboard()
+                    case "DENIED_STITCH":
+                        self.moveToStichDashboard()
                     default:
                         print("None")
                         
@@ -195,31 +204,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
     }
-    
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        
-        /*
-         // Update badge number
-         if let aps = userInfo["aps"] as? [String: AnyObject], let badgeCount = aps["badge"] as? Int {
-         UIApplication.shared.applicationIconBadgeNumber = badgeCount
-         
-         // Get tab bar controller and update badge number
-         if let tabBarController = self.window?.rootViewController as? UITabBarController {
-         if let tabItems = tabBarController.tabBar.items {
-         let tabItem = tabItems[0]
-         tabItem.badgeValue = badgeCount > 0 ? "\(badgeCount)" : nil
-         }
-         }
-         }
-         
-         // Call completion handler
-         completionHandler(.newData)
-         
-         */
-    }
-    
-    
-    
+
     // Helper function to convert a string to a dictionary
     func convertStringToDictionary(text: String) -> [String:Any]? {
         if let data = text.data(using: .utf8) {
@@ -246,10 +231,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         SBUTheme.set(theme: .light)
         
-        
-        SBUTheme.channelListTheme.navigationBarTintColor = UIColor.background
-        
-        
         //SBUStringSet.Empty_No_Channels = "No messages"
         SBUStringSet.User_No_Name = "Stitchbox user"
         SBUStringSet.User_Operator = "Leader"
@@ -260,41 +241,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUGlobals.imageResizingSize = CGSize(width: 480, height: 480)
         SBUTheme.componentTheme.barItemTintColor = UIColor.black
         
-        
-        SBUTheme.messageCellTheme.leftBackgroundColor = UIColor.lightGray
-        SBUTheme.messageCellTheme.rightBackgroundColor = UIColor.primary
-        SBUTheme.messageCellTheme.userMessageLeftTextColor = UIColor.white
+        SBUTheme.messageCellTheme.leftBackgroundColor = .normalButtonBackground
+        SBUTheme.messageCellTheme.rightBackgroundColor = UIColor(red: 53, green: 46, blue: 113)
+        SBUTheme.messageCellTheme.userMessageLeftTextColor = UIColor.black
         SBUTheme.messageCellTheme.userMessageRightTextColor = UIColor.white
-        SBUTheme.messageCellTheme.userMessageLeftEditTextColor = UIColor.black
-        SBUTheme.messageCellTheme.userMessageRightEditTextColor = UIColor.black
-        SBUTheme.messageInputTheme.backgroundColor = UIColor.background
-        SBUTheme.messageInputTheme.buttonTintColor = UIColor.white
-        
-        
-        SBUTheme.channelSettingsTheme.navigationBarTintColor = UIColor.black
-        SBUTheme.channelSettingsTheme.rightBarButtonTintColor = UIColor.black
-        SBUTheme.channelSettingsTheme.leftBarButtonTintColor = UIColor.black
-        SBUTheme.channelSettingsTheme.cellArrowIconTintColor = UIColor.black
-        SBUTheme.channelSettingsTheme.cellSwitchColor = UIColor.black
-        SBUTheme.channelSettingsTheme.cellTypeIconTintColor = UIColor.white
-        SBUTheme.channelSettingsTheme.backgroundColor = .background
-        
-        
-        SBUTheme.userListTheme.navigationBarTintColor = UIColor.white
-        
-        
-        SBUTheme.messageSearchTheme.backgroundColor = .white
-        SBUTheme.userListTheme.statusBarStyle = .lightContent
-        
         SBUTheme.overlayTheme.componentTheme.backgroundColor = .white
         SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = .white
-        
-        SBUTheme.userProfileTheme.backgroundColor = .white
-        SBUTheme.userProfileTheme.usernameTextColor = UIColor.black
-        SBUTheme.messageSearchResultCellTheme.backgroundColor = .white
-        
-        SBUTheme.userCellTheme.backgroundColor = .white
-        
         
         SBUTheme.channelTheme.navigationBarTintColor = UIColor.white
         SBUTheme.channelTheme.backgroundColor = .white
@@ -306,11 +258,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.componentTheme.addReactionTintColor = UIColor.secondary
         SBUTheme.componentTheme.loadingSpinnerColor = UIColor.secondary
         
-        SBUTheme.componentTheme.emptyViewBackgroundColor = .white
-        SBUTheme.componentTheme.backgroundColor = .white
+        SBUTheme.messageInputTheme.buttonTintColor = .black
+
         
-        //SBUFontSet.body1 = UIFont.systemFont(ofSize: 20)
+        SBUFontSet.body1 = FontManager.shared.roboto(.Regular, size: 16)
+        SBUFontSet.body2 = FontManager.shared.roboto(.Medium, size: 14)
+        SBUFontSet.body3 = FontManager.shared.roboto(.Regular, size: 14)
+        SBUFontSet.caption1 = FontManager.shared.roboto(.Bold, size: 12)
+        SBUFontSet.caption2 = FontManager.shared.roboto(.Regular, size: 12)
+        SBUFontSet.caption3 = FontManager.shared.roboto(.Medium, size: 11)
+        SBUFontSet.caption4 = FontManager.shared.roboto(.Regular, size: 11)
         
+        SBUFontSet.button1 = FontManager.shared.roboto(.Medium, size: 18)
+        SBUFontSet.button2 = FontManager.shared.roboto(.Medium, size: 16)
+        SBUFontSet.button3 = FontManager.shared.roboto(.Medium, size: 14)
+        
+        SBUFontSet.h1 = FontManager.shared.roboto(.Bold, size: 18)
+        SBUFontSet.h2 = FontManager.shared.roboto(.Medium, size: 18)
+        SBUFontSet.h3 = FontManager.shared.roboto(.Bold, size: 16)
+        
+        SBUFontSet.subtitle1 = FontManager.shared.roboto(.Medium, size: 16)
+        SBUFontSet.subtitle2 = FontManager.shared.roboto(.Regular, size: 16)
+   
     }
     
     // MARK: UISceneSession Lifecycle
@@ -560,11 +529,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     nav.popBack(4)
                 } else {
                     
-                    if currentVC is FeedViewController || currentVC is TrendingVC || currentVC is ProfileViewController || currentVC is MainMessageVC {
-                        self.presentChatWithNavAndHideBar(nav: nav, channelUrl: channelUrl)
-                    } else {
-                        self.presentChatWithNav(nav: nav, channelUrl: channelUrl)
-                    }
+                    self.presentChatWithoutNav(vc: currentVC, channelUrl: channelUrl)
                     
                 }
                 
@@ -576,84 +541,72 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         
     }
+
     
-    func presentChatWithNavAndHideBar(nav: UINavigationController, channelUrl: String) {
-        
-        let mlsp = SBDMessageListParams()
-        let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
-        channelVC.shouldUnhide = true
-        nav.pushViewController(channelVC, animated: true)
-        
-    }
-    
-    func presentChatWithNav(nav: UINavigationController, channelUrl: String) {
-        
-        let mlsp = SBDMessageListParams()
-        let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
-        nav.pushViewController(channelVC, animated: true)
-        
-    }
     
     func presentChatWithoutNav(vc: UIViewController, channelUrl: String) {
         
         let mlsp = SBDMessageListParams()
         let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
-        let navigationController = UINavigationController(rootViewController: channelVC)
-        navigationController.modalPresentationStyle = .fullScreen
-        vc.present(navigationController, animated: true, completion: nil)
+        
+        
+        let nav = UINavigationController(rootViewController: channelVC)
+
+     
+        // Customize the navigation bar appearance
+        nav.navigationBar.barTintColor = .white
+        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+        nav.modalPresentationStyle = .fullScreen
+ 
+       // self.navigationController?.pushViewController(channelVC, animated: true)
+        nav.modalPresentationStyle = .fullScreen
+        vc.present(nav, animated: true)
         
     }
-    
-    func getGameList() {
+
+    func moveToStichDashboard() {
         
-        global_suppport_game_list.removeAll()
-        
-        APIManager.shared.getGames { [weak self] result in
-            guard let self = self else { return }
+        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchDashboardVC") as? StitchDashboardVC {
             
-            switch result {
-            case .success(let apiResponse):
+            
+            if let vc = UIViewController.currentViewController() {
                 
-                guard apiResponse.body?["message"] as? String == "success",
-                      let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                
+                if vc is FeedViewController || vc is TrendingVC || vc is MainMessageVC || vc is ProfileViewController {
                     
-                    return
+                    if let nav = vc.navigationController {
+                        
+                        PVC.hidesBottomBarWhenPushed = true
+                        hideMiddleBtn(vc: vc.self)
+                        nav.pushViewController(PVC, animated: true)
+                        
+                    }
+                    
+                    
+                } else {
+                    
+                    if let nav = vc.navigationController {
+                        
+                        nav.pushViewController(PVC, animated: true)
+                        
+                    }
+                    
+                    
                 }
                 
-                let list = data.compactMap { GameList(JSON: $0) }
-                let filteredList = list.filter { $0.name != "Other" }
-                global_suppport_game_list += filteredList
                 
-            case .failure(let error):
-                print(error)
                 
             }
+           
+            
         }
+      
         
     }
     
     func openFistBumpList() {
-        
-        if let MFBVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFistBumpListVC") as? MainFistBumpVC {
-            
-            if let vc = UIViewController.currentViewController() {
-                
-                let nav = UINavigationController(rootViewController: MFBVC)
-                
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                MFBVC.onPresent = true
-                
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-                
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-                
-                
-            }
-        }
+
         
         
     }
