@@ -2059,7 +2059,7 @@ extension ShareApi: EndPointType {
 
 public enum UserContactApi {
   case create(body: [String: Any])
-  case createBulk(body: [[String: Any]])
+  case createBulk(body: [String: Any])
 }
 extension UserContactApi: EndPointType {
   var path: String {
