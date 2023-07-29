@@ -1564,7 +1564,7 @@ extension ReelNode {
                 
                 slideVC.modalPresentationStyle = .custom
                 slideVC.transitioningDelegate = vc.self
-                global_presetingRate = Double(0.30)
+                global_presetingRate = Double(0.25)
                 global_cornerRadius = 35
                 vc.present(slideVC, animated: true, completion: nil)
                 

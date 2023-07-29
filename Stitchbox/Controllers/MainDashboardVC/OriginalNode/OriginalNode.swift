@@ -237,7 +237,7 @@ extension OriginalNode {
         
         if let vc = UIViewController.currentViewController() {
             
-            global_presetingRate = Double(0.35)
+            global_presetingRate = Double(0.30)
             global_cornerRadius = 45
             
             if item.owner?.id == _AppCoreData.userDataSource.value?.userID {
@@ -251,7 +251,7 @@ extension OriginalNode {
                     if let update1 = vc as? FeedViewController {
                         update1.editeddPost = item
                             
-                        global_presetingRate = Double(0.35)
+                        global_presetingRate = Double(0.30)
                         global_cornerRadius = 45
                         update1.editeddPost = item
                         vc.present(postSettingVC, animated: true, completion: nil)
@@ -263,7 +263,7 @@ extension OriginalNode {
                     if let update1 = vc as? SelectedPostVC {
                         update1.editeddPost = item
                             
-                        global_presetingRate = Double(0.35)
+                        global_presetingRate = Double(0.30)
                         global_cornerRadius = 45
                         update1.editeddPost = item
                         vc.present(postSettingVC, animated: true, completion: nil)

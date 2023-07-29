@@ -698,7 +698,7 @@ extension CommentVC {
                 commentSettings.modalPresentationStyle = .custom
                 commentSettings.transitioningDelegate = self
                 
-                global_presetingRate = Double(0.35)
+                global_presetingRate = Double(0.3)
                 global_cornerRadius = 45
                 
                 if uid == self.post.owner?.id {
