@@ -3,10 +3,19 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LeaveView" customModule="Stitchbox" customModuleProvider="target">
             <connections>
@@ -20,54 +29,37 @@
             <rect key="frame" x="0.0" y="0.0" width="387" height="440"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="universal_theme" translatesAutoresizingMaskIntoConstraints="NO" id="fVU-KX-EY4">
-                    <rect key="frame" x="0.0" y="-50" width="387" height="490"/>
-                </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Leave channel?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzX-3g-dWT">
-                    <rect key="frame" x="135.5" y="80" width="116" height="19.5"/>
-                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <rect key="frame" x="138.5" y="80" width="110.5" height="19"/>
+                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You will stop receiving messages from this conversation and people will see that you left." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZxW-kd-Hp0">
-                    <rect key="frame" x="58.5" y="115.5" width="270" height="54"/>
+                    <rect key="frame" x="58.5" y="115" width="270" height="53"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="270" id="3II-QR-WOn"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="22" translatesAutoresizingMaskIntoConstraints="NO" id="Lcd-rq-9pw">
-                    <rect key="frame" x="92.5" y="199.5" width="202" height="25"/>
+                    <rect key="frame" x="62.5" y="198" width="262" height="35"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VHg-68-rCy">
-                            <rect key="frame" x="0.0" y="0.0" width="90" height="25"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="25" id="BLS-q7-WTp"/>
-                            </constraints>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="Leave">
-                                <fontDescription key="titleFontDescription" type="boldSystem" pointSize="15"/>
-                            </buttonConfiguration>
-                            <connections>
-                                <action selector="leaveBtnPressed:" destination="-1" eventType="touchUpInside" id="6uc-QD-CBa"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3O4-a3-tOG">
-                            <rect key="frame" x="112" y="0.0" width="90" height="25"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <rect key="frame" x="0.0" y="0.0" width="120" height="35"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="90" id="TFt-Um-Oyw"/>
-                                <constraint firstAttribute="height" constant="25" id="jdM-im-ng9"/>
+                                <constraint firstAttribute="width" constant="120" id="TFt-Um-Oyw"/>
+                                <constraint firstAttribute="height" constant="35" id="jdM-im-ng9"/>
                             </constraints>
-                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="Cancel">
-                                <fontDescription key="titleFontDescription" type="boldSystem" pointSize="15"/>
-                            </buttonConfiguration>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                     <real key="value" value="10"/>
@@ -77,28 +69,47 @@
                                 <action selector="cancelBtnPressed:" destination="-1" eventType="touchUpInside" id="XYi-71-zny"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VHg-68-rCy">
+                            <rect key="frame" x="142" y="0.0" width="120" height="35"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="35" id="BLS-q7-WTp"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Leave">
+                                <color key="titleColor" systemColor="systemRedColor"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="10"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="leaveBtnPressed:" destination="-1" eventType="touchUpInside" id="6uc-QD-CBa"/>
+                            </connections>
+                        </button>
                     </subviews>
                 </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="ZxW-kd-Hp0" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Bdm-N3-eIh"/>
                 <constraint firstItem="zzX-3g-dWT" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="32" id="JAO-Xv-FXh"/>
-                <constraint firstAttribute="bottom" secondItem="fVU-KX-EY4" secondAttribute="bottom" id="Skk-Gw-OBp"/>
                 <constraint firstItem="zzX-3g-dWT" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="UNU-oI-nTU"/>
                 <constraint firstItem="ZxW-kd-Hp0" firstAttribute="top" secondItem="zzX-3g-dWT" secondAttribute="bottom" constant="16" id="VIM-oz-XC8"/>
-                <constraint firstAttribute="trailing" secondItem="fVU-KX-EY4" secondAttribute="trailing" id="Vec-jB-ICf"/>
                 <constraint firstItem="Lcd-rq-9pw" firstAttribute="top" secondItem="ZxW-kd-Hp0" secondAttribute="bottom" constant="30" id="aFL-s0-yqI"/>
-                <constraint firstItem="fVU-KX-EY4" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="-50" id="dTh-3M-j4x"/>
-                <constraint firstItem="fVU-KX-EY4" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="fBg-k5-qCK"/>
                 <constraint firstItem="Lcd-rq-9pw" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="frn-t1-cYx"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-670.28985507246387" y="249.77678571428569"/>
+            <point key="canvasLocation" x="47" y="64"/>
         </view>
     </objects>
     <resources>
-        <image name="universal_theme" width="780" height="628"/>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

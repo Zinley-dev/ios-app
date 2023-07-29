@@ -221,7 +221,7 @@ class AddOperatorMemberVC: UIViewController, UISearchBarDelegate, UINavigationCo
         cell.nicknameLabel.text = selectedUsers[indexPath.row].nickname
         cell.nicknameLabel.font = FontManager.shared.roboto(.Regular, size: 12)
         cell.nicknameLabel.backgroundColor = .clear
-        cell.backgroundColor = .lightGray
+        cell.backgroundColor = hashtagPurple
         return cell
     }
 
