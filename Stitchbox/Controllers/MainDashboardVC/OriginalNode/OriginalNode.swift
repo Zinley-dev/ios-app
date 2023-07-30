@@ -373,7 +373,7 @@ extension OriginalNode {
     }
 
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-        
+     
         APIManager.shared.getStitchPost(rootId: post.id, page: page) {  result in
             
             switch result {
