@@ -818,27 +818,34 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
                 if let index = self.index {
                     start = index + 1
-                } else {
-                    if self.CommentList.isEmpty || !self.CommentList[0].is_title {
-                        start = 0
-                    } else {
-                        start = 1
+                    self.CommentList.insert(item, at: start)
+                    
+                    DispatchQueue.main.async {
+                        // Insert the new comment at its respective position
+                        let indexPath = IndexPath(row: start, section: 0)
+                        self.tableNode.insertRows(at: [indexPath], with: .none)
+                        
+                        // Scroll to the new comment
+                        self.tableNode.scrollToRow(at: indexPath, at: .top, animated: true)
+                        
+                        // Reload the new comment
+                        //self.tableNode.reloadRows(at: [indexPath], with: .none)
                     }
-                }
-                
-                self.CommentList.insert(item, at: start)
-                
-                DispatchQueue.main.async {
-                    let indexPath = IndexPath(row: start, section: 0)
+                } else {
+                    let start = self.CommentList.count
+                    self.CommentList.append(item)
                     
-                    // Insert the new comment
-                    self.tableNode.insertRows(at: [indexPath], with: .none)
-                    
-                    // Scroll to the new comment
-                    self.tableNode.scrollToRow(at: indexPath, at: .top, animated: true)
-                    
-                    // Reload the new comment
-                    self.tableNode.reloadRows(at: [indexPath], with: .none)
+                    DispatchQueue.main.async {
+                        // Insert the new comment at its respective position
+                        let indexPath = IndexPath(row: start, section: 0)
+                        self.tableNode.insertRows(at: [indexPath], with: .none)
+                        
+                        // Scroll to the new comment
+                        self.tableNode.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                        
+                        // Reload the new comment
+                        //self.tableNode.reloadRows(at: [indexPath], with: .none)
+                    }
                 }
                 
                 self.isSending = false

@@ -21,6 +21,7 @@ class ProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet weak var numberOfFollowing: UILabel!
     @IBOutlet weak var numberOfFollowers: UILabel!
+    @IBOutlet weak var numberOfStitches: UILabel!
     @IBOutlet weak var avatarImage: UIImageView!
 
     @IBOutlet weak var followerStack: UIStackView!

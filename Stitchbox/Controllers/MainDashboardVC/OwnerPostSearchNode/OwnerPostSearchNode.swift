@@ -21,11 +21,47 @@ class OwnerPostSearchNode: ASCellNode {
     
     let paragraphStyles = NSMutableParagraphStyle()
     
+    
+    private lazy var stitchSignNode: ASImageNode = {
+        let imageNode = ASImageNode()
+        imageNode.image = UIImage(named: "partner white")
+        imageNode.contentMode = .scaleAspectFill
+        imageNode.style.preferredSize = CGSize(width: 25, height: 25) // set the size here
+        imageNode.clipsToBounds = true
+
+        // Add shadow to layer
+        imageNode.shadowColor = UIColor.black.cgColor
+        imageNode.shadowOpacity = 0.5
+        imageNode.shadowOffset = CGSize(width: 0, height: 2)
+        imageNode.shadowRadius = 2
+        
+        return imageNode
+    }()
+
+
+    private lazy var stitchCountNode: ASTextNode = {
+        let textNode = ASTextNode()
+        let paragraphStyle = NSMutableParagraphStyle()
+        //textNode.style.preferredSize = CGSize(width: 100, height: 25) // set the size here
+        paragraphStyle.alignment = .center
+        textNode.attributedText = NSAttributedString(
+            string: "0",
+            attributes: [
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style as an example
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ]
+        )
+
+        textNode.maximumNumberOfLines = 1
+        return textNode
+    }()
+    
     private lazy var videoSignNode: ASImageNode = {
         let imageNode = ASImageNode()
         imageNode.image = UIImage(named: "play")
         imageNode.contentMode = .scaleAspectFill
-        imageNode.style.preferredSize = CGSize(width: 30, height: 30) // set the size here
+        imageNode.style.preferredSize = CGSize(width: 25, height: 25) // set the size here
         imageNode.clipsToBounds = true
 
         // Add shadow to layer
@@ -155,6 +191,7 @@ class OwnerPostSearchNode: ASCellNode {
         }
         
         countView(with: post)
+        countViewStitch(with: post)
         automaticallyManagesSubnodes = true
         
     }
@@ -176,6 +213,12 @@ class OwnerPostSearchNode: ASCellNode {
             videoCountStack.children = [videoSignNode, countNode]
             videoCountStack.justifyContent = .center
             videoCountStack.alignItems = .center // This centers the nodes vertically
+            
+            let stitchCountStack = ASStackLayoutSpec.horizontal()
+            stitchCountStack.spacing = 4.0
+            stitchCountStack.children = [stitchSignNode, stitchCountNode]
+            stitchCountStack.justifyContent = .center
+            stitchCountStack.alignItems = .center // This centers the nodes vertically
 
             let videoCountInsets = UIEdgeInsets(top: .infinity, left: 0, bottom: 2, right: .infinity)
             let videoCountInsetSpec = ASInsetLayoutSpec(insets: videoCountInsets, child: videoCountStack)
@@ -183,19 +226,24 @@ class OwnerPostSearchNode: ASCellNode {
             let infoNodeMaxWidth: CGFloat = constrainedSize.max.width // Set the max width based on your main view's width
             infoNode.style.maxWidth = ASDimension(unit: .points, value: infoNodeMaxWidth) // Limit the width of infoNode
             
-            let stitchCountInsets = UIEdgeInsets(top: 8, left: 4, bottom: .infinity, right: .infinity)
-            let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: infoNode)
+            let stitchCountInsets = UIEdgeInsets(top: .infinity, left: .infinity, bottom: 4, right: 8)
+            let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: stitchCountStack)
+            
+            
+            let infoInsets = UIEdgeInsets(top: 8, left: 4, bottom: .infinity, right: .infinity)
+            let infoInsetSpec = ASInsetLayoutSpec(insets: infoInsets, child: infoNode)
 
             let overlayLayoutSpec = ASOverlayLayoutSpec(child: imageNode, overlay: videoCountInsetSpec)
             
+            let overlayLayoutSpec2 = ASOverlayLayoutSpec(child: overlayLayoutSpec, overlay: infoInsetSpec)
             
-            let overlayLayoutSpec2 = ASOverlayLayoutSpec(child: overlayLayoutSpec, overlay: stitchCountInsetSpec)
+            let overlayLayoutSpec3 = ASOverlayLayoutSpec(child: overlayLayoutSpec2, overlay: stitchCountInsetSpec)
 
             let stack = ASStackLayoutSpec.vertical()
             stack.spacing = 8.0
             stack.justifyContent = .start // align items to start
             stack.alignItems = .stretch // stretch items to fill the width
-            stack.children = [overlayLayoutSpec2, nameNode]
+            stack.children = [overlayLayoutSpec3, nameNode]
 
             let insetLayoutSpec = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), child: stack)
 
@@ -212,26 +260,37 @@ class OwnerPostSearchNode: ASCellNode {
             videoCountStack.children = [videoSignNode, countNode]
             videoCountStack.justifyContent = .center
             videoCountStack.alignItems = .center // This centers the nodes vertically
+            
+            let stitchCountStack = ASStackLayoutSpec.horizontal()
+            stitchCountStack.spacing = 4.0
+            stitchCountStack.children = [stitchSignNode, stitchCountNode]
+            stitchCountStack.justifyContent = .center
+            stitchCountStack.alignItems = .center // This centers the nodes vertically
 
             let videoCountInsets = UIEdgeInsets(top: .infinity, left: 0, bottom: 2, right: .infinity)
             let videoCountInsetSpec = ASInsetLayoutSpec(insets: videoCountInsets, child: videoCountStack)
+            
+            let stitchCountInsets = UIEdgeInsets(top: .infinity, left: .infinity, bottom: 4, right: 8)
+            let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: stitchCountStack)
+            
         
             let infoNodeMaxWidth: CGFloat = constrainedSize.max.width // Set the max width based on your main view's width
             infoNode.style.maxWidth = ASDimension(unit: .points, value: infoNodeMaxWidth) // Limit the width of infoNode
             
-            let stitchCountInsets = UIEdgeInsets(top: 8, left: 4, bottom: .infinity, right: .infinity)
-            let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: infoNode)
+            let infoInsets = UIEdgeInsets(top: 8, left: 4, bottom: .infinity, right: .infinity)
+            let infoInsetSpec = ASInsetLayoutSpec(insets: infoInsets, child: infoNode)
 
             let overlayLayoutSpec = ASOverlayLayoutSpec(child: imageNode, overlay: videoCountInsetSpec)
             
+            let overlayLayoutSpec2 = ASOverlayLayoutSpec(child: overlayLayoutSpec, overlay: infoInsetSpec)
             
-            let overlayLayoutSpec2 = ASOverlayLayoutSpec(child: overlayLayoutSpec, overlay: stitchCountInsetSpec)
+            let overlayLayoutSpec3 = ASOverlayLayoutSpec(child: overlayLayoutSpec2, overlay: stitchCountInsetSpec)
 
             let stack = ASStackLayoutSpec.vertical()
             stack.spacing = 8.0
             stack.justifyContent = .start // align items to start
             stack.alignItems = .stretch // stretch items to fill the width
-            stack.children = [overlayLayoutSpec2]
+            stack.children = [overlayLayoutSpec3]
 
             let insetLayoutSpec = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), child: stack)
 
@@ -263,9 +322,9 @@ class OwnerPostSearchNode: ASCellNode {
                         let paragraphStyle = NSMutableParagraphStyle()
                         paragraphStyle.alignment = .center
                         self.countNode.attributedText = NSAttributedString(
-                            string: "\(stats.view.total)",
+                            string: "\(formatPoints(num: Double(stats.view.total)))",
                             attributes: [
-                                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style
+                                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
                                 NSAttributedString.Key.foregroundColor: UIColor.white,
                                 NSAttributedString.Key.paragraphStyle: paragraphStyle
                             ]
@@ -275,6 +334,41 @@ class OwnerPostSearchNode: ASCellNode {
                 } catch {
                     print("Error decoding JSON: \(error)")
                 }
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+    }
+    
+    func countViewStitch(with data: PostModel) {
+        
+        APIManager.shared.countPostStitch(pid: data.id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                print(apiResponse)
+
+                guard let total = apiResponse.body?["total"] as? Int else {
+                    print("Couldn't find the 'total' key")
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    let paragraphStyle = NSMutableParagraphStyle()
+                    paragraphStyle.alignment = .center
+                    self.stitchCountNode.attributedText = NSAttributedString(
+                        string: "\(formatPoints(num: Double(total)))",
+                        attributes: [
+                            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
+                            NSAttributedString.Key.foregroundColor: UIColor.white,
+                            NSAttributedString.Key.paragraphStyle: paragraphStyle
+                        ]
+                    )
+
+                }
+                
             case .failure(let error):
                 print(error)
             }

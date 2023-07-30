@@ -46,7 +46,7 @@
                     <state key="normal" title="Hide"/>
                 </button>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="q1p-YQ-BvC">
-                    <rect key="frame" x="8" y="90" width="768" height="153"/>
+                    <rect key="frame" x="8" y="90" width="768" height="161"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="F2h-Cc-luZ">
                         <size key="itemSize" width="128" height="128"/>
@@ -64,7 +64,7 @@
                 <constraint firstAttribute="trailing" secondItem="zHq-vc-swT" secondAttribute="trailing" id="FjJ-58-AOa"/>
                 <constraint firstItem="RBT-cG-JWY" firstAttribute="centerY" secondItem="bwx-sJ-a2h" secondAttribute="centerY" id="PXA-jJ-MvI"/>
                 <constraint firstItem="bwx-sJ-a2h" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="Rxe-Ib-oLX"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="q1p-YQ-BvC" secondAttribute="bottom" constant="16" id="UrW-j2-6H0"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="q1p-YQ-BvC" secondAttribute="bottom" constant="8" id="UrW-j2-6H0"/>
                 <constraint firstAttribute="bottom" secondItem="zHq-vc-swT" secondAttribute="bottom" id="XkL-wT-thM"/>
                 <constraint firstItem="q1p-YQ-BvC" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="8" id="bmt-uB-Uk6"/>
                 <constraint firstItem="zHq-vc-swT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="sVU-WR-Hwx"/>

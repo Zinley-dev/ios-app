@@ -106,7 +106,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             
             self.selectPostCollectionView.collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
             
-            let height =  UIScreen.main.bounds.height * 1 / 4.5
+            let height =  UIScreen.main.bounds.height * 1 / 4
           
             NSLayoutConstraint.activate([
                 self.selectPostCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
@@ -170,7 +170,7 @@ extension OriginalNode {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == self.selectPostCollectionView.collectionView {
         
-            let height =  UIScreen.main.bounds.height * 1 / 4.5 - 70
+            let height =  UIScreen.main.bounds.height * 1 / 4 - 70
             let width = height * 9 / 13.5
             
             return CGSize(width: width, height: height)

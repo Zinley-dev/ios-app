@@ -33,6 +33,7 @@ class ProfileViewController: UIViewController {
     
     var followerCount = 0
     var followingCount = 0
+    var stitchCount = 0
     var hasLoaded = false
     
     
@@ -131,9 +132,9 @@ class ProfileViewController: UIViewController {
         configureDatasource()
         wireDelegate()
         setupSettingButton()
-        self.getFollowing()
-        self.getFollowers()
-        
+        getFollowing()
+        getFollowers()
+        getStitchCount()
         
         self.getMyPost { (newPosts) in
             
@@ -290,7 +291,7 @@ class ProfileViewController: UIViewController {
 
                 cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
                 cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
-         
+                cell.numberOfStitches.text = "\(formatPoints(num: Double(stitchCount)))"
                 
                 // add buttons target
                 cell.insightBtn.addTarget(self, action: #selector(insightTapped), for: .touchUpInside)
@@ -365,12 +366,15 @@ extension ProfileViewController {
         
         reloadUserInformation {
             self.reloadGetFollowers {
-                self.reloadUserInformation {
-                    self.applyAllChange()
-                    Dispatch.main.async {
-                        self.pullControl.endRefreshing()
+                self.reloadGetStitches {
+                    self.reloadUserInformation {
+                        self.applyAllChange()
+                        Dispatch.main.async {
+                            self.pullControl.endRefreshing()
+                        }
                     }
                 }
+                
             }
         }
         
@@ -733,6 +737,34 @@ extension ProfileViewController: UINavigationBarDelegate, UINavigationController
 
 extension ProfileViewController {
     
+    
+    func getStitchCount() {
+        
+        APIManager.shared.countMyStitch { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                  
+                guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
+                    print("Couldn't find the 'totalStitch' key")
+                    self.stitchCount = 0
+                    return
+                }
+                
+                self.stitchCount = totalStitch
+                self.applyHeaderChange()
+                
+            case .failure(let error):
+                self.stitchCount = 0
+                print("Error loading stitch: ", error)
+                
+            }
+        }
+        
+       
+    }
+    
     func getFollowing() {
         
         APIManager.shared.getFollows(page:1) { [weak self] result in
@@ -761,6 +793,7 @@ extension ProfileViewController {
             }
         }
     }
+    
     func getFollowers() {
         
         APIManager.shared.getFollowers(page: 1) { [weak self] result in
@@ -918,6 +951,32 @@ extension ProfileViewController {
         }
     }
 
+    
+    func reloadGetStitches(completed: @escaping DownloadComplete) {
+        
+        APIManager.shared.countMyStitch { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                  
+                guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
+                    print("Couldn't find the 'totalStitch' key")
+                    self.stitchCount = 0
+                    completed()
+                    return
+                }
+                
+                self.stitchCount = totalStitch
+                completed()
+                
+            case .failure(let error):
+                self.stitchCount = 0
+                print("Error loading stitch: ", error)
+                completed()
+            }
+        }
+    }
     
     
 }

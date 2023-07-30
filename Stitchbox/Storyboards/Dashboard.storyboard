@@ -1031,7 +1031,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1xp-lh-cz5">
-                                <rect key="frame" x="0.0" y="100" width="375" height="678"/>
+                                <rect key="frame" x="2" y="100" width="372" height="678"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oPB-cB-idk">
@@ -1047,8 +1047,8 @@
                             <constraint firstItem="NXe-C1-Agt" firstAttribute="trailing" secondItem="lmR-3c-giT" secondAttribute="trailing" constant="8" id="FwW-XA-0Cx"/>
                             <constraint firstItem="oPB-cB-idk" firstAttribute="bottom" secondItem="NXe-C1-Agt" secondAttribute="bottom" id="Ntm-2V-A8B"/>
                             <constraint firstItem="oPB-cB-idk" firstAttribute="trailing" secondItem="NXe-C1-Agt" secondAttribute="trailing" id="VAl-Gn-FyD"/>
-                            <constraint firstItem="1xp-lh-cz5" firstAttribute="leading" secondItem="NXe-C1-Agt" secondAttribute="leading" id="VE6-Co-8qP"/>
-                            <constraint firstItem="NXe-C1-Agt" firstAttribute="trailing" secondItem="1xp-lh-cz5" secondAttribute="trailing" id="caW-dM-KMX"/>
+                            <constraint firstItem="1xp-lh-cz5" firstAttribute="leading" secondItem="n5X-Nt-Zdz" secondAttribute="leading" constant="2" id="VE6-Co-8qP"/>
+                            <constraint firstAttribute="trailing" secondItem="1xp-lh-cz5" secondAttribute="trailing" constant="1" id="caW-dM-KMX"/>
                             <constraint firstItem="1xp-lh-cz5" firstAttribute="top" secondItem="lmR-3c-giT" secondAttribute="bottom" constant="16" id="kDh-ep-jHV"/>
                             <constraint firstItem="lmR-3c-giT" firstAttribute="top" secondItem="NXe-C1-Agt" secondAttribute="top" id="oIh-aW-2V9"/>
                             <constraint firstItem="oPB-cB-idk" firstAttribute="top" secondItem="NXe-C1-Agt" secondAttribute="top" id="psa-Ka-9xQ"/>
@@ -4672,6 +4672,7 @@
                                             <outlet property="linkStackView" destination="EWr-XA-H3O" id="5WJ-FN-VFg"/>
                                             <outlet property="numberOfFollowers" destination="va1-A6-Mok" id="iFe-6g-LgB"/>
                                             <outlet property="numberOfFollowing" destination="fiL-Ja-IPg" id="mAk-Gb-i61"/>
+                                            <outlet property="numberOfStitches" destination="CyK-Tx-GwA" id="1rk-co-9pn"/>
                                             <outlet property="usernameLbl" destination="vnK-Bb-OAW" id="LWN-br-Yds"/>
                                         </connections>
                                     </collectionViewCell>
@@ -9262,7 +9263,7 @@
         <image name="moderator" width="16" height="16"/>
         <image name="notifications-icon" width="512" height="512"/>
         <image name="onlyme" width="17" height="23"/>
-        <image name="play" width="89" height="71"/>
+        <image name="play" width="24" height="24"/>
         <image name="public" width="30" height="30"/>
         <image name="push noti" width="26" height="27"/>
         <image name="rightMove" width="15" height="25"/>

@@ -338,6 +338,7 @@ extension TrendingPostVC {
     
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        
         APIManager.shared.getPostTrending(page: page) { [weak self] result in
             guard let self = self else { return }
             

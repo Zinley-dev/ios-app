@@ -1217,13 +1217,8 @@ extension CommentVC {
                         //self.tableNode.reloadRows(at: [indexPath], with: .none)
                     }
                 } else {
-                    if self.CommentList.isEmpty || !self.CommentList[0].is_title {
-                        start = 0
-                    } else {
-                        start = 1
-                    }
-                    
-                    self.CommentList.insert(item, at: start)
+                    let start = self.CommentList.count
+                    self.CommentList.append(item)
                     
                     DispatchQueue.main.async {
                         // Insert the new comment at its respective position
@@ -1231,7 +1226,7 @@ extension CommentVC {
                         self.tableNode.insertRows(at: [indexPath], with: .none)
                         
                         // Scroll to the new comment
-                        self.tableNode.scrollToRow(at: indexPath, at: .top, animated: true)
+                        self.tableNode.scrollToRow(at: indexPath, at: .bottom, animated: true)
                         
                         // Reload the new comment
                         //self.tableNode.reloadRows(at: [indexPath], with: .none)
