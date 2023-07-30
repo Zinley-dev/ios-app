@@ -1172,7 +1172,7 @@ extension UserProfileVC {
         slideVC.userId = self.userId!
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
-        global_presetingRate = Double(0.75)
+        global_presetingRate = Double(0.70)
         global_cornerRadius = 35
         
         delay(0.1) {

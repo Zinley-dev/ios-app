@@ -136,7 +136,7 @@ extension EditBioVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars <= 10000    // 500 Limit Value
+        return numberOfChars <= 300    // 500 Limit Value
     }
     
     func createDisablePostBtn() {

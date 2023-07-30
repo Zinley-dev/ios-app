@@ -94,7 +94,7 @@ class CommentNode: ASCellNode {
                     
                     let user = NSMutableAttributedString()
               
-                    let username = NSAttributedString(string: "\(username): ", attributes: textAttributes)
+                    let username = NSAttributedString(string: "@\(username): ", attributes: textAttributes)
                     let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
                     var time: NSAttributedString?
                     
@@ -132,7 +132,7 @@ class CommentNode: ASCellNode {
                     
                     let user = NSMutableAttributedString()
               
-                    let username = NSAttributedString(string: "\(username): ", attributes: textAttributes)
+                    let username = NSAttributedString(string: "@\(username): ", attributes: textAttributes)
                     
                     let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
                    
@@ -293,7 +293,6 @@ class CommentNode: ASCellNode {
 
                     // Customize the navigation bar appearance
                     nav.navigationBar.barTintColor = .white
-                    nav.navigationBar.tintColor = .black
                     nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                     nav.modalPresentationStyle = .fullScreen
@@ -326,7 +325,7 @@ class CommentNode: ASCellNode {
 
                     // Customize the navigation bar appearance
                     nav.navigationBar.barTintColor = .white
-                    nav.navigationBar.tintColor = .black
+                  
                     nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
 
                     nav.modalPresentationStyle = .fullScreen
@@ -743,10 +742,7 @@ class CommentNode: ASCellNode {
 
                                     // Set the user ID, nickname, and onPresent properties of UPVC
                                     RVC.posts = [post]
-                                   
-                                    // Customize the navigation bar appearance
-                                    nav.navigationBar.barTintColor = .white
-                                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+                              
 
                                     nav.modalPresentationStyle = .fullScreen
                                     

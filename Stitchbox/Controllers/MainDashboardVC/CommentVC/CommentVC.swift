@@ -688,7 +688,7 @@ extension CommentVC {
                 guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
                     print("Can't get userUID")
                     return
-                }
+                }                                                                                           
                 
                 let uid = userUID
                 let selectedCmt = CommentList[indexPath.row]

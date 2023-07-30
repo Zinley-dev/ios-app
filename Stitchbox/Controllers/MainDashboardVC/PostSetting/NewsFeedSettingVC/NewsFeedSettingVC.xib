@@ -34,7 +34,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="hKr-NG-5QU">
-                    <rect key="frame" x="36" y="88" width="336" height="299"/>
+                    <rect key="frame" x="36" y="80" width="336" height="299"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="oVg-O0-80Z">
                             <rect key="frame" x="0.0" y="0.0" width="336" height="56"/>
@@ -406,7 +406,7 @@
             <constraints>
                 <constraint firstItem="hKr-NG-5QU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="36" id="4xs-xV-KNc"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="hKr-NG-5QU" secondAttribute="trailing" constant="36" id="PpB-K9-FZ0"/>
-                <constraint firstItem="hKr-NG-5QU" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="40" id="Wvy-yr-X6e"/>
+                <constraint firstItem="hKr-NG-5QU" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="32" id="Wvy-yr-X6e"/>
                 <constraint firstItem="KbD-rn-4rK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="-50" id="fxY-tN-UU9"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="KbD-rn-4rK" secondAttribute="bottom" id="knu-Vj-KT8"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="KbD-rn-4rK" secondAttribute="trailing" id="tXU-hN-R8Z"/>

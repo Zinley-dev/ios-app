@@ -176,6 +176,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         if let post = metaDataOneSignal.post {
                             self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
                         }
+                    case "MENTION_IN_COMMENT":
+                        if let post = metaDataOneSignal.post {
+                            self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
+                        }
                     case "NEW_POST":
                         self.openPost(post: metaDataOneSignal.post)
                         

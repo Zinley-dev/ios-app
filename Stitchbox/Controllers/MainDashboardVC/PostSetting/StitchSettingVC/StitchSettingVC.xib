@@ -27,7 +27,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="hKr-NG-5QU">
-                    <rect key="frame" x="36" y="88" width="336" height="218"/>
+                    <rect key="frame" x="36" y="80" width="336" height="218"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="oVg-O0-80Z">
                             <rect key="frame" x="0.0" y="0.0" width="336" height="56"/>
@@ -183,7 +183,7 @@
             <constraints>
                 <constraint firstItem="hKr-NG-5QU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="36" id="4xs-xV-KNc"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="hKr-NG-5QU" secondAttribute="trailing" constant="36" id="PpB-K9-FZ0"/>
-                <constraint firstItem="hKr-NG-5QU" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="40" id="Wvy-yr-X6e"/>
+                <constraint firstItem="hKr-NG-5QU" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="32" id="Wvy-yr-X6e"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="69.565217391304358" y="220.3125"/>

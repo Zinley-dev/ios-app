@@ -215,7 +215,34 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             }
             
             
+        } else if type == "MENTION_IN_COMMENT" {
+            
+            if root_id == reply_to_cid {
+                
+                loadRootCmt(rootComment: root_id) {
+                    
+                    self.loadComment(comment_id: self.commentId)
+                    
+                }
+                
+            } else {
+                
+                loadRootCmt(rootComment: root_id) {
+                    
+                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) {
+                        self.loadComment(comment_id: self.commentId)
+                    }
+                    
+                    
+                }
+                
+                
+            }
+            
+            
         }
+            
+            
         
         NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.reportRequest), name: (NSNotification.Name(rawValue: "notification_report_cmt")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.copyRequest), name: (NSNotification.Name(rawValue: "notification_copy_cmt")), object: nil)
@@ -961,8 +988,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 RVC.onPresent = true
                 
                 // Set the user ID, nickname, and onPresent properties of UPVC
-                RVC.posts = [viewPost]
-                
+                RVC.selectedPost = [viewPost]
+                RVC.startIndex = 0
                 // Customize the navigation bar appearance
                 nav.navigationBar.barTintColor = .background
                 nav.navigationBar.tintColor = .white

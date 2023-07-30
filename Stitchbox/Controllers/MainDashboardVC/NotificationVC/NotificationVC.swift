@@ -306,6 +306,12 @@ extension NotificationVC {
                 } else {
                     self.showErrorAlert("Oops!", msg: "This content is not available")
                 }
+            case "MENTION_IN_COMMENT":
+                if let post = notification.post {
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
+                } else {
+                    self.showErrorAlert("Oops!", msg: "This content is not available")
+                }
             case "NEW_POST":
                 openPost(post: notification.post)
             case "LIKE_COMMENT":

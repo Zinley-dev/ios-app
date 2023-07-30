@@ -78,7 +78,8 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
                                       let nav = UINavigationController(rootViewController: RVC)
 
                                       // Set the user ID, nickname, and onPresent properties of UPVC
-                                      RVC.posts = [post]
+                                      RVC.selectedPost = [post]
+                                      RVC.startIndex = 0
                                      
                                       // Customize the navigation bar appearance
                                       nav.navigationBar.barTintColor = .white
