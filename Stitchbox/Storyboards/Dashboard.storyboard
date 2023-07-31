@@ -6373,7 +6373,7 @@
                                 <rect key="frame" x="0.0" y="482" width="375" height="310"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sDe-vH-vIh">
-                                        <rect key="frame" x="2" y="2" width="371" height="40"/>
+                                        <rect key="frame" x="2" y="0.0" width="371" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stitch to post" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jq1-m7-aEm">
                                                 <rect key="frame" x="16" y="11.333333333333316" width="89" height="17.666666666666671"/>
@@ -6411,7 +6411,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8BZ-Yw-j3W">
-                                        <rect key="frame" x="2" y="50" width="371" height="40"/>
+                                        <rect key="frame" x="2" y="48" width="371" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hashtag #" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pos-Q3-OmE">
                                                 <rect key="frame" x="16" y="11.333333333333373" width="69.333333333333329" height="17.666666666666671"/>
@@ -6449,7 +6449,7 @@
                                         </constraints>
                                     </view>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="6TN-lF-lEI">
-                                        <rect key="frame" x="2" y="92" width="371" height="70"/>
+                                        <rect key="frame" x="2" y="90" width="371" height="70"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="4hl-fX-OTJ"/>
@@ -6463,7 +6463,7 @@
                                         <cells/>
                                     </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EYU-7W-j1f">
-                                        <rect key="frame" x="0.0" y="162" width="375" height="146"/>
+                                        <rect key="frame" x="0.0" y="160" width="375" height="148"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="IES-Sf-6gY">
                                                 <rect key="frame" x="0.0" y="8" width="375" height="150"/>
@@ -6632,7 +6632,7 @@
                                     <constraint firstAttribute="trailing" secondItem="6TN-lF-lEI" secondAttribute="trailing" constant="2" id="8Zh-uw-lCj"/>
                                     <constraint firstAttribute="trailing" secondItem="sDe-vH-vIh" secondAttribute="trailing" constant="2" id="ALS-R3-oM1"/>
                                     <constraint firstAttribute="trailing" secondItem="EYU-7W-j1f" secondAttribute="trailing" id="SAL-yP-9sy"/>
-                                    <constraint firstItem="sDe-vH-vIh" firstAttribute="top" secondItem="RqC-E3-rnc" secondAttribute="top" constant="2" id="bVb-bz-rec"/>
+                                    <constraint firstItem="sDe-vH-vIh" firstAttribute="top" secondItem="RqC-E3-rnc" secondAttribute="top" id="bVb-bz-rec"/>
                                     <constraint firstItem="8BZ-Yw-j3W" firstAttribute="leading" secondItem="RqC-E3-rnc" secondAttribute="leading" constant="2" id="i4D-YI-bgE"/>
                                     <constraint firstItem="6TN-lF-lEI" firstAttribute="leading" secondItem="RqC-E3-rnc" secondAttribute="leading" constant="2" id="qTg-HY-zs2"/>
                                     <constraint firstItem="8BZ-Yw-j3W" firstAttribute="top" secondItem="sDe-vH-vIh" secondAttribute="bottom" constant="8" id="rM8-Ta-Ain"/>
@@ -7753,8 +7753,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NcO-ET-9u6">
                                 <rect key="frame" x="0.0" y="497" width="375" height="315"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LhG-v0-3lI">
-                                        <rect key="frame" x="2" y="50" width="371" height="40"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LhG-v0-3lI">
+                                        <rect key="frame" x="2" y="30" width="371" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hashtag #" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7yI-54-NNT">
                                                 <rect key="frame" x="16" y="11.333333333333373" width="69.333333333333329" height="17.666666666666671"/>
@@ -7791,8 +7791,8 @@
                                             <constraint firstItem="37T-i0-EP3" firstAttribute="centerY" secondItem="LhG-v0-3lI" secondAttribute="centerY" id="wqe-kE-65w"/>
                                         </constraints>
                                     </view>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="1ZZ-kC-RqC">
-                                        <rect key="frame" x="2" y="92" width="371" height="70"/>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="1ZZ-kC-RqC">
+                                        <rect key="frame" x="2" y="72" width="371" height="70"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="4yn-iJ-VRt"/>
@@ -7805,8 +7805,8 @@
                                         </collectionViewFlowLayout>
                                         <cells/>
                                     </collectionView>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Ea-Hn-smt">
-                                        <rect key="frame" x="0.0" y="162" width="375" height="151"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Ea-Hn-smt">
+                                        <rect key="frame" x="0.0" y="142" width="375" height="171"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="93z-pi-Ibx">
                                                 <rect key="frame" x="0.0" y="8" width="375" height="150"/>
@@ -7973,6 +7973,7 @@
                                     <constraint firstAttribute="trailing" secondItem="LhG-v0-3lI" secondAttribute="trailing" constant="2" id="Fmc-4c-9Dv"/>
                                     <constraint firstAttribute="height" constant="315" id="FyR-Gn-SDL"/>
                                     <constraint firstItem="5Ea-Hn-smt" firstAttribute="leading" secondItem="NcO-ET-9u6" secondAttribute="leading" id="SkJ-Da-iv5"/>
+                                    <constraint firstItem="LhG-v0-3lI" firstAttribute="top" secondItem="NcO-ET-9u6" secondAttribute="top" constant="30" id="aWa-mS-zSI"/>
                                     <constraint firstAttribute="trailing" secondItem="1ZZ-kC-RqC" secondAttribute="trailing" constant="2" id="eU5-bl-r5X"/>
                                     <constraint firstItem="1ZZ-kC-RqC" firstAttribute="top" secondItem="LhG-v0-3lI" secondAttribute="bottom" constant="2" id="eeM-3P-E4y"/>
                                     <constraint firstItem="1ZZ-kC-RqC" firstAttribute="leading" secondItem="NcO-ET-9u6" secondAttribute="leading" constant="2" id="gHe-GB-rsw"/>
@@ -7981,7 +7982,7 @@
                                     <constraint firstItem="5Ea-Hn-smt" firstAttribute="top" secondItem="1ZZ-kC-RqC" secondAttribute="bottom" id="wNq-91-21A"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="NO"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kE0-1p-VoU">
@@ -8052,6 +8053,9 @@
                                     <constraint firstItem="BPe-zo-SyQ" firstAttribute="leading" secondItem="kE0-1p-VoU" secondAttribute="leading" constant="8" id="lcX-vH-Wo8"/>
                                     <constraint firstItem="mXJ-rO-rZQ" firstAttribute="centerY" secondItem="BPe-zo-SyQ" secondAttribute="centerY" id="m6y-xO-T4D"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="NO"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bqr-bj-ePX">
                                 <rect key="frame" x="0.0" y="878" width="375" height="34"/>

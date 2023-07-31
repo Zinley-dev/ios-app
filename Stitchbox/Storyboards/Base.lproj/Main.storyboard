@@ -1456,7 +1456,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zdZ-sv-ibT">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
-                                <color key="backgroundColor" name="Background"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IF8-rR-zHO">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -1470,7 +1470,9 @@
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gcm-Ry-e2D">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </collectionViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -1498,11 +1500,11 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="jf3-zT-gJV">
-                                <rect key="frame" x="130" y="584" width="115" height="7"/>
+                                <rect key="frame" x="157" y="584" width="61" height="7"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Gc-0Q-WW8" customClass="circleView" customModule="Stitchbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="7" height="7"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="7" id="PCd-L8-8gL"/>
                                             <constraint firstAttribute="width" constant="7" id="iFL-qq-BrX"/>
@@ -1524,32 +1526,16 @@
                                             <constraint firstAttribute="height" constant="7" id="nfA-kV-m5J"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Ek-DB-IrM" customClass="circleView" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="81" y="0.0" width="7" height="7"/>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="7" id="Czr-YO-ukg"/>
-                                            <constraint firstAttribute="width" constant="7" id="YFt-tQ-El6"/>
-                                        </constraints>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z8S-lf-9nB" customClass="circleView" customModule="Stitchbox" customModuleProvider="target">
-                                        <rect key="frame" x="108" y="0.0" width="7" height="7"/>
-                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="7" id="Tt9-Um-NQ9"/>
-                                            <constraint firstAttribute="width" constant="7" id="lF4-fN-0yi"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="T6B-fb-2DA"/>
-                        <color key="backgroundColor" name="Background"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="XDT-NC-TyD" firstAttribute="centerX" secondItem="gul-y9-TDz" secondAttribute="centerX" id="1tQ-og-vLU"/>
                             <constraint firstItem="zdZ-sv-ibT" firstAttribute="top" secondItem="gul-y9-TDz" secondAttribute="top" id="4cb-g3-eCm"/>
                             <constraint firstItem="XDT-NC-TyD" firstAttribute="top" secondItem="jf3-zT-gJV" secondAttribute="bottom" constant="16" id="5km-Au-4W6"/>
-                            <constraint firstAttribute="bottom" secondItem="zdZ-sv-ibT" secondAttribute="bottom" constant="20" id="DT9-Le-2UQ"/>
+                            <constraint firstItem="T6B-fb-2DA" firstAttribute="bottom" secondItem="zdZ-sv-ibT" secondAttribute="bottom" constant="20" id="DT9-Le-2UQ"/>
                             <constraint firstItem="jf3-zT-gJV" firstAttribute="centerX" secondItem="gul-y9-TDz" secondAttribute="centerX" id="P9i-zB-jqJ"/>
                             <constraint firstItem="zdZ-sv-ibT" firstAttribute="leading" secondItem="gul-y9-TDz" secondAttribute="leading" id="PNY-34-BlN"/>
                             <constraint firstItem="T6B-fb-2DA" firstAttribute="bottom" secondItem="XDT-NC-TyD" secondAttribute="bottom" constant="16" id="QFe-Yk-FaD"/>
@@ -1562,13 +1548,11 @@
                         <outlet property="view1" destination="0Gc-0Q-WW8" id="khR-89-oVv"/>
                         <outlet property="view2" destination="F83-HG-vMi" id="wib-6f-2Wt"/>
                         <outlet property="view3" destination="6yt-h5-WSH" id="CFD-4w-QjD"/>
-                        <outlet property="view4" destination="5Ek-DB-IrM" id="Z9j-xu-4QU"/>
-                        <outlet property="view5" destination="z8S-lf-9nB" id="ABU-7q-iJv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZZV-0N-OBq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3276.811594202899" y="-258.42391304347831"/>
+            <point key="canvasLocation" x="3276" y="-258.62068965517244"/>
         </scene>
         <!--USERNAME-->
         <scene sceneID="DxO-bW-1Gl">
@@ -1912,9 +1896,6 @@
         <image name="loginBg" width="390" height="844"/>
         <image name="normal" width="53" height="52"/>
         <image name="ttw" width="53" height="53"/>
-        <namedColor name="Background">
-            <color red="0.22745098039215686" green="0.23529411764705882" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="Secondary">
             <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
