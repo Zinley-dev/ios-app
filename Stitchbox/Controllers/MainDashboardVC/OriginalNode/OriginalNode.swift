@@ -409,8 +409,6 @@ extension OriginalNode {
             }
         }
         
-       
-        
     }
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {

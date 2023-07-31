@@ -366,8 +366,8 @@ extension ProfileViewController {
         
         reloadUserInformation {
             self.reloadGetFollowers {
-                self.reloadGetStitches {
-                    self.reloadUserInformation {
+                self.reloadGetFollowing {
+                    self.reloadGetStitches {
                         self.applyAllChange()
                         Dispatch.main.async {
                             self.pullControl.endRefreshing()

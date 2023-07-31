@@ -151,6 +151,16 @@ extension SuggestFollowVC {
         self.tableNode.dataSource = self
     }
     
+    @IBAction func findFriendsBtn(_ sender: Any) {
+        
+        if let FFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "FindFriendsVC") as? FindFriendsVC {
+            hideMiddleBtn(vc: self)
+            FFVC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(FFVC, animated: true)
+            
+        }
+    }
+    
 }
 
 extension SuggestFollowVC: ASTableDelegate {

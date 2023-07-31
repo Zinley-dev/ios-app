@@ -53,7 +53,7 @@ class UserProfileVC: UIViewController {
     
     var followerCount = 0
     var followingCount = 0
-  
+    var stitchCount = 0
     var firstAnimated = true
     var isFollow = false
    
@@ -214,7 +214,7 @@ class UserProfileVC: UIViewController {
                     
                     cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
                     cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
-                   
+                    cell.numberOfStitches.text = "\(formatPoints(num: Double(stitchCount)))"
                     
               
 
@@ -806,12 +806,13 @@ extension UserProfileVC {
         
         reloadUserInformation {
             self.reloadGetFollowers {
-                self.reloadUserInformation {
-                    
+                self.reloadGetFollowing {
+                    self.reloadGetStitches {
                         self.applyAllChange()
                         Dispatch.main.async {
                             self.pullControl.endRefreshing()
                         }
+                    }
                     
                 }
             }
@@ -859,6 +860,7 @@ extension UserProfileVC {
                 self.countFollowings()
                 self.countFollowers()
                 self.checkIfFollow()
+                self.getStitchCount()
                
                 
                 self.getUserPost { (newPosts) in
@@ -876,6 +878,35 @@ extension UserProfileVC {
                 
             }
         }
+    }
+    
+    func getStitchCount() {
+        
+        APIManager.shared.countStitchByUser(userId: userId!) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                  
+                guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
+                    print("Couldn't find the 'totalStitch' key")
+                    self.stitchCount = 0
+                    return
+                }
+                
+                self.stitchCount = totalStitch
+                self.applyUIChange()
+                
+            case .failure(let error):
+                self.stitchCount = 0
+                print("Error loading stitch: ", error)
+                
+            }
+        }
+        
+       
     }
     
     func countFollowers() {
@@ -985,6 +1016,8 @@ extension UserProfileVC {
             switch result {
             case .success(let apiResponse):
                 
+                print(apiResponse)
+                
                 guard let isFollowing = apiResponse.body?["data"] as? Bool else {
                     return
                 }
@@ -1072,6 +1105,31 @@ extension UserProfileVC {
         
     }
     
+    func reloadGetStitches(completed: @escaping DownloadComplete) {
+        
+        APIManager.shared.countStitchByUser(userId: userId!) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                  
+                guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
+                    print("Couldn't find the 'totalStitch' key")
+                    self.stitchCount = 0
+                    completed()
+                    return
+                }
+                
+                self.stitchCount = totalStitch
+                completed()
+                
+            case .failure(let error):
+                self.stitchCount = 0
+                print("Error loading stitch: ", error)
+                completed()
+            }
+        }
+    }
     
     func reloadGetFollowing(completed: @escaping DownloadComplete) {
         
