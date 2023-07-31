@@ -1857,10 +1857,11 @@ public enum PostStitchApi {
   case countStitchWaitList(rootId: String)
   case countRootStitch(rootId: String)
   case countMyStitch
+  case countStitchBy(userId: String)
   case isStitchByMe(rootId: String)
   case getStitchWaitList(rootId: String, page: Int)
   case getMyStitch(page: Int)
-  case getSuggestStitch(page: Int)
+  case getSuggestStitch(rootId: String, page: Int)
   case getMyPostInWaitlist(page: Int)
   case getMyNonStitchPost(page: Int)
   case getMyWaitlist(page: Int)
@@ -1874,6 +1875,8 @@ extension PostStitchApi: EndPointType {
         return "/"
       case .getByRoot(let rootId, let page):
         return "/\(rootId)?page=\(page)"
+      case .getSuggestStitch(let rootId, let page):
+        return "/suggest-stitch/\(rootId)?page=\(page)"
       case .getStitchWaitList(let rootId, let page):
         return "/\(rootId)/wait-list?page=\(page)"
       case .countStitchWaitList(let rootId):
@@ -1882,6 +1885,8 @@ extension PostStitchApi: EndPointType {
         return "/\(rootId)/count-stitch"
       case .countMyStitch:
         return "/my-stitch-count"
+      case .countStitchBy(let userId):
+        return "/stitch-count/\(userId)"
       case .isStitchByMe(let rootId):
         return "/\(rootId)/is-stitched"
       case .unstitch:
@@ -1892,8 +1897,6 @@ extension PostStitchApi: EndPointType {
         return "/denied"
       case .getMyStitch(let page):
         return "/my-stitch?page=\(page)"
-      case .getSuggestStitch(let page):
-        return "/suggest-stitch?page=\(page)"
       case .getMyNonStitchPost(let page):
         return "/my-non-stitch?page=\(page)"
       case .getMyPostInWaitlist(let page):
@@ -1947,6 +1950,8 @@ extension PostStitchApi: EndPointType {
         return .get
       case .getStitchTo:
         return .get
+      case .countStitchBy:
+        return .get
     }
   }
   
@@ -1985,6 +1990,8 @@ extension PostStitchApi: EndPointType {
       case .getMyPostInWaitlist:
         return .request
       case .getStitchTo:
+        return .request
+      case .countStitchBy:
         return .request
     }
   }

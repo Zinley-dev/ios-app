@@ -1065,8 +1065,13 @@ extension APIManager {
       completion(result)
     }
   }
-  func getSuggestStitch(page: Int, completion: @escaping APICompletion) {
-    postStitchManager.request(.getSuggestStitch(page: page)) { result in
+  func countStitchByUser(userId: String, completion: @escaping APICompletion) {
+    postStitchManager.request(.countStitchBy(userId: userId)) { result in
+      completion(result)
+    }
+  }
+  func getSuggestStitch(rootId: String, page: Int, completion: @escaping APICompletion) {
+    postStitchManager.request(.getSuggestStitch(rootId: rootId, page: page)) { result in
       completion(result)
     }
   }
