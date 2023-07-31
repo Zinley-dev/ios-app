@@ -1876,7 +1876,7 @@ extension PostStitchApi: EndPointType {
       case .getByRoot(let rootId, let page):
         return "/\(rootId)?page=\(page)"
       case .getSuggestStitch(let rootId, let page):
-        return "/suggest-stitch/\(rootId)?page=\(page)"
+        return "/\(rootId)/suggest-stitch?page=\(page)"
       case .getStitchWaitList(let rootId, let page):
         return "/\(rootId)/wait-list?page=\(page)"
       case .countStitchWaitList(let rootId):
