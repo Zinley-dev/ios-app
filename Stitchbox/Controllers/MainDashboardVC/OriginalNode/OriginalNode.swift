@@ -374,7 +374,7 @@ extension OriginalNode {
 
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
      
-        APIManager.shared.getStitchPost(rootId: post.id, page: page) {  result in
+        APIManager.shared.getSuggestStitch(rootId: post.id, page: page) {  result in
             
             switch result {
             case .success(let apiResponse):
