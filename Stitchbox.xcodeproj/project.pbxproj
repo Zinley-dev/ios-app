@@ -238,7 +238,6 @@
 		6A7ED4A52A0895C900C8204E /* InfoDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4A42A0895C900C8204E /* InfoDetailVC.swift */; };
 		6A7ED4A82A08EF0300C8204E /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4A72A08EF0300C8204E /* Markdown */; };
 		6A7ED4AB2A08F7FC00C8204E /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4AA2A08F7FC00C8204E /* GPTEncoder */; };
-		6A7ED4AD2A0B48AF00C8204E /* MetaDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4AC2A0B48AF00C8204E /* MetaDisplay.swift */; };
 		6A7ED4B52A0C962B00C8204E /* Qonversion in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7ED4B42A0C962B00C8204E /* Qonversion */; };
 		6A7ED4B82A0D9A6900C8204E /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7ED4B72A0D9A6900C8204E /* IAPManager.swift */; };
 		6A7ED4BA2A0DBA0E00C8204E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A7ED4B92A0DBA0E00C8204E /* StoreKit.framework */; };
@@ -740,7 +739,6 @@
 		6A78485D2984D1F6008B2263 /* NotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationVC.swift; sourceTree = "<group>"; };
 		6A78486B29862931008B2263 /* StreamingDomainModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamingDomainModel.swift; sourceTree = "<group>"; };
 		6A7ED4A42A0895C900C8204E /* InfoDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDetailVC.swift; sourceTree = "<group>"; };
-		6A7ED4AC2A0B48AF00C8204E /* MetaDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDisplay.swift; sourceTree = "<group>"; };
 		6A7ED4B72A0D9A6900C8204E /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		6A7ED4B92A0DBA0E00C8204E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		6A7ED4BC2A0E067D00C8204E /* SubcriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubcriptionVC.swift; sourceTree = "<group>"; };
@@ -2928,7 +2926,6 @@
 				6ABDDCAF2A01024300CDAD39 /* ResponseParsingTask.swift */,
 				6ABDDCB02A01024300CDAD39 /* ViewModel.swift */,
 				6A58E1842A087B0F0002E5C8 /* ChatGPTTokenManager.swift */,
-				6A7ED4AC2A0B48AF00C8204E /* MetaDisplay.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -4257,7 +4254,6 @@
 				6A9E4C742977AF2700B59176 /* BlockedListVC.swift in Sources */,
 				6AAD7A65294C699E003E3AB6 /* PresentationController.swift in Sources */,
 				6AE3BEF72A6C727300AAA5DD /* StitchToVC.swift in Sources */,
-				6A7ED4AD2A0B48AF00C8204E /* MetaDisplay.swift in Sources */,
 				6AEA33F4298CE4AB005A4C5D /* ButtonsHeader.swift in Sources */,
 				390FD78629093EA00068B883 /* FeedViewController.swift in Sources */,
 				147187ED2920B0980039B89E /* ControllerType.swift in Sources */,
@@ -4771,7 +4767,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox123.OneSignalNotificationServiceExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -4800,7 +4796,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox123.OneSignalNotificationServiceExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
