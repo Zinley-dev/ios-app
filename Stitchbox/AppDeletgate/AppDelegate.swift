@@ -26,6 +26,8 @@ import SwipeTransitionAutoSwipeBack
 import SwipeTransitionAutoSwipeToDismiss
 import AppsFlyerLib
 import AppTrackingTransparency
+import Contacts
+import ContactsUI
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -742,6 +744,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
         
+        if _AppCoreData.userDataSource.value?.userID != "" {
+            fetchContacts()
+        }
+        
         
     }
     
@@ -752,6 +758,68 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
     }
     
+    
+    func fetchContacts() {
+        let store = CNContactStore()
+
+        store.requestAccess(for: .contacts) { [weak self] (granted, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print("failed to request access", error)
+                return
+            }
+            if granted {
+                
+                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactImageDataKey, CNContactImageDataAvailableKey]
+                let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+                do {
+                    DispatchQueue.global().async {
+                        do {
+                            try store.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
+                                if contact.phoneNumbers.first?.value.stringValue != nil {
+                                    var dict = ["firstName": contact.givenName, "familyName": contact.familyName, "phoneNumber": contact.phoneNumbers.first?.value.stringValue.stringByRemovingWhitespaces.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "-", with: "")] as? [String: Any]
+                                    if contact.imageDataAvailable {
+                                        dict!.updateValue(contact.imageData!, forKey: "imageData")
+                                    }
+                                  
+                                    let contactList = FindFriendsModel(FindFriendsModel: dict! as Dictionary<String, Any>)
+                                    let upload = ["name": contactList.firstName + " " + contactList.familyName, "phone": contactList.phoneNumber]
+                                    self.uploadContact(contact: upload as [String : Any])
+                                   
+                                    
+                                }
+                            })
+                          
+                        } catch let error {
+                            print("Failed to enumerate contact", error)
+                        }
+                    }
+                }
+            } else {
+                print("access denied")
+            }
+        }
+    }
+
+
+    func uploadContact(contact: [String : Any]) {
+        
+    
+        APIManager.shared.createUserContact(contact: contact) {  result in
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
+        
+        
+    }
      
     
 }
