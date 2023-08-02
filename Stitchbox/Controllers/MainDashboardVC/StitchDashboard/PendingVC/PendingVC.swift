@@ -70,7 +70,6 @@ class PendingVC: UIViewController, UINavigationBarDelegate, UINavigationControll
         if rootPost != nil {
             
             refresh_request = true
-            waitPost.removeAll()
             waitPage = 1
             currentIndex = 0
             updateData()
@@ -89,8 +88,7 @@ class PendingVC: UIViewController, UINavigationBarDelegate, UINavigationControll
     
     func updateData() {
         
-        
-        
+    
         self.retrieveNextPageForWaitListWithCompletion { (newPosts) in
             
             if newPosts.count > 0 {

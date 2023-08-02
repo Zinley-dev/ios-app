@@ -584,6 +584,7 @@ extension FeedViewController {
 
 extension FeedViewController {
 
+    /*
     func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
         
         if isfirstLoad {
@@ -603,7 +604,7 @@ extension FeedViewController {
                         
                         delay(0.25) {
 
-                            currentCell.playVideo(index: 0)
+                            //currentCell.playVideo(index: 0)
                         }
                     }
                     
@@ -615,7 +616,7 @@ extension FeedViewController {
     
         }
         
-    }
+    } */
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard !posts.isEmpty, scrollView == collectionNode.view else {

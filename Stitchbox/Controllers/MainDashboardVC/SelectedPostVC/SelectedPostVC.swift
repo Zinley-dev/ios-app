@@ -408,9 +408,6 @@ extension SelectedPostVC {
             currentCell.newPlayingIndex = 0
             currentCell.isVideoPlaying = true
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
-                currentCell.playVideo(index: 0)
-            }
         }
 
     }

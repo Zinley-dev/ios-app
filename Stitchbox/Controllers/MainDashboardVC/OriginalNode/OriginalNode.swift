@@ -31,7 +31,8 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
 
     var page = 1
     var posts = [PostModel]()
-    
+    var saveMin = CGSize(width: 0, height: 0)
+    var saveMax = CGSize(width: 0, height: 0)
     var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
@@ -51,6 +52,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     var imageTimerWorkItem: DispatchWorkItem?
     var isfirstLoad = true
     var imageIndex: Int?
+    var hasStitchTo = false
     
     init(with post: PostModel) {
         self.post = post
@@ -58,14 +60,13 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         if !posts.contains(post) {
             posts.append(post)
         }
-
-
         
         super.init()
        
       
         Dispatch.main.async { [weak self] in
             guard let self = self else { return }
+    
             self.collectionNode.backgroundColor = .black
             self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
             self.collectionNode.leadingScreensForBatching = 2.0
@@ -73,17 +74,34 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             self.applyStyle()
             self.backgroundColor = .black
             self.collectionNode.view.indicatorStyle = .white
-            
             self.addAnimatedLabelToTop()
+            self.collectionNode.delegate = self
+            self.collectionNode.dataSource = self
+            self.addSubCollection()
+            self.getStitchTo() {
+                
+                if self.hasStitchTo {
+                    
+                    self.currentIndex = 1
+                    self.playVideo(index: 1)
+                    
+                    
+                    
+                } else {
+                    
+                    self.currentIndex = 0
+                    self.playVideo(index: 0)
+                    
+                    
+                }
+                
+                
+            }
+           
         }
         
-        self.automaticallyManagesSubnodes = true
-        self.collectionNode.delegate = self
-        self.collectionNode.dataSource = self
-        addSubCollection()
-        //self.getStitchTo()
+        automaticallyManagesSubnodes = true
         
-
     }
     
     func addSubCollection() {
@@ -328,8 +346,23 @@ extension OriginalNode  {
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let min = CGSize(width: self.collectionNode.layer.frame.width, height: 50);
         let max = CGSize(width: self.collectionNode.layer.frame.width, height: collectionNode.frame.height);
+       
+        if collectionNode.frame.width != 0.0 {
+            saveMin = min
+        }
         
-        return ASSizeRangeMake(min, max);
+        if collectionNode.frame.height != 0.0 {
+            saveMax = max
+        }
+        
+       
+        if collectionNode.frame.width != 0.0, collectionNode.frame.height != 0.0 {
+            return ASSizeRangeMake(min, max)
+        } else {
+            return ASSizeRangeMake(saveMin, saveMax)
+        }
+        
+        
     }
     
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
@@ -343,30 +376,49 @@ extension OriginalNode  {
 
 extension OriginalNode {
     
-    func getStitchTo() {
+    func getStitchTo(completed: @escaping DownloadComplete) {
         APIManager.shared.getStitchTo(pid: post.id) { result in
            
             switch result {
             case .success(let apiResponse):
               
                 guard let data = apiResponse.body?["data"] as? [String: Any] else {
+                    completed()
+                    self.currentIndex = 0
+                    self.hasStitchTo = false
                     return
                 }
                 
                 if !data.isEmpty {
                     
-                    if let post = PostModel(JSON: data) {
+                    if let posted = PostModel(JSON: data) {
                         
-                        print(post.id, post.content)
+                        // Save the current content offset
+                        //let contentOffset = self.collectionNode.contentOffset
+
+                        self.posts.insert(posted, at: 0)
+                        self.collectionNode.insertItems(at: [IndexPath(item: 0, section: 0)])
                         
+                        self.selectPostCollectionView.collectionView.reloadData()
+                        self.collectionNode.scrollToItem(at: IndexPath(item: 1, section: 0), at: .bottom, animated: false)
+
+                        self.currentIndex = 1
+                        self.hasStitchTo = true
+                        completed()
+                       
                     }
+                } else {
+                    self.currentIndex = 0
+                    self.hasStitchTo = false
+                    completed()
+                  
                 }
                 
             case .failure(let error):
-                DispatchQueue.main.async {
-                    print("StitchTo: error \(error)")
-                    
-                }
+                completed()
+                self.hasStitchTo = false
+                print("StitchTo: error \(error)")
+                
 
             }
         }
@@ -646,7 +698,12 @@ extension OriginalNode {
         }
 
         cell.videoNode.muted = shouldMute ?? !globalIsSound
-        cell.videoNode.play()
+       
+        if !cell.videoNode.isPlaying() {
+            cell.videoNode.play()
+        }
+        
+      
     }
 
     
@@ -663,12 +720,29 @@ extension OriginalNode {
             self.applyAnimationText(text: "")
         }
         
-        if postCount > 1 {
-            cell.sideButtonsView.statusImg.isHidden = false
-            cell.sideButtonsView.statusImg.image = UIImage.init(named: index == 0 ? "star white" : "partner white")
+        if cell.sideButtonsView != nil {
+            if postCount > 1 {
+                cell.sideButtonsView.statusImg.isHidden = false
+                cell.sideButtonsView.statusImg.image = UIImage.init(named: index == 0 ? "star white" : "partner white")
+            } else {
+                cell.sideButtonsView.statusImg.isHidden = true
+            }
         } else {
-            cell.sideButtonsView.statusImg.isHidden = true
+            
+            delay(1) {
+                if cell.sideButtonsView != nil {
+                    if postCount > 1 {
+                        cell.sideButtonsView.statusImg.isHidden = false
+                        cell.sideButtonsView.statusImg.image = UIImage.init(named: index == 0 ? "star white" : "partner white")
+                    } else {
+                        cell.sideButtonsView.statusImg.isHidden = true
+                    }
+                }
+            }
+            
         }
+        
+        
     }
 
     
@@ -741,30 +815,10 @@ extension OriginalNode {
     }
 
     
-
-
-    
 }
 
 
-
 extension OriginalNode {
-    
-    
-    func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
-        
-        if isfirstLoad {
-            isfirstLoad = false
-            let post = posts[0]
-            if !post.muxPlaybackId.isEmpty {
-                currentIndex = 0
-                newPlayingIndex = 0
-                isVideoPlaying = true
-            }
-            
-        }
-        
-    }
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -800,82 +854,88 @@ extension OriginalNode {
                     }
                 }
             
-            if newPlayingIndex! < posts.count {
+            if newPlayingIndex != nil {
                 
-                if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
-                    foundVisibleVideo = true
-                    //playTimeBar.isHidden = false
-                    imageIndex = nil
-                } else {
-                    //playTimeBar.isHidden = true
-                    imageIndex = newPlayingIndex
+                if newPlayingIndex! < posts.count {
+                    
+                    if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+                        foundVisibleVideo = true
+                        //playTimeBar.isHidden = false
+                        imageIndex = nil
+                    } else {
+                        //playTimeBar.isHidden = true
+                        imageIndex = newPlayingIndex
+                    }
+                    
                 }
                 
-            }
-            
-            
-            
-            if foundVisibleVideo {
-                // Start playing the new video if it's different from the current playing video.
-                if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-                    // Pause the current video, if any.
+                
+                
+                if foundVisibleVideo {
+                    // Start playing the new video if it's different from the current playing video.
+                    if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+                        // Pause the current video, if any.
+                        if let currentIndex = currentIndex {
+                            pauseVideo(index: currentIndex)
+                        }
+                        // Play the new video.
+                        currentIndex = newPlayingIndex
+                        playVideo(index: currentIndex!)
+                        isVideoPlaying = true
+                        
+                        if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? ReelNode {
+                            resetView(cell: node)
+                        }
+                    } else {
+                        // Do nothing if the current index is the same as newPlayingIndex
+                    }
+                } else {
                     if let currentIndex = currentIndex {
                         pauseVideo(index: currentIndex)
                     }
-                    // Play the new video.
-                    currentIndex = newPlayingIndex
-                    playVideo(index: currentIndex!)
-                    isVideoPlaying = true
                     
-                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? ReelNode {
-                        resetView(cell: node)
+                    imageTimerWorkItem?.cancel()
+                    imageTimerWorkItem = DispatchWorkItem { [weak self] in
+                        guard let self = self else { return }
+                        if self.imageIndex != nil {
+                            if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? ReelNode {
+                                if self.imageIndex == self.newPlayingIndex {
+                                    resetView(cell: node)
+                                    node.endImage(id: node.post.id)
+                                }
+                            }
+                        }
                     }
-                } else {
-                    // Do nothing if the current index is the same as newPlayingIndex
-                }
-            } else {
-                if let currentIndex = currentIndex {
-                    pauseVideo(index: currentIndex)
+                    
+                    if let imageTimerWorkItem = imageTimerWorkItem {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
+                    }
+                    
+                    // Reset the current playing index.
+                    currentIndex = nil
                 }
                 
-                imageTimerWorkItem?.cancel()
-                imageTimerWorkItem = DispatchWorkItem { [weak self] in
-                    guard let self = self else { return }
-                    if self.imageIndex != nil {
-                        if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? ReelNode {
-                            if self.imageIndex == self.newPlayingIndex {
-                                resetView(cell: node)
-                                node.endImage(id: node.post.id)
-                            }
+                // If the video is stuck, reset the buffer by seeking to the current playback time.
+                if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
+                    if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                        if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                            cell.videoNode.player?.seek(to: currentTime)
+                        } else {
+                            cell.videoNode.player?.seek(to: CMTime.zero)
                         }
                     }
                 }
                 
-                if let imageTimerWorkItem = imageTimerWorkItem {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
-                }
-                
-                // Reset the current playing index.
-                currentIndex = nil
-            }
-            
-            // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
-                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                        cell.videoNode.player?.seek(to: currentTime)
-                    } else {
-                        cell.videoNode.player?.seek(to: CMTime.zero)
-                    }
+                // If there's no current playing video and no visible video, pause the last playing video, if any.
+                if !isVideoPlaying && currentIndex != nil {
+                    pauseVideo(index: currentIndex!)
+                    currentIndex = nil
                 }
             }
             
-            // If there's no current playing video and no visible video, pause the last playing video, if any.
-            if !isVideoPlaying && currentIndex != nil {
-                pauseVideo(index: currentIndex!)
-                currentIndex = nil
             }
-        }
+            
+
     }
 
     func processStichGuideline() {
@@ -900,6 +960,7 @@ extension OriginalNode {
                     let currentIndexPath = IndexPath(item: self.currentIndex!, section: 0)
                     self.collectionNode.scrollToItem(at: currentIndexPath, at: .left, animated: true)
                 }
+                
             }
             
         }

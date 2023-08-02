@@ -68,7 +68,6 @@ class ApprovedStitchVC: UIViewController, UINavigationBarDelegate, UINavigationC
         if rootPost != nil {
             
             refresh_request = true
-            waitPost.removeAll()
             waitPage = 1
             currentIndex = 0
             updateData()

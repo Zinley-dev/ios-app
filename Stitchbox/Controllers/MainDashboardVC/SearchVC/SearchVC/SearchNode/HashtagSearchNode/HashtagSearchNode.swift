@@ -44,7 +44,7 @@ class HashTagSearchNode: ASCellNode {
         hashtagTextNode.backgroundColor = UIColor.clear
         
         automaticallyManagesSubnodes = true
-        0
+        
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .right
         
