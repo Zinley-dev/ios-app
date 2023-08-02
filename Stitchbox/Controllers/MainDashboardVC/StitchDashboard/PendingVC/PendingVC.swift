@@ -694,6 +694,8 @@ extension PendingVC {
                 // return the next index if it exists
                 if indexPath < waitPost.count {
                     playVideo(index: indexPath)
+                } else if waitPost.count == 1 {
+                    playVideo(index: 0)
                 }
 
             }
@@ -733,6 +735,8 @@ extension PendingVC {
                             // return the next index if it exists
                             if indexPath < waitPost.count {
                                 playVideo(index: indexPath)
+                            } else if waitPost.count == 1 {
+                                playVideo(index: 0)
                             }
                             
                         }

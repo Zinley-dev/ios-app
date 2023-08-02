@@ -1007,9 +1007,19 @@ extension FeedViewController {
 
                             node.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                             node.selectPostCollectionView.collectionView.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                            
+                            
+                            // return the next index if it exists
+                            if node.currentIndex! < node.posts.count {
+                                node.playVideo(index: node.currentIndex!)
+                            } else if node.posts.count == 1 {
+                                node.playVideo(index: 0)
+                            }
+
                         }
                         
                     }
+                    
                 }
                
                 
