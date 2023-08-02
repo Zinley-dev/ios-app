@@ -131,15 +131,6 @@ class TrendingPostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAd
                 self.pullControl.endRefreshing()
             }
             
-            self.delayItem.perform(after: 0.75) {
-                
-                
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-                
-                
-            }
-            
             
         }
         

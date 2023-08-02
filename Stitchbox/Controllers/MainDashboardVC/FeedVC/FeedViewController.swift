@@ -1010,8 +1010,8 @@ extension FeedViewController {
                             
                             
                             // return the next index if it exists
-                            if node.currentIndex! < node.posts.count {
-                                node.playVideo(index: node.currentIndex!)
+                            if indexPath < node.posts.count {
+                                node.playVideo(index: indexPath)
                             } else if node.posts.count == 1 {
                                 node.playVideo(index: 0)
                             }

@@ -168,6 +168,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
     
     
     func updateData() {
+        
         self.retrieveNextPageWithCompletion { (newPosts) in
             
             if newPosts.count > 0 {
@@ -184,7 +185,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
                 
                 if self.posts.isEmpty == true {
                     
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                    self.collectionNode.view.setEmptyMessage("No post found")
                     
                     
                 } else {
@@ -199,16 +200,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
                 self.pullControl.endRefreshing()
             }
             
-            self.delayItem.perform(after: 0.75) {
-                
-                
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-                
-                
-            }
-            
-            
+     
         }
         
         

@@ -33,10 +33,97 @@ class ApprovedStitchVC: UIViewController, UINavigationBarDelegate, UINavigationC
     var firstWaitReload = true
     var rootPost: PostModel!
     
+    var refresh_request = false
+    
+    private var pullControl = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupCollectionNode()
+        
+        if #available(iOS 10.0, *) {
+            waitCollectionNode.view.refreshControl = pullControl
+        } else {
+            myCollectionNode.view.addSubview(pullControl)
+            
+        }
+        
+        pullControl.tintColor = UIColor.systemOrange
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+        
+    }
+    
+    @objc private func refreshListData(_ sender: Any) {
+        // self.pullControl.endRefreshing() // You can stop after API Call
+        // Call API
+        
+        clearAllData()
+        
+    }
+    
+    
+    @objc func clearAllData() {
+        
+        if rootPost != nil {
+            
+            refresh_request = true
+            waitPost.removeAll()
+            waitPage = 1
+            currentIndex = 0
+            updateData()
+            
+        } else {
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+        }
+        
+    
+    }
+    
+    
+    func updateData() {
+        
+        
+        
+        self.retrieveNextPageForWaitListWithCompletion { (newPosts) in
+            
+            if newPosts.count > 0 {
+                
+                self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
+                
+                
+            } else {
+                
+                
+                self.refresh_request = false
+                self.waitPost.removeAll()
+                self.waitCollectionNode.reloadData()
+                
+                if self.waitPost.isEmpty == true {
+                    
+                    self.waitCollectionNode.view.setEmptyMessage("No stitch found")
+                    
+                    
+                } else {
+                    
+                    self.waitCollectionNode.view.restore()
+                    
+                }
+                
+            }
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+     
+        }
+        
+        
     }
 
 }
@@ -169,12 +256,20 @@ extension ApprovedStitchVC: ASCollectionDataSource {
             
         } else if collectionNode == waitCollectionNode {
             
-            retrieveNextPageForWaitListWithCompletion { [weak self] (newPosts) in
-                guard let self = self else { return }
-                self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
+            if refresh_request == false {
+                
+                retrieveNextPageForWaitListWithCompletion { [weak self] (newPosts) in
+                    guard let self = self else { return }
+                    self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
 
+                    context.completeBatchFetching(true)
+                }
+                
+            } else {
                 context.completeBatchFetching(true)
             }
+            
+            
             
         } else {
             
@@ -411,6 +506,22 @@ extension ApprovedStitchVC {
         // checking empty
         guard newPosts.count > 0 else {
             return
+        }
+        
+        if refresh_request {
+
+            refresh_request = false
+
+            if !self.waitPost.isEmpty {
+                var delete_indexPaths: [IndexPath] = []
+                for row in 0..<self.waitPost.count {
+                    let path = IndexPath(row: row, section: 0) // single indexpath
+                    delete_indexPaths.append(path) // append
+                }
+
+                self.waitPost.removeAll()
+                self.waitCollectionNode.deleteItems(at: delete_indexPaths)
+            }
         }
 
         // Create new PostModel objects and append them to the current posts

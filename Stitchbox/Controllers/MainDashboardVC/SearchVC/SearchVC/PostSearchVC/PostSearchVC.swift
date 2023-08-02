@@ -115,16 +115,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdap
                 self.pullControl.endRefreshing()
             }
             
-            self.delayItem.perform(after: 0.75) {
-                
-                
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-                
-                
-            }
-            
-            
+           
         }
         
         
