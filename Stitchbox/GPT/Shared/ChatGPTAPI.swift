@@ -173,9 +173,8 @@ class ChatGPTAPI: @unchecked Sendable {
         tokenManager.clearHistory()
         
         
-        APIManager.shared.clearGptConversation(gameId: chatbot_id) { [weak self] result in
-            guard let self = self else { return }
-            
+        APIManager.shared.clearGptConversation(gameId: chatbot_id) {  result in
+           
             switch result {
             case .success(let apiResponse):
                 

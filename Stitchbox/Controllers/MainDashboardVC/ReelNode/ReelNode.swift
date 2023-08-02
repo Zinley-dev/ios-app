@@ -1094,6 +1094,7 @@ extension ReelNode {
     
     func checkIsStitched() {
         
+        /*
         APIManager.shared.isStitchedByMe(rootId: post.id) { [weak self] result in
             guard let self = self else { return }
             
@@ -1124,7 +1125,7 @@ extension ReelNode {
                 print(error)
             }
         
-        }
+        } */
         
         
     }

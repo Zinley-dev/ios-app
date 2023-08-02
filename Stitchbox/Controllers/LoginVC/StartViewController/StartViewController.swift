@@ -360,9 +360,8 @@ extension StartViewController {
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getSettings { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.getSettings { result in
+            
             switch result {
             case .success(let apiResponse):
             
@@ -370,6 +369,8 @@ extension StartViewController {
                     completed()
                     return
                 }
+                
+                print(data)
                 
                 let settings =  Mapper<SettingModel>().map(JSONObject: data)
                 globalSetting = settings
@@ -389,21 +390,21 @@ extension StartViewController {
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getme { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.getme { result in
+           
             switch result {
             case .success(let response):
                 
                 if let data = response.body {
                     
-                  
-                    
+                
                     if !data.isEmpty {
-                    
+                        
                         if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                            
                             _AppCoreData.reset()
                             _AppCoreData.userDataSource.accept(newUserData)
+                            
                             completed()
                         } else {
                             completed()

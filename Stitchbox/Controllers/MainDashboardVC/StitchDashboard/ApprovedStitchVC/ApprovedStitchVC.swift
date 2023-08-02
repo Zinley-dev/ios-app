@@ -648,7 +648,7 @@ extension ApprovedStitchVC {
                 
                 switch result {
                     
-                case .success(let apiResponse):
+                case .success(_):
                     
                     Dispatch.main.async { [weak self]  in
                         guard let self = self else { return }

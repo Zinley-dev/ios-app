@@ -995,6 +995,24 @@ extension FeedViewController {
                     collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                    
                 }
+            } else {
+                
+                if currentIndex != nil {
+                    
+                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? OriginalNode {
+                        
+                        if let indexPath = node.posts.firstIndex(of: deletingPost) {
+                            
+                            node.posts.removeObject(deletingPost)
+
+                            node.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                            node.selectPostCollectionView.collectionView.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                        }
+                        
+                    }
+                }
+               
+                
             }
             
         }
