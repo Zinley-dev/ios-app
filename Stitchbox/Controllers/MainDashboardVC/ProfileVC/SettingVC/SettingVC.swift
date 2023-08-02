@@ -133,7 +133,7 @@ class SettingVC: UIViewController {
     
     @IBAction func termOfServiceBtnPressed(_ sender: Any) {
         
-        guard let urls = URL(string: "https://stitchbox.gg/term-of-use") else {
+        guard let urls = URL(string: "https://stitchbox.net/term-of-use") else {
             return //be safe
         }
         

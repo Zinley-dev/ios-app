@@ -209,6 +209,7 @@ extension EditBioVC: UITextViewDelegate {
                         SwiftLoader.hide()
                         NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
                         showNote(text: "Updated successfully")
+                        self.view.endEditing(true)
                     }
                   
                 case .failure(let error):

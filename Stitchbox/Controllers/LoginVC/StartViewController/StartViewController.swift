@@ -53,7 +53,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     var URL: Foundation.URL {
         switch self {
         case .Privacy:
-            return Foundation.URL(string: "https://stitchbox.net/public-policy")!
+            return Foundation.URL(string: "https://stitchbox.net/privacy-policy")!
         case .TermsOfUse:
             return Foundation.URL(string: "https://stitchbox.net/term-of-use")!
            
