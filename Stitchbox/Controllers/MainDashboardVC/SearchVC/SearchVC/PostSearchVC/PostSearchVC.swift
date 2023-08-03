@@ -55,7 +55,7 @@ class PostSearchVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdap
         // Do any additional setup after loading the view.
         setupCollectionNode()
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         

@@ -55,7 +55,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     var hasStitchTo = false
     var isFirst = false
     var stitchDone = false
-    var hasStitchToOffSet = false
+   
     
     init(with post: PostModel) {
         self.post = post
@@ -81,43 +81,24 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             self.collectionNode.delegate = self
             self.collectionNode.dataSource = self
             
-            self.addSubCollection()
-            self.getStitchTo() {
+            self.addSubCollection() {
+                self.stitchDone = true
                 
-                if self.hasStitchTo {
-                    
-                    self.currentIndex = 1
-                    self.newPlayingIndex = 1
-                    self.isVideoPlaying = true
-                    if self.isFirst {
-                        self.collectionNode.scrollToItem(at: IndexPath(item: 1, section: 0), at: .centeredVertically, animated: true)
-                    }
-                    
-                } else {
-                    
-                    self.currentIndex = 0
-                    self.newPlayingIndex = 0
-                    self.isVideoPlaying = true
-                    if self.isFirst {
-                        self.playVideo(index: 0)
-                    }
-                    
+                self.currentIndex = 0
+                self.newPlayingIndex = 0
+                self.isVideoPlaying = true
+                if self.isFirst {
+                    self.playVideo(index: 0)
                 }
-                
-                
-                
-                
             }
-            
 
-           
         }
         
         automaticallyManagesSubnodes = true
         
     }
     
-    func addSubCollection() {
+    func addSubCollection(completed: @escaping DownloadComplete) {
         DispatchQueue.main.async() { [weak self] in
             guard let self = self else { return }
             self.selectPostCollectionView = SelectPostCollectionView()
@@ -151,7 +132,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             let hideTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(OriginalNode.hideTapped))
             hideTap.numberOfTapsRequired = 1
             self.selectPostCollectionView.hideBtn.addGestureRecognizer(hideTap)
-            
+            completed()
         }
     }
 
@@ -662,17 +643,7 @@ extension OriginalNode {
         guard let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode, !cell.videoNode.isPlaying() else {
             return
         }
-        
-        if index == 1 {
-            
-            if hasStitchTo, !hasStitchToOffSet, !isFirst {
-                hasStitchToOffSet = true
-                collectionNode.scrollToItem(at: IndexPath(item: 1, section: 0), at: .centeredHorizontally, animated: true)
-                
-            }
-            
-            
-        }
+
         
         // Cell selection/deselection logic
         let indexPath = IndexPath(row: index, section: 0)
@@ -692,16 +663,24 @@ extension OriginalNode {
         }
 
         if index == 0 && self.posts.count <= 1 {
-            delay(1) { [weak self] in
+            delay(0.75) { [weak self] in
                 guard let self = self else { return }
                 self.handleAnimationTextAndImage(for: index, cell: cell)
+                
+                if let sideButtonsView = cell.sideButtonsView {
+                    sideButtonsView.stitchCount.text = "\(index + 1)/\(posts.count)"
+                }
             }
         } else {
             self.handleAnimationTextAndImage(for: index, cell: cell)
+            
+            if let sideButtonsView = cell.sideButtonsView {
+                sideButtonsView.stitchCount.text = "\(index + 1)/\(posts.count)"
+            }
         }
         
         if index == 0 {
-            delay(1) { [weak self] in
+            delay(0.75) { [weak self] in
                 guard let self = self else { return }
                 self.processStichGuideline()
             }
@@ -715,10 +694,7 @@ extension OriginalNode {
         cell.sideButtonsView?.isHidden = isHidden
         cell.buttonNode.isHidden = isHidden
 
-        if let sideButtonsView = cell.sideButtonsView {
-            sideButtonsView.stitchCount.text = "\(index + 1)"
-        }
-
+    
         cell.videoNode.muted = shouldMute ?? !globalIsSound
        
         if !cell.videoNode.isPlaying() {

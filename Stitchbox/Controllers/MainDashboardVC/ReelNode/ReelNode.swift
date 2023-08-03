@@ -93,12 +93,17 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
            
             self.label.backgroundColor = .clear
             self.contentNode.view.isUserInteractionEnabled = true
-        
-            self.label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-            self.label.setContentHuggingPriority(.defaultLow, for: .vertical)
-            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-
+    
+            self.contentNode.view.addSubview(self.label)
+              
+            // Set label's frame to match the contentNode's bounds.
+            //self.label.frame = self.contentNode.view.bounds
+            
+            self.label.translatesAutoresizingMaskIntoConstraints = false
+            self.label.topAnchor.constraint(equalTo: self.contentNode.view.topAnchor, constant: 0).isActive = true
+            self.label.bottomAnchor.constraint(equalTo: self.contentNode.view.bottomAnchor, constant: 0).isActive = true
+            self.label.leadingAnchor.constraint(equalTo: self.contentNode.view.leadingAnchor, constant: 0).isActive = true
+            self.label.trailingAnchor.constraint(equalTo: self.contentNode.view.trailingAnchor, constant: 0).isActive = true
             
 
             let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
@@ -625,28 +630,21 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             truncatedText = truncateTextIfNeeded(finalText)
         }
         
-        let attr1 = NSAttributedString(string: truncatedText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.clear
-        ])
-            
+
         let attr2 = NSAttributedString(string: truncatedText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
         
-        self.contentNode.attributedText = attr1
-        
+        self.contentNode.attributedText = attr2
+        label.attributedText = attr2
       
         setNeedsLayout()
         layoutIfNeeded()
 
-       
-        
-        label.attributedText = attr2
-        
-        self.label.removeFromSuperview()
-        addActiveLabel()
+        label.setNeedsLayout()
+        label.layoutIfNeeded()
+      
     }
 
     private func truncateTextIfNeeded(_ text: String) -> String {
@@ -840,29 +838,20 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             contentText = processTextForHiding(finalText)
         }
         
-        
-        let attr1 = NSAttributedString(string: contentText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.clear
-        ])
-            
         let attr2 = NSAttributedString(string: contentText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
         
         
-        self.contentNode.attributedText = attr1
-     
+        self.contentNode.attributedText = attr2
+        label.attributedText = attr2
         
         setNeedsLayout()
         layoutIfNeeded()
-        
+        label.setNeedsLayout()
+        label.layoutIfNeeded()
        
-
-        label.attributedText = attr2
-        self.label.removeFromSuperview()
-        addActiveLabel()
     }
 
     private func processTextForHiding(_ text: String) -> String {
@@ -878,6 +867,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
     func addActiveLabel() {
     
+        /*
         self.contentNode.view.addSubview(self.label)
           
         // Set label's frame to match the contentNode's bounds.
@@ -888,7 +878,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.label.bottomAnchor.constraint(equalTo: self.contentNode.view.bottomAnchor, constant: 0).isActive = true
         self.label.leadingAnchor.constraint(equalTo: self.contentNode.view.leadingAnchor, constant: 0).isActive = true
         self.label.trailingAnchor.constraint(equalTo: self.contentNode.view.trailingAnchor, constant: 0).isActive = true
-        
+        */
        
     }
 

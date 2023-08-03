@@ -50,7 +50,7 @@ class PendingVC: UIViewController, UINavigationBarDelegate, UINavigationControll
             
         }
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
       
         

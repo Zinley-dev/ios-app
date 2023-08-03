@@ -64,7 +64,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
             
             //todo: customized search to search only in hashtag_list
             setupCollectionNode()
-            pullControl.tintColor = UIColor.systemOrange
+            pullControl.tintColor = .secondary
             pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
             
             if UIDevice.current.hasNotch {

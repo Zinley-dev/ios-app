@@ -23,7 +23,7 @@ extension UIColor{
     }
   
       class var secondary: UIColor{
-        return UIColor(red: (238.0/255.0), green: (135.0/255.0), blue: (101/255.0), alpha: 1.0)
+        return UIColor(red: (255.0/255.0), green: (87.0/255.0), blue: (95/255.0), alpha: 1.0)
       }
       
       class var tertiary: UIColor{

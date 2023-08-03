@@ -59,7 +59,7 @@ class NotificationVC: UIViewController {
         self.tableNode.automaticallyAdjustsContentOffset = true
         
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if UIDevice.current.hasNotch {

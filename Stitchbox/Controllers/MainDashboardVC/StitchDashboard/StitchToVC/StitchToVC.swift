@@ -49,7 +49,7 @@ class StitchToVC: UIViewController, UINavigationBarDelegate, UINavigationControl
             
         }
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
     }
