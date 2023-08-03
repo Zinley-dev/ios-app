@@ -538,9 +538,9 @@ extension ApprovedStitchVC {
         if items.count > 0 {
             let startIndex = self.myPost.count - items.count
             let endIndex = startIndex + items.count - 1
-            print(startIndex, endIndex)
+            
             let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-
+           
             // Insert new items at index paths
             self.myCollectionNode.insertItems(at: indexPaths)
         }

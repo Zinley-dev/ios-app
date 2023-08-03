@@ -55,6 +55,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     var hasStitchTo = false
     var isFirst = false
     var stitchDone = false
+    var hasStitchToOffSet = false
     
     init(with post: PostModel) {
         self.post = post
@@ -89,7 +90,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
                     self.newPlayingIndex = 1
                     self.isVideoPlaying = true
                     if self.isFirst {
-                        self.playVideo(index: 1)
+                        self.collectionNode.scrollToItem(at: IndexPath(item: 1, section: 0), at: .centeredVertically, animated: true)
                     }
                     
                 } else {
@@ -394,54 +395,47 @@ extension OriginalNode {
             guard let self = self else { return }
             switch result {
             case .success(let apiResponse):
-              
                 guard let data = apiResponse.body?["data"] as? [String: Any] else {
-                    completed()
-                    self.currentIndex = 0
                     self.hasStitchTo = false
                     self.stitchDone = true
+                    completed()
+                
+                
                     return
                 }
-                
+
                 if !data.isEmpty {
-                    
                     if let posted = PostModel(JSON: data) {
+                        self.posts.insert(posted, at: 0)
+
+                        // Reload the collection node without automatic scrolling
+                        self.collectionNode.insertItems(at: [IndexPath(item: 0, section: 0)])
+                        self.selectPostCollectionView.collectionView.reloadData()
                         
-                        // Save the current content offset
-                        //let contentOffset = self.collectionNode.contentOffset
                         self.hasStitchTo = true
                         self.stitchDone = true
-                        self.posts.insert(posted, at: 0)
                         
-                        self.collectionNode.insertItems(at: [IndexPath(item: 0, section: 0)])
+                        completed()
                         
-                        // Scroll to the desired index after a delay
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            self.collectionNode.scrollToItem(at: IndexPath(item: 1, section: 0), at: .right, animated: false)
-                            self.selectPostCollectionView.collectionView.reloadData()
-                            completed()
-                        }
                       
-                       
                     }
                 } else {
-                    self.currentIndex = 0
+                    
                     self.hasStitchTo = false
                     self.stitchDone = true
                     completed()
-                  
                 }
-                
+
             case .failure(let error):
-                completed()
                 self.hasStitchTo = false
                 self.stitchDone = true
-                print("StitchTo: error \(error)")
+                completed()
                 
-
+                print("StitchTo: error \(error)")
             }
         }
     }
+
 
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
      
@@ -669,6 +663,16 @@ extension OriginalNode {
             return
         }
         
+        if index == 1 {
+            
+            if hasStitchTo, !hasStitchToOffSet, !isFirst {
+                hasStitchToOffSet = true
+                collectionNode.scrollToItem(at: IndexPath(item: 1, section: 0), at: .centeredHorizontally, animated: true)
+                
+            }
+            
+            
+        }
         
         // Cell selection/deselection logic
         let indexPath = IndexPath(row: index, section: 0)

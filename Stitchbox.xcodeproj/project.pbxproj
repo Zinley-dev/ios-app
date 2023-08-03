@@ -1013,7 +1013,7 @@
 				6A839B3E29A03C3D00BD0A9A /* GameList */,
 				6AEA33E4298AA123005A4C5D /* VideoPostModel */,
 				6A78486A2986291E008B2263 /* StreamingDomainModel */,
-				14621E30298B370C0023694D /* FistBumperModel */,
+				14621E30298B370C0023694D /* InsightModel */,
 				A5D1E9DD2984420D00839311 /* FollowModel */,
 				6A78485F2984D216008B2263 /* PostModel */,
 				6A3F0A812980C4FD00366665 /* UserModel */,
@@ -1037,13 +1037,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		14621E30298B370C0023694D /* FistBumperModel */ = {
+		14621E30298B370C0023694D /* InsightModel */ = {
 			isa = PBXGroup;
 			children = (
 				14621E31298B374B0023694D /* FistBumpUserModel.swift */,
 				396B6AB729B2CA4700ED1DAD /* InsightModel.swift */,
 			);
-			path = FistBumperModel;
+			path = InsightModel;
 			sourceTree = "<group>";
 		};
 		147187E02920A3A20039B89E /* StitchboxUnitTests */ = {
