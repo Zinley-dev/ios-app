@@ -566,18 +566,18 @@ func unmuteVideoIfNeed() {
             
             if let update1 = vc as? FeedViewController {
                 
-                if update1.currentIndex != nil {
+                if update1.currentIndex == nil {
+                    update1.currentIndex = 0
+                }
+                
+                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                    if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
                         
-                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
-                            
-                            cell2.videoNode.muted = false
-                            shouldMute = false
-                        }
-                        
-                        
+                        cell2.videoNode.muted = false
+                        shouldMute = false
                     }
+                    
                     
                 }
                 

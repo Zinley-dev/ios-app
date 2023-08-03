@@ -636,10 +636,13 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         ])
         
         self.contentNode.attributedText = attr1
+        
       
         setNeedsLayout()
         layoutIfNeeded()
 
+       
+        
         label.attributedText = attr2
         
         self.label.removeFromSuperview()
@@ -850,10 +853,12 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         
         self.contentNode.attributedText = attr1
-
+     
         
         setNeedsLayout()
         layoutIfNeeded()
+        
+       
 
         label.attributedText = attr2
         self.label.removeFromSuperview()
@@ -876,7 +881,14 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.contentNode.view.addSubview(self.label)
           
         // Set label's frame to match the contentNode's bounds.
-        self.label.frame = self.contentNode.view.bounds
+        //self.label.frame = self.contentNode.view.bounds
+        
+        self.label.translatesAutoresizingMaskIntoConstraints = false
+        self.label.topAnchor.constraint(equalTo: self.contentNode.view.topAnchor, constant: 0).isActive = true
+        self.label.bottomAnchor.constraint(equalTo: self.contentNode.view.bottomAnchor, constant: 0).isActive = true
+        self.label.leadingAnchor.constraint(equalTo: self.contentNode.view.leadingAnchor, constant: 0).isActive = true
+        self.label.trailingAnchor.constraint(equalTo: self.contentNode.view.trailingAnchor, constant: 0).isActive = true
+        
        
     }
 

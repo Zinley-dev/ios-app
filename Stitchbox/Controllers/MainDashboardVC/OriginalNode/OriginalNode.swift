@@ -53,6 +53,8 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     var isfirstLoad = true
     var imageIndex: Int?
     var hasStitchTo = false
+    var isFirst = false
+    var stitchDone = false
     
     init(with post: PostModel) {
         self.post = post
@@ -77,26 +79,36 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             self.addAnimatedLabelToTop()
             self.collectionNode.delegate = self
             self.collectionNode.dataSource = self
+            
             self.addSubCollection()
             self.getStitchTo() {
                 
                 if self.hasStitchTo {
                     
                     self.currentIndex = 1
-                    self.playVideo(index: 1)
-                    
-                    
+                    self.newPlayingIndex = 1
+                    self.isVideoPlaying = true
+                    if self.isFirst {
+                        self.playVideo(index: 1)
+                    }
                     
                 } else {
                     
                     self.currentIndex = 0
-                    self.playVideo(index: 0)
-                    
+                    self.newPlayingIndex = 0
+                    self.isVideoPlaying = true
+                    if self.isFirst {
+                        self.playVideo(index: 0)
+                    }
                     
                 }
                 
                 
+                
+                
             }
+            
+
            
         }
         
@@ -138,6 +150,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             let hideTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(OriginalNode.hideTapped))
             hideTap.numberOfTapsRequired = 1
             self.selectPostCollectionView.hideBtn.addGestureRecognizer(hideTap)
+            
         }
     }
 
@@ -377,8 +390,8 @@ extension OriginalNode  {
 extension OriginalNode {
     
     func getStitchTo(completed: @escaping DownloadComplete) {
-        APIManager.shared.getStitchTo(pid: post.id) { result in
-           
+        APIManager.shared.getStitchTo(pid: post.id) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let apiResponse):
               
@@ -386,6 +399,7 @@ extension OriginalNode {
                     completed()
                     self.currentIndex = 0
                     self.hasStitchTo = false
+                    self.stitchDone = true
                     return
                 }
                 
@@ -395,21 +409,25 @@ extension OriginalNode {
                         
                         // Save the current content offset
                         //let contentOffset = self.collectionNode.contentOffset
-
+                        self.hasStitchTo = true
+                        self.stitchDone = true
                         self.posts.insert(posted, at: 0)
+                        
                         self.collectionNode.insertItems(at: [IndexPath(item: 0, section: 0)])
                         
-                        self.selectPostCollectionView.collectionView.reloadData()
-                        self.collectionNode.scrollToItem(at: IndexPath(item: 1, section: 0), at: .bottom, animated: false)
-
-                        self.currentIndex = 1
-                        self.hasStitchTo = true
-                        completed()
+                        // Scroll to the desired index after a delay
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            self.collectionNode.scrollToItem(at: IndexPath(item: 1, section: 0), at: .right, animated: false)
+                            self.selectPostCollectionView.collectionView.reloadData()
+                            completed()
+                        }
+                      
                        
                     }
                 } else {
                     self.currentIndex = 0
                     self.hasStitchTo = false
+                    self.stitchDone = true
                     completed()
                   
                 }
@@ -417,6 +435,7 @@ extension OriginalNode {
             case .failure(let error):
                 completed()
                 self.hasStitchTo = false
+                self.stitchDone = true
                 print("StitchTo: error \(error)")
                 
 
@@ -651,7 +670,6 @@ extension OriginalNode {
         }
         
         
-
         // Cell selection/deselection logic
         let indexPath = IndexPath(row: index, section: 0)
         if let imgCell = selectPostCollectionView.collectionView.cellForItem(at: indexPath) as? ImageViewCell {
@@ -822,7 +840,7 @@ extension OriginalNode {
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !posts.isEmpty, scrollView == collectionNode.view {
+        if !posts.isEmpty, scrollView == collectionNode.view, stitchDone {
             // Check if it's a horizontal scroll
             if lastContentOffset != scrollView.contentOffset.x {
                 lastContentOffset = scrollView.contentOffset.x

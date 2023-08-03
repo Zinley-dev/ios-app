@@ -31,7 +31,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     var collectionNode: ASCollectionNode!
     var editeddPost: PostModel?
     var startIndex: Int!
-    var currentIndex: Int!
+    var currentIndex: Int?
     var imageIndex: Int?
     var imageTimerWorkItem: DispatchWorkItem?
     var hasViewAppeared = false
@@ -43,6 +43,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     var selectedIndex = 0
     var isVideoPlaying = false
     var newPlayingIndex: Int?
+    
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
@@ -395,18 +396,38 @@ extension SelectedPostVC {
             let indexPath = IndexPath(row: startIndex, section: 0)
             self.collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
 
-            guard let currentCell = self.collectionNode.nodeForItem(at: indexPath) as? OriginalNode, !currentCell.posts[0].muxPlaybackId.isEmpty else {
+            guard let currentCell = self.collectionNode.nodeForItem(at: indexPath) as? OriginalNode else {
                 self.isVideoPlaying = false
                 self.playTimeBar.isHidden = true
                 return
             }
 
             // Update the playing status of the cell
-            currentIndex = 0
-            newPlayingIndex = 0
-            currentCell.currentIndex = 0
-            currentCell.newPlayingIndex = 0
-            currentCell.isVideoPlaying = true
+            currentIndex = startIndex
+            newPlayingIndex = startIndex
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+                
+                if currentCell.posts.count > 1 {
+                    
+                    currentCell.currentIndex = 1
+                    currentCell.newPlayingIndex = 1
+                    currentCell.isVideoPlaying = true
+                    currentCell.playVideo(index: 1)
+                    
+                } else {
+                    
+                    currentCell.currentIndex = 0
+                    currentCell.newPlayingIndex = 0
+                    currentCell.isVideoPlaying = true
+                    currentCell.playVideo(index: 0)
+                    
+                }
+                
+                
+            }
+            
+            
 
         }
 

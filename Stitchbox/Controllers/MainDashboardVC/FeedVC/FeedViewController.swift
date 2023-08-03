@@ -735,6 +735,13 @@ extension FeedViewController: ASCollectionDataSource {
             let node = OriginalNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
+            
+            
+            if self.isfirstLoad {
+                self.isfirstLoad = false
+                node.isFirst = true
+                
+            }
               
             return node
         }
