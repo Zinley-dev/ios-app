@@ -19,10 +19,11 @@ class NotificationVC: UIViewController {
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var loadingView: UIView!
-    private var pullControl = UIRefreshControl()
+ 
     
     var page = 1
     var refresh_request = false
+    private var pullControl = UIRefreshControl()
     var tableNode: ASTableNode!
     var UserNotificationList = [UserNotificationModel]()
     var firstAnimated = true
@@ -159,12 +160,6 @@ extension NotificationVC {
             
             if self.pullControl.isRefreshing == true {
                 self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) {
-                
-                self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                
             }
             
             

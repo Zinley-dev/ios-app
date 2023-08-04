@@ -198,7 +198,7 @@ class StitchDashboardVC: UIViewController {
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
-        navigationItem.title = "Stitch Dashboard"
+        navigationItem.title = "Stitch dashboard"
     }
     
     func setupLayers() {
