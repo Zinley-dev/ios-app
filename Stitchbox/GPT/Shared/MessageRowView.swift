@@ -98,18 +98,18 @@ struct MessageRowView: View {
             switch rowType {
             case .attributed(let attributedOutput):
                 attributedView(results: attributedOutput.results)
-                    .font(.system(size: 15)) // And here
+                    .font(.roboto(.Regular, size: 15)) // Set Roboto font here
 
                 
             case .rawText(let text):
                 if !text.isEmpty {
                     #if os(tvOS)
                     responseTextView(text: text)
-                        .font(.system(size: 15)) // And here
+                        .font(.roboto(.Regular, size: 15)) // Set Roboto font here
                     #else
                     Text(text)
                         .multilineTextAlignment(.leading)
-                        .font(.system(size: 15)) // And here
+                        .font(.roboto(.Regular, size: 15)) // Set Roboto font here
                         #if os(iOS) || os(macOS)
                         .textSelection(.enabled)
                         #endif
@@ -120,14 +120,18 @@ struct MessageRowView: View {
                 Text("Error: \(error)")
                     .foregroundColor(.red)
                     .multilineTextAlignment(.leading)
-                    .font(.system(size: 14)) // Set font here
+                    .font(.roboto(.Regular, size: 14)) // Set Roboto font here
+
+                
+               
                 
                 Button("Regenerate response") {
                     retryCallback(message)
                 }
-                .foregroundColor(.white)
+                .foregroundColor(.black)
                 .padding(.top)
-                .font(.system(size: 14)) // Set font here
+                .font(.roboto(.Regular, size: 14)) // Set Roboto font here
+
             
             }
             
@@ -147,7 +151,7 @@ struct MessageRowView: View {
         .padding()
         .background(isUser ? Color(red: (53.0/255.0), green: (46.0/255.0), blue: (113.0/255.0)): .normalButtonBackground)
         .cornerRadius(16)
-        .font(.system(size: 14)) // Set font here
+        .font(.roboto(.Regular, size: 14)) // Set Roboto font here
         
         
         //SBUTheme.componentTheme
@@ -162,25 +166,26 @@ struct MessageRowView: View {
                     #if os(iOS)
                     CodeBlockView(parserResult: parsed)
                         .padding(.bottom, 36)
-                        .font(.system(size: 15)) // And here
+                        .font(.roboto(.Regular, size: 15)) // Replace here
                         
                     #else
                     Text(parsed.attributedString)
                         #if os(iOS) || os(macOS)
                         .textSelection(.enabled)
-                        .font(.system(size: 15)) // And here
+                        .font(.roboto(.Regular, size: 15)) // Replace here
                         #endif
                     #endif
                 } else {
                     Text(parsed.attributedString)
                         #if os(iOS) || os(macOS)
                         .textSelection(.enabled)
-                        .font(.system(size: 15)) // And here
+                        .font(.roboto(.Regular, size: 15)) // Replace here
                         #endif
                 }
             }
         }
     }
+
     
     #if os(tvOS)
     private func rowsFor(text: String) -> [String] {
@@ -212,8 +217,8 @@ struct MessageRowView: View {
             Text(text)
                 .focusable()
                 .multilineTextAlignment(.leading)
-                .font(.system(size: 15)) // And here
-                
+                .font(.roboto(.Regular, size: 15)) // Replace here
+                    
         }
     }
     #endif

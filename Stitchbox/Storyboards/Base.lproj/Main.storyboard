@@ -1813,7 +1813,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AoA-cu-Ogw">
                                         <rect key="frame" x="0.0" y="0.0" width="122.5" height="40"/>
-                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="1mj-rq-wvO"/>
                                         </constraints>
@@ -1897,7 +1897,7 @@
         <image name="normal" width="53" height="52"/>
         <image name="ttw" width="53" height="53"/>
         <namedColor name="Secondary">
-            <color red="0.99607843137254903" green="0.50196078431372548" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.3411764705882353" blue="0.37254901960784315" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Tertiary">
             <color red="0.9137254901960784" green="0.90196078431372551" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

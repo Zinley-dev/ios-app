@@ -116,7 +116,7 @@ class ViewModel: ObservableObject {
                     let lastResult = results[results.count - 1]
                     var lastAttrString = lastResult.attributedString
                     if lastResult.isCodeBlock {
-                        lastAttrString.append(AttributedString(String(suffixText), attributes: .init([.font: UIFont.systemFont(ofSize: 12).apply(newTraits: .traitMonoSpace), .foregroundColor: UIColor.white])))
+                        lastAttrString.append(AttributedString(String(suffixText), attributes: .init([.font: FontManager.shared.roboto(.Regular, size: 12).apply(newTraits: .traitMonoSpace), .foregroundColor: UIColor.white])))
                     } else {
                         lastAttrString.append(AttributedString(String(suffixText)))
                     }

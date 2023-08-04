@@ -13,6 +13,9 @@ class NormalLoginVC: UIViewController {
     @IBOutlet weak var phoneBtn: UIButton!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var descLbl: UILabel!
+    
+    var usernameBorder = CALayer()
+    var phoneBorder = CALayer()
   
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -53,6 +56,11 @@ class NormalLoginVC: UIViewController {
 
         // Do any additional setup after loading the view.
         setupBackButton()
+        
+        usernameBorder = usernameBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (130/375))
+        phoneBorder = phoneBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (130/375))
+        
+        
         setupPhoneBtn()
 
         
@@ -154,12 +162,12 @@ class NormalLoginVC: UIViewController {
     
     func setupUsernameBtn() {
         
-        usernameBtn.setTitleColor(UIColor.white, for: .normal)
-        phoneBtn.setTitleColor(UIColor.darkGray, for: .normal)
+        usernameBtn.setTitleColor(UIColor.black, for: .normal)
+        phoneBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
+        usernameBtn.layer.addSublayer(usernameBorder)
         
-        usernameBtn.backgroundColor = UIColor.darkGray
-        phoneBtn.backgroundColor = UIColor.clear
+        phoneBorder.removeFromSuperlayer()
         
         descLbl.text = "Enter your username and password"
         
@@ -171,12 +179,12 @@ class NormalLoginVC: UIViewController {
     
     func setupPhoneBtn() {
         
-        usernameBtn.setTitleColor(UIColor.darkGray, for: .normal)
-        phoneBtn.setTitleColor(UIColor.white, for: .normal)
+        usernameBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        phoneBtn.setTitleColor(UIColor.black, for: .normal)
         
+        phoneBtn.layer.addSublayer(phoneBorder)
         
-        usernameBtn.backgroundColor = UIColor.clear
-        phoneBtn.backgroundColor = UIColor.darkGray
+        usernameBorder.removeFromSuperlayer()
         
         descLbl.text = "Select a country and enter your phone number"
         
