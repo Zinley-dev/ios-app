@@ -71,7 +71,7 @@ class FollowNode: ASCellNode {
                 self.followBtnNode.layer.cornerRadius = 10.0
                 self.followBtnNode.clipsToBounds = true
                 self.followBtnNode.backgroundColor = .normalButtonBackground
-                self.followBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
+                self.followBtnNode.setTitle("Following", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
             }
         } else {
             if let userId = user.userId {
@@ -90,7 +90,7 @@ class FollowNode: ASCellNode {
                             self.followBtnNode.backgroundColor = .normalButtonBackground
                             self.followBtnNode.layer.cornerRadius = 10.0
                             self.followBtnNode.clipsToBounds = true
-                            self.followBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
+                            self.followBtnNode.setTitle("Following", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
                         }
                     } else {
                         if self.user.loadFromUserId == _AppCoreData.userDataSource.value?.userID, self.user.loadFromMode == "follower" {
@@ -163,7 +163,7 @@ class FollowNode: ASCellNode {
                             self.followBtnNode.backgroundColor = .normalButtonBackground
                             self.followBtnNode.layer.cornerRadius = 10.0
                             self.followBtnNode.clipsToBounds = true
-                            self.followBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
+                            self.followBtnNode.setTitle("Following", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
 
                         }
                         
@@ -236,7 +236,7 @@ class FollowNode: ASCellNode {
                 self.followBtnNode.backgroundColor = .normalButtonBackground
                 self.followBtnNode.layer.cornerRadius = 10.0
                 self.followBtnNode.clipsToBounds = true
-                self.followBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
+                self.followBtnNode.setTitle("Following", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
 
             }
             
@@ -347,7 +347,7 @@ class FollowNode: ASCellNode {
                         self.followBtnNode.backgroundColor = .normalButtonBackground
                         self.followBtnNode.layer.cornerRadius = 10.0
                         self.followBtnNode.clipsToBounds = true
-                        self.followBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
+                        self.followBtnNode.setTitle("Following", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
 
                         self.updateTotal(isIncreased: true)
                     }

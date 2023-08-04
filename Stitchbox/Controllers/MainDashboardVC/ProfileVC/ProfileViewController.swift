@@ -310,6 +310,11 @@ class ProfileViewController: UIViewController {
                 cell.followingStack.addGestureRecognizer(numberOfFollowingTap)
                 
                 
+                let insightTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.insightTapped))
+                cell.stitchStack.isUserInteractionEnabled = true
+                cell.stitchStack.addGestureRecognizer(insightTap)
+                
+                
                 return cell
                 
             } else {

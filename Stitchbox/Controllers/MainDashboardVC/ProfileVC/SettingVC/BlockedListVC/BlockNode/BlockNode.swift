@@ -179,7 +179,7 @@ class BlockNode: ASCellNode {
             self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
             self.actionBtnNode.layer.cornerRadius = 10.0
             self.actionBtnNode.clipsToBounds = true
-            self.actionBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
+            self.actionBtnNode.setTitle("Following", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
 
         }
         
@@ -259,7 +259,7 @@ class BlockNode: ASCellNode {
                     self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
                     self.actionBtnNode.layer.cornerRadius = 10.0
                     self.actionBtnNode.clipsToBounds = true
-                    self.actionBtnNode.setTitle("Unfollow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
+                    self.actionBtnNode.setTitle("Following", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
 
 
                     
