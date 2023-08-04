@@ -90,22 +90,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.label = ActiveLabel()
-           
-            self.label.backgroundColor = .clear
-            self.contentNode.view.isUserInteractionEnabled = true
-    
+            self.contentNode.backgroundColor = .blue
+            self.label.backgroundColor = .red
             self.contentNode.view.addSubview(self.label)
-              
-            // Set label's frame to match the contentNode's bounds.
-            //self.label.frame = self.contentNode.view.bounds
-            
-            self.label.translatesAutoresizingMaskIntoConstraints = false
-            self.label.topAnchor.constraint(equalTo: self.contentNode.view.topAnchor, constant: 0).isActive = true
-            self.label.bottomAnchor.constraint(equalTo: self.contentNode.view.bottomAnchor, constant: 0).isActive = true
-            self.label.leadingAnchor.constraint(equalTo: self.contentNode.view.leadingAnchor, constant: 0).isActive = true
-            self.label.trailingAnchor.constraint(equalTo: self.contentNode.view.trailingAnchor, constant: 0).isActive = true
-            
-
+            self.contentNode.view.isUserInteractionEnabled = true
+      
             let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
             self.label.customColor[customType] = .lightGray
             self.label.numberOfLines = Int(self.contentNode.lineCount)
@@ -188,8 +177,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
             self.setupDefaultContent()
             
-            self.contentNode.backgroundColor = .clear
-            
+         
             let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
             self.view.addGestureRecognizer(pinchGestureRecognizer)
             
@@ -394,6 +382,16 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
   
     }
     
+    
+    
+    override func layout() {
+        super.layout()
+        
+        self.label.frame = self.contentNode.bounds
+    }
+
+
+ 
     
     func setupLabel() {
         label = ActiveLabel()
@@ -630,21 +628,23 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             truncatedText = truncateTextIfNeeded(finalText)
         }
         
+        let attr1 = NSAttributedString(string: truncatedText, attributes: [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
+            NSAttributedString.Key.foregroundColor: UIColor.clear
+        ])
 
         let attr2 = NSAttributedString(string: truncatedText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
         
-        self.contentNode.attributedText = attr2
+        self.contentNode.attributedText = attr1
         label.attributedText = attr2
       
         setNeedsLayout()
         layoutIfNeeded()
-
-        label.setNeedsLayout()
-        label.layoutIfNeeded()
-      
+       
+        
     }
 
     private func truncateTextIfNeeded(_ text: String) -> String {
@@ -838,19 +838,23 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             contentText = processTextForHiding(finalText)
         }
         
+        let attr1 = NSAttributedString(string: contentText, attributes: [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
+            NSAttributedString.Key.foregroundColor: UIColor.clear
+        ])
+        
         let attr2 = NSAttributedString(string: contentText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
         
         
-        self.contentNode.attributedText = attr2
+        self.contentNode.attributedText = attr1
         label.attributedText = attr2
         
         setNeedsLayout()
         layoutIfNeeded()
-        label.setNeedsLayout()
-        label.layoutIfNeeded()
+       
        
     }
 

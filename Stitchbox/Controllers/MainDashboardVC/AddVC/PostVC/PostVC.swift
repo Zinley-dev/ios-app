@@ -891,7 +891,7 @@ extension PostVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars <= 200    // 200 Limit Value
+        return numberOfChars <= 500    // 200 Limit Value
     }
     
     
