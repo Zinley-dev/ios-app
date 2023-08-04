@@ -408,7 +408,8 @@ extension SelectedPostVC {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
                 
-                if currentCell.posts.count > 1 {
+                
+                if currentCell.hasStitchTo, currentCell.posts.count > 1 {
                     
                     currentCell.currentIndex = 1
                     currentCell.newPlayingIndex = 1
@@ -423,8 +424,9 @@ extension SelectedPostVC {
                     currentCell.playVideo(index: 0)
                     
                 }
+
                 
-                
+
             }
             
             

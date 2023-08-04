@@ -79,7 +79,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.gradientNode = GradienView()
         
         self.buttonNode = ASDisplayNode()
-       
         super.init()
         
         self.gradientNode.isLayerBacked = true
@@ -90,8 +89,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.label = ActiveLabel()
-            self.contentNode.backgroundColor = .blue
-            self.label.backgroundColor = .red
+            self.contentNode.backgroundColor = .clear
+            self.label.backgroundColor = .clear
             self.contentNode.view.addSubview(self.label)
             self.contentNode.view.isUserInteractionEnabled = true
       

@@ -29,6 +29,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         print("OriginalNode is being deallocated.")
     }
 
+    var hasStitchChecked = false
     var page = 1
     var posts = [PostModel]()
     var saveMin = CGSize(width: 0, height: 0)
@@ -417,14 +418,22 @@ extension OriginalNode {
         }
     }
 
+    
+    func checkStitched() {
+        if !hasStitchChecked {
+            hasStitchChecked = true
+        }
+    }
 
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-     
-        APIManager.shared.getSuggestStitch(rootId: post.id, page: page) {  result in
-            
+        
+      
+        APIManager.shared.getSuggestStitch(rootId: post.id, page: page) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let apiResponse):
                 print(apiResponse)
+                self.checkStitched()
                 guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
@@ -448,6 +457,7 @@ extension OriginalNode {
                 }
             case .failure(let error):
                 print(error)
+                self.checkStitched()
                 let item = [[String: Any]]()
                 DispatchQueue.main.async {
                     block(item)
@@ -662,7 +672,17 @@ extension OriginalNode {
             print("Couldn't cast ?")
         }
 
-        if index == 0 && self.posts.count <= 1 {
+        
+        if hasStitchChecked {
+            
+            self.handleAnimationTextAndImage(for: index, cell: cell)
+            
+            if let sideButtonsView = cell.sideButtonsView {
+                sideButtonsView.stitchCount.text = "\(index + 1)/\(posts.count)"
+            }
+            
+        } else {
+            
             delay(0.75) { [weak self] in
                 guard let self = self else { return }
                 self.handleAnimationTextAndImage(for: index, cell: cell)
@@ -671,13 +691,9 @@ extension OriginalNode {
                     sideButtonsView.stitchCount.text = "\(index + 1)/\(posts.count)"
                 }
             }
-        } else {
-            self.handleAnimationTextAndImage(for: index, cell: cell)
             
-            if let sideButtonsView = cell.sideButtonsView {
-                sideButtonsView.stitchCount.text = "\(index + 1)/\(posts.count)"
-            }
         }
+
         
         if index == 0 {
             delay(0.75) { [weak self] in

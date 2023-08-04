@@ -584,39 +584,6 @@ extension FeedViewController {
 
 extension FeedViewController {
 
-    /*
-    func collectionNode(_ collectionNode: ASCollectionNode, willDisplayItemWith node: ASCellNode) {
-        
-        if isfirstLoad {
-            isfirstLoad = false
-            
-            if !posts.isEmpty {
-                
-                if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: 0, section: 0)) as? OriginalNode {
-                    
-                    if !currentCell.posts[0].muxPlaybackId.isEmpty {
-                        currentIndex = 0
-                        newPlayingIndex = 0
-                        currentCell.currentIndex = 0
-                        currentCell.newPlayingIndex = 0
-                        
-                        currentCell.isVideoPlaying = true
-                        
-                        delay(0.25) {
-
-                            //currentCell.playVideo(index: 0)
-                        }
-                    }
-                    
-                }
-                
-                
-            }
-            
-    
-        }
-        
-    } */
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard !posts.isEmpty, scrollView == collectionNode.view else {
@@ -737,7 +704,7 @@ extension FeedViewController: ASCollectionDataSource {
             node.debugName = "Node \(indexPath.row)"
             
             
-            if self.isfirstLoad {
+            if self.isfirstLoad, indexPath.row == 0 {
                 self.isfirstLoad = false
                 node.isFirst = true
                 
