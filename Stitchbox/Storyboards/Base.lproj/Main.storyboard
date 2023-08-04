@@ -713,21 +713,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mol-uV-LVH">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
-                                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loginBg" translatesAutoresizingMaskIntoConstraints="NO" id="VL2-S8-XMY">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                    </imageView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="1Rh-0J-zgg">
-                                        <rect key="frame" x="122" y="269" width="131" height="129"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launch 2" translatesAutoresizingMaskIntoConstraints="NO" id="1Rh-0J-zgg">
+                                        <rect key="frame" x="-7.5" y="-81.5" width="390" height="830"/>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="VL2-S8-XMY" secondAttribute="bottom" id="4jr-iF-twZ"/>
                                     <constraint firstItem="1Rh-0J-zgg" firstAttribute="centerX" secondItem="mol-uV-LVH" secondAttribute="centerX" id="NCE-nv-5qP"/>
                                     <constraint firstItem="1Rh-0J-zgg" firstAttribute="centerY" secondItem="mol-uV-LVH" secondAttribute="centerY" id="RYx-bG-Qko"/>
-                                    <constraint firstAttribute="trailing" secondItem="VL2-S8-XMY" secondAttribute="trailing" id="dqb-mQ-DBo"/>
-                                    <constraint firstItem="VL2-S8-XMY" firstAttribute="top" secondItem="mol-uV-LVH" secondAttribute="top" id="oBR-Zr-JQu"/>
-                                    <constraint firstItem="VL2-S8-XMY" firstAttribute="leading" secondItem="mol-uV-LVH" secondAttribute="leading" id="pco-HT-TEW"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -1888,12 +1881,12 @@
         </designable>
     </designables>
     <resources>
+        <image name="Launch 2" width="390" height="830"/>
         <image name="Logo" width="131" height="129"/>
         <image name="Tiktok" width="53" height="52"/>
         <image name="apple" width="53" height="52"/>
         <image name="fb" width="53" height="52"/>
         <image name="gg" width="64" height="52"/>
-        <image name="loginBg" width="390" height="844"/>
         <image name="normal" width="53" height="52"/>
         <image name="ttw" width="53" height="53"/>
         <namedColor name="Secondary">

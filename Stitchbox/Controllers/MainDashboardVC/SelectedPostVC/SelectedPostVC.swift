@@ -409,21 +409,10 @@ extension SelectedPostVC {
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
                 
                 
-                if currentCell.hasStitchTo, currentCell.posts.count > 1 {
-                    
-                    currentCell.currentIndex = 1
-                    currentCell.newPlayingIndex = 1
-                    currentCell.isVideoPlaying = true
-                    currentCell.playVideo(index: 1)
-                    
-                } else {
-                    
-                    currentCell.currentIndex = 0
-                    currentCell.newPlayingIndex = 0
-                    currentCell.isVideoPlaying = true
-                    currentCell.playVideo(index: 0)
-                    
-                }
+                currentCell.currentIndex = 0
+                currentCell.newPlayingIndex = 0
+                currentCell.isVideoPlaying = true
+                currentCell.playVideo(index: 0)
 
                 
 

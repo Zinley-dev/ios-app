@@ -181,9 +181,9 @@ class EditPostVC: UIViewController {
         
         mode = 0
         
-        globalBtn.setImage(UIImage(named: "selectedPublic"), for: .normal)
-        followingBtn.setImage(UIImage(named: "following"), for: .normal)
-        privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "selectedPublic")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         publicLbl.textColor = .black
         followLbl.textColor = .lightGray
@@ -196,9 +196,9 @@ class EditPostVC: UIViewController {
         
         mode = 1
         
-        globalBtn.setImage(UIImage(named: "public"), for: .normal)
-        followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
-        privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "selectedFollowing")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         publicLbl.textColor = .lightGray
         followLbl.textColor = .black
@@ -209,9 +209,9 @@ class EditPostVC: UIViewController {
         
         mode = 2
         
-        globalBtn.setImage(UIImage(named: "public"), for: .normal)
-        followingBtn.setImage(UIImage(named: "following"), for: .normal)
-        privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "selectedOnlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         
         publicLbl.textColor = .lightGray
@@ -416,9 +416,9 @@ extension EditPostVC {
             
             mode = 0
             
-            globalBtn.setImage(UIImage(named: "selectedPublic"), for: .normal)
-            followingBtn.setImage(UIImage(named: "following"), for: .normal)
-            privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+            globalBtn.setImage(UIImage(named: "selectedPublic")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
             
             publicLbl.textColor = .black
             followLbl.textColor = .lightGray
@@ -428,9 +428,9 @@ extension EditPostVC {
             
             mode = 1
             
-            globalBtn.setImage(UIImage(named: "public"), for: .normal)
-            followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
-            privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+            globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            followingBtn.setImage(UIImage(named: "selectedFollowing")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
             
             publicLbl.textColor = .lightGray
             followLbl.textColor = .black
@@ -440,9 +440,9 @@ extension EditPostVC {
             
             mode = 2
             
-            globalBtn.setImage(UIImage(named: "public"), for: .normal)
-            followingBtn.setImage(UIImage(named: "following"), for: .normal)
-            privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+            globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            privateBtn.setImage(UIImage(named: "selectedOnlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
             
             
             publicLbl.textColor = .lightGray

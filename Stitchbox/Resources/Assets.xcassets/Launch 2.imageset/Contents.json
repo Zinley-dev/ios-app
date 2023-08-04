@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "Launch 1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Follower (1).png",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -19,6 +19,7 @@
     "version" : 1
   },
   "properties" : {
+    "compression-type" : "automatic",
     "template-rendering-intent" : "original"
   }
 }

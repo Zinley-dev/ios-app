@@ -930,11 +930,11 @@ func requestAppleReview() {
 
 class CustomSlider: UISlider {
     
-    @IBInspectable var trackHeight: CGFloat = 1.67
+    @IBInspectable var trackHeight: CGFloat = 1
     @IBInspectable var highlightedTrackHeight: CGFloat = 7.0
-    @IBInspectable var thumbRadius: CGFloat = 3
+    @IBInspectable var thumbRadius: CGFloat = 2
     @IBInspectable var highlightedThumbRadius: CGFloat = 10
-    @IBInspectable var hitBoxSize: CGFloat = 40 // Size of hit box area
+    @IBInspectable var hitBoxSize: CGFloat = 50 // Size of hit box area
     
     private lazy var thumbView: UIView = {
         let thumb = UIView()
@@ -992,7 +992,7 @@ class CustomSlider: UISlider {
     func endLayout() {
         let thumb = thumbImage(radius: thumbRadius)
         setThumbImage(thumb, for: .normal)
-        trackHeight = 2
+        trackHeight = 1
         hitBoxSize = thumbRadius * 2 + 40 // You might want to adjust this value
         setNeedsDisplay()
     }

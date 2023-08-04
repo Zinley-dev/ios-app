@@ -16,11 +16,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loginBg" translatesAutoresizingMaskIntoConstraints="NO" id="NiW-ej-dM1">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="kWc-cg-vOG">
-                                <rect key="frame" x="141.5" y="383.5" width="131" height="129"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launch 2" translatesAutoresizingMaskIntoConstraints="NO" id="kWc-cg-vOG">
+                                <rect key="frame" x="12" y="33" width="390" height="830"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -28,10 +25,6 @@
                         <constraints>
                             <constraint firstItem="kWc-cg-vOG" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="0bB-dK-iLH"/>
                             <constraint firstItem="kWc-cg-vOG" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="IaB-lt-dI3"/>
-                            <constraint firstAttribute="trailing" secondItem="NiW-ej-dM1" secondAttribute="trailing" id="LKq-z3-Mba"/>
-                            <constraint firstItem="NiW-ej-dM1" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="deO-Lc-87l"/>
-                            <constraint firstAttribute="bottom" secondItem="NiW-ej-dM1" secondAttribute="bottom" id="seC-F2-J93"/>
-                            <constraint firstItem="NiW-ej-dM1" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="xOe-yT-3fR"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -41,7 +34,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Logo" width="131" height="129"/>
-        <image name="loginBg" width="390" height="844"/>
+        <image name="Launch 2" width="390" height="830"/>
     </resources>
 </document>

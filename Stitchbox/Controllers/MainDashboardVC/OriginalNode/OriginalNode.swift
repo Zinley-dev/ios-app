@@ -82,15 +82,21 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             self.collectionNode.delegate = self
             self.collectionNode.dataSource = self
             
-            self.addSubCollection() {
-                self.stitchDone = true
+            self.getStitchTo() {
                 
-                self.currentIndex = 0
-                self.newPlayingIndex = 0
-                self.isVideoPlaying = true
-                if self.isFirst {
-                    self.playVideo(index: 0)
+                self.addSubCollection() {
+                    
+                    self.stitchDone = true
+                    
+                    self.currentIndex = 0
+                    self.newPlayingIndex = 0
+                    self.isVideoPlaying = true
+                    if self.isFirst {
+                        self.playVideo(index: 0)
+                    }
+                    
                 }
+                
             }
 
         }
@@ -378,42 +384,36 @@ extension OriginalNode {
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body?["data"] as? [String: Any] else {
-                    self.hasStitchTo = false
-                    self.stitchDone = true
+                    
                     completed()
-                
-                
                     return
+                    
                 }
 
                 if !data.isEmpty {
                     if let posted = PostModel(JSON: data) {
-                        self.posts.insert(posted, at: 0)
+                        posted.stitchedTo = true
+                        self.posts.insert(posted, at: 1)
 
                         // Reload the collection node without automatic scrolling
-                        self.collectionNode.insertItems(at: [IndexPath(item: 0, section: 0)])
-                        self.selectPostCollectionView.collectionView.reloadData()
+                        self.collectionNode.insertItems(at: [IndexPath(item: 1, section: 0)])
+                       
                         
                         self.hasStitchTo = true
-                        self.stitchDone = true
-                        
+                       
                         completed()
                         
                       
                     }
                 } else {
-                    
-                    self.hasStitchTo = false
-                    self.stitchDone = true
                     completed()
                 }
 
             case .failure(let error):
-                self.hasStitchTo = false
-                self.stitchDone = true
-                completed()
                 
+                completed()
                 print("StitchTo: error \(error)")
+                
             }
         }
     }
@@ -427,7 +427,6 @@ extension OriginalNode {
 
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-      
         APIManager.shared.getSuggestStitch(rootId: post.id, page: page) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -728,7 +727,13 @@ extension OriginalNode {
         if nextIndex < postCount {
             let item = self.posts[nextIndex]
             if let nextUsername = item.owner?.username {
-                self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
+                
+                if item.stitchedTo {
+                    self.applyAnimationText(text: "Up next: @\(nextUsername)'s original!")
+                } else {
+                    self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
+                }
+               
             }
         } else {
             self.applyAnimationText(text: "")
@@ -737,17 +742,25 @@ extension OriginalNode {
         if cell.sideButtonsView != nil {
             if postCount > 1 {
                 cell.sideButtonsView.statusImg.isHidden = false
-                cell.sideButtonsView.statusImg.image = UIImage.init(named: index == 0 ? "star white" : "partner white")
+                if posts[index].stitchedTo {
+                    cell.sideButtonsView.statusImg.image = UIImage.init(named: "star white")
+                } else {
+                    cell.sideButtonsView.statusImg.image = UIImage.init(named: index == 0 ? "star white" : "partner white")
+                }
             } else {
                 cell.sideButtonsView.statusImg.isHidden = true
             }
         } else {
             
-            delay(1) {
+            delay(0.75) {
                 if cell.sideButtonsView != nil {
                     if postCount > 1 {
                         cell.sideButtonsView.statusImg.isHidden = false
-                        cell.sideButtonsView.statusImg.image = UIImage.init(named: index == 0 ? "star white" : "partner white")
+                        if self.posts[index].stitchedTo {
+                            cell.sideButtonsView.statusImg.image = UIImage.init(named: "star white")
+                        } else {
+                            cell.sideButtonsView.statusImg.image = UIImage.init(named: index == 0 ? "star white" : "partner white")
+                        }
                     } else {
                         cell.sideButtonsView.statusImg.isHidden = true
                     }
