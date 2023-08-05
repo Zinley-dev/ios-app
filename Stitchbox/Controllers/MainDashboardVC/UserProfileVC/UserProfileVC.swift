@@ -16,6 +16,9 @@ class UserProfileVC: UIViewController {
     
     deinit {
         print("UserProfileVC is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
     }
     
     private let fireworkController = FountainFireworkController()

@@ -13,6 +13,13 @@ import Alamofire
 
 class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
+    deinit {
+        print("PostListWithHashtagVC is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+        collectionNode.delegate = nil
+        collectionNode.dataSource = nil
+        
+    }
     
     var searchHashtag: String?
     var hasViewAppeared = false
@@ -32,7 +39,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
     var currentIndex: Int?
     var imageIndex: Int?
     var isfirstLoad = true
-    var didScroll = false
+   
     
     var posts = [PostModel]()
     var selectedIndexPath = 0
@@ -44,11 +51,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
     var startIndex: Int!
     var imageTimerWorkItem: DispatchWorkItem?
     
-    lazy var delayItem = workItem()
-    lazy var delayItem2 = workItem()
-    lazy var delayItem3 = workItem()
-    
-    
+  
     private var pullControl = UIRefreshControl()
     
     
@@ -159,7 +162,6 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
         refresh_request = true
         currentIndex = 0
         isfirstLoad = true
-        didScroll = false
         shouldMute = nil
         page = 1
         updateData()

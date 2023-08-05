@@ -18,6 +18,13 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class CommentNode: ASCellNode {
     
+    
+    deinit {
+        print("CommentNode is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+        
+    }
+    
     var replyUsername = ""
     var finalText: NSAttributedString!
     var replyUID = ""
@@ -38,9 +45,7 @@ class CommentNode: ASCellNode {
     var reply : ((ASCellNode) -> Void)?
     var isLiked = false
     var label: ActiveLabel!
-    
-    var like : ((ASCellNode) -> Void)?
-    
+
     init(with post: CommentModel) {
         
         self.post = post
@@ -65,10 +70,15 @@ class CommentNode: ASCellNode {
             self.cmtNode.view.isUserInteractionEnabled = true
                     
             label.enabledTypes = [.mention, .hashtag, .url]
-            
-            label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
             label.mentionColor = .secondary
-            label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+            
+            // A blue color for hashtags
+            label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+
+            // A contrasting green color for URLs
+            label.URLColor = UIColor(red: 50/255, green: 205/255, blue: 50/255, alpha: 1)
+
+
             
             label.customize { label in
                 

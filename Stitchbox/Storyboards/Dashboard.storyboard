@@ -9324,7 +9324,7 @@
         <image name="members-icon" width="32" height="32"/>
         <image name="moderator" width="16" height="16"/>
         <image name="notifications-icon" width="512" height="512"/>
-        <image name="onlyme" width="17" height="23"/>
+        <image name="onlyme" width="30" height="30"/>
         <image name="play" width="24" height="24"/>
         <image name="public" width="30" height="30"/>
         <image name="push noti" width="26" height="27"/>

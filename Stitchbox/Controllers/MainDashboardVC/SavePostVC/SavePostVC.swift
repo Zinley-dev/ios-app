@@ -16,6 +16,10 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
     
     deinit {
         print("SavePostVC is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+        collectionNode.delegate = nil
+        collectionNode.dataSource = nil
+        
     }
 
 
@@ -36,8 +40,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
     var currentIndex: Int?
     var imageIndex: Int?
     var isfirstLoad = true
-    var didScroll = false
-    
+   
     var posts = [PostModel]()
     var selected_itemList = [PostModel]()
     var selectedIndexPath = 0
@@ -47,13 +50,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
     var editeddPost: PostModel?
     var refresh_request = false
     var startIndex: Int!
-    var imageTimerWorkItem: DispatchWorkItem?
-    
-    lazy var delayItem = workItem()
-    lazy var delayItem2 = workItem()
-    lazy var delayItem3 = workItem()
-    
-    
+   
     private var pullControl = UIRefreshControl()
     
     
@@ -119,7 +116,8 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
         navigationController?.setNavigationBarHidden(false, animated: true)
         hasViewAppeared = true
         
-        delay(1.25) {
+        delay(1.25) { [weak self] in
+            guard let self = self else { return }
             
             UIView.animate(withDuration: 0.5) {
                 
@@ -160,7 +158,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
         refresh_request = true
         currentIndex = 0
         isfirstLoad = true
-        didScroll = false
+        
         shouldMute = nil
         page = 1
         updateData()
@@ -411,7 +409,7 @@ extension SavePostVC {
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
         self.applyStyle()
-        self.wireDelegates()
+       
         
         // Reload the data on the collection node
         self.collectionNode.reloadData()
@@ -431,12 +429,6 @@ extension SavePostVC {
         
     }
     
-    func wireDelegates() {
-        
-        self.collectionNode.delegate = self
-        self.collectionNode.dataSource = self
-        
-    }
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
         

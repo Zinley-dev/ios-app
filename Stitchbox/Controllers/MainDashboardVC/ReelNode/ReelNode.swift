@@ -23,6 +23,15 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
     deinit {
         print("ReelNode is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+        view.removeGestureRecognizer(panGestureRecognizer)
+        videoNode.player?.pause()
+        videoNode.delegate = nil
+        panGestureRecognizer.delegate = nil
+        
+        cleanup(view: view)
+
+        
     }
     
     var allowProcess = true
@@ -39,8 +48,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
     var buttonNode: ASDisplayNode
-    var toggleContentNode = ASTextNode()
-   
+    
     var shouldCountView = true
     var headerView: PostHeader!
     var buttonsView: ButtonsHeader!
@@ -81,6 +89,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         self.buttonNode = ASDisplayNode()
         super.init()
         
+        
         self.gradientNode.isLayerBacked = true
         self.gradientNode.isOpaque = false
         
@@ -98,11 +107,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self.label.customColor[customType] = .lightGray
             self.label.numberOfLines = Int(self.contentNode.lineCount)
             self.label.enabledTypes = [.hashtag, .url, customType]
-            //self.label.attributedText = self.contentNode.attributedText
-            
-            
-                //self.label.mentionColor = .secondary
-            
+           
             self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
             self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
             
@@ -222,7 +227,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
                 
                 checkIfFollow()
                 checkIfFollowedMe()
-                checkIsStitched()
+                
                 // check
                 
             }
@@ -307,55 +312,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
        
         
         automaticallyManagesSubnodes = true
-    
-        if post.muxPlaybackId != "" {
-            self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
-            self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
-            self.videoNode.shouldAutoplay = false
-            self.videoNode.shouldAutorepeat = true
-            
-            self.videoNode.muted = false
-            self.videoNode.delegate = self
-            
-            
-            if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
-                // Calculate aspect ratio
-                let aspectRatio = Float(width) / Float(height)
-             
-                // Set contentMode based on aspect ratio
-                if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
-                    self.videoNode.contentMode = .scaleAspectFill
-                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-                } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
-                    self.videoNode.contentMode = .scaleAspectFit
-                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
-                } else {
-                    // Default contentMode, adjust as needed
-                    self.videoNode.contentMode = .scaleAspectFit
-                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
-                }
-            } else {
-                // Default contentMode, adjust as needed
-                self.videoNode.contentMode = .scaleAspectFill
-                self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-                //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
-            }
-
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
-                
-                self.videoNode.view.layer.cornerRadius = 25
-                self.videoNode.view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
-                self.videoNode.view.clipsToBounds = true
-            }
-            
-            
-            
-        }
         
         
         DispatchQueue.main.async() { [weak self] in
@@ -377,6 +333,56 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             viewStitchTap.numberOfTapsRequired = 1
             self.sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
         }
+    
+        
+        if post.muxPlaybackId != "" {
+            videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
+            videoNode.player?.automaticallyWaitsToMinimizeStalling = true
+            videoNode.shouldAutoplay = false
+            videoNode.shouldAutorepeat = true
+            
+            videoNode.muted = false
+            videoNode.delegate = self
+            
+            
+            if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
+                // Calculate aspect ratio
+                let aspectRatio = Float(width) / Float(height)
+             
+                // Set contentMode based on aspect ratio
+                if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
+                    videoNode.contentMode = .scaleAspectFill
+                    videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
+                    videoNode.contentMode = .scaleAspectFit
+                    videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                } else {
+                    // Default contentMode, adjust as needed
+                    videoNode.contentMode = .scaleAspectFit
+                    videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                }
+            } else {
+                // Default contentMode, adjust as needed
+                videoNode.contentMode = .scaleAspectFill
+                videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+            }
+
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
+                
+                self.videoNode.view.layer.cornerRadius = 25
+                self.videoNode.view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
+                self.videoNode.view.clipsToBounds = true
+            }
+            
+            
+            
+        }
 
   
     }
@@ -386,7 +392,10 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     override func layout() {
         super.layout()
         
-        self.label.frame = self.contentNode.bounds
+        if label != nil {
+            label.frame = contentNode.bounds
+        }
+     
     }
 
 
@@ -578,11 +587,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
     private func configureVideoNode(for post: PostModel) {
        // self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
-        self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
-        self.videoNode.shouldAutoplay = false
-        self.videoNode.shouldAutorepeat = true
-        self.videoNode.muted = false
-        self.videoNode.delegate = self
+        videoNode.player?.automaticallyWaitsToMinimizeStalling = true
+        videoNode.shouldAutoplay = false
+        videoNode.shouldAutorepeat = true
+        videoNode.muted = false
+        videoNode.delegate = self
         
         setNodeContentMode(for: post, node: self.videoNode, defaultContentMode: .scaleAspectFill)
         
@@ -593,24 +602,24 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
     
     private func setupSideButtonsView() {
-        self.sideButtonsView = ButtonSideList()
-        self.sideButtonsView.backgroundColor = .clear
-        self.sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(self.sideButtonsView)
-        self.originalCenter = self.view.center
+        sideButtonsView = ButtonSideList()
+        sideButtonsView.backgroundColor = .clear
+        sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(self.sideButtonsView)
+        originalCenter = self.view.center
 
         NSLayoutConstraint.activate([
-            self.sideButtonsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
-            self.sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -55),
-            self.sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
-            self.sideButtonsView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
+            sideButtonsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
+            sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -55),
+            sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
+            sideButtonsView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
         ])
     }
 
     private func setupGestures() {
         let viewStitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.viewStitchTapped))
         viewStitchTap.numberOfTapsRequired = 1
-        self.sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
+        sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
     }
     
     func setupDefaultContent() {
@@ -866,25 +875,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     }
 
 
-
-    
-    func addActiveLabel() {
-    
-        /*
-        self.contentNode.view.addSubview(self.label)
-          
-        // Set label's frame to match the contentNode's bounds.
-        //self.label.frame = self.contentNode.view.bounds
-        
-        self.label.translatesAutoresizingMaskIntoConstraints = false
-        self.label.topAnchor.constraint(equalTo: self.contentNode.view.topAnchor, constant: 0).isActive = true
-        self.label.bottomAnchor.constraint(equalTo: self.contentNode.view.bottomAnchor, constant: 0).isActive = true
-        self.label.leadingAnchor.constraint(equalTo: self.contentNode.view.leadingAnchor, constant: 0).isActive = true
-        self.label.trailingAnchor.constraint(equalTo: self.contentNode.view.trailingAnchor, constant: 0).isActive = true
-        */
-       
-    }
-
     
     @objc private func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
         //guard let view = videoNode.view else { return }
@@ -1096,49 +1086,7 @@ extension ReelNode {
         
     
     }
-    
-    func checkIsStitched() {
-        
-        /*
-        APIManager.shared.isStitchedByMe(rootId: post.id) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let apiResponse):
-    
-                guard apiResponse.body?["message"] as? String == "success",
-                      let isStitchedGet = apiResponse.body?["data"] as? Bool else {
-                        return
-                }
-                
-                if isStitchedGet == false {
-                    
-                    self.isStitched = false
-                    headerView.stichBtn.isUserInteractionEnabled = true
-                    headerView.stitchLbl.text = "Create Stitch"
-                } else {
-                    
-                    self.isStitched = true
-                    headerView.stichBtn.isUserInteractionEnabled = false
-                    headerView.createStitchStack.isUserInteractionEnabled = false
-                    headerView.stitchLbl.text = "Stitched"
-                }
-                
-  
-            case .failure(let error):
-                self.isStitched = true
-                print(error)
-            }
-        
-        } */
-        
-        
-    }
-    
-    
-    
-    
-    
+
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
         let videoDuration = videoNode.currentItem?.duration.seconds ?? 0
@@ -2224,6 +2172,15 @@ extension ReelNode: UIGestureRecognizerDelegate {
         
     }
     
+    
+    func cleanup(view: UIView) {
+        if let recognizers = view.gestureRecognizers {
+            for recognizer in recognizers {
+                view.removeGestureRecognizer(recognizer)
+            }
+        }
+    }
+
 }
 
 extension ReelNode {

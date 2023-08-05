@@ -27,6 +27,14 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     
     deinit {
         print("OriginalNode is being deallocated.")
+   
+        selectPostCollectionView.hideBtn.gestureRecognizers?.forEach { selectPostCollectionView.hideBtn.removeGestureRecognizer($0) }
+        selectPostCollectionView.collectionView.delegate = nil
+        selectPostCollectionView.collectionView.dataSource = nil
+        collectionNode.delegate = nil
+        collectionNode.dataSource = nil
+        cleanup(view: view)
+        
     }
 
     var hasStitchChecked = false
@@ -37,6 +45,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
+    
     lazy var collectionNode: ASCollectionNode = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 0.0
@@ -46,11 +55,11 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         return node
     }()
 
-    var post: PostModel!
+    weak var post: PostModel!
     var currentIndex: Int?
     var isVideoPlaying = false
     var newPlayingIndex: Int?
-    var imageTimerWorkItem: DispatchWorkItem?
+    
     var isfirstLoad = true
     var imageIndex: Int?
     var hasStitchTo = false
@@ -79,10 +88,11 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             self.backgroundColor = .black
             self.collectionNode.view.indicatorStyle = .white
             self.addAnimatedLabelToTop()
-            self.collectionNode.delegate = self
-            self.collectionNode.dataSource = self
             
             self.getStitchTo() {
+                
+                self.collectionNode.delegate = self
+                self.collectionNode.dataSource = self
                 
                 self.addSubCollection() {
                     
@@ -393,12 +403,7 @@ extension OriginalNode {
                 if !data.isEmpty {
                     if let posted = PostModel(JSON: data) {
                         posted.stitchedTo = true
-                        self.posts.insert(posted, at: 1)
-
-                        // Reload the collection node without automatic scrolling
-                        self.collectionNode.insertItems(at: [IndexPath(item: 1, section: 0)])
-                       
-                        
+                        self.posts.append(posted)
                         self.hasStitchTo = true
                        
                         completed()
@@ -916,30 +921,6 @@ extension OriginalNode {
                     } else {
                         // Do nothing if the current index is the same as newPlayingIndex
                     }
-                } else {
-                    if let currentIndex = currentIndex {
-                        pauseVideo(index: currentIndex)
-                    }
-                    
-                    imageTimerWorkItem?.cancel()
-                    imageTimerWorkItem = DispatchWorkItem { [weak self] in
-                        guard let self = self else { return }
-                        if self.imageIndex != nil {
-                            if let node = self.collectionNode.nodeForItem(at: IndexPath(item: self.imageIndex!, section: 0)) as? ReelNode {
-                                if self.imageIndex == self.newPlayingIndex {
-                                    resetView(cell: node)
-                                    node.endImage(id: node.post.id)
-                                }
-                            }
-                        }
-                    }
-                    
-                    if let imageTimerWorkItem = imageTimerWorkItem {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: imageTimerWorkItem)
-                    }
-                    
-                    // Reset the current playing index.
-                    currentIndex = nil
                 }
                 
                 // If the video is stuck, reset the buffer by seeking to the current playback time.
@@ -993,6 +974,14 @@ extension OriginalNode {
         }
         
         
+    }
+    
+    func cleanup(view: UIView) {
+        if let recognizers = view.gestureRecognizers {
+            for recognizer in recognizers {
+                view.removeGestureRecognizer(recognizer)
+            }
+        }
     }
 
 

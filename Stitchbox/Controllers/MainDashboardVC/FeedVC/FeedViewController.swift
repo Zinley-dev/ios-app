@@ -33,7 +33,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     //let promotionButton = UIButton(type: .custom)
     let homeButton: UIButton = UIButton(type: .custom)
-    var promotionList = [PromoteModel]()
    
     var isfirstLoad = true
     var didScroll = false
@@ -49,7 +48,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var imageTimerWorkItem: DispatchWorkItem?
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
-    lazy var delayItem2 = workItem()
     lazy var delayItem3 = workItem()
     var firstAnimated = true
     var lastLoadTime: Date?
@@ -140,11 +138,14 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
         
+        
+        
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         
         setupNavBar()
         setupTabBar()
@@ -184,6 +185,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 
             
         }
+         
         
         
     }
@@ -193,14 +195,17 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        
         delay(0.25) {[weak self] in
             guard let self = self else { return }
             NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         }
+         
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         
         hasViewAppeared = false
         
@@ -871,15 +876,20 @@ extension FeedViewController {
             if firstAnimated {
                 firstAnimated = false
 
-                UIView.animate(withDuration: 0.5) {
-                    self.loadingView.alpha = 0
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    if self.loadingView.alpha == 0 {
-                        self.loadingView.isHidden = true
+                delay(0.15) {
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        self.loadingView.alpha = 0
                     }
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        if self.loadingView.alpha == 0 {
+                            self.loadingView.isHidden = true
+                        }
+                    }
+                    
                 }
+                
             }
 
             // Insert new items at index paths
