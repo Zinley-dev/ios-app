@@ -282,7 +282,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func updateData() {
-        self.retrieveNextPageWithCompletion { (newPosts) in
+        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
             
             if newPosts.count > 0 {
                 
@@ -293,6 +294,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 
                 self.refresh_request = false
+                
                 self.posts.removeAll()
                 self.collectionNode.reloadData()
                 

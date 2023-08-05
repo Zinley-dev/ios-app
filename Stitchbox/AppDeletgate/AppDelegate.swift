@@ -15,13 +15,10 @@ import SendBirdUIKit
 import PixelSDK
 import UserNotifications
 import OneSignal
-
 import Sentry
 import SwipeTransition
 import SwipeTransitionAutoSwipeBack
 import SwipeTransitionAutoSwipeToDismiss
-
-import AppTrackingTransparency
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -41,15 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
     -> Bool {
-        
-
-        UNUserNotificationCenter.current().delegate = self
-        setupPixelSDK()
-        sendbird_authentication()
+    
         
         setupPixelSDK()
-        sendbird_authentication()
-        syncSendbirdAccount()
+        //sendbird_authentication()
+        //syncSendbirdAccount()
         attemptRegisterForNotifications(application: application)
         setupStyle()
         setupOneSignal(launchOptions: launchOptions)
@@ -57,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupVolumeObserver()
         sentrySetup()
         
-     
+        
         return true
         
     }
@@ -717,8 +710,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
     }
     
-    
-     
     
 }
 
