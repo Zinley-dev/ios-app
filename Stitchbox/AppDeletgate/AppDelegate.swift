@@ -6,9 +6,7 @@
 //
 
 import UIKit
-import FirebaseCore
 import GoogleSignIn
-import FBSDKCoreKit
 import SendBirdSDK
 import SendBirdCalls
 import PushKit
@@ -16,18 +14,14 @@ import UserNotifications
 import SendBirdUIKit
 import PixelSDK
 import UserNotifications
-import TikTokOpenSDK
 import OneSignal
-import GooglePlaces
-import GoogleMaps
+
 import Sentry
 import SwipeTransition
 import SwipeTransitionAutoSwipeBack
 import SwipeTransitionAutoSwipeToDismiss
-import AppsFlyerLib
+
 import AppTrackingTransparency
-import Contacts
-import ContactsUI
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -36,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var voipRegistry: PKPushRegistry?
     var volumeOutputList = [Float]()
     static let sharedInstance = UIApplication.shared.delegate as! AppDelegate
-    lazy var delayItem = workItem()
+    
     private var audioLevel : Float = 0.0
     
     private var previousVolume: Float = 0.0
@@ -47,15 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
     -> Bool {
-        ApplicationDelegate.shared.application(
-            application,
-            didFinishLaunchingWithOptions: launchOptions
-        )
         
+
         UNUserNotificationCenter.current().delegate = self
         setupPixelSDK()
         sendbird_authentication()
-        registerAppsFlyer()
         
         setupPixelSDK()
         sendbird_authentication()
@@ -67,11 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupVolumeObserver()
         sentrySetup()
         
-        
-        GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
-        GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
-        
-        //SwipeBackConfiguration.shared = CustomSwipeBackConfiguration()
      
         return true
         
@@ -83,7 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SentrySDK.start { options in
                 options.dsn = "https://b408eb8270e3a80a9eca0764d1702654@o4505650828738560.ingest.sentry.io/4505650829459456"
                 options.debug = true // Enabled debug when first installing is always helpful
-
                 // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
                 // We recommend adjusting this value in production.
                 options.tracesSampleRate = 1.0
@@ -94,13 +78,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 options.enableMetricKit = true
                 options.enableTimeToFullDisplay = true
                 options.attachStacktrace = true
-
                 options.attachViewHierarchy = true
                 options.enableAutoPerformanceTracing = true
                 options.enableUIViewControllerTracing = true
            
                 }
-
         
     }
     
@@ -188,10 +170,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     case "NEW_FOLLOW_2":
                         self.openFollow()
                     case "NEW_TAG":
-                        if let post = metaDataOneSignal.post {
-                            self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
-                        }
-                    case "MENTION_IN_COMMENT":
                         if let post = metaDataOneSignal.post {
                             self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
                         }
@@ -334,35 +312,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             // redirect(to: view, with: parameters)
         }
         
-        guard let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-              let annotation = options[UIApplication.OpenURLOptionsKey.annotation] else {
-            return false
-        }
+       
         
-        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
-            return true
-        }
-        
-        ApplicationDelegate.shared.application(
-            application,
-            open: url,
-            sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-            annotation: options[UIApplication.OpenURLOptionsKey.annotation]
-        )
         return GIDSignIn.sharedInstance.handle(url)
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
-            return true
-        }
+        
         return false
     }
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: nil, annotation: "") {
-            return true
-        }
+        
         return false
     }
     
@@ -753,86 +714,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidBecomeActive(_ application: UIApplication) {
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
-        if _AppCoreData.userDataSource.value?.userID != "" {
-            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
-        }
-        
-        if _AppCoreData.userDataSource.value?.userID != "" {
-            fetchContacts()
-        }
-        
-        
-    }
-    
-    func registerAppsFlyer() {
-        
-        AppsFlyerLib.shared().appsFlyerDevKey = "sumV9RMiJVui7vtQoBVEx"
-        AppsFlyerLib.shared().appleAppID = "1660843872"
         
     }
     
     
-    func fetchContacts() {
-        let store = CNContactStore()
-
-        store.requestAccess(for: .contacts) { [weak self] (granted, error) in
-            guard let self = self else { return }
-            if let error = error {
-                print("failed to request access", error)
-                return
-            }
-            if granted {
-                
-                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactImageDataKey, CNContactImageDataAvailableKey]
-                let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
-                do {
-                    DispatchQueue.global().async {
-                        do {
-                            try store.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
-                                if contact.phoneNumbers.first?.value.stringValue != nil {
-                                    var dict = ["firstName": contact.givenName, "familyName": contact.familyName, "phoneNumber": contact.phoneNumbers.first?.value.stringValue.stringByRemovingWhitespaces.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "-", with: "")] as? [String: Any]
-                                    if contact.imageDataAvailable {
-                                        dict!.updateValue(contact.imageData!, forKey: "imageData")
-                                    }
-                                  
-                                    let contactList = FindFriendsModel(FindFriendsModel: dict! as Dictionary<String, Any>)
-                                    let upload = ["name": contactList.firstName + " " + contactList.familyName, "phone": contactList.phoneNumber]
-                                    self.uploadContact(contact: upload as [String : Any])
-                                   
-                                    
-                                }
-                            })
-                          
-                        } catch let error {
-                            print("Failed to enumerate contact", error)
-                        }
-                    }
-                }
-            } else {
-                print("access denied")
-            }
-        }
-    }
-
-
-    func uploadContact(contact: [String : Any]) {
-        
-    
-        APIManager.shared.createUserContact(contact: contact) {  result in
-            
-            switch result {
-            case .success(let apiResponse):
-                
-                print(apiResponse)
-                
-            case .failure(let error):
-                print(error)
-                
-            }
-        }
-        
-        
-    }
      
     
 }

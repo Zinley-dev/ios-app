@@ -108,6 +108,7 @@ import Alamofire
         super.viewDidLoad()
         //setupView()
         
+        
         self.delegate = self
         
         SBDMain.add(self, identifier: self.sbu_className)
@@ -116,6 +117,7 @@ import Alamofire
         
         setupMiddleButtonForBlackTabBar()
         setupBlackTabBar()
+         
     }
     
     func setupBlackTabBar() {

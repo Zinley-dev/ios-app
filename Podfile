@@ -13,21 +13,8 @@ target 'Stitchbox' do
   pod 'Alamofire', '~> 5.6.4'
   pod 'Cache', '~> 5.3.0'
   pod 'ObjectMapper', '~> 3.5'
-  pod 'EzPopup'
 
-  # Add the Firebase pod for Google Analytics
-  pod 'FirebaseAnalytics', '~> 10.3.0'
-  pod 'FirebaseAuth', '~> 10.3.0'
   pod 'GoogleSignIn', '~> 7.0.0'
-  
-  # Facebook login
-  pod 'FBSDKLoginKit', '~> 14.1.0'
-  
-  # Tiktok SDK
-  pod 'TikTokOpenSDK', '~> 5.0.14'
-  
-  # Twitter
-  pod 'Swifter', :git => "https://github.com/mattdonnelly/Swifter.git"
   
   # Sendbird SDK
   pod 'SendBirdSDK', '~> 3.1.37'
@@ -51,15 +38,13 @@ target 'Stitchbox' do
   pod 'ActiveLabel'
 
   pod 'OneSignalXCFramework', '>= 3.0.0', '< 4.0'
-  pod 'GoogleMaps'
-  pod 'GooglePlaces'
-  pod 'swift-vibrant'
+  #pod 'GoogleMaps'
+  #pod 'GooglePlaces'
   pod 'MarqueeLabel'
   pod 'Sentry'
   pod "SwipeTransition"
   pod "SwipeTransitionAutoSwipeBack"      # if needed
   pod "SwipeTransitionAutoSwipeToDismiss" # if needed
-  pod 'AppsFlyerFramework'
   pod 'SCLAlertView'
   
   target 'StitchboxTests' do

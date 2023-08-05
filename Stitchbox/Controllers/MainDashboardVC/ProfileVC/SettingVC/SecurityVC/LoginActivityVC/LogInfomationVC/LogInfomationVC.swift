@@ -6,10 +6,10 @@
 //
 
 import UIKit
-import GoogleMaps
+//import GoogleMaps
 import Alamofire
 
-class LogInfomationVC: UIViewController, GMSMapViewDelegate {
+class LogInfomationVC: UIViewController {
     
     @IBOutlet weak var countryLbl: UILabel!
     @IBOutlet weak var ispLbl: UILabel!
@@ -19,11 +19,11 @@ class LogInfomationVC: UIViewController, GMSMapViewDelegate {
     @IBOutlet weak var regionLbl: UILabel!
     @IBOutlet weak var IPLbl: UILabel!
     @IBOutlet weak var DeviceLbl: UILabel!
-    @IBOutlet weak var mapView: GMSMapView!
+    //@IBOutlet weak var mapView: GMSMapView!
     
     let backButton: UIButton = UIButton(type: .custom)
     
-    var marker = GMSMarker()
+    //var marker = GMSMarker()
     
     var item: UserLoginActivityModel!
 
@@ -31,13 +31,14 @@ class LogInfomationVC: UIViewController, GMSMapViewDelegate {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        mapView.delegate = self
+        //mapView.delegate = self
         setupButtons()
         styleMap()
         DeviceLbl.text = item.device
 
         let urls = URL(string: "http://ip-api.com/json/")!.appendingPathComponent(item.ip)
-                                  
+              
+        /*
         AF.request(urls, method: .get)
             .validate(statusCode: 200..<500)
             .responseJSON { responseJSON in
@@ -82,7 +83,7 @@ class LogInfomationVC: UIViewController, GMSMapViewDelegate {
               
                     }
                                         
-        }
+        } */
         
         
         let dateFormatterGet = DateFormatter()
@@ -96,10 +97,10 @@ class LogInfomationVC: UIViewController, GMSMapViewDelegate {
     }
 
     
-
+    /*
     func centerMapOnUserLocation(location: CLLocationCoordinate2D) {
-           
-
+        
+       
            // get MapView
            let camera = GMSCameraPosition.camera(withLatitude: location.latitude, longitude: location.longitude, zoom: 17)
            
@@ -115,11 +116,13 @@ class LogInfomationVC: UIViewController, GMSMapViewDelegate {
            
            
            marker.isTappable = false
+        
+        
               
-    }
+    }*/
     
     func styleMap() {
-    
+    /*
         do {
             // Set the map style by passing the URL of the local file.
             if let styleURL = Bundle.main.url(forResource: "customizedMap", withExtension: "json") {
@@ -130,7 +133,7 @@ class LogInfomationVC: UIViewController, GMSMapViewDelegate {
         } catch {
             NSLog("One or more of the map styles failed to load. \(error)")
         }
-    
+    */
     
     
     }

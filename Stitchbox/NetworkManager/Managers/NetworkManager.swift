@@ -16,13 +16,18 @@ protocol RequestManager {
     associatedtype EndPoint: EndPointType
     func request(_ route: EndPoint, completion: @escaping APICompletion)
 }
+
 class RequestDelegate: NSObject, URLSessionTaskDelegate {
     var process: UploadInprogress
-    override init() {
-        self.process = { percent in
-            print(percent)
-        }
+
+    deinit {
+        print("RequestDelegate deallocated")
     }
+
+    init(process: @escaping UploadInprogress) {
+        self.process = process
+    }
+
     func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         let uploadProgress = Float(totalBytesSent) / Float(totalBytesExpectedToSend) * 100
         process(uploadProgress)
@@ -30,16 +35,34 @@ class RequestDelegate: NSObject, URLSessionTaskDelegate {
 }
 
 class Manager<EndPoint: EndPointType>: RequestManager {
+    
     private var task: URLSessionDataTaskProtocol?
-    private let session: URLSessionProtocol
+    private var session: URLSessionProtocol = CustomURLSession.shared
     private let requestDelegate: RequestDelegate
     
-    init(session: URLSessionProtocol = URLSession.shared) {
+    deinit {
+        session.customInvalidateAndCancel()
+        print("Manager deallocated")
+    }
+    
+    init(session: URLSessionProtocol = CustomURLSession.shared) {
+        
+        let process: UploadInprogress = { percent in
+            print(percent)
+        }
+        requestDelegate = RequestDelegate.init(process: process)
+        self.session = session
+        
+        
+    }
+
+    
+    func startSession() {
         let configuration = URLSessionConfiguration.default
         configuration.waitsForConnectivity = true
-        requestDelegate = RequestDelegate.init()
-        self.session = URLSession(configuration: configuration, delegate: requestDelegate, delegateQueue: nil)
+        self.session = CustomURLSession.session(with: configuration, delegate: requestDelegate, delegateQueue: nil)
     }
+
     
     
     func upload(_ route: EndPoint, image: UIImage, completion: @escaping APICompletion) {
@@ -48,7 +71,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             
             let uploadData = builđData(for: image, request: &request)
             
-            task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+            task = session.customUploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
                 }
@@ -68,7 +91,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             
             let uploadData = builđData(for: images, for: content, request: &request)
             
-            task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+            task = session.customUploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
                 }
@@ -91,7 +114,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             
             requestDelegate.process = inprogress
             
-            task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+            task = session.customUploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
                 }
@@ -115,37 +138,33 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         
         print("Request URL --> \(String(describing: request.url))")
         
+        // Updating here
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: OperationQueue.main)
+        
         self.task = session.dataTask(with: request, completionHandler: { [weak self] data, response, error in
             guard let self = self else { return }
             // Now use `strongSelf` instead of `self` inside the closure.
-            // Ensure we are on the main thread
-            DispatchQueue.main.async {
-                
-                print("==============BBB+============")
-                print(error)
-                print(response)
-                print(data)
-                print("==============BBB+============")
-
-                if let error = error {
-                    print(error.localizedDescription)
-                    completion(.failure(ErrorType.badRequest))
-                    return
-                }
-                
-                guard let response = response as? HTTPURLResponse else {
-                    completion(.failure(ErrorType.invalidResponse))
-                    return
-                }
-                
-                let result = self.handleNetworkResponse(data, response)
-                completion(result)
+            
+            if let error = error {
+                print(error.localizedDescription)
+                completion(.failure(ErrorType.badRequest))
+                return
             }
+            
+            guard let response = response as? HTTPURLResponse else {
+                completion(.failure(ErrorType.invalidResponse))
+                return
+            }
+            
+            let result = self.handleNetworkResponse(data, response)
+            completion(result)
         })
 
         self.task?.resume()
 
     }
+
 
     
     fileprivate func builđData(for image: UIImage, request: inout URLRequest) -> Data {
@@ -285,3 +304,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     }
     
 }
+
+
+
+

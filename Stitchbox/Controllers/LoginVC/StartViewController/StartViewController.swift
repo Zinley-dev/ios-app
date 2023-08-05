@@ -14,7 +14,6 @@ import ZSWTaggedString
 import SafariServices
 import AuthenticationServices
 import ObjectMapper
-import AppsFlyerLib
 
 
 class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {

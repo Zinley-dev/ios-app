@@ -16,7 +16,6 @@ import AVFAudio
 import ObjectMapper
 import AppTrackingTransparency
 import AdSupport
-import AppsFlyerLib
 import AsyncDisplayKit
 
 
@@ -947,9 +946,9 @@ class CustomSlider: UISlider {
         let thumb = thumbImage(radius: thumbRadius)
         setThumbImage(thumb, for: .normal)
         
-        self.addTarget(self, action: #selector(sliderDidStartSliding), for: .touchDown)
-        self.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
-        self.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
+        addTarget(self, action: #selector(sliderDidStartSliding), for: .touchDown)
+        addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
+        addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
     }
     
     
@@ -1232,46 +1231,17 @@ func removeAllUserDefaults() {
 
 
 func requestTrackingAuthorization(userId: String) {
-    AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
-    ATTrackingManager.requestTrackingAuthorization { status in
-        switch status {
-        case .authorized:
-            // User has authorized tracking.
-            print("User has authorized tracking.")
-            AppsFlyerLib.shared().customerUserID = userId
-            AppsFlyerLib.shared().start(completionHandler: { (dictionary, error) in
-                        if (error != nil){
-                            print(error ?? "")
-                            return
-                        } else {
-                            print(dictionary ?? "")
-                            return
-                        }
-                    })
-        case .denied:
-            // User has denied tracking.
-            print("User has denied tracking.")
-        case .notDetermined:
-            // User has not yet made a choice.
-            print("User has not yet made a choice.")
-        case .restricted:
-            // The device is restricted from tracking.
-            print("The device is restricted from tracking.")
-        @unknown default:
-            // Handle other cases.
-            print("Unknown case.")
-        }
-    }
+
 }
 
 extension UIView {
     func pinToSuperviewEdges() {
-        guard let superview = self.superview else { return }
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
-        self.bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
-        self.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
-        self.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
+        guard let superview = superview else { return }
+        translatesAutoresizingMaskIntoConstraints = false
+        topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
+        bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
+        leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
+        trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
     }
 }
 
@@ -1280,11 +1250,11 @@ class ShadowedView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.5
-        self.layer.shadowOffset = CGSize(width: 0, height: 2)
-        self.layer.shadowRadius = 5
-        self.layer.masksToBounds = false
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.5
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowRadius = 5
+        layer.masksToBounds = false
     }
 
 }

@@ -27,6 +27,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         view.removeGestureRecognizer(panGestureRecognizer)
         videoNode.player?.pause()
         videoNode.delegate = nil
+        videoNode.url = nil
+        videoNode.asset = nil
         panGestureRecognizer.delegate = nil
         
         cleanup(view: view)
@@ -605,14 +607,14 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         sideButtonsView = ButtonSideList()
         sideButtonsView.backgroundColor = .clear
         sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(self.sideButtonsView)
-        originalCenter = self.view.center
+        view.addSubview(sideButtonsView)
+        originalCenter = view.center
 
         NSLayoutConstraint.activate([
-            sideButtonsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
-            sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -55),
+            sideButtonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            sideButtonsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -55),
             sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
-            sideButtonsView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
+            sideButtonsView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
     }
 

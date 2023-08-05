@@ -11,7 +11,6 @@ import AlamofireImage
 import Alamofire
 import FLAnimatedImage
 import ObjectMapper
-import AppsFlyerLib
 
 class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
@@ -216,7 +215,9 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
             if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? OriginalNode {
                 
-                node.pauseVideo(index: node.currentIndex!)
+                if node.currentIndex != nil {
+                    node.pauseVideo(index: node.currentIndex!)
+                }
                 
             }
 

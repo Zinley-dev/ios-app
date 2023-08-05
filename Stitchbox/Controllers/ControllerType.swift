@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import EzPopup
 import SwiftUI
 
 protocol ControllerType: UIViewController {
@@ -31,22 +30,13 @@ extension ControllerType {
     
     func presentError(error: Error) {
     
-        // For Dismissing the Popup
-        SwiftLoader.hide()
-        let alert = UIAlertController(title: "Error", message: error._domain, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+      
         
     }
     
     func presentMessage(message: String) {
         
-        // Dismiss current Viewcontroller and back to ViewController B
-        SwiftLoader.hide()
-        self.navigationController?.popViewController(animated: true)
-        let alert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Return", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+       
     }
     
 }

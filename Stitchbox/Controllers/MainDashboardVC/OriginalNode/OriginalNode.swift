@@ -89,12 +89,14 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
             self.collectionNode.view.indicatorStyle = .white
             self.addAnimatedLabelToTop()
             
-            self.getStitchTo() {
+            self.getStitchTo() { [weak self] in
+                guard let self = self else { return }
                 
                 self.collectionNode.delegate = self
                 self.collectionNode.dataSource = self
                 
-                self.addSubCollection() {
+                self.addSubCollection() { [weak self] in
+                    guard let self = self else { return }
                     
                     self.stitchDone = true
                     
@@ -757,7 +759,8 @@ extension OriginalNode {
             }
         } else {
             
-            delay(0.75) {
+            delay(0.75) { [weak self] in
+                guard let self = self else { return }
                 if cell.sideButtonsView != nil {
                     if postCount > 1 {
                         cell.sideButtonsView.statusImg.isHidden = false
@@ -963,7 +966,8 @@ extension OriginalNode {
                 collectionNode.setContentOffset(CGPoint(x: nextOffset, y: 0), animated: true)
 
                 // Delay the scroll back by 1 second.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
+                    guard let self = self else { return }
                     // Scroll back to the original item.
                     let currentIndexPath = IndexPath(item: self.currentIndex!, section: 0)
                     self.collectionNode.scrollToItem(at: currentIndexPath, at: .left, animated: true)

@@ -341,20 +341,20 @@
                                 <color key="backgroundColor" red="0.16083192830000001" green="0.16467335820000001" blue="0.18431678409999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WELCOME TO STITCHBOX" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MoT-Op-8Rj">
-                                <rect key="frame" x="26.5" y="502.5" width="322" height="32"/>
+                                <rect key="frame" x="18.5" y="503.5" width="338" height="31.5"/>
                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="27"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="znR-BX-pDM">
-                                <rect key="frame" x="147.5" y="413" width="80" height="79.5"/>
+                                <rect key="frame" x="147.5" y="414" width="80" height="79.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="KhQ-8E-XXP"/>
                                     <constraint firstAttribute="width" secondItem="znR-BX-pDM" secondAttribute="height" multiplier="130:129" id="jIi-mE-gJ7"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By using any of these login option above.               You agree to our Term of Use and Privacy Policy." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QHM-oC-nqz" customClass="ZSWTappableLabel">
-                                <rect key="frame" x="37.5" y="606.5" width="300" height="28.5"/>
+                                <rect key="frame" x="37.5" y="607" width="300" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="dKk-0E-RZe"/>
                                 </constraints>
@@ -363,7 +363,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1gE-Sa-qHz">
-                                <rect key="frame" x="25" y="550.5" width="325" height="40"/>
+                                <rect key="frame" x="25" y="551" width="325" height="40"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3mN-YX-AWw">
                                         <rect key="frame" x="0.0" y="0.0" width="325" height="40"/>
@@ -1877,12 +1877,12 @@
     </scenes>
     <designables>
         <designable name="QHM-oC-nqz">
-            <size key="intrinsicContentSize" width="519.5" height="14.5"/>
+            <size key="intrinsicContentSize" width="532" height="14"/>
         </designable>
     </designables>
     <resources>
         <image name="Launch 2" width="390" height="830"/>
-        <image name="Logo" width="131" height="129"/>
+        <image name="Logo" width="56.5" height="52"/>
         <image name="Tiktok" width="53" height="52"/>
         <image name="apple" width="53" height="52"/>
         <image name="fb" width="53" height="52"/>
