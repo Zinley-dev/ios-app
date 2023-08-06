@@ -7593,9 +7593,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RyZ-fq-mQQ" customClass="GMSMapView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RyZ-fq-mQQ" customClass="MKMapView">
                                 <rect key="frame" x="16" y="82" width="343" height="300"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="FaE-3C-Vgr"/>
                                 </constraints>
@@ -7791,7 +7791,7 @@
                         <outlet property="cityLbl" destination="bvO-9j-tgb" id="eCh-te-tEI"/>
                         <outlet property="countryLbl" destination="fug-TF-wBL" id="wbV-b8-gk0"/>
                         <outlet property="ispLbl" destination="yn8-FW-Jpz" id="ewa-TB-f0N"/>
-                        <outlet property="mapView" destination="RyZ-fq-mQQ" id="onp-KG-Iy9"/>
+                        <outlet property="mapView" destination="RyZ-fq-mQQ" id="A4r-kA-LTq"/>
                         <outlet property="regionLbl" destination="xSQ-Kw-8MV" id="aeV-6i-OHC"/>
                         <outlet property="timeLbl" destination="mcG-aU-FLs" id="q4F-rc-3YF"/>
                     </connections>
