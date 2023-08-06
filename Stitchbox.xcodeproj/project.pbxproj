@@ -2493,6 +2493,13 @@
 			path = SlideAnimator;
 			sourceTree = "<group>";
 		};
+		6A9A26912A801EA600F4D45A /* TestNode */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TestNode;
+			sourceTree = "<group>";
+		};
 		6A9E3AEF29E913C3002B36D7 /* RiotAccountModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -2539,6 +2546,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A9A26912A801EA600F4D45A /* TestNode */,
 				6AE3BEEE2A6C721900AAA5DD /* StitchDashboard */,
 				6AE3BEDC2A68830E00AAA5DD /* SuggestFollowVC */,
 				6A6071F72A631FBE003538EF /* TrendingVC */,

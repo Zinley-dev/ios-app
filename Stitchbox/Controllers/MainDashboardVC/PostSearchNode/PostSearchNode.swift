@@ -16,115 +16,32 @@ class PostSearchNode: ASCellNode {
     
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
-    
+    var stitchCountNode: ASTextNode!
+    var infoNode: ASTextNode!
+    var videoSignNode: ASImageNode!
+    var stitchSignNode: ASImageNode!
+    var countNode: ASTextNode!
+   
     let paragraphStyles = NSMutableParagraphStyle()
-    
-    
-    private lazy var stitchSignNode: ASImageNode = {
-        let imageNode = ASImageNode()
-        imageNode.image = UIImage(named: "partner white")
-        imageNode.contentMode = .scaleAspectFill
-        imageNode.style.preferredSize = CGSize(width: 25, height: 25) // set the size here
-        imageNode.clipsToBounds = true
 
-        // Add shadow to layer
-        imageNode.shadowColor = UIColor.black.cgColor
-        imageNode.shadowOpacity = 0.5
-        imageNode.shadowOffset = CGSize(width: 0, height: 2)
-        imageNode.shadowRadius = 2
-        
-        return imageNode
-    }()
-
-
-    private lazy var stitchCountNode: ASTextNode = {
-        let textNode = ASTextNode()
-        let paragraphStyle = NSMutableParagraphStyle()
-        //textNode.style.preferredSize = CGSize(width: 100, height: 25) // set the size here
-        paragraphStyle.alignment = .center
-        textNode.attributedText = NSAttributedString(
-            string: "0",
-            attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style as an example
-                NSAttributedString.Key.foregroundColor: UIColor.white,
-                NSAttributedString.Key.paragraphStyle: paragraphStyle
-            ]
-        )
-
-        textNode.maximumNumberOfLines = 1
-        return textNode
-    }()
-    
-    private lazy var videoSignNode: ASImageNode = {
-        let imageNode = ASImageNode()
-        imageNode.image = UIImage(named: "play")
-        imageNode.contentMode = .scaleAspectFill
-        imageNode.style.preferredSize = CGSize(width: 25, height: 25) // set the size here
-        imageNode.clipsToBounds = true
-
-        // Add shadow to layer
-        imageNode.shadowColor = UIColor.black.cgColor
-        imageNode.shadowOpacity = 0.5
-        imageNode.shadowOffset = CGSize(width: 0, height: 2)
-        imageNode.shadowRadius = 2
-        
-        return imageNode
-    }()
-
-
-    private lazy var countNode: ASTextNode = {
-        let textNode = ASTextNode()
-        let paragraphStyle = NSMutableParagraphStyle()
-        //textNode.style.preferredSize = CGSize(width: 100, height: 25) // set the size here
-        paragraphStyle.alignment = .center
-        textNode.attributedText = NSAttributedString(
-            string: "0",
-            attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style as an example
-                NSAttributedString.Key.foregroundColor: UIColor.white,
-                NSAttributedString.Key.paragraphStyle: paragraphStyle
-            ]
-        )
-
-        textNode.maximumNumberOfLines = 1
-        return textNode
-    }()
-    
-    
-    private lazy var infoNode: ASTextNode = {
-        let textNode = ASTextNode()
-        //textNode.style.preferredSize.width = 70
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        textNode.attributedText = NSAttributedString(
-            string: "",
-            attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
-                NSAttributedString.Key.foregroundColor: UIColor.black,
-                NSAttributedString.Key.paragraphStyle: paragraphStyle
-            ]
-        )
-
-        textNode.backgroundColor = .black // set the background color to dark gray
-        textNode.maximumNumberOfLines = 1
-
-        DispatchQueue.main.async {
-            textNode.view.cornerRadius = 3
-        }
-        
-        return textNode
-    }()
 
     init(with post: PostModel, keyword: String) {
         
         self.post = post
         self.nameNode = ASTextNode()
+        self.stitchCountNode = ASTextNode()
+        self.countNode = ASTextNode()
+        self.infoNode = ASTextNode()
+        
         self.imageNode = ASNetworkImageNode()
+        self.videoSignNode = ASImageNode()
+        self.stitchSignNode = ASImageNode()
+       
         
         super.init()
         
         self.backgroundColor = .clear // set background to clear
-        
+        setupnode()
         paragraphStyles.alignment = .center
         
         let title = post.content
@@ -164,13 +81,17 @@ class PostSearchNode: ASCellNode {
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
         )
-
-
         
-        countView(with: post)
-        countViewStitch(with: post)
         automaticallyManagesSubnodes = true
     }
+    
+    override func didLoad() {
+        super.didLoad()
+        
+        countView()
+        countViewStitch()
+    }
+    
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let nameNodeHeight: CGFloat = 35.0 // Set your desired height
@@ -224,7 +145,49 @@ class PostSearchNode: ASCellNode {
         return insetLayoutSpec
     }
 
+    func setupnode() {
+        
+        stitchSignNode.image = UIImage(named: "partner white")
+        stitchSignNode.contentMode = .scaleAspectFill
+        stitchSignNode.style.preferredSize = CGSize(width: 25, height: 25) // set the size here
+        stitchSignNode.clipsToBounds = true
 
+        // Add shadow to layer
+        stitchSignNode.shadowColor = UIColor.black.cgColor
+        stitchSignNode.shadowOpacity = 0.5
+        stitchSignNode.shadowOffset = CGSize(width: 0, height: 2)
+        stitchSignNode.shadowRadius = 2
+        
+        
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        //textNode.style.preferredSize = CGSize(width: 100, height: 25) // set the size here
+        paragraphStyle.alignment = .center
+        stitchCountNode.maximumNumberOfLines = 1
+        
+        videoSignNode.image = UIImage(named: "play")
+        videoSignNode.contentMode = .scaleAspectFill
+        videoSignNode.style.preferredSize = CGSize(width: 25, height: 25) // set the size here
+        videoSignNode.clipsToBounds = true
+
+        // Add shadow to layer
+        videoSignNode.shadowColor = UIColor.black.cgColor
+        videoSignNode.shadowOpacity = 0.5
+        videoSignNode.shadowOffset = CGSize(width: 0, height: 2)
+        videoSignNode.shadowRadius = 2
+        
+    
+        countNode.maximumNumberOfLines = 1
+       
+        infoNode.backgroundColor = .black // set the background color to dark gray
+        infoNode.maximumNumberOfLines = 1
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.infoNode.view.cornerRadius = 3
+        }
+        
+    }
 
 
     func searchString(in text: String, for keyword: String, maxLength: Int) -> String? {
@@ -238,14 +201,16 @@ class PostSearchNode: ASCellNode {
         return nil
     }
 
-    func countView(with data: PostModel) {
+    func countView() {
         
-        APIManager.shared.getPostStats(postId: data.id) { [weak self] result in
+        APIManager.shared.getPostStats(postId: post.id) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success(let apiResponse):
-
+                
+                print(apiResponse)
+                
                 guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
                     print("Couldn't cast")
                     return
@@ -272,6 +237,7 @@ class PostSearchNode: ASCellNode {
                 } catch {
                     print("Error decoding JSON: \(error)")
                 }
+                
             case .failure(let error):
                 print(error)
             }
@@ -280,15 +246,16 @@ class PostSearchNode: ASCellNode {
     }
     
     
-    func countViewStitch(with data: PostModel) {
+    func countViewStitch() {
         
-        APIManager.shared.countPostStitch(pid: data.id) { [weak self] result in
+        APIManager.shared.countPostStitch(pid: post.id) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success(let apiResponse):
                 print(apiResponse)
 
+                
                 guard let total = apiResponse.body?["total"] as? Int else {
                     print("Couldn't find the 'total' key")
                     return

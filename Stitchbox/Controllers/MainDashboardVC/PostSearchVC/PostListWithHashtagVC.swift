@@ -16,9 +16,6 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
     deinit {
         print("PostListWithHashtagVC is being deallocated.")
         NotificationCenter.default.removeObserver(self)
-        collectionNode.delegate = nil
-        collectionNode.dataSource = nil
-        
     }
     
     var searchHashtag: String?

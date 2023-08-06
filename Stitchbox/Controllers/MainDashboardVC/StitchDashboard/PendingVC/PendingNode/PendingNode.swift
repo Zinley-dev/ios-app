@@ -62,9 +62,6 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     var pendingView: HandlePendingView!
     //HandlePendingView
     
-    private let fireworkController = FountainFireworkController()
-    private let fireworkController2 = ClassicFireworkController()
- 
     let maximumShowing = 100
     
     var approveBtn : ((ASCellNode) -> Void)?

@@ -16,12 +16,9 @@ import AuthenticationServices
 import ObjectMapper
 
 
+
 class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-        print("StartViewController is being deallocated.")
-    }
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
@@ -56,7 +53,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     var URL: Foundation.URL {
         switch self {
         case .Privacy:
-            return Foundation.URL(string: "https://stitchbox.net/privacy-policy")!
+            return Foundation.URL(string: "https://stitchbox.net/public-policy")!
         case .TermsOfUse:
             return Foundation.URL(string: "https://stitchbox.net/term-of-use")!
            
@@ -226,37 +223,25 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     .disposed(by: disposeBag)
   }
   
-    func buildUI() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            guard let path = Bundle.main.path(forResource: "bg", ofType: "mp4") else {
-                print("Video file not found")
-                return
-            }
-
-            let url = URL(fileURLWithPath: path)
-
-            self.player = AVPlayer(url: url)
-            self.player?.actionAtItemEnd = .none
-            self.player?.isMuted = true
-
-            DispatchQueue.main.async {
-                let playerLayer = AVPlayerLayer(player: self.player)
-                playerLayer.frame = self.view.frame
-                playerLayer.videoGravity = .resizeAspectFill
-                self.contentView.layer.insertSublayer(playerLayer, at: 0)
-                self.player?.seek(to: CMTime.zero)
-                self.player?.play()
-
-                // Customizations related to the button
-                self.btnLetStart.setTitle("", for: .normal)
-                self.collectionLoginProviders.forEach { (btn) in
-                    btn.setTitle("", for: .normal)
-                }
-            }
-        }
+  func buildUI() {
+    let path = Bundle.main.path(forResource: "bg", ofType: ".mp4")
+    player = AVPlayer(url: URL(fileURLWithPath: path!))
+    player?.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
+    let playerLayer = AVPlayerLayer(player: player)
+    playerLayer.frame = self.view.frame
+    playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+    self.contentView.layer.insertSublayer(playerLayer, at: 0)
+    player!.seek(to: CMTime.zero)
+    player!.play()
+    self.player?.isMuted = true
+    
+    //btnLetStart.layer.cornerRadius = btnLetStart.frame.height / 2
+    btnLetStart.setTitle("", for: .normal)
+    collectionLoginProviders.forEach { (btn) in
+      btn.setTitle("", for: .normal)
     }
-
-
+  
+  }
   
   @IBAction func didTapLetStart(_ sender: UIButton) {
 //    self.presentLoading()
@@ -375,8 +360,9 @@ extension StartViewController {
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getSettings { result in
-            
+        APIManager.shared.getSettings { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let apiResponse):
             
@@ -384,8 +370,6 @@ extension StartViewController {
                     completed()
                     return
                 }
-                
-                print(data)
                 
                 let settings =  Mapper<SettingModel>().map(JSONObject: data)
                 globalSetting = settings
@@ -405,21 +389,21 @@ extension StartViewController {
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
         
-        APIManager.shared.getme { result in
-           
+        APIManager.shared.getme { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let response):
                 
                 if let data = response.body {
                     
-                
+                  
+                    
                     if !data.isEmpty {
-                        
+                    
                         if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
-                            
                             _AppCoreData.reset()
                             _AppCoreData.userDataSource.accept(newUserData)
-                            
                             completed()
                         } else {
                             completed()
@@ -446,4 +430,3 @@ extension StartViewController {
     
     
 }
-

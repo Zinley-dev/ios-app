@@ -57,10 +57,10 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     var currentTimeStamp: TimeInterval!
     var originalCenter: CGPoint?
     var label: ActiveLabel!
+    
+    
     var pinchGestureRecognizer: UIPinchGestureRecognizer!
     var panGestureRecognizer: UIPanGestureRecognizer!
-
-    //var panGestureRecognizer: UIPanGestureRecognizer!
     
     private let fireworkController = FountainFireworkController()
     private let fireworkController2 = ClassicFireworkController()
@@ -866,7 +866,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         //guard let view = videoNode.view else { return }
     
         if recognizer.state == .began {
-            disableScroll()
+            disableSroll()
         }
 
         if recognizer.state == .changed {
@@ -891,14 +891,12 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             if post.muxPlaybackId != "" {
                 let tempTransform = videoNode.view.transform.concatenating(scaleTransform)
                 
-                UIView.animate(withDuration: 0.2, animations: { [weak self] in
-                    guard let self = self else { return }
+                UIView.animate(withDuration: 0.2, animations: {
                     if tempTransform.a < 1.0 {
                         self.videoNode.view.transform = CGAffineTransform.identity
                         //self.videoNode.view.center = self.originalCenter!
                     }
-                }, completion: { [weak self] _ in
-                            guard let self = self else { return }
+                        }, completion: { _ in
                             self.enableScroll()
                 })
             }
@@ -906,15 +904,13 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         }
     }
-
-
-
-
+    
+    
     @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
         //guard let view = recognizer.view else { return }
 
         if recognizer.state == .began {
-            disableScroll()
+            disableSroll()
            
         }
 
@@ -935,8 +931,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
            
             UIView.animate(withDuration: 0.2, animations: {
                         
-                    }, completion: { [weak self] _ in
-                        guard let self = self else { return }
+                    }, completion: { _ in
                         self.enableScroll()
                     })
             
@@ -1895,50 +1890,6 @@ extension ReelNode {
 }
 
 
-extension ReelNode {
-    
-    func disableScroll() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-
-            if let update1 = vc as? FeedViewController {
-                            
-                update1.collectionNode.view.isScrollEnabled = false
-                            
-                        } else if let update1 = vc as? SelectedPostVC {
-                            
-                            update1.collectionNode.view.isScrollEnabled = false
-                            
-                        }
-            
-            
-        }
-        
-        
-    }
-    
-    func enableScroll() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if let update1 = vc as? FeedViewController {
-                            
-                update1.collectionNode.view.isScrollEnabled = true
-                            
-                        } else if let update1 = vc as? SelectedPostVC {
-                            
-                            update1.collectionNode.view.isScrollEnabled = true
-                            
-                        }
-            
-            
-        }
-        
-    }
-    
-}
-
 extension ReelNode: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -2130,3 +2081,55 @@ extension ReelNode {
     
 }
 
+
+
+extension ReelNode {
+    
+    func disableSroll() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if vc is FeedViewController || vc is SelectedPostVC {
+                
+                if let update1 = vc as? FeedViewController {
+                    
+                    update1.collectionNode.view.isScrollEnabled = false
+                    
+                } else if let update1 = vc as? SelectedPostVC {
+                    
+                    update1.collectionNode.view.isScrollEnabled = false
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    func enableScroll() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if vc is FeedViewController || vc is SelectedPostVC {
+                
+                if let update1 = vc as? FeedViewController {
+                    
+                    update1.collectionNode.view.isScrollEnabled = true
+                    
+                } else if let update1 = vc as? SelectedPostVC {
+                    
+                    update1.collectionNode.view.isScrollEnabled = true
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+    }
+    
+}

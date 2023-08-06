@@ -708,16 +708,16 @@ extension FeedViewController: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = OriginalNode(with: post)
+            let node = ReelNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
-            
+            /*
             if self.isfirstLoad, indexPath.row == 0 {
                 self.isfirstLoad = false
                 node.isFirst = true
                 
-            }
+            }*/
               
             return node
         }

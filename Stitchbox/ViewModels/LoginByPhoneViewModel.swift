@@ -53,16 +53,14 @@ class LoginByPhoneSendCodeViewModel: ViewModelProtocol {
                 }
                 
                 print("=====LOGIN=====")
-                print(phone, countryCode)
-                print(phone.formatPhoneNumber())
-                // call api toward login api of backend
+                print(countryCode + phone.formatPhoneNumber())
                 APIManager.shared.phoneLogin(phone: countryCode + phone.formatPhoneNumber()) { [unowned self] result in
                    
                     switch result {
                     case .success(let apiResponse):
                         // get and process data
                         print(apiResponse)
-                        if let data = apiResponse.body?["data"], data != nil {
+                        if (apiResponse.body?["data"]) != nil {
                             let newUserData = Mapper<UserDataSource>().map(JSON: ["phone": "\(countryCode)\(phone.formatPhoneNumber())", "signinMethod": "phone"])
                             _AppCoreData.userDataSource.accept(newUserData)
                             self.OTPSentSubject.onNext(true)
