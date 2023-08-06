@@ -39,7 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
     -> Bool {
     
-        
         setupPixelSDK()
         //sendbird_authentication()
         //syncSendbirdAccount()
@@ -49,7 +48,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         activeSpeaker()
         setupVolumeObserver()
         sentrySetup()
-        
         
         return true
         

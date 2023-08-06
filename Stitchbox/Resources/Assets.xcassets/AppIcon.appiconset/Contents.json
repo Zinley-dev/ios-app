@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Icon-App-20x20@2x 1.png",
+      "filename" : "Icon-App-20x20@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
@@ -71,7 +71,7 @@
       "size" : "20x20"
     },
     {
-      "filename" : "Icon-App-20x20@2x.png",
+      "filename" : "Icon-App-20x20@2x 1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
@@ -139,7 +139,7 @@
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "logoSB.png",
+      "filename" : "icon-messages-app-store-1024x1024.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

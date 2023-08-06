@@ -23,17 +23,6 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     
     deinit {
         print("ReelNode is being deallocated.")
-        NotificationCenter.default.removeObserver(self)
-        view.removeGestureRecognizer(panGestureRecognizer)
-        videoNode.player?.pause()
-        videoNode.delegate = nil
-        videoNode.url = nil
-        videoNode.asset = nil
-        panGestureRecognizer.delegate = nil
-        
-        cleanup(view: view)
-
-        
     }
     
     var allowProcess = true
@@ -73,8 +62,10 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
     //var panGestureRecognizer: UIPanGestureRecognizer!
     
-    private let fireworkController = FountainFireworkController()
-    private let fireworkController2 = ClassicFireworkController()
+    /*
+    weak let fireworkController = FountainFireworkController()
+    weak let fireworkController2 = ClassicFireworkController()
+     */
  
     let maximumShowing = 100
 
@@ -92,250 +83,13 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         super.init()
         
         
-        self.gradientNode.isLayerBacked = true
-        self.gradientNode.isOpaque = false
-        
-        
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.label = ActiveLabel()
-            self.contentNode.backgroundColor = .clear
-            self.label.backgroundColor = .clear
-            self.contentNode.view.addSubview(self.label)
-            self.contentNode.view.isUserInteractionEnabled = true
-      
-            let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
-            self.label.customColor[customType] = .lightGray
-            self.label.numberOfLines = Int(self.contentNode.lineCount)
-            self.label.enabledTypes = [.hashtag, .url, customType]
-           
-            self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-            self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
-            
-            self.label.handleCustomTap(for: customType) { [weak self] element in
-                guard let self = self else { return }
-                if element == "*more" {
-                    self.seeMore()
-                } else if element == "*hide" {
-                    self.hideContent()
-                }
-            }
+        gradientNode.isLayerBacked = true
+        gradientNode.isOpaque = false
 
-            self.label.handleHashtagTap { hashtag in
-                var selectedHashtag = hashtag
-                selectedHashtag.insert("#", at: selectedHashtag.startIndex)
-                
-            
-                if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-                    
-                    if let vc = UIViewController.currentViewController() {
-                        
-                        let nav = UINavigationController(rootViewController: PLHVC)
-
-                        // Set the user ID, nickname, and onPresent properties of UPVC
-                        PLHVC.searchHashtag = selectedHashtag
-                        PLHVC.onPresent = true
-
-                        // Customize the navigation bar appearance
-                        nav.navigationBar.barTintColor = .background
-                        nav.navigationBar.tintColor = .white
-                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                        nav.modalPresentationStyle = .fullScreen
-                        vc.present(nav, animated: true, completion: nil)
-               
-                    }
-                }
-                
-                
-            }
-
-            self.label.handleURLTap { [weak self] string in
-                guard let self = self else { return }
-                let url = string.absoluteString
-                
-                if url.contains("https://stitchbox.net/app/account/") {
-                    
-                    if let id = self.getUIDParameter(from: url) {
-                        self.moveToUserProfileVC(id: id)
-                    }
-        
-                } else if url.contains("https://stitchbox.net/app/post/") {
-                
-                    if let id = self.getUIDParameter(from: url) {
-                        self.openPost(id: id)
-                    }
-
-                } else {
-                    
-                    guard let requestUrl = URL(string: url) else {
-                        return
-                    }
-
-                    if UIApplication.shared.canOpenURL(requestUrl) {
-                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                    }
-                }
-                
-            }
-            
-            
-            self.setupDefaultContent()
-            
-         
-            let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
-            self.view.addGestureRecognizer(pinchGestureRecognizer)
-            
-            
-            self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
-            self.panGestureRecognizer.delegate = self
-            self.panGestureRecognizer.minimumNumberOfTouches = 2
-            self.view.addGestureRecognizer(self.panGestureRecognizer)
-            
-            
-            
-            self.headerView = PostHeader()
-            self.headerNode.view.addSubview(self.headerView)
-
-            self.headerView.translatesAutoresizingMaskIntoConstraints = false
-            self.headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
-            self.headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
-            self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
-            self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
-            
-            if post.setting?.allowStitch == false {
-                self.headerView.createStitchView.isHidden = true
-                self.headerView.createStitchStack.isHidden = true
-                self.headerView.stichBtn.isHidden = true
-            } else {
-                
-                if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
-                    self.headerView.createStitchView.isHidden = true
-                    self.headerView.createStitchStack.isHidden = true
-                    self.headerView.stichBtn.isHidden = true
-                } else {
-                    self.headerView.createStitchView.isHidden = false
-                    self.headerView.stichBtn.isHidden = false
-                    self.headerView.createStitchStack.isHidden = false
-                }
-            }
-            
-            if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
-                
-                self.headerView.followBtn.isHidden = true
-                
-            } else {
-                
-                checkIfFollow()
-                checkIfFollowedMe()
-                
-                // check
-                
-            }
-            
-            self.buttonsView = ButtonsHeader()
-            self.buttonNode.view.addSubview(self.buttonsView)
-            self.buttonsView.translatesAutoresizingMaskIntoConstraints = false
-            self.buttonsView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
-            self.buttonsView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
-            self.buttonsView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
-            self.buttonsView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
-
-            self.buttonsView.likeBtn.setTitle("", for: .normal)
-            self.buttonsView.commentBtn.setTitle("", for: .normal)
-            self.buttonsView.commentBtn.setImage(cmtImage, for: .normal)
-            self.buttonsView.shareBtn.setTitle("", for: .normal)
-            self.buttonsView.shareBtn.setImage(shareImage, for: .normal)
-            self.buttonsView.saveBtn.setImage(unsaveImage, for: .normal)
-            
-            let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
-            avatarTap.numberOfTapsRequired = 1
-          
-            let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
-            usernameTap.numberOfTapsRequired = 1
-            self.headerView.usernameLbl.isUserInteractionEnabled = true
-            self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
-            
-            
-            let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
-            username2Tap.numberOfTapsRequired = 1
-           
-
-            let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.shareTapped))
-            shareTap.numberOfTapsRequired = 1
-            self.buttonsView.shareBtn.addGestureRecognizer(shareTap)
-            
-            
-            let likeTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeTapped))
-            likeTap.numberOfTapsRequired = 1
-            self.buttonsView.likeBtn.addGestureRecognizer(likeTap)
-            
-            let stitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.stitchTapped))
-            stitchTap.numberOfTapsRequired = 1
-            self.headerView.stichBtn.addGestureRecognizer(stitchTap)
-            
-            
-            let saveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.onClickSave))
-            saveTap.numberOfTapsRequired = 1
-            self.buttonsView.saveBtn.addGestureRecognizer(saveTap)
-            
-            
-            let commentTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.cmtTapped))
-            commentTap.numberOfTapsRequired = 1
-            self.buttonsView.commentBtn.addGestureRecognizer(commentTap)
-            
-            
-            let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeHandle))
-            doubleTap.numberOfTapsRequired = 2
-            self.view.addGestureRecognizer(doubleTap)
-            
-            doubleTap.delaysTouchesBegan = true
-            
-            
-            let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ReelNode.settingTapped))
-            longPress.minimumPressDuration = 0.65
-            self.view.addGestureRecognizer(longPress)
-            
-            longPress.delaysTouchesBegan = true
-            
-            //-------------------------------------//
-            
-            
-            self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
-            
-            self.checkIfLike()
-            self.totalLikeCount()
-            self.totalCmtCount()
-            self.shareCount()
-            self.getSaveCount()
-            self.checkIfSave()
-        }
-       
         
         automaticallyManagesSubnodes = true
         
-        
-        DispatchQueue.main.async() { [weak self] in
-            guard let self = self else { return }
-            self.sideButtonsView = ButtonSideList()
-            self.sideButtonsView.backgroundColor = .clear
-            self.sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
-            self.view.addSubview(self.sideButtonsView)
-            self.originalCenter = self.view.center
 
-            NSLayoutConstraint.activate([
-                self.sideButtonsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
-                self.sideButtonsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -55),
-                self.sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
-                self.sideButtonsView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
-            ])
-
-            let viewStitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.viewStitchTapped))
-            viewStitchTap.numberOfTapsRequired = 1
-            self.sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
-        }
-    
         
         if post.muxPlaybackId != "" {
             videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
@@ -389,6 +143,238 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
   
     }
     
+    override func didLoad() {
+        super.didLoad()
+        
+        label = ActiveLabel()
+        contentNode.backgroundColor = .clear
+        label.backgroundColor = .clear
+        contentNode.view.addSubview(self.label)
+        contentNode.view.isUserInteractionEnabled = true
+  
+        let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
+        label.customColor[customType] = .lightGray
+        label.numberOfLines = Int(self.contentNode.lineCount)
+        label.enabledTypes = [.hashtag, .url, customType]
+       
+        label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+        label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+        
+        label.handleCustomTap(for: customType) { [weak self] element in
+            guard let self = self else { return }
+            if element == "*more" {
+                self.seeMore()
+            } else if element == "*hide" {
+                self.hideContent()
+            }
+        }
+
+        label.handleHashtagTap { hashtag in
+            var selectedHashtag = hashtag
+            selectedHashtag.insert("#", at: selectedHashtag.startIndex)
+            
+        
+            if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+                
+                if let vc = UIViewController.currentViewController() {
+                    
+                    let nav = UINavigationController(rootViewController: PLHVC)
+
+                    // Set the user ID, nickname, and onPresent properties of UPVC
+                    PLHVC.searchHashtag = selectedHashtag
+                    PLHVC.onPresent = true
+
+                    // Customize the navigation bar appearance
+                    nav.navigationBar.barTintColor = .background
+                    nav.navigationBar.tintColor = .white
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                    nav.modalPresentationStyle = .fullScreen
+                    vc.present(nav, animated: true, completion: nil)
+           
+                }
+            }
+            
+            
+        }
+
+        self.label.handleURLTap { [weak self] string in
+            guard let self = self else { return }
+            let url = string.absoluteString
+            
+            if url.contains("https://stitchbox.net/app/account/") {
+                
+                if let id = self.getUIDParameter(from: url) {
+                    self.moveToUserProfileVC(id: id)
+                }
+    
+            } else if url.contains("https://stitchbox.net/app/post/") {
+            
+                if let id = self.getUIDParameter(from: url) {
+                    self.openPost(id: id)
+                }
+
+            } else {
+                
+                guard let requestUrl = URL(string: url) else {
+                    return
+                }
+
+                if UIApplication.shared.canOpenURL(requestUrl) {
+                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                }
+            }
+            
+        }
+        
+        
+        setupDefaultContent()
+        
+     
+        let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+        view.addGestureRecognizer(pinchGestureRecognizer)
+        
+        
+        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
+        panGestureRecognizer.delegate = self
+        panGestureRecognizer.minimumNumberOfTouches = 2
+        view.addGestureRecognizer(self.panGestureRecognizer)
+        
+        headerView = PostHeader()
+        headerNode.view.addSubview(self.headerView)
+
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
+        headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
+        headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
+        headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
+        
+        if post.setting?.allowStitch == false {
+            headerView.createStitchView.isHidden = true
+            headerView.createStitchStack.isHidden = true
+            headerView.stichBtn.isHidden = true
+        } else {
+            
+            if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
+                headerView.createStitchView.isHidden = true
+                headerView.createStitchStack.isHidden = true
+                headerView.stichBtn.isHidden = true
+            } else {
+                headerView.createStitchView.isHidden = false
+                headerView.stichBtn.isHidden = false
+                headerView.createStitchStack.isHidden = false
+            }
+        }
+        
+        if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
+            
+            self.headerView.followBtn.isHidden = true
+            
+        } else {
+            
+            checkIfFollow()
+            checkIfFollowedMe()
+            
+            // check
+            
+        }
+        
+        buttonsView = ButtonsHeader()
+        buttonNode.view.addSubview(self.buttonsView)
+        buttonsView.translatesAutoresizingMaskIntoConstraints = false
+        buttonsView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
+        buttonsView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
+        buttonsView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
+        buttonsView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
+
+        buttonsView.likeBtn.setTitle("", for: .normal)
+        buttonsView.commentBtn.setTitle("", for: .normal)
+        buttonsView.commentBtn.setImage(cmtImage, for: .normal)
+        buttonsView.shareBtn.setTitle("", for: .normal)
+        buttonsView.shareBtn.setImage(shareImage, for: .normal)
+        buttonsView.saveBtn.setImage(unsaveImage, for: .normal)
+           
+        //-------------------------------------//
+        
+        
+        headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
+        
+        checkIfLike()
+        totalLikeCount()
+        totalCmtCount()
+        shareCount()
+        getSaveCount()
+        checkIfSave()
+        
+        
+        let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
+        avatarTap.numberOfTapsRequired = 1
+      
+        let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
+        usernameTap.numberOfTapsRequired = 1
+        headerView.usernameLbl.isUserInteractionEnabled = true
+        headerView.usernameLbl.addGestureRecognizer(usernameTap)
+        
+        
+        let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.userTapped))
+        username2Tap.numberOfTapsRequired = 1
+       
+
+        let shareTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.shareTapped))
+        shareTap.numberOfTapsRequired = 1
+        buttonsView.shareBtn.addGestureRecognizer(shareTap)
+        
+        
+        let likeTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeTapped))
+        likeTap.numberOfTapsRequired = 1
+        buttonsView.likeBtn.addGestureRecognizer(likeTap)
+        
+        let stitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.stitchTapped))
+        stitchTap.numberOfTapsRequired = 1
+        headerView.stichBtn.addGestureRecognizer(stitchTap)
+        
+        
+        let saveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.onClickSave))
+        saveTap.numberOfTapsRequired = 1
+        buttonsView.saveBtn.addGestureRecognizer(saveTap)
+        
+        
+        let commentTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.cmtTapped))
+        commentTap.numberOfTapsRequired = 1
+        buttonsView.commentBtn.addGestureRecognizer(commentTap)
+        
+        
+        let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.likeHandle))
+        doubleTap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubleTap)
+        
+        doubleTap.delaysTouchesBegan = true
+        
+        
+        let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ReelNode.settingTapped))
+        longPress.minimumPressDuration = 0.65
+        view.addGestureRecognizer(longPress)
+        
+        longPress.delaysTouchesBegan = true
+        
+        sideButtonsView = ButtonSideList()
+        sideButtonsView.backgroundColor = .clear
+        sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(self.sideButtonsView)
+        originalCenter = self.view.center
+
+        NSLayoutConstraint.activate([
+           sideButtonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            sideButtonsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -55),
+            sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
+            sideButtonsView.heightAnchor.constraint(equalTo: view.heightAnchor)
+        ])
+
+        let viewStitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.viewStitchTapped))
+        viewStitchTap.numberOfTapsRequired = 1
+        sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
+        
+    }
     
     
     override func layout() {
@@ -1613,10 +1599,10 @@ extension ReelNode {
         imgView.center = self.view.center
         self.view.addSubview(imgView)
         
-        
+        /*
         self.fireworkController.addFirework(sparks: 10, above: imgView)
         self.fireworkController2.addFireworks(count: 10, sparks: 8, around: imgView)
-        
+        */
         imgView.transform = CGAffineTransform.identity
         
         UIView.animate(withDuration: 0.5) {
@@ -2181,6 +2167,32 @@ extension ReelNode: UIGestureRecognizerDelegate {
                 view.removeGestureRecognizer(recognizer)
             }
         }
+        
+        for sub in view.subviews  {
+            sub.removeFromSuperview()
+        }
+        
+        if let recognizers = headerNode.view.gestureRecognizers {
+            for recognizer in recognizers {
+                headerNode.view.removeGestureRecognizer(recognizer)
+            }
+        }
+        
+        for sub in headerNode.view.subviews {
+            sub.removeFromSuperview()
+        }
+        
+        if let recognizers = buttonNode.view.gestureRecognizers {
+            for recognizer in recognizers {
+                buttonNode.view.removeGestureRecognizer(recognizer)
+            }
+        }
+        
+        for sub in buttonNode.view.subviews {
+            sub.removeFromSuperview()
+        }
+               
+        
     }
 
 }

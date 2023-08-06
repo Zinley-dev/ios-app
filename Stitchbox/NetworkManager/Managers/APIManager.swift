@@ -1085,4 +1085,10 @@ extension APIManager {
       completion(result)
     }
   }
+    func getStitchInsightOverview(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
+        postStitchManager.request(.getStitchInsight(uid: userID)) {
+          result in
+          completion(result)
+        }
+      }
 }

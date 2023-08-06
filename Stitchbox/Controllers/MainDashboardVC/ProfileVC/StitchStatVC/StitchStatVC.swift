@@ -79,8 +79,8 @@ extension StitchStatVC {
     }
     
     func loadInsightData() {
-      
-        APIManager.shared.getInsightOverview(userID: _AppCoreData.userDataSource.value?.userID ?? "") { [weak self] result in
+   
+        APIManager.shared.getStitchInsightOverview(userID: _AppCoreData.userDataSource.value?.userID ?? "") { [weak self] result in
             guard let self = self else { return }
 
         
@@ -90,7 +90,7 @@ extension StitchStatVC {
                 guard let data = apiResponse.body else {
                   return
                 }
-                
+              
                 self.insightData =  Mapper<InsightModel>().map(JSONObject: data)
                 
                 DispatchQueue.main {

@@ -27,14 +27,6 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     
     deinit {
         print("OriginalNode is being deallocated.")
-   
-        selectPostCollectionView.hideBtn.gestureRecognizers?.forEach { selectPostCollectionView.hideBtn.removeGestureRecognizer($0) }
-        selectPostCollectionView.collectionView.delegate = nil
-        selectPostCollectionView.collectionView.dataSource = nil
-        collectionNode.delegate = nil
-        collectionNode.dataSource = nil
-        cleanup(view: view)
-        
     }
 
     var hasStitchChecked = false
@@ -75,45 +67,43 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
         }
         
         super.init()
-       
-      
-        Dispatch.main.async { [weak self] in
-            guard let self = self else { return }
+        
+        automaticallyManagesSubnodes = true
+        
+    }
     
-            self.collectionNode.backgroundColor = .black
-            self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
-            self.collectionNode.leadingScreensForBatching = 2.0
-            self.collectionNode.view.contentInsetAdjustmentBehavior = .never
-            self.applyStyle()
-            self.backgroundColor = .black
-            self.collectionNode.view.indicatorStyle = .white
-            self.addAnimatedLabelToTop()
+    override func didLoad() {
+        super.didLoad()
+
+        collectionNode.backgroundColor = .black
+        collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
+        collectionNode.leadingScreensForBatching = 2.0
+        collectionNode.view.contentInsetAdjustmentBehavior = .never
+        applyStyle()
+        backgroundColor = .black
+        collectionNode.view.indicatorStyle = .white
+        addAnimatedLabelToTop()
+        self.getStitchTo() { [weak self] in
+            guard let self = self else { return }
             
-            self.getStitchTo() { [weak self] in
+            self.collectionNode.delegate = self
+            self.collectionNode.dataSource = self
+            
+            self.addSubCollection() { [weak self] in
                 guard let self = self else { return }
                 
-                self.collectionNode.delegate = self
-                self.collectionNode.dataSource = self
+                self.stitchDone = true
                 
-                self.addSubCollection() { [weak self] in
-                    guard let self = self else { return }
-                    
-                    self.stitchDone = true
-                    
-                    self.currentIndex = 0
-                    self.newPlayingIndex = 0
-                    self.isVideoPlaying = true
-                    if self.isFirst {
-                        self.playVideo(index: 0)
-                    }
-                    
+                self.currentIndex = 0
+                self.newPlayingIndex = 0
+                self.isVideoPlaying = true
+                if self.isFirst {
+                    self.playVideo(index: 0)
                 }
                 
             }
-
+            
         }
-        
-        automaticallyManagesSubnodes = true
         
     }
     

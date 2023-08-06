@@ -282,6 +282,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func updateData() {
+        
         self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
             guard let self = self else { return }
             
@@ -497,7 +498,7 @@ extension FeedViewController {
     func setupHasNotiButton() {
         
         let notiButton = UIButton(type: .custom)
-        notiButton.setImage(UIImage.init(named: "homeNoti")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
+        notiButton.setImage(UIImage.init(named: "homeNoti")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
         notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
         notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let notiBarButton = UIBarButtonItem(customView: notiButton)

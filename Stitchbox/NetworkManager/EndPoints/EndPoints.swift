@@ -458,7 +458,6 @@ extension UserAPI: EndPointType {
             return "/challenge-card"
           case .deleteGameChallengeCard:
             return "/challenge-card"
-         
             
         }
     }
@@ -1867,6 +1866,7 @@ public enum PostStitchApi {
   case getMyWaitlist(page: Int)
   case getMyPostsHasStitched(page: Int)
   case getStitchTo(pid: String)
+  case getStitchInsight(uid: String)
 }
 extension PostStitchApi: EndPointType {
   var path: String {
@@ -1907,6 +1907,8 @@ extension PostStitchApi: EndPointType {
         return "/my-stitched-post?page=\(page)"
       case .getStitchTo(let pid):
         return "/stitch-to/\(pid)"
+      case .getStitchInsight(let uid):
+        return "/\(uid)/insight"
     }
   }
   
@@ -1952,6 +1954,8 @@ extension PostStitchApi: EndPointType {
         return .get
       case .countStitchBy:
         return .get
+      case .getStitchInsight:
+        return .get
     }
   }
   
@@ -1992,6 +1996,8 @@ extension PostStitchApi: EndPointType {
       case .getStitchTo:
         return .request
       case .countStitchBy:
+        return .request
+      case .getStitchInsight:
         return .request
     }
   }
