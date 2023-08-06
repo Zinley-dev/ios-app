@@ -62,10 +62,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
     //var panGestureRecognizer: UIPanGestureRecognizer!
     
-    /*
-    weak let fireworkController = FountainFireworkController()
-    weak let fireworkController2 = ClassicFireworkController()
-     */
+    private let fireworkController = FountainFireworkController()
+    private let fireworkController2 = ClassicFireworkController()
  
     let maximumShowing = 100
 
@@ -1517,10 +1515,10 @@ extension ReelNode {
         imgView.center = self.view.center
         self.view.addSubview(imgView)
         
-        /*
+        
         self.fireworkController.addFirework(sparks: 10, above: imgView)
         self.fireworkController2.addFireworks(count: 10, sparks: 8, around: imgView)
-        */
+        
         imgView.transform = CGAffineTransform.identity
         
         UIView.animate(withDuration: 0.5) {

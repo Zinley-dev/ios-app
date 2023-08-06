@@ -13,55 +13,22 @@ public enum HTTPTask {
     case requestParametersAndHeaders(bodyParameters: [String: Any]?, additionHeaders: [String: String]?)
 }
 
-protocol URLSessionProtocol: AnyObject {
-    typealias DataTaskResponse = (Data?, URLResponse?, Error?) -> Void
-    func customDataTask(with request: URLRequest, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol
-    func customUploadTask(with request: URLRequest, from data: Data, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol
-    func customInvalidateAndCancel()
-    var delegate: URLSessionDelegate? { get set }
+protocol URLSessionProtocol {
+    func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol
+    func uploadTask(with request: URLRequest, from data: Data, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol
 }
 
-class CustomURLSession: URLSessionProtocol {
-    static let shared = CustomURLSession()
-        
-    private let urlSession: URLSession
-    weak var delegate: URLSessionDelegate?
-        
-    private init(urlSession: URLSession = URLSession.shared) {
-        self.urlSession = urlSession
+extension URLSession: URLSessionProtocol {
+    func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol {
+        return dataTask(with: request, completionHandler: completionHandler) as URLSessionDataTask
     }
-
-    static func session(with configuration: URLSessionConfiguration, delegate: URLSessionDelegate?, delegateQueue: OperationQueue?) -> CustomURLSession {
-        return CustomURLSession(urlSession: URLSession(configuration: configuration, delegate: delegate, delegateQueue: delegateQueue))
-    }
-    
-    func customDataTask(with request: URLRequest, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol {
-        let task = urlSession.dataTask(with: request) { [weak self] (data, response, error) in
-            completionHandler(data, response, error)
-        }
-        return task as URLSessionDataTaskProtocol
-    }
-    
-    func customUploadTask(with request: URLRequest, from data: Data, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol {
-        let task = urlSession.uploadTask(with: request, from: data) { [weak self] (data, response, error) in
-            completionHandler(data, response, error)
-        }
-        return task as URLSessionDataTaskProtocol
-    }
-    
-    func customInvalidateAndCancel() {
-        urlSession.invalidateAndCancel()
-    }
-    
-    deinit {
-        customInvalidateAndCancel()
+    func uploadTask(with request: URLRequest, from data: Data, completionHandler: @escaping DataTaskResponse) -> URLSessionDataTaskProtocol {
+        return uploadTask(with: request, from: data, completionHandler: completionHandler) as URLSessionDataTask
     }
 }
 
 protocol URLSessionDataTaskProtocol {
     func resume()
-    func cancel()
 }
 
 extension URLSessionDataTask: URLSessionDataTaskProtocol {}
-
