@@ -61,12 +61,46 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     
     init(with post: PostModel) {
         self.post = post
+    
+        super.init()
         
         if !posts.contains(post) {
             posts.append(post)
         }
         
-        super.init()
+        
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+    
+            self.collectionNode.backgroundColor = .black
+            self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
+            self.collectionNode.leadingScreensForBatching = 2.0
+            self.collectionNode.view.contentInsetAdjustmentBehavior = .never
+            self.applyStyle()
+            self.backgroundColor = .black
+            self.collectionNode.view.indicatorStyle = .white
+            
+            self.getStitchTo() {
+                
+                self.collectionNode.delegate = self
+                self.collectionNode.dataSource = self
+                
+                self.addSubCollection() {
+                    
+                    self.stitchDone = true
+                    
+                    self.currentIndex = 0
+                    self.newPlayingIndex = 0
+                    self.isVideoPlaying = true
+                    if self.isFirst {
+                        self.playVideo(index: 0)
+                    }
+                    
+                }
+                
+            }
+
+        }
         
         automaticallyManagesSubnodes = true
         
@@ -74,38 +108,11 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     
     override func didLoad() {
         super.didLoad()
-
-        collectionNode.backgroundColor = .black
-        collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
-        collectionNode.leadingScreensForBatching = 2.0
-        collectionNode.view.contentInsetAdjustmentBehavior = .never
-        applyStyle()
-        backgroundColor = .black
-        collectionNode.view.indicatorStyle = .white
+        
         addAnimatedLabelToTop()
-        self.getStitchTo() { [weak self] in
-            guard let self = self else { return }
-            
-            self.collectionNode.delegate = self
-            self.collectionNode.dataSource = self
-            
-            self.addSubCollection() { [weak self] in
-                guard let self = self else { return }
-                
-                self.stitchDone = true
-                
-                self.currentIndex = 0
-                self.newPlayingIndex = 0
-                self.isVideoPlaying = true
-                if self.isFirst {
-                    self.playVideo(index: 0)
-                }
-                
-            }
-            
-        }
         
     }
+    
     
     func addSubCollection(completed: @escaping DownloadComplete) {
         DispatchQueue.main.async() { [weak self] in

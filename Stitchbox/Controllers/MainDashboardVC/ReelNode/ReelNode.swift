@@ -893,45 +893,19 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             if post.muxPlaybackId != "" {
                 let tempTransform = videoNode.view.transform.concatenating(scaleTransform)
                 
-                UIView.animate(withDuration: 0.2, animations: {
+                UIView.animate(withDuration: 0.2, animations: { [weak self] in
+                    guard let self = self else { return }
                     if tempTransform.a < 1.0 {
                         self.videoNode.view.transform = CGAffineTransform.identity
                         //self.videoNode.view.center = self.originalCenter!
                     }
-                        }, completion: { _ in
+                }, completion: { [weak self] _ in
+                            guard let self = self else { return }
                             self.enableScroll()
                 })
             }
   
         
-        }
-    }
-
-  
-
-    func walkthroughPanAndZoom() {
-        // Store original center for later use
-        let originalCenter = videoNode.view.center
-        
-        // Disable scrolling during walkthrough
-        disableScroll()
-
-        // Simulate pan by translating center
-        let simulatedTranslation = CGPoint(x: 30, y: 30)
-        videoNode.view.center = CGPoint(x: videoNode.view.center.x + simulatedTranslation.x, y: videoNode.view.center.y + simulatedTranslation.y)
-        
-        // Animate zoom in and pan back to original center with spring effect
-        UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.2, options: [], animations: {
-            self.videoNode.view.transform = CGAffineTransform(scaleX: 1.6, y: 1.6) // Increased zoom
-            self.videoNode.view.center = originalCenter
-        }) { _ in
-            // Animate zoom out with spring effect
-            UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.2, options: [], animations: {
-                self.videoNode.view.transform = CGAffineTransform.identity
-            }) { _ in
-                // Re-enable scrolling once walkthrough is complete
-                self.enableScroll()
-            }
         }
     }
 
@@ -963,7 +937,8 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
            
             UIView.animate(withDuration: 0.2, animations: {
                         
-                    }, completion: { _ in
+                    }, completion: { [weak self] _ in
+                        guard let self = self else { return }
                         self.enableScroll()
                     })
             
@@ -1156,65 +1131,8 @@ extension ReelNode {
         
         
     }
-    
-    func endImage(id: String) {
-        
-        if _AppCoreData.userDataSource.value != nil {
-            
-            time += 1
-            
-            if time < 2 {
-                
-                last_view_timestamp = NSDate().timeIntervalSince1970
-                isViewed = true
-            
-                APIManager.shared.createView(post: id, watchTime: 0) { result in
-                    
-                    switch result {
-                    case .success(let apiResponse):
-            
-                        print(apiResponse)
-                        
-                    case .failure(let error):
-                        print(error)
-                    }
-                
-                }
-                
-            }
-            
-        }
-        
-        
-    }
-    
-    
-    @objc func zoomAnimation() {
-        
-        let imgView = UIImageView()
-        imgView.frame.size = CGSize(width: 170, height: 120)
-        
-        imgView.center = self.view.center
-        self.view.addSubview(imgView)
-        
-        let tapImages: [UIImage] = [
-            UIImage(named: "zoom1")!,
-            UIImage(named: "zoom2")!,
-            UIImage(named: "zoom3")!
-        ]
-        
-        imgView.animationImages = tapImages
-        imgView.animationDuration = 1.5 // time duration for complete animation cycle
-        imgView.animationRepeatCount = 1 // number of times the animation repeats, set to 1 to play once
-        imgView.startAnimating()
-        
-        // Optional: clear images after animation ends
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            imgView.animationImages = nil
-            imgView.removeFromSuperview()
-        }
-        
-    }
+
+
     
 }
 
