@@ -12,6 +12,10 @@ fileprivate let FontSize: CGFloat = 13
 
 class PostSearchNode: ASCellNode {
     
+    deinit {
+        print("PostSearchNode is being deallocated.")
+    }
+    
     var post: PostModel!
     
     var nameNode: ASTextNode!

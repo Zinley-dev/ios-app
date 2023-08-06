@@ -251,6 +251,7 @@
 		6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B3F29A03C4A00BD0A9A /* GameList.swift */; };
 		6A839B4329A0424700BD0A9A /* GameStatsDomainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A839B4229A0424700BD0A9A /* GameStatsDomainModel.swift */; };
 		6A9289C62A2454100092FD58 /* SlideAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9289C52A2454100092FD58 /* SlideAnimator.swift */; };
+		6A9A26932A801EC400F4D45A /* TestNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9A26922A801EC400F4D45A /* TestNode.swift */; };
 		6A9E3AF129E913D2002B36D7 /* RiotAccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E3AF029E913D2002B36D7 /* RiotAccountModel.swift */; };
 		6A9E3AF729E9D2D0002B36D7 /* SB-ChatBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E3AF629E9D2D0002B36D7 /* SB-ChatBot.swift */; };
 		6A9E4C6229767ECA00B59176 /* PushNotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */; };
@@ -752,6 +753,7 @@
 		6A839B3F29A03C4A00BD0A9A /* GameList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameList.swift; sourceTree = "<group>"; };
 		6A839B4229A0424700BD0A9A /* GameStatsDomainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatsDomainModel.swift; sourceTree = "<group>"; };
 		6A9289C52A2454100092FD58 /* SlideAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideAnimator.swift; sourceTree = "<group>"; };
+		6A9A26922A801EC400F4D45A /* TestNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNode.swift; sourceTree = "<group>"; };
 		6A9E3AF029E913D2002B36D7 /* RiotAccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiotAccountModel.swift; sourceTree = "<group>"; };
 		6A9E3AF629E9D2D0002B36D7 /* SB-ChatBot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SB-ChatBot.swift"; sourceTree = "<group>"; };
 		6A9E4C6129767ECA00B59176 /* PushNotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationVC.swift; sourceTree = "<group>"; };
@@ -2496,6 +2498,7 @@
 		6A9A26912A801EA600F4D45A /* TestNode */ = {
 			isa = PBXGroup;
 			children = (
+				6A9A26922A801EC400F4D45A /* TestNode.swift */,
 			);
 			path = TestNode;
 			sourceTree = "<group>";
@@ -4161,6 +4164,7 @@
 				A540A8D8294731120085CC45 /* TwitterSignInService.swift in Sources */,
 				6A12359A294EFC58004B612E /* globalFile.swift in Sources */,
 				6AE3BEEA2A69AE5900AAA5DD /* TrendingHashtagNode.swift in Sources */,
+				6A9A26932A801EC400F4D45A /* TestNode.swift in Sources */,
 				6AB929D32A3D514D003E109E /* AddView.swift in Sources */,
 				6AE3BEDE2A68831900AAA5DD /* SuggestFollowVC.swift in Sources */,
 				6A0D54482974EDE30059530C /* ProfileHeaderData.swift in Sources */,

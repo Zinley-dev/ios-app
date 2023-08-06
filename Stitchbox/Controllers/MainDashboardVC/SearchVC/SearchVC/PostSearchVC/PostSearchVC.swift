@@ -293,17 +293,26 @@ extension PostSearchVC {
     
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
-        
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let selectedPostVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
             
-            SPVC.selectedPost = posts
-            SPVC.startIndex = indexPath.row
+            // Find the index of the selected post
+            let currentIndex = indexPath.row
+            
+            // Determine the range of posts to include before and after the selected post
+            let beforeIndex = max(currentIndex - 5, 0)
+            let afterIndex = min(currentIndex + 5, posts.count - 1)
 
-            self.navigationController?.pushViewController(SPVC, animated: true)
+            // Include up to 5 posts before and after the selected post in the sliced array
+            selectedPostVC.posts = Array(posts[beforeIndex...afterIndex])
+            
+            // Set the startIndex to the position of the selected post within the sliced array
+            selectedPostVC.startIndex = currentIndex - beforeIndex
+           
+            self.navigationController?.pushViewController(selectedPostVC, animated: true)
         }
-        
-        
     }
+
+
     
 }
 

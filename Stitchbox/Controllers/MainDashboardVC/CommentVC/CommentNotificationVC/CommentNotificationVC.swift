@@ -995,7 +995,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 RVC.onPresent = true
                 
                 // Set the user ID, nickname, and onPresent properties of UPVC
-                RVC.selectedPost = [viewPost]
+                RVC.posts = [viewPost]
                 RVC.startIndex = 0
                 // Customize the navigation bar appearance
                 nav.navigationBar.barTintColor = .background

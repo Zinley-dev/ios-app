@@ -592,7 +592,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 
                 // Set the user ID, nickname, and onPresent properties of UPVC
                 SPVC.onPresent = true
-                SPVC.selectedPost = [post]
+                SPVC.posts = [post]
                 SPVC.startIndex = 0
                 
                 

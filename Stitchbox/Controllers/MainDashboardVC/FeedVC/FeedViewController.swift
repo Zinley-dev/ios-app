@@ -51,7 +51,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var firstAnimated = true
     var lastLoadTime: Date?
     var isPromote = false
-
+    
+    
     
     private var pullControl = UIRefreshControl()
     
@@ -595,6 +596,7 @@ extension FeedViewController {
 
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
         guard !posts.isEmpty, scrollView == collectionNode.view else {
             return
         }
@@ -643,7 +645,7 @@ extension FeedViewController {
                 currentIndex = newPlayingIndex
                 newPlayingCell.playVideo(index: newPlayingCell.currentIndex ?? 0)
 
-                if let node = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(item: newPlayingCell.currentIndex ?? 0, section: 0)) as? ReelNode {
+                if let node = newPlayingCell.mainCollectionNode.nodeForItem(at: IndexPath(item: newPlayingCell.currentIndex ?? 0, section: 0)) as? ReelNode {
                     resetView(cell: node)
                 }
             }
@@ -651,7 +653,7 @@ extension FeedViewController {
             print("Couldn't find foundVisibleVideo")
         }
 
-        if let currentIndex = newPlayingCell.currentIndex, let cell = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
+        if let currentIndex = newPlayingCell.currentIndex, let cell = newPlayingCell.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
             if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
                 if let currentTime = cell.videoNode.currentItem?.currentTime() {
                     cell.videoNode.player?.seek(to: currentTime)
@@ -660,6 +662,7 @@ extension FeedViewController {
                 }
             }
         }
+
     }
 
  
@@ -708,16 +711,16 @@ extension FeedViewController: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = ReelNode(with: post)
+            let node = OriginalNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
+            node.automaticallyManagesSubnodes = true
             
-            /*
             if self.isfirstLoad, indexPath.row == 0 {
                 self.isfirstLoad = false
                 node.isFirst = true
                 
-            }*/
+            }
               
             return node
         }
@@ -793,7 +796,7 @@ extension FeedViewController {
     
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-        
+
         APIManager.shared.getUserFeed { [weak self] result in
             guard let self = self else { return }
             
@@ -808,6 +811,7 @@ extension FeedViewController {
                     return
                 }
                 if !data.isEmpty {
+                            
                     self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data
@@ -863,10 +867,16 @@ extension FeedViewController {
         var items = [PostModel]()
         for i in newPosts {
             if let item = PostModel(JSON: i) {
+                /*
                 if !self.posts.contains(item) {
                     self.posts.append(item)
                     items.append(item)
-                }
+                } */
+                
+                self.posts.append(item)
+                items.append(item)
+                
+                
             }
         }
 
@@ -874,7 +884,6 @@ extension FeedViewController {
         if items.count > 0 {
             let startIndex = self.posts.count - items.count
             let endIndex = startIndex + items.count - 1
-            print(startIndex, endIndex)
             let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
 
             if firstAnimated {
@@ -994,8 +1003,10 @@ extension FeedViewController {
                             
                             node.posts.removeObject(deletingPost)
 
-                            node.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                            node.selectPostCollectionView.collectionView.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                            node.mainCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                            node.galleryCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                            
+                            //node.selectPostCollectionView.collectionView.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                             
                             
                             // return the next index if it exists

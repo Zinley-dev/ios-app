@@ -676,23 +676,33 @@ extension ProfileViewController: UICollectionViewDelegate {
             
         case .posts(_):
             
-            let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
+            let selectedPosts = datasource.snapshot().itemIdentifiers(inSection: .posts)
                 .compactMap { item -> PostModel? in
                     if case .posts(let post) = item {
                         return post
                     }
                     return nil
                 }
-            
-            
+
             if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
-                
-                SPVC.selectedPost = selectedPost
-                SPVC.startIndex = indexPath.row
+                // Find the index of the selected post
+                let currentIndex = indexPath.row
+
+                // Determine the range of posts to include before and after the selected post
+                let beforeIndex = max(currentIndex - 5, 0)
+                let afterIndex = min(currentIndex + 5, selectedPosts.count - 1)
+
+                // Include up to 5 posts before and after the selected post in the sliced array
+                SPVC.posts = Array(selectedPosts[beforeIndex...afterIndex])
+
+                // Set the startIndex to the position of the selected post within the sliced array
+                SPVC.startIndex = currentIndex - beforeIndex
                 SPVC.hidesBottomBarWhenPushed = true
                 hideMiddleBtn(vc: self)
                 self.navigationController?.pushViewController(SPVC, animated: true)
             }
+
+
             
         case .none:
             print("None")

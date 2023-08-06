@@ -24,7 +24,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var blurView: UIView!
     @IBOutlet weak var playTimeBar: CustomSlider!
-    var selectedPost = [PostModel]()
+ 
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var selected_item: PostModel!
@@ -299,7 +299,7 @@ extension SelectedPostVC {
                    currentIndex = newPlayingIndex
                    newPlayingCell.playVideo(index: newPlayingCell.currentIndex ?? 0)
 
-                   if let node = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(item: newPlayingCell.currentIndex ?? 0, section: 0)) as? ReelNode {
+                   if let node = newPlayingCell.mainCollectionNode.nodeForItem(at: IndexPath(item: newPlayingCell.currentIndex ?? 0, section: 0)) as? ReelNode {
                        resetView(cell: node)
                    }
                }
@@ -307,7 +307,7 @@ extension SelectedPostVC {
                print("Couldn't find foundVisibleVideo")
            }
 
-           if let currentIndex = newPlayingCell.currentIndex, let cell = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
+           if let currentIndex = newPlayingCell.currentIndex, let cell = newPlayingCell.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
                        cell.videoNode.player?.seek(to: currentTime)
@@ -370,32 +370,23 @@ extension SelectedPostVC {
     
     func loadPosts() {
         // Ensure that there are posts to load
-        guard !selectedPost.isEmpty else {
+        guard !posts.isEmpty else {
             return
         }
 
-        // Append the `selectedPost` items to the `posts` array and update the `indexPaths` array with the new index paths.
-        let indexPaths = selectedPost.enumerated().map { index, _ in
-            return IndexPath(row: self.posts.count + index, section: 0)
-        }
-        self.posts.append(contentsOf: selectedPost)
+        self.collectionNode.reloadData()
 
-        // It's better to insert items rather than reloading the whole collectionNode
-        // If you are using UICollectionView, the method should be insertItems(at:)
-        self.collectionNode.performBatchUpdates({
-            self.collectionNode.insertItems(at: indexPaths)
-        }, completion: nil)
-        
-        // If the `startIndex` is not `nil`, scroll to the item at the `startIndex` index path, and delay the play of the video for 0.25 seconds.
+        // If the `startIndex` is not `nil`, jump immediately to the item at the `startIndex` index path, and delay the play of the video for 0.5 seconds.
         guard let startIndex = self.startIndex else {
             return
         }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) { [weak self] in
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) { [weak self] in
             guard let self = self else { return }
+            
             let indexPath = IndexPath(row: startIndex, section: 0)
             self.collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-
+            
             guard let currentCell = self.collectionNode.nodeForItem(at: indexPath) as? OriginalNode else {
                 self.isVideoPlaying = false
                 self.playTimeBar.isHidden = true
@@ -403,26 +394,17 @@ extension SelectedPostVC {
             }
 
             // Update the playing status of the cell
-            currentIndex = startIndex
-            newPlayingIndex = startIndex
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
-                
-                
-                currentCell.currentIndex = 0
-                currentCell.newPlayingIndex = 0
-                currentCell.isVideoPlaying = true
-                currentCell.playVideo(index: 0)
+            self.currentIndex = startIndex
+            self.newPlayingIndex = startIndex
 
-                
-
-            }
-            
-            
-
+            currentCell.currentIndex = 0
+            currentCell.newPlayingIndex = 0
+            currentCell.isVideoPlaying = true
+            currentCell.playVideo(index: 0)
         }
-
     }
+
+
 
 
     
@@ -899,8 +881,9 @@ extension SelectedPostVC {
                             
                             node.posts.removeObject(deletingPost)
 
-                            node.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                            node.selectPostCollectionView.collectionView.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                            node.mainCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                            node.galleryCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                            //node.selectPostCollectionView.collectionView.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                             
                             // return the next index if it exists
                             if indexPath < node.posts.count {

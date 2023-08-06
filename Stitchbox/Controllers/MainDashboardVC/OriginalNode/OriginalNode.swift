@@ -22,7 +22,7 @@ fileprivate let FontSize: CGFloat = 13
 fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
-class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
+class OriginalNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
     
     deinit {
@@ -37,17 +37,10 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     var animatedLabel: MarqueeLabel!
     var selectPostCollectionView: SelectPostCollectionView!
     var lastContentOffset: CGFloat = 0
-    
-    lazy var collectionNode: ASCollectionNode = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 0.0
-        flowLayout.scrollDirection = .horizontal
-        let node = ASCollectionNode(collectionViewLayout: flowLayout)
-        // Perform any additional setup here.
-        return node
-    }()
+    var mainCollectionNode: ASCollectionNode
+    var galleryCollectionNode: ASCollectionNode
 
-    weak var post: PostModel!
+    var post: PostModel!
     var currentIndex: Int?
     var isVideoPlaying = false
     var newPlayingIndex: Int?
@@ -61,41 +54,55 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     
     init(with post: PostModel) {
         self.post = post
-    
+        
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 0.0
+        flowLayout.scrollDirection = .horizontal
+        mainCollectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
+        
+        
+        let flowLayout1 = UICollectionViewFlowLayout()
+        flowLayout1.scrollDirection = .horizontal
+        flowLayout1.minimumLineSpacing = 12
+        flowLayout1.minimumInteritemSpacing = 12
+        galleryCollectionNode = ASCollectionNode(collectionViewLayout: flowLayout1)
+        
+
         super.init()
         
         if !posts.contains(post) {
             posts.append(post)
         }
         
-        
+
         Dispatch.main.async { [weak self] in
             guard let self = self else { return }
     
-            self.collectionNode.backgroundColor = .black
-            self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
-            self.collectionNode.leadingScreensForBatching = 2.0
-            self.collectionNode.view.contentInsetAdjustmentBehavior = .never
+            self.mainCollectionNode.backgroundColor = .black
+            self.mainCollectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
+            self.mainCollectionNode.leadingScreensForBatching = 2.0
+            self.mainCollectionNode.view.contentInsetAdjustmentBehavior = .never
             self.applyStyle()
             self.backgroundColor = .black
-            self.collectionNode.view.indicatorStyle = .white
+            self.mainCollectionNode.view.indicatorStyle = .white
+            self.addSubCollection()
             
             self.getStitchTo() {
                 
-                self.collectionNode.delegate = self
-                self.collectionNode.dataSource = self
+                self.mainCollectionNode.delegate = self
+                self.mainCollectionNode.dataSource = self
                 
-                self.addSubCollection() {
-                    
-                    self.stitchDone = true
-                    
-                    self.currentIndex = 0
-                    self.newPlayingIndex = 0
-                    self.isVideoPlaying = true
-                    if self.isFirst {
-                        self.playVideo(index: 0)
-                    }
-                    
+                self.galleryCollectionNode.delegate = self
+                self.galleryCollectionNode.dataSource = self
+                
+                self.stitchDone = true
+                
+                self.currentIndex = 0
+                self.newPlayingIndex = 0
+                self.isVideoPlaying = true
+                
+                if self.isFirst {
+                    self.playVideo(index: 0)
                 }
                 
             }
@@ -114,49 +121,52 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     
-    func addSubCollection(completed: @escaping DownloadComplete) {
-        DispatchQueue.main.async() { [weak self] in
-            guard let self = self else { return }
-            self.selectPostCollectionView = SelectPostCollectionView()
-            self.selectPostCollectionView.translatesAutoresizingMaskIntoConstraints = false
-            
-            // Set collectionView layout scroll direction to horizontal
-            if let layout = self.selectPostCollectionView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                layout.scrollDirection = .horizontal
-                layout.minimumLineSpacing = 12
-                layout.minimumInteritemSpacing = 12
-            }
-            
-            self.view.addSubview(self.selectPostCollectionView)
-            self.selectPostCollectionView.isHidden = true
-            self.selectPostCollectionView.collectionView.delegate = self
-            self.selectPostCollectionView.collectionView.dataSource = self
-            
-            self.selectPostCollectionView.collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
-            
-            let height =  UIScreen.main.bounds.height * 1 / 4
-          
-            NSLayoutConstraint.activate([
-                self.selectPostCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
-                self.selectPostCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
-                self.selectPostCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -8),
-                self.selectPostCollectionView.heightAnchor.constraint(equalToConstant: height)
-            ])
-            
-            self.selectPostCollectionView.collectionView.allowsMultipleSelection = false
+    func addSubCollection() {
+        
+        self.selectPostCollectionView = SelectPostCollectionView()
+        self.selectPostCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.view.addSubview(self.selectPostCollectionView)
+        self.selectPostCollectionView.isHidden = true
+        let height =  UIScreen.main.bounds.height * 1 / 4
+        
+        NSLayoutConstraint.activate([
+            self.selectPostCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
+            self.selectPostCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
+            self.selectPostCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -8),
+            self.selectPostCollectionView.heightAnchor.constraint(equalToConstant: height)
+        ])
+        
+        
+        selectPostCollectionView.galleryView.addSubview(galleryCollectionNode.view)
+        galleryCollectionNode.view.translatesAutoresizingMaskIntoConstraints = false
+        galleryCollectionNode.view.topAnchor.constraint(equalTo: selectPostCollectionView.galleryView.topAnchor, constant: 0).isActive = true
+        galleryCollectionNode.view.leadingAnchor.constraint(equalTo: selectPostCollectionView.galleryView.leadingAnchor, constant: 0).isActive = true
+        galleryCollectionNode.view.trailingAnchor.constraint(equalTo: selectPostCollectionView.galleryView.trailingAnchor, constant: 0).isActive = true
+        galleryCollectionNode.view.bottomAnchor.constraint(equalTo: selectPostCollectionView.galleryView.bottomAnchor, constant: 0).isActive = true
+        
+        
+        galleryCollectionNode.view.isPagingEnabled = false
+        galleryCollectionNode.view.backgroundColor = UIColor.clear
+        galleryCollectionNode.view.showsVerticalScrollIndicator = false
+        galleryCollectionNode.view.allowsSelection = true
+        galleryCollectionNode.allowsMultipleSelection = false
+        galleryCollectionNode.view.contentInsetAdjustmentBehavior = .never
+        galleryCollectionNode.needsDisplayOnBoundsChange = true
+       
+        galleryCollectionNode.allowsMultipleSelection = false
+        
+        let hideTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(OriginalNode.hideTapped))
+        hideTap.numberOfTapsRequired = 1
+        self.selectPostCollectionView.hideBtn.addGestureRecognizer(hideTap)
 
-            let hideTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(OriginalNode.hideTapped))
-            hideTap.numberOfTapsRequired = 1
-            self.selectPostCollectionView.hideBtn.addGestureRecognizer(hideTap)
-            completed()
-        }
     }
 
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
-        return ASInsetLayoutSpec(insets: insets, child: collectionNode)
+        return ASInsetLayoutSpec(insets: insets, child: mainCollectionNode)
     }
     
     @objc func hideTapped() {
@@ -164,7 +174,7 @@ class OriginalNode: ASCellNode, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func hideBtnPressed() {
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? ReelNode {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? ReelNode {
 
             if selectPostCollectionView.isHidden == false {
 
@@ -187,31 +197,15 @@ extension OriginalNode {
     
     func applyStyle() {
         
-        self.collectionNode.view.isPagingEnabled = true
-        self.collectionNode.view.backgroundColor = UIColor.black
-        self.collectionNode.view.showsVerticalScrollIndicator = false
-        self.collectionNode.view.allowsSelection = false
-        self.collectionNode.view.contentInsetAdjustmentBehavior = .never
-        self.collectionNode.needsDisplayOnBoundsChange = true
+        self.mainCollectionNode.view.isPagingEnabled = true
+        self.mainCollectionNode.view.backgroundColor = UIColor.black
+        self.mainCollectionNode.view.showsVerticalScrollIndicator = false
+        self.mainCollectionNode.view.allowsSelection = false
+        self.mainCollectionNode.view.contentInsetAdjustmentBehavior = .never
+        self.mainCollectionNode.needsDisplayOnBoundsChange = true
         
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == self.selectPostCollectionView.collectionView {
-        
-            let height =  UIScreen.main.bounds.height * 1 / 4 - 70
-            let width = height * 9 / 13.5
-            
-            return CGSize(width: width, height: height)
-            
-        } else {
-            
-            return CGSize(width: 0, height: 0)
-            
-        }
     }
 
-    
 }
 
 
@@ -230,31 +224,50 @@ extension OriginalNode: ASCollectionDelegate, ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = posts[indexPath.row]
 
-        return { [weak self] in
-            guard let self = self else {
-                // Return an empty node if self or post is nil
-                return ASCellNode()
-            }
-
-            let node = ReelNode(with: post)
-
-            node.neverShowPlaceholders = true
-            node.debugName = "Node \(indexPath.row)"
+        if collectionNode == galleryCollectionNode {
             
-            node.viewStitchBtn = { [weak self] node in
-                self?.viewStitchedPost(node: node as! ReelNode)
-            }
-
-            node.soundBtn = { [weak self] node in
-                self?.soundProcess(node: node as! ReelNode)
+            return {
+                let node = StitchControlNode(with: post)
+                node.neverShowPlaceholders = true
+                node.debugName = "Node \(indexPath.row)"
+                
+                //
+                return node
             }
             
-            node.settingBtn = { [weak self] node in
-                self?.settingPost(item: post)
-            }
+        } else {
+            
+            return { [weak self] in
+                guard let self = self else {
+                    // Return an empty node if self or post is nil
+                    return ASCellNode()
+                }
 
-            return node
+                let node = ReelNode(with: post)
+
+                node.neverShowPlaceholders = true
+                node.debugName = "Node \(indexPath.row)"
+                
+                node.viewStitchBtn = { [weak self] node in
+                    self?.viewStitchedPost(node: node as! ReelNode)
+                }
+
+                node.soundBtn = { [weak self] node in
+                    self?.soundProcess(node: node as! ReelNode)
+                }
+                
+                node.settingBtn = { [weak self] node in
+                    self?.settingPost(item: post)
+                }
+                
+                node.automaticallyManagesSubnodes = true
+
+                return node
+            }
+            
         }
+        
+        
     }
 
     
@@ -355,28 +368,51 @@ extension OriginalNode {
 extension OriginalNode  {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        let min = CGSize(width: self.collectionNode.layer.frame.width, height: 50);
-        let max = CGSize(width: self.collectionNode.layer.frame.width, height: collectionNode.frame.height);
-       
-        if collectionNode.frame.width != 0.0 {
-            saveMin = min
-        }
         
-        if collectionNode.frame.height != 0.0 {
-            saveMax = max
-        }
         
-       
-        if collectionNode.frame.width != 0.0, collectionNode.frame.height != 0.0 {
+        if collectionNode == galleryCollectionNode {
+            
+            let height =  UIScreen.main.bounds.height * 1 / 4 - 70
+            let width = height * 9 / 13.5
+            
+            let min = CGSize(width: width, height: height)
+            let max = CGSize(width: width, height: height)
+            
             return ASSizeRangeMake(min, max)
+            
         } else {
-            return ASSizeRangeMake(saveMin, saveMax)
+            
+            let min = CGSize(width: self.mainCollectionNode.layer.frame.width, height: 50);
+            let max = CGSize(width: self.mainCollectionNode.layer.frame.width, height: mainCollectionNode.frame.height);
+           
+            if collectionNode.frame.width != 0.0 {
+                saveMin = min
+            }
+            
+            if collectionNode.frame.height != 0.0 {
+                saveMax = max
+            }
+            
+           
+            if collectionNode.frame.width != 0.0, collectionNode.frame.height != 0.0 {
+                return ASSizeRangeMake(min, max)
+            } else {
+                return ASSizeRangeMake(saveMin, saveMax)
+            }
+            
         }
+        
+        
         
         
     }
     
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
+        
+        if collectionNode == galleryCollectionNode {
+            return false
+        }
+        
         return true
     }
 
@@ -498,8 +534,8 @@ extension OriginalNode {
             let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
 
             // Insert new items at index paths
-            self.collectionNode.insertItems(at: indexPaths)
-            self.selectPostCollectionView.collectionView.insertItems(at: indexPaths)
+            self.mainCollectionNode.insertItems(at: indexPaths)
+            //self.selectPostCollectionView.collectionView.insertItems(at: indexPaths)
         }
     }
 
@@ -579,7 +615,7 @@ extension OriginalNode {
         if currentIndex != nil, currentIndex! + 1 < posts.count {
             
             let indexPath = IndexPath(item: currentIndex! + 1, section: 0)
-            collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+            mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
             
         }
     }
@@ -620,7 +656,8 @@ extension OriginalNode {
     
     func pauseVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             // Seek to the beginning of the video
             cell.videoNode.player?.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
@@ -636,7 +673,7 @@ extension OriginalNode {
     
     func seekVideo(index: Int, time: CMTime) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
             
             cell.videoNode.player?.seek(to: time)
             
@@ -645,7 +682,7 @@ extension OriginalNode {
     }
     
     
-    func updateCellAppearance(_ cell: ImageViewCell, isSelected: Bool) {
+    func updateCellAppearance(_ cell: StitchControlNode, isSelected: Bool) {
         cell.layer.cornerRadius = 10
         cell.layer.borderWidth = isSelected ? 2 : 0
         cell.layer.borderColor = isSelected ? UIColor.secondary.cgColor : UIColor.clear.cgColor
@@ -653,21 +690,22 @@ extension OriginalNode {
     }
 
     func playVideo(index: Int) {
-        guard let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode, !cell.videoNode.isPlaying() else {
+        
+        
+        guard let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode, !cell.videoNode.isPlaying() else {
             return
         }
-
         
         // Cell selection/deselection logic
         let indexPath = IndexPath(row: index, section: 0)
-        if let imgCell = selectPostCollectionView.collectionView.cellForItem(at: indexPath) as? ImageViewCell {
+        if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchControlNode {
             updateCellAppearance(imgCell, isSelected: true)
-            selectPostCollectionView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-            self.selectPostCollectionView.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            galleryCollectionNode.selectItem(at: indexPath, animated: false, scrollPosition: [])
+            galleryCollectionNode.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
 
             // Deselect all other cells
-            for i in 0..<selectPostCollectionView.collectionView.numberOfItems(inSection: 0) {
-                if i != index, let otherCell = selectPostCollectionView.collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? ImageViewCell {
+            for i in 0..<galleryCollectionNode.numberOfItems(inSection: 0) {
+                if i != index, let otherCell = galleryCollectionNode.nodeForItem(at: IndexPath(row: i, section: 0)) as? StitchControlNode {
                     updateCellAppearance(otherCell, isSelected: false)
                 }
             }
@@ -820,30 +858,37 @@ extension OriginalNode {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
     }
-
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    
+    func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
         
-        if let currentIndex = currentIndex, abs(currentIndex - indexPath.row) > 1 {
-            var prev = IndexPath(item: currentIndex, section: 0)
+        if collectionNode == galleryCollectionNode {
             
-            // If the user is moving forward
-            if indexPath.row > currentIndex {
-                prev = IndexPath(item: indexPath.row - 1, section: 0)
+            if let currentIndex = currentIndex, abs(currentIndex - indexPath.row) > 1 {
+                var prev = IndexPath(item: currentIndex, section: 0)
+                
+                // If the user is moving forward
+                if indexPath.row > currentIndex {
+                    prev = IndexPath(item: indexPath.row - 1, section: 0)
+                }
+                
+                // If the user is moving backward
+                if indexPath.row < currentIndex {
+                    prev = IndexPath(item: indexPath.row + 1, section: 0)
+                }
+                
+                mainCollectionNode.scrollToItem(at: prev, at: .centeredVertically, animated: false)
+                mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                print("scroll: scroll1")
+            } else {
+                mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                print("scroll: scroll2")
             }
             
-            // If the user is moving backward
-            if indexPath.row < currentIndex {
-                prev = IndexPath(item: indexPath.row + 1, section: 0)
-            }
             
-            collectionNode.scrollToItem(at: prev, at: .centeredVertically, animated: false)
-            collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-            print("scroll: scroll1")
-        } else {
-            collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-            print("scroll: scroll2")
         }
+        
+        
     }
 
     
@@ -854,7 +899,7 @@ extension OriginalNode {
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !posts.isEmpty, scrollView == collectionNode.view, stitchDone {
+        if !posts.isEmpty, scrollView == mainCollectionNode.view, stitchDone {
             // Check if it's a horizontal scroll
             if lastContentOffset != scrollView.contentOffset.x {
                 lastContentOffset = scrollView.contentOffset.x
@@ -866,7 +911,7 @@ extension OriginalNode {
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
             
             // Calculate the visible cells.
-            let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? ReelNode }
+            let visibleCells = mainCollectionNode.visibleNodes.compactMap { $0 as? ReelNode }
             
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
@@ -874,7 +919,7 @@ extension OriginalNode {
             var foundVisibleVideo = false
             
             for cell in visibleCells {
-                    let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+                    let cellRect = cell.view.convert(cell.bounds, to: mainCollectionNode.view)
                     let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
                     let distanceFromCenter = abs(cellCenter.x - visibleRect.midX) // Use the x-coordinate for horizontal scroll
                     
@@ -915,7 +960,7 @@ extension OriginalNode {
                         playVideo(index: currentIndex!)
                         isVideoPlaying = true
                         
-                        if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? ReelNode {
+                        if let node = mainCollectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? ReelNode {
                             resetView(cell: node)
                         }
                     } else {
@@ -924,7 +969,7 @@ extension OriginalNode {
                 }
                 
                 // If the video is stuck, reset the buffer by seeking to the current playback time.
-                if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
+                if let currentIndex = currentIndex, let cell = mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
                     if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
                         if let currentTime = cell.videoNode.currentItem?.currentTime() {
                             cell.videoNode.player?.seek(to: currentTime)
@@ -959,15 +1004,15 @@ extension OriginalNode {
                 
                 
                 // Scroll slightly to the next item.
-                let nextOffset = collectionNode.contentOffset.x + collectionNode.frame.width * 0.2
-                collectionNode.setContentOffset(CGPoint(x: nextOffset, y: 0), animated: true)
+                let nextOffset = mainCollectionNode.contentOffset.x + mainCollectionNode.frame.width * 0.2
+                mainCollectionNode.setContentOffset(CGPoint(x: nextOffset, y: 0), animated: true)
 
                 // Delay the scroll back by 1 second.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
                     guard let self = self else { return }
                     // Scroll back to the original item.
                     let currentIndexPath = IndexPath(item: self.currentIndex!, section: 0)
-                    self.collectionNode.scrollToItem(at: currentIndexPath, at: .left, animated: true)
+                    self.mainCollectionNode.scrollToItem(at: currentIndexPath, at: .left, animated: true)
                 }
                 
             }
