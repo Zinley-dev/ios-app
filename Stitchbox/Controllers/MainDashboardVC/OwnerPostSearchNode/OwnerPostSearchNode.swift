@@ -189,11 +189,16 @@ class OwnerPostSearchNode: ASCellNode {
         } else {
             
         }
+     
+        automaticallyManagesSubnodes = true
+        
+    }
+    
+    override func didLoad() {
+        super.didLoad()
         
         countView(with: post)
         countViewStitch(with: post)
-        automaticallyManagesSubnodes = true
-        
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

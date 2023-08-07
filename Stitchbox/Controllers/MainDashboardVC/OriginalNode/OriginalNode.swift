@@ -26,6 +26,10 @@ class OriginalNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePr
     
     
     deinit {
+        mainCollectionNode.delegate = nil
+        mainCollectionNode.dataSource = nil
+        galleryCollectionNode.delegate = nil
+        galleryCollectionNode.dataSource = nil
         print("OriginalNode is being deallocated.")
     }
 
@@ -74,17 +78,9 @@ class OriginalNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePr
             posts.append(post)
         }
         
-
-        Dispatch.main.async { [weak self] in
+        Dispatch.main.async() { [weak self] in
             guard let self = self else { return }
-    
-            self.mainCollectionNode.backgroundColor = .black
-            self.mainCollectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
-            self.mainCollectionNode.leadingScreensForBatching = 2.0
-            self.mainCollectionNode.view.contentInsetAdjustmentBehavior = .never
-            self.applyStyle()
-            self.backgroundColor = .black
-            self.mainCollectionNode.view.indicatorStyle = .white
+            
             self.addSubCollection()
             
             self.getStitchTo() {
@@ -109,17 +105,23 @@ class OriginalNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePr
 
         }
         
-        automaticallyManagesSubnodes = true
-        
     }
     
     override func didLoad() {
         super.didLoad()
         
-        addAnimatedLabelToTop()
+        self.addAnimatedLabelToTop()
+        self.mainCollectionNode.backgroundColor = .black
+        self.mainCollectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
+        self.mainCollectionNode.leadingScreensForBatching = 2.0
+        self.mainCollectionNode.view.contentInsetAdjustmentBehavior = .never
+        self.applyStyle()
+        self.backgroundColor = .black
+        self.mainCollectionNode.view.indicatorStyle = .white
         
     }
     
+
     
     func addSubCollection() {
         
@@ -160,6 +162,41 @@ class OriginalNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePr
         hideTap.numberOfTapsRequired = 1
         self.selectPostCollectionView.hideBtn.addGestureRecognizer(hideTap)
 
+    }
+    
+    func getStitchTo(completed: @escaping DownloadComplete) {
+        APIManager.shared.getStitchTo(pid: post.id) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let apiResponse):
+                guard let data = apiResponse.body?["data"] as? [String: Any] else {
+                    
+                    completed()
+                    return
+                    
+                }
+
+                if !data.isEmpty {
+                    if let posted = PostModel(JSON: data) {
+                        posted.stitchedTo = true
+                        self.posts.append(posted)
+                        self.hasStitchTo = true
+                       
+                        completed()
+                        
+                      
+                    }
+                } else {
+                    completed()
+                }
+
+            case .failure(let error):
+                
+                completed()
+                print("StitchTo: error \(error)")
+                
+            }
+        }
     }
 
     
@@ -422,43 +459,7 @@ extension OriginalNode  {
 
 
 extension OriginalNode {
-    
-    func getStitchTo(completed: @escaping DownloadComplete) {
-        APIManager.shared.getStitchTo(pid: post.id) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let apiResponse):
-                guard let data = apiResponse.body?["data"] as? [String: Any] else {
-                    
-                    completed()
-                    return
-                    
-                }
 
-                if !data.isEmpty {
-                    if let posted = PostModel(JSON: data) {
-                        posted.stitchedTo = true
-                        self.posts.append(posted)
-                        self.hasStitchTo = true
-                       
-                        completed()
-                        
-                      
-                    }
-                } else {
-                    completed()
-                }
-
-            case .failure(let error):
-                
-                completed()
-                print("StitchTo: error \(error)")
-                
-            }
-        }
-    }
-
-    
     func checkStitched() {
         if !hasStitchChecked {
             hasStitchChecked = true
@@ -535,6 +536,7 @@ extension OriginalNode {
 
             // Insert new items at index paths
             self.mainCollectionNode.insertItems(at: indexPaths)
+            self.galleryCollectionNode.insertItems(at: indexPaths)
             //self.selectPostCollectionView.collectionView.insertItems(at: indexPaths)
         }
     }

@@ -71,11 +71,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
-       
-        if _AppCoreData.userDataSource.value?.userID != "" {
-            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
-        }
-    
+     
         
     }
 

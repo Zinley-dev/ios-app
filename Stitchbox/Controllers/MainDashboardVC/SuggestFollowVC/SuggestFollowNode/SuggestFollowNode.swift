@@ -67,8 +67,7 @@ class SuggestFollowNode: ASCellNode {
             }
         }
 
-        checkIfFollow()
-
+        
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
         self.userNameNode.attributedText = NSAttributedString(string: "@\(user.username ?? "@")" , attributes: [NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
@@ -93,13 +92,18 @@ class SuggestFollowNode: ASCellNode {
             avatarNode.image = UIImage.init(named: "defaultuser")
         }
     }
+    
+    override func didLoad() {
+        super.didLoad()
+        
+        checkIfFollow()
+    }
 
     
     func checkIfFollow() {
         
         if let userId = user.userId {
             
-         
             APIManager.shared.isFollowing(uid: userId) { [weak self] result in
                 guard let self = self else { return }
                 

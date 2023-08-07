@@ -53,24 +53,10 @@ class UserSearchNode: ASCellNode {
         
         automaticallyManagesSubnodes = true
         
-        
-        DispatchQueue.main.async {
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             
-            self.gameListView = GameListView()
-            self.gameNode.view.addSubview(self.gameListView)
-            
-            self.gameListView.translatesAutoresizingMaskIntoConstraints = false
-            self.gameListView.topAnchor.constraint(equalTo: self.gameNode.view.topAnchor, constant: 0).isActive = true
-            self.gameListView.bottomAnchor.constraint(equalTo: self.gameNode.view.bottomAnchor, constant: 0).isActive = true
-            self.gameListView.leadingAnchor.constraint(equalTo: self.gameNode.view.leadingAnchor, constant: 0).isActive = true
-            self.gameListView.trailingAnchor.constraint(equalTo: self.gameNode.view.trailingAnchor, constant: 0).isActive = true
-            
-            self.loadGameIfNeed()
-            
-        }
-         
-        
-        DispatchQueue.main.async {
             let paragraphStyles = NSMutableParagraphStyle()
             paragraphStyles.alignment = .left
             self.userNameNode.attributedText = NSAttributedString(
@@ -119,8 +105,6 @@ class UserSearchNode: ASCellNode {
         imageStorage.async.object(forKey: url) { result in
             if case .value(_) = result {
                 
-        
-               
             } else {
                 
                 

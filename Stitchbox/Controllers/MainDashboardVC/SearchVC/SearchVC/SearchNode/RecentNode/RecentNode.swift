@@ -95,7 +95,40 @@ class RecentNode: ASCellNode {
             imageNode.shouldRenderProgressImages = true
             imageNode.isLayerBacked = true
             
-           
+            DispatchQueue.main.async {
+                
+
+                let paragraphStyles = NSMutableParagraphStyle()
+                paragraphStyles.alignment = .left
+                self.upperNameNode.attributedText = NSAttributedString(
+                    string: item.user_nickname ?? "@",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                        NSAttributedString.Key.foregroundColor: UIColor.black,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyles
+                    ]
+                )
+                
+                self.belowNameNode.attributedText = NSAttributedString(
+                    string: item.user_name ?? "@",
+                    attributes: [
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                        NSAttributedString.Key.foregroundColor: UIColor.black,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyles
+                    ]
+                )
+
+                if item.avatarUrl != "" {
+                    self.imageNode.url = URL(string: item.avatarUrl)
+                } else {
+                    self.imageNode.image = UIImage.init(named: "defaultuser")
+                }
+
+                
+            }
+
+            
+
         } else if item.type == "text" {
             
             DispatchQueue.main.async {
@@ -120,8 +153,7 @@ class RecentNode: ASCellNode {
         
     }
     
-
-    
+  
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
         

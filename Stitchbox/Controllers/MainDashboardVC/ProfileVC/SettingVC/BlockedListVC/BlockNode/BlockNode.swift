@@ -74,11 +74,10 @@ class BlockNode: ASCellNode {
         automaticallyManagesSubnodes = true
         
         
-        loadInfo(uid: user.blockId)
-        
         if isBlock {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.actionBtnNode.backgroundColor = .secondary
                 self.actionBtnNode.layer.borderWidth = 1.0
                 self.actionBtnNode.layer.borderColor = UIColor.dimmedLightBackground.cgColor
@@ -90,6 +89,12 @@ class BlockNode: ASCellNode {
             
         }
         
+    }
+    
+    override func didLoad() {
+        super.didLoad()
+        
+        loadInfo(uid: user.blockId)
     }
     
     

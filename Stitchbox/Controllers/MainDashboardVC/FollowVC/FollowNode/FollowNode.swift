@@ -67,7 +67,8 @@ class FollowNode: ASCellNode {
 
         if user.needCheck == false, user.action == "following" {
             self.isFollowingUser = true
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.followBtnNode.layer.cornerRadius = 10.0
                 self.followBtnNode.clipsToBounds = true
                 self.followBtnNode.backgroundColor = .normalButtonBackground
@@ -76,7 +77,8 @@ class FollowNode: ASCellNode {
         } else {
             if let userId = user.userId {
                 if userId == _AppCoreData.userDataSource.value?.userID {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.isFollowingUser = false
                         self.followBtnNode.backgroundColor = .secondary
                         self.followBtnNode.layer.cornerRadius = 10.0
@@ -85,7 +87,8 @@ class FollowNode: ASCellNode {
                     }
                 } else {
                     if user.isFollowing {
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.isFollowingUser = true
                             self.followBtnNode.backgroundColor = .normalButtonBackground
                             self.followBtnNode.layer.cornerRadius = 10.0
@@ -94,7 +97,8 @@ class FollowNode: ASCellNode {
                         }
                     } else {
                         if self.user.loadFromUserId == _AppCoreData.userDataSource.value?.userID, self.user.loadFromMode == "follower" {
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 self.isFollowingUser = false
                                 self.followBtnNode.backgroundColor = .secondary
                                 self.followBtnNode.layer.cornerRadius = 10.0
@@ -102,7 +106,8 @@ class FollowNode: ASCellNode {
                                 self.followBtnNode.setTitle("Follow back", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.white, for: .normal)
                             }
                         } else {
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 self.isFollowingUser = false
                                 self.followBtnNode.backgroundColor = .secondary
                                 self.followBtnNode.layer.cornerRadius = 10.0
@@ -141,71 +146,6 @@ class FollowNode: ASCellNode {
         
     }
 
-    
-    func checkIfFollow() {
-        
-        if let userId = user.userId {
-            
-            APIManager.shared.isFollowing(uid: userId) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let isFollowing = apiResponse.body?["data"] as? Bool else {
-                        return
-                    }
-                    
-                    if isFollowing {
-                        
-                        DispatchQueue.main.async {
-                            self.isFollowingUser = true
-                            self.followBtnNode.backgroundColor = .normalButtonBackground
-                            self.followBtnNode.layer.cornerRadius = 10.0
-                            self.followBtnNode.clipsToBounds = true
-                            self.followBtnNode.setTitle("Following", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.black, for: .normal)
-
-                        }
-                        
-                    } else {
-                        
-                        if self.user.loadFromUserId == _AppCoreData.userDataSource.value?.userID, self.user.loadFromMode == "follower" {
-                            
-                            DispatchQueue.main.async {
-                                self.isFollowingUser = false
-                                self.followBtnNode.backgroundColor = .secondary
-                                self.followBtnNode.layer.cornerRadius = 10.0
-                                self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("Follow back", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.white, for: .normal)
-
-                            }
-                            
-                        } else {
-                            
-                            DispatchQueue.main.async {
-                                self.isFollowingUser = false
-                                self.followBtnNode.backgroundColor = .secondary
-                                self.followBtnNode.layer.cornerRadius = 10.0
-                                self.followBtnNode.clipsToBounds = true
-                                self.followBtnNode.setTitle("+ Follow", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.white, for: .normal)
-
-                            }
-                            
-                        }
-                        
-                        
-                    }
-                    
-                case .failure(let error):
-                    print(error)
-                    self.followBtnNode.isHidden = true
-                    
-                }
-            }
-            
-        }
-        
-    }
     
     
     @objc func followBtnPressed() {

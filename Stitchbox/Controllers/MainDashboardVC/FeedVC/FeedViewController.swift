@@ -704,23 +704,26 @@ extension FeedViewController: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
         
+        print("Total post: \(posts.count)")
         return self.posts.count
+        
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = OriginalNode(with: post)
+            let node = TestNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             node.automaticallyManagesSubnodes = true
             
+            /*
             if self.isfirstLoad, indexPath.row == 0 {
                 self.isfirstLoad = false
                 node.isFirst = true
                 
-            }
+            } */
               
             return node
         }
@@ -732,8 +735,6 @@ extension FeedViewController: ASCollectionDataSource {
             retrieveNextPageWithCompletion { [weak self] (newPosts) in
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                
                 
                 context.completeBatchFetching(true)
             }
@@ -867,14 +868,11 @@ extension FeedViewController {
         var items = [PostModel]()
         for i in newPosts {
             if let item = PostModel(JSON: i) {
-                /*
+               
                 if !self.posts.contains(item) {
                     self.posts.append(item)
                     items.append(item)
-                } */
-                
-                self.posts.append(item)
-                items.append(item)
+                }
                 
                 
             }
@@ -889,7 +887,8 @@ extension FeedViewController {
             if firstAnimated {
                 firstAnimated = false
 
-                delay(0.15) {
+                delay(0.15) { [weak self] in
+                    guard let self = self else { return }
                     
                     UIView.animate(withDuration: 0.5) {
                         self.loadingView.alpha = 0
@@ -1319,8 +1318,10 @@ extension FeedViewController {
         let fortyFiveMinutesAgo = now.addingTimeInterval(-2700) // 2700 seconds = 45 minutes
         
         if lastLoadTime != nil, lastLoadTime! < fortyFiveMinutesAgo, !posts.isEmpty {
+            
             pullControl.beginRefreshing()
             clearAllData()
+            
         }
     }
     

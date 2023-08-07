@@ -92,8 +92,8 @@ extension SuggestFollowVC {
     
     
     func updateData() {
-        self.retrieveNextPageWithCompletion { (newFollowers) in
-            
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowers) in
+            guard let self = self else { return }
             if newFollowers.count > 0 {
                 
                 self.userList.removeAll()

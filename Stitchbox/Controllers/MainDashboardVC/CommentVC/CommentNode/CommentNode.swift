@@ -288,6 +288,13 @@ class CommentNode: ASCellNode {
         textNode.isLayerBacked = true
         automaticallyManagesSubnodes = true
 
+
+          
+    }
+    
+    override func didLoad() {
+        super.didLoad()
+        
         // Load content based on the post.
         loadInfo(uid: self.post.comment_uid)
         if self.post.has_reply == true {
@@ -295,8 +302,7 @@ class CommentNode: ASCellNode {
         }
         checkLikeCmt()
         cmtCount()
-
-          
+        
     }
     
     @objc func replyToBtnPressed() {
@@ -389,7 +395,8 @@ class CommentNode: ASCellNode {
                 
                 if checkIsLike {
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.imageView.image = likeImage
                     }
                     
@@ -399,7 +406,8 @@ class CommentNode: ASCellNode {
             
                 } else {
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.imageView.image = emptyLikeImageLM
                     }
             
@@ -407,7 +415,8 @@ class CommentNode: ASCellNode {
                 
                 
             case .failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.imageView.image = emptyLikeImageLM
                 }
                 print(error)
@@ -448,7 +457,8 @@ class CommentNode: ASCellNode {
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(likeCount)))", attributes: LikeAttributes)
                 
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.textNode.attributedText = like
                 }
                
@@ -498,7 +508,8 @@ class CommentNode: ASCellNode {
     
     func addReplyUIDBtn() {
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
         
             
             self.replyToNode.attributedText = NSAttributedString(
@@ -591,14 +602,16 @@ class CommentNode: ASCellNode {
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                   return
                 }
                
                 if !data.isEmpty {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                         
                         if let post = PostModel(JSON: data) {
@@ -635,14 +648,16 @@ class CommentNode: ASCellNode {
                     }
                     
                 } else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                 }
 
             case .failure(let error):
                 print(error)
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                 }
                 
@@ -725,7 +740,8 @@ class CommentNode: ASCellNode {
 extension CommentNode {
     
     func likeComment() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.imageView.image = likeImage
         }
         
@@ -740,7 +756,8 @@ extension CommentNode {
         
         self.count += 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.textNode.attributedText = like
         }
         
@@ -753,7 +770,8 @@ extension CommentNode {
                 self.isLiked = true
 
             case .failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.imageView.image = emptyLikeImageLM
                 }
                 
@@ -768,7 +786,8 @@ extension CommentNode {
                 
                 self.count -= 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.textNode.attributedText = like
                 }
                 
@@ -779,7 +798,8 @@ extension CommentNode {
 
     
     func unlikeComment() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.imageView.image = emptyLikeImageLM
         }
         
@@ -795,7 +815,8 @@ extension CommentNode {
         self.count -= 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.textNode.attributedText = like
         }
         
@@ -808,7 +829,8 @@ extension CommentNode {
                 self.isLiked = false
 
             case .failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.imageView.image = likeImage
                 }
                 
@@ -823,7 +845,8 @@ extension CommentNode {
                 
                 self.count += 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.textNode.attributedText = like
                 }
                 
@@ -881,7 +904,8 @@ extension CommentNode {
 
 
     func updateUI(username: String?, clearUser: NSMutableAttributedString, user: NSMutableAttributedString, time: NSAttributedString?) {
-        DispatchQueue.main.async { [self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             timeNode.attributedText = time
             cmtNode.attributedText = clearUser
             label.attributedText = user
