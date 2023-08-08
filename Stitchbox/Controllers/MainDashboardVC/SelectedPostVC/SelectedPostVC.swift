@@ -104,18 +104,25 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         
         if firstAnimated {
             firstAnimated = false
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                self.loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
+                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+
+                            self.loadingImage.animatedImage = image
+                            self.loadingView.backgroundColor = self.view.backgroundColor
+                        }
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
+
             
             loadingView.backgroundColor = .white
             navigationController?.setNavigationBarHidden(false, animated: true)
@@ -346,14 +353,14 @@ extension SelectedPostVC: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
         
-        return self.posts.count
+        return posts.count
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = OriginalNode(with: post)
+            let node = OriginalNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -374,15 +381,16 @@ extension SelectedPostVC {
             return
         }
 
-        self.collectionNode.reloadData()
-
         // If the `startIndex` is not `nil`, jump immediately to the item at the `startIndex` index path, and delay the play of the video for 0.5 seconds.
         guard let startIndex = self.startIndex else {
             return
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) { [weak self] in
-            guard let self = self else { return }
+        print(posts.count, startIndex)
+        collectionNode.reloadData()
+        
+        /*
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
             
             let indexPath = IndexPath(row: startIndex, section: 0)
             self.collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
@@ -401,7 +409,8 @@ extension SelectedPostVC {
             currentCell.newPlayingIndex = 0
             currentCell.isVideoPlaying = true
             currentCell.playVideo(index: 0)
-        }
+        } */
+        
     }
 
 

@@ -124,8 +124,11 @@ class TrendingPostNode: ASCellNode {
     override func didLoad() {
         super.didLoad()
         
-        countView()
-        countViewStitch()
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.countView()
+            self?.countViewStitch()
+        }
+    
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -246,7 +249,8 @@ class TrendingPostNode: ASCellNode {
                     let decoder = JSONDecoder()
                     let stats = try decoder.decode(Stats.self, from: data)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self]  in
+                        guard let self = self else { return }
                         let paragraphStyle = NSMutableParagraphStyle()
                         paragraphStyle.alignment = .center
                         self.countNode.attributedText = NSAttributedString(
@@ -283,7 +287,8 @@ class TrendingPostNode: ASCellNode {
                     return
                 }
 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self]  in
+                    guard let self = self else { return }
                     let paragraphStyle = NSMutableParagraphStyle()
                     paragraphStyle.alignment = .center
                     self.stitchCountNode.attributedText = NSAttributedString(

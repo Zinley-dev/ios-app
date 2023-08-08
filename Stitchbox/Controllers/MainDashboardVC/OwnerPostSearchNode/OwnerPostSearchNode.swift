@@ -197,8 +197,12 @@ class OwnerPostSearchNode: ASCellNode {
     override func didLoad() {
         super.didLoad()
         
-        countView(with: post)
-        countViewStitch(with: post)
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.countView()
+            self?.countViewStitch()
+        }
+        
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -305,9 +309,9 @@ class OwnerPostSearchNode: ASCellNode {
     }
 
 
-    func countView(with data: PostModel) {
+    func countView() {
         
-        APIManager.shared.getPostStats(postId: data.id) { [weak self] result in
+        APIManager.shared.getPostStats(postId: post.id) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
@@ -323,7 +327,8 @@ class OwnerPostSearchNode: ASCellNode {
                     let decoder = JSONDecoder()
                     let stats = try decoder.decode(Stats.self, from: data)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         let paragraphStyle = NSMutableParagraphStyle()
                         paragraphStyle.alignment = .center
                         self.countNode.attributedText = NSAttributedString(
@@ -346,9 +351,9 @@ class OwnerPostSearchNode: ASCellNode {
         
     }
     
-    func countViewStitch(with data: PostModel) {
+    func countViewStitch() {
         
-        APIManager.shared.countPostStitch(pid: data.id) { [weak self] result in
+        APIManager.shared.countPostStitch(pid: post.id) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
@@ -360,7 +365,8 @@ class OwnerPostSearchNode: ASCellNode {
                     return
                 }
 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     let paragraphStyle = NSMutableParagraphStyle()
                     paragraphStyle.alignment = .center
                     self.stitchCountNode.attributedText = NSAttributedString(

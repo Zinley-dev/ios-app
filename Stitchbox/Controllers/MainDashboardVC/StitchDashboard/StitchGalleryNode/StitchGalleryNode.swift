@@ -1,9 +1,10 @@
 //
-//  StitchControlNode.swift
+//  StitchGalleryNode.swift
 //  Stitchbox
 //
-//  Created by Khoi Nguyen on 7/22/23.
+//  Created by Khoi Nguyen on 8/7/23.
 //
+
 
 import Foundation
 import UIKit
@@ -11,7 +12,7 @@ import AsyncDisplayKit
 
 fileprivate let FontSize: CGFloat = 13
 
-class StitchControlNode: ASCellNode {
+class StitchGalleryNode: ASCellNode {
     
     var post: PostModel!
     var nameNode: ASTextNode!
@@ -55,3 +56,4 @@ class StitchControlNode: ASCellNode {
 
 
 }
+

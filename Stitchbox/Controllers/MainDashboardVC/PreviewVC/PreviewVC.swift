@@ -332,7 +332,7 @@ extension PreviewVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = ReelNode(with: post)
+            let node = ReelNode(with: post, at: indexPath.row)
             node.collectionNode = self.collectionNode
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"

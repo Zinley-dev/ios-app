@@ -60,7 +60,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if let currentStartVC = currentVC as? StartViewController {
             if currentStartVC.player != nil {
+                
                 currentStartVC.player?.play()
+                
             }
         }
         

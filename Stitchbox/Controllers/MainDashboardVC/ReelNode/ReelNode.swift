@@ -67,8 +67,10 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
  
     let maximumShowing = 100
 
-    init(with post: PostModel) {
+    init(with post: PostModel, at: Int) {
             self.post = post
+        
+            print("ReelNode at \(at) is loading post: \(post.id)")
           
             self.contentNode = ASTextNode()
             self.headerNode = ASDisplayNode()
@@ -137,6 +139,9 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         super.didLoad()
         print("didLoad: \(post.id)")
      
+        
+        
+        
          self.videoNode.view.layer.cornerRadius = 25
          self.videoNode.view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
          self.videoNode.view.clipsToBounds = true
@@ -271,6 +276,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             }
         }
         
+    
         
         if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
             
@@ -278,9 +284,14 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             
         } else {
             
-            checkIfFollow()
-            checkIfFollowedMe()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                
+                self?.checkIfFollow()
+                self?.checkIfFollowedMe()
+               
+            }
             
+         
         }
         
         self.buttonsView = ButtonsHeader()
@@ -349,13 +360,20 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
         
-        self.checkIfLike()
-        self.totalLikeCount()
-        self.totalCmtCount()
-        self.shareCount()
-        self.getSaveCount()
-        self.checkIfSave()
         
+        setupSpace(width: self.view.frame.width)
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            self?.checkIfLike()
+            self?.totalLikeCount()
+            self?.totalCmtCount()
+            self?.shareCount()
+            self?.getSaveCount()
+            self?.checkIfSave()
+            
+        }
+       
     }
     
     
@@ -382,228 +400,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         
         videoNode.delegate = self
     }
- 
-    
-    func setupLabel() {
-        label = ActiveLabel()
-        label.backgroundColor = .clear
-        contentNode.view.isUserInteractionEnabled = true
-        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        label.setContentHuggingPriority(.defaultLow, for: .vertical)
-        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
 
-        let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
-        label.customColor[customType] = .lightGray
-        label.numberOfLines = Int(contentNode.lineCount)
-        label.enabledTypes = [.hashtag, .url, customType]
-        label.attributedText = contentNode.attributedText
-
-        // Set custom colors
-        label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-        label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
-
-        label.handleCustomTap(for: customType) { [weak self] element in
-            guard let self = self else { return }
-            if element == "*more" {
-                self.seeMore()
-            } else if element == "*hide" {
-                self.hideContent()
-            }
-        }
-
-        label.handleHashtagTap { [weak self] hashtag in
-            guard let self = self else { return }
-            self.navigateToHashtag(hashtag)
-        }
-
-        label.handleURLTap { [weak self] string in
-            guard let self = self else { return }
-            self.navigateToHashtag(string.absoluteString)
-        }
-    }
-
-    func setupGestureRecognizers() {
-        view.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:))))
-        
-        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        panGestureRecognizer.delegate = self
-        panGestureRecognizer.minimumNumberOfTouches = 2
-        view.addGestureRecognizer(panGestureRecognizer)
-        
-        let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(likeHandle))
-        doubleTap.numberOfTapsRequired = 2
-        view.addGestureRecognizer(doubleTap)
-        doubleTap.delaysTouchesBegan = true
-
-        let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(settingTapped))
-        longPress.minimumPressDuration = 0.65
-        view.addGestureRecognizer(longPress)
-        longPress.delaysTouchesBegan = true
-    }
-
-    func setupViews() {
-        setupHeaderView()
-        setupButtonsView()
-    }
-
-    func navigateToHashtag(_ hashtag: String) {
-        if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-                           
-            if let vc = UIViewController.currentViewController() {
-                               
-                let nav = UINavigationController(rootViewController: PLHVC)
-
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                PLHVC.searchHashtag = hashtag
-                PLHVC.onPresent = true
-
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-                      
-            }
-        }
-    }
-
-    func navigateToURL(url: String) {
-        guard let url = URL(string: url), UIApplication.shared.canOpenURL(url) else {
-            return
-        }
-        
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-    }
-
-    
-    func setupHeaderView() {
-        headerView = PostHeader()
-        headerNode.view.addSubview(headerView)
-
-        headerView.pinToSuperviewEdges()
-        adjustHeaderViewVisibility()
-    }
-
-    func setupButtonsView() {
-        buttonsView = ButtonsHeader()
-        buttonNode.view.addSubview(buttonsView)
-
-        buttonsView.pinToSuperviewEdges()
-        setupButtons()
-    }
-
-    func adjustHeaderViewVisibility() {
-        let isOwnedByUser = _AppCoreData.userDataSource.value?.userID == post.owner?.id
-        let isStitchAllowed = post.setting?.allowStitch ?? false
-
-        headerView.followBtn.isHidden = isOwnedByUser
-        headerView.createStitchView.isHidden = isOwnedByUser || !isStitchAllowed
-        headerView.createStitchStack.isHidden = isOwnedByUser || !isStitchAllowed
-        headerView.stichBtn.isHidden = isOwnedByUser || !isStitchAllowed
-    }
-
-    func setupButtons() {
-        buttonsView.likeBtn.setImage(nil, for: .normal)
-        buttonsView.commentBtn.setImage(cmtImage, for: .normal)
-        buttonsView.shareBtn.setImage(shareImage, for: .normal)
-        buttonsView.saveBtn.setImage(unsaveImage, for: .normal)
-
-        setupButtonGestures()
-    }
-
-    func setupButtonGestures() {
-        let buttons = [
-            buttonsView.likeBtn,
-            buttonsView.shareBtn,
-            buttonsView.saveBtn,
-            buttonsView.commentBtn,
-            headerView.stichBtn
-        ]
-        
-        let selectors = [
-            #selector(likeTapped),
-            #selector(shareTapped),
-            #selector(onClickSave),
-            #selector(cmtTapped),
-            #selector(stitchTapped)
-        ]
-        
-        for (index, button) in buttons.enumerated() {
-            let tap = UITapGestureRecognizer(target: self, action: selectors[index])
-            tap.numberOfTapsRequired = 1
-            button?.addGestureRecognizer(tap)
-        }
-        
-        let labelTap = UITapGestureRecognizer(target: self, action: #selector(userTapped))
-        labelTap.numberOfTapsRequired = 1
-        headerView.usernameLbl.addGestureRecognizer(labelTap)
-    }
-
-    func updatePostStatistics() {
-        checkIfLike()
-        totalLikeCount()
-        totalCmtCount()
-        shareCount()
-        getSaveCount()
-        checkIfSave()
-    }
-    
-    private func setNodeContentMode(for post: PostModel, node: ASNetworkImageNode, defaultContentMode: UIView.ContentMode) {
-        if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
-            let aspectRatio = Float(width) / Float(height)
-            
-            if aspectRatio >= 0.5 && aspectRatio <= 0.7 {
-                node.contentMode = .scaleAspectFill
-            } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 {
-                node.contentMode = .scaleAspectFit
-            } else {
-                node.contentMode = defaultContentMode
-            }
-        } else {
-            node.contentMode = defaultContentMode
-        }
-    }
-
-    
-    private func configureVideoNode(for post: PostModel) {
-       // self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
-        videoNode.player?.automaticallyWaitsToMinimizeStalling = true
-        videoNode.shouldAutoplay = false
-        videoNode.shouldAutorepeat = true
-        videoNode.muted = false
-        videoNode.delegate = self
-        
-        setNodeContentMode(for: post, node: self.videoNode, defaultContentMode: .scaleAspectFill)
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
-        }
-    }
-    
-    private func setupSideButtonsView() {
-        sideButtonsView = ButtonSideList()
-        sideButtonsView.backgroundColor = .clear
-        sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(sideButtonsView)
-        originalCenter = view.center
-
-        NSLayoutConstraint.activate([
-            sideButtonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            sideButtonsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -55),
-            sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
-            sideButtonsView.heightAnchor.constraint(equalTo: view.heightAnchor)
-        ])
-    }
-
-    private func setupGestures() {
-        let viewStitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.viewStitchTapped))
-        viewStitchTap.numberOfTapsRequired = 1
-        sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
-    }
     
     func setupDefaultContent() {
 
@@ -1805,7 +1602,7 @@ extension ReelNode {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
-        setupSpace(constrainedSize: constrainedSize)
+        
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
         contentNode.maximumNumberOfLines = 0
         contentNode.truncationMode = .byWordWrapping
@@ -1856,29 +1653,26 @@ extension ReelNode {
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
 
-    private func setupSpace(constrainedSize: ASSizeRange) {
-        delay(0.25) { [weak self] in
-            guard let self = self else { return }
-            if let buttonsView = self.buttonsView {
-             
-                let leftAndRightPadding: CGFloat = 16 * 2 // Padding for both sides
-                let itemWidth: CGFloat = 60
-                let numberOfItems: CGFloat = 4 // Number of items in the stack view
-                let superViewWidth: CGFloat = constrainedSize.min.width // Assuming this is the superview's width
-                
-                // Calculate the total width of items
-                let totalItemWidth: CGFloat = numberOfItems * itemWidth
-                
-                // Calculate the total space we have left for spacing after subtracting the item widths and paddings
-                let totalSpacingWidth: CGFloat = superViewWidth - totalItemWidth - leftAndRightPadding
-                
-                // Calculate the spacing by dividing the total space by the number of spaces (which is 3, for 4 items)
-                let spacing: CGFloat = totalSpacingWidth / (numberOfItems - 1)
-                
-                // Set the calculated spacing
-                print(spacing)
-                buttonsView.stackView.spacing = spacing
-            }
+    private func setupSpace(width: CGFloat) {
+        if let buttonsView = self.buttonsView {
+         
+            let leftAndRightPadding: CGFloat = 16 * 2 // Padding for both sides
+            let itemWidth: CGFloat = 60
+            let numberOfItems: CGFloat = 4 // Number of items in the stack view
+            let superViewWidth: CGFloat = width // Assuming this is the superview's width
+            
+            // Calculate the total width of items
+            let totalItemWidth: CGFloat = numberOfItems * itemWidth
+            
+            // Calculate the total space we have left for spacing after subtracting the item widths and paddings
+            let totalSpacingWidth: CGFloat = superViewWidth - totalItemWidth - leftAndRightPadding
+            
+            // Calculate the spacing by dividing the total space by the number of spaces (which is 3, for 4 items)
+            let spacing: CGFloat = totalSpacingWidth / (numberOfItems - 1)
+            
+            // Set the calculated spacing
+            print(spacing)
+            buttonsView.stackView.spacing = spacing
         }
     }
 

@@ -457,6 +457,23 @@ extension PostVC {
         
     }
     
+    @objc func onClickPost(_ sender: AnyObject) {
+        
+        if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
+  
+            if mediaType == "image" {
+                //uploadImage()
+            } else if mediaType == "video" {
+                uploadVideo()
+            } else {
+                showErrorAlert("Oops!", msg: "Unknown media type selected, please try again.")
+            }
+        } else {
+            self.showErrorAlert("Oops!", msg: "Your current post is being uploaded, please try again later.")
+        }
+        
+    }
+    
     
    
     
@@ -774,22 +791,6 @@ extension PostVC {
         }
     }
     
-    @objc func onClickPost(_ sender: AnyObject) {
-        
-        if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
-  
-            if mediaType == "image" {
-                //uploadImage()
-            } else if mediaType == "video" {
-                uploadVideo()
-            } else {
-                showErrorAlert("Oops!", msg: "Unknown media type selected, please try again.")
-            }
-        } else {
-            self.showErrorAlert("Oops!", msg: "Your current post is being uploaded, please try again later.")
-        }
-        
-    }
     
     @objc func handleKeyboardShow(notification: Notification) {
         isKeyboardShow = true

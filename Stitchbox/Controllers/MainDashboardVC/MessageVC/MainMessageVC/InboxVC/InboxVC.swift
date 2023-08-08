@@ -331,7 +331,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             cell.frozenImageView.isHidden = !channel.isFrozen
             cell.frozenImageView.image = SBUIconSet.iconFreeze.resize(targetSize: CGSize(width: 20, height: 20)).withTintColor(UIColor.black)
 
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
                 if let members = channel.members {
                     let filteredMembers = members.compactMap { $0 as? SBDMember }.filter { $0.userId != SBDMain.getCurrentUser()?.userId }
                     let count = filteredMembers.count
@@ -602,7 +602,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         query.loadNextPage { [weak self] (newChannels, error) in
             guard let self = self else { return }
             
-            
             if let error = error {
                 print("Failed to load next page: \(error)")
                 DispatchQueue.main.async {
@@ -611,7 +610,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 return
             }
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 if refresh {
                     self.channels.removeAll()
                 }

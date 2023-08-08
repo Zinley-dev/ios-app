@@ -157,20 +157,23 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         if firstAnimated {
             
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
+                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+
+                            self.loadingImage.animatedImage = image
+                            self.loadingView.backgroundColor = self.view.backgroundColor
+                        }
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
-            
-            loadingView.backgroundColor = self.view.backgroundColor
             
         }
         
@@ -704,7 +707,6 @@ extension FeedViewController: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
         
-        print("Total post: \(posts.count)")
         return self.posts.count
         
     }
@@ -713,17 +715,17 @@ extension FeedViewController: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = TestNode(with: post)
+            let node = OriginalNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             node.automaticallyManagesSubnodes = true
             
-            /*
+            
             if self.isfirstLoad, indexPath.row == 0 {
                 self.isfirstLoad = false
                 node.isFirst = true
                 
-            } */
+            }
               
             return node
         }

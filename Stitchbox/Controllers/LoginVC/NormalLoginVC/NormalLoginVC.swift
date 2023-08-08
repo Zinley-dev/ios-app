@@ -24,7 +24,7 @@ class NormalLoginVC: UIViewController {
         
         if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginController") as? LoginController {
                     
-            self.addVCAsChildVC(childViewController: controller)
+            addVCAsChildVC(childViewController: controller)
             
             return controller
         } else {
@@ -40,7 +40,7 @@ class NormalLoginVC: UIViewController {
         if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "LoginByPhoneSendCodeController") as? LoginByPhoneSendCodeController {
             
     
-            self.addVCAsChildVC(childViewController: controller)
+            addVCAsChildVC(childViewController: controller)
             
             return controller
             
@@ -54,8 +54,13 @@ class NormalLoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         // Do any additional setup after loading the view.
         setupBackButton()
+    
+        
+        setupNavBar()
+        
         
         usernameBorder = usernameBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (130/375))
         phoneBorder = phoneBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (130/375))
@@ -68,9 +73,6 @@ class NormalLoginVC: UIViewController {
         
         LoginController.view.isHidden = true
         LoginByPhoneSendCodeController.view.isHidden = false
-        
-        setupNavBar()
-        
         
     }
     
@@ -173,8 +175,7 @@ class NormalLoginVC: UIViewController {
         
         LoginController.view.isHidden = false
         LoginByPhoneSendCodeController.view.isHidden = true
-        
-       
+         
     }
     
     func setupPhoneBtn() {

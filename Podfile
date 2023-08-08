@@ -28,7 +28,6 @@ target 'Stitchbox' do
   pod 'NYTPhotoViewer', '~> 1.1.0'
   pod 'AlamofireImage'
   pod 'PixelSDK'
-  
   # animation note
   pod 'SwiftEntryKit', '1.2.6'
   

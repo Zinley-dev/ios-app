@@ -96,7 +96,11 @@ class SuggestFollowNode: ASCellNode {
     override func didLoad() {
         super.didLoad()
         
-        checkIfFollow()
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.checkIfFollow()
+        }
+        
     }
 
     
@@ -116,7 +120,8 @@ class SuggestFollowNode: ASCellNode {
                     
                     if isFollowing {
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self]  in
+                            guard let self = self else { return }
                             self.isFollowingUser = true
                             self.followBtnNode.backgroundColor = .normalButtonBackground
                             self.followBtnNode.layer.cornerRadius = 10.0

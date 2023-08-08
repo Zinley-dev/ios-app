@@ -92,8 +92,10 @@ class PostSearchNode: ASCellNode {
     override func didLoad() {
         super.didLoad()
         
-        countView()
-        countViewStitch()
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.countView()
+            self?.countViewStitch()
+        }
     }
     
     
@@ -225,7 +227,8 @@ class PostSearchNode: ASCellNode {
                     let decoder = JSONDecoder()
                     let stats = try decoder.decode(Stats.self, from: data)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self]  in
+                        guard let self = self else { return }
                         let paragraphStyle = NSMutableParagraphStyle()
                         paragraphStyle.alignment = .center
                         self.countNode.attributedText = NSAttributedString(
@@ -265,7 +268,8 @@ class PostSearchNode: ASCellNode {
                     return
                 }
 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self]  in
+                    guard let self = self else { return }
                     let paragraphStyle = NSMutableParagraphStyle()
                     paragraphStyle.alignment = .center
                     self.stitchCountNode.attributedText = NSAttributedString(

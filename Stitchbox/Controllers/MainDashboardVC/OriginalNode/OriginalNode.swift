@@ -33,6 +33,8 @@ class OriginalNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePr
         print("OriginalNode is being deallocated.")
     }
 
+    var allowLoadStitched = true
+    var stitchToPost: PostModel!
     var hasStitchChecked = false
     var page = 1
     var posts = [PostModel]()
@@ -49,21 +51,20 @@ class OriginalNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePr
     var isVideoPlaying = false
     var newPlayingIndex: Int?
     
-    var isfirstLoad = true
-    var imageIndex: Int?
-    var hasStitchTo = false
+    
     var isFirst = false
     var stitchDone = false
-   
+    var at: Int?
     
-    init(with post: PostModel) {
+    init(with post: PostModel, at: Int) {
         self.post = post
+        self.at = at
+        print("OriginalNode \(at) is loading post: \(post.id)")
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 0.0
         flowLayout.scrollDirection = .horizontal
         mainCollectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        
         
         let flowLayout1 = UICollectionViewFlowLayout()
         flowLayout1.scrollDirection = .horizontal
@@ -71,40 +72,39 @@ class OriginalNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePr
         flowLayout1.minimumInteritemSpacing = 12
         galleryCollectionNode = ASCollectionNode(collectionViewLayout: flowLayout1)
         
-
         super.init()
         
         if !posts.contains(post) {
             posts.append(post)
         }
-        
-        Dispatch.main.async() { [weak self] in
-            guard let self = self else { return }
-            
-            self.addSubCollection()
-            
-            self.getStitchTo() {
-                
-                self.mainCollectionNode.delegate = self
-                self.mainCollectionNode.dataSource = self
-                
-                self.galleryCollectionNode.delegate = self
-                self.galleryCollectionNode.dataSource = self
-                
-                self.stitchDone = true
-                
-                self.currentIndex = 0
-                self.newPlayingIndex = 0
-                self.isVideoPlaying = true
-                
-                if self.isFirst {
-                    self.playVideo(index: 0)
-                }
-                
-            }
 
+        DispatchQueue.main.async { [weak self] in
+            self?.addSubCollection()
         }
         
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.getStitchTo() {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.mainCollectionNode.delegate = self
+                    self.mainCollectionNode.dataSource = self
+                    
+                    self.galleryCollectionNode.delegate = self
+                    self.galleryCollectionNode.dataSource = self
+                    
+                    self.stitchDone = true
+                    
+                    self.currentIndex = 0
+                    self.newPlayingIndex = 0
+                    
+                    if self.isFirst {
+                        self.isVideoPlaying = true
+                        self.playVideo(index: 0)
+                    }
+                }
+            }
+        }
     }
     
     override func didLoad() {
@@ -178,10 +178,12 @@ class OriginalNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePr
 
                 if !data.isEmpty {
                     if let posted = PostModel(JSON: data) {
+
+                        
+                        posts.append(posted)
+                        //stitchToPost = posted
                         posted.stitchedTo = true
-                        self.posts.append(posted)
-                        self.hasStitchTo = true
-                       
+
                         completed()
                         
                       
@@ -267,7 +269,7 @@ extension OriginalNode: ASCollectionDelegate, ASCollectionDataSource {
                 let node = StitchControlNode(with: post)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
-                
+                node.automaticallyManagesSubnodes = true
                 //
                 return node
             }
@@ -275,12 +277,14 @@ extension OriginalNode: ASCollectionDelegate, ASCollectionDataSource {
         } else {
             
             return { [weak self] in
+                let startTime = Date()
+                
                 guard let self = self else {
                     // Return an empty node if self or post is nil
                     return ASCellNode()
                 }
 
-                let node = ReelNode(with: post)
+                let node = ReelNode(with: post, at: at!)
 
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
@@ -298,6 +302,8 @@ extension OriginalNode: ASCollectionDelegate, ASCollectionDataSource {
                 }
                 
                 node.automaticallyManagesSubnodes = true
+                
+                print("Time taken to load ReelNode: \(Date().timeIntervalSince(startTime)) seconds")
 
                 return node
             }
@@ -548,24 +554,32 @@ extension OriginalNode {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        retrieveNextPageWithCompletion { [weak self] (newPosts) in
-            guard let self = self else { return }
+        if allowLoadStitched {
             
-            if let vc = UIViewController.currentViewController() {
+            retrieveNextPageWithCompletion { [weak self] (newPosts) in
+                guard let self = self else { return }
                 
-                if vc is FeedViewController || vc is SelectedPostVC {
-                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                    context.completeBatchFetching(true)
-                    //self.cleanupPosts(collectionNode: collectionNode)
+                if let vc = UIViewController.currentViewController() {
+                    
+                    if vc is FeedViewController || vc is SelectedPostVC {
+                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                        context.completeBatchFetching(true)
+                        //self.cleanupPosts(collectionNode: collectionNode)
+                    } else {
+                        context.completeBatchFetching(true)
+                    }
+                    
                 } else {
                     context.completeBatchFetching(true)
                 }
-                
-            } else {
-                context.completeBatchFetching(true)
+               
             }
-           
+            
+        } else {
+            context.completeBatchFetching(true)
         }
+        
+
     }
 
    
@@ -939,11 +953,7 @@ extension OriginalNode {
                     
                     if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                         foundVisibleVideo = true
-                        //playTimeBar.isHidden = false
-                        imageIndex = nil
-                    } else {
-                        //playTimeBar.isHidden = true
-                        imageIndex = newPlayingIndex
+                        
                     }
                     
                 }

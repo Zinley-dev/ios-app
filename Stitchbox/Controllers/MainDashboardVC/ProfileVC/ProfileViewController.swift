@@ -132,14 +132,17 @@ class ProfileViewController: UIViewController {
         configureDatasource()
         wireDelegate()
         setupSettingButton()
-        getFollowing()
-        getFollowers()
-        getStitchCount()
         
-        self.getMyPost { (newPosts) in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                        
+            self?.getFollowing()
+            self?.getFollowers()
+            self?.getStitchCount()
             
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
-            
+            self?.getMyPost { [weak self] (newPosts) in
+                self?.insertNewRowsInCollectionNode(newPosts: newPosts)
+            }
+                        
         }
         
         delay(2) {
@@ -368,28 +371,31 @@ extension ProfileViewController {
             
         }
         
-        
-        reloadUserInformation {
-            self.reloadGetFollowers {
-                self.reloadGetFollowing {
-                    self.reloadGetStitches {
-                        self.applyAllChange()
-                        Dispatch.main.async {
-                            self.pullControl.endRefreshing()
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                                
+            self?.reloadUserInformation {
+                self?.reloadGetFollowers {
+                    self?.reloadGetFollowing {
+                        self?.reloadGetStitches {
+                            self?.applyAllChange()
+                            Dispatch.main.async { [weak self] in
+                                self?.pullControl.endRefreshing()
+                            }
                         }
                     }
+                    
                 }
-                
             }
+            
+                                
         }
-        
-        
+
     }
     
     @objc func refreshData(_ sender: Any) {
         
-        reloadUserInformation {
-            self.applyUIChange()
+        reloadUserInformation { [weak self] in
+            self?.applyUIChange()
             
         }
         
@@ -398,10 +404,14 @@ extension ProfileViewController {
     
     func refreshFollow() {
         
-        reloadGetFollowers {
-            self.reloadGetFollowing {
-                self.applyHeaderChange()
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            self?.reloadGetFollowers {
+                self?.reloadGetFollowing {
+                    self?.applyHeaderChange()
+                }
             }
+            
         }
         
         
@@ -414,11 +424,16 @@ extension ProfileViewController {
         datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
         currpage = 1
         
-        self.getMyPost { (newPosts) in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            self?.getMyPost { [weak self] (newPosts) in
+                
+                self?.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+            }
             
         }
+        
         
         
     }
@@ -716,9 +731,17 @@ extension ProfileViewController: UICollectionViewDelegate {
         // Infinite scrolling logic
         let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
         if indexPath.row == snap.count - 5 {
-            self.getMyPost { (newPosts) in
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
+            
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                
+                self?.getMyPost { [weak self] (newPosts) in
+                    self?.insertNewRowsInCollectionNode(newPosts: newPosts)
+                }
+                
             }
+            
+            
         }
     }
     

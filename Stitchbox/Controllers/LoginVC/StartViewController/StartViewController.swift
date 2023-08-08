@@ -86,8 +86,10 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             
         }
         
+    buildUI()
         
-      buildUI()
+    
+        
       bindingUI()
       
       termOfUseLbl.tapDelegate = self
@@ -129,234 +131,6 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
       
       setupNavBar()
   }
-    
-    func setupNavBar() {
-        
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithDefaultBackground()
-        navigationBarAppearance.backgroundColor = .clear
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.backgroundImage = UIImage()
-        navigationBarAppearance.shadowImage = UIImage()
-        navigationBarAppearance.shadowColor = .clear
-        navigationBarAppearance.backgroundEffect = nil
-
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.isTranslucent = true
-
-        
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
-        if player != nil {
-            player!.play()
-            
-            delay(1) {
-                NotificationCenter.default.addObserver(self, selector: #selector(self.playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player!.currentItem)
-            }
-        
-        }
-        
-        setupNavBar()
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        
-        if player != nil {
-            player!.pause()
-            
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
-        }
-
-    }
-
-    
-    func tappableLabel(_ tappableLabel: ZSWTappableLabel, tappedAt idx: Int, withAttributes attributes: [NSAttributedString.Key : Any] = [:]) {
-        guard let URL = attributes[StartViewController.URLAttributeName] as? URL else {
-            return
-        }
-        
-        let SF = SFSafariViewController(url: URL)
-        SF.modalPresentationStyle = .fullScreen
-        self.present(SF, animated: true)
-    }
-    
-  
-  // MARK: - Functions
-  func bindUI(with: ViewModelType) {
-  }
-  
-  func bindAction(with viewModel: ViewModelType) {
-  }
-
-  
-  func bindingUI() {
-    vm.output.errorsObservable
-      .subscribe(onNext: { (error) in
-        
-        DispatchQueue.main.async {
-          if (error._code == 401) {
-            self.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
-          } else {
-            self.presentError(error: error)
-          }
-        }
-      })
-      .disposed(by: disposeBag)
-    
-    vm.output.loginResultObservable.subscribe(onNext: { isTrue in
-      if (isTrue) {
-          RedirectionHelper.redirectToDashboard()
-      }
-    })
-    .disposed(by: disposeBag)
-  }
-  
-  func buildUI() {
-    let path = Bundle.main.path(forResource: "bg", ofType: ".mp4")
-    player = AVPlayer(url: URL(fileURLWithPath: path!))
-    player?.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
-    let playerLayer = AVPlayerLayer(player: player)
-    playerLayer.frame = self.view.frame
-    playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-    self.contentView.layer.insertSublayer(playerLayer, at: 0)
-    player!.seek(to: CMTime.zero)
-    player!.play()
-    self.player?.isMuted = true
-    
-    //btnLetStart.layer.cornerRadius = btnLetStart.frame.height / 2
-    btnLetStart.setTitle("", for: .normal)
-    collectionLoginProviders.forEach { (btn) in
-      btn.setTitle("", for: .normal)
-    }
-  
-  }
-  
-  @IBAction func didTapLetStart(_ sender: UIButton) {
-//    self.presentLoading()
-
-      UIView.animate(withDuration: 0.3) {
-          self.collectionLoginStackProviders.forEach { item in
-              item.isHidden = !item.isHidden
-              item.alpha = item.isHidden ? 0 : 1
-          }
-      }
-      
-  }
-  
-  @IBAction func didTapLogin(_ sender: UIButton) {
-     
-      if let seleted = SocialLoginType(rawValue: sender.tag) {
-          
-          vm.startSignInProcess(with: seleted)
-          
-      } else {
-          
-          print("Can't get SocialLoginType tag number to perform")
-          
-      }
-   
-  }
-    
-  @IBAction func didTapNormalLogin(_ sender: UIButton) {
-       
-      //NormalLoginVC
-      
-      if let NLVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NormalLoginVC") as? NormalLoginVC {
-         
-          self.navigationController?.pushViewController(NLVC, animated: true)
-          
-      }
-     
-  }
-    
-    @IBAction func didTapAppleLogin(_ sender: UIButton) {
-        
-        let appleIDProvider = ASAuthorizationAppleIDProvider()
-        let request = appleIDProvider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-            
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-        authorizationController.delegate = self
-        authorizationController.presentationContextProvider = self
-        authorizationController.performRequests()
-        
-    }
-    
-    @available(iOS 13.0, *)
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        if error._code != 1001 {
-            self.showErrorAlert("Oops!", msg: error.localizedDescription)
-        }
-       
-    }
-    
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            let userIdentifier = appleIDCredential.user
-            let userFirstName = appleIDCredential.fullName?.givenName
-            let userLastName = appleIDCredential.fullName?.familyName
-            let userEmail = appleIDCredential.email
-            
-            let data = AuthResult(idToken: userIdentifier, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(userFirstName ?? "") \(userLastName ?? "")", email: userEmail, phone: nil, avatar: "")
-
-            self.vm.completeSignIn(with: data)
-        }
-    }
-  
-  
-  @objc func playVideoDidReachEnd() {
-    player!.seek(to: CMTime.zero)
-  }
-    
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        
-        
-        let touch = touches.first
-        guard let location = touch?.location(in: self.view) else { return }
-        
-        if !termOfUseLbl.frame.contains(location) {
-            
-            UIView.animate(withDuration: 0.3) {
-                self.collectionLoginStackProviders.forEach { item in
-                    item.isHidden = !item.isHidden
-                    item.alpha = item.isHidden ? 0 : 1
-                }
-            }
-            
-        }
-        
-    }
-  
-    
-    func showErrorAlert(_ title: String, msg: String) {
-                                                                                                                                           
-        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(action)
-        
-                                                                                       
-        present(alert, animated: true, completion: nil)
-        
-    }
-    
-}
-
-extension StartViewController {
-    
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
@@ -428,5 +202,236 @@ extension StartViewController {
         
     }
     
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .clear
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundImage = UIImage()
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.shadowColor = .clear
+        navigationBarAppearance.backgroundEffect = nil
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.isTranslucent = true
+
+        
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if player != nil {
+            player!.play()
+            
+            // Add observer here
+            NotificationCenter.default.addObserver(self, selector: #selector(self.playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player!.currentItem)
+        }
+        
+        setupNavBar()
+    }
+
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if player != nil {
+            player!.pause()
+
+            // Remove observer here
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
+        }
+    }
+
+    
+    
+    func buildUI() {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            let path = Bundle.main.path(forResource: "bg", ofType: ".mp4")
+            self.player = AVPlayer(url: URL(fileURLWithPath: path!))
+            self.player?.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
+            let playerLayer = AVPlayerLayer(player: self.player)
+            playerLayer.frame = self.view.frame
+            playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+            self.player?.seek(to: CMTime.zero)
+            self.player?.play()
+            self.player?.isMuted = true
+            
+            // Add observer here
+            NotificationCenter.default.addObserver(self, selector: #selector(self.playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player!.currentItem)
+
+            // Dispatch UI updates to the main thread
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.contentView.layer.insertSublayer(playerLayer, at: 0)
+                //btnLetStart.layer.cornerRadius = btnLetStart.frame.height / 2
+                self.btnLetStart.setTitle("", for: .normal)
+                self.collectionLoginProviders.forEach { (btn) in
+                    btn.setTitle("", for: .normal)
+                }
+            }
+        }
+    }
+    
+    @objc func playVideoDidReachEnd() {
+        player?.seek(to: CMTime.zero)
+    }
+
+
+
+    
+    func tappableLabel(_ tappableLabel: ZSWTappableLabel, tappedAt idx: Int, withAttributes attributes: [NSAttributedString.Key : Any] = [:]) {
+        guard let URL = attributes[StartViewController.URLAttributeName] as? URL else {
+            return
+        }
+        
+        let SF = SFSafariViewController(url: URL)
+        SF.modalPresentationStyle = .fullScreen
+        self.present(SF, animated: true)
+    }
+    
+  
+  // MARK: - Functions
+  func bindUI(with: ViewModelType) {
+  }
+  
+  func bindAction(with viewModel: ViewModelType) {
+  }
+
+  
+  func bindingUI() {
+    vm.output.errorsObservable
+      .subscribe(onNext: { (error) in
+        
+        DispatchQueue.main.async { [weak self] in
+          if (error._code == 401) {
+            self?.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
+          } else {
+            self?.presentError(error: error)
+          }
+        }
+      })
+      .disposed(by: disposeBag)
+    
+    vm.output.loginResultObservable.subscribe(onNext: { isTrue in
+      if (isTrue) {
+          RedirectionHelper.redirectToDashboard()
+      }
+    })
+    .disposed(by: disposeBag)
+  }
+
+  
+  @IBAction func didTapLetStart(_ sender: UIButton) {
+//    self.presentLoading()
+
+      UIView.animate(withDuration: 0.3) { [weak self] in
+          self?.collectionLoginStackProviders.forEach { item in
+              item.isHidden = !item.isHidden
+              item.alpha = item.isHidden ? 0 : 1
+          }
+      }
+      
+  }
+  
+  @IBAction func didTapLogin(_ sender: UIButton) {
+     
+      if let seleted = SocialLoginType(rawValue: sender.tag) {
+          
+          vm.startSignInProcess(with: seleted)
+          
+      } else {
+          
+          print("Can't get SocialLoginType tag number to perform")
+          
+      }
+   
+  }
+    
+  @IBAction func didTapNormalLogin(_ sender: UIButton) {
+       
+      //NormalLoginVC
+      
+      if let NLVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NormalLoginVC") as? NormalLoginVC {
+         
+          self.navigationController?.pushViewController(NLVC, animated: true)
+          
+      }
+     
+  }
+    
+    @IBAction func didTapAppleLogin(_ sender: UIButton) {
+        
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+            
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+        
+    }
+    
+    @available(iOS 13.0, *)
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        if error._code != 1001 {
+            self.showErrorAlert("Oops!", msg: error.localizedDescription)
+        }
+       
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            let userIdentifier = appleIDCredential.user
+            let userFirstName = appleIDCredential.fullName?.givenName
+            let userLastName = appleIDCredential.fullName?.familyName
+            let userEmail = appleIDCredential.email
+            
+            let data = AuthResult(idToken: userIdentifier, providerID: nil, rawNonce: nil, accessToken: nil, name: "\(userFirstName ?? "") \(userLastName ?? "")", email: userEmail, phone: nil, avatar: "")
+
+            self.vm.completeSignIn(with: data)
+        }
+    }
+  
+  
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        
+        let touch = touches.first
+        guard let location = touch?.location(in: self.view) else { return }
+        
+        if !termOfUseLbl.frame.contains(location) {
+            
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.collectionLoginStackProviders.forEach { item in
+                    item.isHidden = !item.isHidden
+                    item.alpha = item.isHidden ? 0 : 1
+                }
+            }
+            
+        }
+        
+    }
+  
+    
+    func showErrorAlert(_ title: String, msg: String) {
+                                                                                                                                           
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+                                                                                       
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 }

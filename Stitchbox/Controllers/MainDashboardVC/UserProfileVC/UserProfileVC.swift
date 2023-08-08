@@ -96,7 +96,10 @@ class UserProfileVC: UIViewController {
             
             configureDatasource()
             
-            self.loadUserData()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.loadUserData()
+            }
+        
          
             
         }
@@ -113,26 +116,6 @@ class UserProfileVC: UIViewController {
         
         
         self.loadingView.isHidden = true
-        
-        /*
-        if !loadingView.isHidden {
-            
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                self.loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
-            }
-            
-            loadingView.backgroundColor = self.view.backgroundColor
-            
-        } */
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -321,7 +304,8 @@ extension UserProfileVC {
                     
                     print(error)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.allowProcess = true
                         self.isFollow = false
                         self.followerCount += 1
@@ -365,7 +349,8 @@ extension UserProfileVC {
                     
                     print(error)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.allowProcess = true
                         self.isFollow = true
                         self.followerCount -= 1
@@ -394,7 +379,8 @@ extension UserProfileVC {
         channelParams.operatorUserIds = [userUID]
         
         
-        SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
+        SBDGroupChannel.createChannel(with: channelParams) { [weak self] groupChannel, error in
+            guard let self = self else { return }
             guard error == nil, let channelUrl = groupChannel?.channelUrl else {
                 self.showErrorAlert("Oops!", msg: error?.localizedDescription ?? "Failed to create message")
                 return
@@ -869,21 +855,26 @@ extension UserProfileVC {
                 self.hideAnimation()
                 
                
-                self.countFollowings()
-                self.countFollowers()
-                self.checkIfFollow()
-                self.getStitchCount()
-               
-                
-                self.getUserPost { (newPosts) in
+                DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                                        
+                    self?.countFollowings()
+                    self?.countFollowers()
+                    self?.checkIfFollow()
+                    self?.getStitchCount()
                     
-                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                    
+                    self?.getUserPost { (newPosts) in
+                        
+                        self?.insertNewRowsInCollectionNode(newPosts: newPosts)
+                        
+                    }
+                                        
                 }
+                
                 
             case .failure(_):
                 
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.hideAnimation()
                     self.NoticeBlockAndDismiss()
                 }
