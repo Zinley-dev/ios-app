@@ -562,7 +562,7 @@ func unmuteVideoIfNeed() {
                         update1.stitchViewController.currentIndex = 0
                     }
                     
-                    if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.feedViewController.currentIndex!, section: 0)) as? VideoNode {
+                    if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.stitchViewController.currentIndex!, section: 0)) as? VideoNode {
                         
                         cell2.videoNode.muted = false
                         shouldMute = false

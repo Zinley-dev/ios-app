@@ -452,6 +452,8 @@ extension ParentViewController {
             isFeed = true
             if stitchViewController.currentIndex != nil {
                 stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
+            } else {
+                stitchViewController.pauseVideo(index: 0)
             }
             
             if feedViewController.currentIndex != nil {
@@ -464,6 +466,8 @@ extension ParentViewController {
             isFeed = false
             if feedViewController.currentIndex != nil {
                 feedViewController.pauseVideo(index: feedViewController.currentIndex!)
+            } else {
+                feedViewController.pauseVideo(index: 0)
             }
             
             
