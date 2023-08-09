@@ -55,6 +55,7 @@ var newSlogan = ""
 var didChanged = false
 var reloadAddedGame = false
 var globalIsSound = false
+var globalClear = false
 var shouldMute: Bool?
 var globalSetting: SettingModel!
 var navigationControllerHeight:CGFloat = 0.0
@@ -63,21 +64,12 @@ let horizontalPadding: CGFloat = 12
 let bottomValue: CGFloat = 40
 let bottomValueNoHide: CGFloat = 0
 
-let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitchbox", "domain": ["stitchbox.gg"], "status": true])
-let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
-let data3 = StreamingDomainModel(postKey: "3", streamingDomainModel: ["company": "Twitch", "domain": ["twitch.tv", "m.twitch.tv"], "status": true])
-let data4 = StreamingDomainModel(postKey: "4", streamingDomainModel: ["company": "Facebook gaming", "domain": ["facebook.com", "m.facebook.com"], "status": true])
-let data5 = StreamingDomainModel(postKey: "5", streamingDomainModel: ["company": "Bigo Live", "domain": ["bigo.tv"], "status": true])
-let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company": "Nonolive", "domain": ["nonolive.com"], "status": true])
-let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
 
 var emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-with-concrete-floor_53876-70804.jpg?w=1380"
 var emptySB = "https://stitchbox-app-images.s3.us-east-1.amazonaws.com/adf94fba-69a1-4dc3-b934-003a04265c39.png"
 let xBtn = UIImage(named: "1024x")?.resize(targetSize: CGSize(width: 12, height: 12))
 
-var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
 var back_frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-var discord_domain = ["discordapp.com", "discord.com", "discord.co", "discord.gg", "watchanimeattheoffice.com", "dis.gd", "discord.media", "discordapp.net", "discordstatus.com" ]
 
 let muteImage = UIImage.init(named: "3xmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)
 let unmuteImage = UIImage.init(named: "3xunmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)
@@ -301,9 +293,6 @@ extension UICollectionReusableView {
 }
 
 
-func check_Url(host: String) -> Bool {
-    return streaming_domain.contains { $0.domain.contains(host) }
-}
 
 extension UITextView {
     
@@ -330,24 +319,24 @@ extension UITextView {
 }
 
 
-func handlePauseVideoInCell(_ cell: ReelNode) {
+func handlePauseVideoInCell(_ cell: VideoNode) {
     cell.videoNode.player?.seek(to: CMTime.zero)
     cell.videoNode.pause()
 }
 
-func handlePauseVideoInReelCell(_ cell: ReelNode) {
+func handlePauseVideoInReelCell(_ cell: VideoNode) {
     cell.videoNode.player?.seek(to: CMTime.zero)
     cell.videoNode.pause()
 }
 
-func handleVideoNodeInCell(_ cell: ReelNode, muteStatus: Bool) {
+func handleVideoNodeInCell(_ cell: VideoNode, muteStatus: Bool) {
     guard !cell.videoNode.isPlaying() else { return }
     
     cell.videoNode.muted = muteStatus
     cell.videoNode.play()
 }
 
-func handleVideoNodeInReelCell(_ cell: ReelNode, muteStatus: Bool) {
+func handleVideoNodeInReelCell(_ cell: VideoNode, muteStatus: Bool) {
     guard !cell.videoNode.isPlaying() else { return }
     cell.videoNode.muted = muteStatus
     cell.videoNode.play()
@@ -387,16 +376,6 @@ func presentSwiftLoader() {
     
     SwiftLoader.show(title: "", animated: true)
 
-}
-
-
-func discord_verify(host: String) -> Bool  {
-    
-    if discord_domain.contains(host) {
-        return true
-    }
-    
-    return false
 }
 
 
@@ -546,7 +525,6 @@ func reloadGlobalSettings() {
             }
 
             globalSetting =  Mapper<SettingModel>().map(JSONObject: data)
-           
       
         case .failure(let error):
         
@@ -569,15 +547,10 @@ func unmuteVideoIfNeed() {
                     update1.currentIndex = 0
                 }
                 
-                if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? VideoNode {
                     
-                    if let cell2 = cell.mainCollectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
-                        
-                        cell2.videoNode.muted = false
-                        shouldMute = false
-                    }
-                    
-                    
+                    cell2.videoNode.muted = false
+                    shouldMute = false
                 }
                 
                
@@ -590,17 +563,11 @@ func unmuteVideoIfNeed() {
                 
                 if update1.currentIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                    if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? VideoNode {
                         
-                        if let cell2 = cell.mainCollectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
-                            
-                            cell2.videoNode.muted = false
-                            shouldMute = false
-                        }
-                        
-                        
+                        cell2.videoNode.muted = false
+                        shouldMute = false
                     }
-                    
                 }
                 
                
@@ -613,15 +580,10 @@ func unmuteVideoIfNeed() {
                 
                 if update1.currentIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                    if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? VideoNode {
                         
-                        if let cell2 = cell.mainCollectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
-                            
-                            cell2.videoNode.muted = false
-                            shouldMute = false
-                        }
-                        
-                        
+                        cell2.videoNode.muted = false
+                        shouldMute = false
                     }
                     
                 }
@@ -695,21 +657,16 @@ func muteVideoIfNeed() {
                 
                 if update1.currentIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                    if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? VideoNode {
                         
-                        if let cell2 = cell.mainCollectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
+                        
+                        if cell2.videoNode.isPlaying() {
                             
+                            cell2.videoNode.muted = true
+                            shouldMute = true
                             
-                            if cell2.videoNode.isPlaying() {
-                                
-                                cell2.videoNode.muted = true
-                                shouldMute = true
-                                
-                                
-                            }
                             
                         }
-
                         
                     }
                     
@@ -725,21 +682,16 @@ func muteVideoIfNeed() {
                 
                 if update1.currentIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                    if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? VideoNode {
                         
-                        if let cell2 = cell.mainCollectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
+                        
+                        if cell2.videoNode.isPlaying() {
                             
+                            cell2.videoNode.muted = true
+                            shouldMute = true
                             
-                            if cell2.videoNode.isPlaying() {
-                                
-                                cell2.videoNode.muted = true
-                                shouldMute = true
-                                
-                                
-                            }
                             
                         }
-
                         
                     }
                     
@@ -753,8 +705,8 @@ func muteVideoIfNeed() {
     
 }
 
-func resetView(cell: ReelNode) {
-    
+func resetView(cell: VideoNode) {
+    /*
     if cell.isViewed == true {
         
         let currentTime = NSDate().timeIntervalSince1970
@@ -769,12 +721,13 @@ func resetView(cell: ReelNode) {
         }
         
     }
-    
+    */
     
 }
 
-func resetViewForReel(cell: ReelNode) {
+func resetViewForReel(cell: VideoNode) {
     
+    /*
     if cell.isViewed == true {
         
         let currentTime = NSDate().timeIntervalSince1970
@@ -789,7 +742,7 @@ func resetViewForReel(cell: ReelNode) {
         }
         
     }
-    
+    */
     
 }
 
@@ -1056,12 +1009,7 @@ class CustomSlider: UISlider {
                 if update1.currentIndex != nil {
                     //update1.pauseVideo(index: update1.currentIndex!)
                     
-                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        currentCell.pauseVideo(index: currentCell.currentIndex!)
-                        
-                        
-                    }
+                    update1.pauseVideo(index: update1.currentIndex!)
                     
                 }
                 
@@ -1082,26 +1030,11 @@ class CustomSlider: UISlider {
                 if update1.currentIndex != nil {
                     //update1.pauseVideo(index: update1.currentIndex!)
                     
-                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        currentCell.pauseVideo(index: currentCell.currentIndex!)
-                        
-                        
-                    }
+                    update1.pauseVideo(index: update1.currentIndex!)
                     
                 } else {
                     
-                    if update1.startIndex != nil {
-                        //update1.pauseVideo(index: update1.currentIndex!)
-                        
-                        if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.startIndex!, section: 0)) as? OriginalNode {
-                            
-                            currentCell.pauseVideo(index: currentCell.currentIndex!)
-                            
-                            
-                        }
-                        
-                    }
+                    update1.pauseVideo(index: update1.startIndex!)
                     
                     
                 }
@@ -1145,13 +1078,10 @@ class CustomSlider: UISlider {
                     
                     let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
                     
-                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
-                        currentCell.playVideo(index: currentCell.currentIndex!)
-                        
-                        
-                    }
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
+                    
+
 
                 }
                 
@@ -1166,13 +1096,8 @@ class CustomSlider: UISlider {
                     
                     let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
                     
-                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
-                        currentCell.playVideo(index: currentCell.currentIndex!)
-                        
-                        
-                    }
+                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
+                    update1.playVideo(index: update1.currentIndex!)
 
                 } else {
                     
@@ -1181,13 +1106,8 @@ class CustomSlider: UISlider {
                         
                         let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
                         
-                        if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.startIndex!, section: 0)) as? OriginalNode {
-                            
-                            currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
-                            currentCell.playVideo(index: currentCell.currentIndex!)
-                            
-                            
-                        }
+                        update1.seekVideo(index: update1.startIndex!, time: newVideoTime)
+                        update1.playVideo(index: update1.startIndex!)
 
                     }
                     
@@ -1257,4 +1177,33 @@ class ShadowedView: UIView {
         layer.masksToBounds = false
     }
 
+}
+
+extension UITabBarController {
+    
+    func changeTabBar(hidden: Bool, animated: Bool) {
+        let tabBar = self.tabBar
+
+        if tabBar.isHidden == hidden {
+            return
+        }
+
+        let duration: TimeInterval = (animated ? 0.25 : 0.0)
+
+        if hidden {
+            UIView.animate(withDuration: duration, animations: {
+                tabBar.alpha = 0
+            }, completion: { _ in
+                tabBar.isHidden = true
+                tabBar.alpha = 1 // Reset the alpha back to 1
+            })
+        } else {
+            tabBar.isHidden = false
+            tabBar.alpha = 0
+
+            UIView.animate(withDuration: duration) {
+                tabBar.alpha = 1
+            }
+        }
+    }
 }

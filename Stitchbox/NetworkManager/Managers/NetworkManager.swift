@@ -27,6 +27,7 @@ class RequestDelegate: NSObject, URLSessionTaskDelegate {
 }
 
 class Manager<EndPoint: EndPointType>: RequestManager {
+    
     private var task: URLSessionDataTaskProtocol?
     private let session: URLSessionProtocol
     private let requestDelegate: RequestDelegate
@@ -112,36 +113,29 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         
         guard let request = buildRequest(from: route) else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                completion(.failure(ErrorType.badRequest))
-                
-            }
+            completion(.failure(ErrorType.badRequest))
             return
         }
-        
 
         
         self.task = session.dataTask(with: request, completionHandler: { [weak self] data, response, error in
             guard let self = self else { return }
             // Now use `strongSelf` instead of `self` inside the closure.
             // Ensure we are on the main thread
-            DispatchQueue.main.async {
-
-                if let error = error {
-                    print(error.localizedDescription)
-                    completion(.failure(ErrorType.badRequest))
-                    return
-                }
-                
-                guard let response = response as? HTTPURLResponse else {
-                    completion(.failure(ErrorType.invalidResponse))
-                    return
-                }
-                
-                let result = self.handleNetworkResponse(data, response)
-                completion(result)
+            if let error = error {
+                print(error.localizedDescription)
+                completion(.failure(ErrorType.badRequest))
+                return
             }
+            
+            guard let response = response as? HTTPURLResponse else {
+                completion(.failure(ErrorType.invalidResponse))
+                return
+            }
+            
+            let result = self.handleNetworkResponse(data, response)
+            completion(result)
+            
         })
 
         task?.resume()
@@ -200,7 +194,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         
         contentData += "--\(boundary)\r\n"
         uploadData.append(contentData.data(using: .utf8)!)
-       
+
         return uploadData
     }
 
@@ -222,10 +216,24 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
 
         // Define a constant for the key or fetch it from a proper location
-        
         if let clientIp = UserDefaults.standard.object(forKey: kUserIp) as? String {
             request.setValue(clientIp, forHTTPHeaderField: "Sb-Client-Ip")
         }
+
+        // Get the current device's preferred language
+        let language = Locale.current.languageCode ?? "en"
+        let region = Locale.current.regionCode ?? "US"
+        let deviceLanguage = "\(language)-\(region)"
+
+        // Get the current device model
+        let device = UIDevice.current.model
+
+        // Get the current operating system version
+        let currentOS = UIDevice.current.systemVersion
+
+        request.setValue(deviceLanguage, forHTTPHeaderField: "Sb-Client-Language")
+        request.setValue(device, forHTTPHeaderField: "Sb-Client-Device")
+        request.setValue(currentOS, forHTTPHeaderField: "Sb-Client-OS")
 
         request.httpMethod = route.httpMethod.rawValue
         switch route.task {
@@ -244,8 +252,10 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             self.addAdditionalHeaders(additionalHeaders, request: &request)
             self.configureParameters(parameters: parameters, request: &request)
         }
+
         return request
     }
+
 
     
     fileprivate func configureParameters(parameters: [String: Any]?, request: inout URLRequest) {

@@ -1,5 +1,5 @@
 //
-//  ReelNode.swift
+//  demoNode.swift
 //  Stitchbox
 //
 //  Created by Khoi Nguyen on 4/2/23.
@@ -19,12 +19,13 @@ fileprivate let FontSize: CGFloat = 14
 fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
-class ReelNode: ASCellNode, ASVideoNodeDelegate {
+class demoNode: ASCellNode {
     
     deinit {
         print("ReelNode is being deallocated.")
     }
     
+
     var allowProcess = true
     var isFollowingUser = false
     var isSave = false
@@ -70,7 +71,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
     init(with post: PostModel, at: Int) {
             self.post = post
         
-            print("ReelNode at \(at) is loading post: \(post.id)")
+            print("demoNode at \(at) is loading post: \(post.id)")
           
             self.contentNode = ASTextNode()
             self.headerNode = ASDisplayNode()
@@ -133,7 +134,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
         }
     
-    
+    /*
     
     override func didLoad() {
         super.didLoad()
@@ -141,10 +142,11 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
      
         
         
-        
+        /*
          self.videoNode.view.layer.cornerRadius = 25
          self.videoNode.view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] // bottom left and right corners
          self.videoNode.view.clipsToBounds = true
+        */
         
         self.label = ActiveLabel()
         self.contentNode.backgroundColor = .clear
@@ -373,7 +375,24 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             self?.checkIfSave()
             
         }
-       
+        
+        setupClearMode()
+        
+    }
+    
+    
+    func setupClearMode() {
+        
+        if globalClear {
+            
+            contentNode.isHidden = true
+            buttonNode.isHidden = true
+            sideButtonsView.isHidden = true
+            headerNode.isHidden = true
+
+            
+        }
+        
     }
     
     
@@ -385,22 +404,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
         }
      
     }
-
-
-    override func didExitVisibleState() {
-        super.didExitVisibleState()
-        
-        videoNode.delegate = nil
-        videoNode.pause()
-        
-    }
-    
-    override func didEnterVisibleState() {
-        super.didEnterVisibleState()
-        
-        videoNode.delegate = self
-    }
-
+*/
     
     func setupDefaultContent() {
 
@@ -514,7 +518,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
             guard let self = self else { return }
             self.headerView.followBtn.isHidden = false
             self.isFollowingUser = false
-            let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReelNode.followTap))
+            let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(demoNode.followTap))
             followTap.numberOfTapsRequired = 1
             self.headerView.followBtn.addGestureRecognizer(followTap)
             
@@ -808,7 +812,7 @@ class ReelNode: ASCellNode, ASVideoNodeDelegate {
 
 }
 
-extension ReelNode {
+extension demoNode {
 
   
     func didTap(_ videoNode: ASVideoNode) {
@@ -874,11 +878,7 @@ extension ReelNode {
             shouldCountView = false
             endVideo(watchTime: Double(totalWatchedTime))
         }
-        
-        // Optionally, add another condition to check if user is actively engaging with the video
-        // if shouldCountView && userIsEngagingWithVideo {
-        //     endVideo(watchTime: Double(totalWatchedTime))
-        // }
+     
     }
     
     func videoDidPlay(toEnd videoNode: ASVideoNode) {
@@ -924,7 +924,7 @@ extension ReelNode {
 }
 
 
-extension ReelNode {
+extension demoNode {
     
     
     @objc func userTapped() {
@@ -1524,7 +1524,7 @@ extension ReelNode {
 
 }
 
-extension ReelNode {
+extension demoNode {
     
     func totalLikeCountFromLocal() {
         
@@ -1598,7 +1598,7 @@ extension ReelNode {
     
 }
 
-extension ReelNode {
+extension demoNode {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
@@ -1681,7 +1681,7 @@ extension ReelNode {
 }
 
 
-extension ReelNode: UIGestureRecognizerDelegate {
+extension demoNode: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UIPinchGestureRecognizer || otherGestureRecognizer is UIPinchGestureRecognizer {
@@ -1855,7 +1855,7 @@ extension ReelNode: UIGestureRecognizerDelegate {
 
 }
 
-extension ReelNode {
+extension demoNode {
     
     func seeMore() {
         
@@ -1874,7 +1874,7 @@ extension ReelNode {
 
 
 
-extension ReelNode {
+extension demoNode {
     
     func disableSroll() {
         
