@@ -76,7 +76,8 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
     func bindUI(with viewModel: LoginByPhoneSendCodeViewModel) {
         // bind View Model outputs to Controller elements
         viewModel.output.errorsObservable
-            .subscribe(onNext: { (error) in
+            .subscribe(onNext: { [weak self] (error) in
+                guard let self = self else { return }
                 DispatchQueue.main.async {
                     SwiftLoader.hide()
                     self.presentError(error: error)
@@ -88,8 +89,8 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
             .subscribe(onNext: { isTrue in
                 if isTrue {
                     
-                    DispatchQueue.main.async { [self] in
-                        
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         let viewModel = LoginByPhoneVerifyViewModel()
                         phoneTextfield.rx.text.orEmpty.asObservable().subscribe(viewModel.input.phoneObserver)
                             .disposed(by: self.disposeBag)
@@ -108,7 +109,8 @@ class LoginByPhoneSendCodeController: UIViewController, ControllerType, CountryP
     func bindAction(with viewModel: LoginByPhoneSendCodeViewModel) {
         
         sendCodeButton.rx.tap.asObservable()
-            .withLatestFrom(phoneTextfield.rx.text.orEmpty.asObservable()) {
+            .withLatestFrom(phoneTextfield.rx.text.orEmpty.asObservable()) { [weak self] in
+                guard let self = self else { return ("","")}
                 return ($1, self.cpv.selectedCountry.phoneCode) }
             .subscribe(viewModel.action.sendOTPDidTap)
             .disposed(by: disposeBag)

@@ -18,6 +18,13 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class CommentNode: ASCellNode {
     
+    
+    deinit {
+        print("CommentNode is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+        
+    }
+    
     var replyUsername = ""
     var finalText: NSAttributedString!
     var replyUID = ""
@@ -37,10 +44,8 @@ class CommentNode: ASCellNode {
     var replyBtn : ((ASCellNode) -> Void)?
     var reply : ((ASCellNode) -> Void)?
     var isLiked = false
-   
-    
-    var like : ((ASCellNode) -> Void)?
-    
+    var label: ActiveLabel!
+
     init(with post: CommentModel) {
         
         self.post = post
@@ -54,504 +59,31 @@ class CommentNode: ASCellNode {
         self.timeNode = ASTextNode()
         self.replyBtnNode = ASButtonNode()
         self.replyToNode = ASTextNode()
-        
+      
         super.init()
         
-        self.replyBtnNode.setTitle("Reply", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.darkGray, for: .normal)
-
-        self.replyBtnNode.addTarget(self, action: #selector(CommentNode.replyBtnPressed), forControlEvents: .touchUpInside)
-        self.selectionStyle = .none
-        avatarNode.contentMode = .scaleAspectFill
-        avatarNode.cornerRadius = OrganizerImageSize/2
-        avatarNode.clipsToBounds = true
-        cmtNode.truncationMode = .byTruncatingTail
-       
-        let paragraphStyles = NSMutableParagraphStyle()
-        paragraphStyles.alignment = .left
-        
-        avatarNode.shouldRenderProgressImages = true
-        
-        
-        let textAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
-            NSAttributedString.Key.foregroundColor: UIColor.black
-        ]
-
-        let timeAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
-            NSAttributedString.Key.foregroundColor: UIColor.darkGray
-        ]
-
-        
-        if self.post.reply_to != "" {
-           
-            if let username = self.post.reply_to_username {
-                                
-               let username = "\(username)"
-                self.replyUsername = username
-               
-                if self.post.createdAt != nil {
-                    
-                    let user = NSMutableAttributedString()
-              
-                    let username = NSAttributedString(string: "\(username): ", attributes: textAttributes)
-                    let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
-                    var time: NSAttributedString?
-                    
-                    
-                    
-                    
-                    if self.post.is_title == true {
-                    
-                        if self.post.updatedAt != Date() {
-                            
-                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.updatedAt, numericDates: true))", attributes: timeAttributes)
-                            
-                        } else {
-                            
-                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
-                            
-                        }
-                        
-                    } else {
-                        
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
-                    }
-                      
-                    user.append(username)
-                    user.append(text)
-                    
-                    
-                    
-                    self.timeNode.attributedText = time
-                    self.cmtNode.attributedText = user
-                    
-                    
-                }  else {
-                                               
-                    
-                    let user = NSMutableAttributedString()
-              
-                    let username = NSAttributedString(string: "\(username): ", attributes: textAttributes)
-                    
-                    let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
-                   
-                    let time = NSAttributedString(string: "Just now", attributes: timeAttributes)
-                    
-                    user.append(username)
-                    user.append(text)
-                    
-                    
-                    self.timeNode.attributedText = time
-                    self.cmtNode.attributedText = user
-                   
-                    
-                }
-                
-                                  
-                
-            }
-           
-          
-        } else {
-            
-            
-            if self.post.createdAt != nil {
-                
-            
-                let user = NSMutableAttributedString()
-                
-                let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
-              
-                var time: NSAttributedString?
-                
-                if self.post.is_title == true {
-                    
-                    if self.post.updatedAt != Date() {
-                        
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.updatedAt, numericDates: true))", attributes: timeAttributes)
-                        
-                    } else {
-                        
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
-                        
-                    }
-                    
-                } else {
-                    
-                    time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
-                    
-                }
-                
-               
-                
-                user.append(text)
-                
-                
-                DispatchQueue.main.async { [self] in
-                    timeNode.attributedText = time
-                    cmtNode.attributedText = user
-                }
-                
-                
-            } else {
-                
-                
-                let user = NSMutableAttributedString()
-             
-                let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
-               
-                let time = NSAttributedString(string: "Just now", attributes: timeAttributes)
-                
-                user.append(text)
-                
-                DispatchQueue.main.async { [self] in
-                    timeNode.attributedText = time
-                    cmtNode.attributedText = user
-                }
-               
-            }
-            
-        }
-        
-        DispatchQueue.main.async {
-            self.view.backgroundColor = .white
-        }
-       
-        infoNode.backgroundColor = UIColor.clear
-        
-        loadReplyBtnNode.backgroundColor = UIColor.clear
-        cmtNode.backgroundColor = UIColor.clear
-        replyToNode.backgroundColor = UIColor.clear
-        userNameNode.backgroundColor = UIColor.clear
-        
-        imageView.contentMode = .scaleAspectFit
-        imageView.frame = CGRect(x: 2, y: 2, width: 25, height: 25)
-    
-    
-        textNode.isLayerBacked = true
-    
-        textNode.backgroundColor = UIColor.clear
-        imageView.backgroundColor = UIColor.clear
-        imageView.contentMode = .scaleAspectFit
-                                                     
-        textNode.frame = CGRect(x: 0, y: 30, width: 30, height: 20)
-       
-        let button = ASButtonNode()
-        button.frame = CGRect(x: 0, y: 0, width: 30, height: 60)
-        button.backgroundColor = UIColor.clear
-        
-        
-        infoNode.addSubnode(imageView)
-        infoNode.addSubnode(textNode)
-        infoNode.addSubnode(button)
-   
-        button.addTarget(self, action: #selector(CommentNode.LikedBtnPressed), forControlEvents: .touchUpInside)
-        loadReplyBtnNode.addTarget(self, action: #selector(CommentNode.repliedBtnPressed), forControlEvents: .touchUpInside)
-        
-        
-        loadInfo(uid: self.post.comment_uid)
-        
-        
-        if self.post.has_reply == true {
-            
-            loadCmtCount()
-            
-        }
-        
-        
-        checkLikeCmt()
-        cmtCount()
-        
-        //
-        
-        
-        automaticallyManagesSubnodes = true
-        
-        // add Button
-        
-        //userNameNode
-        userNameNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
-        avatarNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
-          
-    }
-    
-    @objc func replyToBtnPressed() {
-        
-        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != post.reply_to {
-            
-            if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-                
-                if let vc = UIViewController.currentViewController() {
-                    
-                    let nav = UINavigationController(rootViewController: UPVC)
-
-                    // Set the user ID, nickname, and onPresent properties of UPVC
-                    UPVC.userId = post.reply_to
-                    UPVC.nickname = post.reply_to_username
-                    UPVC.onPresent = true
-
-                    // Customize the navigation bar appearance
-                    nav.navigationBar.barTintColor = .white
-                    nav.navigationBar.tintColor = .black
-                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
-
-                    nav.modalPresentationStyle = .fullScreen
-                    vc.present(nav, animated: true, completion: nil)
-           
-                }
-            }
-            
-            
-        }
-        
-        
-    }
-    
-    @objc func usernameBtnPressed() {
-        
-        
-        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != post.comment_uid {
-            
-            if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-                
-                if let vc = UIViewController.currentViewController() {
-                    
-                    let nav = UINavigationController(rootViewController: UPVC)
-
-                    // Set the user ID, nickname, and onPresent properties of UPVC
-                    UPVC.userId = post.comment_uid
-                    UPVC.nickname = post.comment_username
-                    UPVC.onPresent = true
-
-                    // Customize the navigation bar appearance
-                    nav.navigationBar.barTintColor = .white
-                    nav.navigationBar.tintColor = .black
-                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
-
-                    nav.modalPresentationStyle = .fullScreen
-                    vc.present(nav, animated: true, completion: nil)
-                    
-                }
-            }
-            
-        }
-
-        
-    }
-    
-    
-    @objc func LikedBtnPressed(sender: AnyObject!) {
-  
-        if isLiked {
-            unlikeComment()
-        } else {
-            likeComment()
-        }
-
-    }
-    
-    func checkLikeCmt() {
-        
-        APIManager.shared.islike(comment: post.comment_id) { [weak self] result in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            
-            switch result {
-            case .success(let apiResponse):
-                guard apiResponse.body?["message"] as? String == "success",
-                      let checkIsLike = apiResponse.body?["liked"] as? Bool  else {
-                        return
-                }
-                
-                self.isLiked = checkIsLike
-                
-                if checkIsLike {
-                    
-                    DispatchQueue.main.async {
-                        self.imageView.image = likeImage
-                    }
-                    
-                    
-                    
-                   
-            
-                } else {
-                    
-                    DispatchQueue.main.async {
-                        self.imageView.image = emptyLikeImageLM
-                    }
-            
-                }
-                
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self.imageView.image = emptyLikeImageLM
-                }
-                print(error)
-            }
-        
-        }
-
-    }
+            self.label = ActiveLabel()
     
-    
-    func cmtCount() {
-        
-        APIManager.shared.countLike(comment: post.comment_id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-    
-                print(apiResponse)
-                
-                guard apiResponse.body?["message"] as? String == "success",
-                      let likeCount = apiResponse.body?["liked"] as? Int  else {
-                        return
-                }
-                
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.alignment = .center
-                
-                let LikeAttributes: [NSAttributedString.Key: Any] = [
-                    NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
-                    NSAttributedString.Key.foregroundColor: UIColor.black,
-                    NSAttributedString.Key.paragraphStyle: paragraphStyle
-                ]
-
-              
-                
-                self.count = likeCount
-                let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(likeCount)))", attributes: LikeAttributes)
-                
-                
-                DispatchQueue.main.async {
-                    self.textNode.attributedText = like
-                }
-               
-                
-            case .failure(let error):
-                print(error)
-            }
-        
-        }
-        
-        
-    }
-    
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let headerSubStack = ASStackLayoutSpec.vertical()
-        
-        avatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
-        infoNode.style.preferredSize = CGSize(width: 30.0, height: 60.0)
-        
-        headerSubStack.style.flexShrink = 16.0
-        headerSubStack.style.flexGrow = 16.0
-        headerSubStack.spacing = 8.0
-        
-        let horizontalSubStack = ASStackLayoutSpec.horizontal()
-        horizontalSubStack.spacing = 10
-        horizontalSubStack.justifyContent = ASStackLayoutJustifyContent.start
-        horizontalSubStack.children = [timeNode, replyBtnNode]
-
-        if self.post.has_reply == true && loadReplyBtnNode.isHidden == false {
-            headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack, loadReplyBtnNode]
-        } else {
-            headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack]
-        }
-
-        let headerStack = ASStackLayoutSpec.horizontal()
-        headerStack.spacing = 10
-        headerStack.justifyContent = ASStackLayoutJustifyContent.start
-        headerStack.children = [avatarNode, headerSubStack, infoNode]
-        
-        if self.post.isReply == true {
-            return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 40, bottom: 16, right: 20), child: headerStack)
-        } else {
-            return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 20), child: headerStack)
-        }
-    }
-
-    
-    func addReplyUIDBtn(label: ActiveLabel) {
-        
-        DispatchQueue.main.async {
-        
-            
-            self.replyToNode.attributedText = NSAttributedString(
-                string: "\(self.replyUsername): ",
-                attributes: [
-                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
-                    NSAttributedString.Key.foregroundColor: UIColor.black
-                ]
-            )
-
-            let size = self.replyToNode.attributedText?.size()
-            
-            let userButton = ASButtonNode()
-            userButton.backgroundColor = UIColor.clear
-            userButton.frame = CGRect(x: 0, y: 0, width: size!.width, height: size!.height)
-            self.cmtNode.view.addSubnode(userButton)
-            
-            userButton.addTarget(self, action: #selector(CommentNode.replyToBtnPressed), forControlEvents: .touchUpInside)
-            
-        
-        }
-        
-        
-    }
-    
-    
-    @objc func replyBtnPressed(sender: AnyObject!) {
-  
-        replyBtn?(self)
-  
-        
-    }
-    
-    
-    override func layout() {
-        delay(0.025) {
-            self.addActiveLabelToCmtNode()
-        }
-    }
-    
-    
-    func addActiveLabelToCmtNode() {
-        
-        DispatchQueue.main.async {
-            
+            self.cmtNode.view.addSubview(self.label)
             self.cmtNode.view.isUserInteractionEnabled = true
-            
-            
-            let label = ActiveLabel()
-            
-            //
-            self.cmtNode.view.addSubview(label)
-            
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.topAnchor.constraint(equalTo: self.cmtNode.view.topAnchor, constant: 0).isActive = true
-            label.leadingAnchor.constraint(equalTo: self.cmtNode.view.leadingAnchor, constant: 0).isActive = true
-            label.trailingAnchor.constraint(equalTo: self.cmtNode.view.trailingAnchor, constant: 0).isActive = true
-            label.bottomAnchor.constraint(equalTo: self.cmtNode.view.bottomAnchor, constant: 0).isActive = true
-            
                     
+            label.enabledTypes = [.mention, .hashtag, .url]
+            label.mentionColor = .secondary
+            
+            // A blue color for hashtags
+            label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+
+            // A contrasting green color for URLs
+            label.URLColor = UIColor(red: 50/255, green: 205/255, blue: 50/255, alpha: 1)
+
+
+            
             label.customize { label in
                 
-               
-                label.numberOfLines = Int(self.cmtNode.lineCount)
-                label.enabledTypes = [.mention, .hashtag, .url]
-                
-                label.attributedText = self.cmtNode.attributedText
-                //label.attributedText = textAttributes
-            
-                label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-                label.mentionColor = .secondary
-                label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
-                
                 if self.post.reply_to != "" {
-                    self.addReplyUIDBtn(label: label)
+                    self.addReplyUIDBtn()
                 }
                 
                 
@@ -562,6 +94,7 @@ class CommentNode: ASCellNode {
                         
                         for item in mentionArr {
                             
+                        
                             if let username = item["username"] as? String, username == mention {
                                 
                                 if let id = item["_id"] as? String {
@@ -666,10 +199,366 @@ class CommentNode: ASCellNode {
                 
                 
             }
+              
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: FontManager.shared.roboto(.Regular, size: FontSize),
+                .foregroundColor: UIColor.black
+            ]
+
+            let timeAttributes: [NSAttributedString.Key: Any] = [
+                .font: FontManager.shared.roboto(.Regular, size: FontSize),
+                .foregroundColor: UIColor.darkGray
+            ]
+
+            let clearTextAttributes: [NSAttributedString.Key: Any] = [
+                .font: FontManager.shared.roboto(.Regular, size: FontSize),
+                .foregroundColor: UIColor.clear
+            ]
+
+
+            
+            if let replyToUsername = self.post.reply_to_username, !self.post.reply_to.isEmpty {
+                self.replyUsername = replyToUsername
+                let username = "\(replyToUsername): " // Remove "@" symbol here
+                let clearUser = createAttributedString(username: username, text: self.post.text, clear: true, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+                let user = createAttributedString(username: username, text: self.post.text, clear: false, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+                let time = createTimeAttributedString(createdAt: self.post.createdAt, updatedAt: self.post.is_title == true ? self.post.updatedAt : nil, timeAttributes: timeAttributes)
+                updateUI(username: username, clearUser: clearUser, user: user, time: time)
+            } else {
+                let clearUser = createAttributedString(username: nil, text: self.post.text, clear: true, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+                let user = createAttributedString(username: nil, text: self.post.text, clear: false, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+                let time = createTimeAttributedString(createdAt: self.post.createdAt, updatedAt: self.post.is_title == true ? self.post.updatedAt : nil, timeAttributes: timeAttributes)
+                updateUI(username: nil, clearUser: clearUser, user: user, time: time)
+            }
+
             
         }
-            
+        
+        // Configure the reply button.
+        self.replyBtnNode.setTitle("Reply", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.darkGray, for: .normal)
+        self.replyBtnNode.addTarget(self, action: #selector(CommentNode.replyBtnPressed), forControlEvents: .touchUpInside)
+
+        // Set selection style and avatar properties.
+        self.selectionStyle = .none
+        avatarNode.contentMode = .scaleAspectFill
+        avatarNode.cornerRadius = OrganizerImageSize / 2
+        avatarNode.clipsToBounds = true
+        avatarNode.shouldRenderProgressImages = true
+
+        // Configure text alignment.
+        let paragraphStyles = NSMutableParagraphStyle()
+        paragraphStyles.alignment = .left
+
+        // Set background colors.
+        DispatchQueue.main.async {
+            self.view.backgroundColor = .white
+        }
+
+        infoNode.backgroundColor = UIColor.clear
+        loadReplyBtnNode.backgroundColor = UIColor.clear
+        cmtNode.backgroundColor = UIColor.clear
+        replyToNode.backgroundColor = UIColor.clear
+        userNameNode.backgroundColor = UIColor.clear
+        textNode.backgroundColor = UIColor.clear
+        imageView.backgroundColor = UIColor.clear
+
+        // Set content modes.
+        imageView.contentMode = .scaleAspectFit
+        cmtNode.truncationMode = .byTruncatingTail
+
+        // Set frames.
+        imageView.frame = CGRect(x: 2, y: 2, width: 25, height: 25)
+        textNode.frame = CGRect(x: 0, y: 30, width: 30, height: 20)
+
+        // Configure button.
+        let button = ASButtonNode()
+        button.frame = CGRect(x: 0, y: 0, width: 30, height: 60)
+        button.backgroundColor = UIColor.clear
+        infoNode.addSubnode(imageView)
+        infoNode.addSubnode(textNode)
+        infoNode.addSubnode(button)
+        button.addTarget(self, action: #selector(CommentNode.LikedBtnPressed), forControlEvents: .touchUpInside)
+
+        // Add more targets.
+        loadReplyBtnNode.addTarget(self, action: #selector(CommentNode.repliedBtnPressed), forControlEvents: .touchUpInside)
+        userNameNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
+        avatarNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
+
+        // Other configurations.
+        textNode.isLayerBacked = true
+        automaticallyManagesSubnodes = true
+
+
+          
     }
+    
+    override func didLoad() {
+        super.didLoad()
+        
+        // Load content based on the post.
+        loadInfo(uid: self.post.comment_uid)
+        if self.post.has_reply == true {
+            loadCmtCount()
+        }
+        checkLikeCmt()
+        cmtCount()
+        
+    }
+    
+    @objc func replyToBtnPressed() {
+        
+        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != post.reply_to {
+            
+            if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+                
+                if let vc = UIViewController.currentViewController() {
+                    
+                    let nav = UINavigationController(rootViewController: UPVC)
+
+                    // Set the user ID, nickname, and onPresent properties of UPVC
+                    UPVC.userId = post.reply_to
+                    UPVC.nickname = post.reply_to_username
+                    UPVC.onPresent = true
+
+                    // Customize the navigation bar appearance
+                    nav.navigationBar.barTintColor = .white
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+                    nav.modalPresentationStyle = .fullScreen
+                    vc.present(nav, animated: true, completion: nil)
+           
+                }
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    @objc func usernameBtnPressed() {
+        
+        
+        if let userUID = _AppCoreData.userDataSource.value?.userID, userUID != post.comment_uid {
+            
+            if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+                
+                if let vc = UIViewController.currentViewController() {
+                    
+                    let nav = UINavigationController(rootViewController: UPVC)
+
+                    // Set the user ID, nickname, and onPresent properties of UPVC
+                    UPVC.userId = post.comment_uid
+                    UPVC.nickname = post.comment_username
+                    UPVC.onPresent = true
+
+                    // Customize the navigation bar appearance
+                    nav.navigationBar.barTintColor = .white
+                  
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+                    nav.modalPresentationStyle = .fullScreen
+                    vc.present(nav, animated: true, completion: nil)
+                    
+                }
+            }
+            
+        }
+
+        
+    }
+    
+    
+    @objc func LikedBtnPressed(sender: AnyObject!) {
+  
+        if isLiked {
+            unlikeComment()
+        } else {
+            likeComment()
+        }
+
+    }
+    
+    func checkLikeCmt() {
+        
+        APIManager.shared.islike(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                guard apiResponse.body?["message"] as? String == "success",
+                      let checkIsLike = apiResponse.body?["liked"] as? Bool  else {
+                        return
+                }
+                
+                self.isLiked = checkIsLike
+                
+                if checkIsLike {
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.imageView.image = likeImage
+                    }
+                    
+                    
+                    
+                   
+            
+                } else {
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.imageView.image = emptyLikeImageLM
+                    }
+            
+                }
+                
+                
+            case .failure(let error):
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.imageView.image = emptyLikeImageLM
+                }
+                print(error)
+            }
+        
+        }
+
+    }
+    
+    
+    func cmtCount() {
+        
+        APIManager.shared.countLike(comment: post.comment_id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+    
+                print(apiResponse)
+                
+                guard apiResponse.body?["message"] as? String == "success",
+                      let likeCount = apiResponse.body?["liked"] as? Int  else {
+                        return
+                }
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = .center
+                
+                let LikeAttributes: [NSAttributedString.Key: Any] = [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                ]
+
+              
+                
+                self.count = likeCount
+                let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(likeCount)))", attributes: LikeAttributes)
+                
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.textNode.attributedText = like
+                }
+               
+                
+            case .failure(let error):
+                print(error)
+            }
+        
+        }
+        
+        
+    }
+    
+    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        let headerSubStack = ASStackLayoutSpec.vertical()
+        
+        avatarNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
+        infoNode.style.preferredSize = CGSize(width: 30.0, height: 60.0)
+        
+        headerSubStack.style.flexShrink = 16.0
+        headerSubStack.style.flexGrow = 16.0
+        headerSubStack.spacing = 8.0
+        
+        let horizontalSubStack = ASStackLayoutSpec.horizontal()
+        horizontalSubStack.spacing = 10
+        horizontalSubStack.justifyContent = ASStackLayoutJustifyContent.start
+        horizontalSubStack.children = [timeNode, replyBtnNode]
+
+        if self.post.has_reply == true && loadReplyBtnNode.isHidden == false {
+            headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack, loadReplyBtnNode]
+        } else {
+            headerSubStack.children = [userNameNode, cmtNode, horizontalSubStack]
+        }
+
+        let headerStack = ASStackLayoutSpec.horizontal()
+        headerStack.spacing = 10
+        headerStack.justifyContent = ASStackLayoutJustifyContent.start
+        headerStack.children = [avatarNode, headerSubStack, infoNode]
+        
+        if self.post.isReply == true {
+            return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 40, bottom: 16, right: 20), child: headerStack)
+        } else {
+            return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 20), child: headerStack)
+        }
+    }
+
+    
+    func addReplyUIDBtn() {
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+        
+            
+            self.replyToNode.attributedText = NSAttributedString(
+                string: "\(self.replyUsername): ",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
+                    NSAttributedString.Key.foregroundColor: UIColor.black
+                ]
+            )
+
+            let size = self.replyToNode.attributedText?.size()
+            
+            let userButton = ASButtonNode()
+            userButton.backgroundColor = UIColor.clear
+            userButton.frame = CGRect(x: 0, y: 0, width: size!.width, height: size!.height)
+            self.cmtNode.view.addSubnode(userButton)
+            
+            userButton.addTarget(self, action: #selector(CommentNode.replyToBtnPressed), forControlEvents: .touchUpInside)
+            
+            
+        
+        }
+        
+        
+    }
+    
+    
+    @objc func replyBtnPressed(sender: AnyObject!) {
+  
+        replyBtn?(self)
+  
+        
+    }
+    
+    
+    override func layout() {
+        super.layout()
+        if self.label != nil {
+            self.label.frame = self.cmtNode.bounds
+            self.label.numberOfLines = Int(self.cmtNode.lineCount)
+        } else {
+            delay(1) {
+                self.label.frame = self.cmtNode.bounds
+                self.label.numberOfLines = Int(self.cmtNode.lineCount)
+            }
+        }
+        
+    }
+    
     
     func moveToUserProfileVC(id: String) {
         
@@ -713,14 +602,16 @@ class CommentNode: ASCellNode {
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                   return
                 }
                
                 if !data.isEmpty {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                         
                         if let post = PostModel(JSON: data) {
@@ -743,10 +634,7 @@ class CommentNode: ASCellNode {
 
                                     // Set the user ID, nickname, and onPresent properties of UPVC
                                     RVC.posts = [post]
-                                   
-                                    // Customize the navigation bar appearance
-                                    nav.navigationBar.barTintColor = .white
-                                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+                              
 
                                     nav.modalPresentationStyle = .fullScreen
                                     
@@ -760,14 +648,16 @@ class CommentNode: ASCellNode {
                     }
                     
                 } else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                 }
 
             case .failure(let error):
                 print(error)
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                 }
                 
@@ -850,7 +740,8 @@ class CommentNode: ASCellNode {
 extension CommentNode {
     
     func likeComment() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.imageView.image = likeImage
         }
         
@@ -865,7 +756,8 @@ extension CommentNode {
         
         self.count += 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.textNode.attributedText = like
         }
         
@@ -878,7 +770,8 @@ extension CommentNode {
                 self.isLiked = true
 
             case .failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.imageView.image = emptyLikeImageLM
                 }
                 
@@ -893,7 +786,8 @@ extension CommentNode {
                 
                 self.count -= 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.textNode.attributedText = like
                 }
                 
@@ -904,7 +798,8 @@ extension CommentNode {
 
     
     func unlikeComment() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.imageView.image = emptyLikeImageLM
         }
         
@@ -920,7 +815,8 @@ extension CommentNode {
         self.count -= 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.textNode.attributedText = like
         }
         
@@ -933,7 +829,8 @@ extension CommentNode {
                 self.isLiked = false
 
             case .failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.imageView.image = likeImage
                 }
                 
@@ -948,7 +845,8 @@ extension CommentNode {
                 
                 self.count += 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.textNode.attributedText = like
                 }
                 
@@ -975,6 +873,44 @@ extension CommentNode {
         }
     }
 
+    func createTimeAttributedString(createdAt: Date?, updatedAt: Date?, timeAttributes: [NSAttributedString.Key: Any]) -> NSAttributedString? {
+        var dateToUse: Date? = createdAt
+
+        if let updatedAt = updatedAt, updatedAt != Date() {
+            dateToUse = updatedAt
+        }
+
+        if let date = dateToUse {
+            return NSAttributedString(string: timeAgoSinceDate(date, numericDates: true), attributes: timeAttributes)
+        }
+
+        return nil
+    }
+
+
+
+    func createAttributedString(username: String?, text: String, clear: Bool, clearTextAttributes: [NSAttributedString.Key: Any], textAttributes: [NSAttributedString.Key: Any]) -> NSMutableAttributedString {
+        let attributes = clear ? clearTextAttributes : textAttributes
+        let user = NSMutableAttributedString()
+        
+        if let username = username {
+            user.append(NSAttributedString(string: "@\(username)", attributes: attributes)) // Append "@" symbol here
+        }
+        
+        user.append(NSAttributedString(string: text, attributes: attributes))
+        return user
+    }
+
+
+
+    func updateUI(username: String?, clearUser: NSMutableAttributedString, user: NSMutableAttributedString, time: NSAttributedString?) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            timeNode.attributedText = time
+            cmtNode.attributedText = clearUser
+            label.attributedText = user
+        }
+    }
 
     
 }

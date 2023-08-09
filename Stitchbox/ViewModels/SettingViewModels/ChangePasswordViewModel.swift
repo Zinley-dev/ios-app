@@ -101,7 +101,8 @@ class ChangePasswordViewModel: ViewModelProtocol {
     
     func logic() {
         changePasswordDidTapSubject.asObservable()
-            .subscribe (onNext: { (currentPassword, newPassword, retypePassword) in
+            .subscribe (onNext: { [weak self] (currentPassword, newPassword, retypePassword) in
+                guard let self = self else { return }
                 if (newPassword != retypePassword) {
                     self.errorsSubject.onNext("New password and retype password does not match!")
                     return;

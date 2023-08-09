@@ -15,10 +15,9 @@ class TutorialVC: UIViewController {
     @IBOutlet weak var view1: circleView!
     @IBOutlet weak var view2: circleView!
     @IBOutlet weak var view3: circleView!
-    @IBOutlet weak var view4: circleView!
-    @IBOutlet weak var view5: circleView!
     
-    var tutorialList = ["welcome", "streaming link", "fist bump" , "challenge card", "tactics"]
+    
+    var tutorialList = ["tut1", "tut2", "tut3"]
     var currentIndex = 0
     var willIndex = 0
     
@@ -29,7 +28,8 @@ class TutorialVC: UIViewController {
         //setupNavigationController()
         wireDelegates()
         collectionView.alwaysBounceVertical = false
-        
+        collectionView.backgroundColor = .white
+     
     }
     
 
@@ -42,12 +42,9 @@ class TutorialVC: UIViewController {
         case 1:
             nextIndex()
         case 2:
-            nextIndex()
-        case 3:
-            nextIndex()
-        case 4:
             print("Show next item here")
             RedirectionHelper.redirectToDashboard()
+            
         default:
             break
         }
@@ -69,7 +66,7 @@ extension TutorialVC {
     
     func setupNavigationController() {
         
-        self.navigationController?.title = "DKM"
+        self.navigationController?.title = ""
         
     }
     
@@ -104,9 +101,6 @@ extension TutorialVC {
         return section
     }
 
-
-
-    
     
 }
 
@@ -135,6 +129,7 @@ extension TutorialVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
             
+            cell.backgroundColor = .white
             cell.configure(with: UIImage.init(named: tutorialList[indexPath.row])!)
           
             return cell
@@ -168,39 +163,27 @@ extension TutorialVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func updateUI(currentIndex: Int) {
         switch currentIndex {
         case 0:
-            view1.backgroundColor = .white
+            view1.backgroundColor = .black
             view2.backgroundColor = .lightGray
             view3.backgroundColor = .lightGray
-            view4.backgroundColor = .lightGray
-            view5.backgroundColor = .lightGray
+           
         case 1:
             view1.backgroundColor = .lightGray
-            view2.backgroundColor = .white
+            view2.backgroundColor = .black
             view3.backgroundColor = .lightGray
-            view4.backgroundColor = .lightGray
-            view5.backgroundColor = .lightGray
+            
         case 2:
             view1.backgroundColor = .lightGray
             view2.backgroundColor = .lightGray
-            view3.backgroundColor = .white
-            view4.backgroundColor = .lightGray
-            view5.backgroundColor = .lightGray
-        case 3:
-            view1.backgroundColor = .lightGray
-            view2.backgroundColor = .lightGray
-            view3.backgroundColor = .lightGray
-            view4.backgroundColor = .white
-            view5.backgroundColor = .lightGray
-        case 4:
-            view1.backgroundColor = .lightGray
-            view2.backgroundColor = .lightGray
-            view3.backgroundColor = .lightGray
-            view4.backgroundColor = .lightGray
-            view5.backgroundColor = .white
+            view3.backgroundColor = .black
+            
+     
         default:
             break
         }
-        controlBtn.setTitle(currentIndex == 4 ? "Let's go" : "Skip", for: .normal)
+        
+        controlBtn.setTitle(currentIndex == 2 ? "Let's go" : "Skip", for: .normal)
+        
     }
 
     

@@ -62,9 +62,6 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     var pendingView: HandlePendingView!
     //HandlePendingView
     
-    private let fireworkController = FountainFireworkController()
-    private let fireworkController2 = ClassicFireworkController()
- 
     let maximumShowing = 100
     
     var approveBtn : ((ASCellNode) -> Void)?
@@ -87,186 +84,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         self.gradientNode.isLayerBacked = true
         self.gradientNode.isOpaque = false
     
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.gradientNode.cornerRadius = 25
-            self.gradientNode.clipsToBounds = true
-            
-            self.label = ActiveLabel()
-           
-            self.label.backgroundColor = .clear
-            self.contentNode.view.isUserInteractionEnabled = true
-        
-            self.label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-            self.label.setContentHuggingPriority(.defaultLow, for: .vertical)
-            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-
-            
-
-            let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
-            self.label.customColor[customType] = .lightGray
-            self.label.numberOfLines = Int(self.contentNode.lineCount)
-            self.label.enabledTypes = [.hashtag, .url, customType]
-            self.label.attributedText = self.contentNode.attributedText
-            
-            
-                //self.label.mentionColor = .secondary
-            
-            self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-            self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
-            
-            self.label.handleCustomTap(for: customType) { [weak self] element in
-                guard let self = self else { return }
-                if element == "*more" {
-                    self.seeMore()
-                } else if element == "*hide" {
-                    self.hideContent()
-                }
-            }
-
-            self.label.handleHashtagTap { hashtag in
-                
-                var selectedHashtag = hashtag
-                selectedHashtag.insert("#", at: selectedHashtag.startIndex)
-                
-            
-                if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-                    
-                    if let vc = UIViewController.currentViewController() {
-                        
-                        let nav = UINavigationController(rootViewController: PLHVC)
-
-                        // Set the user ID, nickname, and onPresent properties of UPVC
-                        PLHVC.searchHashtag = selectedHashtag
-                        PLHVC.onPresent = true
-
-                        // Customize the navigation bar appearance
-                        nav.navigationBar.barTintColor = .background
-                        nav.navigationBar.tintColor = .white
-                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                        nav.modalPresentationStyle = .fullScreen
-                        vc.present(nav, animated: true, completion: nil)
-               
-                    }
-                }
-                
-                
-            }
-
-            self.label.handleURLTap { [weak self] string in
-                guard let self = self else { return }
-                let url = string.absoluteString
-                
-                if url.contains("https://stitchbox.gg/app/account/") {
-                    
-                    if let id = self.getUIDParameter(from: url) {
-                        self.moveToUserProfileVC(id: id)
-                    }
-        
-                } else if url.contains("https://stitchbox.gg/app/post/") {
-                
-                    if let id = self.getUIDParameter(from: url) {
-                        self.openPost(id: id)
-                    }
-
-                } else {
-                    
-                    guard let requestUrl = URL(string: url) else {
-                        return
-                    }
-
-                    if UIApplication.shared.canOpenURL(requestUrl) {
-                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                    }
-                }
-                
-            }
-            
-            
-            self.setupDefaultContent()
-            
-            self.contentNode.backgroundColor = .clear
-            
-            let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
-            self.view.addGestureRecognizer(pinchGestureRecognizer)
-            
-            
-            self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
-            self.panGestureRecognizer.delegate = self
-            self.panGestureRecognizer.minimumNumberOfTouches = 2
-            self.view.addGestureRecognizer(self.panGestureRecognizer)
-            
-            
-            
-            self.headerView = PostHeader()
-            self.headerNode.view.addSubview(self.headerView)
-
-            self.headerView.translatesAutoresizingMaskIntoConstraints = false
-            self.headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
-            self.headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
-            self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
-            self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
-            
-            self.headerView.createStitchView.isHidden = true
-            self.headerView.createStitchStack.isHidden = true
-            self.headerView.stichBtn.isHidden = true
-            
-            if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
-                
-                self.headerView.followBtn.isHidden = true
-                
-            } else {
-                
-                checkIfFollow()
-                // check
-                
-            }
-
-            
-            let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
-            avatarTap.numberOfTapsRequired = 1
-          
-            let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
-            usernameTap.numberOfTapsRequired = 1
-            self.headerView.usernameLbl.isUserInteractionEnabled = true
-            self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
-            self.headerView.usernameLbl.font = FontManager.shared.roboto(.Bold, size: 12)
-
-            
-            let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
-            username2Tap.numberOfTapsRequired = 1
-
-            
-            
-            self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
-            
-            
-            self.pendingView = HandlePendingView()
-            self.buttonNode.view.addSubview(self.pendingView)
-            self.pendingView.translatesAutoresizingMaskIntoConstraints = false
-            self.pendingView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
-            self.pendingView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
-            self.pendingView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
-            self.pendingView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
-            
-            
-            //
-            
-            let approveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.approveTapped))
-            approveTap.numberOfTapsRequired = 1
-            self.pendingView.approveBtn.addGestureRecognizer(approveTap)
-            
-            let declineTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.declineTapped))
-            declineTap.numberOfTapsRequired = 1
-            self.pendingView.declineBtn.addGestureRecognizer(declineTap)
-            
-        }
-       
-        
+     
         automaticallyManagesSubnodes = true
     
         if post.muxPlaybackId != "" {
@@ -317,6 +135,184 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         }
         
        
+    }
+    
+    override func didLoad() {
+        super.didLoad()
+        
+        self.gradientNode.cornerRadius = 25
+        self.gradientNode.clipsToBounds = true
+        
+        self.label = ActiveLabel()
+       
+        self.label.backgroundColor = .clear
+        self.contentNode.view.isUserInteractionEnabled = true
+    
+        self.label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        self.label.setContentHuggingPriority(.defaultLow, for: .vertical)
+        self.label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        self.label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+
+        
+
+        let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
+        self.label.customColor[customType] = .lightGray
+        self.label.numberOfLines = Int(self.contentNode.lineCount)
+        self.label.enabledTypes = [.hashtag, .url, customType]
+        self.label.attributedText = self.contentNode.attributedText
+        
+        
+            //self.label.mentionColor = .secondary
+        
+        self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+        self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+        
+        self.label.handleCustomTap(for: customType) { [weak self] element in
+            guard let self = self else { return }
+            if element == "*more" {
+                self.seeMore()
+            } else if element == "*hide" {
+                self.hideContent()
+            }
+        }
+
+        self.label.handleHashtagTap { hashtag in
+            
+            var selectedHashtag = hashtag
+            selectedHashtag.insert("#", at: selectedHashtag.startIndex)
+            
+        
+            if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+                
+                if let vc = UIViewController.currentViewController() {
+                    
+                    let nav = UINavigationController(rootViewController: PLHVC)
+
+                    // Set the user ID, nickname, and onPresent properties of UPVC
+                    PLHVC.searchHashtag = selectedHashtag
+                    PLHVC.onPresent = true
+
+                    // Customize the navigation bar appearance
+                    nav.navigationBar.barTintColor = .background
+                    nav.navigationBar.tintColor = .white
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                    nav.modalPresentationStyle = .fullScreen
+                    vc.present(nav, animated: true, completion: nil)
+           
+                }
+            }
+            
+            
+        }
+
+        self.label.handleURLTap { [weak self] string in
+            guard let self = self else { return }
+            let url = string.absoluteString
+            
+            if url.contains("https://stitchbox.gg/app/account/") {
+                
+                if let id = self.getUIDParameter(from: url) {
+                    self.moveToUserProfileVC(id: id)
+                }
+    
+            } else if url.contains("https://stitchbox.gg/app/post/") {
+            
+                if let id = self.getUIDParameter(from: url) {
+                    self.openPost(id: id)
+                }
+
+            } else {
+                
+                guard let requestUrl = URL(string: url) else {
+                    return
+                }
+
+                if UIApplication.shared.canOpenURL(requestUrl) {
+                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                }
+            }
+            
+        }
+        
+        
+        self.setupDefaultContent()
+        
+        self.contentNode.backgroundColor = .clear
+        
+        let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+        self.view.addGestureRecognizer(pinchGestureRecognizer)
+        
+        
+        self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
+        self.panGestureRecognizer.delegate = self
+        self.panGestureRecognizer.minimumNumberOfTouches = 2
+        self.view.addGestureRecognizer(self.panGestureRecognizer)
+        
+        
+        
+        self.headerView = PostHeader()
+        self.headerNode.view.addSubview(self.headerView)
+
+        self.headerView.translatesAutoresizingMaskIntoConstraints = false
+        self.headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
+        self.headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
+        self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
+        self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
+        
+        self.headerView.createStitchView.isHidden = true
+        self.headerView.createStitchStack.isHidden = true
+        self.headerView.stichBtn.isHidden = true
+        
+        if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
+            
+            self.headerView.followBtn.isHidden = true
+            
+        } else {
+            
+            checkIfFollow()
+            // check
+            
+        }
+
+        
+        let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
+        avatarTap.numberOfTapsRequired = 1
+      
+        let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
+        usernameTap.numberOfTapsRequired = 1
+        self.headerView.usernameLbl.isUserInteractionEnabled = true
+        self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
+        self.headerView.usernameLbl.font = FontManager.shared.roboto(.Bold, size: 12)
+
+        
+        let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
+        username2Tap.numberOfTapsRequired = 1
+
+        
+        
+        self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
+        
+        
+        self.pendingView = HandlePendingView()
+        self.buttonNode.view.addSubview(self.pendingView)
+        self.pendingView.translatesAutoresizingMaskIntoConstraints = false
+        self.pendingView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
+        self.pendingView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
+        self.pendingView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
+        self.pendingView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
+        
+        
+        //
+        
+        let approveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.approveTapped))
+        approveTap.numberOfTapsRequired = 1
+        self.pendingView.approveBtn.addGestureRecognizer(approveTap)
+        
+        let declineTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.declineTapped))
+        declineTap.numberOfTapsRequired = 1
+        self.pendingView.declineBtn.addGestureRecognizer(declineTap)
+        
     }
 
     func navigateToHashtag(_ hashtag: String) {
@@ -497,13 +493,15 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
                     
                 case .failure(_):
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.allowProcess = true
                         showNote(text: "Something happened!")
                     }
                     
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.headerView.followBtn.setTitle("Follow", for: .normal)
                     }
                 }
@@ -535,12 +533,14 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
                     needRecount = true
                     self.allowProcess = true
                 case .failure(_):
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.allowProcess = true
                         showNote(text: "Something happened!")
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.headerView.followBtn.setTitle("Following", for: .normal)
                     }
                     
@@ -964,7 +964,8 @@ extension PendingNode {
         imgView.startAnimating()
         
         // Optional: clear images after animation ends
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            guard let self = self else { return }
             imgView.animationImages = nil
             imgView.removeFromSuperview()
         }
@@ -1246,14 +1247,16 @@ extension PendingNode: UIGestureRecognizerDelegate {
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                   return
                 }
                
                 if !data.isEmpty {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                         
                         if let post = PostModel(JSON: data) {
@@ -1294,14 +1297,16 @@ extension PendingNode: UIGestureRecognizerDelegate {
                     }
                     
                 } else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                 }
 
             case .failure(let error):
                 print(error)
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                 }
                 

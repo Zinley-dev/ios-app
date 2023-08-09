@@ -66,43 +66,14 @@ extension AppDelegate: SendBirdCallDelegate, DirectCallDelegate {
     
     func didRemoteAudioSettingsChange(_ call: DirectCall) {
         
-        if let vc = UIViewController.currentViewController() {
-                    
-           
-        }
+      
         
     }
     
     func didAudioDeviceChange(_ call: DirectCall, session: AVAudioSession, previousRoute: AVAudioSessionRouteDescription, reason: AVAudioSession.RouteChangeReason) {
         
         
-        
-        if let vc = UIViewController.currentViewController() {
-                 
-            /*
-            if vc is VoiceCallViewController {
-                
-                if let update1 = vc as? VoiceCallViewController {
-                    
-                    guard !call.isEnded else { return }
-                    guard let output = session.currentRoute.outputs.first else { return }
-                    
-                  
-                    if output.portType.rawValue == "BluetoothHFP" {
-                        
-                        update1.speakerButton.setBackgroundImage(UIImage(named: "airpod"), for: .normal)
-                        
-                    } else {
-                        update1.speakerButton.setBackgroundImage(.audio(output: output.portType),
-                                                                 for: .normal)
-                    }
-                    
-                    
-                 
-                }
-            }*/
-            
-        }
+       
         
     }
 }

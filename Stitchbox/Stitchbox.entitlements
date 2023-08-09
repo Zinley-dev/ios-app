@@ -10,7 +10,7 @@
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.mobile.gg.Stitchbox1.onesignal</string>
+		<string>group.com.mobile.gg.Stitchbox123.onesignal</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array/>

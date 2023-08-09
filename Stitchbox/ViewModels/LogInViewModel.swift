@@ -53,8 +53,8 @@ class LoginControllerViewModel: ViewModelProtocol {
     // MARK: Logic function
         func logic() {
             signInDidTapSubject
-                .subscribe (onNext: { (username, password) in
-                    
+                .subscribe (onNext: { [weak self] (username, password) in
+                    guard let self = self else { return }
                     
                     if (isNotValidInput(Input: username, RegEx: "\\w{3,18}") ||
                         isNotValidInput(Input: password, RegEx: "^[\\w\\S]{6,18}$")) {

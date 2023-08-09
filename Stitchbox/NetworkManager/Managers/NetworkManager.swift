@@ -16,28 +16,29 @@ protocol RequestManager {
     associatedtype EndPoint: EndPointType
     func request(_ route: EndPoint, completion: @escaping APICompletion)
 }
+
 class RequestDelegate: NSObject, URLSessionTaskDelegate {
-    var process: UploadInprogress
-    override init() {
-        self.process = { percent in
-            print(percent)
-        }
-    }
+    var process: UploadInprogress?
+
     func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         let uploadProgress = Float(totalBytesSent) / Float(totalBytesExpectedToSend) * 100
-        process(uploadProgress)
+        process?(uploadProgress)
     }
 }
 
 class Manager<EndPoint: EndPointType>: RequestManager {
+    
     private var task: URLSessionDataTaskProtocol?
     private let session: URLSessionProtocol
     private let requestDelegate: RequestDelegate
-    
+
     init(session: URLSessionProtocol = URLSession.shared) {
         let configuration = URLSessionConfiguration.default
         configuration.waitsForConnectivity = true
-        requestDelegate = RequestDelegate.init()
+        requestDelegate = RequestDelegate()
+        requestDelegate.process = { percent in
+            print(percent)
+        }
         self.session = URLSession(configuration: configuration, delegate: requestDelegate, delegateQueue: nil)
     }
     
@@ -48,7 +49,8 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             
             let uploadData = builđData(for: image, request: &request)
             
-            task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+            task = session.uploadTask(with: request, from: uploadData, completionHandler: { [weak self] data, response, error in
+                guard let self = self else { return }
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
                 }
@@ -58,7 +60,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                 }
             })
             
-            self.task?.resume()
+            task?.resume()
         }
     }
     
@@ -66,9 +68,10 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         
         if var request = buildRequest(from: route) {
             
-            let uploadData = builđData(for: images, for: content, request: &request)
+            let uploadData = buildData(for: images, for: content, request: &request)
             
-            task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+            task = session.uploadTask(with: request, from: uploadData, completionHandler: { [weak self] data, response, error in
+                guard let self = self else { return }
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
                 }
@@ -78,7 +81,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                 }
             })
             
-            self.task?.resume()
+            task?.resume()
             
         }
     }
@@ -91,7 +94,8 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             
             requestDelegate.process = inprogress
             
-            task = session.uploadTask(with: request, from: uploadData, completionHandler: { data, response, error in
+            task = session.uploadTask(with: request, from: uploadData, completionHandler: { [weak self] data, response, error in
+                guard let self = self else { return }
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
                 }
@@ -101,7 +105,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
                 }
             })
             
-            self.task?.resume()
+            task?.resume()
             
         }
     }
@@ -109,41 +113,32 @@ class Manager<EndPoint: EndPointType>: RequestManager {
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
         
         guard let request = buildRequest(from: route) else {
-            DispatchQueue.main.async { completion(.failure(ErrorType.badRequest)) }
+            completion(.failure(ErrorType.badRequest))
             return
         }
-        
-        print("Request URL --> \(String(describing: request.url))")
+
         
         self.task = session.dataTask(with: request, completionHandler: { [weak self] data, response, error in
             guard let self = self else { return }
             // Now use `strongSelf` instead of `self` inside the closure.
             // Ensure we are on the main thread
-            DispatchQueue.main.async {
-                
-                print("==============BBB+============")
-                print(error)
-                print(response)
-                print(data)
-                print("==============BBB+============")
-
-                if let error = error {
-                    print(error.localizedDescription)
-                    completion(.failure(ErrorType.badRequest))
-                    return
-                }
-                
-                guard let response = response as? HTTPURLResponse else {
-                    completion(.failure(ErrorType.invalidResponse))
-                    return
-                }
-                
-                let result = self.handleNetworkResponse(data, response)
-                completion(result)
+            if let error = error {
+                print(error.localizedDescription)
+                completion(.failure(ErrorType.badRequest))
+                return
             }
+            
+            guard let response = response as? HTTPURLResponse else {
+                completion(.failure(ErrorType.invalidResponse))
+                return
+            }
+            
+            let result = self.handleNetworkResponse(data, response)
+            completion(result)
+            
         })
 
-        self.task?.resume()
+        task?.resume()
 
     }
 
@@ -174,7 +169,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         return uploadData
     }
     
-    fileprivate func builđData(for images: [UIImage], for content: String, request: inout URLRequest) -> Data {
+    fileprivate func buildData(for images: [UIImage], for content: String, request: inout URLRequest) -> Data {
         
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
@@ -199,10 +194,10 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         
         contentData += "--\(boundary)\r\n"
         uploadData.append(contentData.data(using: .utf8)!)
-        print(uploadData)
-        
+
         return uploadData
     }
+
     fileprivate func buildRequest(from route: EndPoint) -> URLRequest? {
         // Check API endpoint is valid
         let encodedChar = String(APIBuilder.baseURL + route.module + route.path).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
@@ -210,18 +205,35 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         guard let endpointUrl = URL(string: encodedChar!) else {
             return nil
         }
-        
+
         var request = URLRequest(url: endpointUrl,
                                  cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                  timeoutInterval: 30.0)
-        let userAgent = UAString()
+
+        // Define or compute the User-Agent string
+        let userAgent = "Stitchbox/\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")"
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        if UserDefaults.standard.object(forKey: kUserIp) is String {
-            if let data = UserDefaults.standard.object(forKey: kUserIp) as? String {
-                request.setValue(data, forHTTPHeaderField: "Sb-Client-Ip")
-            }
+
+        // Define a constant for the key or fetch it from a proper location
+        if let clientIp = UserDefaults.standard.object(forKey: kUserIp) as? String {
+            request.setValue(clientIp, forHTTPHeaderField: "Sb-Client-Ip")
         }
-        
+
+        // Get the current device's preferred language
+        let language = Locale.current.languageCode ?? "en"
+        let region = Locale.current.regionCode ?? "US"
+        let deviceLanguage = "\(language)-\(region)"
+
+        // Get the current device model
+        let device = UIDevice.current.model
+
+        // Get the current operating system version
+        let currentOS = UIDevice.current.systemVersion
+
+        request.setValue(deviceLanguage, forHTTPHeaderField: "Sb-Client-Language")
+        request.setValue(device, forHTTPHeaderField: "Sb-Client-Device")
+        request.setValue(currentOS, forHTTPHeaderField: "Sb-Client-OS")
+
         request.httpMethod = route.httpMethod.rawValue
         switch route.task {
         case .request:
@@ -239,20 +251,25 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             self.addAdditionalHeaders(additionalHeaders, request: &request)
             self.configureParameters(parameters: parameters, request: &request)
         }
+
         return request
     }
+
+
     
     fileprivate func configureParameters(parameters: [String: Any]?, request: inout URLRequest) {
-        let jsonData = try? JSONSerialization.data(withJSONObject: parameters ?? Data())
+        guard let parameters = parameters else { return }
+        let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
         request.httpBody = jsonData
     }
-    
+
     fileprivate func addAdditionalHeaders(_ additionalHeaders: [String: String]?, request: inout URLRequest) {
         guard let headers = additionalHeaders else { return }
         for (key, value) in headers {
             request.setValue(value, forHTTPHeaderField: key)
         }
     }
+
     
     fileprivate func handleNetworkResponse(_ data: Data?, _ response: HTTPURLResponse) -> Result {
         switch response.statusCode {

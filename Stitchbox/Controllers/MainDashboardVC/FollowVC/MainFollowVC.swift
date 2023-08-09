@@ -23,6 +23,10 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!
     
+    
+    var followerBorder = CALayer()
+    var followingBorder = CALayer()
+    
     var searchController: UISearchController?
     var showFollowerFirst = false
     var type = ""
@@ -80,6 +84,10 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         
         // Do any additional setup after loading the view.
         setupButtons()
+        
+        followerBorder = followerBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (180/375))
+        followingBorder = followingBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (180/375))
+       
         
         if showFollowerFirst
         {
@@ -331,13 +339,12 @@ extension MainFollowVC {
     
     func setupFollowersView() {
         
-        followerBtn.setTitleColor(UIColor.white, for: .normal)
+        followerBtn.setTitleColor(UIColor.black, for: .normal)
         followingBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
+        followerBtn.layer.addSublayer(followerBorder)
         
-        followerBtn.backgroundColor = UIColor.darkGray
-        followingBtn.backgroundColor = UIColor.clear
-        
+        followingBorder.removeFromSuperlayer()
         
         FollowerVC.view.isHidden = false
         FollowingVC.view.isHidden = true
@@ -349,12 +356,12 @@ extension MainFollowVC {
     func setupFollowingView() {
         
         followerBtn.setTitleColor(UIColor.lightGray, for: .normal)
-        followingBtn.setTitleColor(UIColor.white, for: .normal)
+        followingBtn.setTitleColor(UIColor.black, for: .normal)
         
+        followingBtn.layer.addSublayer(followingBorder)
         
-        followerBtn.backgroundColor = UIColor.clear
-        followingBtn.backgroundColor = UIColor.darkGray
-        
+        followerBorder.removeFromSuperlayer()
+      
         
         FollowerVC.view.isHidden = true
         FollowingVC.view.isHidden = false

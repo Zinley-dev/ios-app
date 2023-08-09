@@ -9,113 +9,17 @@ PODS:
   - AppAuth/Core (1.6.2)
   - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
-  - AppsFlyerFramework (6.11.1):
-    - AppsFlyerFramework/Main (= 6.11.1)
-  - AppsFlyerFramework/Main (6.11.1)
   - Cache (5.3.0)
-  - EzPopup (1.2.4)
-  - FBAEMKit (14.1.0):
-    - FBSDKCoreKit_Basics (= 14.1.0)
-  - FBSDKCoreKit (14.1.0):
-    - FBAEMKit (= 14.1.0)
-    - FBSDKCoreKit_Basics (= 14.1.0)
-  - FBSDKCoreKit_Basics (14.1.0)
-  - FBSDKLoginKit (14.1.0):
-    - FBSDKCoreKit (= 14.1.0)
-  - FirebaseAnalytics (10.3.0):
-    - FirebaseAnalytics/AdIdSupport (= 10.3.0)
-    - FirebaseCore (~> 10.0)
-    - FirebaseInstallations (~> 10.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
-    - GoogleUtilities/MethodSwizzler (~> 7.8)
-    - GoogleUtilities/Network (~> 7.8)
-    - "GoogleUtilities/NSData+zlib (~> 7.8)"
-    - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseAnalytics/AdIdSupport (10.3.0):
-    - FirebaseCore (~> 10.0)
-    - FirebaseInstallations (~> 10.0)
-    - GoogleAppMeasurement (= 10.3.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
-    - GoogleUtilities/MethodSwizzler (~> 7.8)
-    - GoogleUtilities/Network (~> 7.8)
-    - "GoogleUtilities/NSData+zlib (~> 7.8)"
-    - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseAuth (10.3.0):
-    - FirebaseCore (~> 10.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
-    - GoogleUtilities/Environment (~> 7.8)
-    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
-  - FirebaseCore (10.10.0):
-    - FirebaseCoreInternal (~> 10.0)
-    - GoogleUtilities/Environment (~> 7.8)
-    - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreInternal (10.10.0):
-    - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseInstallations (10.10.0):
-    - FirebaseCore (~> 10.0)
-    - GoogleUtilities/Environment (~> 7.8)
-    - GoogleUtilities/UserDefaults (~> 7.8)
-    - PromisesObjC (~> 2.1)
   - FLAnimatedImage (1.0.17)
-  - GoogleAppMeasurement (10.3.0):
-    - GoogleAppMeasurement/AdIdSupport (= 10.3.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
-    - GoogleUtilities/MethodSwizzler (~> 7.8)
-    - GoogleUtilities/Network (~> 7.8)
-    - "GoogleUtilities/NSData+zlib (~> 7.8)"
-    - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/AdIdSupport (10.3.0):
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.3.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
-    - GoogleUtilities/MethodSwizzler (~> 7.8)
-    - GoogleUtilities/Network (~> 7.8)
-    - "GoogleUtilities/NSData+zlib (~> 7.8)"
-    - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/WithoutAdIdSupport (10.3.0):
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
-    - GoogleUtilities/MethodSwizzler (~> 7.8)
-    - GoogleUtilities/Network (~> 7.8)
-    - "GoogleUtilities/NSData+zlib (~> 7.8)"
-    - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleMaps (8.0.0):
-    - GoogleMaps/Maps (= 8.0.0)
-  - GoogleMaps/Base (8.0.0)
-  - GoogleMaps/Maps (8.0.0):
-    - GoogleMaps/Base
-  - GooglePlaces (8.0.0)
   - GoogleSignIn (7.0.0):
     - AppAuth (~> 1.5)
     - GTMAppAuth (< 3.0, >= 1.3)
     - GTMSessionFetcher/Core (< 4.0, >= 1.1)
-  - GoogleUtilities/AppDelegateSwizzler (7.11.1):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.11.1):
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.11.1):
-    - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (7.11.1):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/Network (7.11.1):
-    - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
-    - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.11.1)"
-  - GoogleUtilities/Reachability (7.11.1):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.11.1):
-    - GoogleUtilities/Logger
   - GTMAppAuth (2.0.0):
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
   - GTMSessionFetcher/Core (3.1.1)
   - MarqueeLabel (4.3.0)
-  - nanopb (2.30909.0):
-    - nanopb/decode (= 2.30909.0)
-    - nanopb/encode (= 2.30909.0)
-  - nanopb/decode (2.30909.0)
-  - nanopb/encode (2.30909.0)
   - NYTPhotoViewer (1.1.0):
     - NYTPhotoViewer/AnimatedGifSupport (= 1.1.0)
     - NYTPhotoViewer/Core (= 1.1.0)
@@ -152,7 +56,6 @@ PODS:
   - PixelSDK (11.3.2):
     - PixelSDK-GPUImage3 (~> 3.0)
   - PixelSDK-GPUImage3 (3.1.3)
-  - PromisesObjC (2.2.0)
   - QuickLayout (3.0.0)
   - RSKImageCropper (4.0.0)
   - RxCocoa (6.5.0):
@@ -174,10 +77,8 @@ PODS:
   - Sentry/Core (8.7.2):
     - SentryPrivate (= 8.7.2)
   - SentryPrivate (8.7.2)
-  - swift-vibrant (1.0.0)
   - SwiftEntryKit (1.2.6):
     - QuickLayout (= 3.0.0)
-  - Swifter (2.5.0)
   - SwiftLint (0.50.3)
   - SwipeTransition (0.5.0)
   - SwipeTransitionAutoSwipeBack (0.5.0):
@@ -204,7 +105,6 @@ PODS:
     - Texture/Core
   - Texture/Video (3.1.0):
     - Texture/Core
-  - TikTokOpenSDK (5.0.15)
   - ZSWTaggedString/Core (4.2)
   - ZSWTaggedString/Swift (4.2):
     - ZSWTaggedString/Core
@@ -214,15 +114,8 @@ DEPENDENCIES:
   - ActiveLabel
   - Alamofire (~> 5.6.4)
   - AlamofireImage
-  - AppsFlyerFramework
   - Cache (~> 5.3.0)
-  - EzPopup
-  - FBSDKLoginKit (~> 14.1.0)
-  - FirebaseAnalytics (~> 10.3.0)
-  - FirebaseAuth (~> 10.3.0)
   - FLAnimatedImage (~> 1.0)
-  - GoogleMaps
-  - GooglePlaces
   - GoogleSignIn (~> 7.0.0)
   - MarqueeLabel
   - NYTPhotoViewer (~> 1.1.0)
@@ -237,15 +130,12 @@ DEPENDENCIES:
   - SendBirdSDK (~> 3.1.37)
   - SendBirdUIKit (~> 2.2.11)
   - Sentry
-  - swift-vibrant
   - SwiftEntryKit (= 1.2.6)
-  - Swifter (from `https://github.com/mattdonnelly/Swifter.git`)
   - SwiftLint (~> 0.50.3)
   - SwipeTransition
   - SwipeTransitionAutoSwipeBack
   - SwipeTransitionAutoSwipeToDismiss
   - Texture (~> 3.1.0)
-  - TikTokOpenSDK (~> 5.0.14)
   - ZSWTaggedString/Swift (~> 4.0)
   - ZSWTappableLabel (~> 2.0)
 
@@ -255,28 +145,12 @@ SPEC REPOS:
     - Alamofire
     - AlamofireImage
     - AppAuth
-    - AppsFlyerFramework
     - Cache
-    - EzPopup
-    - FBAEMKit
-    - FBSDKCoreKit
-    - FBSDKCoreKit_Basics
-    - FBSDKLoginKit
-    - FirebaseAnalytics
-    - FirebaseAuth
-    - FirebaseCore
-    - FirebaseCoreInternal
-    - FirebaseInstallations
     - FLAnimatedImage
-    - GoogleAppMeasurement
-    - GoogleMaps
-    - GooglePlaces
     - GoogleSignIn
-    - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
     - MarqueeLabel
-    - nanopb
     - NYTPhotoViewer
     - ObjectMapper
     - OneSignalXCFramework
@@ -285,7 +159,6 @@ SPEC REPOS:
     - PINRemoteImage
     - PixelSDK
     - PixelSDK-GPUImage3
-    - PromisesObjC
     - QuickLayout
     - RSKImageCropper
     - RxCocoa
@@ -298,53 +171,26 @@ SPEC REPOS:
     - SendBirdWebRTC
     - Sentry
     - SentryPrivate
-    - swift-vibrant
     - SwiftEntryKit
     - SwiftLint
     - SwipeTransition
     - SwipeTransitionAutoSwipeBack
     - SwipeTransitionAutoSwipeToDismiss
     - Texture
-    - TikTokOpenSDK
     - ZSWTaggedString
     - ZSWTappableLabel
-
-EXTERNAL SOURCES:
-  Swifter:
-    :git: https://github.com/mattdonnelly/Swifter.git
-
-CHECKOUT OPTIONS:
-  Swifter:
-    :commit: f6888d61500f46ca6d1814fe2624056339eda986
-    :git: https://github.com/mattdonnelly/Swifter.git
 
 SPEC CHECKSUMS:
   ActiveLabel: 5e3f4de79a1952d4604b845a0610d4776e4b82b3
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
-  AppsFlyerFramework: fc1fd93999a3e53d028259265b92150d55decfe3
   Cache: 48762993ec44e1d93483c4d4a13edd18452326f4
-  EzPopup: 37f2c40e8ce50412a269bfba365baa7085c28002
-  FBAEMKit: a899515e45476027f73aef377b5cffadcd56ca3a
-  FBSDKCoreKit: 24f8bc8d3b5b2a8c5c656a1329492a12e8efa792
-  FBSDKCoreKit_Basics: 6e578c9bdc7aa1365dbbbde633c9ebb536bcaa98
-  FBSDKLoginKit: 787de205d524c3a4b17d527916f1d066e4361660
-  FirebaseAnalytics: 036232b6a1e2918e5f67572417be1173576245f3
-  FirebaseAuth: 0e415d29d846c1dce2fb641e46f35e9888d9bec6
-  FirebaseCore: d027ff503d37edb78db98429b11f580a24a7df2a
-  FirebaseCoreInternal: 971029061d326000d65bfdc21f5502c75c8b0893
-  FirebaseInstallations: 52153982b057d3afcb4e1fbb3eb0b6d00611e681
   FLAnimatedImage: bbf914596368867157cc71b38a8ec834b3eeb32b
-  GoogleAppMeasurement: c7d6fff39bf2d829587d74088d582e32d75133c3
-  GoogleMaps: 0dce473ab18742d0f327887853630927cbee9127
-  GooglePlaces: 46231f49e2dc52aa9a604f99e2e6b29996f30cc7
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
-  GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   MarqueeLabel: 02f5ac8fd6877c94564556cb93fa86c70c08baeb
-  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
   ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
   OneSignalXCFramework: 4afdd14f6fa769eadf141209037e3eac5890beb9
@@ -353,7 +199,6 @@ SPEC CHECKSUMS:
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
   PixelSDK: 420b25af577c378acf2d96fb139cf5e7d409d576
   PixelSDK-GPUImage3: 56b8688866b9d866e995c889e1072357b1610de0
-  PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   QuickLayout: 07b45a72b10083fee3f095990cfed1c1e7b27f0a
   RSKImageCropper: 90dfe482402fb8a40cabd5fea65186d9102cc425
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
@@ -366,18 +211,15 @@ SPEC CHECKSUMS:
   SendBirdWebRTC: d848df17569ecb607d0c5503b726bae3ce3dcf68
   Sentry: c43b6d1d51bf96edbaeac7772c4178aa54f4f450
   SentryPrivate: 760a9fd5d134c4d926c4c0afe9c4deceadbf4557
-  swift-vibrant: 3def73c5c281db74f420ec386590d9c1c5b0995c
   SwiftEntryKit: 96a2fa90b2631bbbfac50d18449e9ca3d0635f13
-  Swifter: 4c2f8cf320c2f751c10128f841d8e9bd8609d988
   SwiftLint: 77f7cb2b9bb81ab4a12fcc86448ba3f11afa50c6
   SwipeTransition: 2d35c95dcb4c47a6a1cc530235a3cbf7114b5670
   SwipeTransitionAutoSwipeBack: 3d6f744757e86d69ea46fd8b3018bcfb6d81cb00
   SwipeTransitionAutoSwipeToDismiss: bb082e2070c846bd8b542cf0a70f64f877dafdc4
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
-  TikTokOpenSDK: dc1199ba9c6d7815aee0eaca6ec80ad13f7d9c1f
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 1d86ec14b78d279fc89cd5a2a82e8e3ff4975a5a
+PODFILE CHECKSUM: d98344b875dfff1c2299ec68d919bd606243da4b
 
 COCOAPODS: 1.12.1

@@ -249,17 +249,22 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         
         if firstAnimated {
             
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                self.loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
+                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+
+                            self.loadingImage.animatedImage = image
+                            self.loadingView.backgroundColor = self.view.backgroundColor
+                        }
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
             
             loadingView.backgroundColor = .white
@@ -688,7 +693,7 @@ extension CommentVC {
                 guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
                     print("Can't get userUID")
                     return
-                }
+                }                                                                                           
                 
                 let uid = userUID
                 let selectedCmt = CommentList[indexPath.row]
@@ -698,7 +703,7 @@ extension CommentVC {
                 commentSettings.modalPresentationStyle = .custom
                 commentSettings.transitioningDelegate = self
                 
-                global_presetingRate = Double(0.35)
+                global_presetingRate = Double(0.3)
                 global_cornerRadius = 45
                 
                 if uid == self.post.owner?.id {
@@ -1217,13 +1222,8 @@ extension CommentVC {
                         //self.tableNode.reloadRows(at: [indexPath], with: .none)
                     }
                 } else {
-                    if self.CommentList.isEmpty || !self.CommentList[0].is_title {
-                        start = 0
-                    } else {
-                        start = 1
-                    }
-                    
-                    self.CommentList.insert(item, at: start)
+                    let start = self.CommentList.count
+                    self.CommentList.append(item)
                     
                     DispatchQueue.main.async {
                         // Insert the new comment at its respective position
@@ -1231,7 +1231,7 @@ extension CommentVC {
                         self.tableNode.insertRows(at: [indexPath], with: .none)
                         
                         // Scroll to the new comment
-                        self.tableNode.scrollToRow(at: indexPath, at: .top, animated: true)
+                        self.tableNode.scrollToRow(at: indexPath, at: .bottom, animated: true)
                         
                         // Reload the new comment
                         //self.tableNode.reloadRows(at: [indexPath], with: .none)

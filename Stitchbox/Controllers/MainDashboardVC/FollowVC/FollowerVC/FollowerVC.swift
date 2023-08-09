@@ -32,6 +32,9 @@ class FollowerVC: UIViewController {
     
     var userId = ""
     
+    var refresh_request = false
+    private var pullControl = UIRefreshControl()
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.tableNode = ASTableNode(style: .plain)
@@ -44,6 +47,17 @@ class FollowerVC: UIViewController {
         //must happen before setting up tablenode otherwise data is not enough to render
         setupTableNode()
         // Do any additional setup after loading the view.
+        
+        pullControl.tintColor = .secondary
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+        
+        
+        if #available(iOS 10.0, *) {
+            tableNode.view.refreshControl = pullControl
+        } else {
+            tableNode.view.addSubview(pullControl)
+        }
+        
         
     }
     
@@ -175,13 +189,22 @@ extension FollowerVC: ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        self.retrieveNextPageWithCompletion { [weak self] (newFollowers) in
-            guard let self = self else { return }
-            self.insertNewRowsInTableNode(newFollowers: newFollowers)
+        if refresh_request == false {
+            
+            self.retrieveNextPageWithCompletion { [weak self] (newFollowers) in
+                guard let self = self else { return }
+                self.insertNewRowsInTableNode(newFollowers: newFollowers)
+                
+                context.completeBatchFetching(true)
+                
+            }
+            
+        } else {
             
             context.completeBatchFetching(true)
             
         }
+        
         
     }
     
@@ -322,3 +345,68 @@ extension FollowerVC {
     
 }
 
+
+
+
+extension FollowerVC {
+    
+    @objc private func refreshListData(_ sender: Any) {
+        // self.pullControl.endRefreshing() // You can stop after API Call
+        // Call API
+        
+        clearAllData()
+        
+    }
+    
+    @objc func clearAllData() {
+        
+        refresh_request = true
+        currPage = 1
+        updateData()
+        
+    }
+    
+    
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowers) in
+            guard let self = self else { return }
+           
+            
+            if newFollowers.count > 0 {
+                
+                self.userList.removeAll()
+                self.tableNode.reloadData()
+                
+                self.insertNewRowsInTableNode(newFollowers: newFollowers)
+                
+            } else {
+                
+                self.refresh_request = false
+                self.userList.removeAll()
+                self.tableNode.reloadData()
+                
+                if self.userList.isEmpty == true {
+                    
+                    self.tableNode.view.setEmptyMessage("No follower")
+                    
+                } else {
+                    
+                    self.tableNode.view.restore()
+                    
+                }
+                
+            }
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+           
+            
+        }
+        
+        
+    }
+    
+    
+}

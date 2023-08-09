@@ -195,7 +195,7 @@ class UserNotificationModel {
     }
     
     init(UserNotificationModel: Dictionary<String, Any>) {
-        
+          
         if let isRead = UserNotificationModel["isRead"] as? Bool {
             self._isRead = isRead
         }
@@ -242,7 +242,7 @@ class UserNotificationModel {
                     self._template = template
                     
                     
-                    if template == "NEW_POST" || template == "NEW_COMMENT" || template == "REPLY_COMMENT" || template == "NEW_TAG" {
+                    if template == "NEW_POST" || template == "NEW_COMMENT" || template == "REPLY_COMMENT" || template == "NEW_TAG" || template == "MENTION_IN_COMMENT" {
                         
                         if let getPostId = self._postId, getPostId != "" {
                             

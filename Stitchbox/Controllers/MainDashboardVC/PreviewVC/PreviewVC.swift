@@ -166,7 +166,7 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
             
             if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
 
-                if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: self.startIndex, section: 0)) as? ReelNode {
+                if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: self.startIndex, section: 0)) as? VideoNode {
                     
                     if !currentCell.post.muxPlaybackId.isEmpty {
                         currentIndex = 0
@@ -332,8 +332,8 @@ extension PreviewVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = ReelNode(with: post)
-            node.collectionNode = self.collectionNode
+            let node = VideoNode(with: post, at: indexPath.row)
+            //node.collectionNode = self.collectionNode
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             
@@ -402,7 +402,7 @@ extension PreviewVC {
     
     func pauseVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
          
             
             cell.videoNode.pause()
@@ -413,7 +413,7 @@ extension PreviewVC {
     
     func seekVideo(index: Int, time: CMTime) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             cell.videoNode.player?.seek(to: time)
             
@@ -424,11 +424,11 @@ extension PreviewVC {
     
     func playVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             if !cell.videoNode.isPlaying() {
                 
-                
+                /*
                 if cell.headerView != nil {
                     cell.headerView.stichBtn.isHidden = true
                     cell.headerView.createStitchView.isHidden = true
@@ -450,6 +450,7 @@ extension PreviewVC {
                 cell.contentNode.isUserInteractionEnabled = false
                 
                 cell.setNeedsLayout()
+                */
 
                 if let muteStatus = shouldMute {
                     

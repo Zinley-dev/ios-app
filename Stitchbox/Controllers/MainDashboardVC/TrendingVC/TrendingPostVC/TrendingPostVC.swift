@@ -61,7 +61,7 @@ class TrendingPostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAd
     
         //todo: customized search to search only in hashtag_list
         setupCollectionNode()
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if UIDevice.current.hasNotch {
@@ -129,15 +129,6 @@ class TrendingPostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAd
             
             if self.pullControl.isRefreshing == true {
                 self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) {
-                
-                
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-                
-                
             }
             
             
@@ -317,18 +308,27 @@ extension TrendingPostVC {
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
-        
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let selectedPostVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
             
-            SPVC.selectedPost = posts
-            SPVC.startIndex = indexPath.row
-            SPVC.hidesBottomBarWhenPushed = true
+            // Find the index of the selected post
+            let currentIndex = indexPath.row
+            
+            // Determine the range of posts to include before and after the selected post
+            let beforeIndex = max(currentIndex - 5, 0)
+            let afterIndex = min(currentIndex + 5, posts.count - 1)
+
+            // Include up to 5 posts before and after the selected post in the sliced array
+            selectedPostVC.posts = Array(posts[beforeIndex...afterIndex])
+            
+            // Set the startIndex to the position of the selected post within the sliced array
+            selectedPostVC.startIndex = currentIndex - beforeIndex
+            selectedPostVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(SPVC, animated: true)
+            self.navigationController?.pushViewController(selectedPostVC, animated: true)
         }
-        
-        
     }
+
+
 
 
 }
@@ -338,6 +338,7 @@ extension TrendingPostVC {
     
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        
         APIManager.shared.getPostTrending(page: page) { [weak self] result in
             guard let self = self else { return }
             

@@ -35,10 +35,25 @@ class FollowingVC: UIViewController {
         
     }
     
+    var refresh_request = false
+    private var pullControl = UIRefreshControl()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableNode()
         // Do any additional setup after loading the view.
+        
+        pullControl.tintColor = .secondary
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+        
+        
+        if #available(iOS 10.0, *) {
+            tableNode.view.refreshControl = pullControl
+        } else {
+            tableNode.view.addSubview(pullControl)
+        }
+        
         
     }
     
@@ -265,5 +280,68 @@ extension FollowingVC {
         tableNode.insertRows(at: insertIndexPaths, with: .automatic)
         
     }
+    
+}
+
+extension FollowingVC {
+    
+    @objc private func refreshListData(_ sender: Any) {
+        // self.pullControl.endRefreshing() // You can stop after API Call
+        // Call API
+        
+        clearAllData()
+        
+    }
+    
+    @objc func clearAllData() {
+        
+        refresh_request = true
+        currPage = 1
+        updateData()
+        
+    }
+    
+    
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowings) in
+            guard let self = self else { return }
+           
+            
+            if newFollowings.count > 0 {
+                
+                self.userList.removeAll()
+                self.tableNode.reloadData()
+                
+                self.insertNewRowsInTableNode(newFollowings: newFollowings)
+                
+            } else {
+                
+                self.refresh_request = false
+                self.userList.removeAll()
+                self.tableNode.reloadData()
+                
+                if self.userList.isEmpty == true {
+                    
+                    self.tableNode.view.setEmptyMessage("No following")
+                    
+                } else {
+                    
+                    self.tableNode.view.restore()
+                    
+                }
+                
+            }
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+           
+            
+        }
+        
+        
+    }
+    
     
 }

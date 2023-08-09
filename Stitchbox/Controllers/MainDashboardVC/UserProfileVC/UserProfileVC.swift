@@ -16,6 +16,9 @@ class UserProfileVC: UIViewController {
     
     deinit {
         print("UserProfileVC is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
     }
     
     private let fireworkController = FountainFireworkController()
@@ -53,7 +56,7 @@ class UserProfileVC: UIViewController {
     
     var followerCount = 0
     var followingCount = 0
-  
+    var stitchCount = 0
     var firstAnimated = true
     var isFollow = false
    
@@ -93,7 +96,10 @@ class UserProfileVC: UIViewController {
             
             configureDatasource()
             
-            self.loadUserData()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.loadUserData()
+            }
+        
          
             
         }
@@ -110,26 +116,6 @@ class UserProfileVC: UIViewController {
         
         
         self.loadingView.isHidden = true
-        
-        /*
-        if !loadingView.isHidden {
-            
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                self.loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
-            }
-            
-            loadingView.backgroundColor = self.view.backgroundColor
-            
-        } */
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -214,7 +200,7 @@ class UserProfileVC: UIViewController {
                     
                     cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
                     cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
-                   
+                    cell.numberOfStitches.text = "\(formatPoints(num: Double(stitchCount)))"
                     
               
 
@@ -318,7 +304,8 @@ extension UserProfileVC {
                     
                     print(error)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.allowProcess = true
                         self.isFollow = false
                         self.followerCount += 1
@@ -362,7 +349,8 @@ extension UserProfileVC {
                     
                     print(error)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.allowProcess = true
                         self.isFollow = true
                         self.followerCount -= 1
@@ -391,7 +379,8 @@ extension UserProfileVC {
         channelParams.operatorUserIds = [userUID]
         
         
-        SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
+        SBDGroupChannel.createChannel(with: channelParams) { [weak self] groupChannel, error in
+            guard let self = self else { return }
             guard error == nil, let channelUrl = groupChannel?.channelUrl else {
                 self.showErrorAlert("Oops!", msg: error?.localizedDescription ?? "Failed to create message")
                 return
@@ -659,23 +648,32 @@ extension UserProfileVC: UICollectionViewDelegate {
             
         case .posts(_):
             
-            print("posts")
-            let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
+            let selectedPosts = datasource.snapshot().itemIdentifiers(inSection: .posts)
                 .compactMap { item -> PostModel? in
                     if case .posts(let post) = item {
                         return post
                     }
                     return nil
                 }
-            
-            
+
             if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
-                SPVC.selectedPost = selectedPost
-                SPVC.startIndex = indexPath.row
-                SPVC.hidesBottomBarWhenPushed = true
-                self.navigationController?.setNavigationBarHidden(false, animated: true)
+                // Find the index of the selected post
+                let currentIndex = indexPath.row
+
+                // Determine the range of posts to include before and after the selected post
+                let beforeIndex = max(currentIndex - 5, 0)
+                let afterIndex = min(currentIndex + 5, selectedPosts.count - 1)
+
+                // Include up to 5 posts before and after the selected post in the sliced array
+                SPVC.posts = Array(selectedPosts[beforeIndex...afterIndex])
+
+                // Set the startIndex to the position of the selected post within the sliced array
+                SPVC.startIndex = currentIndex - beforeIndex
+               
                 self.navigationController?.pushViewController(SPVC, animated: true)
             }
+
+
             
         case .none:
             print("None")
@@ -806,12 +804,13 @@ extension UserProfileVC {
         
         reloadUserInformation {
             self.reloadGetFollowers {
-                self.reloadUserInformation {
-                    
+                self.reloadGetFollowing {
+                    self.reloadGetStitches {
                         self.applyAllChange()
                         Dispatch.main.async {
                             self.pullControl.endRefreshing()
                         }
+                    }
                     
                 }
             }
@@ -856,26 +855,61 @@ extension UserProfileVC {
                 self.hideAnimation()
                 
                
-                self.countFollowings()
-                self.countFollowers()
-                self.checkIfFollow()
-               
-                
-                self.getUserPost { (newPosts) in
+                DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                                        
+                    self?.countFollowings()
+                    self?.countFollowers()
+                    self?.checkIfFollow()
+                    self?.getStitchCount()
                     
-                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                    
+                    self?.getUserPost { (newPosts) in
+                        
+                        self?.insertNewRowsInCollectionNode(newPosts: newPosts)
+                        
+                    }
+                                        
                 }
+                
                 
             case .failure(_):
                 
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.hideAnimation()
                     self.NoticeBlockAndDismiss()
                 }
                 
             }
         }
+    }
+    
+    func getStitchCount() {
+        
+        APIManager.shared.countStitchByUser(userId: userId!) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                  
+                guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
+                    print("Couldn't find the 'totalStitch' key")
+                    self.stitchCount = 0
+                    return
+                }
+                
+                self.stitchCount = totalStitch
+                self.applyUIChange()
+                
+            case .failure(let error):
+                self.stitchCount = 0
+                print("Error loading stitch: ", error)
+                
+            }
+        }
+        
+       
     }
     
     func countFollowers() {
@@ -985,6 +1019,8 @@ extension UserProfileVC {
             switch result {
             case .success(let apiResponse):
                 
+                print(apiResponse)
+                
                 guard let isFollowing = apiResponse.body?["data"] as? Bool else {
                     return
                 }
@@ -1072,6 +1108,31 @@ extension UserProfileVC {
         
     }
     
+    func reloadGetStitches(completed: @escaping DownloadComplete) {
+        
+        APIManager.shared.countStitchByUser(userId: userId!) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                  
+                guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
+                    print("Couldn't find the 'totalStitch' key")
+                    self.stitchCount = 0
+                    completed()
+                    return
+                }
+                
+                self.stitchCount = totalStitch
+                completed()
+                
+            case .failure(let error):
+                self.stitchCount = 0
+                print("Error loading stitch: ", error)
+                completed()
+            }
+        }
+    }
     
     func reloadGetFollowing(completed: @escaping DownloadComplete) {
         
@@ -1172,7 +1233,7 @@ extension UserProfileVC {
         slideVC.userId = self.userId!
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = self
-        global_presetingRate = Double(0.75)
+        global_presetingRate = Double(0.70)
         global_cornerRadius = 35
         
         delay(0.1) {

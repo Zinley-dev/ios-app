@@ -159,7 +159,8 @@ class StartViewModel: ViewModelProtocol {
     }
     
     func showAlert(title: String, message: String) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             // Using 'vc' to present the UIAlertController

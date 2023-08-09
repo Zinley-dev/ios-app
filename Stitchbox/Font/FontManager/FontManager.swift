@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class FontManager {
     
@@ -36,3 +37,11 @@ class FontManager {
     }
 }
 
+
+
+extension Font {
+    static func roboto(_ style: FontManager.RobotoStyle, size: CGFloat) -> Font {
+        let uiFont = FontManager.shared.roboto(style, size: size)
+        return Font.custom(uiFont.fontName, size: size)
+    }
+}

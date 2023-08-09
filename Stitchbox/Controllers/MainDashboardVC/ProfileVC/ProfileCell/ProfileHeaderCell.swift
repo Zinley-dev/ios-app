@@ -21,10 +21,12 @@ class ProfileHeaderCell: UICollectionViewCell {
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet weak var numberOfFollowing: UILabel!
     @IBOutlet weak var numberOfFollowers: UILabel!
+    @IBOutlet weak var numberOfStitches: UILabel!
     @IBOutlet weak var avatarImage: UIImageView!
 
     @IBOutlet weak var followerStack: UIStackView!
     @IBOutlet weak var followingStack: UIStackView!
+    @IBOutlet weak var stitchStack: UIStackView!
    
     let kCONTENT_XIB_NAME = "ProfileView"
     

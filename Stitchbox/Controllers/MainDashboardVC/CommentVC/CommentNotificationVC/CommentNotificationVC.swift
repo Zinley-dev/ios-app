@@ -215,7 +215,34 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             }
             
             
+        } else if type == "MENTION_IN_COMMENT" {
+            
+            if root_id == reply_to_cid {
+                
+                loadRootCmt(rootComment: root_id) {
+                    
+                    self.loadComment(comment_id: self.commentId)
+                    
+                }
+                
+            } else {
+                
+                loadRootCmt(rootComment: root_id) {
+                    
+                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) {
+                        self.loadComment(comment_id: self.commentId)
+                    }
+                    
+                    
+                }
+                
+                
+            }
+            
+            
         }
+            
+            
         
         NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.reportRequest), name: (NSNotification.Name(rawValue: "notification_report_cmt")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(CommentNotificationVC.copyRequest), name: (NSNotification.Name(rawValue: "notification_copy_cmt")), object: nil)
@@ -791,27 +818,34 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
                 if let index = self.index {
                     start = index + 1
-                } else {
-                    if self.CommentList.isEmpty || !self.CommentList[0].is_title {
-                        start = 0
-                    } else {
-                        start = 1
+                    self.CommentList.insert(item, at: start)
+                    
+                    DispatchQueue.main.async {
+                        // Insert the new comment at its respective position
+                        let indexPath = IndexPath(row: start, section: 0)
+                        self.tableNode.insertRows(at: [indexPath], with: .none)
+                        
+                        // Scroll to the new comment
+                        self.tableNode.scrollToRow(at: indexPath, at: .top, animated: true)
+                        
+                        // Reload the new comment
+                        //self.tableNode.reloadRows(at: [indexPath], with: .none)
                     }
-                }
-                
-                self.CommentList.insert(item, at: start)
-                
-                DispatchQueue.main.async {
-                    let indexPath = IndexPath(row: start, section: 0)
+                } else {
+                    let start = self.CommentList.count
+                    self.CommentList.append(item)
                     
-                    // Insert the new comment
-                    self.tableNode.insertRows(at: [indexPath], with: .none)
-                    
-                    // Scroll to the new comment
-                    self.tableNode.scrollToRow(at: indexPath, at: .top, animated: true)
-                    
-                    // Reload the new comment
-                    self.tableNode.reloadRows(at: [indexPath], with: .none)
+                    DispatchQueue.main.async {
+                        // Insert the new comment at its respective position
+                        let indexPath = IndexPath(row: start, section: 0)
+                        self.tableNode.insertRows(at: [indexPath], with: .none)
+                        
+                        // Scroll to the new comment
+                        self.tableNode.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                        
+                        // Reload the new comment
+                        //self.tableNode.reloadRows(at: [indexPath], with: .none)
+                    }
                 }
                 
                 self.isSending = false
@@ -962,7 +996,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
                 // Set the user ID, nickname, and onPresent properties of UPVC
                 RVC.posts = [viewPost]
-                
+                RVC.startIndex = 0
                 // Customize the navigation bar appearance
                 nav.navigationBar.barTintColor = .background
                 nav.navigationBar.tintColor = .white

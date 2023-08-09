@@ -33,6 +33,7 @@ class ProfileViewController: UIViewController {
     
     var followerCount = 0
     var followingCount = 0
+    var stitchCount = 0
     var hasLoaded = false
     
     
@@ -131,14 +132,17 @@ class ProfileViewController: UIViewController {
         configureDatasource()
         wireDelegate()
         setupSettingButton()
-        self.getFollowing()
-        self.getFollowers()
         
-        
-        self.getMyPost { (newPosts) in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                        
+            self?.getFollowing()
+            self?.getFollowers()
+            self?.getStitchCount()
             
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
-            
+            self?.getMyPost { [weak self] (newPosts) in
+                self?.insertNewRowsInCollectionNode(newPosts: newPosts)
+            }
+                        
         }
         
         delay(2) {
@@ -290,7 +294,7 @@ class ProfileViewController: UIViewController {
 
                 cell.numberOfFollowers.text = "\(formatPoints(num: Double(followerCount)))"
                 cell.numberOfFollowing.text = "\(formatPoints(num: Double(followingCount)))"
-         
+                cell.numberOfStitches.text = "\(formatPoints(num: Double(stitchCount)))"
                 
                 // add buttons target
                 cell.insightBtn.addTarget(self, action: #selector(insightTapped), for: .touchUpInside)
@@ -307,6 +311,11 @@ class ProfileViewController: UIViewController {
                 let numberOfFollowingTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.followingTapped))
                 cell.followingStack.isUserInteractionEnabled = true
                 cell.followingStack.addGestureRecognizer(numberOfFollowingTap)
+                
+                
+                let insightTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.insightTapped))
+                cell.stitchStack.isUserInteractionEnabled = true
+                cell.stitchStack.addGestureRecognizer(insightTap)
                 
                 
                 return cell
@@ -362,25 +371,31 @@ extension ProfileViewController {
             
         }
         
-        
-        reloadUserInformation {
-            self.reloadGetFollowers {
-                self.reloadUserInformation {
-                    self.applyAllChange()
-                    Dispatch.main.async {
-                        self.pullControl.endRefreshing()
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                                
+            self?.reloadUserInformation {
+                self?.reloadGetFollowers {
+                    self?.reloadGetFollowing {
+                        self?.reloadGetStitches {
+                            self?.applyAllChange()
+                            Dispatch.main.async { [weak self] in
+                                self?.pullControl.endRefreshing()
+                            }
+                        }
                     }
+                    
                 }
             }
+            
+                                
         }
-        
-        
+
     }
     
     @objc func refreshData(_ sender: Any) {
         
-        reloadUserInformation {
-            self.applyUIChange()
+        reloadUserInformation { [weak self] in
+            self?.applyUIChange()
             
         }
         
@@ -389,10 +404,14 @@ extension ProfileViewController {
     
     func refreshFollow() {
         
-        reloadGetFollowers {
-            self.reloadGetFollowing {
-                self.applyHeaderChange()
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            self?.reloadGetFollowers {
+                self?.reloadGetFollowing {
+                    self?.applyHeaderChange()
+                }
             }
+            
         }
         
         
@@ -405,11 +424,16 @@ extension ProfileViewController {
         datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
         currpage = 1
         
-        self.getMyPost { (newPosts) in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            self?.getMyPost { [weak self] (newPosts) in
+                
+                self?.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+            }
             
         }
+        
         
         
     }
@@ -667,23 +691,33 @@ extension ProfileViewController: UICollectionViewDelegate {
             
         case .posts(_):
             
-            let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
+            let selectedPosts = datasource.snapshot().itemIdentifiers(inSection: .posts)
                 .compactMap { item -> PostModel? in
                     if case .posts(let post) = item {
                         return post
                     }
                     return nil
                 }
-            
-            
+
             if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
-                
-                SPVC.selectedPost = selectedPost
-                SPVC.startIndex = indexPath.row
+                // Find the index of the selected post
+                let currentIndex = indexPath.row
+
+                // Determine the range of posts to include before and after the selected post
+                let beforeIndex = max(currentIndex - 5, 0)
+                let afterIndex = min(currentIndex + 5, selectedPosts.count - 1)
+
+                // Include up to 5 posts before and after the selected post in the sliced array
+                SPVC.posts = Array(selectedPosts[beforeIndex...afterIndex])
+
+                // Set the startIndex to the position of the selected post within the sliced array
+                SPVC.startIndex = currentIndex - beforeIndex
                 SPVC.hidesBottomBarWhenPushed = true
                 hideMiddleBtn(vc: self)
                 self.navigationController?.pushViewController(SPVC, animated: true)
             }
+
+
             
         case .none:
             print("None")
@@ -697,9 +731,17 @@ extension ProfileViewController: UICollectionViewDelegate {
         // Infinite scrolling logic
         let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
         if indexPath.row == snap.count - 5 {
-            self.getMyPost { (newPosts) in
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
+            
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                
+                self?.getMyPost { [weak self] (newPosts) in
+                    self?.insertNewRowsInCollectionNode(newPosts: newPosts)
+                }
+                
             }
+            
+            
         }
     }
     
@@ -733,6 +775,34 @@ extension ProfileViewController: UINavigationBarDelegate, UINavigationController
 
 extension ProfileViewController {
     
+    
+    func getStitchCount() {
+        
+        APIManager.shared.countMyStitch { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                  
+                guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
+                    print("Couldn't find the 'totalStitch' key")
+                    self.stitchCount = 0
+                    return
+                }
+                
+                self.stitchCount = totalStitch
+                self.applyHeaderChange()
+                
+            case .failure(let error):
+                self.stitchCount = 0
+                print("Error loading stitch: ", error)
+                
+            }
+        }
+        
+       
+    }
+    
     func getFollowing() {
         
         APIManager.shared.getFollows(page:1) { [weak self] result in
@@ -761,6 +831,7 @@ extension ProfileViewController {
             }
         }
     }
+    
     func getFollowers() {
         
         APIManager.shared.getFollowers(page: 1) { [weak self] result in
@@ -918,6 +989,32 @@ extension ProfileViewController {
         }
     }
 
+    
+    func reloadGetStitches(completed: @escaping DownloadComplete) {
+        
+        APIManager.shared.countMyStitch { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                  
+                guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
+                    print("Couldn't find the 'totalStitch' key")
+                    self.stitchCount = 0
+                    completed()
+                    return
+                }
+                
+                self.stitchCount = totalStitch
+                completed()
+                
+            case .failure(let error):
+                self.stitchCount = 0
+                print("Error loading stitch: ", error)
+                completed()
+            }
+        }
+    }
     
     
 }
