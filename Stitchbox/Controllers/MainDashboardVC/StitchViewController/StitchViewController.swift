@@ -40,6 +40,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var selectedIndexPath = 0
     var selected_item: PostModel!
     var collectionNode: ASCollectionNode!
+    var galleryCollectionNode: ASCollectionNode!
     var editeddPost: PostModel?
     var refresh_request = false
     var startIndex: Int!
@@ -52,7 +53,6 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var lastLoadTime: Date?
     var isPromote = false
     var rootId = ""
-    
     
     
     private var pullControl = UIRefreshControl()
@@ -356,6 +356,7 @@ extension StitchViewController: ASCollectionDataSource {
             let node = VideoNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
+            node.collectionNode = self.collectionNode
             node.automaticallyManagesSubnodes = true
              
             return node
@@ -932,15 +933,18 @@ extension StitchViewController {
     
     func pauseVideo(index: Int) {
         
-        print("StitchViewController: \(index) - pause")
-        
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             cell.videoNode.pause()
             
+            let time = CMTime(seconds: 0, preferredTimescale: 1)
+            cell.videoNode.player?.seek(to: time)
+            playTimeBar.setValue(Float(0), animated: false)
+            
         }
         
     }
+
     
     
     func seekVideo(index: Int, time: CMTime) {
@@ -950,6 +954,7 @@ extension StitchViewController {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             cell.videoNode.player?.seek(to: time)
+            
             
         }
         

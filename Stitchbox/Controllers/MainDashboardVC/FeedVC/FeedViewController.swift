@@ -421,7 +421,7 @@ extension FeedViewController {
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
                         
-                        //resetView(cell: node)
+                        resetView(cell: node)
                         
                     }
                     
@@ -519,6 +519,8 @@ extension FeedViewController: ASCollectionDataSource {
             let node = VideoNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
+            node.collectionNode = self.collectionNode
+            node.isOriginal = true
             node.automaticallyManagesSubnodes = true
             
             if isfirstLoad, indexPath.row == 0 {
@@ -616,7 +618,6 @@ extension FeedViewController {
                     return
                 }
                 if !data.isEmpty {
-                            
                     self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data
@@ -1205,10 +1206,14 @@ extension FeedViewController {
             
             cell.videoNode.pause()
             
+            let time = CMTime(seconds: 0, preferredTimescale: 1)
+            cell.videoNode.player?.seek(to: time)
+            playTimeBar.setValue(Float(0), animated: false)
+            
         }
         
     }
-    
+
     
     func seekVideo(index: Int, time: CMTime) {
         

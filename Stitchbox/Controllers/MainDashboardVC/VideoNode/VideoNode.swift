@@ -17,7 +17,7 @@ import ActiveLabel
 class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     deinit {
-        print("TestNode is being deallocated.")
+        print("VideoNode is being deallocated.")
     }
     
     var post: PostModel
@@ -29,12 +29,16 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var time = 0
     var shouldCountView = true
     var isViewed = false
+    var isOriginal = false
     //------------------------------------------//
 
     var isFirstItem = false
+    var collectionNode: ASCollectionNode?
+    var pinchGestureRecognizer: UIPinchGestureRecognizer!
+    var panGestureRecognizer: UIPanGestureRecognizer!
     
     init(with post: PostModel, at: Int) {
-        //print("TestNode \(at) is loading post: \(post.id)")
+        print("VideoNode \(at) is loading post: \(post.id)")
         self.post = post
         self.gradientNode = GradienView()
         self.videoNode = ASVideoNode()
@@ -87,11 +91,25 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
     }
 
+    override func didLoad() {
+        super.didLoad()
+        
+        let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+        view.addGestureRecognizer(pinchGestureRecognizer)
+                    
+                    
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
+        panGestureRecognizer.delegate = self
+        panGestureRecognizer.minimumNumberOfTouches = 2
+        view.addGestureRecognizer(panGestureRecognizer)
+        
+        
+    }
     
     func getThumbnailURL(post: PostModel) -> URL? {
         if post.muxPlaybackId != "" {
             
-            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.png?time=0.25"
+            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.jpg?time=0"
             
             return URL(string: urlString)
             
@@ -259,5 +277,164 @@ extension VideoNode {
         playTimeBar.maximumValue = Float(maxDurationSeconds)
         playTimeBar.setValue(Float(currentTime), animated: true)
     }
+    
+}
+
+extension VideoNode {
+    
+    @objc private func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
+        //guard let view = videoNode.view else { return }
+    
+        if recognizer.state == .began {
+            disableSroll()
+        }
+
+        if recognizer.state == .changed {
+            let scale = recognizer.scale
+            let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
+          
+            
+            if post.muxPlaybackId != "" {
+                let tempTransform = videoNode.view.transform.concatenating(scaleTransform)
+                videoNode.view.transform = tempTransform
+            }
+            
+        
+            recognizer.scale = 1
+        }
+
+        if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
+            
+            let scale = recognizer.scale
+            let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
+            
+            if post.muxPlaybackId != "" {
+                let tempTransform = videoNode.view.transform.concatenating(scaleTransform)
+                
+                UIView.animate(withDuration: 0.2, animations: {
+                    if tempTransform.a < 1.0 {
+                        self.videoNode.view.transform = CGAffineTransform.identity
+                        //self.videoNode.view.center = self.originalCenter!
+                    }
+                        }, completion: { _ in
+                            self.enableScroll()
+                })
+            }
+  
+        
+        }
+    }
+    
+    
+    @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
+        //guard let view = recognizer.view else { return }
+
+        if recognizer.state == .began {
+            disableSroll()
+           
+        }
+
+        if recognizer.state == .changed {
+            
+            if post.muxPlaybackId != "" {
+                
+                let translation = recognizer.translation(in: videoNode.view)
+                videoNode.view.center = CGPoint(x: videoNode.view.center.x + translation.x, y: videoNode.view.center.y + translation.y)
+                recognizer.setTranslation(.zero, in: videoNode.view)
+                
+            }
+            
+            
+        }
+
+        if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
+           
+            UIView.animate(withDuration: 0.2, animations: {
+                        
+                    }, completion: { _ in
+                        self.enableScroll()
+                    })
+            
+        }
+    }
+    
+    func disableSroll() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if vc is ParentViewController || vc is SelectedPostVC {
+                
+                if let update1 = vc as? ParentViewController {
+                    
+                    if update1.isFeed {
+                        update1.feedViewController.collectionNode.view.isScrollEnabled = false
+                    } else {
+                        update1.stitchViewController.collectionNode.view.isScrollEnabled = false
+                    }
+                    
+                } else if let update1 = vc as? SelectedPostVC {
+                    
+                    update1.collectionNode.view.isScrollEnabled = false
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    func enableScroll() {
+        
+        if let vc = UIViewController.currentViewController() {
+            
+            if vc is ParentViewController || vc is SelectedPostVC {
+                
+                if let update1 = vc as? ParentViewController {
+                    
+                    if update1.isFeed {
+                        update1.feedViewController.collectionNode.view.isScrollEnabled = true
+                    } else {
+                        update1.stitchViewController.collectionNode.view.isScrollEnabled = true
+                    }
+                    
+                } else if let update1 = vc as? SelectedPostVC {
+                    
+                    update1.collectionNode.view.isScrollEnabled = true
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+    }
+
+    
+}
+
+
+extension VideoNode: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            if gestureRecognizer is UIPinchGestureRecognizer || otherGestureRecognizer is UIPinchGestureRecognizer {
+                return true
+            }
+
+            // Check for the collectionNode's panGestureRecognizer
+            if let collectionNodePanGestureRecognizer = collectionNode?.view.panGestureRecognizer, otherGestureRecognizer == collectionNodePanGestureRecognizer {
+                return true
+            }
+            
+            if gestureRecognizer is UIPanGestureRecognizer || otherGestureRecognizer is UIPanGestureRecognizer {
+                return true
+            }
+
+            return false
+        }
+    
     
 }
