@@ -164,10 +164,10 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="er8-RJ-puU">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="762"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G5g-71-nWX" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="150" y="368.66666666666669" width="75" height="75"/>
+                                        <rect key="frame" x="150" y="343.66666666666669" width="75" height="75"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="75" id="0BC-ki-rTg"/>
@@ -181,7 +181,7 @@
                                     <constraint firstItem="G5g-71-nWX" firstAttribute="centerY" secondItem="er8-RJ-puU" secondAttribute="centerY" id="cag-8E-Nqv"/>
                                 </constraints>
                             </view>
-                            <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lti-pc-8ON">
+                            <view hidden="YES" alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lti-pc-8ON">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -206,7 +206,7 @@
                             <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="AYU-5k-6kG" secondAttribute="bottom" constant="64" id="95a-dK-Jl9"/>
                             <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="W1f-2E-fwc" secondAttribute="bottom" constant="8" id="9gg-SZ-leL"/>
                             <constraint firstItem="0Z6-8G-TMT" firstAttribute="trailing" secondItem="Lti-pc-8ON" secondAttribute="trailing" id="B3l-PG-RLy"/>
-                            <constraint firstItem="er8-RJ-puU" firstAttribute="top" secondItem="1Fc-76-Mf6" secondAttribute="top" id="BvG-R3-bD3"/>
+                            <constraint firstItem="er8-RJ-puU" firstAttribute="top" secondItem="0Z6-8G-TMT" secondAttribute="top" id="BvG-R3-bD3"/>
                             <constraint firstItem="W1f-2E-fwc" firstAttribute="leading" secondItem="1Fc-76-Mf6" secondAttribute="leading" id="ETX-Hi-Lv1"/>
                             <constraint firstAttribute="trailing" secondItem="er8-RJ-puU" secondAttribute="trailing" id="OSj-Hi-iph"/>
                             <constraint firstItem="0Z6-8G-TMT" firstAttribute="bottom" secondItem="BEx-to-46U" secondAttribute="bottom" id="UUP-bU-eco"/>
@@ -9340,7 +9340,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="H6M-p9-bo4"/>
-                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <navigationItem key="navigationItem" id="sie-Gx-rU1"/>
                 </viewController>
@@ -9369,7 +9369,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="4Hk-iM-1Wz" kind="relationship" relationship="rootViewController" id="Aeb-b8-2IX"/>
+                        <segue destination="4Hk-iM-1Wz" kind="relationship" relationship="rootViewController" id="5jN-jP-6Sn"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VEU-cO-ufV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -9528,9 +9528,6 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -37,8 +37,6 @@ target 'Stitchbox' do
   pod 'ActiveLabel'
 
   pod 'OneSignalXCFramework', '>= 3.0.0', '< 4.0'
-  #pod 'GoogleMaps'
-  #pod 'GooglePlaces'
   pod 'MarqueeLabel'
   pod 'Sentry'
   pod "SwipeTransition"

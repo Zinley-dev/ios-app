@@ -30,7 +30,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var newPlayingIndex: Int?
     var hasViewAppeared = false
     var isVideoPlaying = false
-    
+    var curPage = 1
     //let promotionButton = UIButton(type: .custom)
     let homeButton: UIButton = UIButton(type: .custom)
    
@@ -52,6 +52,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var firstAnimated = true
     var lastLoadTime: Date?
     var isPromote = false
+    var rootId = ""
     
     
     
@@ -60,39 +61,10 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        // Do any additional setup after loading the view
-       // setupNavBar()
-        //setupTabBar()
-        syncSendbirdAccount()
-        IAPManager.shared.configure()
-        setupButtons()
+
+       
         setupCollectionNode()
        
-        
-        pullControl.tintColor = .secondary
-        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
-        
-        
-        if UIDevice.current.hasNotch {
-            pullControl.bounds = CGRect(x: pullControl.bounds.origin.x, y: -50, width: pullControl.bounds.size.width, height: pullControl.bounds.size.height)
-        }
-        
-        if #available(iOS 10.0, *) {
-            collectionNode.view.refreshControl = pullControl
-        } else {
-            collectionNode.view.addSubview(pullControl)
-        }
-        
-        //self.navigationController?.hidesBarsOnSwipe = true
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
-        
-        
-        
-        //
-        
         NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
@@ -116,149 +88,30 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
         
         
     }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
-        //setupNavBar()
-        //setupTabBar()
-        checkNotification()
-        showMiddleBtn(vc: self)
-        loadFeed()
-        
-        hasViewAppeared = true
-        
-        if firstAnimated {
-            
-            DispatchQueue.global(qos: .userInitiated).async {
-                do {
-                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
-                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
-                        let image = FLAnimatedImage(animatedGIFData: gifData)
 
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-
-                            self.loadingImage.animatedImage = image
-                            self.loadingView.backgroundColor = self.view.backgroundColor
-                        }
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-            
-        }
-        
-        if currentIndex != nil {
-            //newPlayingIndex
-            
-            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
-                
-                //node.playVideo(index: node.currentIndex!)
-                
-            }
-
-            
-        }
-         
-        
-        
-    }
-    
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
-        delay(0.25) {[weak self] in
-            guard let self = self else { return }
-            NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
-        }
-         
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        
-        hasViewAppeared = false
-        
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
-        
-        if currentIndex != nil {
-            //newPlayingIndex
-            
-            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
-                
-               
-                
-            }
-
-            
-        }
-        
-        
-    }
-    
-    
-    func setupTabBar() {
-        
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = .black
-        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .black
-        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .black
-        self.tabBarController?.tabBar.standardAppearance = tabBarAppearance
-        
-    }
-    
-    func setupNavBar() {
-        
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithDefaultBackground()
-        navigationBarAppearance.backgroundColor = .clear
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.backgroundImage = UIImage()
-        navigationBarAppearance.shadowImage = UIImage()
-        navigationBarAppearance.shadowColor = .clear
-        navigationBarAppearance.backgroundEffect = nil
-
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.isTranslucent = true
-
-        
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        
-    }
-    
-    
-    @objc private func refreshListData(_ sender: Any) {
-        // Call API
-        
-        self.clearAllData()
-        
-    }
     
     @objc func clearAllData() {
         
-        refresh_request = true
-        currentIndex = 0
-        isfirstLoad = true
-        didScroll = false
-        shouldMute = nil
-        imageIndex = nil
-        updateData()
+        
+        if rootId != "" {
+            
+            refresh_request = true
+            currentIndex = 0
+            curPage = 1
+            isfirstLoad = true
+            didScroll = false
+            imageIndex = nil
+            updateData()
+            
+        }
+        
+        
         
     }
     
     func updateData() {
+        
+        
         
         self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
             guard let self = self else { return }
@@ -278,7 +131,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
                 
                 if self.posts.isEmpty == true {
                     
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                    self.collectionNode.view.setEmptyMessage("No stitch found!")
                     
                     
                 } else {
@@ -312,222 +165,6 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
 }
 
-extension StitchViewController {
-    
-    @objc func updateProgressBar() {
-        
-        if (global_percentComplete == 0.00) || (global_percentComplete == 100.0) {
-            
-            DispatchQueue.main.async {
-                self.progressBar.isHidden = true
-                
-            }
-            global_percentComplete = 0.00
-            
-        } else {
-            
-            
-            DispatchQueue.main.async {
-                self.progressBar.isHidden = false
-                self.progressBar.progress = (CGFloat(global_percentComplete)/100)
-                
-            }
-            
-        }
-        
-    }
-    
-    
-    @objc func shouldScrollToTop() {
-        
-        if currentIndex != 0, currentIndex != nil {
-            
-            navigationController?.setNavigationBarHidden(false, animated: true)
-            
-            if collectionNode.numberOfItems(inSection: 0) != 0 {
-                
-                if currentIndex == 1 {
-                    collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                } else {
-                    
-                    collectionNode.scrollToItem(at: IndexPath(row: 1, section: 0), at: .centeredVertically, animated: false)
-                    collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                    
-                }
-                
-            }
-            
-        } else {
-            
-            delayItem3.perform(after: 0.25) { [weak self] in
-                guard let self = self else { return }
-                self.clearAllData()
-            }
-            
-        }
-        
-    }
-    
-    func checkNotification() {
-        
-        APIManager.shared.getBadge { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let apiResponse):
-                
-                if let data = apiResponse.body {
-                    
-                    if let badge = data["badge"] as? Int {
-                        
-                        if badge == 0 {
-                            
-                            Dispatch.main.async {
-                                self.setupEmptyNotiButton()
-                            }
-                            
-                        } else {
-                            Dispatch.main.async {
-                                self.setupHasNotiButton()
-                            }
-                        }
-                        
-                    } else {
-                        
-                        Dispatch.main.async {
-                            self.setupEmptyNotiButton()
-                        }
-                        
-                    }
-                    
-                }
-                
-            case .failure(let error):
-                Dispatch.main.async {
-                    self.setupEmptyNotiButton()
-                }
-                print(error)
-                
-            }
-        }
-        
-        
-        
-    }
-    
-    
-    
-}
-
-extension StitchViewController {
-    
-    func setupButtons() {
-        
-        setupHomeButton()
-        
-    }
-    
-    
-    func setupHomeButton() {
-        
-        // Do any additional setup after loading the view.
-        homeButton.setImage(UIImage.init(named: "Logo")?.resize(targetSize: CGSize(width: 35, height: 35)), for: [])
-        homeButton.addTarget(self, action: #selector(onClickHome(_:)), for: .touchUpInside)
-        homeButton.frame = back_frame
-        homeButton.setTitleColor(UIColor.white, for: .normal)
-        homeButton.setTitle("", for: .normal)
-        homeButton.sizeToFit()
-        let homeButtonBarButton = UIBarButtonItem(customView: homeButton)
-        
-        self.navigationItem.leftBarButtonItem = homeButtonBarButton
-        
-    }
-    
-    
-    func setupEmptyNotiButton() {
-        
-        let notiButton = UIButton(type: .custom)
-        notiButton.setImage(UIImage.init(named: "noNoti")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
-        notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
-        notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        let notiBarButton = UIBarButtonItem(customView: notiButton)
-        
-        let searchButton = UIButton(type: .custom)
-        searchButton.setImage(UIImage(named: "search")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
-        searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
-        searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        let searchBarButton = UIBarButtonItem(customView: searchButton)
-        
-        
-        
-        
-        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        fixedSpace.width = 2
-        
-        
-        //let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
-        
-        
-    }
-    
-    
-    func setupHasNotiButton() {
-        
-        let notiButton = UIButton(type: .custom)
-        notiButton.setImage(UIImage.init(named: "homeNoti")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
-        notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
-        notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        let notiBarButton = UIBarButtonItem(customView: notiButton)
-        
-        let searchButton = UIButton(type: .custom)
-        searchButton.setImage(UIImage(named: "search")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
-        searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
-        searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
-        let searchBarButton = UIBarButtonItem(customView: searchButton)
-        
-        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        fixedSpace.width = 2
-        
-        
-        //let promotionBarButton = self.createPromotionButton()
-        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
-        
-    }
-    
-
-}
-
-extension StitchViewController {
-    
-    @objc func onClickHome(_ sender: AnyObject) {
-        shouldScrollToTop()
-    }
-    
-    
-    @objc func onClickNoti(_ sender: AnyObject) {
-        if let NVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "NotificationVC") as? NotificationVC {
-            
-            resetNoti()
-            NVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(NVC, animated: true)
-            
-        }
-    }
-    
-    @objc func onClickSearch(_ sender: AnyObject) {
-        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
-            
-            SVC.hidesBottomBarWhenPushed = true
-            hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(SVC, animated: true)
-            
-        }
-    }
-    
-    
-}
 
 extension StitchViewController {
     
@@ -666,8 +303,7 @@ extension StitchViewController {
         
         
     }
-
- 
+    
 }
 
 extension StitchViewController: ASCollectionDelegate {
@@ -706,6 +342,18 @@ extension StitchViewController: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
         
+        
+        if self.posts.isEmpty == true {
+            
+            self.collectionNode.view.setEmptyMessage("No stitch found!")
+            
+            
+        } else {
+            
+            self.collectionNode.view.restore()
+            
+        }
+        
         return self.posts.count
         
     }
@@ -716,30 +364,34 @@ extension StitchViewController: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let startTime = Date()
+          
             let node = VideoNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             node.automaticallyManagesSubnodes = true
-            
-            print("Time taken to load VideoNode \(indexPath.row): \(Date().timeIntervalSince(startTime)) seconds")
-            
+             
             return node
         }
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        if refresh_request == false {
+        if rootId != "" {
+         
             retrieveNextPageWithCompletion { [weak self] (newPosts) in
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 
                 context.completeBatchFetching(true)
             }
+            
         } else {
+            
             context.completeBatchFetching(true)
+            
         }
+        
+        
     }
     
 
@@ -752,7 +404,7 @@ extension StitchViewController {
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 0.0
-        flowLayout.scrollDirection = .vertical
+        flowLayout.scrollDirection = .horizontal
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
         self.collectionNode.leadingScreensForBatching = 2.0
@@ -769,13 +421,11 @@ extension StitchViewController {
         self.collectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
-        
-        //self.collectionNode.view.isScrollEnabled = false
-        
-        self.applyStyle()
-        
-        self.collectionNode.reloadData()
+        self.collectionNode.isUserInteractionEnabled = true
+        self.contentView.isUserInteractionEnabled = true
        
+        self.applyStyle()
+     
     }
     
     
@@ -798,43 +448,52 @@ extension StitchViewController {
     
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-
-        APIManager.shared.getUserFeed { [weak self] result in
-            guard let self = self else { return }
+        
+        if rootId != "" {
             
-            switch result {
-            case .success(let apiResponse):
+            APIManager.shared.getSuggestStitch(rootId: rootId, page: curPage) { result in
                 
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                if !data.isEmpty {
-                            
-                    self.lastLoadTime = Date()
-                    print("Successfully retrieved \(data.count) posts.")
-                    let items = data
-                
-                    DispatchQueue.main.async {
-                        block(items)
-                    }
-                } else {
+                switch result {
+                case .success(let apiResponse):
                     
+                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                        return
+                    }
+                    if !data.isEmpty {
+                                
+                        print("Successfully retrieved \(data.count) posts.")
+                        let items = data
+                    
+                        DispatchQueue.main.async {
+                            block(items)
+                        }
+                    } else {
+                        
+                        let item = [[String: Any]]()
+                        DispatchQueue.main.async {
+                            block(item)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
                     let item = [[String: Any]]()
                     DispatchQueue.main.async {
                         block(item)
                     }
-                }
-            case .failure(let error):
-                print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
                 }
             }
+            
+        } else {
+            
+            let item = [[String: Any]]()
+            DispatchQueue.main.async {
+                block(item)
+            }
+            
         }
         
     }
@@ -1299,120 +958,7 @@ extension StitchViewController {
         
     }
     
-    func switchToProfileVC() {
-    
-        self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
-        
-    }
-    
-    
-    func loadFeed() {
-        let now = Date()
-        let fortyFiveMinutesAgo = now.addingTimeInterval(-2700) // 2700 seconds = 45 minutes
-        
-        if lastLoadTime != nil, lastLoadTime! < fortyFiveMinutesAgo, !posts.isEmpty {
-            
-            pullControl.beginRefreshing()
-            clearAllData()
-            
-        }
-    }
-    
-    func resetNoti() {
-        
-        APIManager.shared.resetBadge { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(_):
-                
-                Dispatch.main.async {
-                    self.setupEmptyNotiButton()
-                }
-                
-            case .failure(let error):
-                
-                print(error)
-                
-            }
-        }
-        
-        
-    }
-
-}
-
-
-extension StitchViewController {
-    
-    
-    func loadSettings(completed: @escaping DownloadComplete) {
-        
-        APIManager.shared.getSettings {  result in
-           
-            switch result {
-            case .success(let apiResponse):
-                
-                guard let data = apiResponse.body else {
-                    completed()
-                    return
-                }
-                
-                let settings =  Mapper<SettingModel>().map(JSONObject: data)
-                globalSetting = settings
-                globalIsSound = settings?.AutoPlaySound ?? false
-                
-                completed()
-                
-            case .failure(_):
-                
-                completed()
-                
-            }
-        }
-        
-    }
-    
-    
-    func loadNewestCoreData(completed: @escaping DownloadComplete) {
-        
-        APIManager.shared.getme { result in
-            
-            switch result {
-            case .success(let response):
-                
-                if let data = response.body {
-                    
-                    if !data.isEmpty {
-                        
-                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
-                            _AppCoreData.reset()
-                            _AppCoreData.userDataSource.accept(newUserData)
-                            completed()
-                        } else {
-                            completed()
-                        }
-                        
-                        
-                    } else {
-                        completed()
-                    }
-                    
-                } else {
-                    completed()
-                }
-                
-                
-            case .failure(let error):
-                print("Error loading profile: ", error)
-                completed()
-            }
-        }
-        
-        
-    }
-    
-    
+   
 }
 
 extension StitchViewController {
