@@ -105,34 +105,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
-        
-        
-        /*
-        if let tabBarController = self.tabBarController {
-            let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
-            for viewController in viewControllersToPreload {
-                _ = viewController.view
-            }
-        }
-        
-        
-        
-        if let navigationController = self.navigationController {
-            navigationController.navigationBar.prefersLargeTitles = false
-            navigationController.navigationBar.isTranslucent = false
-        }
-        */
-        
-        
-        self.loadNewestCoreData {
-            self.loadSettings {
-                print("Oke!")
-            }
-        }
-        
-        if _AppCoreData.userDataSource.value?.userID != "" {
-            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
-        }
+
         
         
     }
@@ -538,14 +511,21 @@ extension FeedViewController: ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
         
-        return {
-            let startTime = Date()
+        return { [weak self] in
+            guard let self = self else {
+                return ASCellNode()
+            }
+            
             let node = VideoNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             node.automaticallyManagesSubnodes = true
             
-            print("Time taken to load VideoNode \(indexPath.row): \(Date().timeIntervalSince(startTime)) seconds")
+            if isfirstLoad, indexPath.row == 0 {
+                isfirstLoad = true
+                node.isFirstItem = true
+            }
+            
             
             return node
         }

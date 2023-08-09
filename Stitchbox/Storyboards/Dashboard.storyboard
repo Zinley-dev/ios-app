@@ -186,7 +186,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="BEx-to-46U" customClass="CustomSlider" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="-2" y="748" width="379" height="31"/>
+                                <rect key="frame" x="0.0" y="748" width="377" height="31"/>
                                 <color key="minimumTrackTintColor" name="Secondary"/>
                                 <color key="maximumTrackTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -214,7 +214,7 @@
                             <constraint firstAttribute="bottom" secondItem="Lti-pc-8ON" secondAttribute="bottom" id="dAi-6H-Eh8"/>
                             <constraint firstItem="AYU-5k-6kG" firstAttribute="centerX" secondItem="1Fc-76-Mf6" secondAttribute="centerX" id="dEI-ZR-Mc3"/>
                             <constraint firstAttribute="trailing" secondItem="W1f-2E-fwc" secondAttribute="trailing" id="esm-n9-uu3"/>
-                            <constraint firstItem="BEx-to-46U" firstAttribute="leading" secondItem="0Z6-8G-TMT" secondAttribute="leading" id="hM0-nd-FtZ"/>
+                            <constraint firstItem="BEx-to-46U" firstAttribute="leading" secondItem="0Z6-8G-TMT" secondAttribute="leading" constant="2" id="hM0-nd-FtZ"/>
                             <constraint firstItem="Lti-pc-8ON" firstAttribute="top" secondItem="1Fc-76-Mf6" secondAttribute="top" id="jIk-Xy-LUj"/>
                             <constraint firstItem="er8-RJ-puU" firstAttribute="leading" secondItem="1Fc-76-Mf6" secondAttribute="leading" id="nAy-IZ-d8i"/>
                             <constraint firstItem="0Z6-8G-TMT" firstAttribute="trailing" secondItem="BEx-to-46U" secondAttribute="trailing" id="p8r-Uk-7it"/>
@@ -291,7 +291,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Ofe-cI-1Xf" customClass="CustomSlider" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="-2" y="782" width="379" height="31"/>
+                                <rect key="frame" x="0.0" y="782" width="377" height="31"/>
                                 <color key="minimumTrackTintColor" name="Secondary"/>
                                 <color key="maximumTrackTintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -319,7 +319,7 @@
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="Wbn-Yc-2Lj"/>
                             <constraint firstItem="Ofe-cI-1Xf" firstAttribute="top" secondItem="dD1-hr-nJj" secondAttribute="bottom" constant="64" id="WxP-0J-NJl"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Ofe-cI-1Xf" secondAttribute="trailing" id="a3F-J9-5cu"/>
-                            <constraint firstItem="Ofe-cI-1Xf" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="eRg-FG-u1o"/>
+                            <constraint firstItem="Ofe-cI-1Xf" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="2" id="eRg-FG-u1o"/>
                             <constraint firstItem="d8M-fE-mgk" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="oyG-I8-JrD"/>
                             <constraint firstItem="dD1-hr-nJj" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="rIo-Ct-2Zj"/>
                             <constraint firstAttribute="trailing" secondItem="htG-J3-w8j" secondAttribute="trailing" id="t8Z-HB-O6a"/>

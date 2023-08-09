@@ -6,6 +6,11 @@
 //
 
 import UIKit
+import AsyncDisplayKit
+import AlamofireImage
+import Alamofire
+import FLAnimatedImage
+import ObjectMapper
 
 class ParentViewController: UIViewController {
 
@@ -14,8 +19,8 @@ class ParentViewController: UIViewController {
     let homeButton: UIButton = UIButton(type: .custom)
     
     
-    private var feedViewController: FeedViewController!
-    private var stitchViewController: StitchViewController!
+    var feedViewController: FeedViewController!
+    var stitchViewController: StitchViewController!
     
     var isFeed = true
 
@@ -31,6 +36,36 @@ class ParentViewController: UIViewController {
         addViewControllers()
         setupNavBar()
         navigationControllerDelegate()
+        
+        
+        
+        if let tabBarController = self.tabBarController {
+            let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
+            for viewController in viewControllersToPreload {
+                _ = viewController.view
+            }
+        }
+        
+        
+        
+        if let navigationController = self.navigationController {
+            navigationController.navigationBar.prefersLargeTitles = false
+            navigationController.navigationBar.isTranslucent = false
+        }
+        
+        
+        
+        loadNewestCoreData { [weak self] in
+            guard let self = self else { return }
+            self.loadSettings {
+                print("Oke!")
+            }
+        }
+        
+        if _AppCoreData.userDataSource.value?.userID != "" {
+            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -434,4 +469,77 @@ extension ParentViewController {
 
 
 
+}
+
+
+extension ParentViewController {
+    
+    
+    func loadSettings(completed: @escaping DownloadComplete) {
+        
+        APIManager.shared.getSettings {  result in
+           
+            switch result {
+            case .success(let apiResponse):
+                
+                guard let data = apiResponse.body else {
+                    completed()
+                    return
+                }
+                
+                let settings =  Mapper<SettingModel>().map(JSONObject: data)
+                globalSetting = settings
+                globalIsSound = settings?.AutoPlaySound ?? false
+                
+                completed()
+                
+            case .failure(_):
+                
+                completed()
+                
+            }
+        }
+        
+    }
+    
+    
+    func loadNewestCoreData(completed: @escaping DownloadComplete) {
+        
+        APIManager.shared.getme { result in
+            
+            switch result {
+            case .success(let response):
+                
+                if let data = response.body {
+                    
+                    if !data.isEmpty {
+                        
+                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                            _AppCoreData.reset()
+                            _AppCoreData.userDataSource.accept(newUserData)
+                            completed()
+                        } else {
+                            completed()
+                        }
+                        
+                        
+                    } else {
+                        completed()
+                    }
+                    
+                } else {
+                    completed()
+                }
+                
+                
+            case .failure(let error):
+                print("Error loading profile: ", error)
+                completed()
+            }
+        }
+        
+        
+    }
+    
+    
 }

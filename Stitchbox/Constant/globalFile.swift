@@ -539,19 +539,38 @@ func unmuteVideoIfNeed() {
   
     if let vc = UIViewController.currentViewController() {
          
-        if vc is FeedViewController {
+        if vc is ParentViewController {
             
-            if let update1 = vc as? FeedViewController {
+            if let update1 = vc as? ParentViewController {
                 
-                if update1.currentIndex == nil {
-                    update1.currentIndex = 0
-                }
                 
-                if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? VideoNode {
+                if update1.isFeed {
                     
-                    cell2.videoNode.muted = false
-                    shouldMute = false
+                    if update1.feedViewController.currentIndex == nil {
+                        update1.feedViewController.currentIndex = 0
+                    }
+                    
+                    if let cell2 = update1.feedViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.feedViewController.currentIndex!, section: 0)) as? VideoNode {
+                        
+                        cell2.videoNode.muted = false
+                        shouldMute = false
+                    }
+                    
+                } else {
+                    
+                    if update1.stitchViewController.currentIndex == nil {
+                        update1.stitchViewController.currentIndex = 0
+                    }
+                    
+                    if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.feedViewController.currentIndex!, section: 0)) as? VideoNode {
+                        
+                        cell2.videoNode.muted = false
+                        shouldMute = false
+                    }
+                    
                 }
+                
+                
                 
                
                 
@@ -647,64 +666,6 @@ func unmuteVideoIfNeed() {
 }
 
 
-func muteVideoIfNeed() {
-  
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is FeedViewController {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                if update1.currentIndex != nil {
-                    
-                    if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? VideoNode {
-                        
-                        
-                        if cell2.videoNode.isPlaying() {
-                            
-                            cell2.videoNode.muted = true
-                            shouldMute = true
-                            
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-               
-                
-            }
-            
-        } else if vc is SelectedPostVC {
-            
-            if let update1 = vc as? SelectedPostVC {
-                
-                if update1.currentIndex != nil {
-                    
-                    if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.newPlayingIndex!, section: 0)) as? VideoNode {
-                        
-                        
-                        if cell2.videoNode.isPlaying() {
-                            
-                            cell2.videoNode.muted = true
-                            shouldMute = true
-                            
-                            
-                        }
-                        
-                    }
-                    
-                }
-                  
-            }
-            
-        }
-        
-    }
-    
-}
-
 func resetView(cell: VideoNode) {
     /*
     if cell.isViewed == true {
@@ -725,26 +686,6 @@ func resetView(cell: VideoNode) {
     
 }
 
-func resetViewForReel(cell: VideoNode) {
-    
-    /*
-    if cell.isViewed == true {
-        
-        let currentTime = NSDate().timeIntervalSince1970
-        
-        let change = currentTime - cell.last_view_timestamp
-        
-        if change > 30.0 {
-            
-            cell.isViewed = false
-            cell.time = 0
-        
-        }
-        
-    }
-    */
-    
-}
 
 extension UIView {
     
@@ -961,10 +902,13 @@ class CustomSlider: UISlider {
         
         if let vc = UIViewController.currentViewController() {
             
-            if let update1 = vc as? FeedViewController {
+            if let update1 = vc as? ParentViewController {
                 
-                update1.timeLbl.text = processTime()
-
+                if update1.isFeed {
+                    update1.feedViewController.timeLbl.text = processTime()
+                } else {
+                    update1.stitchViewController.timeLbl.text = processTime()
+                }
                 
             } else if let update1 = vc as? SelectedPostVC {
                 
@@ -1000,22 +944,50 @@ class CustomSlider: UISlider {
         
         if let vc = UIViewController.currentViewController() {
             
-            if let update1 = vc as? FeedViewController {
+            if let update1 = vc as? ParentViewController {
                 
-                if update1.tabBarController?.tabBar.isTranslucent == false {
-                    update1.bottomConstraint.constant = 10
+                
+                if update1.isFeed {
+                    
+                    if update1.tabBarController?.tabBar.isTranslucent == false {
+                        update1.feedViewController.bottomConstraint.constant = 10
+                    }
+                    
+                    if update1.feedViewController.currentIndex != nil {
+                        //update1.pauseVideo(index: update1.currentIndex!)
+                        
+                        update1.feedViewController.pauseVideo(index: update1.feedViewController.currentIndex!)
+                        
+                    }
+                    
+                    update1.feedViewController.timeLbl.text = processTime()
+                    update1.feedViewController.timeLbl.isHidden = false
+                    update1.feedViewController.blurView.isHidden = false
+                    
+                } else {
+                    
+                    if update1.tabBarController?.tabBar.isTranslucent == false {
+                        update1.stitchViewController.bottomConstraint.constant = 10
+                    }
+                    
+                    if update1.stitchViewController.currentIndex != nil {
+                        //update1.pauseVideo(index: update1.currentIndex!)
+                        
+                        update1.stitchViewController.pauseVideo(index: update1.stitchViewController.currentIndex!)
+                        
+                    }
+                    
+                    update1.stitchViewController.timeLbl.text = processTime()
+                    update1.stitchViewController.timeLbl.isHidden = false
+                    update1.stitchViewController.blurView.isHidden = false
+                    
+                    
                 }
                 
-                if update1.currentIndex != nil {
-                    //update1.pauseVideo(index: update1.currentIndex!)
-                    
-                    update1.pauseVideo(index: update1.currentIndex!)
-                    
-                }
                 
-                update1.timeLbl.text = processTime()
-                update1.timeLbl.isHidden = false
-                update1.blurView.isHidden = false
+                
+                
+                
                 
                 
             }  else if let update1 = vc as? SelectedPostVC {
@@ -1064,29 +1036,60 @@ class CustomSlider: UISlider {
         
         if let vc = UIViewController.currentViewController() {
             
-            if let update1 = vc as? FeedViewController {
+            if let update1 = vc as? ParentViewController {
                 
-                if update1.tabBarController?.tabBar.isTranslucent == false {
-                    update1.bottomConstraint.constant = bottomValueNoHide
+                
+                if update1.isFeed {
+                    
+                    if update1.tabBarController?.tabBar.isTranslucent == false {
+                        update1.feedViewController.bottomConstraint.constant = bottomValueNoHide
+                    } else {
+                        update1.feedViewController.bottomConstraint.constant = bottomValue
+                    }
+                    
+                  
+                    if update1.feedViewController.currentIndex != nil {
+                        //newPlayingIndex
+                        
+                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+                        
+                        update1.feedViewController.seekVideo(index: update1.feedViewController.currentIndex!, time: newVideoTime)
+                        update1.feedViewController.playVideo(index: update1.feedViewController.currentIndex!)
+                        
+
+
+                    }
+                    
+                    update1.feedViewController.timeLbl.isHidden = true
+                    update1.feedViewController.blurView.isHidden = true
+                    
                 } else {
-                    update1.bottomConstraint.constant = bottomValue
+                    
+                    if update1.tabBarController?.tabBar.isTranslucent == false {
+                        update1.stitchViewController.bottomConstraint.constant = bottomValueNoHide
+                    } else {
+                        update1.stitchViewController.bottomConstraint.constant = bottomValue
+                    }
+                    
+                  
+                    if update1.stitchViewController.currentIndex != nil {
+                        //newPlayingIndex
+                        
+                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+                        
+                        update1.stitchViewController.seekVideo(index: update1.stitchViewController.currentIndex!, time: newVideoTime)
+                        update1.stitchViewController.playVideo(index: update1.stitchViewController.currentIndex!)
+                        
+                    }
+                    
+                    update1.stitchViewController.timeLbl.isHidden = true
+                    update1.stitchViewController.blurView.isHidden = true
+                    
                 }
                 
-              
-                if update1.currentIndex != nil {
-                    //newPlayingIndex
-                    
-                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-                    
-                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
-                    update1.playVideo(index: update1.currentIndex!)
-                    
-
-
-                }
                 
-                update1.timeLbl.isHidden = true
-                update1.blurView.isHidden = true
+                
+                
                 
             } else if let update1 = vc as? SelectedPostVC {
                 

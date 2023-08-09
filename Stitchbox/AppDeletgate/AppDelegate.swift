@@ -544,7 +544,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let vc = UIViewController.currentViewController() {
                 
                 
-                if vc is FeedViewController || vc is TrendingVC || vc is MainMessageVC || vc is ProfileViewController {
+                if vc is ParentViewController || vc is TrendingVC || vc is MainMessageVC || vc is ProfileViewController {
                     
                     if let nav = vc.navigationController {
                         

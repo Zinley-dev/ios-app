@@ -27,9 +27,8 @@ class VideoNode: ASCellNode {
     var gradientNode: GradienView
     
     //------------------------------------------//
-    
-    
- 
+
+    var isFirstItem = false
     
     init(with post: PostModel, at: Int) {
         //print("TestNode \(at) is loading post: \(post.id)")
@@ -47,14 +46,41 @@ class VideoNode: ASCellNode {
         self.videoNode.shouldAutorepeat = true
         self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue;
     
-        DispatchQueue.main.async() {
+        DispatchQueue.main.async() { [weak self]  in
+            guard let self = self else { return }
             self.videoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
+            if self.isFirstItem {
+                if let muteStatus = shouldMute {
+                    
+                    
+                    if muteStatus {
+                        self.videoNode.muted = true
+                    } else {
+                        self.videoNode.muted = false
+                    }
+                    
+                    self.videoNode.play()
+                    
+                } else {
+                    
+                    if globalIsSound {
+                        self.videoNode.muted = false
+                    } else {
+                        self.videoNode.muted = true
+                    }
+                    
+                    self.videoNode.play()
+                    
+                }
+            }
         }
         
         self.addSubnode(self.videoNode)
         self.addSubnode(self.gradientNode)
         
         self.gradientNode.isHidden = true
+        
+        
     }
 
     
