@@ -203,7 +203,6 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         
         return uploadData
     }
-    
     fileprivate func buildRequest(from route: EndPoint) -> URLRequest? {
         // Check API endpoint is valid
         let encodedChar = String(APIBuilder.baseURL + route.module + route.path).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)

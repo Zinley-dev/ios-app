@@ -1091,4 +1091,14 @@ extension APIManager {
       completion(result)
     }
   }
+  func getReactionPost(postId: String, completion: @escaping APICompletion) {
+    postManager.request(.reaction(pid: postId)) { resut in
+      completion(resut)
+    }
+  }
+  func getModeration(completion: @escaping APICompletion) {
+    postManager.request(.moderation) { resut in
+      completion(resut)
+    }
+  }
 }

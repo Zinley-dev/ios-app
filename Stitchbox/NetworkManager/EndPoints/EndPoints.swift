@@ -642,6 +642,8 @@ public enum PostAPI {
     case lastSetting
     case deleteMyPost(pid: String)
     case stats(pid: String)
+    case reaction(pid: String)
+    case moderation
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -682,6 +684,10 @@ extension PostAPI: EndPointType {
             return "/\(pid)"
           case .stats(let pid):
             return "/stats/\(pid)"
+          case .reaction(let pid):
+            return "/reaction/\(pid)"
+          case .moderation:
+            return "/moderation"
         }
     }
     
@@ -719,6 +725,10 @@ extension PostAPI: EndPointType {
             return .get
           case .checkSavedPost:
             return .get
+          case .reaction:
+            return .get
+          case .moderation:
+            return .get
         }
     }
     
@@ -755,6 +765,10 @@ extension PostAPI: EndPointType {
           case .countSavedPost:
             return .request
           case .checkSavedPost:
+            return .request
+          case .reaction:
+            return .request
+          case .moderation:
             return .request
         }
     }
