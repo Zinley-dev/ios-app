@@ -149,22 +149,107 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xor-KS-DvQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2415" y="1615"/>
+            <point key="canvasLocation" x="-3415" y="2329"/>
+        </scene>
+        <!--Stitch View Controller-->
+        <scene sceneID="Mi7-q2-ND6">
+            <objects>
+                <viewController storyboardIdentifier="StitchViewController" id="tBJ-fo-OYD" customClass="StitchViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1Fc-76-Mf6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W1f-2E-fwc">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="740"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="er8-RJ-puU">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G5g-71-nWX" customClass="FLAnimatedImageView">
+                                        <rect key="frame" x="150" y="368.66666666666669" width="75" height="75"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="75" id="0BC-ki-rTg"/>
+                                            <constraint firstAttribute="width" constant="75" id="FKG-oN-4xe"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="G5g-71-nWX" firstAttribute="centerX" secondItem="er8-RJ-puU" secondAttribute="centerX" id="RVm-KM-dVL"/>
+                                    <constraint firstItem="G5g-71-nWX" firstAttribute="centerY" secondItem="er8-RJ-puU" secondAttribute="centerY" id="cag-8E-Nqv"/>
+                                </constraints>
+                            </view>
+                            <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lti-pc-8ON">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="BEx-to-46U" customClass="CustomSlider" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="-2" y="748" width="379" height="31"/>
+                                <color key="minimumTrackTintColor" name="Secondary"/>
+                                <color key="maximumTrackTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </slider>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00 / 00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AYU-5k-6kG">
+                                <rect key="frame" x="142.33333333333334" y="666" width="90.666666666666657" height="18"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="0Z6-8G-TMT"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="W1f-2E-fwc" firstAttribute="top" secondItem="1Fc-76-Mf6" secondAttribute="top" id="83o-bF-YC1"/>
+                            <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="AYU-5k-6kG" secondAttribute="bottom" constant="64" id="95a-dK-Jl9"/>
+                            <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="W1f-2E-fwc" secondAttribute="bottom" constant="8" id="9gg-SZ-leL"/>
+                            <constraint firstItem="0Z6-8G-TMT" firstAttribute="trailing" secondItem="Lti-pc-8ON" secondAttribute="trailing" id="B3l-PG-RLy"/>
+                            <constraint firstItem="er8-RJ-puU" firstAttribute="top" secondItem="1Fc-76-Mf6" secondAttribute="top" id="BvG-R3-bD3"/>
+                            <constraint firstItem="W1f-2E-fwc" firstAttribute="leading" secondItem="1Fc-76-Mf6" secondAttribute="leading" id="ETX-Hi-Lv1"/>
+                            <constraint firstAttribute="trailing" secondItem="er8-RJ-puU" secondAttribute="trailing" id="OSj-Hi-iph"/>
+                            <constraint firstItem="0Z6-8G-TMT" firstAttribute="bottom" secondItem="BEx-to-46U" secondAttribute="bottom" id="UUP-bU-eco"/>
+                            <constraint firstAttribute="bottom" secondItem="er8-RJ-puU" secondAttribute="bottom" id="b6t-WU-Myu"/>
+                            <constraint firstAttribute="bottom" secondItem="Lti-pc-8ON" secondAttribute="bottom" id="dAi-6H-Eh8"/>
+                            <constraint firstItem="AYU-5k-6kG" firstAttribute="centerX" secondItem="1Fc-76-Mf6" secondAttribute="centerX" id="dEI-ZR-Mc3"/>
+                            <constraint firstAttribute="trailing" secondItem="W1f-2E-fwc" secondAttribute="trailing" id="esm-n9-uu3"/>
+                            <constraint firstItem="BEx-to-46U" firstAttribute="leading" secondItem="0Z6-8G-TMT" secondAttribute="leading" id="hM0-nd-FtZ"/>
+                            <constraint firstItem="Lti-pc-8ON" firstAttribute="top" secondItem="1Fc-76-Mf6" secondAttribute="top" id="jIk-Xy-LUj"/>
+                            <constraint firstItem="er8-RJ-puU" firstAttribute="leading" secondItem="1Fc-76-Mf6" secondAttribute="leading" id="nAy-IZ-d8i"/>
+                            <constraint firstItem="0Z6-8G-TMT" firstAttribute="trailing" secondItem="BEx-to-46U" secondAttribute="trailing" id="p8r-Uk-7it"/>
+                            <constraint firstItem="Lti-pc-8ON" firstAttribute="leading" secondItem="0Z6-8G-TMT" secondAttribute="leading" id="qrx-A7-Cto"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="xJ4-tO-1m6"/>
+                    <connections>
+                        <outlet property="blurView" destination="Lti-pc-8ON" id="nK5-hC-LDd"/>
+                        <outlet property="bottomConstraint" destination="UUP-bU-eco" id="oh6-RJ-o8s"/>
+                        <outlet property="contentView" destination="W1f-2E-fwc" id="VeM-gB-96J"/>
+                        <outlet property="loadingImage" destination="G5g-71-nWX" id="6VD-o3-K0H"/>
+                        <outlet property="loadingView" destination="er8-RJ-puU" id="YoD-84-zFg"/>
+                        <outlet property="playTimeBar" destination="BEx-to-46U" id="RuC-07-C7D"/>
+                        <outlet property="timeLbl" destination="AYU-5k-6kG" id="Qox-sr-GL8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Cw7-Hw-SIi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2383.1999999999998" y="1602.7093596059115"/>
         </scene>
         <!--Feed View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
                 <viewController storyboardIdentifier="FeedViewController" id="Y6W-OH-hqX" customClass="FeedViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htG-J3-w8j">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="691"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="774"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QjB-Ff-npc" customClass="ProgressBar" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="16" y="106" width="35" height="35"/>
+                                <rect key="frame" x="16" y="62" width="35" height="35"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="XuL-D6-Oyi"/>
@@ -184,10 +269,10 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rla-m0-I86">
-                                <rect key="frame" x="0.0" y="94" width="375" height="635"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="762"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pQ7-eE-6yk" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="150" y="280" width="75" height="75"/>
+                                        <rect key="frame" x="150" y="343.66666666666669" width="75" height="75"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="75" id="IjP-RR-Bpf"/>
@@ -202,17 +287,17 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d8M-fE-mgk">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Ofe-cI-1Xf" customClass="CustomSlider" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="-2" y="699" width="379" height="31"/>
+                                <rect key="frame" x="-2" y="782" width="379" height="31"/>
                                 <color key="minimumTrackTintColor" name="Secondary"/>
                                 <color key="maximumTrackTintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </slider>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00 / 00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dD1-hr-nJj">
-                                <rect key="frame" x="142.33333333333334" y="617" width="90.666666666666657" height="18"/>
+                                <rect key="frame" x="142.33333333333334" y="700" width="90.666666666666657" height="18"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -257,7 +342,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1442.4000000000001" y="1614.5320197044337"/>
+            <point key="canvasLocation" x="-3415" y="1603"/>
         </scene>
         <!--TrendingVC-->
         <scene sceneID="TLo-ON-iiT">
@@ -9250,6 +9335,22 @@
             </objects>
             <point key="canvasLocation" x="2260" y="109"/>
         </scene>
+        <!--Parent View Controller-->
+        <scene sceneID="GVI-ap-NnD">
+            <objects>
+                <viewController storyboardIdentifier="ParentViewController" id="4Hk-iM-1Wz" customClass="ParentViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cCg-da-Ykr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="H6M-p9-bo4"/>
+                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="sie-Gx-rU1"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="q7D-GU-2RI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2902" y="844"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="kG5-Pe-QPN">
             <objects>
@@ -9271,12 +9372,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="B10-A9-0SJ"/>
+                        <segue destination="4Hk-iM-1Wz" kind="relationship" relationship="rootViewController" id="Aeb-b8-2IX"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VEU-cO-ufV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1442" y="876"/>
+            <point key="canvasLocation" x="-1473" y="833"/>
         </scene>
         <!--ViewVC-->
         <scene sceneID="KOX-18-Gl4">
@@ -9346,6 +9447,9 @@
         </scene>
     </scenes>
     <designables>
+        <designable name="BEx-to-46U">
+            <size key="intrinsicContentSize" width="-1" height="30"/>
+        </designable>
         <designable name="Ofe-cI-1Xf">
             <size key="intrinsicContentSize" width="-1" height="30"/>
         </designable>
@@ -9427,6 +9531,9 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

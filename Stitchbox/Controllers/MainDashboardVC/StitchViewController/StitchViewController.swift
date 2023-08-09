@@ -1,8 +1,8 @@
 //
-//  FeedViewController.swift
+//  StitchViewController.swift
 //  Stitchbox
 //
-//  Created by Nghiem Minh Hoang on 26/10/2022.
+//  Created by Khoi Nguyen on 8/9/23.
 //
 
 import UIKit
@@ -12,7 +12,7 @@ import Alamofire
 import FLAnimatedImage
 import ObjectMapper
 
-class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
+class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
     
     @IBOutlet weak var progressBar: ProgressBar!
@@ -61,7 +61,13 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+        
+        // Do any additional setup after loading the view
+       // setupNavBar()
+        //setupTabBar()
+        syncSendbirdAccount()
+        IAPManager.shared.configure()
+        setupButtons()
         setupCollectionNode()
        
         
@@ -81,58 +87,32 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         //self.navigationController?.hidesBarsOnSwipe = true
         
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         
         
         
         //
         
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
-        
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
         
         
-        /*
-        if let tabBarController = self.tabBarController {
-            let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
-            for viewController in viewControllersToPreload {
-                _ = viewController.view
-            }
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
         
-        
-        if let navigationController = self.navigationController {
-            navigationController.navigationBar.prefersLargeTitles = false
-            navigationController.navigationBar.isTranslucent = false
-        }
-        */
-        
-        
-        self.loadNewestCoreData {
-            self.loadSettings {
-                print("Oke!")
-            }
-        }
-        
-        if _AppCoreData.userDataSource.value?.userID != "" {
-            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
-        }
+
         
         
     }
@@ -141,7 +121,10 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-    
+        
+        //setupNavBar()
+        //setupTabBar()
+        checkNotification()
         showMiddleBtn(vc: self)
         loadFeed()
         
@@ -193,7 +176,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         delay(0.25) {[weak self] in
             guard let self = self else { return }
-            NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         }
          
     }
@@ -329,7 +312,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
 }
 
-extension FeedViewController {
+extension StitchViewController {
     
     @objc func updateProgressBar() {
         
@@ -385,14 +368,207 @@ extension FeedViewController {
         
     }
     
+    func checkNotification() {
+        
+        APIManager.shared.getBadge { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                if let data = apiResponse.body {
+                    
+                    if let badge = data["badge"] as? Int {
+                        
+                        if badge == 0 {
+                            
+                            Dispatch.main.async {
+                                self.setupEmptyNotiButton()
+                            }
+                            
+                        } else {
+                            Dispatch.main.async {
+                                self.setupHasNotiButton()
+                            }
+                        }
+                        
+                    } else {
+                        
+                        Dispatch.main.async {
+                            self.setupEmptyNotiButton()
+                        }
+                        
+                    }
+                    
+                }
+                
+            case .failure(let error):
+                Dispatch.main.async {
+                    self.setupEmptyNotiButton()
+                }
+                print(error)
+                
+            }
+        }
+        
+        
+        
+    }
     
     
     
 }
 
+extension StitchViewController {
+    
+    func setupButtons() {
+        
+        setupHomeButton()
+        
+    }
+    
+    
+    func setupHomeButton() {
+        
+        // Do any additional setup after loading the view.
+        homeButton.setImage(UIImage.init(named: "Logo")?.resize(targetSize: CGSize(width: 35, height: 35)), for: [])
+        homeButton.addTarget(self, action: #selector(onClickHome(_:)), for: .touchUpInside)
+        homeButton.frame = back_frame
+        homeButton.setTitleColor(UIColor.white, for: .normal)
+        homeButton.setTitle("", for: .normal)
+        homeButton.sizeToFit()
+        let homeButtonBarButton = UIBarButtonItem(customView: homeButton)
+        
+        self.navigationItem.leftBarButtonItem = homeButtonBarButton
+        
+    }
+    
+    
+    func setupEmptyNotiButton() {
+        
+        let notiButton = UIButton(type: .custom)
+        notiButton.setImage(UIImage.init(named: "noNoti")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
+        notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
+        notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let notiBarButton = UIBarButtonItem(customView: notiButton)
+        
+        let searchButton = UIButton(type: .custom)
+        searchButton.setImage(UIImage(named: "search")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
+        searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
+        searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let searchBarButton = UIBarButtonItem(customView: searchButton)
+        
+        
+        
+        
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+        
+        
+        //let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        
+        
+    }
+    
+    
+    func setupHasNotiButton() {
+        
+        let notiButton = UIButton(type: .custom)
+        notiButton.setImage(UIImage.init(named: "homeNoti")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
+        notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
+        notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let notiBarButton = UIBarButtonItem(customView: notiButton)
+        
+        let searchButton = UIButton(type: .custom)
+        searchButton.setImage(UIImage(named: "search")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
+        searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
+        searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let searchBarButton = UIBarButtonItem(customView: searchButton)
+        
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+        
+        
+        //let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        
+    }
+    
+
+}
+
+extension StitchViewController {
+    
+    @objc func onClickHome(_ sender: AnyObject) {
+        shouldScrollToTop()
+    }
+    
+    
+    @objc func onClickNoti(_ sender: AnyObject) {
+        if let NVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "NotificationVC") as? NotificationVC {
+            
+            resetNoti()
+            NVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(NVC, animated: true)
+            
+        }
+    }
+    
+    @objc func onClickSearch(_ sender: AnyObject) {
+        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+            
+            SVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(SVC, animated: true)
+            
+        }
+    }
+    
+    
+}
+
+extension StitchViewController {
+    
+    func showErrorAlert(_ title: String, msg: String) {
+        
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func swiftLoader(progress: String) {
+        
+        var config : SwiftLoader.Config = SwiftLoader.Config()
+        config.size = 170
+        
+        config.backgroundColor = UIColor.clear
+        config.spinnerColor = UIColor.white
+        config.titleTextColor = UIColor.white
+        
+        
+        config.spinnerLineWidth = 3.0
+        config.foregroundColor = UIColor.black
+        config.foregroundAlpha = 0.7
+        
+        
+        SwiftLoader.setConfig(config: config)
+        
+        
+        SwiftLoader.show(title: progress, animated: true)
+        
+        
+    }
+    
+}
 
 
-extension FeedViewController {
+extension StitchViewController {
 
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -409,6 +585,7 @@ extension FeedViewController {
             var minDistanceFromCenter = CGFloat.infinity
             
             var foundVisibleVideo = false
+            
             
             for cell in visibleCells {
                 
@@ -493,7 +670,7 @@ extension FeedViewController {
  
 }
 
-extension FeedViewController: ASCollectionDelegate {
+extension StitchViewController: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         let frameWidth = self.collectionNode.frame.width
@@ -519,7 +696,7 @@ extension FeedViewController: ASCollectionDelegate {
     
 }
 
-extension FeedViewController: ASCollectionDataSource {
+extension StitchViewController: ASCollectionDataSource {
     
     func numberOfSections(in collectionNode: ASCollectionNode) -> Int {
         
@@ -570,7 +747,7 @@ extension FeedViewController: ASCollectionDataSource {
 }
 
 
-extension FeedViewController {
+extension StitchViewController {
     
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
@@ -579,8 +756,9 @@ extension FeedViewController {
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = false
         self.collectionNode.leadingScreensForBatching = 2.0
-       
+        self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         // Set the data source and delegate
+       
         self.collectionNode.dataSource = self
         self.collectionNode.delegate = self
         
@@ -610,12 +788,13 @@ extension FeedViewController {
         self.collectionNode.view.allowsSelection = false
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
         
+        
     }
     
     
 }
 
-extension FeedViewController {
+extension StitchViewController {
     
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
@@ -735,13 +914,13 @@ extension FeedViewController {
 }
 
 
-extension FeedViewController {
+extension StitchViewController {
     
     @objc func onClickDelete(_ sender: AnyObject) {
         
         
         if let vc = UIViewController.currentViewController() {
-            if vc is FeedViewController {
+            if vc is StitchViewController {
                 
                 presentSwiftLoader()
                 
@@ -846,7 +1025,7 @@ extension FeedViewController {
     @objc func onClickEdit(_ sender: AnyObject) {
         
         if let vc = UIViewController.currentViewController() {
-            if vc is FeedViewController {
+            if vc is StitchViewController {
                 
                 print("Edit requested")
                 if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC {
@@ -870,7 +1049,7 @@ extension FeedViewController {
         
         
         if let vc = UIViewController.currentViewController() {
-            if vc is FeedViewController {
+            if vc is StitchViewController {
                 
                 print("Stats requested")
                 if let VVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewVC") as? ViewVC {
@@ -895,7 +1074,7 @@ extension FeedViewController {
     @objc func onClickDownload(_ sender: AnyObject) {
         
         if let vc = UIViewController.currentViewController() {
-            if vc is FeedViewController {
+            if vc is StitchViewController {
                 
                 if let post = editeddPost {
                     
@@ -1138,12 +1317,33 @@ extension FeedViewController {
             
         }
     }
-
+    
+    func resetNoti() {
+        
+        APIManager.shared.resetBadge { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                
+                Dispatch.main.async {
+                    self.setupEmptyNotiButton()
+                }
+                
+            case .failure(let error):
+                
+                print(error)
+                
+            }
+        }
+        
+        
+    }
 
 }
 
 
-extension FeedViewController {
+extension StitchViewController {
     
     
     func loadSettings(completed: @escaping DownloadComplete) {
@@ -1215,7 +1415,7 @@ extension FeedViewController {
     
 }
 
-extension FeedViewController {
+extension StitchViewController {
     
     func pauseVideo(index: Int) {
         
@@ -1277,44 +1477,6 @@ extension FeedViewController {
         
     }
     
-    
-}
-
-extension FeedViewController {
-    
-    func showErrorAlert(_ title: String, msg: String) {
-        
-        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(action)
-        
-        
-        present(alert, animated: true, completion: nil)
-        
-    }
-    
-    func swiftLoader(progress: String) {
-        
-        var config : SwiftLoader.Config = SwiftLoader.Config()
-        config.size = 170
-        
-        config.backgroundColor = UIColor.clear
-        config.spinnerColor = UIColor.white
-        config.titleTextColor = UIColor.white
-        
-        
-        config.spinnerLineWidth = 3.0
-        config.foregroundColor = UIColor.black
-        config.foregroundAlpha = 0.7
-        
-        
-        SwiftLoader.setConfig(config: config)
-        
-        
-        SwiftLoader.show(title: progress, animated: true)
-        
-        
-    }
     
 }
 
