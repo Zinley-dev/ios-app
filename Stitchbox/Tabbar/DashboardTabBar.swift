@@ -108,6 +108,7 @@ import Alamofire
         super.viewDidLoad()
         //setupView()
         
+        
         self.delegate = self
         
         SBDMain.add(self, identifier: self.sbu_className)
@@ -116,6 +117,8 @@ import Alamofire
         
         setupMiddleButtonForBlackTabBar()
         setupBlackTabBar()
+        
+         
     }
     
     func setupBlackTabBar() {
@@ -125,6 +128,7 @@ import Alamofire
         tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .black
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .black
         self.tabBar.standardAppearance = tabBarAppearance
+        self.view.backgroundColor = .black
         setupImageForTabbar()
         button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
     }
@@ -137,6 +141,7 @@ import Alamofire
         tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .white
         tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .white
         self.tabBar.standardAppearance = tabBarAppearance
+        self.view.backgroundColor = .white
         setupImageForLightTabbar()
         button.setImage(UIImage(named: "Add 3")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
     }

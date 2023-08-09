@@ -13,6 +13,9 @@ class NormalLoginVC: UIViewController {
     @IBOutlet weak var phoneBtn: UIButton!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var descLbl: UILabel!
+    
+    var usernameBorder = CALayer()
+    var phoneBorder = CALayer()
   
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -21,7 +24,7 @@ class NormalLoginVC: UIViewController {
         
         if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginController") as? LoginController {
                     
-            self.addVCAsChildVC(childViewController: controller)
+            addVCAsChildVC(childViewController: controller)
             
             return controller
         } else {
@@ -37,7 +40,7 @@ class NormalLoginVC: UIViewController {
         if let controller = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "LoginByPhoneSendCodeController") as? LoginByPhoneSendCodeController {
             
     
-            self.addVCAsChildVC(childViewController: controller)
+            addVCAsChildVC(childViewController: controller)
             
             return controller
             
@@ -51,8 +54,18 @@ class NormalLoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         // Do any additional setup after loading the view.
         setupBackButton()
+    
+        
+        setupNavBar()
+        
+        
+        usernameBorder = usernameBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (130/375))
+        phoneBorder = phoneBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (130/375))
+        
+        
         setupPhoneBtn()
 
         
@@ -60,9 +73,6 @@ class NormalLoginVC: UIViewController {
         
         LoginController.view.isHidden = true
         LoginByPhoneSendCodeController.view.isHidden = false
-        
-        setupNavBar()
-        
         
     }
     
@@ -154,29 +164,28 @@ class NormalLoginVC: UIViewController {
     
     func setupUsernameBtn() {
         
-        usernameBtn.setTitleColor(UIColor.white, for: .normal)
-        phoneBtn.setTitleColor(UIColor.darkGray, for: .normal)
+        usernameBtn.setTitleColor(UIColor.black, for: .normal)
+        phoneBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
+        usernameBtn.layer.addSublayer(usernameBorder)
         
-        usernameBtn.backgroundColor = UIColor.darkGray
-        phoneBtn.backgroundColor = UIColor.clear
+        phoneBorder.removeFromSuperlayer()
         
         descLbl.text = "Enter your username and password"
         
         LoginController.view.isHidden = false
         LoginByPhoneSendCodeController.view.isHidden = true
-        
-       
+         
     }
     
     func setupPhoneBtn() {
         
-        usernameBtn.setTitleColor(UIColor.darkGray, for: .normal)
-        phoneBtn.setTitleColor(UIColor.white, for: .normal)
+        usernameBtn.setTitleColor(UIColor.lightGray, for: .normal)
+        phoneBtn.setTitleColor(UIColor.black, for: .normal)
         
+        phoneBtn.layer.addSublayer(phoneBorder)
         
-        usernameBtn.backgroundColor = UIColor.clear
-        phoneBtn.backgroundColor = UIColor.darkGray
+        usernameBorder.removeFromSuperlayer()
         
         descLbl.text = "Select a country and enter your phone number"
         

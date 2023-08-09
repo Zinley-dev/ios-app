@@ -16,6 +16,10 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
     
     deinit {
         print("SavePostVC is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+        collectionNode.delegate = nil
+        collectionNode.dataSource = nil
+        
     }
 
 
@@ -36,8 +40,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
     var currentIndex: Int?
     var imageIndex: Int?
     var isfirstLoad = true
-    var didScroll = false
-    
+   
     var posts = [PostModel]()
     var selected_itemList = [PostModel]()
     var selectedIndexPath = 0
@@ -47,13 +50,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
     var editeddPost: PostModel?
     var refresh_request = false
     var startIndex: Int!
-    var imageTimerWorkItem: DispatchWorkItem?
-    
-    lazy var delayItem = workItem()
-    lazy var delayItem2 = workItem()
-    lazy var delayItem3 = workItem()
-    
-    
+   
     private var pullControl = UIRefreshControl()
     
     
@@ -67,7 +64,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
         
         //todo: customized search to search only in hashtag_list
         setupCollectionNode()
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if UIDevice.current.hasNotch {
@@ -102,24 +99,31 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
+        DispatchQueue.global(qos: .userInitiated).async {
+                        do {
+                            if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
+                                let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
+                                let image = FLAnimatedImage(animatedGIFData: gifData)
+
+                                DispatchQueue.main.async { [weak self] in
+                                    guard let self = self else { return }
+
+                                    self.loadingImage.animatedImage = image
+                                    self.loadingView.backgroundColor = self.view.backgroundColor
+                                }
+                            }
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+
         
         loadingView.backgroundColor = self.view.backgroundColor
         navigationController?.setNavigationBarHidden(false, animated: true)
         hasViewAppeared = true
         
-        delay(1.25) {
+        delay(1.25) { [weak self] in
+            guard let self = self else { return }
             
             UIView.animate(withDuration: 0.5) {
                 
@@ -160,7 +164,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
         refresh_request = true
         currentIndex = 0
         isfirstLoad = true
-        didScroll = false
+        
         shouldMute = nil
         page = 1
         updateData()
@@ -200,16 +204,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
                 self.pullControl.endRefreshing()
             }
             
-            self.delayItem.perform(after: 0.75) {
-                
-                
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-                
-                
-            }
-            
-            
+    
         }
         
         
@@ -420,7 +415,7 @@ extension SavePostVC {
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
         self.applyStyle()
-        self.wireDelegates()
+       
         
         // Reload the data on the collection node
         self.collectionNode.reloadData()
@@ -440,25 +435,27 @@ extension SavePostVC {
         
     }
     
-    func wireDelegates() {
-        
-        self.collectionNode.delegate = self
-        self.collectionNode.dataSource = self
-        
-    }
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
-        
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let selectedPostVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
             
-            SPVC.selectedPost = posts
-            SPVC.startIndex = indexPath.row
+            // Find the index of the selected post
+            let currentIndex = indexPath.row
+            
+            // Determine the range of posts to include before and after the selected post
+            let beforeIndex = max(currentIndex - 5, 0)
+            let afterIndex = min(currentIndex + 5, posts.count - 1)
 
-            self.navigationController?.pushViewController(SPVC, animated: true)
+            // Include up to 5 posts before and after the selected post in the sliced array
+            selectedPostVC.posts = Array(posts[beforeIndex...afterIndex])
+            
+            // Set the startIndex to the position of the selected post within the sliced array
+            selectedPostVC.startIndex = currentIndex - beforeIndex
+            
+            self.navigationController?.pushViewController(selectedPostVC, animated: true)
         }
-        
-        
     }
+
 
 
 }

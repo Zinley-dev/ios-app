@@ -458,8 +458,6 @@ extension UserAPI: EndPointType {
             return "/challenge-card"
           case .deleteGameChallengeCard:
             return "/challenge-card"
-          case .updateFavoriteContent:
-            return "/me/favorite-content"
             
         }
     }
@@ -520,8 +518,7 @@ extension UserAPI: EndPointType {
             return .put
           case .deleteGameChallengeCard:
             return .delete
-          case .updateFavoriteContent:
-            return .patch
+         
         }
     }
     
@@ -576,8 +573,6 @@ extension UserAPI: EndPointType {
           case .emailExist(let params):
             return .requestParameters(parameters: params)
           case .addGameChallengeCard(let params):
-            return .requestParameters(parameters: params)
-          case .updateFavoriteContent(let params):
             return .requestParameters(parameters: params)
           case .updateGameChallengeCard(let params):
             return .requestParameters(parameters: params)
@@ -2117,5 +2112,3 @@ extension UserContactApi: EndPointType {
   }
   
 }
-
-

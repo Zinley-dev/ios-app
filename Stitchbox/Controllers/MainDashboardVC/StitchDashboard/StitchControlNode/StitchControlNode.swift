@@ -35,8 +35,6 @@ class StitchControlNode: ASCellNode {
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
 
       
-        automaticallyManagesSubnodes = true
-        
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

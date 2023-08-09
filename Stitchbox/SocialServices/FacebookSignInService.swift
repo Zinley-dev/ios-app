@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import FBSDKLoginKit
 
 class FacebookSignInService: NSObject {
     private var vm: StartViewModel
@@ -19,24 +18,7 @@ class FacebookSignInService: NSObject {
 extension FacebookSignInService: LoginCoordinatorProtocol {
     func triggerSignIn() {
         print("FACEBOOK LOGIN...")
-        let loginManager = LoginManager()
-        loginManager.logOut()
-        loginManager.logIn(permissions: ["public_profile"], from: vm.vc) { result, error in
-            if let error = error {
-                print("Encountered error: \(error)")
-            } else if let result = result, result.isCancelled {
-                print("Cancelled")
-            } else {
-                print("Logged In")
-                
-                let userId = Profile.current?.userID
-                let email = Profile.current?.email ?? ""
-                let avatar = Profile.current?.imageURL?.absoluteString ?? ""
-                let name = "\(Profile.current?.firstName ?? "") \(Profile.current?.lastName ?? "")"
-                let data = AuthResult(idToken: userId, providerID: nil, rawNonce: nil, accessToken: nil, name: name, email: email, phone: nil, avatar: avatar)
-                self.vm.completeSignIn(with: data)
-            }
-        }
+        
     }
     
     func logout() {

@@ -19,10 +19,11 @@ class NotificationVC: UIViewController {
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var loadingView: UIView!
-    private var pullControl = UIRefreshControl()
+ 
     
     var page = 1
     var refresh_request = false
+    private var pullControl = UIRefreshControl()
     var tableNode: ASTableNode!
     var UserNotificationList = [UserNotificationModel]()
     var firstAnimated = true
@@ -59,7 +60,7 @@ class NotificationVC: UIViewController {
         self.tableNode.automaticallyAdjustsContentOffset = true
         
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if UIDevice.current.hasNotch {
@@ -77,25 +78,7 @@ class NotificationVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadingView.isHidden = true
-        /*
-        if firstAnimated {
-            
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                self.loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
-            }
-            
-            loadingView.backgroundColor = self.view.backgroundColor
-            
-        } */
+
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -159,12 +142,6 @@ extension NotificationVC {
             
             if self.pullControl.isRefreshing == true {
                 self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) {
-                
-                self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                
             }
             
             
@@ -301,6 +278,12 @@ extension NotificationVC {
             case "NEW_FOLLOW_2":
                 openFollow()
             case "NEW_TAG":
+                if let post = notification.post {
+                    openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
+                } else {
+                    self.showErrorAlert("Oops!", msg: "This content is not available")
+                }
+            case "MENTION_IN_COMMENT":
                 if let post = notification.post {
                     openComment(commentId: notification.commentId, rootComment: notification.rootComment, replyToComment: notification.replyToComment, type: template, post: post)
                 } else {

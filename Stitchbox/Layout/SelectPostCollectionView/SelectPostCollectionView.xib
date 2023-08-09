@@ -15,8 +15,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectPostCollectionView" customModule="Stitchbox" customModuleProvider="target">
             <connections>
-                <outlet property="collectionView" destination="q1p-YQ-BvC" id="9e7-qC-HsM"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="B5C-me-TfX"/>
+                <outlet property="galleryView" destination="vz9-c4-28u" id="Xv8-dK-h78"/>
                 <outlet property="hideBtn" destination="RBT-cG-JWY" id="bbH-dz-Gux"/>
             </connections>
         </placeholder>
@@ -45,31 +45,25 @@
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                     <state key="normal" title="Hide"/>
                 </button>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="q1p-YQ-BvC">
-                    <rect key="frame" x="8" y="90" width="768" height="153"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vz9-c4-28u">
+                    <rect key="frame" x="8" y="90" width="768" height="161"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="F2h-Cc-luZ">
-                        <size key="itemSize" width="128" height="128"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
-                </collectionView>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="bwx-sJ-a2h" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="0HC-yJ-bJM"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="q1p-YQ-BvC" secondAttribute="trailing" constant="8" id="BBi-dv-bL4"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="vz9-c4-28u" secondAttribute="bottom" constant="8" id="DTq-Ts-q1K"/>
                 <constraint firstAttribute="trailing" secondItem="zHq-vc-swT" secondAttribute="trailing" id="FjJ-58-AOa"/>
+                <constraint firstItem="vz9-c4-28u" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="8" id="IeM-iu-73w"/>
                 <constraint firstItem="RBT-cG-JWY" firstAttribute="centerY" secondItem="bwx-sJ-a2h" secondAttribute="centerY" id="PXA-jJ-MvI"/>
                 <constraint firstItem="bwx-sJ-a2h" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="Rxe-Ib-oLX"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="q1p-YQ-BvC" secondAttribute="bottom" constant="16" id="UrW-j2-6H0"/>
                 <constraint firstAttribute="bottom" secondItem="zHq-vc-swT" secondAttribute="bottom" id="XkL-wT-thM"/>
-                <constraint firstItem="q1p-YQ-BvC" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="8" id="bmt-uB-Uk6"/>
+                <constraint firstItem="vz9-c4-28u" firstAttribute="top" secondItem="bwx-sJ-a2h" secondAttribute="bottom" constant="8" id="fIF-7Y-wDt"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="vz9-c4-28u" secondAttribute="trailing" constant="8" id="oYX-Ik-NQ5"/>
                 <constraint firstItem="zHq-vc-swT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="sVU-WR-Hwx"/>
                 <constraint firstAttribute="trailing" secondItem="RBT-cG-JWY" secondAttribute="trailing" constant="8" id="wcH-Ge-Qe1"/>
-                <constraint firstItem="q1p-YQ-BvC" firstAttribute="top" secondItem="bwx-sJ-a2h" secondAttribute="bottom" constant="8" id="x6u-Oc-Wq2"/>
                 <constraint firstItem="zHq-vc-swT" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="zwL-63-Qgt"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

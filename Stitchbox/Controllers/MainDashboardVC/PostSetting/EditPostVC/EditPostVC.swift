@@ -21,11 +21,9 @@ class EditPostVC: UIViewController {
     @IBOutlet weak var thumbnailImg: UIImageView!
     @IBOutlet weak var hashtagLbl: UILabel!
     @IBOutlet weak var hiddenHashTagTxtField: UITextField!
-    @IBOutlet weak var streamingLinkLbl: UILabel!
     @IBOutlet weak var onlyMeLbl: UILabel!
     @IBOutlet weak var followLbl: UILabel!
     @IBOutlet weak var publicLbl: UILabel!
-    @IBOutlet weak var streamingLinkBtn: UIButton!
     @IBOutlet weak var avatarImage: UIImageView!
     @IBOutlet weak var settingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var collectionHeight: NSLayoutConstraint!
@@ -36,8 +34,9 @@ class EditPostVC: UIViewController {
     @IBOutlet weak var privateBtn: UIButton!
     @IBOutlet weak var hashtagBtn: UIButton!
     @IBOutlet weak var allowCmtSwitch: UISwitch!
+    @IBOutlet weak var allowStitchSwitch: UISwitch!
     
-    
+    var isAllowStitch = true
     var hashtagList = [String]()
     var mode = 0
     var isAllowComment = true
@@ -70,15 +69,16 @@ class EditPostVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if !firstLoad {
-            firstLoad = false
-            if global_host != "" {
-                streamingLinkLbl.text = "Streaming link added for \(global_host)"
-            } else {
-                streamingLinkLbl.text = "Streaming link"
-            }
-            
-        }
+
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
         
         
@@ -117,6 +117,29 @@ class EditPostVC: UIViewController {
         
     }
     
+    @IBAction func allowStitchSwitchPressed(_ sender: Any) {
+        
+        if isAllowStitch == true {
+                  
+            isAllowStitch =  false
+            allowStitchSwitch.setOn(false, animated: true)
+            
+            print("Allow stitch: \(String(describing: self.isAllowStitch))")
+            
+            
+        } else {
+            
+            isAllowStitch = true
+            allowStitchSwitch.setOn(true, animated: true)
+            
+            print("Allow stitch: \(String(describing: self.isAllowStitch))")
+            
+        }
+        
+        
+    }
+    
+    
     @IBAction func hashtagBtnPressed(_ sender: Any) {
         
         if let HTVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "HashtagVC") as? HashtagVC {
@@ -127,14 +150,14 @@ class EditPostVC: UIViewController {
                 
                 if !text.findMHashtagText().isEmpty {
                     self.collectionHeight.constant = 50.0
-                    self.settingViewHeight.constant = 295
+                    self.settingViewHeight.constant = 335
                     self.collectionView.isHidden = false
                     self.hashtagLbl.text = "Hashtag added"
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList = text.findMHashtagText()
                 } else {
                     self.collectionHeight.constant = 0.0
-                    self.settingViewHeight.constant = 295 - 50
+                    self.settingViewHeight.constant = 335 - 50
                     self.collectionView.isHidden = true
                     self.hashtagLbl.text = "Hashtag #"
                     self.hashtagList.removeAll()
@@ -158,11 +181,11 @@ class EditPostVC: UIViewController {
         
         mode = 0
         
-        globalBtn.setImage(UIImage(named: "selectedPublic"), for: .normal)
-        followingBtn.setImage(UIImage(named: "following"), for: .normal)
-        privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "selectedPublic")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
-        publicLbl.textColor = .secondary
+        publicLbl.textColor = .black
         followLbl.textColor = .lightGray
         onlyMeLbl.textColor = .lightGray
         
@@ -173,12 +196,12 @@ class EditPostVC: UIViewController {
         
         mode = 1
         
-        globalBtn.setImage(UIImage(named: "public"), for: .normal)
-        followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
-        privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "selectedFollowing")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         publicLbl.textColor = .lightGray
-        followLbl.textColor = .secondary
+        followLbl.textColor = .black
         onlyMeLbl.textColor = .lightGray
     }
     
@@ -186,17 +209,19 @@ class EditPostVC: UIViewController {
         
         mode = 2
         
-        globalBtn.setImage(UIImage(named: "public"), for: .normal)
-        followingBtn.setImage(UIImage(named: "following"), for: .normal)
-        privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "selectedOnlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         
         publicLbl.textColor = .lightGray
         followLbl.textColor = .lightGray
-        onlyMeLbl.textColor = .secondary
+        onlyMeLbl.textColor = .black
         
         
     }
+    
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -204,14 +229,7 @@ class EditPostVC: UIViewController {
         self.view.endEditing(true)
         
     }
-    
-    @IBAction func StreamingLinkBtnPressed(_ sender: Any) {
-        
-        
 
-        
-    }
-    
     
     
 }
@@ -243,9 +261,9 @@ extension EditPostVC {
         setDefaultDesc()
         setDefaultMeia()
         setDefaultMode()
+        setupDefaultStitch()
         setDefaultComment()
         setDefaultHashtag()
-        setDefaultStreamingLink()
         loadAvatar()
     }
     
@@ -291,33 +309,7 @@ extension EditPostVC {
         
     }
     
-    func setDefaultStreamingLink() {
-        
-        if selectedPost.streamLink != "" {
-            
-            let streamUrl = selectedPost.streamLink
-            
-            if let url = URL(string: streamUrl) {
-                
-                if let domain = url.host {
-                    
-                    if check_Url(host: domain) == true {
-                        
-                        global_host = domain
-                        global_fullLink = streamUrl
-                        DispatchQueue.main.async {
-                            self.streamingLinkLbl.text = "Streaming link added for \(global_host)"
-                        }
-                        
-                    }
-                    
-                }
-            }
-            
-        }
-        
-    }
-    
+
     func setDefaultComment() {
         
         
@@ -345,20 +337,27 @@ extension EditPostVC {
     
     func setDefaultHashtag() {
         
-        delay(0.1) {
+        delay(0.1) { [weak self] in
+            guard let self = self else { return }
             
             self.hashtagList = self.selectedPost.hashtags
             self.hiddenHashTagTxtField.text = self.hashtagList.joined(separator: "")
             
+            if self.hashtagList.count == 1 {
+                if self.hashtagList[0] == "" {
+                    self.hashtagList.removeAll()
+                }
+            }
+            
+    
             if !self.hashtagList.isEmpty {
                 self.collectionHeight.constant = 50.0
-                self.settingViewHeight.constant = 295
+                self.settingViewHeight.constant = 335
                 self.collectionView.isHidden = false
                 self.hashtagLbl.text = "Hashtag added"
-                self.hashtagLbl.text = "Hashtag #"
             } else {
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 295 - 50
+                self.settingViewHeight.constant = 335 - 50
                 self.collectionView.isHidden = true
                 self.hashtagLbl.text = "Hashtag #"
             }
@@ -394,17 +393,34 @@ extension EditPostVC {
         
     }
     
+    func setupDefaultStitch() {
+        
+        if selectedPost.setting?.allowStitch == true {
+            
+            isAllowStitch = true
+            allowStitchSwitch.setOn(true, animated: true)
+            
+            
+        } else {
+            
+            isAllowStitch = false
+            allowStitchSwitch.setOn(false, animated: true)
+            
+        }
+        
+    }
+    
     func setDefaultMode() {
         
         if selectedPost.setting?.mode == 0 {
             
             mode = 0
             
-            globalBtn.setImage(UIImage(named: "selectedPublic"), for: .normal)
-            followingBtn.setImage(UIImage(named: "following"), for: .normal)
-            privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+            globalBtn.setImage(UIImage(named: "selectedPublic")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
             
-            publicLbl.textColor = .secondary
+            publicLbl.textColor = .black
             followLbl.textColor = .lightGray
             onlyMeLbl.textColor = .lightGray
             
@@ -412,26 +428,26 @@ extension EditPostVC {
             
             mode = 1
             
-            globalBtn.setImage(UIImage(named: "public"), for: .normal)
-            followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
-            privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+            globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            followingBtn.setImage(UIImage(named: "selectedFollowing")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
             
             publicLbl.textColor = .lightGray
-            followLbl.textColor = .secondary
+            followLbl.textColor = .black
             onlyMeLbl.textColor = .lightGray
             
         } else if selectedPost.setting?.mode == 2 {
             
             mode = 2
             
-            globalBtn.setImage(UIImage(named: "public"), for: .normal)
-            followingBtn.setImage(UIImage(named: "following"), for: .normal)
-            privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+            globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            privateBtn.setImage(UIImage(named: "selectedOnlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
             
             
             publicLbl.textColor = .lightGray
             followLbl.textColor = .lightGray
-            onlyMeLbl.textColor = .secondary
+            onlyMeLbl.textColor = .black
             
         }
         
@@ -497,7 +513,7 @@ extension EditPostVC {
         privateBtn.setTitle("", for: .normal)
         followingBtn.setTitle("", for: .normal)
         hashtagBtn.setTitle("", for: .normal)
-        streamingLinkBtn.setTitle("", for: .normal)
+        
         
     }
     
@@ -543,7 +559,7 @@ extension EditPostVC {
         
         if hashtagList.isEmpty == true {
             
-            update_hashtaglist = ["#\(loadUsername ?? "")"]
+            //update_hashtaglist = ["#\(loadUsername ?? "")"]
             
         } else {
             
@@ -560,13 +576,13 @@ extension EditPostVC {
         var updateText = ""
         
         
-        if let text = descTxtView.text, text != "Hi, let's unleash your gameplay!" {
+        if let text = descTxtView.text, text != "Hi, let's share something fun!" {
             updateText = text
         }
         
         
-        contentPost = ["id": selectedPost.id, "content": updateText, "streamLink": global_fullLink, "hashtags": update_hashtaglist]
-        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment]
+        contentPost = ["id": selectedPost.id, "content": updateText, "hashtags": update_hashtaglist]
+        contentPost["setting"] = ["mode": mode as Any, "allowComment": isAllowComment, "allowStitch": isAllowStitch]
         
         presentSwiftLoader()
         APIManager.shared.updatePost(params: contentPost) { [weak self] result in
@@ -630,7 +646,7 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
         cell.hashTagLabel.font = UIFont.systemFont(ofSize: 12)
         cell.hashTagLabel.text = hashtagList[indexPath.row]
         cell.hashTagLabel.backgroundColor = .clear
-        cell.backgroundColor = .secondary
+        cell.backgroundColor = hashtagPurple
         
         return cell
         
@@ -640,12 +656,13 @@ extension EditPostVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
         hashtagList.remove(at: indexPath.row)
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             if self.hashtagList.count == 0 {
                 self.collectionHeight.constant = 0
                 self.collectionView.isHidden = true
                 self.collectionHeight.constant = 0.0
-                self.settingViewHeight.constant = 295 - 50
+                self.settingViewHeight.constant = 335 - 50
                 
                 self.hiddenHashTagTxtField.text = ""
                 self.hashtagLbl.text = "Hashtag #"
@@ -672,7 +689,7 @@ extension EditPostVC: UITextViewDelegate {
         
         if textView == descTxtView {
             
-            if textView.text == "Hi, let's unleash your gameplay!" {
+            if textView.text == "Hi, let's share something fun!" {
                 
                 textView.text = ""
                 
@@ -687,7 +704,7 @@ extension EditPostVC: UITextViewDelegate {
             
             if textView.text == "" {
                 
-                textView.text = "Hi, let's unleash your gameplay!"
+                textView.text = "Hi, let's share something fun!"
                 
             } else {
                 selectedDescTxtView = textView.text
@@ -702,7 +719,7 @@ extension EditPostVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars <= 200    // 200 Limit Value
+        return numberOfChars <= 500    // 200 Limit Value
     }
     
     

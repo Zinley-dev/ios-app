@@ -6,10 +6,11 @@
 //
 
 import UIKit
-import GoogleMaps
 import Alamofire
+import CoreLocation
+import MapKit
 
-class LogInfomationVC: UIViewController, GMSMapViewDelegate {
+class LogInfomationVC: UIViewController {
     
     @IBOutlet weak var countryLbl: UILabel!
     @IBOutlet weak var ispLbl: UILabel!
@@ -19,123 +20,87 @@ class LogInfomationVC: UIViewController, GMSMapViewDelegate {
     @IBOutlet weak var regionLbl: UILabel!
     @IBOutlet weak var IPLbl: UILabel!
     @IBOutlet weak var DeviceLbl: UILabel!
-    @IBOutlet weak var mapView: GMSMapView!
-    
+    @IBOutlet weak var mapView: MKMapView!
+
     let backButton: UIButton = UIButton(type: .custom)
-    
-    var marker = GMSMarker()
-    
     var item: UserLoginActivityModel!
+
+    let ipApiURLString = "http://ip-api.com/json/"
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        mapView.delegate = self
         setupButtons()
-        styleMap()
         DeviceLbl.text = item.device
+        fetchLocationInformation()
+        configureTimeAndAction()
+    }
 
-        let urls = URL(string: "http://ip-api.com/json/")!.appendingPathComponent(item.ip)
-                                  
-        AF.request(urls, method: .get)
+
+
+    private func fetchLocationInformation() {
+        guard let url = URL(string: ipApiURLString)?.appendingPathComponent(item.ip) else {
+            print("Invalid URL")
+            return
+        }
+
+        AF.request(url, method: .get)
             .validate(statusCode: 200..<500)
             .responseJSON { responseJSON in
-                                        
                 switch responseJSON.result {
-                                            
                     case .success(let json):
-                                            
-                        if let dict = json as? Dictionary<String, Any> {
-                                                
-                            if let status = dict["status"] as? String, status == "success" {
-                                                    
-                                if let regionName = dict["regionName"] as? String, let lat = dict["lat"] as? CLLocationDegrees, let lon = dict["lon"] as? CLLocationDegrees, let query = dict["query"] as? String, let city = dict["city"] as? String, let isp = dict["isp"] as? String, let country = dict["country"] as? String {
-                                    
-                                    
-                                    let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                                    self.centerMapOnUserLocation(location: location)
-                                    self.regionLbl.text = regionName
-                                    self.IPLbl.text = query
-                                    self.cityLbl.text = city
-                                    self.ispLbl.text = isp
-                                    self.countryLbl.text = country
-                                }
-                                               
-
-                            } else {
-                                
-                                self.IPLbl.text = self.item.ip
-                                self.regionLbl.text = "Private range"
-                                self.countryLbl.text = "Private range"
-                                self.cityLbl.text = "Private range"
-                                self.ispLbl.text = "Private range"
-                                
-                            }
-                        }
-                                            
+                        self.processJSON(json: json)
                     case .failure(let error):
-                      
                         print(error.localizedDescription)
-                                           
-                                            
-              
-                    }
-                                        
+                        // Consider adding user alert or other UI handling here
+                }
         }
-        
-        
+    }
+
+    private func processJSON(json: Any) {
+        if let dict = json as? Dictionary<String, Any>,
+           let status = dict["status"] as? String, status == "success",
+           let regionName = dict["regionName"] as? String,
+           let lat = dict["lat"] as? CLLocationDegrees,
+           let lon = dict["lon"] as? CLLocationDegrees,
+           let query = dict["query"] as? String,
+           let city = dict["city"] as? String,
+           let isp = dict["isp"] as? String,
+           let country = dict["country"] as? String {
+            
+            let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            centerMapOnUserLocation(location: location)
+            regionLbl.text = regionName
+            IPLbl.text = query
+            cityLbl.text = city
+            ispLbl.text = isp
+            countryLbl.text = country
+        } else {
+            IPLbl.text = item.ip
+            regionLbl.text = "Private range"
+            countryLbl.text = "Private range"
+            cityLbl.text = "Private range"
+            ispLbl.text = "Private range"
+        }
+    }
+
+    private func configureTimeAndAction() {
         let dateFormatterGet = DateFormatter()
         dateFormatterGet.dateFormat = "MM-dd-yyyy HH:mm:ss"
         timeLbl.text = dateFormatterGet.string(from: item.createdAt)
-
         actionLbl.text = item.content
-        
-        
-        
     }
-
-    
 
     func centerMapOnUserLocation(location: CLLocationCoordinate2D) {
-           
-
-           // get MapView
-           let camera = GMSCameraPosition.camera(withLatitude: location.latitude, longitude: location.longitude, zoom: 17)
-           
-
-           self.marker.infoWindowAnchor = CGPoint(x: 0.5, y: 0.5)
-        
-           marker.position = location
-        
-           marker.map = mapView
-           mapView.camera = camera
-           mapView.animate(to: camera)
-           marker.appearAnimation = GMSMarkerAnimation.pop
-           
-           
-           marker.isTappable = false
-              
+        let region = MKCoordinateRegion(center: location, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        mapView.setRegion(region, animated: true)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = location
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotation(annotation)
     }
-    
-    func styleMap() {
-    
-        do {
-            // Set the map style by passing the URL of the local file.
-            if let styleURL = Bundle.main.url(forResource: "customizedMap", withExtension: "json") {
-                mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
-            } else {
-                NSLog("Unable to find style.json")
-            }
-        } catch {
-            NSLog("One or more of the map styles failed to load. \(error)")
-        }
-    
-    
-    
-    }
-
 }
+
 
 extension LogInfomationVC {
     

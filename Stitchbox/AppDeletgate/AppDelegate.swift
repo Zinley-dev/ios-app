@@ -6,9 +6,7 @@
 //
 
 import UIKit
-import FirebaseCore
 import GoogleSignIn
-import FBSDKCoreKit
 import SendBirdSDK
 import SendBirdCalls
 import PushKit
@@ -16,16 +14,11 @@ import UserNotifications
 import SendBirdUIKit
 import PixelSDK
 import UserNotifications
-import TikTokOpenSDK
 import OneSignal
-import GooglePlaces
-import GoogleMaps
 import Sentry
 import SwipeTransition
 import SwipeTransitionAutoSwipeBack
 import SwipeTransitionAutoSwipeToDismiss
-import AppsFlyerLib
-import AppTrackingTransparency
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -34,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var voipRegistry: PKPushRegistry?
     var volumeOutputList = [Float]()
     static let sharedInstance = UIApplication.shared.delegate as! AppDelegate
-    lazy var delayItem = workItem()
+    
     private var audioLevel : Float = 0.0
     
     private var previousVolume: Float = 0.0
@@ -45,19 +38,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
     -> Bool {
-        ApplicationDelegate.shared.application(
-            application,
-            didFinishLaunchingWithOptions: launchOptions
-        )
-        
-        UNUserNotificationCenter.current().delegate = self
+    
         setupPixelSDK()
-        sendbird_authentication()
-        registerAppsFlyer()
-        
-        setupPixelSDK()
-        sendbird_authentication()
-        syncSendbirdAccount()
+        //sendbird_authentication()
+        //syncSendbirdAccount()
         attemptRegisterForNotifications(application: application)
         setupStyle()
         setupOneSignal(launchOptions: launchOptions)
@@ -65,12 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupVolumeObserver()
         sentrySetup()
         
-        
-        GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
-        GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
-        
-        //SwipeBackConfiguration.shared = CustomSwipeBackConfiguration()
-     
         return true
         
     }
@@ -78,13 +56,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func sentrySetup() {
         
-        SentrySDK.start { options in
-            options.dsn = "https://3406dbc29f884019aa59d9319a12b765@o4505243020689408.ingest.sentry.io/4505243021606912"
-            options.debug = true // Enabled debug when first installing is always helpful
-            
-            // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-            // We recommend adjusting this value in production.
-            options.tracesSampleRate = 1.0
+        func application(_ application: UIApplication,
+            didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+            SentrySDK.start { options in
+                options.dsn = "https://b408eb8270e3a80a9eca0764d1702654@o4505650828738560.ingest.sentry.io/4505650829459456"
+                options.debug = true // Enabled debug when first installing is always helpful
+                
+                // Enable all experimental features
+                    options.attachViewHierarchy = true
+                    options.enablePreWarmedAppStartTracing = true
+                    options.enableMetricKit = true
+                    options.enableTimeToFullDisplay = true
+                    options.enableSwizzling = true
+                
+            }
+
+            return true
         }
         
     }
@@ -315,35 +303,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             // redirect(to: view, with: parameters)
         }
         
-        guard let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-              let annotation = options[UIApplication.OpenURLOptionsKey.annotation] else {
-            return false
-        }
+       
         
-        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
-            return true
-        }
-        
-        ApplicationDelegate.shared.application(
-            application,
-            open: url,
-            sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-            annotation: options[UIApplication.OpenURLOptionsKey.annotation]
-        )
         return GIDSignIn.sharedInstance.handle(url)
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
-            return true
-        }
+        
         return false
     }
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: nil, annotation: "") {
-            return true
-        }
+        
         return false
     }
     
@@ -573,7 +544,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let vc = UIViewController.currentViewController() {
                 
                 
-                if vc is FeedViewController || vc is TrendingVC || vc is MainMessageVC || vc is ProfileViewController {
+                if vc is ParentViewController || vc is TrendingVC || vc is MainMessageVC || vc is ProfileViewController {
                     
                     if let nav = vc.navigationController {
                         
@@ -621,7 +592,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 
                 // Set the user ID, nickname, and onPresent properties of UPVC
                 SPVC.onPresent = true
-                SPVC.selectedPost = [post]
+                SPVC.posts = [post]
                 SPVC.startIndex = 0
                 
                 
@@ -734,21 +705,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidBecomeActive(_ application: UIApplication) {
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
-        if _AppCoreData.userDataSource.value?.userID != "" {
-            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
-        }
-        
         
     }
     
-    func registerAppsFlyer() {
-        
-        AppsFlyerLib.shared().appsFlyerDevKey = "sumV9RMiJVui7vtQoBVEx"
-        AppsFlyerLib.shared().appleAppID = "1660843872"
-        
-    }
-    
-     
     
 }
 

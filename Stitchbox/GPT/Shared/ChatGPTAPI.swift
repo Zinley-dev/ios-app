@@ -72,8 +72,7 @@ class ChatGPTAPI: @unchecked Sendable {
     
         if tokenManager.historyList.count <= 2 {
             
-            APIManager.shared.createGptConversation(params: conversation) { [weak self] result in
-                guard let self = self else { return }
+            APIManager.shared.createGptConversation(params: conversation) { result in
                 
                 switch result {
                 case .success(let apiResponse):
@@ -90,8 +89,7 @@ class ChatGPTAPI: @unchecked Sendable {
             
         } else {
             
-            APIManager.shared.updateGptConversation(params: conversation) { [weak self] result in
-                guard let self = self else { return }
+            APIManager.shared.updateGptConversation(params: conversation) { result in
                 
                 switch result {
                 case .success(let apiResponse):
@@ -175,9 +173,8 @@ class ChatGPTAPI: @unchecked Sendable {
         tokenManager.clearHistory()
         
         
-        APIManager.shared.clearGptConversation(gameId: chatbot_id) { [weak self] result in
-            guard let self = self else { return }
-            
+        APIManager.shared.clearGptConversation(gameId: chatbot_id) {  result in
+           
             switch result {
             case .success(let apiResponse):
                 

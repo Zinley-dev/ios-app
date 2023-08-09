@@ -23,20 +23,21 @@ struct CodeBlockView: View {
                 .padding(.horizontal)
                 .padding(.vertical, 8)
                 .background(Color.white)
-                .font(.system(size: 15)) // And here
+                .font(.roboto(.Regular, size: 15)) // Replace here
                 .foregroundColor(.black)
             
             ScrollView(.horizontal, showsIndicators: true) {
                 Text(parserResult.attributedString)
                     .padding(.horizontal, 16)
                     .textSelection(.enabled)
-                    .font(.system(size: 15)) // And here
+                    .font(.roboto(.Regular, size: 15)) // Replace here
                     .foregroundColor(.black)
             }
         }
         .background(HighlighterConstants.color)
         .cornerRadius(8)
     }
+
     
     var header: some View {
         HStack {

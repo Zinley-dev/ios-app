@@ -96,7 +96,7 @@ struct ContentView: View {
                     .background(.clear)
                     .foregroundColor(.black)
                     .accentColor(Color(red: 194.0 / 255.0, green: 169.0 / 255.0, blue: 250.0 / 255.0, opacity: 1.0))
-                    .font(.system(size: 15))
+                    .font(.roboto(.Regular, size: 15)) // Replace here
                     .focused($isTextFieldFocused)
                     .disabled(vm.isInteractingWithChatGPT)
             } else {
@@ -104,18 +104,19 @@ struct ContentView: View {
                     if vm.inputMessage.isEmpty && !isTextFieldFocused {
                         Text("Ask us anything!")
                             .foregroundColor(.black)
-                            .font(.system(size: 15))
+                            .font(.roboto(.Regular, size: 15)) // Replace here
                     }
                     TextField("", text: $vm.inputMessage)
                         .textFieldStyle(PlainTextFieldStyle())
                         .background(Color.clear)
                         .foregroundColor(.black)
                         .accentColor(Color(red: 194.0 / 255.0, green: 169.0 / 255.0, blue: 250.0 / 255.0, opacity: 1.0))
-                        .font(.system(size: 15))
+                        .font(.roboto(.Regular, size: 15)) // Replace here
                         .focused($isTextFieldFocused)
                         .disabled(vm.isInteractingWithChatGPT)
                 }
             }
+
             
             if vm.isInteractingWithChatGPT {
                 DotLoadingView().frame(width: 40, height: 30)

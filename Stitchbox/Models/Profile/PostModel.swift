@@ -71,6 +71,7 @@ class PostMetadata: Mappable {
 
 class PostModel: Mappable {
   var id: String = ""
+  var stitchedTo = false
   
   var imageUrl: URL = URL(string: "https://via.placeholder.com/150")!
   

@@ -24,14 +24,14 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var blurView: UIView!
     @IBOutlet weak var playTimeBar: CustomSlider!
-    var selectedPost = [PostModel]()
+ 
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var selected_item: PostModel!
     var collectionNode: ASCollectionNode!
     var editeddPost: PostModel?
     var startIndex: Int!
-    var currentIndex: Int!
+    var currentIndex: Int?
     var imageIndex: Int?
     var imageTimerWorkItem: DispatchWorkItem?
     var hasViewAppeared = false
@@ -43,6 +43,7 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     var selectedIndex = 0
     var isVideoPlaying = false
     var newPlayingIndex: Int?
+    
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
@@ -103,18 +104,26 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         
         if firstAnimated {
             firstAnimated = false
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                self.loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
+                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+
+                            self.loadingImage.animatedImage = image
+                            self.loadingView.backgroundColor = self.view.backgroundColor
+                        }
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
+
+
             
             loadingView.backgroundColor = .white
             navigationController?.setNavigationBarHidden(false, animated: true)
@@ -149,11 +158,9 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         if currentIndex != nil {
             //newPlayingIndex
             
-            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? OriginalNode {
+            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
                 
-                if node.currentIndex != nil {
-                    node.playVideo(index: node.currentIndex!)
-                }
+                
                 
             }
 
@@ -171,11 +178,9 @@ class SelectedPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         if currentIndex != nil {
             //newPlayingIndex
             
-            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? OriginalNode {
+            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
                 
-                if node.currentIndex != nil {
-                    node.pauseVideo(index: node.currentIndex!)
-                }
+                
                 
             }
                   
@@ -251,70 +256,98 @@ extension SelectedPostVC {
 extension SelectedPostVC {
     
        func scrollViewDidScroll(_ scrollView: UIScrollView) {
-           guard !posts.isEmpty, scrollView == collectionNode.view else {
-               return
-           }
-
-           let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-           let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? OriginalNode }
            
-           var minDistanceFromCenter = CGFloat.infinity
-           var newPlayingIndex: Int? = nil
-           var foundVisibleVideo = false
-
-           for cell in visibleCells {
-               let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-               let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-               let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+           if !posts.isEmpty, scrollView == collectionNode.view {
                
-               if distanceFromCenter < minDistanceFromCenter {
-                   newPlayingIndex = cell.indexPath?.row
-                   minDistanceFromCenter = distanceFromCenter
+               // Get the visible rect of the collection view.
+               let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+               
+               // Calculate the visible cells.
+               let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? VideoNode }
+               
+               // Find the index of the visible video that is closest to the center of the screen.
+               var minDistanceFromCenter = CGFloat.infinity
+               
+               var foundVisibleVideo = false
+               
+               for cell in visibleCells {
+                   
+                   let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+                   let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+                   let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+                   if distanceFromCenter < minDistanceFromCenter {
+                       newPlayingIndex = cell.indexPath!.row
+                       minDistanceFromCenter = distanceFromCenter
+                   }
                }
-           }
+               
+               
+               if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+                   
+                   foundVisibleVideo = true
+                   playTimeBar.isHidden = false
+                   imageIndex = nil
+               } else {
+                   playTimeBar.isHidden = true
+                   imageIndex = newPlayingIndex
+               }
+               
+               
+               if foundVisibleVideo {
+                   
+                   // Start playing the new video if it's different from the current playing video.
+                   if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+                       // Pause the current video, if any.
+                       if let currentIndex = currentIndex {
+                           pauseVideo(index: currentIndex)
+                       }
+                       // Play the new video.
+                       currentIndex = newPlayingIndex
+                       playVideo(index: currentIndex!)
+                       isVideoPlaying = true
+                       
+                       if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
+                           
+                           resetView(cell: node)
+                           
+                       }
+                       
+                   }
+                   
+               } else {
+                   
+                   if let currentIndex = currentIndex {
+                       pauseVideo(index: currentIndex)
+                   }
 
-           guard let newPlayingIndex = newPlayingIndex, let currentCell = collectionNode.nodeForItem(at: IndexPath(item: currentIndex ?? 0, section: 0)) as? OriginalNode, let newPlayingCell = collectionNode.nodeForItem(at: IndexPath(item: newPlayingIndex, section: 0)) as? OriginalNode else {
-               return
+                   
+                   
+                   // Reset the current playing index.
+                   currentIndex = nil
+                   
+               }
+               
+               
+               // If the video is stuck, reset the buffer by seeking to the current playback time.
+               if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
+                   if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                       if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                           cell.videoNode.player?.seek(to: currentTime)
+                       } else {
+                           cell.videoNode.player?.seek(to: CMTime.zero)
+                       }
+                   }
+               }
+               
+               // If there's no current playing video and no visible video, pause the last playing video, if any.
+               if !isVideoPlaying && currentIndex != nil {
+                   pauseVideo(index: currentIndex!)
+                   currentIndex = nil
+               }
+               
            }
            
-           // Safe guard for Array Out-of-Bounds
-           guard newPlayingCell.currentIndex != nil && newPlayingCell.currentIndex! < newPlayingCell.posts.count else {
-               return
-           }
            
-           if !newPlayingCell.posts[newPlayingCell.currentIndex!].muxPlaybackId.isEmpty {
-               foundVisibleVideo = true
-               imageIndex = nil
-           } else {
-               imageIndex = newPlayingIndex
-           }
-
-           if foundVisibleVideo {
-               if currentIndex != newPlayingIndex {
-                   if let currentIndex = currentCell.currentIndex {
-                       currentCell.pauseVideo(index: currentIndex)
-                   }
-
-                   currentIndex = newPlayingIndex
-                   newPlayingCell.playVideo(index: newPlayingCell.currentIndex ?? 0)
-
-                   if let node = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(item: newPlayingCell.currentIndex ?? 0, section: 0)) as? ReelNode {
-                       resetView(cell: node)
-                   }
-               }
-           } else {
-               print("Couldn't find foundVisibleVideo")
-           }
-
-           if let currentIndex = newPlayingCell.currentIndex, let cell = newPlayingCell.collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? ReelNode {
-               if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                   if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                       cell.videoNode.player?.seek(to: currentTime)
-                   } else {
-                       cell.videoNode.player?.seek(to: CMTime.zero)
-                   }
-               }
-           }
        }
 
 }
@@ -345,18 +378,16 @@ extension SelectedPostVC: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
         
-        return self.posts.count
+        return posts.count
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = OriginalNode(with: post)
+            let node = VideoNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            
-        
             
             return node
         }
@@ -369,51 +400,43 @@ extension SelectedPostVC {
     
     func loadPosts() {
         // Ensure that there are posts to load
-        guard !selectedPost.isEmpty else {
+        guard !posts.isEmpty else {
             return
         }
 
-        // Append the `selectedPost` items to the `posts` array and update the `indexPaths` array with the new index paths.
-        let indexPaths = selectedPost.enumerated().map { index, _ in
-            return IndexPath(row: self.posts.count + index, section: 0)
-        }
-        self.posts.append(contentsOf: selectedPost)
-
-        // It's better to insert items rather than reloading the whole collectionNode
-        // If you are using UICollectionView, the method should be insertItems(at:)
-        self.collectionNode.performBatchUpdates({
-            self.collectionNode.insertItems(at: indexPaths)
-        }, completion: nil)
-        
-        // If the `startIndex` is not `nil`, scroll to the item at the `startIndex` index path, and delay the play of the video for 0.25 seconds.
+        // If the `startIndex` is not `nil`, jump immediately to the item at the `startIndex` index path, and delay the play of the video for 0.5 seconds.
         guard let startIndex = self.startIndex else {
             return
         }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) { [weak self] in
-            guard let self = self else { return }
+        
+        print(posts.count, startIndex)
+        collectionNode.reloadData()
+        
+        /*
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+            
             let indexPath = IndexPath(row: startIndex, section: 0)
             self.collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-
-            guard let currentCell = self.collectionNode.nodeForItem(at: indexPath) as? OriginalNode, !currentCell.posts[0].muxPlaybackId.isEmpty else {
+            
+            guard let currentCell = self.collectionNode.nodeForItem(at: indexPath) as? OriginalNode else {
                 self.isVideoPlaying = false
                 self.playTimeBar.isHidden = true
                 return
             }
 
             // Update the playing status of the cell
-            currentIndex = 0
-            newPlayingIndex = 0
+            self.currentIndex = startIndex
+            self.newPlayingIndex = startIndex
+
             currentCell.currentIndex = 0
             currentCell.newPlayingIndex = 0
             currentCell.isVideoPlaying = true
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
-                currentCell.playVideo(index: 0)
-            }
-        }
-
+            currentCell.playVideo(index: 0)
+        } */
+        
     }
+
+
 
 
     
@@ -880,6 +903,10 @@ extension SelectedPostVC {
                     collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
  
                 }
+            } else {
+                
+               
+                
             }
             
         }
@@ -932,7 +959,7 @@ extension SelectedPostVC {
     
     func pauseVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             cell.videoNode.pause()
             
         }
@@ -941,7 +968,7 @@ extension SelectedPostVC {
     
     func seekVideo(index: Int, time: CMTime) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             cell.videoNode.player?.seek(to: time)
             
@@ -953,7 +980,7 @@ extension SelectedPostVC {
     func playVideo(index: Int) {
         
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             if !cell.videoNode.isPlaying() {
                 

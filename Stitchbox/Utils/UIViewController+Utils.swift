@@ -59,7 +59,19 @@ extension UIViewController {
     }
     
     public static func currentViewController() -> UIViewController? {
-        guard let viewController = UIApplication.shared.keyWindow?.rootViewController else { return nil }
-        return UIViewController.findBestViewController(viewController)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            if let viewController = window.rootViewController {
+                return UIViewController.findBestViewController(viewController)
+            } else {
+                return nil
+            }
+           
+        } else{
+            return nil
+        }
+        
     }
+
 }

@@ -258,9 +258,9 @@ class PostVC: UIViewController {
         
         mode = 0
         
-        globalBtn.setImage(UIImage(named: "selectedPublic"), for: .normal)
-        followingBtn.setImage(UIImage(named: "following"), for: .normal)
-        privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "selectedPublic")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         publicLbl.textColor = .black
         followLbl.textColor = .lightGray
@@ -273,9 +273,9 @@ class PostVC: UIViewController {
         
         mode = 1
         
-        globalBtn.setImage(UIImage(named: "public"), for: .normal)
-        followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
-        privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "selectedFollowing")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         publicLbl.textColor = .lightGray
         followLbl.textColor = .black
@@ -286,9 +286,9 @@ class PostVC: UIViewController {
         
         mode = 2
         
-        globalBtn.setImage(UIImage(named: "public"), for: .normal)
-        followingBtn.setImage(UIImage(named: "following"), for: .normal)
-        privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "selectedOnlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         
         publicLbl.textColor = .lightGray
@@ -382,9 +382,9 @@ extension PostVC {
                             
                             DispatchQueue.main.async {
                                 
-                                self.globalBtn.setImage(UIImage(named: "selectedPublic"), for: .normal)
-                                self.followingBtn.setImage(UIImage(named: "following"), for: .normal)
-                                self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+                                self.globalBtn.setImage(UIImage(named: "selectedPublic")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+                                self.followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+                                self.privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
                                         
                                 self.publicLbl.textColor = .black
                                 self.followLbl.textColor = .lightGray
@@ -398,9 +398,9 @@ extension PostVC {
                             
                             DispatchQueue.main.async {
                                 
-                                self.globalBtn.setImage(UIImage(named: "public"), for: .normal)
-                                self.followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
-                                self.privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+                                self.globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+                                self.followingBtn.setImage(UIImage(named: "selectedFollowing")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+                                self.privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
                                         
                                 self.publicLbl.textColor = .lightGray
                                 self.followLbl.textColor = .black
@@ -415,9 +415,9 @@ extension PostVC {
                             
                             DispatchQueue.main.async {
                                 
-                                self.globalBtn.setImage(UIImage(named: "public"), for: .normal)
-                                self.followingBtn.setImage(UIImage(named: "following"), for: .normal)
-                                self.privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+                                self.globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+                                self.followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 15)), for: .normal)
+                                self.privateBtn.setImage(UIImage(named: "selectedOnlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
                                         
                                         
                                 self.publicLbl.textColor = .lightGray
@@ -453,6 +453,23 @@ extension PostVC {
                 }
                 print(error)
             }
+        }
+        
+    }
+    
+    @objc func onClickPost(_ sender: AnyObject) {
+        
+        if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
+  
+            if mediaType == "image" {
+                //uploadImage()
+            } else if mediaType == "video" {
+                uploadVideo()
+            } else {
+                showErrorAlert("Oops!", msg: "Unknown media type selected, please try again.")
+            }
+        } else {
+            self.showErrorAlert("Oops!", msg: "Your current post is being uploaded, please try again later.")
         }
         
     }
@@ -774,22 +791,6 @@ extension PostVC {
         }
     }
     
-    @objc func onClickPost(_ sender: AnyObject) {
-        
-        if global_percentComplete == 0.00 || global_percentComplete == 100.0 {
-  
-            if mediaType == "image" {
-                //uploadImage()
-            } else if mediaType == "video" {
-                uploadVideo()
-            } else {
-                showErrorAlert("Oops!", msg: "Unknown media type selected, please try again.")
-            }
-        } else {
-            self.showErrorAlert("Oops!", msg: "Your current post is being uploaded, please try again later.")
-        }
-        
-    }
     
     @objc func handleKeyboardShow(notification: Notification) {
         isKeyboardShow = true
@@ -891,7 +892,7 @@ extension PostVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars <= 200    // 200 Limit Value
+        return numberOfChars <= 500    // 200 Limit Value
     }
     
     

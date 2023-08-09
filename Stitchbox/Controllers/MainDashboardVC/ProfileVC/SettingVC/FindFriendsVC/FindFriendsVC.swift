@@ -105,16 +105,19 @@ extension FindFriendsVC {
     
     func fetchContacts() {
         let store = CNContactStore()
-        store.requestAccess(for: .contacts) { (granted, error) in
+        store.requestAccess(for: .contacts) { [weak self] (granted, error) in
+            guard let self = self else { return }
             if let error = error {
                 print("failed to request access", error)
                 if error._code == 100 {
-                    self.showErrorAlert("Oops!", msg: "You have denied to grant permission to access contacts before. Please turn it on manually in your phone settings.")
+                    self.showErrorAlert("Oops!", msg: "You have denied to grant permission to access contacts. Please turn it on manually in your phone settings.")
                 }
                 return
             }
             if granted {
-                self.loadingView.isHidden = true
+                DispatchQueue.main.async {
+                    self.loadingView.isHidden = true
+                }
                 let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactImageDataKey, CNContactImageDataAvailableKey]
                 let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
                 do {
@@ -126,7 +129,10 @@ extension FindFriendsVC {
                                     if contact.imageDataAvailable {
                                         dict!.updateValue(contact.imageData!, forKey: "imageData")
                                     }
+                                  
                                     let contactList = FindFriendsModel(FindFriendsModel: dict! as Dictionary<String, Any>)
+                                    let upload = ["name": contactList.firstName + " " + contactList.familyName, "phone": contactList.phoneNumber]
+                                    self.uploadContact(contact: upload as [String : Any])
                                     contactList._isIn = false
                                     self.contactLists.append(contactList)
                                     
@@ -148,6 +154,24 @@ extension FindFriendsVC {
     }
 
 
+    func uploadContact(contact: [String : Any]) {
+        
+    
+        APIManager.shared.createUserContact(contact: contact) {  result in
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                print(apiResponse)
+                
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
+        
+        
+    }
     
 
     
@@ -228,7 +252,7 @@ extension FindFriendsVC: ASTableDataSource {
         
         if self.contactLists.count == 0 {
             
-            tableNode.view.setEmptyMessage("No user")
+            tableNode.view.setEmptyMessage("No contact found")
             
         } else {
             tableNode.view.restore()
@@ -280,7 +304,7 @@ extension FindFriendsVC: ASTableDataSource {
 
                 // Configure the fields of the interface.
                 composeVC.recipients = [phoneNumber]
-                composeVC.body = "[Stitchbox] I am \(userDataSource.userName ?? "") on Stitchbox. To download the app and stay connected with your gaming friends. tap:https://apps.apple.com/us/app/stitchbox/id1660843872"
+                composeVC.body = "[Stitchbox] I am \(userDataSource.userName ?? "") on Stitchbox. To download the app and stay connected with your friends. tap:https://apps.apple.com/us/app/stitchbox/id1660843872"
 
                 // Present the view controller modally.
                 if MFMessageComposeViewController.canSendText() {

@@ -20,8 +20,10 @@ class LeaveView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        cancelBtn.backgroundColor = .normalButtonBackground
+        leaveBtn.backgroundColor = .secondary
         leaveBtn.setTitleColor(UIColor.white, for: .normal)
-        cancelBtn.setTitleColor(UIColor.secondary, for: .normal)
+        cancelBtn.setTitleColor(UIColor.black, for: .normal)
         
     }
     

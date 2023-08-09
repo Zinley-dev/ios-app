@@ -59,7 +59,7 @@ extension SuggestFollowVC {
         self.tableNode.leadingScreensForBatching = 5
         
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if UIDevice.current.hasNotch {
@@ -92,8 +92,8 @@ extension SuggestFollowVC {
     
     
     func updateData() {
-        self.retrieveNextPageWithCompletion { (newFollowers) in
-            
+        self.retrieveNextPageWithCompletion { [weak self] (newFollowers) in
+            guard let self = self else { return }
             if newFollowers.count > 0 {
                 
                 self.userList.removeAll()
@@ -149,6 +149,16 @@ extension SuggestFollowVC {
         
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
+    }
+    
+    @IBAction func findFriendsBtn(_ sender: Any) {
+        
+        if let FFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "FindFriendsVC") as? FindFriendsVC {
+            hideMiddleBtn(vc: self)
+            FFVC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(FFVC, animated: true)
+            
+        }
     }
     
 }

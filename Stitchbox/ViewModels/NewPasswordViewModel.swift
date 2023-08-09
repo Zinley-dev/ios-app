@@ -73,7 +73,8 @@ class NewPasswordViewModel : ViewModelProtocol {
     }
     
     func logic() {
-        submitDidTapSubject.subscribe(onNext: { (pwd, rePwd) in
+        submitDidTapSubject.subscribe(onNext: { [weak self] (pwd, rePwd) in
+            guard let self = self else { return }
             if pwd != rePwd {
                 self.errorsSubject.onNext(NSError(domain: "Password not match", code: 400))
             } else {

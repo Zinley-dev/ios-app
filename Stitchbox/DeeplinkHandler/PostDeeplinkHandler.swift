@@ -79,6 +79,7 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
 
                                       // Set the user ID, nickname, and onPresent properties of UPVC
                                       RVC.posts = [post]
+                                      RVC.startIndex = 0
                                      
                                       // Customize the navigation bar appearance
                                       nav.navigationBar.barTintColor = .white
