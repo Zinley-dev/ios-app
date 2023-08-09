@@ -16,6 +16,8 @@ class ParentViewController: UIViewController {
     
     private var feedViewController: FeedViewController!
     private var stitchViewController: StitchViewController!
+    
+    var isFeed = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +29,6 @@ class ParentViewController: UIViewController {
         //----------------------------//
         setupScrollView()
         addViewControllers()
-        setupTabBar()
         setupNavBar()
         navigationControllerDelegate()
     }
@@ -36,7 +37,28 @@ class ParentViewController: UIViewController {
         super.viewWillAppear(animated)
         
         setupTabBar()
+        setupNavBar()
         checkNotification()
+    
+        if isFeed {
+            if feedViewController.currentIndex != nil {
+                feedViewController.playVideo(index: feedViewController.currentIndex!)
+            }
+        }
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        
+        if isFeed {
+            if feedViewController.currentIndex != nil {
+                feedViewController.pauseVideo(index: feedViewController.currentIndex!)
+            }
+        }
+        
+        
     }
 
     private func setupScrollView() {
@@ -48,27 +70,30 @@ class ParentViewController: UIViewController {
         scrollView.bounces = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.backgroundColor = .clear
         view.addSubview(scrollView)
 
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 34) // Adding a 16-point gap
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: 0)
         ])
 
 
         containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = .blue
         scrollView.addSubview(containerView)
 
         NSLayoutConstraint.activate([
-            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            containerView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
-        ])
+                   containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+                   containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+                   containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                   
+                   containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+                   containerView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+               ])
     }
 
     private func addViewControllers() {
@@ -385,6 +410,7 @@ extension ParentViewController {
         switch pageIndex {
         case 0:
             print("FeedViewController is fully shown")
+            isFeed = true
             if stitchViewController.currentIndex != nil {
                 stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
             }
@@ -396,6 +422,7 @@ extension ParentViewController {
             
         case 1:
             print("StitchViewController is fully shown")
+            isFeed = false
             if feedViewController.currentIndex != nil {
                 feedViewController.pauseVideo(index: feedViewController.currentIndex!)
             }
