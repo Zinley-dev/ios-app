@@ -23,6 +23,7 @@ class ParentViewController: UIViewController {
     var stitchViewController: StitchViewController!
     
     var isFeed = true
+    var rootId = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +66,9 @@ class ParentViewController: UIViewController {
         if _AppCoreData.userDataSource.value?.userID != "" {
             requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.observeRootChange), name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
         
     }
     
@@ -461,6 +465,13 @@ extension ParentViewController {
             if feedViewController.currentIndex != nil {
                 feedViewController.pauseVideo(index: feedViewController.currentIndex!)
             }
+            
+            
+            if stitchViewController.currentIndex != nil, !stitchViewController.posts.isEmpty {
+                stitchViewController.playVideo(index: stitchViewController.currentIndex!)
+               
+            }
+            
          
         default:
             print("Unknown page")
@@ -536,6 +547,44 @@ extension ParentViewController {
                 print("Error loading profile: ", error)
                 completed()
             }
+        }
+        
+        
+    }
+    
+    
+}
+
+extension ParentViewController {
+    
+    @objc func observeRootChange() {
+        
+        print("observeRootChange")
+        var shouldReload = false
+        if rootId == "" {
+            
+            rootId = mainRootId
+            shouldReload = true
+            
+        } else if rootId != mainRootId {
+            
+            rootId = mainRootId
+            shouldReload = true
+            
+        } else {
+            print("observeRootChange - \(rootId) - \(mainRootId)")
+        }
+        
+        if shouldReload {
+            
+            stitchViewController.rootId = rootId
+            
+            Dispatch.main.async { [weak self] in
+                guard let self = self else { return }
+                self.stitchViewController.clearAllData()
+            }
+            
+            
         }
         
         

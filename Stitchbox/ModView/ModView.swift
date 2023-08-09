@@ -510,10 +510,10 @@ extension UITableView {
 
 extension UICollectionView {
     
-    func setEmptyMessage(_ message: String) {
+    func setEmptyMessage(_ message: String, color: UIColor) {
         let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width - 120, height: self.bounds.size.height))
         messageLabel.text = message
-        messageLabel.textColor = .black
+        messageLabel.textColor = color
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
         messageLabel.font = FontManager.shared.roboto(.Regular, size: 15)

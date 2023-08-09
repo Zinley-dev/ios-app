@@ -41,7 +41,6 @@ struct APIManager {
     let postManager = Manager<PostAPI>()
     let commentManager = Manager<CommentApi>()
     let likePostManager = Manager<LikePostApi>()
-    let fistBumpManager = Manager<FistBumpAPI>()
     let gamesManager = Manager<GameAPI>()
     let searchFeedManager = Manager<SearchFeedAPI>()
     let notiManager = Manager<NotiApi>()
@@ -49,13 +48,7 @@ struct APIManager {
     let accountActManager = Manager<AccountActivityApi>()
     let reportManager = Manager<ReportApi>()
     let viewManager = Manager<ViewApi>()
-    let riotManager = Manager<RiotApi>()
-    let supportedGameManager = Manager<SupportedGameApi>()
-    let supportedRegionManager = Manager<SupportedRegionApi>()
     let gptHistoryManager = Manager<GptHistoryApi>()
-    let gamePatchManager = Manager<GamePatchApi>()
-    //let usedTokenManager = Manager<UsedTokenApi>()
-    let promotionManager = Manager<PromotionApi>()
     let openLinkManager = Manager<OpenLinkLogApi>()
     let postStitchManager = Manager<PostStitchApi>()
     let shareManager = Manager<ShareApi>()
@@ -173,61 +166,7 @@ struct APIManager {
             completion(result)
         }
     }
-    
-    func getFistBumper(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
-        fistBumpManager.request(.getFistBumper(userID: userID, page: page, limit: limit)) {
-            result in
-                completion(result)
-        }
-    }
-    func getFistBumpee(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", page: Int = 1, limit: Int = 10, completion: @escaping APICompletion) {
-        fistBumpManager.request(.getFistBumpee(userID: userID, page: page, limit: limit)) {
-            result in
-                completion(result)
-        }
-    }
-    func getFistBumperCount(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
-        fistBumpManager.request(.getFistBumperCount(userID: userID)) {
-            result in
-                completion(result)
-        }
-    }
-    func getFistBumpeeCount(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
-        fistBumpManager.request(.getFistBumpeeCount(userID: userID)) {
-            result in
-                completion(result)
-        }
-    }
-    func isFistBumper(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
-        fistBumpManager.request(.isFistBumper(userID: userID)) {
-            result in
-                completion(result)
-        }
-    }
-    func isFistBumpee(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
-        fistBumpManager.request(.isFistBumpee(userID: userID)) {
-            result in
-                completion(result)
-        }
-    }
-    func addFistBump(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
-        fistBumpManager.request(.addFistBump(userID: userID)) {
-            result in
-                completion(result)
-        }
-    }
-    func deleteFistBump(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
-        fistBumpManager.request(.deleteFistBump(userID: userID)) {
-            result in
-                completion(result)
-        }
-    }
-    func getInsightOverview(userID: String = _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping APICompletion) {
-        fistBumpManager.request(.getInsight(userID: userID)) {
-            result in
-            completion(result)
-        }
-    }
+
 }
 
 extension APIManager {
@@ -790,63 +729,7 @@ extension APIManager {
 
 
 extension APIManager {
-
-  func confirmRiot(params: [String: Any], completion: @escaping APICompletion) {
-    userManager.request(.riotUpdate(params: params)) { result in
-      completion(result)
-    }
-  }
-  
-  func updateLatestRiot(completion: @escaping APICompletion) {
-    userManager.request(.riotLatestUpdate) { result in
-      completion(result)
-    }
-  }
-  
-  func searchUserRiot(region: String, username: String, completion: @escaping APICompletion) {
-    riotManager.request(.searchUserRiot(region: region, username: username)) { result in
-      completion(result)
-    }
-  }
-  
-  func userInGame(completion: @escaping APICompletion) {
-    riotManager.request(.userInGame) { result in
-      completion(result)
-    }
-  }
-  
-  func getSupportedGame(completion: @escaping APICompletion) {
-    supportedGameManager.request(.getSupportedGame) { result in
-      completion(result)
-    }
-  }
-  
-  func getSupportedRegion(completion: @escaping APICompletion) {
-    supportedRegionManager.request(.getSupportedRegion) { result in
-      completion(result)
-    }
-  }
-  
-  func getSummonerStat(region: String, name: String, queue: String = "420", completion: @escaping APICompletion) {
-    riotManager.request(.stats(region: region, name: name, queue: queue)) { result in
-      completion(result)
-    }
-  }
-  
-  func getRiotHistory(completion: @escaping APICompletion) {
-    riotManager.request(.history) { result in
-      completion(result)
-    }
-  }
-  
-  func getMatchDetect(match: String, completion: @escaping APICompletion) {
-    riotManager.request(.detect(match: match)) { result in
-      completion(result)
-    }
-  }
-}
-
-extension APIManager {
+    
   func getGptConversation(gameId: String, completion: @escaping APICompletion) {
     gptHistoryManager.request(.getConversation(gameId: gameId)) { result in
       completion(result)
@@ -867,23 +750,6 @@ extension APIManager {
       completion(result)
     }
   }
-  func getGamePatch(gameId: String, completion: @escaping APICompletion) {
-    gamePatchManager.request(.getGamePatch(gameId: gameId)) { result in
-      completion(result)
-    }
-  }
-  
-  func getPromotion(completion: @escaping APICompletion) {
-    promotionManager.request(.getPromotion) { result in
-      completion(result)
-    }
-  }
-  
-  func applyPromotion(id: String, completion: @escaping APICompletion) {
-    promotionManager.request(.applyPromotion(id: id)) { result in
-      completion(result)
-    }
-  }
     
 }
 
@@ -895,20 +761,6 @@ extension APIManager {
         }
     }
     
-    func searchFistbumpee(query: String, userid: String, page: Int, completion: @escaping APICompletion) {
-      let params = ["query": query, "userid": userid]
-      fistBumpManager.request(.searchFistBumpee(params: params, page: page, lim: 10)) { result in
-        completion(result)
-      }
-    }
-    
-    func searchFistbumper(query: String, userid: String, page: Int, completion: @escaping APICompletion) {
-      let params = ["query": query, "userid": userid]
-      fistBumpManager.request(.searchFistBumper(params: params, page: page, lim: 10)) { result in
-        completion(result)
-      }
-    }
-  
   
   func stitch(rootId: String, memberId: String, completion: @escaping APICompletion) {
     let params = ["rootId": rootId, "member": memberId]

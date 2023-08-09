@@ -105,7 +105,7 @@ class PendingVC: UIViewController, UINavigationBarDelegate, UINavigationControll
                 
                 if self.waitPost.isEmpty == true {
                     
-                    self.waitCollectionNode.view.setEmptyMessage("No stitch found")
+                    self.waitCollectionNode.view.setEmptyMessage("No stitch found", color: .black)
                     
                     
                 } else {
@@ -188,14 +188,14 @@ extension PendingVC: ASCollectionDataSource {
         if collectionNode == myCollectionNode {
             
             if self.myPost.isEmpty {
-                myCollectionNode.view.setEmptyMessage("No post found")
+                myCollectionNode.view.setEmptyMessage("No post found", color: .black)
             } else {
                 myCollectionNode.view.restore()
             }
             return self.myPost.count
         } else {
             if self.myPost.isEmpty {
-                waitCollectionNode.view.setEmptyMessage("No stitch found")
+                waitCollectionNode.view.setEmptyMessage("No stitch found", color: .black)
             } else {
                 waitCollectionNode.view.restore()
             }

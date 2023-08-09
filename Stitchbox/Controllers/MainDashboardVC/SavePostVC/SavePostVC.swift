@@ -189,7 +189,7 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
                 
                 if self.posts.isEmpty == true {
                     
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?", color: .black)
                     
                     
                 } else {
@@ -350,7 +350,7 @@ extension SavePostVC: ASCollectionDataSource {
         
         if self.posts.count == 0 {
             
-            collectionNode.view.setEmptyMessage("No saved posts!")
+            collectionNode.view.setEmptyMessage("No saved posts!", color: .black)
             
         } else {
             collectionNode.view.restore()

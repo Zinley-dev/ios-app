@@ -268,7 +268,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 if self.posts.isEmpty == true {
                     
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                    self.collectionNode.view.setEmptyMessage("No post found!", color: .black)
                     
                     
                 } else {
@@ -524,6 +524,8 @@ extension FeedViewController: ASCollectionDataSource {
             if isfirstLoad, indexPath.row == 0 {
                 isfirstLoad = true
                 node.isFirstItem = true
+                mainRootId = post.id
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
             }
             
             
@@ -1250,6 +1252,9 @@ extension FeedViewController {
                     
                 }
                 
+                mainRootId = cell.post.id
+                
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
                 
             }
             

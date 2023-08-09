@@ -14,7 +14,7 @@ import ObjectMapper
 
 class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
-    
+    var lastContentOffset: CGFloat = 0
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
@@ -24,8 +24,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var blurView: UIView!
     @IBOutlet weak var playTimeBar: CustomSlider!
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
+
     var currentIndex: Int?
     var newPlayingIndex: Int?
     var hasViewAppeared = false
@@ -111,8 +110,6 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     func updateData() {
         
-        
-        
         self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
             guard let self = self else { return }
             
@@ -126,12 +123,16 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
                 
                 self.refresh_request = false
                 
-                self.posts.removeAll()
-                self.collectionNode.reloadData()
+                if !posts.isEmpty {
+                    
+                    self.posts.removeAll()
+                    self.collectionNode.reloadData()
+                    
+                }
                 
                 if self.posts.isEmpty == true {
                     
-                    self.collectionNode.view.setEmptyMessage("No stitch found!")
+                    self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
                     
                     
                 } else {
@@ -145,18 +146,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
             if self.pullControl.isRefreshing == true {
                 self.pullControl.endRefreshing()
             }
-            
-            self.delayItem.perform(after: 0.75) { [weak self] in
-                guard let self = self else { return }
-                
-                
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-                
-                
-            }
-            
-            
+              
         }
         
         
@@ -209,8 +199,13 @@ extension StitchViewController {
 
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
         if !posts.isEmpty, scrollView == collectionNode.view {
+            // Check if it's a horizontal scroll
+            if lastContentOffset != scrollView.contentOffset.x {
+                lastContentOffset = scrollView.contentOffset.x
+            } else {
+                return
+            }
             
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -223,85 +218,77 @@ extension StitchViewController {
             
             var foundVisibleVideo = false
             
-            
             for cell in visibleCells {
-                
-                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
-                if distanceFromCenter < minDistanceFromCenter {
-                    newPlayingIndex = cell.indexPath!.row
-                    minDistanceFromCenter = distanceFromCenter
-                }
-            }
-            
-            
-            if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
-                
-                foundVisibleVideo = true
-                playTimeBar.isHidden = false
-                imageIndex = nil
-            } else {
-                playTimeBar.isHidden = true
-                imageIndex = newPlayingIndex
-            }
-            
-            
-            if foundVisibleVideo {
-                
-                // Start playing the new video if it's different from the current playing video.
-                if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-                    // Pause the current video, if any.
-                    if let currentIndex = currentIndex {
-                        pauseVideo(index: currentIndex)
-                    }
-                    // Play the new video.
-                    currentIndex = newPlayingIndex
-                    playVideo(index: currentIndex!)
-                    isVideoPlaying = true
+                    let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+                    let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+                    let distanceFromCenter = abs(cellCenter.x - visibleRect.midX) // Use the x-coordinate for horizontal scroll
                     
-                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
-                        
-                        //resetView(cell: node)
-                        
+                    // Only switch video if the distance from center is less than the min distance
+                    // and also less than the threshold.
+                    if distanceFromCenter < minDistanceFromCenter {
+                        newPlayingIndex = cell.indexPath!.row
+                        minDistanceFromCenter = distanceFromCenter
                     }
+                }
+            
+            if newPlayingIndex != nil {
+                
+                if newPlayingIndex! < posts.count {
                     
-                }
-                
-            } else {
-                
-                if let currentIndex = currentIndex {
-                    pauseVideo(index: currentIndex)
-                }
-
-                
-                
-                // Reset the current playing index.
-                currentIndex = nil
-                
-            }
-            
-            
-            // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
-                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                        cell.videoNode.player?.seek(to: currentTime)
+                    if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
+                        foundVisibleVideo = true
+                        //playTimeBar.isHidden = false
+                        imageIndex = nil
                     } else {
-                        cell.videoNode.player?.seek(to: CMTime.zero)
+                        //playTimeBar.isHidden = true
+                        imageIndex = newPlayingIndex
+                    }
+                    
+                }
+                
+                
+                
+                if foundVisibleVideo {
+                    // Start playing the new video if it's different from the current playing video.
+                    if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+                        // Pause the current video, if any.
+                        if let currentIndex = currentIndex {
+                            pauseVideo(index: currentIndex)
+                        }
+                        // Play the new video.
+                        currentIndex = newPlayingIndex
+                        playVideo(index: currentIndex!)
+                        isVideoPlaying = true
+                        
+                        if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
+                            resetView(cell: node)
+                        }
+                    } else {
+                        // Do nothing if the current index is the same as newPlayingIndex
                     }
                 }
-            }
-            
-            // If there's no current playing video and no visible video, pause the last playing video, if any.
-            if !isVideoPlaying && currentIndex != nil {
-                pauseVideo(index: currentIndex!)
-                currentIndex = nil
+                
+                // If the video is stuck, reset the buffer by seeking to the current playback time.
+                if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
+                    if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                        if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                            cell.videoNode.player?.seek(to: currentTime)
+                        } else {
+                            cell.videoNode.player?.seek(to: CMTime.zero)
+                        }
+                    }
+                }
+                
+                // If there's no current playing video and no visible video, pause the last playing video, if any.
+                if !isVideoPlaying && currentIndex != nil {
+                    pauseVideo(index: currentIndex!)
+                    currentIndex = nil
+                }
             }
             
         }
-        
-        
+            
+
     }
     
 }
@@ -343,14 +330,15 @@ extension StitchViewController: ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
         
         
-        if self.posts.isEmpty == true {
+        if self.posts.isEmpty {
             
-            self.collectionNode.view.setEmptyMessage("No stitch found!")
-            
+            self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
+            playTimeBar.isHidden = true
             
         } else {
             
             self.collectionNode.view.restore()
+            playTimeBar.isHidden = false
             
         }
         
@@ -451,11 +439,11 @@ extension StitchViewController {
         
         if rootId != "" {
             
-            APIManager.shared.getSuggestStitch(rootId: rootId, page: curPage) { result in
-                
+            APIManager.shared.getSuggestStitch(rootId: rootId, page: curPage) { [weak self] result in
+                guard let self = self else { return }
                 switch result {
                 case .success(let apiResponse):
-                    
+
                     guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         let item = [[String: Any]]()
                         DispatchQueue.main.async {
@@ -464,10 +452,9 @@ extension StitchViewController {
                         return
                     }
                     if !data.isEmpty {
-                                
                         print("Successfully retrieved \(data.count) posts.")
                         let items = data
-                    
+                        curPage += 1
                         DispatchQueue.main.async {
                             block(items)
                         }
@@ -541,26 +528,6 @@ extension StitchViewController {
             let startIndex = self.posts.count - items.count
             let endIndex = startIndex + items.count - 1
             let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-
-            if firstAnimated {
-                firstAnimated = false
-
-                delay(0.15) { [weak self] in
-                    guard let self = self else { return }
-                    
-                    UIView.animate(withDuration: 0.5) {
-                        self.loadingView.alpha = 0
-                    }
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        if self.loadingView.alpha == 0 {
-                            self.loadingView.isHidden = true
-                        }
-                    }
-                    
-                }
-                
-            }
 
             // Insert new items at index paths
            collectionNode.insertItems(at: indexPaths)
@@ -965,6 +932,8 @@ extension StitchViewController {
     
     func pauseVideo(index: Int) {
         
+        print("StitchViewController: \(index) - pause")
+        
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             cell.videoNode.pause()
@@ -975,6 +944,8 @@ extension StitchViewController {
     
     
     func seekVideo(index: Int, time: CMTime) {
+        
+        print("StitchViewController: \(index) - seek")
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
@@ -987,6 +958,8 @@ extension StitchViewController {
     
     func playVideo(index: Int) {
         
+        
+        print("StitchViewController: \(index) - play")
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             

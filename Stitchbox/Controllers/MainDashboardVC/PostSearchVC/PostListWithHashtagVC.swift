@@ -189,7 +189,7 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
                 
                 if self.posts.isEmpty == true {
                     
-                    self.collectionNode.view.setEmptyMessage("No post found")
+                    self.collectionNode.view.setEmptyMessage("No post found", color: .black)
                     
                     
                 } else {

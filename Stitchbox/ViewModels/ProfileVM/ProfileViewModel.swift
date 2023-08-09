@@ -126,30 +126,7 @@ class ProfileViewModel: ViewModelProtocol {
             }
         }
     }
-    func getFistBumperCount(userID: String =  _AppCoreData.userDataSource.value?.userID ?? "", completion: @escaping (Int) -> Void = {_ in}) -> Void  {
-        APIManager.shared.getFistBumperCount(userID: userID){ [weak self] result in
-            guard let self = self else { return }
 
-            switch result {
-            case .success(let response):
-                if let data = response.body {
-                    if let message = data["message"] as? String, message == "success"{
-                        print("go here")
-                        if let bodyData = data["data"] as? [[String: Any]] {
-                            if let count = bodyData.first?["count"] as? Int {
-                                self.fistbumpSubject.onNext(count)
-                                completion(count)
-                            }
-                        } else {
-                            self.fistbumpSubject.onNext(0)
-                        }
-                    }
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
     func unfollow(userId: String = "") {
         
         APIManager.shared.unFollow(params: ["FollowId": userId]) { [weak self] result in
@@ -180,22 +157,5 @@ class ProfileViewModel: ViewModelProtocol {
             
         }
     }
-    //    func getAllFollowing() {
-    //        APIManager().getAllFollow { result in
-    //            switch result {
-    //            case .success(let response):
-    //                guard response.body?["message"] as? String == "success",
-    //                      let data = response.body?["data"] as? [[String: Any]] else {
-    //                    return
-    //                }
-    //                let list = data.map { item in
-    //                    return FollowerModel(JSON: item)!
-    //                }
-    //                print("Following List: ", list)
-    //                self.allFollowingListSubject.onNext(list)
-    //            case .failure(let error):
-    //                print("Error loading following: ", error)
-    //            }
-    //        }
-    //    }
+
 }
