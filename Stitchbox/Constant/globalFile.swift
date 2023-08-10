@@ -945,6 +945,7 @@ class CustomSlider: UISlider {
             
             if let update1 = vc as? ParentViewController {
                 
+                update1.scrollView.isScrollEnabled = false
                 
                 if update1.isFeed {
                     
@@ -1037,6 +1038,7 @@ class CustomSlider: UISlider {
             
             if let update1 = vc as? ParentViewController {
                 
+                update1.scrollView.isScrollEnabled = true
                 
                 if update1.isFeed {
                     
@@ -1208,4 +1210,11 @@ extension UITabBarController {
             }
         }
     }
+}
+
+
+protocol PostManaging {
+    var editeddPost: PostModel? { get }
+    var posts: [PostModel] { get set }
+    var collectionNode: ASCollectionNode { get } // Replace with your collection node type
 }

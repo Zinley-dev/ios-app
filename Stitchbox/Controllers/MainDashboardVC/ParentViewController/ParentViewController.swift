@@ -18,7 +18,7 @@ class ParentViewController: UIViewController {
     private var containerView: UIView!
     let homeButton: UIButton = UIButton(type: .custom)
     
-    
+    var hasViewAppeared = false
     var feedViewController: FeedViewController!
     var stitchViewController: StitchViewController!
     
@@ -71,6 +71,18 @@ class ParentViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.observeRootChange), name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
        
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickShowInfo), name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
         
     }
     
@@ -93,6 +105,8 @@ class ParentViewController: UIViewController {
             }
         }
         
+        hasViewAppeared = true
+        
         delay(1) {
             NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         }
@@ -104,7 +118,8 @@ class ParentViewController: UIViewController {
         
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "scrollToTop"), object: nil)
 
-
+        hasViewAppeared = false
+        
         if isFeed {
             if feedViewController.currentIndex != nil {
                 feedViewController.pauseVideo(index: feedViewController.currentIndex!)
@@ -598,71 +613,58 @@ extension ParentViewController {
         print("observeRootChange")
         var shouldReload = false
         
-        if rootId == "" {
-            
+        if rootId == "" || rootId != mainRootId {
             rootId = mainRootId
             shouldReload = true
-            
-        } else if rootId != mainRootId {
-            
-            rootId = mainRootId
-            shouldReload = true
-            
         } else {
             print("observeRootChange - \(rootId) - \(mainRootId)")
         }
         
         if shouldReload {
             
-            Dispatch.main.async { [weak self] in
+            DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                scrollView.isScrollEnabled = false
+                self.scrollView.isScrollEnabled = false
             }
             
             stitchViewController.rootId = rootId
             count += 1
-            delayItem.perform(after: 1) { [weak self] in
+            
+            delayItem.perform(after: 1.25) { [weak self] in
                 guard let self = self else { return }
-                print("Loading stitches: \(count) - \(stitchViewController.rootId)")
+                print("Loading stitches: \(self.count) - \(self.stitchViewController.rootId)")
                 self.stitchViewController.clearAllData()
-                Dispatch.main.async { [weak self] in
+                
+                DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    scrollView.isScrollEnabled = true
+                    self.scrollView.isScrollEnabled = true
                     
-                    delay(0.5) {[weak self] in
-                        guard let self = self else { return }
-                        self.processStichGuideline()
+                    if !UserDefaults.standard.bool(forKey: "hasShowStitched") {
+                        UserDefaults.standard.set(true, forKey: "hasShowStitched")
+                        
+                        delay(0.5) {[weak self] in
+                            guard let self = self else { return }
+                            self.processStichGuideline()
+                        }
                     }
-                   
                 }
             }
-            
         }
-        
     }
 
     
     func processStichGuideline() {
         
-        let userDefaults = UserDefaults.standard
-        if userDefaults.bool(forKey: "hasShowStitched") == false {
-            
-            userDefaults.set(true, forKey: "hasShowStitched")
-            userDefaults.synchronize() // This forces the app to update userDefaults
-            
-            // Calculate the offset that represents a slight move to the right.
-            let nextOffset = scrollView.contentOffset.x + scrollView.frame.width * 0.2
-            scrollView.setContentOffset(CGPoint(x: nextOffset, y: 0), animated: true)
+        // Calculate the offset that represents a slight move to the right.
+        let nextOffset = scrollView.contentOffset.x + scrollView.frame.width * 0.2
+        scrollView.setContentOffset(CGPoint(x: nextOffset, y: 0), animated: true)
 
-            // Delay the scroll back by 0.75 seconds.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
-                guard let self = self else { return }
-                // Scroll back to the original position (index 0).
-                let originalOffset = CGPoint(x: 0, y: 0)
-                scrollView.setContentOffset(originalOffset, animated: true)
-            }
-
-            
+        // Delay the scroll back by 0.75 seconds.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
+            guard let self = self else { return }
+            // Scroll back to the original position (index 0).
+            let originalOffset = CGPoint(x: 0, y: 0)
+            scrollView.setContentOffset(originalOffset, animated: true)
         }
         
         
@@ -670,7 +672,6 @@ extension ParentViewController {
     
     
     @objc func shouldScrollToTop() {
-        
         
         if isFeed {
             
@@ -705,5 +706,335 @@ extension ParentViewController {
     
     }
     
+    
+}
+
+
+extension ParentViewController {
+    
+
+    @objc func onClickDelete(_ sender: AnyObject) {
+        presentSwiftLoader()
+
+        // Check which view controller's post we should delete
+        let postToDelete: String? = isFeed ? feedViewController.editeddPost?.id : stitchViewController.editeddPost?.id
+
+        if let id = postToDelete, !id.isEmpty {
+            APIManager.shared.deleteMyPost(pid: id) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(_):
+                    needReloadPost = true
+                    SwiftLoader.hide()
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
+                        if self.isFeed {
+                            self.removePostOnRequest(from: self.feedViewController)
+                        } else {
+                            self.removePostOnRequest(from: self.stitchViewController)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                    SwiftLoader.hide()
+                    self.showErrorAfterDelay(message: "Unable to delete this post. \(error.localizedDescription), please try again.")
+                }
+            }
+        } else {
+            self.showErrorAfterDelay(message: "Unable to delete this post, please try again.")
+        }
+    }
+
+    func removePostOnRequest(from controller: UIViewController) {
+        if let vc = controller as? FeedViewController, let deletingPost = vc.editeddPost, let indexPath = vc.posts.firstIndex(of: deletingPost) {
+            vc.posts.removeObject(deletingPost)
+            manageCollectionView(in: vc, for: indexPath)
+        } else if let vc = controller as? StitchViewController, let deletingPost = vc.editeddPost, let indexPath = vc.posts.firstIndex(of: deletingPost) {
+            vc.posts.removeObject(deletingPost)
+            manageCollectionView(in: vc, for: indexPath)
+        }
+    }
+    
+    @objc func removePost(_ sender: AnyObject) {
+        
+        if isFeed {
+            
+            if let deletingPost = feedViewController.editeddPost {
+                
+                if let indexPath = feedViewController.posts.firstIndex(of: deletingPost) {
+                    
+                    feedViewController.posts.removeObject(deletingPost)
+                    // check if there are no more posts
+                    if feedViewController.posts.isEmpty {
+                        feedViewController.collectionNode.reloadData()
+                    } else {
+                        feedViewController.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                        
+                    }
+                }
+            }
+        } else {
+            
+            if let deletingPost = stitchViewController.editeddPost {
+                
+                if let indexPath = stitchViewController.posts.firstIndex(of: deletingPost) {
+                    
+                    stitchViewController.posts.removeObject(deletingPost)
+                    
+                    // check if there are no more posts
+                    if stitchViewController.posts.isEmpty {
+                        stitchViewController.collectionNode.reloadData()
+                        stitchViewController.galleryCollectionNode.reloadData()
+                    } else {
+                        stitchViewController.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                        stitchViewController.galleryCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                        
+                    }
+                }
+            }
+            
+        }
+       
+    }
+
+    func manageCollectionView(in controller: UIViewController, for indexPath: Int) {
+        if let vc = controller as? FeedViewController {
+            if vc.posts.isEmpty {
+                vc.collectionNode.reloadData()
+            } else {
+                vc.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+            }
+        } else if let vc = controller as? StitchViewController {
+            if vc.posts.isEmpty {
+                vc.collectionNode.reloadData()
+                vc.galleryCollectionNode.reloadData()
+            } else {
+                vc.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                vc.galleryCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+            }
+        }
+    }
+
+    func showErrorAfterDelay(message: String) {
+        delay(0.1) { [weak self] in
+            guard let self = self else { return }
+            SwiftLoader.hide()
+            self.showErrorAlert("Oops!", msg: message)
+        }
+    }
+
+    
+
+    
+    @objc func onClickEdit(_ sender: AnyObject) {
+        guard let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC else {
+            return
+        }
+
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        EPVC.selectedPost = isFeed ? feedViewController.editeddPost : stitchViewController.editeddPost
+        navigationController?.pushViewController(EPVC, animated: true)
+    }
+
+    @objc func onClickShowInfo(_ sender: AnyObject) {
+        
+        if isFeed, let index = feedViewController.currentIndex, !feedViewController.posts.isEmpty {
+            if let node = feedViewController.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+                node.showAllInfo()
+            }
+        } else if let index = stitchViewController.currentIndex, !stitchViewController.posts.isEmpty {
+            if let node = stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+                node.showAllInfo()
+            }
+        }
+    }
+
+    @objc func onClickStats(_ sender: AnyObject) {
+        guard let VVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewVC") as? ViewVC else {
+            return
+        }
+
+        VVC.selected_item = isFeed ? feedViewController.editeddPost : stitchViewController.editeddPost
+
+        delay(0.1) {
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.navigationController?.pushViewController(VVC, animated: true)
+        }
+    }
+
+    @objc func onClickDownload(_ sender: AnyObject) {
+        let post = isFeed ? feedViewController.editeddPost : stitchViewController.editeddPost
+        
+        guard let selectedPost = post else { return }
+        
+        if selectedPost.muxPlaybackId != "" {
+            let url = "https://stream.mux.com/\(selectedPost.muxPlaybackId)/high.mp4"
+            downloadVideo(url: url, id: selectedPost.muxAssetId)
+        }
+    }
+
+    
+    func downloadVideo(url: String, id: String) {
+        AF.request(url).downloadProgress { [weak self] progress in
+            guard let self = self else { return }
+            self.swiftLoader(progress: String(format: "%.2f", progress.fractionCompleted * 100) + "%")
+        }.responseData { [weak self] response in
+            guard let self = self else { return }
+            switch response.result {
+            case .success(let data):
+                self.saveVideoWithData(data, id: id)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
+    func saveVideoWithData(_ data: Data, id: String) {
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let videoURL = documentsURL.appendingPathComponent("\(id).mp4")
+        do {
+            try data.write(to: videoURL)
+            self.addVideoToPhotoLibrary(url: videoURL)
+        } catch {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                SwiftLoader.hide()
+                print("Something went wrong!")
+                self.showErrorAlert("Oops!", msg: "Failed to save video.")
+            }
+        }
+    }
+
+    func addVideoToPhotoLibrary(url: URL) {
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
+        }) { saved, error in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                SwiftLoader.hide()
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                    self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                } else {
+                    let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
+                    let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alertController.addAction(defaultAction)
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+
+
+    @objc func copyPost() {
+        let postID = isFeed ? feedViewController.editeddPost?.id : stitchViewController.editeddPost?.id
+
+        if let id = postID {
+            let link = "https://stitchbox.net/app/post/?uid=\(id)"
+            UIPasteboard.general.string = link
+            showNote(text: "Post link is copied")
+        } else {
+            showNote(text: "Post link is unable to be copied")
+        }
+    }
+
+    
+    @objc func copyProfile() {
+        let ownerID = isFeed ? feedViewController.editeddPost?.owner?.id : stitchViewController.editeddPost?.owner?.id
+
+        if let id = ownerID {
+            let link = "https://stitchbox.net/app/account/?uid=\(id)"
+            UIPasteboard.general.string = link
+            showNote(text: "User profile link is copied")
+        } else {
+            showNote(text: "User profile link is unable to be copied")
+        }
+    }
+
+    
+    
+    
+    @objc func reportPost() {
+        let slideVC = reportView()
+        slideVC.post_report = true
+        slideVC.postId = isFeed ? feedViewController.editeddPost?.id ?? "" : stitchViewController.editeddPost?.id ?? ""
+        slideVC.modalPresentationStyle = .custom
+        slideVC.transitioningDelegate = self
+        global_presetingRate = 0.75
+        global_cornerRadius = 35
+        
+        delay(0.1) {[weak self] in
+            guard let self = self else { return }
+            self.present(slideVC, animated: true, completion: nil)
+        }
+    }
+
+    
+    @objc func sharePost() {
+        
+        guard let userDataSource = _AppCoreData.userDataSource.value,
+              let userUID = userDataSource.userID,
+              userUID != "" else {
+            print("Sendbird: Can't get userUID")
+            return
+        }
+
+        let postId = isFeed ? feedViewController.editeddPost?.id : stitchViewController.editeddPost?.id
+        guard let id = postId else {
+            print("Failed to get postId")
+            return
+        }
+
+        let loadUsername = userDataSource.userName
+        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.net/app/post/?uid=\(id)")!]
+        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+
+        ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
+            // Completion logic here if needed
+        }
+
+        delay(0.1) {[weak self] in
+            self?.present(ac, animated: true, completion: nil)
+        }
+    }
+
+    @objc func createPostForStitch() {
+
+        guard let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC else {
+            return
+        }
+
+        PNVC.modalPresentationStyle = .fullScreen
+
+        let postForStitch = isFeed ? feedViewController.editeddPost : stitchViewController.editeddPost
+
+        if let rootvc = PNVC.viewControllers[0] as? PostVC {
+            rootvc.stitchPost = postForStitch
+        } else {
+            printContent(PNVC.viewControllers[0])
+        }
+
+        delay(0.1) {
+            self.present(PNVC, animated: true)
+        }
+    }
+
+    
+    
+    @objc func stitchToExistingPost() {
+        
+        guard let ASTEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddStitchToExistingVC") as? AddStitchToExistingVC else {
+            return
+        }
+
+        ASTEVC.hidesBottomBarWhenPushed = true
+        ASTEVC.stitchedPost = isFeed ? feedViewController.editeddPost : stitchViewController.editeddPost
+        hideMiddleBtn(vc: self)
+
+        delay(0.1) {
+            self.navigationController?.pushViewController(ASTEVC, animated: true)
+        }
+    }
+
     
 }

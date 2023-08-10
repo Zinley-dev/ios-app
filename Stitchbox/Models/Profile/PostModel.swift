@@ -75,6 +75,16 @@ class Owner: Mappable {
     }
 }
 
+class stitchTo: Mappable {
+    private(set) var rootId: String = ""
+  
+    required init?(map: ObjectMapper.Map) { }
+
+    func mapping(map: ObjectMapper.Map) {
+        rootId <- map["rootId"]
+    }
+}
+
 class PostModel: Mappable {
     var id: String = ""
     var stitchedTo = false
@@ -90,6 +100,7 @@ class PostModel: Mappable {
     private(set) var muxPlaybackId: String = ""
     private(set) var muxAssetId: String = ""
     private(set) var owner: Owner?
+    private(set) var stitchTo: [stitchTo]?
     private(set) var setting: Setting?
     private(set) var estimatedCount: EstimatedCount?
     private(set) var metadata: PostMetadata?
@@ -101,8 +112,10 @@ class PostModel: Mappable {
     private(set) var image: [String] = [""]
     private(set) var hashtags: [String]?
     private(set) var isApproved: Bool = false
+    private(set) var totalMemberStitch: Int = 0
+    private(set) var totalStitchTo: Int = 0
     
-    required init?(map: ObjectMapper.Map) { }
+    required init?(map: ObjectMapper.Map) {}
 
     func mapping(map: ObjectMapper.Map) {
         id <- map["_id"]
@@ -117,6 +130,7 @@ class PostModel: Mappable {
         muxPlaybackId <- map["mux.playbackId"]
         muxAssetId <- map["mux.assetId"]
         owner <- map["owner"]
+        stitchTo <- map["stitchTo"]
         setting <- map["setting"]
         metadata <- map["metadata"]
         estimatedCount <- map["estimatedCount"]
@@ -128,6 +142,8 @@ class PostModel: Mappable {
         image <- map["images"]
         hashtags <- map["hashtags"]
         isApproved <- map["isApproved"]
+        totalMemberStitch <- map["totalMemberStitch"]
+        totalStitchTo <- map["totalStitchTo"]
         // Handle image URL logic as needed
         
         if image[0] != "" {

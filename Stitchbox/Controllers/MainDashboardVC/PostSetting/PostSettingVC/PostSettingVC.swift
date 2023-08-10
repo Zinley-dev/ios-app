@@ -28,12 +28,22 @@ class PostSettingVC: UIViewController{
     
     @IBOutlet weak var deleteBtn: UIButton!
     
-
+    @IBOutlet weak var showInfoStack: UIStackView!
+    
+    @IBOutlet weak var showInfoBtn: UIButton!
+    
+    var isInformationHidden = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         emptyLbl()
         
+        if isInformationHidden {
+            showInfoStack.isHidden = false
+        } else {
+            showInfoStack.isHidden = true
+        }
 
     }
     
@@ -47,6 +57,16 @@ class PostSettingVC: UIViewController{
         cancelBtn.setTitle("", for: .normal)
         sendBtn.setTitle("", for: .normal)
         copyLinkBtn.setTitle("", for: .normal)
+        showInfoBtn.setTitle("", for: .normal)
+    }
+    
+    
+    @IBAction func showVideoInfoBtnPressed(_ sender: Any) {
+        
+        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
+        
+        self.dismiss(animated: true)
+        
     }
     
     @IBAction func editBtnPressed(_ sender: Any) {

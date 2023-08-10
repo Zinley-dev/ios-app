@@ -11,6 +11,7 @@ import AlamofireImage
 import Alamofire
 import FLAnimatedImage
 import ObjectMapper
+import MarqueeLabel
 
 class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
@@ -19,7 +20,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     var lastContentOffsetY: CGFloat = 0
-    //let threshold: CGFloat = 100 // Adjust this value as needed.
 
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var blurView: UIView!
@@ -28,22 +28,15 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBOutlet weak var loadingView: UIView!
     var currentIndex: Int?
     var newPlayingIndex: Int?
-    var hasViewAppeared = false
     var isVideoPlaying = false
     
-    //let promotionButton = UIButton(type: .custom)
-    let homeButton: UIButton = UIButton(type: .custom)
-   
     var isfirstLoad = true
-    var didScroll = false
-    var imageIndex: Int?
     var posts = [PostModel]()
-    var selectedIndexPath = 0
-    var selected_item: PostModel!
+   
     var collectionNode: ASCollectionNode!
     var editeddPost: PostModel?
     var refresh_request = false
-    var startIndex: Int!
+   
 
     var imageTimerWorkItem: DispatchWorkItem?
     let backButton: UIButton = UIButton(type: .custom)
@@ -51,19 +44,15 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     lazy var delayItem3 = workItem()
     var firstAnimated = true
     var lastLoadTime: Date?
-    var isPromote = false
-    
-    
-    
+    var animatedLabel: MarqueeLabel!
     private var pullControl = UIRefreshControl()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
 
         setupCollectionNode()
-       
+        addAnimatedLabelToTop()
         
         pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
@@ -84,44 +73,12 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         
         
-        
-        //
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
-        
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
-
-        
-        
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-    /*
-        showMiddleBtn(vc: self)
-        loadFeed()
-        
-        hasViewAppeared = true
-        
-        */
-        
+
         if firstAnimated {
             
             DispatchQueue.global(qos: .userInitiated).async {
@@ -147,136 +104,55 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
     
-
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        
-        hasViewAppeared = false
-        
-        NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
-        
-        if currentIndex != nil {
-            //newPlayingIndex
-            
-            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
-                
-               
-                
-            }
+    func addAnimatedLabelToTop() {
+        animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
+        animatedLabel.translatesAutoresizingMaskIntoConstraints = false
+        animatedLabel.backgroundColor = UIColor.clear
+        animatedLabel.type = .continuous
+        animatedLabel.leadingBuffer = 15.0
+        animatedLabel.trailingBuffer = 10.0
+        animatedLabel.animationDelay = 0.0
+        animatedLabel.textAlignment = .center
+        animatedLabel.font = FontManager.shared.roboto(.Bold, size: 16)
+        animatedLabel.textColor = UIColor.white
+        animatedLabel.layer.masksToBounds = true
+        animatedLabel.layer.cornerRadius = 10 // Round the corners for a cleaner look
 
-            
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(container)
+        container.addSubview(animatedLabel)
+        
+        NSLayoutConstraint.activate([
+            container.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 100),
+            container.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -100),
+            container.topAnchor.constraint(equalTo: self.view.topAnchor),
+            container.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 55),
+            animatedLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10), // Add padding around the text
+            animatedLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10), // Add padding around the text
+            animatedLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10), // Add padding around the text
+            animatedLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10) // Add padding around the text
+        ])
+        
+        // Make the label tappable
+        container.isUserInteractionEnabled = true
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FeedViewController.labelTapped))
+        tap.numberOfTapsRequired = 1
+        container.addGestureRecognizer(tap)
+        
+    }
+    
+    func applyAnimationText(text: String) {
+        if text != "" {
+            animatedLabel.text = text + "                   "
+            animatedLabel.restartLabel()
+        } else {
+            //animatedLabel.pauseLabel()
+            animatedLabel.text = text
         }
-        
-        
+           
     }
-    
-    
-    func setupTabBar() {
-        
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = .black
-        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .black
-        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .black
-        self.tabBarController?.tabBar.standardAppearance = tabBarAppearance
-        
-    }
-    
-    func setupNavBar() {
-        
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithDefaultBackground()
-        navigationBarAppearance.backgroundColor = .clear
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationBarAppearance.backgroundImage = UIImage()
-        navigationBarAppearance.shadowImage = UIImage()
-        navigationBarAppearance.shadowColor = .clear
-        navigationBarAppearance.backgroundEffect = nil
-
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-        self.navigationController?.navigationBar.isTranslucent = true
-
-        
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        
-    }
-    
-    
-    @objc private func refreshListData(_ sender: Any) {
-        // Call API
-        
-        self.clearAllData()
-        
-    }
-    
-    @objc func clearAllData() {
-        
-        refresh_request = true
-        currentIndex = 0
-        isfirstLoad = true
-        didScroll = false
-        shouldMute = nil
-        imageIndex = nil
-        updateData()
-        
-    }
-    
-    func updateData() {
-        
-        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
-            guard let self = self else { return }
-            
-            if newPosts.count > 0 {
-                
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                
-            } else {
-                
-                
-                self.refresh_request = false
-                
-                self.posts.removeAll()
-                self.collectionNode.reloadData()
-                
-                if self.posts.isEmpty == true {
-                    
-                    self.collectionNode.view.setEmptyMessage("No post found!", color: .black)
-                    
-                    
-                } else {
-                    
-                    self.collectionNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) { [weak self] in
-                guard let self = self else { return }
-                
-                
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                
-                
-                
-            }
-            
-            
-        }
-        
-        
-    }
-    
     
 }
 
@@ -286,7 +162,8 @@ extension FeedViewController {
         
         if (global_percentComplete == 0.00) || (global_percentComplete == 100.0) {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.progressBar.isHidden = true
                 
             }
@@ -295,7 +172,8 @@ extension FeedViewController {
         } else {
             
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.progressBar.isHidden = false
                 self.progressBar.progress = (CGFloat(global_percentComplete)/100)
                 
@@ -304,38 +182,6 @@ extension FeedViewController {
         }
         
     }
-    
-    
-    func scrollToTop() {
-        
-        if currentIndex != 0, currentIndex != nil {
-            
-            navigationController?.setNavigationBarHidden(false, animated: true)
-            
-            if collectionNode.numberOfItems(inSection: 0) != 0 {
-                
-                if currentIndex == 1 {
-                    collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                } else {
-                    
-                    collectionNode.scrollToItem(at: IndexPath(row: 1, section: 0), at: .centeredVertically, animated: false)
-                    collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                    
-                }
-                
-            }
-            
-        } else {
-            
-            delayItem3.perform(after: 0.25) { [weak self] in
-                guard let self = self else { return }
-                self.clearAllData()
-            }
-            
-        }
-        
-    }
-    
     
     
 }
@@ -376,10 +222,7 @@ extension FeedViewController {
                 
                 foundVisibleVideo = true
                 playTimeBar.isHidden = false
-                imageIndex = nil
-            } else {
-                playTimeBar.isHidden = true
-                imageIndex = newPlayingIndex
+               
             }
             
             
@@ -506,6 +349,15 @@ extension FeedViewController: ASCollectionDataSource {
                 mainRootId = post.id
                 currentIndex = 0
                 NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
+                
+                Dispatch.main.async() { [weak self] in
+                    guard let self = self else {
+                        return
+                    }
+                    handleAnimationTextAndImage(post: post)
+                }
+               
+            
             }
             
             
@@ -528,7 +380,6 @@ extension FeedViewController: ASCollectionDataSource {
     }
     
 
-    
 }
 
 
@@ -554,8 +405,6 @@ extension FeedViewController {
         self.collectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.collectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
-        //self.collectionNode.view.isScrollEnabled = false
-        
         self.applyStyle()
         
         self.collectionNode.reloadData()
@@ -580,116 +429,102 @@ extension FeedViewController {
 extension FeedViewController {
     
     
-    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+    @objc private func refreshListData(_ sender: Any) {
+        self.clearAllData()
+    }
 
-        APIManager.shared.getUserFeed { [weak self] result in
+    @objc func clearAllData() {
+        refresh_request = true
+        currentIndex = 0
+        isfirstLoad = true
+        shouldMute = nil
+        updateData()
+    }
+
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] newPosts in
             guard let self = self else { return }
-            
+
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+
+            if self.pullControl.isRefreshing {
+                self.pullControl.endRefreshing()
+            }
+
+            self.delayItem.perform(after: 0.75) { [weak self] in
+                self?.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+            }
+        }
+    }
+
+    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        APIManager.shared.getUserFeed { result in
+            var items: [[String: Any]] = []
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                if !data.isEmpty {
-                
-                    self.lastLoadTime = Date()
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    items = data
                     print("Successfully retrieved \(data.count) posts.")
-                    let items = data
-                
-                    DispatchQueue.main.async {
-                        block(items)
-                    }
-                } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
                 }
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+            }
+            DispatchQueue.main.async {
+                block(items)
             }
         }
-        
     }
-    
-    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
 
-        // checking empty
-        guard newPosts.count > 0 else {
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+        if newPosts.isEmpty {
+            if refresh_request {
+                refresh_request = false
+                posts.removeAll()
+                collectionNode.reloadData()
+                if posts.isEmpty {
+                    self.collectionNode.view.setEmptyMessage("No post found!", color: .black)
+                } else {
+                    self.collectionNode.view.restore()
+                }
+            }
             return
         }
 
         if refresh_request {
-
             refresh_request = false
-
-            if !posts.isEmpty {
-                var delete_indexPaths: [IndexPath] = []
-                for row in 0..<self.posts.count {
-                    let path = IndexPath(row: row, section: 0) // single indexpath
-                    delete_indexPaths.append(path) // append
-                }
-                
-                posts.removeAll()
-                collectionNode.deleteItems(at: delete_indexPaths)
-                
-            }
+            posts.removeAll()
+            collectionNode.reloadData()
         }
 
-        // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()
-        for i in newPosts {
-           
-            if let item = PostModel(JSON: i) {
-               
-                if !self.posts.contains(item) {
-                    self.posts.append(item)
-                    items.append(item)
-                }
-                
+        let postsSet = Set(posts)
+        for postData in newPosts {
+            if let item = PostModel(JSON: postData), !postsSet.contains(item) {
+                posts.append(item)
+                items.append(item)
             }
         }
 
-        // Construct index paths for the new rows
-        if items.count > 0 {
-            let startIndex = self.posts.count - items.count
-            let endIndex = startIndex + items.count - 1
-            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
+        if items.isEmpty { return }
 
-            if firstAnimated {
-                firstAnimated = false
+        let indexPaths = (posts.count - items.count..<posts.count).map { IndexPath(row: $0, section: 0) }
 
-                delay(0.15) { [weak self] in
-                    guard let self = self else { return }
-                    
-                    UIView.animate(withDuration: 0.5) {
-                        self.loadingView.alpha = 0
-                    }
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        if self.loadingView.alpha == 0 {
-                            self.loadingView.isHidden = true
-                        }
-                    }
-                    
+        if firstAnimated {
+            firstAnimated = false
+            delay(0.15) { [weak self] in
+                UIView.animate(withDuration: 0.5) {
+                    self?.loadingView.alpha = 0
                 }
-                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    if self?.loadingView.alpha == 0 {
+                        self?.loadingView.isHidden = true
+                    }
+                }
             }
-
-            // Insert new items at index paths
-           collectionNode.insertItems(at: indexPaths)
-           items.removeAll()
         }
+
+        collectionNode.insertItems(at: indexPaths)
+        items.removeAll()
     }
 
     
@@ -708,16 +543,17 @@ extension FeedViewController {
                 presentSwiftLoader()
                 
                 if let id = editeddPost?.id, id != "" {
-                    
-                    
-                    APIManager.shared.deleteMyPost(pid: id) { result in
+ 
+                    APIManager.shared.deleteMyPost(pid: id) { [weak self ] result in
+                        guard let self = self else { return }
                         switch result {
                         case .success(_):
                             needReloadPost = true
                             
                             SwiftLoader.hide()
                             
-                            Dispatch.main.async {
+                            Dispatch.main.async { [weak self] in
+                                guard let self = self else { return }
                                 
                                 self.removePost()
                                 
@@ -729,7 +565,8 @@ extension FeedViewController {
                             SwiftLoader.hide()
                             
                             delay(0.1) {
-                                Dispatch.main.async {
+                                Dispatch.main.async { [weak self] in
+                                    guard let self = self else { return }
                                     self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
                                 }
 
@@ -740,7 +577,8 @@ extension FeedViewController {
                     
                 } else {
                 
-                    delay(0.1) {
+                    delay(0.1) { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                         self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
                     }
@@ -768,36 +606,6 @@ extension FeedViewController {
                     collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
                    
                 }
-            } else {
-                
-                if currentIndex != nil {
-                    
-                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
-                        /*
-                        if let indexPath = node.posts.firstIndex(of: deletingPost) {
-                            
-                            node.posts.removeObject(deletingPost)
-
-                            node.mainCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                            //node.galleryCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                            
-                            //node.selectPostCollectionView.collectionView.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                            
-                            
-                            // return the next index if it exists
-                            if indexPath < node.posts.count {
-                                node.playVideo(index: indexPath)
-                            } else if node.posts.count == 1 {
-                                node.playVideo(index: 0)
-                            }
-
-                        }*/
-                        
-                    }
-                    
-                }
-               
-                
             }
             
         }
@@ -823,6 +631,15 @@ extension FeedViewController {
             }
             
         }
+        
+        
+        
+    }
+    
+    @objc func onClickShowInfo(_ sender: AnyObject) {
+        
+        
+       
         
         
         
@@ -1106,82 +923,27 @@ extension FeedViewController {
     
         }
     }
-
-
-}
-
-
-extension FeedViewController {
     
-    
-    func loadSettings(completed: @escaping DownloadComplete) {
+    func handleAnimationTextAndImage(post: PostModel) {
         
-        APIManager.shared.getSettings {  result in
-           
-            switch result {
-            case .success(let apiResponse):
-                
-                guard let data = apiResponse.body else {
-                    completed()
-                    return
-                }
-                
-                let settings =  Mapper<SettingModel>().map(JSONObject: data)
-                globalSetting = settings
-                globalIsSound = settings?.AutoPlaySound ?? false
-                
-                completed()
-                
-            case .failure(_):
-                
-                completed()
-                
+        let total = post.totalStitchTo + post.totalMemberStitch
+        
+        if total > 0 {
+            if total == 1 {
+                applyAnimationText(text: "Up next: \(total) stitch!")
+            } else {
+                applyAnimationText(text: "Up next: \(total) stitches!")
             }
-        }
-        
-    }
-    
-    
-    func loadNewestCoreData(completed: @escaping DownloadComplete) {
-        
-        APIManager.shared.getme { result in
             
-            switch result {
-            case .success(let response):
-                
-                if let data = response.body {
-                    
-                    if !data.isEmpty {
-                        
-                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
-                            _AppCoreData.reset()
-                            _AppCoreData.userDataSource.accept(newUserData)
-                            completed()
-                        } else {
-                            completed()
-                        }
-                        
-                        
-                    } else {
-                        completed()
-                    }
-                    
-                } else {
-                    completed()
-                }
-                
-                
-            case .failure(let error):
-                print("Error loading profile: ", error)
-                completed()
-            }
+        } else {
+            applyAnimationText(text: "")
         }
-        
-        
+         
     }
-    
-    
+
+
 }
+
 
 extension FeedViewController {
     
@@ -1193,7 +955,7 @@ extension FeedViewController {
             
             let time = CMTime(seconds: 0, preferredTimescale: 1)
             cell.videoNode.player?.seek(to: time)
-            playTimeBar.setValue(Float(0), animated: false)
+           // playTimeBar.setValue(Float(0), animated: false)
             
         }
         
@@ -1204,6 +966,7 @@ extension FeedViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
+           
             cell.videoNode.player?.seek(to: time)
             
         }
@@ -1217,6 +980,17 @@ extension FeedViewController {
             
             if !cell.videoNode.isPlaying() {
 
+                handleAnimationTextAndImage(post: cell.post)
+                
+                if globalSetting.ClearMode == true {
+                    
+                    cell.hideAllInfo()
+                    
+                } else {
+                    
+                    cell.showAllInfo()
+                    
+                }
                 
                 if let muteStatus = shouldMute {
                     
@@ -1288,6 +1062,27 @@ extension FeedViewController {
         
         SwiftLoader.show(title: progress, animated: true)
         
+        
+    }
+    
+    @objc func labelTapped() {
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is ParentViewController {
+                if let update1 = vc as? ParentViewController {
+                    if update1.isFeed {
+                        // Calculate the next page index
+                       
+                        let offset = CGFloat(1) * update1.scrollView.bounds.width
+                        
+                        // Scroll to the next page
+                        update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                        update1.showStitch()
+                      
+                    }
+                }
+            }
+        }
         
     }
     

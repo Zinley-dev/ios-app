@@ -57,13 +57,14 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private var likeCount = 0
     private var isLike = false
     private var allowProcess = true
-    private var settingBtn : ((ASCellNode) -> Void)?
     fileprivate let FontSize: CGFloat = 14
     fileprivate let OrganizerImageSize: CGFloat = 30
+    private var index: Int!
     
     init(with post: PostModel, at: Int) {
         print("VideoNode \(at) is loading post: \(post.id)")
         self.post = post
+        self.index = at
         self.gradientNode = GradienView()
         self.videoNode = ASVideoNode()
         self.contentNode = ASTextNode()
@@ -74,8 +75,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
         configureGradientNode()
         configureVideoNode(with: post)
-       
     }
+
     
     override func didLoad() {
         super.didLoad()
@@ -89,7 +90,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             if isOriginal {
                 // Handle count stitch if not then hide
                 
-                addSideButtons(isOwned: true)
+            
+                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
                 
                 
             } else {
@@ -99,9 +101,19 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         setupViews()
         setupSpace(width: self.view.frame.width)
-       
+        clearMode()
        
      }
+    
+    func clearMode() {
+        
+        if globalSetting.ClearMode == true {
+            
+            hideAllInfo()
+            
+        }
+        
+    }
     
     override func layout() {
         super.layout()
@@ -140,50 +152,101 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         videoNode.pause()
     }
 
-    
-    private func addSideButtons(isOwned: Bool) {
+    private func addSideButtons(isOwned: Bool, total: Int? = 0) {
+        setupSideButtonsView()
+
+        if isOwned {
+            configureForOwnedState(total: total)
+        } else {
+            configureForNonOwnedState()
+        }
+    }
+
+    private func setupSideButtonsView() {
         sideButtonsView = ButtonSideList()
         sideButtonsView.backgroundColor = .clear
         sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(sideButtonsView)
-
+        
         sideButtonsView.statusImg.isHidden = false
-       
+        
         NSLayoutConstraint.activate([
             sideButtonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             sideButtonsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -55),
             sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
             sideButtonsView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
-        
-        if isOwned {
-           
+    }
+
+    private func configureForOwnedState(total: Int?) {
+        if let finalTotal = total, finalTotal > 0 {
+            sideButtonsView.isHidden = false
             sideButtonsView.originalStack.isHidden = false
             sideButtonsView.stickStack.isHidden = true
-            
+
             let pushToStitch = UITapGestureRecognizer(target: self, action: #selector(VideoNode.pushToStitchView))
-            pushToStitch.numberOfTapsRequired = 1
             sideButtonsView.originalStack.addGestureRecognizer(pushToStitch)
             
             sideButtonsView.originalStack.isUserInteractionEnabled = true
-            
+            sideButtonsView.originalStitchCount.text = "\(formatPoints(num: Double(finalTotal)))"
         } else {
-            
-            let viewStitchTap = UITapGestureRecognizer(target: self, action: #selector(VideoNode.viewStitchTapped))
-            viewStitchTap.numberOfTapsRequired = 1
-            sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
-
-            let backToOriginal = UITapGestureRecognizer(target: self, action: #selector(VideoNode.backToOriginal))
-            backToOriginal.numberOfTapsRequired = 1
-            sideButtonsView.backToOriginalBtn.addGestureRecognizer(backToOriginal)
-            
-            
-            sideButtonsView.originalStack.isHidden = true
-            sideButtonsView.stickStack.isHidden = false
-            
+            sideButtonsView.isHidden = true
         }
-    
     }
+
+    private func configureForNonOwnedState() {
+        sideButtonsView.isHidden = false
+
+        let viewStitchTap = UITapGestureRecognizer(target: self, action: #selector(VideoNode.viewStitchTapped))
+        sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
+
+        let backToOriginal = UITapGestureRecognizer(target: self, action: #selector(VideoNode.backToOriginal))
+        sideButtonsView.backToOriginalBtn.addGestureRecognizer(backToOriginal)
+        
+        sideButtonsView.originalStack.isHidden = true
+        sideButtonsView.stickStack.isHidden = false
+        
+        if let vc = UIViewController.currentViewController() as? ParentViewController {
+                     
+            var index = 0
+            
+            if vc.feedViewController.currentIndex != nil {
+                index = vc.feedViewController.currentIndex!
+            }
+            
+            if !vc.feedViewController.posts.isEmpty {
+                
+                let feedPost = vc.feedViewController.posts[index]
+                
+                
+                if let stitchto = feedPost.stitchTo, !stitchto.isEmpty {
+                    
+                    if stitchto[0].rootId == post.id {
+                        
+                        sideButtonsView.statusImg.image = UIImage(named: "star white")
+                        
+                    } else {
+                        
+                        sideButtonsView.statusImg.image = UIImage(named: "partner white")
+                        
+                    }
+                    
+                } else {
+                    
+                    sideButtonsView.statusImg.image = UIImage(named: "partner white")
+                    
+                }
+                
+            } else {
+                sideButtonsView.statusImg.image = UIImage(named: "partner white")
+            }
+        
+            
+
+        }
+        
+    }
+
 
     func updateStitchCount(text: String) {
         
@@ -377,6 +440,7 @@ extension VideoNode {
         sideButtonsView.isHidden = true
         buttonNode.isHidden = true
         label.isHidden = true
+        gradientNode.isHidden = true
     }
     
     func showAllInfo() {
@@ -385,6 +449,7 @@ extension VideoNode {
         sideButtonsView.isHidden = false
         buttonNode.isHidden = false
         label.isHidden = false
+        gradientNode.isHidden = false
     }
 
 
@@ -1281,12 +1346,84 @@ extension VideoNode {
     }
 
     
-    
     @objc func settingTapped() {
         
-        settingBtn?(self)
+        guard let vc = UIViewController.currentViewController() else { return }
+
+        global_cornerRadius = 45
         
+        if buttonNode.isHidden {
+            
+            global_presetingRate = 0.36
+            
+        } else {
+            
+            global_presetingRate = 0.35
+        }
+
+        if post.id == _AppCoreData.userDataSource.value?.userID {
+            
+            presentVC(vc, using: PostSettingVC())
+            
+        } else {
+            
+            let newsFeedSettingVC = NewsFeedSettingVC()
+            newsFeedSettingVC.modalPresentationStyle = .custom
+            newsFeedSettingVC.transitioningDelegate = vc.self
+            newsFeedSettingVC.isInformationHidden = buttonNode.isHidden
+            
+            
+            if let updateVC = vc as? ParentViewController {
+                
+                if updateVC.isFeed {
+                    updateVC.feedViewController.editeddPost = post
+                    setOwnership(for: newsFeedSettingVC)
+                    updateVC.present(newsFeedSettingVC, animated: true)
+                } else {
+                    updateVC.stitchViewController.editeddPost = post
+                    setOwnership(for: newsFeedSettingVC)
+                    updateVC.present(newsFeedSettingVC, animated: true)
+                }
+                
+            } else if let updateVC = vc as? SelectedPostVC {
+                updateVC.editeddPost = post
+                setOwnership(for: newsFeedSettingVC)
+                vc.present(newsFeedSettingVC, animated: true)
+            }
+        }
     }
+
+    func setOwnership(for vc: NewsFeedSettingVC) {
+        if post.owner?.id == _AppCoreData.userDataSource.value?.userID {
+            vc.isOwner = true
+        } else {
+            vc.isOwner = false
+        }
+    }
+
+    func presentVC(_ viewController: UIViewController, using postSettingVC: PostSettingVC) {
+        
+        postSettingVC.modalPresentationStyle = .custom
+        postSettingVC.transitioningDelegate = viewController.self
+        postSettingVC.isInformationHidden = buttonNode.isHidden
+       
+
+        if let updateVC = viewController as? ParentViewController {
+            
+            if updateVC.isFeed {
+                updateVC.feedViewController.editeddPost = post
+                updateVC.present(postSettingVC, animated: true)
+            } else {
+                updateVC.stitchViewController.editeddPost = post
+                updateVC.present(postSettingVC, animated: true)
+            }
+            
+        } else if let updateVC = viewController as? SelectedPostVC {
+            updateVC.editeddPost = post
+            viewController.present(postSettingVC, animated: true)
+        }
+    }
+
 
     
     @objc func likeHandle() {

@@ -27,12 +27,18 @@ class NewsFeedSettingVC: UIViewController {
     
     @IBOutlet weak var removeBtn: UIButton!
     
+    @IBOutlet weak var showInfoBtn: UIButton!
+    
+    @IBOutlet weak var showInfoStack: UIStackView!
+    
+    
+    
     var isOwner = false
     var isSearch = false
     var isHashtag = false
     var isSelected = false
     var isReels = false
-
+    var isInformationHidden = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +48,12 @@ class NewsFeedSettingVC: UIViewController {
         if isOwner {
             removeStack.isHidden = true
             reportStack.isHidden = true
+        }
+        
+        if isInformationHidden {
+            showInfoStack.isHidden = false
+        } else {
+            showInfoStack.isHidden = true
         }
 
     }
@@ -55,9 +67,25 @@ class NewsFeedSettingVC: UIViewController {
         cancelBtn.setTitle("", for: .normal)
         sendBtn.setTitle("", for: .normal)
         removeBtn.setTitle("", for: .normal)
+        showInfoBtn.setTitle("", for: .normal)
+       
     }
     
     //_selected
+    
+    
+    @IBAction func showVideoInfoBtnPressed(_ sender: Any) {
+        
+        if isSelected {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo_selected")), object: nil)
+        } else {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
+        }
+        
+        self.dismiss(animated: true)
+        
+    }
+    
     
     @IBAction func copyProfileBtnPressed(_ sender: Any) {
         

@@ -56,24 +56,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func sentrySetup() {
         
-        func application(_ application: UIApplication,
-            didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-            SentrySDK.start { options in
-                options.dsn = "https://b408eb8270e3a80a9eca0764d1702654@o4505650828738560.ingest.sentry.io/4505650829459456"
+        SentrySDK.start { options in
+                options.dsn = "https://f303994ce86f5234623d9f66dbe6f6cb@o4505682647646208.ingest.sentry.io/4505682648170496"
                 options.debug = true // Enabled debug when first installing is always helpful
-                
-                // Enable all experimental features
-                    options.attachViewHierarchy = true
-                    options.enablePreWarmedAppStartTracing = true
-                    options.enableMetricKit = true
-                    options.enableTimeToFullDisplay = true
-                    options.enableSwizzling = true
-                
+
+                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                // We recommend adjusting this value in production.
+                options.tracesSampleRate = 1.0
+                options.attachViewHierarchy = true
+                options.enablePreWarmedAppStartTracing = true
+                options.enableMetricKit = true
+                options.enableTimeToFullDisplay = true
+               
             }
 
-            return true
-        }
         
     }
     

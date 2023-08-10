@@ -67,26 +67,6 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
-        
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(StitchViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
-        
         
         let height =  UIScreen.main.bounds.height * 1 / 4
         heightConstraint.constant = height
@@ -145,78 +125,114 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
             animatedLabel.text = text + "                   "
             animatedLabel.restartLabel()
         } else {
-            animatedLabel.pauseLabel()
+            //animatedLabel.pauseLabel()
             animatedLabel.text = text
         }
            
     }
     
     
-    @objc func clearAllData() {
+    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        
-        if rootId != "" {
-            
-            if animatedLabel != nil {
-                animatedLabel.pauseLabel()
-                animatedLabel.text = ""
-            }
-            
-            refresh_request = true
-            currentIndex = 0
-            curPage = 1
-            isfirstLoad = true
-            didScroll = false
-            imageIndex = nil
-            updateData()
-            
+        guard rootId != "" else {
+            completeWithEmptyData(block)
+            return
         }
-        
-        
-        
-    }
-    
-    func updateData() {
-        
-        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
+
+        APIManager.shared.getSuggestStitch(rootId: rootId, page: curPage) { [weak self] result in
             guard let self = self else { return }
             
-            if newPosts.count > 0 {
-                
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                
-            } else {
-                
-                
-                self.refresh_request = false
-                
-                if !posts.isEmpty {
-                    
-                    self.posts.removeAll()
-                    self.collectionNode.reloadData()
-                    self.galleryCollectionNode.reloadData()
-                    
-                }
-                
-                if self.posts.isEmpty == true {
-                    
-                    self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
-                    
-                    
+            switch result {
+            case .success(let apiResponse):
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
+                    curPage += 1
+                    DispatchQueue.main.async {
+                        block(data)
+                    }
                 } else {
-                    
-                    self.collectionNode.view.restore()
-                    
+                    self.completeWithEmptyData(block)
                 }
-                
+            case .failure(let error):
+                print(error)
+                self.completeWithEmptyData(block)
             }
-            
-           
         }
-        
-        
     }
+
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
+    }
+
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+        guard !newPosts.isEmpty else { return }
+
+        if refresh_request {
+            clearExistingPosts()
+            refresh_request = false
+        }
+
+        let uniquePosts = Set(self.posts)
+        let items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !uniquePosts.contains($0) }
+        
+        guard !items.isEmpty else { return }
+
+        self.posts.append(contentsOf: items)
+
+        let indexPaths = (posts.count - items.count..<posts.count).map { IndexPath(row: $0, section: 0) }
+
+        collectionNode.insertItems(at: indexPaths)
+        galleryCollectionNode.insertItems(at: indexPaths)
+    }
+
+
+    private func clearExistingPosts() {
+        let deleteIndexPaths = posts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        posts.removeAll()
+        collectionNode.deleteItems(at: deleteIndexPaths)
+        galleryCollectionNode.deleteItems(at: deleteIndexPaths)
+    }
+
+    private func generateIndexPaths(for items: [PostModel]) -> [IndexPath] {
+        let startIndex = self.posts.count - items.count
+        return (startIndex..<self.posts.count).map { IndexPath(row: $0, section: 0) }
+    }
+
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
+
+            if newPosts.isEmpty {
+                self.refresh_request = false
+                self.posts.removeAll()
+                self.collectionNode.reloadData()
+                self.galleryCollectionNode.reloadData()
+                if self.posts.isEmpty {
+                    self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
+                } else {
+                    self.collectionNode.view.restore()
+                }
+            } else {
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            }
+        }
+    }
+
+    @objc func clearAllData() {
+        guard rootId != "" else { return }
+
+        animatedLabel?.text = ""
+        refresh_request = true
+        currentIndex = 0
+        curPage = 1
+        isfirstLoad = true
+        didScroll = false
+        imageIndex = nil
+        updateData()
+    }
+
     
     
     @IBAction func hideBtnPressed(_ sender: Any) {
@@ -621,7 +637,7 @@ extension StitchViewController {
 
 extension StitchViewController {
     
-    
+    /*
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
         if rootId != "" {
@@ -722,7 +738,7 @@ extension StitchViewController {
            items.removeAll()
         }
     }
-
+*/
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
         
@@ -761,394 +777,6 @@ extension StitchViewController {
 
 extension StitchViewController {
     
-    @objc func onClickDelete(_ sender: AnyObject) {
-        
-        
-        if let vc = UIViewController.currentViewController() {
-            if vc is StitchViewController {
-                
-                presentSwiftLoader()
-                
-                if let id = editeddPost?.id, id != "" {
-                    
-                    
-                    APIManager.shared.deleteMyPost(pid: id) { result in
-                        switch result {
-                        case .success(_):
-                            needReloadPost = true
-                            
-                            SwiftLoader.hide()
-                            
-                            Dispatch.main.async {
-                                
-                                self.removePost()
-                                
-                            }
-                            
-                            
-                          case .failure(let error):
-                            print(error)
-                            SwiftLoader.hide()
-                            
-                            delay(0.1) {
-                                Dispatch.main.async {
-                                    self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
-                                }
-
-                            }
-                            
-                        }
-                      }
-                    
-                } else {
-                
-                    delay(0.1) {
-                        SwiftLoader.hide()
-                        self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
-                    }
-                    
-                }
-                
-            }
-        }
-  
-
-    }
-    
-    @objc func removePost() {
-        
-        if let deletingPost = editeddPost {
-           
-            if let indexPath = posts.firstIndex(of: deletingPost) {
-                
-                posts.removeObject(deletingPost)
-
-                // check if there are no more posts
-                if posts.isEmpty {
-                    collectionNode.reloadData()
-                } else {
-                    collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                   
-                }
-            } else {
-                
-                if currentIndex != nil {
-                    
-                    if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
-                        /*
-                        if let indexPath = node.posts.firstIndex(of: deletingPost) {
-                            
-                            node.posts.removeObject(deletingPost)
-
-                            node.mainCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                            //node.galleryCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                            
-                            //node.selectPostCollectionView.collectionView.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                            
-                            
-                            // return the next index if it exists
-                            if indexPath < node.posts.count {
-                                node.playVideo(index: indexPath)
-                            } else if node.posts.count == 1 {
-                                node.playVideo(index: 0)
-                            }
-
-                        }*/
-                        
-                    }
-                    
-                }
-               
-                
-            }
-            
-        }
-        
-        
-    }
-    
-    @objc func onClickEdit(_ sender: AnyObject) {
-        
-        if let vc = UIViewController.currentViewController() {
-            if vc is StitchViewController {
-                
-                print("Edit requested")
-                if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC {
-                    
-                    navigationController?.setNavigationBarHidden(false, animated: true)
-                    EPVC.selectedPost = editeddPost
-                    self.navigationController?.pushViewController(EPVC, animated: true)
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-        
-        
-    }
-    
-    @objc func onClickStats(_ sender: AnyObject) {
-        
-        
-        if let vc = UIViewController.currentViewController() {
-            if vc is StitchViewController {
-                
-                print("Stats requested")
-                if let VVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewVC") as? ViewVC {
-                    
-                    
-                    VVC.selected_item = editeddPost
-                    delay(0.1) {
-                        self.navigationController?.setNavigationBarHidden(false, animated: true)
-                        self.navigationController?.pushViewController(VVC, animated: true)
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        
-        
-        
-    }
-    
-    @objc func onClickDownload(_ sender: AnyObject) {
-        
-        if let vc = UIViewController.currentViewController() {
-            if vc is StitchViewController {
-                
-                if let post = editeddPost {
-                    
-                    if post.muxPlaybackId != "" {
-                        
-                        let url = "https://stream.mux.com/\(post.muxPlaybackId)/high.mp4"
-                       
-                        downloadVideo(url: url, id: post.muxAssetId)
-                        
-                    } else {
-                        
-                        if let data = try? Data(contentsOf: post.imageUrl) {
-                            
-                            downloadImage(image: UIImage(data: data)!)
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        
-        
-        
-       
-    }
-    
-    func downloadVideo(url: String, id: String) {
-        
-        
-        AF.request(url).downloadProgress(closure : { (progress) in
-       
-            self.swiftLoader(progress: "\(String(format:"%.2f", Float(progress.fractionCompleted) * 100))%")
-            
-        }).responseData{ (response) in
-            
-            switch response.result {
-            
-            case let .success(value):
-                
-                
-                let data = value
-                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-                let videoURL = documentsURL.appendingPathComponent("\(id).mp4")
-                do {
-                    try data.write(to: videoURL)
-                } catch {
-                    print("Something went wrong!")
-                }
-          
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
-                }) { saved, error in
-                    
-                    
-                    DispatchQueue.main.async {
-                        SwiftLoader.hide()
-                    }
-                    
-                    if (error != nil) {
-                        
-                        
-                        DispatchQueue.main.async {
-                            print("Error: \(error!.localizedDescription)")
-                            self.showErrorAlert("Oops!", msg: error!.localizedDescription)
-                        }
-                        
-                    } else {
-                        
-                        
-                        DispatchQueue.main.async {
-                        
-                            let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
-                            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alertController.addAction(defaultAction)
-                            self.present(alertController, animated: true, completion: nil)
-                        }
-     
-                        
-                    }
-                }
-                
-            case let .failure(error):
-                print(error)
-                
-        }
-           
-           
-        }
-        
-    }
-    
-    func downloadImage(image: UIImage) {
-        
-        let imageSaver = ImageSaver()
-        imageSaver.writeToPhotoAlbum(image: image)
-        
-    }
-    
-    
-    func writeToPhotoAlbum(image: UIImage) {
-            UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
-        }
-
-        @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-            print("Save finished!")
-    }
-    
-    @objc func copyPost() {
-        
-        if let id = self.editeddPost?.id {
-            
-            let link = "https://stitchbox.net/app/post/?uid=\(id)"
-            
-            UIPasteboard.general.string = link
-            showNote(text: "Post link is copied")
-            
-        } else {
-            showNote(text: "Post link is unable to be copied")
-        }
-        
-    }
-    
-    @objc func copyProfile() {
-        
-        if let id = self.editeddPost?.owner?.id {
-            
-            let link = "https://stitchbox.net/app/account/?uid=\(id)"
-            
-            UIPasteboard.general.string = link
-            showNote(text: "User profile link is copied")
-            
-        } else {
-            showNote(text: "User profile link is unable to be copied")
-        }
-        
-    }
-    
- 
-    
-    @objc func reportPost() {
-        
-        let slideVC =  reportView()
-        
-        slideVC.post_report = true
-        slideVC.postId = editeddPost?.id ?? ""
-        slideVC.modalPresentationStyle = .custom
-        slideVC.transitioningDelegate = self
-        global_presetingRate = Double(0.75)
-        global_cornerRadius = 35
-        
-        delay(0.1) {[weak self] in
-            guard let self = self else { return }
-            self.present(slideVC, animated: true, completion: nil)
-        }
-        
-    }
-    
-    @objc func sharePost() {
-        
-        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-            print("Sendbird: Can't get userUID")
-            return
-        }
-        
-        let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.net/app/post/?uid=\(editeddPost?.id ?? "")")!]
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        
-        ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
-            
-            
-        }
-        
-        delay(0.1) {[weak self] in
-            guard let self = self else { return }
-            self.present(ac, animated: true, completion: nil)
-        }
-        
-    }
-    
-    @objc func createPostForStitch() {
-        
-        if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
-            
-            
-            PNVC.modalPresentationStyle = .fullScreen
-            
-            if let rootvc = PNVC.viewControllers[0] as? PostVC {
-                rootvc.stitchPost = editeddPost
-            } else {
-                printContent(PNVC.viewControllers[0])
-            }
-            
-            delay(0.1) {
-                
-                self.present(PNVC, animated: true)
-            }
-            
-        }
-        
-    }
-    
-    
-    @objc func stitchToExistingPost() {
-        
-        if let ASTEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddStitchToExistingVC") as? AddStitchToExistingVC {
-            
-            ASTEVC.hidesBottomBarWhenPushed = true
-            ASTEVC.stitchedPost = editeddPost
-            hideMiddleBtn(vc: self)
-            
-            delay(0.1) {
-                self.navigationController?.pushViewController(ASTEVC, animated: true)
-            }
-            
-        }
-        
-        
-    }
-    
-   
-}
-
-extension StitchViewController {
-    
     func pauseVideo(index: Int) {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
@@ -1157,7 +785,7 @@ extension StitchViewController {
             
             let time = CMTime(seconds: 0, preferredTimescale: 1)
             cell.videoNode.player?.seek(to: time)
-            playTimeBar.setValue(Float(0), animated: false)
+           // playTimeBar.setValue(Float(0), animated: false)
             
         }
         
@@ -1171,6 +799,7 @@ extension StitchViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
+          
             cell.videoNode.player?.seek(to: time)
             
             
@@ -1195,9 +824,21 @@ extension StitchViewController {
             handleAnimationTextAndImage(for: index)
             
             if selectPostCollectionView.isHidden == false {
+                
                 cell.hideAllInfo()
+                
             } else {
-                cell.showAllInfo()
+                
+                if globalSetting.ClearMode == true {
+                    
+                    cell.hideAllInfo()
+                    
+                } else {
+                    
+                    cell.showAllInfo()
+                    
+                }
+              
             }
             
             // Cell selection/deselection logic
