@@ -52,7 +52,8 @@ class HashtagVC: UIViewController {
         setupButtons()
         setupView()
         
-        delay(0.1) {
+        delay(0.1) { [weak self] in
+            guard let self = self else { return }
             self.hashtagTxtField.addUnderLine()
         }
         
@@ -268,7 +269,8 @@ extension HashtagVC: UITextFieldDelegate {
         if text.last != " " && text.last != "#" {
             let searchText = String(getCurrentSearchHashTag(text: text).dropFirst(1))
             
-            delayItem.perform(after: 0.35) {
+            delayItem.perform(after: 0.35) { [weak self] in
+                guard let self = self else { return }
                 self.searchHashTags(searchText: searchText)
             }
             
@@ -380,7 +382,8 @@ extension HashtagVC {
                     
                     if self.searchHashtagList != retrievedSearchHashtagList {
                         self.searchHashtagList = retrievedSearchHashtagList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.tableNode.reloadData(completion: nil)
                         }
                     }
@@ -429,7 +432,8 @@ extension HashtagVC {
                     
                     if self.searchHashtagList != newSearchList {
                         self.searchHashtagList = newSearchList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.tableNode.reloadData()
                         }
                     }

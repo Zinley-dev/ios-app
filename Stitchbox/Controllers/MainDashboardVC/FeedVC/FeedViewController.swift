@@ -596,7 +596,7 @@ extension FeedViewController {
                     return
                 }
                 if !data.isEmpty {
-                    
+                
                     self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data

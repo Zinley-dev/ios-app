@@ -223,8 +223,8 @@ class PostVC: UIViewController {
             
             HTVC.text = self.hiddenHashTagTxtField.text
             
-            HTVC.completionHandler = { text in
-                
+            HTVC.completionHandler = { [weak self] text in
+                guard let self = self else { return }
                 if !text.findMHashtagText().isEmpty {
                     self.collectionHeight.constant = 50.0
                     self.settingViewHeight.constant = 335
@@ -345,7 +345,8 @@ extension PostVC {
                 
                 guard let data = apiResponse.body?["data"] as? [[String: Any]]  else {
                     print("Couldn't cast data")
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.setDefaultMode()
                     }
                     return
@@ -359,14 +360,16 @@ extension PostVC {
                         if allowcomment == true {
                                   
                             self.isAllowComment =  true
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 self.allowCmtSwitch.setOn(true, animated: true)
                             }
                             
                         } else {
                             
                             self.isAllowComment = false
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 self.allowCmtSwitch.setOn(false, animated: true)
                             }
                             
@@ -380,7 +383,8 @@ extension PostVC {
                             
                             self.mode = mode
                             
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 
                                 self.globalBtn.setImage(UIImage(named: "selectedPublic")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
                                 self.followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
@@ -396,7 +400,8 @@ extension PostVC {
                             
                             self.mode = mode
                             
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 
                                 self.globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
                                 self.followingBtn.setImage(UIImage(named: "selectedFollowing")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
@@ -413,7 +418,8 @@ extension PostVC {
                             
                             self.mode = mode
                             
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 
                                 self.globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
                                 self.followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 15)), for: .normal)
@@ -428,27 +434,31 @@ extension PostVC {
                             
                             
                         } else {
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 self.setDefaultMode()
                             }
                         }
                         
                     } else {
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.setDefaultMode()
                         }
                     }
                     
                 } else {
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.setDefaultMode()
                     }
                     
                 }
                 
             case .failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.setDefaultMode()
                 }
                 print(error)
@@ -482,10 +492,12 @@ extension PostVC {
         if self.selectedVideo.duration.seconds > 3.0 {
             
             print("Start exporting")
-            self.exportVideo(video: self.selectedVideo){
+            self.exportVideo(video: self.selectedVideo) { [weak self] in
+                guard let self = self else { return }
 
                 
-                Dispatch.background {
+                Dispatch.background { [weak self] in
+                    guard let self = self else { return }
                     
                     print("Start uploading video to db")
                     if self.stitchPost != nil {
@@ -496,7 +508,8 @@ extension PostVC {
                     
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                     showNote(text: "Thank you, your content is being uploaded!")
                     self.dismiss(animated: true, completion: nil)
@@ -518,43 +531,23 @@ extension PostVC {
     }
     
     func exportImage(currentImage: SessionImage, completed: @escaping DownloadComplete) {
-        ImageExporter.shared.export(images: [currentImage], progress: { [weak self] progress in
-            self?.swiftLoader(progress: "Uploading")
-        }, completion: { [weak self] error, imageList  in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                //SwiftLoader.hide()
-            }
-            if let error = error {
-                print("Unable to export image: \(error)")
-                self.showErrorAlert("Ops!", msg: "Unable to export image: \(error)")
-                return
-            }
-            if let exportedImage = imageList?.first {
-                self.renderedImage = exportedImage
-                self.origin_width = exportedImage.size.width
-                self.origin_height = exportedImage.size.height
-                self.length = 0.0
-                completed()
-            } else {
-                print("Unable to export image: image list is nil or empty")
-                self.showErrorAlert("Ops!", msg: "Unable to export image: image list is nil or empty")
-            }
-        })
+
     }
 
     
     func exportVideo(video: SessionVideo, completed: @escaping DownloadComplete) {
         
         VideoExporter.shared.export(video: video, progress: { progress in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.swiftLoader(progress: "Exporting: \(String(format:"%.2f", Float(progress) * 100))%")
             }
-        }, completion: {  error in
+        }, completion: { [weak self] error in
+            guard let self = self else { return }
             if let error = error {
-                
-                
-                DispatchQueue.main.async {
+            
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                 }
                 
@@ -756,7 +749,8 @@ extension PostVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
         hashtagList.remove(at: indexPath.row)
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             if self.hashtagList.count == 0 {
                 self.collectionHeight.constant = 0
                 self.collectionView.isHidden = true

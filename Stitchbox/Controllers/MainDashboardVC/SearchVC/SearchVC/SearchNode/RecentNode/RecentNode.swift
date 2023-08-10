@@ -43,7 +43,6 @@ class RecentNode: ASCellNode {
         upperNameNode.isLayerBacked = true
         
 
-   
         upperNameNode.backgroundColor = UIColor.clear
         belowNameNode.backgroundColor = UIColor.clear
         
@@ -57,7 +56,8 @@ class RecentNode: ASCellNode {
             imageNode.shouldRenderProgressImages = true
             imageNode.isLayerBacked = true
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
                 self.upperNameNode.attributedText = NSAttributedString(
@@ -95,7 +95,8 @@ class RecentNode: ASCellNode {
             imageNode.shouldRenderProgressImages = true
             imageNode.isLayerBacked = true
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 
 
                 let paragraphStyles = NSMutableParagraphStyle()
@@ -131,7 +132,8 @@ class RecentNode: ASCellNode {
 
         } else if item.type == "text" {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
                 self.upperNameNode.attributedText = NSAttributedString(

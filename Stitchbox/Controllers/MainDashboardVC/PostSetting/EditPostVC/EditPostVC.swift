@@ -146,8 +146,8 @@ class EditPostVC: UIViewController {
             
             HTVC.text = self.hiddenHashTagTxtField.text
             
-            HTVC.completionHandler = { text in
-                
+            HTVC.completionHandler = { [weak self] text in
+                guard let self = self else { return }
                 if !text.findMHashtagText().isEmpty {
                     self.collectionHeight.constant = 50.0
                     self.settingViewHeight.constant = 335
@@ -372,10 +372,12 @@ extension EditPostVC {
     
     func setDefaultMeia() {
         
-        DispatchQueue.global().async {
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
             
             if let data = try? Data(contentsOf: self.selectedPost.imageUrl) {
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.thumbnailImg.image = UIImage(data: data)
                 }
             }
@@ -591,7 +593,8 @@ extension EditPostVC {
             switch result {
             case .success(_):
                 needReloadPost = true
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                     showNote(text: "Updated successfully!")
                     self.navigationController?.popBack(3)
@@ -601,7 +604,8 @@ extension EditPostVC {
             case .failure(let error):
                 print(error)
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                     self.showErrorAlert("Oops", msg: "Unable to update \(error.localizedDescription)")
                 }
