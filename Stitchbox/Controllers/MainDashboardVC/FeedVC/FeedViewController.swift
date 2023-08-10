@@ -114,11 +114,13 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-    
+    /*
         showMiddleBtn(vc: self)
         loadFeed()
         
         hasViewAppeared = true
+        
+        */
         
         if firstAnimated {
             
@@ -141,20 +143,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
             
         }
-        
-        if currentIndex != nil {
-            //newPlayingIndex
-            
-            if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
-                
-                //node.playVideo(index: node.currentIndex!)
-                
-            }
-
-            
-        }
-         
-        
+   
         
     }
     
@@ -1109,6 +1098,12 @@ extension FeedViewController {
             pullControl.beginRefreshing()
             clearAllData()
             
+        } else {
+            
+            if let index = currentIndex {
+                playVideo(index: index)
+            }
+    
         }
     }
 
@@ -1218,7 +1213,6 @@ extension FeedViewController {
     
     func playVideo(index: Int) {
         
-        
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             if !cell.videoNode.isPlaying() {
@@ -1248,6 +1242,7 @@ extension FeedViewController {
                 }
                 
                 mainRootId = cell.post.id
+                
                 
                 NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
                 

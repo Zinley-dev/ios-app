@@ -676,7 +676,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
         self.headerView = PostHeader()
         self.headerNode.view.addSubview(self.headerView)
         addConstraints(to: self.headerView, within: self.headerNode.view)
-        
+    
         if post.setting?.allowStitch == false {
             hideStitchViews()
         } else if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
@@ -692,6 +692,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
         addConstraints(to: self.buttonsView, within: self.buttonNode.view)
         self.buttonsView.shareBtn.setImage(shareImage, for: .normal)
         self.buttonsView.saveBtn.setImage(unsaveImage, for: .normal)
+        self.buttonsView.commentBtn.setImage(cmtImage, for: .normal)
 
         // Gesture Recognizers
         setupGestureRecognizers()
@@ -745,7 +746,9 @@ extension VideoNode: UIGestureRecognizerDelegate {
     func setupGestureRecognizers() {
      
         let usernameTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.userTapped))
+        self.headerView.usernameLbl.isUserInteractionEnabled = true
         self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
+        
         let shareTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.shareTapped))
         self.buttonsView.shareBtn.addGestureRecognizer(shareTap)
 

@@ -160,7 +160,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W1f-2E-fwc">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="740"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="747"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lti-pc-8ON">
@@ -234,7 +234,7 @@
                         <constraints>
                             <constraint firstItem="W1f-2E-fwc" firstAttribute="top" secondItem="1Fc-76-Mf6" secondAttribute="top" id="83o-bF-YC1"/>
                             <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="AYU-5k-6kG" secondAttribute="bottom" constant="64" id="95a-dK-Jl9"/>
-                            <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="W1f-2E-fwc" secondAttribute="bottom" constant="8" id="9gg-SZ-leL"/>
+                            <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="W1f-2E-fwc" secondAttribute="bottom" constant="1" id="9gg-SZ-leL"/>
                             <constraint firstItem="0Z6-8G-TMT" firstAttribute="trailing" secondItem="Lti-pc-8ON" secondAttribute="trailing" id="B3l-PG-RLy"/>
                             <constraint firstItem="nif-pC-VFd" firstAttribute="leading" secondItem="0Z6-8G-TMT" secondAttribute="leading" id="Cf7-5P-d5f"/>
                             <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="nif-pC-VFd" secondAttribute="bottom" id="E64-Af-ekK"/>
@@ -275,7 +275,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htG-J3-w8j">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="774"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="781"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QjB-Ff-npc" customClass="ProgressBar" customModule="Stitchbox" customModuleProvider="target">
@@ -343,7 +343,7 @@
                             <constraint firstItem="Rla-m0-I86" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="9el-ci-5qP"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="12" id="FAH-dq-see"/>
                             <constraint firstAttribute="bottom" secondItem="Ofe-cI-1Xf" secondAttribute="bottom" id="FzS-Sa-U0Z"/>
-                            <constraint firstItem="Ofe-cI-1Xf" firstAttribute="top" secondItem="htG-J3-w8j" secondAttribute="bottom" constant="8" id="GC8-d6-Jmm"/>
+                            <constraint firstItem="Ofe-cI-1Xf" firstAttribute="top" secondItem="htG-J3-w8j" secondAttribute="bottom" constant="1" id="GC8-d6-Jmm"/>
                             <constraint firstItem="Rla-m0-I86" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="Pou-1N-uLM"/>
                             <constraint firstItem="Rla-m0-I86" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="UO6-lF-sY4"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="Wbn-Yc-2Lj"/>
@@ -5680,7 +5680,7 @@
                                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="QM8-Wa-ukc">
                                                                         <rect key="frame" x="16" y="5" width="133.66666666666666" height="30"/>
                                                                         <subviews>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tier-2-black" translatesAutoresizingMaskIntoConstraints="NO" id="snt-m9-Zuv">
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="public-stitch" translatesAutoresizingMaskIntoConstraints="NO" id="snt-m9-Zuv">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="height" constant="30" id="ena-Qa-M2p"/>
@@ -5758,7 +5758,7 @@
                                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4YF-jp-miD">
                                                                         <rect key="frame" x="16.000000000000007" y="5" width="126.66666666666669" height="30"/>
                                                                         <subviews>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sound 1" translatesAutoresizingMaskIntoConstraints="NO" id="RAP-IP-eDf">
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clear-mode" translatesAutoresizingMaskIntoConstraints="NO" id="RAP-IP-eDf">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" constant="30" id="5mw-bB-GGP"/>
@@ -9506,6 +9506,7 @@
         <image name="btnSpeaker" width="1024" height="1024"/>
         <image name="call 1" width="32" height="32"/>
         <image name="checkmark_2" width="21" height="21"/>
+        <image name="clear-mode" width="256" height="256"/>
         <image name="defaultuser" width="278" height="278"/>
         <image name="following" width="30" height="30"/>
         <image name="img_icon_nofi_off" width="36" height="36"/>
@@ -9520,6 +9521,7 @@
         <image name="onlyme" width="30" height="30"/>
         <image name="play" width="24" height="24"/>
         <image name="public" width="30" height="30"/>
+        <image name="public-stitch" width="24" height="24"/>
         <image name="push noti" width="26" height="27"/>
         <image name="rightMove" width="15" height="25"/>
         <image name="searchInChannel" width="61" height="60"/>

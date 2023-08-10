@@ -67,9 +67,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         
-        if let currentFeedVC = currentVC as? FeedViewController {
-            currentFeedVC.loadFeed()
+        if let currentFeedVC = currentVC as? ParentViewController {
+            if currentFeedVC.isFeed {
+                currentFeedVC.feedViewController.loadFeed()
+            } else {
+                
+                if let index = currentFeedVC.stitchViewController.currentIndex, !currentFeedVC.stitchViewController.posts.isEmpty {
+                    currentFeedVC.stitchViewController.playVideo(index: index)
+                }
+               
+            }
         }
+
         
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
@@ -81,6 +90,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
+        guard let currentVC = UIViewController.currentViewController() else { return }
+        
+        if let currentFeedVC = currentVC as? ParentViewController {
+            if currentFeedVC.isFeed {
+                
+                if let index = currentFeedVC.feedViewController.currentIndex, !currentFeedVC.feedViewController.posts.isEmpty {
+                    currentFeedVC.feedViewController.pauseVideo(index: index)
+                }
+                
+            } else {
+                
+                if let index = currentFeedVC.stitchViewController.currentIndex, !currentFeedVC.stitchViewController.posts.isEmpty {
+                    currentFeedVC.stitchViewController.pauseVideo(index: index)
+                }
+               
+            }
+        }
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {

@@ -70,18 +70,8 @@ class ParentViewController: UIViewController {
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.observeRootChange), name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
+       
         
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
-        delay(0.25) {[weak self] in
-            guard let self = self else { return }
-            NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
-        }
-         
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,11 +80,20 @@ class ParentViewController: UIViewController {
         setupTabBar()
         setupNavBar()
         checkNotification()
-    
+        
         if isFeed {
             if feedViewController.currentIndex != nil {
                 feedViewController.playVideo(index: feedViewController.currentIndex!)
             }
+        } else {
+            
+            if stitchViewController.currentIndex != nil {
+                stitchViewController.playVideo(index: stitchViewController.currentIndex!)
+            }
+        }
+        
+        delay(1) {
+            NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         }
         
     }
@@ -102,10 +101,16 @@ class ParentViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "scrollToTop"), object: nil)
+
+
         if isFeed {
             if feedViewController.currentIndex != nil {
                 feedViewController.pauseVideo(index: feedViewController.currentIndex!)
+            }
+        } else {
+            if stitchViewController.currentIndex != nil {
+                stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
             }
         }
         

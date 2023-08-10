@@ -93,7 +93,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
         
         setupCollectionNode()
         setupGalleryNode()
-        
+        addAnimatedLabelToTop()
         collectionNode.dataSource = self
         collectionNode.delegate = self
         galleryCollectionNode.delegate = self
@@ -142,10 +142,11 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     func applyAnimationText(text: String) {
         if text != "" {
-            animatedLabel.pauseLabel()
-        } else {
             animatedLabel.text = text + "                   "
             animatedLabel.restartLabel()
+        } else {
+            animatedLabel.pauseLabel()
+            animatedLabel.text = text
         }
            
     }
@@ -156,7 +157,11 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
         
         if rootId != "" {
             
-            animatedLabel.pauseLabel()
+            if animatedLabel != nil {
+                animatedLabel.pauseLabel()
+                animatedLabel.text = ""
+            }
+            
             refresh_request = true
             currentIndex = 0
             curPage = 1
@@ -1187,6 +1192,7 @@ extension StitchViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
+            handleAnimationTextAndImage(for: index)
             
             if selectPostCollectionView.isHidden == false {
                 cell.hideAllInfo()
