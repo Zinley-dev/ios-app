@@ -80,6 +80,7 @@ class ParentViewController: UIViewController {
         setupTabBar()
         setupNavBar()
         checkNotification()
+        showMiddleBtn(vc: self)
         
         if isFeed {
             if feedViewController.currentIndex != nil {

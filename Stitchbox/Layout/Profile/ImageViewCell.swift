@@ -158,8 +158,8 @@ class ImageViewCell: UICollectionViewCell {
             
             stackView.isHidden = false
             stitchStackView.isHidden = false
-            countView(with: data)
-            countViewStitch(with: data)
+            //countView(with: data)
+            //countViewStitch(with: data)
         } else {
             
             stackView.isHidden = true

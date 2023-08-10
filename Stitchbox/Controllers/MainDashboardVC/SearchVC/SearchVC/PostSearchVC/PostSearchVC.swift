@@ -38,7 +38,6 @@ class PostSearchVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdap
     var editeddPost: PostModel?
     var refresh_request = false
     var startIndex: Int!
-    var imageTimerWorkItem: DispatchWorkItem?
     
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -96,8 +95,8 @@ class PostSearchVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdap
     
     func updateData() {
         
-        self.retrieveNextPageWithCompletion { (newPosts) in
-            
+        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
             if newPosts.count > 0 {
                 
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
@@ -332,7 +331,8 @@ extension PostSearchVC {
                     print(apiResponse)
                     guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
                         let item = [[String: Any]]()
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             block(item)
                         }
                         return
@@ -341,20 +341,23 @@ extension PostSearchVC {
                         print("Successfully retrieved \(data.count) posts.")
                         let items = data
                         self.page += 1
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             block(items)
                         }
                     } else {
                         
                         let item = [[String: Any]]()
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             block(item)
                         }
                     }
                 case .failure(let error):
                     print(error)
                     let item = [[String: Any]]()
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         block(item)
                     }
                 }
@@ -363,7 +366,8 @@ extension PostSearchVC {
         } else {
             
             let item = [[String: Any]]()
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 block(item)
             }
         }

@@ -122,7 +122,8 @@ extension HashtagSearchVC {
                         
                         if self.searchHashtagList != newSearchList {
                             self.searchHashtagList = newSearchList
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 self.tableNode.reloadData()
                             }
                         }
@@ -152,7 +153,8 @@ extension HashtagSearchVC {
                     
                     if self.searchHashtagList != retrievedSearchList {
                         self.searchHashtagList = retrievedSearchList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.tableNode.reloadData(completion: nil)
                         }
                     }

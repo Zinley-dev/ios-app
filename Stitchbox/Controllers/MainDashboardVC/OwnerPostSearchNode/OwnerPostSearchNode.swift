@@ -155,7 +155,7 @@ class OwnerPostSearchNode: ASCellNode {
             
             let title = post.content
             let hashtags = post.hashtags?.joined(separator: " ")
-            let combinedString = "\(title) \(hashtags)"
+            let combinedString = "\(title) \(hashtags ?? "")"
             let textToDisplay = String(combinedString.prefix(60))
 
             let textAttributes: [NSAttributedString.Key: Any] = [
@@ -193,17 +193,7 @@ class OwnerPostSearchNode: ASCellNode {
         automaticallyManagesSubnodes = true
         
     }
-    
-    override func didLoad() {
-        super.didLoad()
-        
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.countView()
-            self?.countViewStitch()
-        }
-        
-    }
+
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
        

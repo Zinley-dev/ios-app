@@ -16,15 +16,15 @@ class PostSearchNode: ASCellNode {
         print("PostSearchNode is being deallocated.")
     }
     
-    var post: PostModel!
+    private var post: PostModel!
     
-    var nameNode: ASTextNode!
-    var imageNode: ASNetworkImageNode!
-    var stitchCountNode: ASTextNode!
-    var infoNode: ASTextNode!
-    var videoSignNode: ASImageNode!
-    var stitchSignNode: ASImageNode!
-    var countNode: ASTextNode!
+    private var nameNode: ASTextNode!
+    private var imageNode: ASNetworkImageNode!
+    private var stitchCountNode: ASTextNode!
+    private var infoNode: ASTextNode!
+    private var videoSignNode: ASImageNode!
+    private var stitchSignNode: ASImageNode!
+    private var countNode: ASTextNode!
    
     let paragraphStyles = NSMutableParagraphStyle()
 
@@ -89,14 +89,6 @@ class PostSearchNode: ASCellNode {
         automaticallyManagesSubnodes = true
     }
     
-    override func didLoad() {
-        super.didLoad()
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.countView()
-            self?.countViewStitch()
-        }
-    }
     
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -206,91 +198,5 @@ class PostSearchNode: ASCellNode {
         }
         return nil
     }
-
-    func countView() {
-        
-        APIManager.shared.getPostStats(postId: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                
-                print(apiResponse)
-                
-                guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
-                    print("Couldn't cast")
-                    return
-                }
-            
-                do {
-                    let data = try JSONSerialization.data(withJSONObject: dataDictionary, options: .fragmentsAllowed)
-                    let decoder = JSONDecoder()
-                    let stats = try decoder.decode(Stats.self, from: data)
-                    
-                    DispatchQueue.main.async { [weak self]  in
-                        guard let self = self else { return }
-                        let paragraphStyle = NSMutableParagraphStyle()
-                        paragraphStyle.alignment = .center
-                        self.countNode.attributedText = NSAttributedString(
-                            string: "\(formatPoints(num: Double(stats.view.total)))",
-                            attributes: [
-                                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
-                                NSAttributedString.Key.foregroundColor: UIColor.white,
-                                NSAttributedString.Key.paragraphStyle: paragraphStyle
-                            ]
-                        )
-
-                    }
-                } catch {
-                    print("Error decoding JSON: \(error)")
-                }
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
-    }
-    
-    
-    func countViewStitch() {
-        
-        APIManager.shared.countPostStitch(pid: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                print(apiResponse)
-
-                
-                guard let total = apiResponse.body?["total"] as? Int else {
-                    print("Couldn't find the 'total' key")
-                    return
-                }
-
-                DispatchQueue.main.async { [weak self]  in
-                    guard let self = self else { return }
-                    let paragraphStyle = NSMutableParagraphStyle()
-                    paragraphStyle.alignment = .center
-                    self.stitchCountNode.attributedText = NSAttributedString(
-                        string: "\(formatPoints(num: Double(total)))",
-                        attributes: [
-                            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
-                            NSAttributedString.Key.foregroundColor: UIColor.white,
-                            NSAttributedString.Key.paragraphStyle: paragraphStyle
-                        ]
-                    )
-
-                }
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
-    }
-
-
-
 
 }

@@ -242,18 +242,16 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
     }
     
     func sendSearchRequestToTargetVC(){
-        //print("Searching... \(searchText), previous search: \(self.prevSearchText)")
         if searchText.isEmpty {
             self.hideTableOnEmptySearchText()
 
         } else if selectedSearchMode == prevSelectedSearchMode && searchText == prevSearchText {
-            //print("no change...")
             return
         } else {
             switch self.selectedSearchMode {
             case SearchMode.users:
                
-               
+                    
                 UserSearchVC.view.isHidden = false
                 UserSearchVC.searchUsers(for: searchText)
                 
@@ -270,6 +268,7 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
                 
                 HashtagSearchVC.view.isHidden = false
                 HashtagSearchVC.searchHashtags(searchText: searchText)
+                
             }
         }
         
@@ -290,7 +289,19 @@ class MainSearchVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDe
             HashtagSearchVC.searchHashtagList.removeAll()
             HashtagSearchVC.tableNode.reloadData(completion: nil)
         }
+        
+        
     }
+    
+    
+    func removeChildVC(childViewController: UIViewController) {
+        childViewController.willMove(toParent: nil)
+        childViewController.view.removeFromSuperview()
+        childViewController.removeFromParent()
+    }
+
+
+    
 }
 
 extension MainSearchVC {
@@ -502,7 +513,8 @@ extension MainSearchVC {
             contentView.isHidden = true
             searchView.isHidden = false
             
-            delayItem.perform(after: 0.35) {
+            delayItem.perform(after: 0.35) { [weak self] in
+                guard let self = self else { return }
                 
                 self.search(for: searchText)
                 
@@ -516,9 +528,9 @@ extension MainSearchVC {
         if let text = searchBar.text {
             
             saveRecentText(text: text)
-            self.searchText = text
-            self.searchController?.dismiss(animated: true)
-            self.sendSearchRequestToTargetVC()
+            searchText = text
+            searchController?.dismiss(animated: true)
+            sendSearchRequestToTargetVC()
             
             contentView.isHidden = false
             searchView.isHidden = true
@@ -561,7 +573,8 @@ extension MainSearchVC {
                     
                     if self.searchList != newSearchList {
                         self.searchList = newSearchList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.searchTableNode.reloadData()
                         }
                     }
@@ -587,7 +600,8 @@ extension MainSearchVC {
                     
                     if self.searchList != retrievedSearchList {
                         self.searchList = retrievedSearchList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.searchTableNode.reloadData(completion: nil)
                         }
                     }

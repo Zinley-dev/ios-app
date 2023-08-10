@@ -267,7 +267,6 @@
 		6A9E4C832977B3C100B59176 /* AccountActivityNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C822977B3C100B59176 /* AccountActivityNode.swift */; };
 		6A9E4C862977B8F000B59176 /* BlockNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C852977B8F000B59176 /* BlockNode.swift */; };
 		6A9E4C8B2977C4FC00B59176 /* ContactUsImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C8A2977C4FC00B59176 /* ContactUsImageCell.swift */; };
-		6AA276E32A83150A0001D69A /* OriginalTestNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA276E22A83150A0001D69A /* OriginalTestNode.swift */; };
 		6AA276E52A832E4B0001D69A /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA276E42A832E4B0001D69A /* PresentationController.swift */; };
 		6AA276E82A83703C0001D69A /* ParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA276E72A83703C0001D69A /* ParentViewController.swift */; };
 		6AA276EB2A83705C0001D69A /* StitchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA276EA2A83705C0001D69A /* StitchViewController.swift */; };
@@ -771,7 +770,6 @@
 		6A9E4C822977B3C100B59176 /* AccountActivityNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountActivityNode.swift; sourceTree = "<group>"; };
 		6A9E4C852977B8F000B59176 /* BlockNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockNode.swift; sourceTree = "<group>"; };
 		6A9E4C8A2977C4FC00B59176 /* ContactUsImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsImageCell.swift; sourceTree = "<group>"; };
-		6AA276E22A83150A0001D69A /* OriginalTestNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginalTestNode.swift; sourceTree = "<group>"; };
 		6AA276E42A832E4B0001D69A /* PresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
 		6AA276E72A83703C0001D69A /* ParentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentViewController.swift; sourceTree = "<group>"; };
 		6AA276EA2A83705C0001D69A /* StitchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchViewController.swift; sourceTree = "<group>"; };
@@ -2555,7 +2553,6 @@
 			children = (
 				6AA276E92A83704A0001D69A /* StitchViewController */,
 				6AA276E62A83702A0001D69A /* ParentViewController */,
-				6AA276E12A8314F80001D69A /* OriginalTestNode */,
 				6A9A26912A801EA600F4D45A /* VideoNode */,
 				6AE3BEEE2A6C721900AAA5DD /* StitchDashboard */,
 				6AE3BEDC2A68830E00AAA5DD /* SuggestFollowVC */,
@@ -2678,14 +2675,6 @@
 				6A9E4C8A2977C4FC00B59176 /* ContactUsImageCell.swift */,
 			);
 			path = ContactUsImageCell;
-			sourceTree = "<group>";
-		};
-		6AA276E12A8314F80001D69A /* OriginalTestNode */ = {
-			isa = PBXGroup;
-			children = (
-				6AA276E22A83150A0001D69A /* OriginalTestNode.swift */,
-			);
-			path = OriginalTestNode;
 			sourceTree = "<group>";
 		};
 		6AA276E62A83702A0001D69A /* ParentViewController */ = {
@@ -4181,7 +4170,6 @@
 				6AE3BEFA2A6C7B8100AAA5DD /* StitchControlNode.swift in Sources */,
 				6AEC690629518021000393D8 /* UIColor+Utils.swift in Sources */,
 				6AE3BED82A68787200AAA5DD /* TrendingPostVC.swift in Sources */,
-				6AA276E32A83150A0001D69A /* OriginalTestNode.swift in Sources */,
 				6AAD7A5E294C699E003E3AB6 /* workItem.swift in Sources */,
 				6AAD7A30294C6630003E3AB6 /* CXProvider+QuickStart.swift in Sources */,
 				6AAD7A40294C6642003E3AB6 /* String+QuickStart.swift in Sources */,
