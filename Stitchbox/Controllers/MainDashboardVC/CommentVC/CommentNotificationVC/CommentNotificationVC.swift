@@ -84,7 +84,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         vc.view.frame = searchResultContainerView.bounds
         
         
-        vc.userSearchcompletionHandler = { newMention, userUID in
+        vc.userSearchcompletionHandler = { [weak self] newMention, userUID in
+            guard let self = self else { return }
             if newMention.isEmpty {
                 return
             }
@@ -109,7 +110,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
         }
         
-        vc.hashtagSearchcompletionHandler = { newHashtag in
+        vc.hashtagSearchcompletionHandler = { [weak self] newHashtag in
+            guard let self = self else { return }
             
             if newHashtag.isEmpty {
                 return
@@ -194,7 +196,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
             if root_id == reply_to_cid {
                 
-                loadRootCmt(rootComment: root_id) {
+                loadRootCmt(rootComment: root_id) { [weak self] in
+                    guard let self = self else { return }
                     
                     self.loadComment(comment_id: self.commentId)
                     
@@ -202,9 +205,11 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
             } else {
                 
-                loadRootCmt(rootComment: root_id) {
+                loadRootCmt(rootComment: root_id) { [weak self] in
+                    guard let self = self else { return }
                     
-                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) {
+                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) { [weak self] in
+                        guard let self = self else { return }
                         self.loadComment(comment_id: self.commentId)
                     }
                     
@@ -219,7 +224,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
             if root_id == reply_to_cid {
                 
-                loadRootCmt(rootComment: root_id) {
+                loadRootCmt(rootComment: root_id) { [weak self] in
+                    guard let self = self else { return }
                     
                     self.loadComment(comment_id: self.commentId)
                     
@@ -227,9 +233,12 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
             } else {
                 
-                loadRootCmt(rootComment: root_id) {
+                loadRootCmt(rootComment: root_id) { [weak self] in
+                    guard let self = self else { return }
                     
-                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) {
+                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) { [weak self] in
+                        guard let self = self else { return }
+                        
                         self.loadComment(comment_id: self.commentId)
                     }
                     
@@ -322,7 +331,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "notification_delete_cmt")), object: nil)
         
     
-        delay(0.001) {
+        delay(0.001) { [weak self] in
+            guard let self = self else { return }
             
             if let vc = UIViewController.currentViewController() {
                 
@@ -365,17 +375,20 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         }
         let avatarUrl = userDataSource.avatarURL
         
-        imageStorage.async.object(forKey: avatarUrl) { result in
+        imageStorage.async.object(forKey: avatarUrl) { [weak self] result in
+            guard let self = self else { return }
             if case .value(let image) = result {
                 // Return the image from cache
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.avatarView.image = image
                 }
                 return
             }
             
             // Image not found in cache or storage, fetch from network
-            AF.request(avatarUrl).validate().responseImage { response in
+            AF.request(avatarUrl).validate().responseImage { [weak self] response in
+                guard let self = self else { return }
                 switch response.result {
                 case .success(let image):
                     self.avatarView.image = image
@@ -439,7 +452,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             case .success(let apiResponse):
                 
                 guard let data = apiResponse.body else {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.hideAnimation()
                     }
                     return
@@ -472,7 +486,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         }
                         
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
                             self.hideAnimation()
@@ -492,7 +507,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         }
                         
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
                             self.hideAnimation()
@@ -515,8 +531,9 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     }
                     
                     
-                    DispatchQueue.main.async {
-                        
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                         
                         self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
                         self.hideAnimation()
                         
@@ -820,7 +837,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     start = index + 1
                     self.CommentList.insert(item, at: start)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         // Insert the new comment at its respective position
                         let indexPath = IndexPath(row: start, section: 0)
                         self.tableNode.insertRows(at: [indexPath], with: .none)
@@ -835,7 +853,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     let start = self.CommentList.count
                     self.CommentList.append(item)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         // Insert the new comment at its respective position
                         let indexPath = IndexPath(row: start, section: 0)
                         self.tableNode.insertRows(at: [indexPath], with: .none)
@@ -857,7 +876,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 self.mention_arr.removeAll()
                 self.mention_dict.removeAll()
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     // showNote(text: "Comment sent!")
                     self.searchResultContainerView.isHidden = true
                     self.cmtTxtView.text = ""
@@ -868,7 +888,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             case .failure(let error):
                 print(error)
                 self.isSending = false
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
             }
@@ -890,7 +911,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             bView.isHidden = false
             
             
-            UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
+            UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  { [weak self] in
+                guard let self = self else { return }
                 self.view.layoutIfNeeded()
             }, completion: { (completed) in
                 
@@ -940,7 +962,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         }
         
         
-        UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
+        UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  { [weak self] in
+            guard let self = self else { return }
             self.view.layoutIfNeeded()
         }, completion: { (completed) in
             
@@ -970,7 +993,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 self.dismiss(animated: true, completion: nil)
             } else {
                 // Set back to original position of the view controller
-                UIView.animate(withDuration: 0.3) {
+                UIView.animate(withDuration: 0.3) { [weak self] in
+                    guard let self = self else { return }
                     self.view.frame.origin = self.pointOrigin ?? CGPoint(x: 0, y: 400)
                 }
             }
@@ -1193,7 +1217,8 @@ extension CommentNotificationVC: ASTableDataSource {
                     
                     self.CommentList.insert(contentsOf: newCommentModels, at: currentIndex + 1)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         let indexPaths = (currentIndex + 1 ..< currentIndex + 1 + newCommentModels.count).map { IndexPath(row: $0, section: 0) }
                         self.tableNode.insertRows(at: indexPaths, with: .none)
                         
@@ -1362,14 +1387,16 @@ extension CommentNotificationVC {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success" else {
                     
-                    DispatchQueue.main.async {
-                        self.showErrorAlert("Ops !", msg: "Unable to remove this comment right now, please try again.")
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.showErrorAlert("Oops!", msg: "Unable to remove this comment right now, please try again.")
                     }
                     return
                 }
                 
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     
                     self.CommentList.remove(at: indexPath)
                     self.tableNode.deleteRows(at: [IndexPath(item: indexPath, section: 0)], with: .automatic)
@@ -1388,8 +1415,9 @@ extension CommentNotificationVC {
             case .failure(let error):
                 print(error)
                 
-                DispatchQueue.main.async {
-                    self.showErrorAlert("Ops !", msg: "Unable to remove this comment right now, please try again.")
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.showErrorAlert("Oops!", msg: "Unable to remove this comment right now, please try again.")
                 }
             }
         }
@@ -1447,7 +1475,8 @@ extension CommentNotificationVC {
             global_presetingRate = Double(0.75)
             global_cornerRadius = 35
             
-            delay(0.1) {
+            delay(0.1) { [weak self] in
+                guard let self = self else { return }
                 self.present(slideVC, animated: true, completion: nil)
             }
             
@@ -1461,16 +1490,19 @@ extension CommentNotificationVC {
             
             firstAnimated = false
             
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.5) { [weak self] in
+                guard let self = self else { return }
                 
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.loadingView.alpha = 0
                 }
                 
             }
             
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+                guard let self = self else { return }
                 
                 if self.loadingView.alpha == 0 {
                     

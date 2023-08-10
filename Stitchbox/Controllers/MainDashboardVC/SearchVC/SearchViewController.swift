@@ -490,7 +490,8 @@ extension SearchViewController {
             contentview.isHidden = true
             searchView.isHidden = false
             
-            delayItem.perform(after: 0.35) {
+            delayItem.perform(after: 0.35) { [weak self] in
+                guard let self = self else { return }
                 
                 self.search(for: searchText)
                 
@@ -523,7 +524,7 @@ extension SearchViewController {
     func search(for searchText: String) {
         
         //check local result first
-        if checkLocalRecords(searchText: searchText){
+        if checkLocalRecords(searchText: searchText) {
             return
         }
         
@@ -577,7 +578,8 @@ extension SearchViewController {
                     
                     if self.searchList != retrievedSearchList {
                         self.searchList = retrievedSearchList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.searchTableNode.reloadData(completion: nil)
                         }
                     }

@@ -37,13 +37,13 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     weak var collectionNode: ASCollectionNode?
     var pinchGestureRecognizer: UIPinchGestureRecognizer!
     var panGestureRecognizer: UIPanGestureRecognizer!
-    private var sideButtonsView: ButtonSideList!
     
     private let fireworkController = FountainFireworkController()
     private let fireworkController2 = ClassicFireworkController()
     
     
     private var headerView: PostHeader!
+    private var sideButtonsView: ButtonSideList!
     private var buttonsView: ButtonsHeader!
     private var contentNode: ASTextNode
     private var headerNode: ASDisplayNode
@@ -80,15 +80,11 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     override func didLoad() {
         super.didLoad()
         
-        
         addPinchGestureRecognizer()
         addPanGestureRecognizer()
         setupLabel()
-        setupViews()
-        setupSpace(width: self.view.frame.width)
         
-       
-        if let parentVC = UIViewController.currentViewController() as? ParentViewController {
+        if UIViewController.currentViewController() is ParentViewController {
           
             if isOriginal {
                 // Handle count stitch if not then hide
@@ -100,7 +96,11 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
                 addSideButtons(isOwned: false)
             }
         }
-    
+        
+        setupViews()
+        setupSpace(width: self.view.frame.width)
+       
+       
      }
     
     override func layout() {
@@ -201,11 +201,38 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     }
 
     private func configureVideoNode(with post: PostModel) {
+        
         videoNode.url = getThumbnailURL(post: post)
+        videoNode.player?.automaticallyWaitsToMinimizeStalling = true
         videoNode.shouldAutoplay = false
         videoNode.shouldAutorepeat = true
-        videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
         videoNode.delegate = self
+
+        if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
+                // Calculate aspect ratio
+            let aspectRatio = Float(width) / Float(height)
+
+            if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
+                videoNode.contentMode = .scaleAspectFill
+                videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+            } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
+                videoNode.contentMode = .scaleAspectFit
+                videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+                   
+            } else {
+                // Default contentMode, adjust as needed
+                videoNode.contentMode = .scaleAspectFit
+                videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                   
+            }
+        } else {
+                // Default contentMode, adjust as needed
+            videoNode.contentMode = .scaleAspectFill
+            videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                
+        }
+        
+    
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.videoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
@@ -214,6 +241,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
                 self.videoNode.muted = shouldMute ?? !globalIsSound
                 self.videoNode.play()
             }
+            
         }
     }
 
@@ -280,7 +308,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
         verticalStack.children?.append(buttonsInsetSpec)
 
-        let verticalStackInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
+        let verticalStackInset = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 8)
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
 
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -659,12 +687,14 @@ extension VideoNode: UIGestureRecognizerDelegate {
             element == "*more" ? self.seeMore() : self.hideContent()
         }
         
-        self.label.handleHashtagTap { hashtag in
+        self.label.handleHashtagTap { [weak self] hashtag in
+            guard let self = self else { return }
             self.presentPostListWithHashtagVC(for: "#" + hashtag)
         }
 
         self.label.handleURLTap { [weak self] string in
-            self?.handleURLTap(url: string.absoluteString)
+            guard let self = self else { return }
+            self.handleURLTap(url: string.absoluteString)
         }
         
         setupDefaultContent()

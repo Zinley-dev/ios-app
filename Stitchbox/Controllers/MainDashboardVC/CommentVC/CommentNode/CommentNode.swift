@@ -64,141 +64,6 @@ class CommentNode: ASCellNode {
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.label = ActiveLabel()
-    
-            self.cmtNode.view.addSubview(self.label)
-            self.cmtNode.view.isUserInteractionEnabled = true
-                    
-            label.enabledTypes = [.mention, .hashtag, .url]
-            label.mentionColor = .secondary
-            
-            // A blue color for hashtags
-            label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-
-            // A contrasting green color for URLs
-            label.URLColor = UIColor(red: 50/255, green: 205/255, blue: 50/255, alpha: 1)
-
-
-            
-            label.customize { label in
-                
-                if self.post.reply_to != "" {
-                    self.addReplyUIDBtn()
-                }
-                
-                
-                label.handleMentionTap {  mention in
-                    
-                  
-                    if let mentionArr = self.post.mention {
-                        
-                        for item in mentionArr {
-                            
-                        
-                            if let username = item["username"] as? String, username == mention {
-                                
-                                if let id = item["_id"] as? String {
-                                    
-                                    if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-                                        
-                                        if let vc = UIViewController.currentViewController() {
-                                            
-                                            let nav = UINavigationController(rootViewController: UPVC)
-
-                                            // Set the user ID, nickname, and onPresent properties of UPVC
-                                            UPVC.userId = id
-                                            UPVC.nickname = username
-                                            UPVC.onPresent = true
-
-                                            // Customize the navigation bar appearance
-                                            nav.navigationBar.barTintColor = .white
-                                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
-
-                                            nav.modalPresentationStyle = .fullScreen
-                                            vc.present(nav, animated: true, completion: nil)
-                                            return
-
-
-                                        }
-                                    }
-                                    
-                                }
-                                
-                              
-                            }
-                                
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-                label.handleHashtagTap { hashtag in
-                          
-                    var selectedHashtag = hashtag
-                    selectedHashtag.insert("#", at: selectedHashtag.startIndex)
-                    
-                
-                    if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-                        
-                        if let vc = UIViewController.currentViewController() {
-                            
-                            let nav = UINavigationController(rootViewController: PLHVC)
-
-                            // Set the user ID, nickname, and onPresent properties of UPVC
-                            PLHVC.searchHashtag = selectedHashtag
-                            PLHVC.onPresent = true
-
-                            // Customize the navigation bar appearance
-                            nav.navigationBar.barTintColor = .white
-                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
-
-                            nav.modalPresentationStyle = .fullScreen
-                            vc.present(nav, animated: true, completion: nil)
-                   
-                        }
-                    }
-                    
-                    
-                    
-                    
-                }
-                
-                label.handleURLTap { [weak self] string in
-                    
-                    
-                    let url = string.absoluteString
-                    
-                    if url.contains("https://stitchbox.net/app/account/") {
-                        
-                        if let id = self?.getUIDParameter(from: url) {
-                            self?.moveToUserProfileVC(id: id)
-                        }
-            
-                    } else if url.contains("https://stitchbox.net/app/post/") {
-                    
-                        if let id = self?.getUIDParameter(from: url) {
-                            self?.openPost(id: id)
-                        }
-
-                    } else {
-                        
-                        guard let requestUrl = URL(string: url) else {
-                            return
-                        }
-
-                        if UIApplication.shared.canOpenURL(requestUrl) {
-                             UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                        }
-                    }
-                    
-                    
-                }
-                
-                
-                
-            }
               
             let textAttributes: [NSAttributedString.Key: Any] = [
                 .font: FontManager.shared.roboto(.Regular, size: FontSize),
@@ -295,6 +160,63 @@ class CommentNode: ASCellNode {
     override func didLoad() {
         super.didLoad()
         
+        label = ActiveLabel()
+          
+        cmtNode.view.addSubview(self.label)
+        cmtNode.view.isUserInteractionEnabled = true
+                          
+        label.enabledTypes = [.mention, .hashtag, .url]
+        label.mentionColor = .secondary
+                  
+        // A blue color for hashtags
+        label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+
+        // A contrasting green color for URLs
+        label.URLColor = UIColor(red: 50/255, green: 205/255, blue: 50/255, alpha: 1)
+        
+        self.label.customize { [weak self] label in
+            guard let self = self else { return }
+            if self.post.reply_to != "" {
+                self.addReplyUIDBtn()
+            }
+            
+            label.handleMentionTap { [weak self] mention in
+                guard let self = self else { return }
+                guard let mentionArr = self.post.mention else { return }
+                
+                for item in mentionArr {
+                    guard let username = item["username"] as? String, username == mention,
+                          let id = item["_id"] as? String else { continue }
+                    
+                    self.moveToViewController(id: id, identifier: "UserProfileVC")
+                }
+            }
+            
+            label.handleHashtagTap { [weak self] hashtag in
+                guard let self = self else { return }
+                let selectedHashtag = "#" + hashtag
+                if let viewController = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+                    viewController.searchHashtag = selectedHashtag
+                    viewController.onPresent = true
+                    self.present(viewController)
+                }
+            }
+            
+            label.handleURLTap { [weak self] string in
+                guard let self = self else { return }
+                
+                let url = string.absoluteString
+                if url.contains("https://stitchbox.net/app/account/") {
+                    self.moveToUserProfileVC(id: self.getUIDParameter(from: url)!)
+                } else if url.contains("https://stitchbox.net/app/post/") {
+                    self.openPost(id: self.getUIDParameter(from: url)!)
+                } else if let requestUrl = URL(string: url), UIApplication.shared.canOpenURL(requestUrl) {
+                    UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                }
+            }
+        }
+        
+        
         // Load content based on the post.
         loadInfo(uid: self.post.comment_uid)
         if self.post.has_reply == true {
@@ -304,6 +226,26 @@ class CommentNode: ASCellNode {
         cmtCount()
         
     }
+
+    
+    func present(_ viewController: UIViewController, animated: Bool = true) {
+        if let vc = UIViewController.currentViewController() {
+            let nav = UINavigationController(rootViewController: viewController)
+            nav.navigationBar.barTintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+            nav.modalPresentationStyle = .fullScreen
+            vc.present(nav, animated: animated, completion: nil)
+        }
+    }
+
+    func moveToViewController(id: String, identifier: String) {
+        if let viewController = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: identifier) as? UserProfileVC {
+            viewController.userId = id
+            viewController.onPresent = true
+            present(viewController)
+        }
+    }
+
     
     @objc func replyToBtnPressed() {
         
@@ -551,7 +493,8 @@ class CommentNode: ASCellNode {
             self.label.frame = self.cmtNode.bounds
             self.label.numberOfLines = Int(self.cmtNode.lineCount)
         } else {
-            delay(1) {
+            delay(1) { [weak self] in
+                guard let self = self else { return }
                 self.label.frame = self.cmtNode.bounds
                 self.label.numberOfLines = Int(self.cmtNode.lineCount)
             }

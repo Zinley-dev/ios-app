@@ -160,7 +160,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W1f-2E-fwc">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="747"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="748"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lti-pc-8ON">
@@ -234,7 +234,7 @@
                         <constraints>
                             <constraint firstItem="W1f-2E-fwc" firstAttribute="top" secondItem="1Fc-76-Mf6" secondAttribute="top" id="83o-bF-YC1"/>
                             <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="AYU-5k-6kG" secondAttribute="bottom" constant="64" id="95a-dK-Jl9"/>
-                            <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="W1f-2E-fwc" secondAttribute="bottom" constant="1" id="9gg-SZ-leL"/>
+                            <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="W1f-2E-fwc" secondAttribute="bottom" id="9gg-SZ-leL"/>
                             <constraint firstItem="0Z6-8G-TMT" firstAttribute="trailing" secondItem="Lti-pc-8ON" secondAttribute="trailing" id="B3l-PG-RLy"/>
                             <constraint firstItem="nif-pC-VFd" firstAttribute="leading" secondItem="0Z6-8G-TMT" secondAttribute="leading" id="Cf7-5P-d5f"/>
                             <constraint firstItem="BEx-to-46U" firstAttribute="top" secondItem="nif-pC-VFd" secondAttribute="bottom" id="E64-Af-ekK"/>
@@ -275,7 +275,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htG-J3-w8j">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="781"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="782"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QjB-Ff-npc" customClass="ProgressBar" customModule="Stitchbox" customModuleProvider="target">
@@ -343,7 +343,7 @@
                             <constraint firstItem="Rla-m0-I86" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="9el-ci-5qP"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="12" id="FAH-dq-see"/>
                             <constraint firstAttribute="bottom" secondItem="Ofe-cI-1Xf" secondAttribute="bottom" id="FzS-Sa-U0Z"/>
-                            <constraint firstItem="Ofe-cI-1Xf" firstAttribute="top" secondItem="htG-J3-w8j" secondAttribute="bottom" constant="1" id="GC8-d6-Jmm"/>
+                            <constraint firstItem="Ofe-cI-1Xf" firstAttribute="top" secondItem="htG-J3-w8j" secondAttribute="bottom" id="GC8-d6-Jmm"/>
                             <constraint firstItem="Rla-m0-I86" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="Pou-1N-uLM"/>
                             <constraint firstItem="Rla-m0-I86" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="UO6-lF-sY4"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="Wbn-Yc-2Lj"/>
@@ -9477,14 +9477,32 @@
         <designable name="BEx-to-46U">
             <size key="intrinsicContentSize" width="-1" height="30"/>
         </designable>
+        <designable name="FAX-Qh-QnX">
+            <size key="intrinsicContentSize" width="659.33333333333337" height="15.333333333333334"/>
+        </designable>
+        <designable name="JXw-RP-eFG">
+            <size key="intrinsicContentSize" width="278" height="15.333333333333334"/>
+        </designable>
         <designable name="Ofe-cI-1Xf">
             <size key="intrinsicContentSize" width="-1" height="30"/>
         </designable>
         <designable name="RLL-7O-DSd">
             <size key="intrinsicContentSize" width="-1" height="30"/>
         </designable>
+        <designable name="SeZ-Dn-ANO">
+            <size key="intrinsicContentSize" width="485.66666666666669" height="14.333333333333334"/>
+        </designable>
+        <designable name="UB3-9W-WJT">
+            <size key="intrinsicContentSize" width="315" height="15.333333333333334"/>
+        </designable>
+        <designable name="mQ7-db-ueA">
+            <size key="intrinsicContentSize" width="359.66666666666669" height="15.333333333333334"/>
+        </designable>
         <designable name="nN2-uK-ySa">
             <size key="intrinsicContentSize" width="-1" height="30"/>
+        </designable>
+        <designable name="uAM-Hz-5k4">
+            <size key="intrinsicContentSize" width="697.66666666666663" height="15.333333333333334"/>
         </designable>
     </designables>
     <resources>
