@@ -154,7 +154,7 @@ class OwnerPostSearchNode: ASCellNode {
             paragraphStyles.alignment = .center
             
             let title = post.content
-            let hashtags = post.hashtags.joined(separator: " ")
+            let hashtags = post.hashtags?.joined(separator: " ")
             let combinedString = "\(title) \(hashtags)"
             let textToDisplay = String(combinedString.prefix(60))
 

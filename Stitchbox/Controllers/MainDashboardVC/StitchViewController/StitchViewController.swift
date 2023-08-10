@@ -156,11 +156,17 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
                 
             }
             
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-              
+           
         }
+        
+        
+    }
+    
+    
+    @IBAction func hideBtnPressed(_ sender: Any) {
+        
+        
+        selectPostCollectionView.isHidden = true
         
         
     }
@@ -353,6 +359,8 @@ extension StitchViewController: ASCollectionDelegate {
         }
         
         return true
+        
+
     }
     
 }
@@ -600,7 +608,7 @@ extension StitchViewController {
                         block(item)
                     }
                 }
-            } */
+            }*/
             
         } else {
             
@@ -1129,7 +1137,6 @@ extension StitchViewController {
     
     func playVideo(index: Int) {
         
-        
         print("StitchViewController: \(index) - play")
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
@@ -1153,6 +1160,8 @@ extension StitchViewController {
             }
             
             if !cell.videoNode.isPlaying() {
+                
+                cell.updateStitchCount(text: "\(index + 1)/\(posts.count)")
 
                 
                 if let muteStatus = shouldMute {

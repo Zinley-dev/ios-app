@@ -50,9 +50,9 @@ class PostSearchNode: ASCellNode {
         
         let title = post.content
         let ownerName = post.owner?.username ?? ""
-        let hashtags = post.hashtags.joined(separator: " ")
+        let hashtags = post.hashtags?.joined(separator: " ")
         
-        let searchResults = [title, ownerName, hashtags].compactMap { searchString(in: $0, for: keyword, maxLength: 60) }
+        let searchResults = [title, ownerName, hashtags ?? ""].compactMap { searchString(in: $0, for: keyword, maxLength: 60) }
         let highlightedKeyword = searchResults.first ?? ""
         
         let textAttributes: [NSAttributedString.Key: Any] = [

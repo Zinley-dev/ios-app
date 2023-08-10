@@ -340,7 +340,7 @@ extension EditPostVC {
         delay(0.1) { [weak self] in
             guard let self = self else { return }
             
-            self.hashtagList = self.selectedPost.hashtags
+            self.hashtagList = self.selectedPost.hashtags ?? [""]
             self.hiddenHashTagTxtField.text = self.hashtagList.joined(separator: "")
             
             if self.hashtagList.count == 1 {

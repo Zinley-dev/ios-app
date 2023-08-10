@@ -158,18 +158,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
     
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
-        delay(0.25) {[weak self] in
-            guard let self = self else { return }
-            NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
-        }
-         
-    }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -328,7 +317,7 @@ extension FeedViewController {
     }
     
     
-    @objc func shouldScrollToTop() {
+    func scrollToTop() {
         
         if currentIndex != 0, currentIndex != nil {
             
@@ -357,7 +346,6 @@ extension FeedViewController {
         }
         
     }
-    
     
     
     
@@ -527,6 +515,7 @@ extension FeedViewController: ASCollectionDataSource {
                 isfirstLoad = true
                 node.isFirstItem = true
                 mainRootId = post.id
+                currentIndex = 0
                 NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
             }
             
@@ -618,6 +607,7 @@ extension FeedViewController {
                     return
                 }
                 if !data.isEmpty {
+                    
                     self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                     let items = data

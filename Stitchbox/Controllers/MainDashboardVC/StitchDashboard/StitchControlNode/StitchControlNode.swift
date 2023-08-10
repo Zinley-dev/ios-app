@@ -30,7 +30,7 @@ class StitchControlNode: ASCellNode {
         self.backgroundColor = .clear // set background to clear
 
       
-        self.imageNode.backgroundColor = .red
+        self.imageNode.backgroundColor = .clear
         
        
         imageNode.url = post.imageUrl

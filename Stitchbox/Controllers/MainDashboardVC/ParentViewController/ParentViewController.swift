@@ -14,7 +14,7 @@ import ObjectMapper
 
 class ParentViewController: UIViewController {
 
-    private var scrollView: UIScrollView!
+    var scrollView: UIScrollView!
     private var containerView: UIView!
     let homeButton: UIButton = UIButton(type: .custom)
     
@@ -25,6 +25,8 @@ class ParentViewController: UIViewController {
     var isFeed = true
     var rootId = ""
 
+    lazy var delayItem = workItem()
+    var count = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -70,6 +72,17 @@ class ParentViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.observeRootChange), name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+        delay(0.25) {[weak self] in
+            guard let self = self else { return }
+            NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
+        }
+         
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -365,13 +378,13 @@ extension ParentViewController {
 
 
 extension ParentViewController {
-  
-    func switchToProfileVC() {
     
+    func switchToProfileVC() {
+        
         self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
         
     }
-
+    
     
     func resetNoti() {
         
@@ -439,49 +452,63 @@ extension ParentViewController {
             }
         }
         
-    
+        
     }
     
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageIndex = scrollView.contentOffset.x / view.frame.width
-
+        
         switch pageIndex {
         case 0:
             print("FeedViewController is fully shown")
-            isFeed = true
-            if stitchViewController.currentIndex != nil {
-                stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
-            } else {
-                stitchViewController.pauseVideo(index: 0)
-            }
-            
-            if feedViewController.currentIndex != nil {
-                feedViewController.playVideo(index: feedViewController.currentIndex!)
-            }
+            showFeed()
             
             
         case 1:
-            print("StitchViewController is fully shown")
-            isFeed = false
-            if feedViewController.currentIndex != nil {
-                feedViewController.pauseVideo(index: feedViewController.currentIndex!)
-            } else {
-                feedViewController.pauseVideo(index: 0)
-            }
+            showStitch()
             
             
-            if stitchViewController.currentIndex != nil, !stitchViewController.posts.isEmpty {
-                stitchViewController.playVideo(index: stitchViewController.currentIndex!)
-               
-            }
             
-         
         default:
             print("Unknown page")
         }
     }
-
+    
+    func showFeed() {
+        
+        isFeed = true
+        if stitchViewController.currentIndex != nil {
+            stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
+        } else {
+            stitchViewController.currentIndex = 0
+            stitchViewController.pauseVideo(index: 0)
+        }
+        
+        if feedViewController.currentIndex != nil {
+            feedViewController.playVideo(index: feedViewController.currentIndex!)
+        } else {
+            feedViewController.currentIndex = 0
+            feedViewController.playVideo(index: 0)
+        }
+        
+    }
+    
+    func showStitch() {
+        
+        isFeed = false
+        if feedViewController.currentIndex != nil {
+            feedViewController.pauseVideo(index: feedViewController.currentIndex!)
+        } else {
+            feedViewController.pauseVideo(index: 0)
+        }
+        
+        
+        if stitchViewController.currentIndex != nil, !stitchViewController.posts.isEmpty {
+            stitchViewController.playVideo(index: stitchViewController.currentIndex!)
+        }
+        
+    }
 
 
 }
@@ -582,16 +609,54 @@ extension ParentViewController {
         if shouldReload {
             
             stitchViewController.rootId = rootId
-            
-            Dispatch.main.async { [weak self] in
+            count += 1
+            delayItem.perform(after: 0.75) { [weak self] in
                 guard let self = self else { return }
+                print("clearAllData: \(count) - \(stitchViewController.rootId)")
                 self.stitchViewController.clearAllData()
+                
             }
-            
             
         }
         
         
+    }
+    
+    
+    @objc func shouldScrollToTop() {
+        
+        
+        if isFeed {
+            
+            if feedViewController.currentIndex != 0, feedViewController.currentIndex != nil {
+                
+                navigationController?.setNavigationBarHidden(false, animated: true)
+                
+                if feedViewController.collectionNode.numberOfItems(inSection: 0) != 0 {
+                    
+                    if feedViewController.currentIndex == 1 {
+                        feedViewController.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                    } else {
+                        
+                        feedViewController.collectionNode.scrollToItem(at: IndexPath(row: 1, section: 0), at: .centeredVertically, animated: false)
+                        feedViewController.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                        
+                    }
+                    
+                }
+                
+            } else {
+                
+                feedViewController.delayItem3.perform(after: 0.25) { [weak self] in
+                    guard let self = self else { return }
+                    feedViewController.clearAllData()
+                }
+                
+            }
+            
+            
+        }
+    
     }
     
     

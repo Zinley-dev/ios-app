@@ -383,12 +383,12 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
 
         headerNode.backgroundColor = UIColor.clear
 
-        let hashtagsText = post.hashtags.joined(separator: " ")
-        let finalText = post.content + " " + hashtagsText
+        let hashtagsText = post.hashtags?.joined(separator: " ")
+        let finalText = post.content + " " + (hashtagsText ?? "")
         var truncatedText: String
         
         if post.content == "" {
-            truncatedText = truncateTextIfNeeded(hashtagsText)
+            truncatedText = truncateTextIfNeeded(hashtagsText ?? "")
         } else {
             truncatedText = truncateTextIfNeeded(finalText)
         }
@@ -569,12 +569,12 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         
         headerNode.backgroundColor = UIColor.clear
         
-        let hashtagsText = post.hashtags.joined(separator: " ")
-        let finalText = post.content + " " + hashtagsText
+        let hashtagsText = post.hashtags?.joined(separator: " ")
+        let finalText = post.content + " " + (hashtagsText ?? "")
         var contentText: String
 
         if post.content == "" {
-            contentText = processTextForHiding(hashtagsText)
+            contentText = processTextForHiding(hashtagsText ?? "")
         } else {
             contentText = processTextForHiding(finalText)
         }
@@ -1103,7 +1103,7 @@ extension PendingNode {
         let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
         verticalStack.children = [headerInsetSpec]
         
-        if !post.content.isEmpty || post.hashtags.contains(where: { !$0.isEmpty }) {
+        if !post.content.isEmpty || ((post.hashtags?.contains(where: { !$0.isEmpty })) != nil) {
             verticalStack.children?.append(contentInsetSpec)
         }
 

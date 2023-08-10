@@ -73,8 +73,8 @@ class TrendingPostNode: ASCellNode {
         paragraphStyles.alignment = .center
         
         let title = post.content
-        let hashtags = post.hashtags.joined(separator: " ")
-        let combinedString = "\(title) \(hashtags)"
+        let hashtags = post.hashtags?.joined(separator: " ")
+        let combinedString = "\(title) \(hashtags ?? "")"
         let textToDisplay = String(combinedString.prefix(60))
 
         let textAttributes: [NSAttributedString.Key: Any] = [
